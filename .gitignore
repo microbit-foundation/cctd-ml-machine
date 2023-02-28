@@ -1,0 +1,10 @@
+/.idea/
+/node_modules/
+
+.DS_Store
+
+/public/.azure/
+
+/public/build/
+
+.DS_Store

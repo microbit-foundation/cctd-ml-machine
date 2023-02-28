@@ -111,9 +111,8 @@ will find information about how to contribute. The maintainers will review the c
 
 ### Credits
 
-ML-Machine is a platform created by the CEED research project for empowering education in the emerging fields of
-technology and computation.
+ML-Machine is a platform created by the Center for Computational Thinking and Design (see [CCTD.dk](https://cctd.dk)) at Aarhus University for empowering education in the emerging fields of technology and computation.
 
 ## License
 
-[MIT](LICENSE) © Project CEED, Aarhus University
+[MIT](license) © Center for Computational Thinking and Design, Aarhus University

@@ -9,11 +9,11 @@ let text = get(t);
 t.subscribe(t => text = t);
 
 class OutputBehaviour implements ConnectionBehaviour {
-	isConnected(): boolean {
+	isAssigned(): boolean {
 		return get(state).isOutputting;
 	}
 
-	bluetoothConnect(microbitBluetooth: MicrobitBluetooth, name: string) {
+	onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
 		informUser(text("alert.output.GATTserverInform"));
 		informUser(text("alert.output.microBitServiceInform"));
 		informUser(text("alert.output.connectingToComponents"));
@@ -27,7 +27,7 @@ class OutputBehaviour implements ConnectionBehaviour {
 		informUser(text("alert.output.nowConnectedInform"));
 	}
 
-	bluetoothDisconnect(manual?: boolean, bothDisconnected?: boolean): void {
+	onExpelled(manual?: boolean, bothDisconnected?: boolean): void {
 		// Ensure state is updated
 		state.update((s) => {
 			s.isOutputting = false;
@@ -39,7 +39,7 @@ class OutputBehaviour implements ConnectionBehaviour {
 		});
 	}
 
-	bluetoothConnectionError(error?: Error): void {
+	onCancelledBluetoothRequest(error?: Error): void {
 		if (error) {
 			if (error.message) {
 				if (error.message.includes("User cancelled the requestDevice() chooser")) {
@@ -64,6 +64,14 @@ class OutputBehaviour implements ConnectionBehaviour {
 
 	buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {
 		return;
+	}
+
+	onConnected(name: string): void {
+		throw new Error("Not implemented")
+	}
+
+	onDisconnected(): void {
+		throw new Error("Not implemented")
 	}
 }
 

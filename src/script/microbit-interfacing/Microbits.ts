@@ -6,7 +6,7 @@ import connectionBehaviours from "../connection-behaviours/ConnectionBehaviours"
 import { get, writable } from "svelte/store";
 import MBSpecs from "./MBSpecs";
 import MicrobitBluetooth from "./MicrobitBluetooth";
-import { outputting } from "../stores/uiStore";
+import {outputting} from "../stores/uiStore";
 import MicrobitUSB from "./MicrobitUSB";
 
 type QueueElement = {
@@ -92,7 +92,16 @@ class Microbits {
 
 		const connectionBehaviour = ConnectionBehaviours.getInputBehaviour();
 		const onFailedConnection = (err: Error) => {
-			connectionBehaviour.bluetoothConnectionError(err);
+			if (err) {
+				if (err.message && err.message.includes("User cancelled the requestDevice() chooser")) {
+					// User just cancelled
+					connectionBehaviour.onCancelledBluetoothRequest();
+				} else {
+					throw err; // Todo: handle other cases and add events to connection behaviour interface
+				}
+			} else {
+				throw new Error("An unknown error occured while attempting to connect via Bluetooth")
+			}
 		};
 
 		try {
@@ -101,20 +110,25 @@ class Microbits {
 			this.assignedInputMicrobit = await MicrobitBluetooth
 				.createConnection(
 					request,
-					undefined,
+					() => connectionBehaviour.onConnected(name),
 					(manual) => {
 						this.clearAssignedInputReference();
 						if (this.isOutputAssigned()) {
 							this.expelOutput();
 						}
 						this.clearAssignedOutputReference();
-						connectionBehaviours.getInputBehaviour().bluetoothDisconnect(manual, true);
-						connectionBehaviours.getOutputBehaviour().bluetoothDisconnect(manual, true);
+						connectionBehaviours.getInputBehaviour().onExpelled(manual, true);
+						connectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
 					},
-					onFailedConnection
+					onFailedConnection,
+					() => {connectionBehaviour.onConnected(name)},
+					() => {
+						connectionBehaviours.getInputBehaviour().onExpelled(false, true);
+						connectionBehaviours.getOutputBehaviour().onExpelled(false, true);
+					}
 				);
 
-			connectionBehaviour.bluetoothConnect(this.assignedInputMicrobit, name);
+			connectionBehaviour.onAssigned(this.assignedInputMicrobit, name);
 			this.inputName = name;
 			this.inputVersion = this.assignedInputMicrobit.getVersion();
 			await this.assignedInputMicrobit.listenToAccelerometer(connectionBehaviour.accelerometerChange.bind(connectionBehaviour));
@@ -137,7 +151,7 @@ class Microbits {
 
 		const connectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
 		const onFailedConnection = (err: Error) => {
-			connectionBehaviour.bluetoothConnectionError(err);
+			connectionBehaviour.onCancelledBluetoothRequest(err);
 		};
 
 		try {
@@ -150,11 +164,11 @@ class Microbits {
 					undefined,
 					(manual) => {
 						this.clearAssignedOutputReference();
-						connectionBehaviours.getOutputBehaviour().bluetoothDisconnect(manual);
+						connectionBehaviours.getOutputBehaviour().onExpelled(manual);
 					},
 					onFailedConnection
 				);
-			connectionBehaviour.bluetoothConnect(this.assignedOutputMicrobit, name);
+			connectionBehaviour.onAssigned(this.assignedOutputMicrobit, name);
 			this.outputName = name;
 			this.outputVersion = this.assignedOutputMicrobit.getVersion();
 			return true;
@@ -212,7 +226,7 @@ class Microbits {
 		if (!this.isOutputAssigned()) {
 			throw new Error("Cannot disconnect, no output micro:bit is connected");
 		}
-		ConnectionBehaviours.getOutputBehaviour().bluetoothDisconnect(true);
+		ConnectionBehaviours.getOutputBehaviour().onExpelled(true);
 		if (this.isInputOutputTheSame()) {
 			this.clearAssignedOutputReference();
 			void this.setGladSmiley(this.assignedInputMicrobit!);
@@ -226,7 +240,7 @@ class Microbits {
 		if (!this.isInputAssigned()) {
 			throw new Error("Cannot disconnect, no input micro:bit is connected");
 		}
-		ConnectionBehaviours.getInputBehaviour().bluetoothDisconnect(true);
+		ConnectionBehaviours.getInputBehaviour().onExpelled(true);
 		if (this.isInputOutputTheSame()) {
 			this.expelInputAndOutput();
 		} else {
@@ -276,7 +290,7 @@ class Microbits {
 		this.assignedOutputMicrobit = this.assignedInputMicrobit;
 		this.outputName = this.inputName;
 		this.outputVersion = this.inputVersion;
-		ConnectionBehaviours.getOutputBehaviour().bluetoothConnect(this.assignedOutputMicrobit, this.outputName);
+		ConnectionBehaviours.getOutputBehaviour().onAssigned(this.assignedOutputMicrobit, this.outputName);
 	}
 
 	public static getInputVersion(): MBSpecs.MBVersion {

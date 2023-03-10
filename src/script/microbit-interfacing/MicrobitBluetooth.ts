@@ -28,11 +28,16 @@ export class MicrobitBluetooth {
 	 *      The version of micro:bit.
 	 * @param {boolean => void} onDisconnect
 	 *      Fired when the micro:bit disconnects.
+	 * @param onReconnect
+	 * 		What happens when the microbit reconnects after lost connection (leave undefined to turn off reconnect)
+	 * @param onReconnectFailed What should happen when the microbit fails to reconnect?
 	 */
 	protected constructor(
 		private gattServer: BluetoothRemoteGATTServer,
 		private microbitVersion: MBSpecs.MBVersion,
-		private onDisconnect: (manual?: boolean) => void = () => {/*Empty*/}
+		private onDisconnect: (manual?: boolean) => void = () => {/*Empty*/},
+		private onReconnect?: (gattServer: BluetoothRemoteGATTServer) => void,
+		private onReconnectFailed?: () => void
 	) {
 		this.dcListener = this.disconnectListener.bind(this);
 		this.disconnectHasFired = false;
@@ -347,6 +352,23 @@ export class MicrobitBluetooth {
 	 * @private
 	 */
 	private disconnectListener(event: Event): void {
+		if (this.onReconnect) {
+			MicrobitBluetooth.exponentialBackoff(1, 1.0,
+				() => {
+					// Attempt reconnect
+					return this.device.gatt!.connect()
+				},
+				(result) => {
+					void this.onReconnect!(result)
+				},
+				() => {
+					//todo: add onReconnectFailed?
+					if (this.onReconnectFailed) {
+						void this.onReconnectFailed();
+					}
+				}
+			);
+		}
 		this.disconnectEventHandler(false);
 	}
 
@@ -406,6 +428,8 @@ export class MicrobitBluetooth {
 	 *      The microbit device to connect to.
 	 * @param {BluetoothRemoteGATTServer => void} onConnect
 	 *      Fired when a successful connection is made.
+	 * @param onReconnect What should happen when the microbit reconnects
+	 * @param onReconnectFailed What should happen when the microbit fails to reconnect
 	 * @param {(boolean) => void} onDisconnect
 	 *      Fired when the device disconnects.
 	 * @param {Error => void} onConnectFailed
@@ -415,7 +439,9 @@ export class MicrobitBluetooth {
 		microbitDevice: BluetoothDevice,
 		onConnect?: (gattServer?: BluetoothRemoteGATTServer) => void,
 		onDisconnect?: (manual?: boolean) => void,
-		onConnectFailed?: (err: Error) => void
+		onConnectFailed?: (err: Error) => void,
+		onReconnect?: (gattServer?: BluetoothRemoteGATTServer) => void,
+		onReconnectFailed?: () => void
 	): Promise<MicrobitBluetooth> {
 		try {
 			if(microbitDevice.gatt === undefined){
@@ -433,7 +459,9 @@ export class MicrobitBluetooth {
 			const connection = new MicrobitBluetooth(
 				gattServer,
 				microbitVersion,
-				onDisconnect
+				onDisconnect,
+				onReconnect,
+				onReconnectFailed
 			);
 
 			// fire the connect event and return the connection object
@@ -453,6 +481,18 @@ export class MicrobitBluetooth {
 			}
 			return Promise.reject("Failed to establish a connection!");
 		}
+	}
+
+	private static exponentialBackoff(max: number, delay: number, toTry:() => Promise<BluetoothRemoteGATTServer>, success: (mbDevice: BluetoothRemoteGATTServer) => void, fail: () => void) {
+		toTry().then(result => success(result))
+			.catch(_ => {
+				if (max === 0) {
+					return fail();
+				}
+				setTimeout(function() {
+					MicrobitBluetooth.exponentialBackoff(--max, delay * 1.5, toTry, success, fail);
+				}, delay * 1000);
+			});
 	}
 }
 

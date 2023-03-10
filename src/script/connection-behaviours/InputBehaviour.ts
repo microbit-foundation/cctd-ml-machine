@@ -13,15 +13,45 @@ t.subscribe((t) => (text = t));
  * Implementation of the input ConnectionBehaviour
  */
 class InputBehaviour implements ConnectionBehaviour {
+
 	private smoothedAccelX = 0;
 	private smoothedAccelY = 0;
 	private smoothedAccelZ = 0;
 
-	public isConnected(): boolean {
+	public isAssigned(): boolean {
 		return get(state).isRecording;
 	}
 
-	bluetoothConnect(microbitBluetooth: MicrobitBluetooth, name: string) {
+	onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
+	}
+
+	onExpelled(manual?: boolean, bothDisconnected?: boolean): void {
+		state.update((s) => {
+			s.isConnected = false;
+			s.offerReconnect = !manual;
+			s.reconnectState = DeviceRequestStates.INPUT;
+			return s;
+		});
+	}
+
+	onCancelledBluetoothRequest(): void {
+		state.update((s) => {
+			s.requestDeviceWasCancelled = true;
+			s.isConnected = false;
+			return s;
+		});
+	}
+
+	onDisconnected(): void {
+		state.update((s) => {
+			s.isConnected = false;
+			s.offerReconnect = false;
+			s.reconnectState = DeviceRequestStates.NONE;
+			return s;
+		});
+	}
+
+	onConnected(name: string): void {
 		informUser(text("alert.micro.GATTserverInform"));
 		informUser(text("alert.micro.microBitServiceInform"));
 		informUser(text("alert.micro.gettingDataInform"));
@@ -37,34 +67,6 @@ class InputBehaviour implements ConnectionBehaviour {
 		}
 
 		informUser(text("alert.micro.nowConnectedInform"));
-	}
-
-	bluetoothDisconnect(manual?: boolean, bothDisconnected?: boolean): void {
-		state.update((s) => {
-			s.isConnected = false;
-			s.offerReconnect = !manual;
-			s.reconnectState = DeviceRequestStates.INPUT;
-			return s;
-		});
-	}
-
-	bluetoothConnectionError(error?: Error): void {
-		if (error) {
-			if (error.message) {
-				if (error.message.includes("User cancelled the requestDevice() chooser")) {
-					// User just cancelled
-					state.update((s) => {
-						s.requestDeviceWasCancelled = true;
-						return s;
-					});
-				}
-			}
-			console.log(error);
-		}
-		state.update((s) => {
-			s.isConnected = false;
-			return s;
-		});
 	}
 
 	accelerometerChange(x: number, y: number, z: number): void {

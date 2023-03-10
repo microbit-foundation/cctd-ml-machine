@@ -34,9 +34,9 @@
 
 		const connect = () => {
 			if (connectState == DeviceRequestStates.INPUT) {
-				return Microbits.connectBluetoothInput(name);
+				return Microbits.assignInput(name);
 			}
-			return Microbits.connectBluetoothOutput(name);
+			return Microbits.assignOutput(name);
 		};
 
 		void connect().then((didSucceed) => {

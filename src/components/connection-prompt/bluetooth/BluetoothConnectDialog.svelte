@@ -26,9 +26,9 @@
 		let name = MBSpecs.Utility.patternToName($patternMatrixState);
 		const connectionResult = () => {
 			if (deviceState == DeviceRequestStates.INPUT) {
-				return Microbits.connectBluetoothInput(name);
+				return Microbits.assignInput(name);
 			} else {
-				return Microbits.connectBluetoothOutput(name);
+				return Microbits.assignOutput(name);
 			}
 		};
 

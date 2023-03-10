@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import "svelte-jester";
-import MockUSBDevice, { TestableMicrobitUSB } from "./mock-bluetooth/mock-usb";
+import MockUSBDevice, { TestableMicrobitUSB } from "./mocks/mock-usb";
 
 describe("Microbit USB connection tests", () => {
 

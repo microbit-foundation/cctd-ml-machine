@@ -31,8 +31,8 @@ export class MicrobitBluetooth {
 	 */
 	protected constructor(
 		private gattServer: BluetoothRemoteGATTServer,
-		private microbitVersion: 1 | 2,
-		private onDisconnect: (manual?: boolean) => void
+		private microbitVersion: MBSpecs.MBVersion,
+		private onDisconnect: (manual?: boolean) => void = () => {/*Empty*/}
 	) {
 		this.dcListener = this.disconnectListener.bind(this);
 		this.disconnectHasFired = false;
@@ -171,7 +171,7 @@ export class MicrobitBluetooth {
 	/**
 	 * @returns {number} The version of the micro:bit.
 	 */
-	public getVersion(): 1 | 2 {
+	public getVersion(): MBSpecs.MBVersion {
 		return this.microbitVersion;
 	}
 
@@ -359,6 +359,99 @@ export class MicrobitBluetooth {
 		if (this.onDisconnect) {
 			this.disconnectHasFired = true;
 			this.onDisconnect(manual);
+		}
+	}
+
+	/**
+	 * Opens a requestDevice prompt on the browser, searching for a micro:bit with the given name.
+	 * @param {string} name
+	 *      The name of the micro:bit.
+	 * @param {Error => void} onRequestFailed
+	 *      Fired if the request failed.
+	 */
+	public static async requestDevice(
+		name: string,
+		onRequestFailed?: (e: Error) => void
+	): Promise<BluetoothDevice> {
+		return new Promise<BluetoothDevice>((resolve, reject) => {
+			try {
+				navigator.bluetooth
+					.requestDevice({
+						filters: [{ namePrefix: `BBC micro:bit [${name}]` }],
+						optionalServices: [
+							MBSpecs.Services.UART_SERVICE,
+							MBSpecs.Services.ACCEL_SERVICE,
+							MBSpecs.Services.DEVICE_INFO_SERVICE,
+							MBSpecs.Services.LED_SERVICE,
+							MBSpecs.Services.IO_SERVICE,
+							MBSpecs.Services.BUTTON_SERVICE
+						]
+					})
+					.then((btDevice) => {
+						resolve(btDevice);
+					}).catch(e => reject(e));
+			} catch (e: unknown) {
+				if (onRequestFailed) {
+					onRequestFailed(e as Error);
+				}
+				reject(e);
+			}
+		});
+	}
+
+	/**
+	 * Attempts to connect to the micro:bit device.
+	 *
+	 * @param {BluetoothDevice} microbitDevice
+	 *      The microbit device to connect to.
+	 * @param {BluetoothRemoteGATTServer => void} onConnect
+	 *      Fired when a successful connection is made.
+	 * @param {(boolean) => void} onDisconnect
+	 *      Fired when the device disconnects.
+	 * @param {Error => void} onConnectFailed
+	 *      Called when the connection failed.
+	 */
+	public static async createConnection(
+		microbitDevice: BluetoothDevice,
+		onConnect?: (gattServer?: BluetoothRemoteGATTServer) => void,
+		onDisconnect?: (manual?: boolean) => void,
+		onConnectFailed?: (err: Error) => void
+	): Promise<MicrobitBluetooth> {
+		try {
+			if(microbitDevice.gatt === undefined){
+				console.warn('Missing gatt server on microbit device:', microbitDevice)
+				throw new Error("BluetoothRemoteGATTServer for microbit device is undefined");
+			}
+			const gattServer: BluetoothRemoteGATTServer =
+				await microbitDevice.gatt.connect();
+
+			const microbitVersion: MBSpecs.MBVersion = await MBSpecs.Utility.getModelNumber(
+				gattServer
+			);
+
+			// Create the connection object.
+			const connection = new MicrobitBluetooth(
+				gattServer,
+				microbitVersion,
+				onDisconnect
+			);
+
+			// fire the connect event and return the connection object
+			if (onConnect) {
+				if (gattServer.connected) {
+					onConnect(gattServer);
+				}
+			}
+
+			return connection;
+		} catch (e: unknown) {
+			if (onConnectFailed) {
+				onConnectFailed(e as Error);
+				if (microbitDevice.gatt !== undefined){
+					microbitDevice.gatt.disconnect() // In cause bluetooth was connected but some other error occurs, disconnect bluetooth to keep consistent state
+				}
+			}
+			return Promise.reject("Failed to establish a connection!");
 		}
 	}
 }

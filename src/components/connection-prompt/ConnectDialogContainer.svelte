@@ -36,14 +36,14 @@
 	let flashProgress = 0;
 
 	function onFoundUsbDevice() {
-		Microbits.getUSBFriendlyName().then(friendlyName => {// Find the name of the micro:bit
+		Microbits.getLinkedFriendlyName().then(friendlyName => {// Find the name of the micro:bit
 			if (deviceState === DeviceRequestStates.OUTPUT) {
 				btPatternOutput.set(MBSpecs.Utility.nameToPattern(friendlyName));
 			} else {
 				btPatternInput.set(MBSpecs.Utility.nameToPattern(friendlyName));
 			}
 
-			Microbits.flashHexToUSB(progress => {// Flash hex
+			Microbits.flashHexToLinked(progress => {// Flash hex
 				// Send users to download screen
 				if (currentState != ConnectionStates.USB_DOWNLOADING) {
 					currentState = ConnectionStates.USB_DOWNLOADING;

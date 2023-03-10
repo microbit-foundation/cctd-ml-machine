@@ -16,11 +16,11 @@
 	};
 
 	const inputDisconnectButtonClicked = () => {
-		Microbits.disconnectBluetoothInputAndOutput();
+		Microbits.expelInputAndOutput();
 	};
 
 	const outputDisconnectButtonClicked = () => {
-		Microbits.disconnectBluetoothOutput();
+		Microbits.expelOutput();
 	};
 
 </script>

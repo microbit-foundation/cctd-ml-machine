@@ -6,7 +6,7 @@
 	export let onFoundUsb: () => void;
 
 	function onFindUsbClick() {
-		Microbits.connectUSB().then(() => onFoundUsb()).catch((e) => {
+		Microbits.linkMicrobit().then(() => onFoundUsb()).catch((e) => {
 			console.log(e);
 		});
 	}

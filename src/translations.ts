@@ -168,7 +168,6 @@ export default {
 		"connectMB.outputMB.sameButton": "Samme",
 		"connectMB.outputMB.otherButton": "Anden",
 
-
 		// COOKIE BANNER
 
 		"cookies.banner.title": "Cookie politik",
@@ -267,7 +266,6 @@ export default {
 		"content.data.choice": "Choice",
 		"content.data.choice.header": "Choice of class",
 		"content.data.choice.body": "Here, you choose which class you want to add data to. After having selected a class, you can either press the \"Record\" button below or press one of the buttons on your micro:bit to record a data segment. See the picture below.",
-
 
 		"content.data.dataDescription": "Here you can see the gathered data. ",
 		"content.data.addDataNoConnection": "You cannot add data without being connected with a micro:bit",

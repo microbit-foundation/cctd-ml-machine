@@ -14,7 +14,6 @@ export class MicrobitBluetooth {
 	private readonly device: BluetoothDevice;
 
 	private dcListener: OmitThisParameter<(event: Event) => void>;
-	private isReadingServices = false;
 
 	/**
 	 * Constructs a bluetooth connection object. Should not be called directly.
@@ -326,7 +325,7 @@ export class MicrobitBluetooth {
 	 */
 	private disconnectEventHandler(manual?: boolean): void {
 		if (this.device === undefined) return;
-		if (this.onDisconnect && !this.isReadingServices) {
+		if (this.onDisconnect) {
 			this.onDisconnect(manual);
 		}
 	}

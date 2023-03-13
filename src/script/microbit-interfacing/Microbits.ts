@@ -107,38 +107,61 @@ class Microbits {
 		try {
 			const request = await MicrobitBluetooth
 				.requestDevice(name, onFailedConnection);
-			this.assignedInputMicrobit = await MicrobitBluetooth
-				.createConnection(
+			await MicrobitBluetooth
+				.createMicrobitBluetooth(
 					request,
-					() => connectionBehaviour.onConnected(name),
+					(microbit) => {
+						this.assignedInputMicrobit = microbit;
+						Microbits.listenToInputServices().then(() => {
+							connectionBehaviour.onConnected(name)
+						}).catch((e) => {
+							console.log("HELLO")
+						})
+					},
 					(manual) => {
-						this.clearAssignedInputReference();
-						if (this.isOutputAssigned()) {
-							this.expelOutput();
+						if (manual) {
+							connectionBehaviours.getInputBehaviour().onExpelled(manual, true);
+							connectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
+							this.clearAssignedOutputReference();
+						} else {
+							connectionBehaviour.onDisconnected();
 						}
-						this.clearAssignedOutputReference();
-						connectionBehaviours.getInputBehaviour().onExpelled(manual, true);
-						connectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
 					},
 					onFailedConnection,
-					() => {connectionBehaviour.onConnected(name)},
+					(microbit) => {
+						Microbits.listenToInputServices().then(() => {
+							this.assignedInputMicrobit = microbit;
+							connectionBehaviour.onConnected(name)
+						}).catch((e) => {
+							this.assignedInputMicrobit?.disconnect()
+							console.log(e)
+						})
+					},
 					() => {
 						connectionBehaviours.getInputBehaviour().onExpelled(false, true);
 						connectionBehaviours.getOutputBehaviour().onExpelled(false, true);
 					}
 				);
 
-			connectionBehaviour.onAssigned(this.assignedInputMicrobit, name);
+			connectionBehaviour.onAssigned(this.assignedInputMicrobit!, name);
 			this.inputName = name;
-			this.inputVersion = this.assignedInputMicrobit.getVersion();
-			await this.assignedInputMicrobit.listenToAccelerometer(connectionBehaviour.accelerometerChange.bind(connectionBehaviour));
-			await this.assignedInputMicrobit.listenToButton("A", connectionBehaviour.buttonChange.bind(connectionBehaviour));
-			await this.assignedInputMicrobit.listenToButton("B", connectionBehaviour.buttonChange.bind(connectionBehaviour));
+			this.inputVersion = this.assignedInputMicrobit!.getVersion();
 			return true;
 		} catch (e) {
+			console.log(e);
 			onFailedConnection(e as Error);
 		}
 		return false;
+	}
+
+	private static async listenToInputServices(): Promise<void> {
+		const connectionBehaviour = ConnectionBehaviours.getInputBehaviour();
+		if (!this.isInputConnected()) {
+			throw new Error("Could not listen to services, no microbit connected!")
+		}
+		await this.assignedInputMicrobit!.listenToAccelerometer(connectionBehaviour.accelerometerChange.bind(connectionBehaviour));
+		await this.assignedInputMicrobit!.listenToButton("A", connectionBehaviour.buttonChange.bind(connectionBehaviour));
+		await this.assignedInputMicrobit!.listenToButton("B", connectionBehaviour.buttonChange.bind(connectionBehaviour));
 	}
 
 	/**
@@ -159,12 +182,16 @@ class Microbits {
 				.requestDevice(name, onFailedConnection);
 
 			this.assignedOutputMicrobit = await MicrobitBluetooth
-				.createConnection(
+				.createMicrobitBluetooth(
 					request,
 					undefined,
 					(manual) => {
 						this.clearAssignedOutputReference();
-						connectionBehaviours.getOutputBehaviour().onExpelled(manual);
+						if (manual) {
+							connectionBehaviours.getOutputBehaviour().onExpelled(manual);
+						} else {
+							connectionBehaviours.getOutputBehaviour().onDisconnected();
+						}
 					},
 					onFailedConnection
 				);

@@ -5,6 +5,8 @@ import { livedata } from "../stores/mlStore";
 import { t } from "../../i18n";
 import { get } from "svelte/store";
 import MBSpecs from "../microbit-interfacing/MBSpecs";
+import LoggingDecorator from "./LoggingDecorator";
+import Microbits from "../microbit-interfacing/Microbits";
 
 let text = get(t);
 t.subscribe((t) => (text = t));
@@ -12,7 +14,7 @@ t.subscribe((t) => (text = t));
 /**
  * Implementation of the input ConnectionBehaviour
  */
-class InputBehaviour implements ConnectionBehaviour {
+class InputBehaviour extends LoggingDecorator {
 
 	private smoothedAccelX = 0;
 	private smoothedAccelY = 0;
@@ -23,9 +25,11 @@ class InputBehaviour implements ConnectionBehaviour {
 	}
 
 	onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
+		super.onAssigned(microbitBluetooth, name)
 	}
 
 	onExpelled(manual?: boolean, bothDisconnected?: boolean): void {
+		super.onExpelled(manual, bothDisconnected)
 		state.update((s) => {
 			s.isConnected = false;
 			s.offerReconnect = !manual;
@@ -35,6 +39,7 @@ class InputBehaviour implements ConnectionBehaviour {
 	}
 
 	onCancelledBluetoothRequest(): void {
+		super.onCancelledBluetoothRequest()
 		state.update((s) => {
 			s.requestDeviceWasCancelled = true;
 			s.isConnected = false;
@@ -43,6 +48,8 @@ class InputBehaviour implements ConnectionBehaviour {
 	}
 
 	onDisconnected(): void {
+		super.onDisconnected()
+		console.log(Microbits.isInputConnected())
 		state.update((s) => {
 			s.isConnected = false;
 			s.offerReconnect = false;
@@ -52,6 +59,8 @@ class InputBehaviour implements ConnectionBehaviour {
 	}
 
 	onConnected(name: string): void {
+		super.onConnected(name)
+
 		informUser(text("alert.micro.GATTserverInform"));
 		informUser(text("alert.micro.microBitServiceInform"));
 		informUser(text("alert.micro.gettingDataInform"));
@@ -70,6 +79,8 @@ class InputBehaviour implements ConnectionBehaviour {
 	}
 
 	accelerometerChange(x: number, y: number, z: number): void {
+		super.accelerometerChange(x,y,z)
+
 		const accelX = x / 1000.0;
 		const accelY = y / 1000.0;
 		const accelZ = z / 1000.0;
@@ -88,6 +99,7 @@ class InputBehaviour implements ConnectionBehaviour {
 	}
 
 	buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {
+		super.buttonChange(buttonState, button)
 		if (buttonState === MBSpecs.ButtonStates.Released) return;
 		if (button === "A") {
 			buttonPressed.update((obj) => {

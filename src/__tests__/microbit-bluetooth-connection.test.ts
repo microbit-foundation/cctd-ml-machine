@@ -37,24 +37,24 @@ describe("Microbit Bluetooth interface tests", () => {
 
 	test("can create connection", async () => {
 		const mockBt = new MockBTDevice().withMicrobitVersion(2).build();
-		const con = await MicrobitBluetooth.createConnection(mockBt);
+		const con = await MicrobitBluetooth.createMicrobitBluetooth(mockBt);
 		expect(con).toBeDefined();
 	});
 
 	test("Can read version", async () => {
 		const mockBt1 = new MockBTDevice().withMicrobitVersion(1).build();
-		const con1 = await MicrobitBluetooth.createConnection(mockBt1);
+		const con1 = await MicrobitBluetooth.createMicrobitBluetooth(mockBt1);
 		expect(con1.getVersion()).toBe(1);
 
 		const mockBt2 = new MockBTDevice().withMicrobitVersion(2).build();
-		const con2 = await MicrobitBluetooth.createConnection(mockBt2);
+		const con2 = await MicrobitBluetooth.createMicrobitBluetooth(mockBt2);
 		expect(con2.getVersion()).toBe(2);
 	});
 
 	test("On connect fires when connected", async () => {
 		const mockBt = new MockBTDevice().build();
 		let didFire = false;
-		await MicrobitBluetooth.createConnection(mockBt, () => didFire = true
+		await MicrobitBluetooth.createMicrobitBluetooth(mockBt, () => didFire = true
 		);
 		expect(didFire).toBe(true);
 	});
@@ -63,7 +63,7 @@ describe("Microbit Bluetooth interface tests", () => {
 		const mockBt = new MockBTDevice().withFailingConnection().build();
 		let didFire = false;
 		try {
-			await MicrobitBluetooth.createConnection(mockBt, () => didFire = true
+			await MicrobitBluetooth.createMicrobitBluetooth(mockBt, () => didFire = true
 			);
 
 		} catch (e) {
@@ -76,7 +76,7 @@ describe("Microbit Bluetooth interface tests", () => {
 		const mockBt = new MockBTDevice().withFailingConnection().build();
 		let didFire = false;
 		try {
-			await MicrobitBluetooth.createConnection(
+			await MicrobitBluetooth.createMicrobitBluetooth(
 				mockBt,
 				void 0,
 				void 0,
@@ -91,7 +91,7 @@ describe("Microbit Bluetooth interface tests", () => {
 	test("onConnectFailed does not fire when connection succeeds", async () => {
 		const mockBt: BluetoothDevice = new MockBTDevice().build();
 		let didFire = false;
-		await MicrobitBluetooth.createConnection(
+		await MicrobitBluetooth.createMicrobitBluetooth(
 			mockBt,
 			void 0,
 			void 0,
@@ -104,7 +104,7 @@ describe("Microbit Bluetooth interface tests", () => {
 	test("onDisconnect fires when gatt is disconnected", async () => {
 		const mockBt: BluetoothDevice = new MockBTDevice().build();
 		let didFire = false;
-		await MicrobitBluetooth.createConnection(
+		await MicrobitBluetooth.createMicrobitBluetooth(
 			mockBt,
 			void 0,
 			() => {
@@ -125,7 +125,7 @@ describe("Microbit Bluetooth interface tests", () => {
 	test("Can connect to requested device", async () => {
 		const device = await MicrobitBluetooth.requestDevice("vatav");
 
-		const con = await MicrobitBluetooth.createConnection(device);
+		const con = await MicrobitBluetooth.createMicrobitBluetooth(device);
 		expect(con).toBeDefined();
 		expect(con.isConnected()).toBe(true);
 	});

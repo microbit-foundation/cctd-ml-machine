@@ -13,8 +13,8 @@ type CharacteristicDataTarget = EventTarget & {
 export class MicrobitBluetooth {
 	private readonly device: BluetoothDevice;
 
-	private disconnectHasFired: boolean;
 	private dcListener: OmitThisParameter<(event: Event) => void>;
+	private isReadingServices = false;
 
 	/**
 	 * Constructs a bluetooth connection object. Should not be called directly.
@@ -24,7 +24,7 @@ export class MicrobitBluetooth {
 	 *    Callback to be called when the connection is established.
 	 * @param {BluetoothRemoteGATTServer} gattServer
 	 *      The gattServer, that has been attached to this micro:bit.
-	 * @param {number} microbitVersion
+	 * @param {MBSpecs.MBVersion} microbitVersion
 	 *      The version of micro:bit.
 	 * @param {boolean => void} onDisconnect
 	 *      Fired when the micro:bit disconnects.
@@ -36,11 +36,10 @@ export class MicrobitBluetooth {
 		private gattServer: BluetoothRemoteGATTServer,
 		private microbitVersion: MBSpecs.MBVersion,
 		private onDisconnect: (manual?: boolean) => void = () => {/*Empty*/},
-		private onReconnect?: (gattServer: BluetoothRemoteGATTServer) => void,
+		private onReconnect?: (microbit: MicrobitBluetooth) => void,
 		private onReconnectFailed?: () => void
 	) {
 		this.dcListener = this.disconnectListener.bind(this);
-		this.disconnectHasFired = false;
 		this.device = gattServer.device;
 		this.device.addEventListener(
 			"gattserverdisconnected",
@@ -75,81 +74,42 @@ export class MicrobitBluetooth {
 	 * @returns {Promise<BluetoothRemoteGATTService>} The UART service of the micro:bit.
 	 */
 	public async getUARTService(): Promise<BluetoothRemoteGATTService> {
-		try {
-			return await this.gattServer.getPrimaryService(
-				MBSpecs.Services.UART_SERVICE
-			);
-		} catch (e) {
-			return Promise.reject(e);
-		}
+		return await this.getService(MBSpecs.Services.UART_SERVICE);
 	}
 
 	/**
 	 * @returns {Promise<BluetoothRemoteGATTService>} The accelerometer service of the micro:bit.
 	 */
 	public async getAccelerometerService(): Promise<BluetoothRemoteGATTService> {
-		try {
-			return await this.gattServer.getPrimaryService(
-				MBSpecs.Services.ACCEL_SERVICE
-			);
-		} catch (e) {
-			console.log(e);
-			return Promise.reject(e);
-		}
+		return await this.getService(MBSpecs.Services.ACCEL_SERVICE);
 	}
 
 	/**
 	 * @returns {Promise<BluetoothRemoteGATTService>} The button service of the micro:bit.
 	 */
 	public async getButtonService(): Promise<BluetoothRemoteGATTService> {
-		try {
-			return await this.gattServer.getPrimaryService(
-				MBSpecs.Services.BUTTON_SERVICE
-			);
-		} catch (e) {
-			console.log(e);
-			return Promise.reject(e);
-		}
+		return await this.getService(MBSpecs.Services.BUTTON_SERVICE);
 	}
 
 	/**
 	 * @returns {Promise<BluetoothRemoteGATTService>} The device information service of the micro:bit.
 	 */
 	public async getDeviceInfoService(): Promise<BluetoothRemoteGATTService> {
-		try {
-			return await this.gattServer.getPrimaryService(
-				MBSpecs.Services.DEVICE_INFO_SERVICE
-			);
-		} catch (e) {
-			console.log(e);
-			return Promise.reject(e);
-		}
+		return await this.getService(MBSpecs.Services.DEVICE_INFO_SERVICE);
 	}
 
 	/**
 	 * @returns {Promise<BluetoothRemoteGATTService>} The LED service of the micro:bit.
 	 */
 	public async getLEDService(): Promise<BluetoothRemoteGATTService> {
-		try {
-			return await this.gattServer.getPrimaryService(
-				MBSpecs.Services.LED_SERVICE
-			);
-		} catch (e) {
-			console.log(e);
-			return Promise.reject(e);
-		}
+		return await this.getService(MBSpecs.Services.LED_SERVICE);
 	}
 
 	/**
 	 * @returns {Promise<BluetoothRemoteGATTService>} The IO service of the micro:bit.
 	 */
 	public async getIOService(): Promise<BluetoothRemoteGATTService> {
-		try {
-			return await this.gattServer.getPrimaryService(MBSpecs.Services.IO_SERVICE);
-		} catch (e) {
-			console.log(e);
-			return Promise.reject(e);
-		}
+		return await this.getService(MBSpecs.Services.IO_SERVICE);
 	}
 
 	/**
@@ -174,7 +134,7 @@ export class MicrobitBluetooth {
 	}
 
 	/**
-	 * @returns {number} The version of the micro:bit.
+	 * @returns {MBSpecs.MBVersion} The version of the micro:bit.
 	 */
 	public getVersion(): MBSpecs.MBVersion {
 		return this.microbitVersion;
@@ -275,15 +235,16 @@ export class MicrobitBluetooth {
 	public async listenToAccelerometer(
 		onAccelerometerChanged: (x: number, y: number, z: number) => void
 	): Promise<void> {
+		console.log("Listening to accelerometer")
 		const accelerometerService: BluetoothRemoteGATTService =
 			await this.getAccelerometerService();
-
+		console.log("Got service")
 		const accelerometerCharacteristic: BluetoothRemoteGATTCharacteristic =
-			await accelerometerService.getCharacteristic(
-				MBSpecs.Characteristics.ACCEL_DATA
-			);
+			await accelerometerService.getCharacteristic(MBSpecs.Characteristics.ACCEL_DATA);
+		console.log("Got characteristic")
 
 		await accelerometerCharacteristic.startNotifications();
+		console.log("Started notifications")
 
 		accelerometerCharacteristic.addEventListener(
 			"characteristicvaluechanged",
@@ -297,6 +258,8 @@ export class MicrobitBluetooth {
 				onAccelerometerChanged(x, y, z);
 			}
 		);
+		console.log("Added listener")
+
 	}
 
 	/**
@@ -353,21 +316,14 @@ export class MicrobitBluetooth {
 	 */
 	private disconnectListener(event: Event): void {
 		if (this.onReconnect) {
-			MicrobitBluetooth.exponentialBackoff(1, 1.0,
-				() => {
-					// Attempt reconnect
-					return this.device.gatt!.connect()
-				},
-				(result) => {
-					void this.onReconnect!(result)
-				},
-				() => {
-					//todo: add onReconnectFailed?
-					if (this.onReconnectFailed) {
-						void this.onReconnectFailed();
-					}
+			this.device.gatt!.connect().then(() => {
+				this.onReconnect?.(this)
+			}).catch(() => {
+				console.log("Failed reconnnect")
+				if (this.onReconnectFailed) {
+					void this.onReconnectFailed();
 				}
-			);
+			});
 		}
 		this.disconnectEventHandler(false);
 	}
@@ -376,10 +332,8 @@ export class MicrobitBluetooth {
 	 * Fires when the micro:bit disconnects.
 	 */
 	private disconnectEventHandler(manual?: boolean): void {
-		if (this.disconnectHasFired) return;
 		if (this.device === undefined) return;
-		if (this.onDisconnect) {
-			this.disconnectHasFired = true;
+		if (this.onDisconnect && !this.isReadingServices) {
 			this.onDisconnect(manual);
 		}
 	}
@@ -435,12 +389,12 @@ export class MicrobitBluetooth {
 	 * @param {Error => void} onConnectFailed
 	 *      Called when the connection failed.
 	 */
-	public static async createConnection(
+	public static async createMicrobitBluetooth(
 		microbitDevice: BluetoothDevice,
-		onConnect?: (gattServer?: BluetoothRemoteGATTServer) => void,
+		onConnect?: (microbit: MicrobitBluetooth) => void,
 		onDisconnect?: (manual?: boolean) => void,
 		onConnectFailed?: (err: Error) => void,
-		onReconnect?: (gattServer?: BluetoothRemoteGATTServer) => void,
+		onReconnect?: (microbit: MicrobitBluetooth) => void,
 		onReconnectFailed?: () => void
 	): Promise<MicrobitBluetooth> {
 		try {
@@ -451,11 +405,10 @@ export class MicrobitBluetooth {
 			const gattServer: BluetoothRemoteGATTServer =
 				await microbitDevice.gatt.connect();
 
-			const microbitVersion: MBSpecs.MBVersion = await MBSpecs.Utility.getModelNumber(
-				gattServer
-			);
+			const microbitVersion: MBSpecs.MBVersion =
+				await MBSpecs.Utility.getModelNumber(gattServer);
 
-			// Create the connection object.
+			// Create the wrapper object.
 			const connection = new MicrobitBluetooth(
 				gattServer,
 				microbitVersion,
@@ -467,7 +420,7 @@ export class MicrobitBluetooth {
 			// fire the connect event and return the connection object
 			if (onConnect) {
 				if (gattServer.connected) {
-					onConnect(gattServer);
+					onConnect(connection);
 				}
 			}
 
@@ -483,16 +436,15 @@ export class MicrobitBluetooth {
 		}
 	}
 
-	private static exponentialBackoff(max: number, delay: number, toTry:() => Promise<BluetoothRemoteGATTServer>, success: (mbDevice: BluetoothRemoteGATTServer) => void, fail: () => void) {
-		toTry().then(result => success(result))
-			.catch(_ => {
-				if (max === 0) {
-					return fail();
-				}
-				setTimeout(function() {
-					MicrobitBluetooth.exponentialBackoff(--max, delay * 1.5, toTry, success, fail);
-				}, delay * 1000);
-			});
+	private async getService(serviceUuid: string): Promise<BluetoothRemoteGATTService> {
+		try {
+			return await this.gattServer.getPrimaryService(
+				serviceUuid
+			);
+		} catch (e) {
+			console.log(e);
+		}
+		throw new Error("Failed to get primary service!")
 	}
 }
 

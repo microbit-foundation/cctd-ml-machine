@@ -17,9 +17,7 @@ class OutputBehaviour extends LoggingDecorator {
 		super.onBluetoothConnectionError(error);
 		state.update((s) => {
 			s.isOutputting = false;
-			s.offerReconnect = true;
 			s.isOutputAssigned = false;
-			s.reconnectState = DeviceRequestStates.OUTPUT;
 			return s;
 		});
 	}

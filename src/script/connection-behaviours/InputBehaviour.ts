@@ -27,8 +27,6 @@ class InputBehaviour extends LoggingDecorator {
 		state.update((s) => {
 			s.isConnected = false;
 			s.isInputAssigned = false;
-			s.offerReconnect = true;
-			s.reconnectState = DeviceRequestStates.INPUT;
 			return s;
 		});
 	}

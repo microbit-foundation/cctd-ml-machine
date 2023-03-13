@@ -6,18 +6,20 @@ import type ConnectionBehaviour from "./ConnectionBehaviour";
  * Used for logging / Decorator pattern
  */
 abstract class LoggingDecorator implements ConnectionBehaviour {
-    onBluetoothConnectionError(error?:unknown): void {
-        console.log("An error occured while connecting.", error)
-    }
-    private enableLogging: boolean = location.hostname == "localhost" && true
 
-    onReady(): void {
-        this.enableLogging && console.log("Is ready!")
-    }
+    private enableLogging: boolean = location.hostname == "localhost" && true
 
     // For preventing spam of accelerometer data
     private logTimer = new Date().getTime();
     private logInterval = 1000
+
+    onBluetoothConnectionError(error?:unknown): void {
+        this.enableLogging && console.log("An error occured while connecting.", error)
+    }
+
+    onReady(): void {
+        this.enableLogging && console.log("Is ready!")
+    }
 
     accelerometerChange(x: number, y: number, z: number): void {
         // this.enableLogging && this.logTimed("X:", x, "Y:", y,"Z:",z)

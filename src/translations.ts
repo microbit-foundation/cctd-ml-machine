@@ -54,7 +54,7 @@ export default {
 		"content.data.choice.body": "Her vælger du, hvilken klasse du vil tilføje data til. Efter at du har valgt en klasse at tilføje data til, kan du trykke på \"Optag\" knappen nedenfor, eller på en af knapperne på din micro:bit for at optage et data-segment. Se billedet nedenfor.",
 		"content.data.dataDescription": "Her kan du se din indsamlede data. Generelt vil det være en fordel at have mere data, da dette giver lærings-algoritmen mere infomration at lære ud fra.",
 		"content.data.addDataNoConnection": "Du kan ikke tilføje data, uden at være tilsluttet en micro:bit",
-		"content.data.noData": "Du har ingen bevægelser at træne med, tilføj nogle bevægelser som du vil træne din micro:bit til at genkende.",
+		"content.data.noData": "Du har ingen bevægelser at træne med. Tilføj nogle bevægelser, som du vil træne din BBC micro:bit til at genkende.",
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Træning mislykkedes",
@@ -162,8 +162,8 @@ export default {
 		"connectMB.usb.manual.manualDownloadLink": "her",
 		"connectMB.usb.manual.done": "Færdig: Tilslut med bluetooth",
 
-		"connectMB.outputMB.same": "Brug samme micro:bit",
-		"connectMB.outputMB.different": "Tilslut anden micro:bit",
+		"connectMB.outputMB.same": "Brug samme BBC micro:bit",
+		"connectMB.outputMB.different": "Tilslut anden BBC micro:bit",
 		"connectMB.outputMB.sameButton": "Samme",
 		"connectMB.outputMB.otherButton": "Anden",
 

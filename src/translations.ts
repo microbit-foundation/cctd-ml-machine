@@ -28,12 +28,12 @@ export default {
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
 		// HOME PAGE:
-		"content.index.heading": "Gør Det Selv Machine Learning",
-		"content.index.howBody": "Velkommen til ultra:bit datatræneren. Eksperimenter og leg med machine learning og byg dine første machine learning modeller – kom i gang her!",
+		"content.index.heading": "Gør-det-selv machine learning",
+		"content.index.howBody": "Velkommen til 'ultra:bit datatræneren'. Eksperimentér og leg med machine learning og byg dine første machine learning-modeller – kom i gang her!",
 		"content.index.ledDescription": "25 LED lys",
 		"content.index.recordButtonDescription": "\"Optag\"-knap",
 		"content.index.videoHeading": "Introvideo",
-		"content.index.setupBody2": "Hjemmesiden benytter bluetooth, accelerometer, LED'er, knapper og lyd fra micro:bit'en. For at hjemmesiden kan tilgå disse, skal der overføres et program til micro:bit'en. Det downloades første gang du tilslutter micro:bit'en med USB. Efterfølgende kan du blot tilslutte med bluetooth uden at bruge USB-kablet.",
+		"content.index.setupBody2": "Hjemmesiden benytter bluetooth, accelerometer, LED'er, knapper og lyd fra BBC micro:bit'en. For at hjemmesiden kan tilgå disse, skal der overføres et program til BBC micro:bit'en. Det downloades første gang, du tilslutter BBC micro:bit'en med USB. Efterfølgende kan du blot tilslutte med bluetooth uden at bruge USB-kablet.",
 		"content.index.contactButton": "Kontakt os",
 		"content.index.contactBody": "Hvis du finder fejl og mangler på denne platform, skal du være velkommen til at skrive til os. Hvis du har andre efterspørgsler, ideer eller generel interesse, skal du være velkommen til at kontakte os. Skaberne af denne platform kan kontaktes på:",
 		"content.index.contactMail": "keb@cs.au.dk",
@@ -90,7 +90,7 @@ export default {
 		"content.model.output.popup.header": "Tilslut output-micro:bit",
 		"content.model.output.popup.body": "Hvis du ikke har tilsluttet en output-micro:bit, kan du ikke se resultatet af de ændringer du laver på denne side. Tilslut nedenfor.",
 		// FOOTER:
-		"footer.connectButtonNotConnected": "Tilslut din micro:bit",
+		"footer.connectButtonNotConnected": "Tilslut din BBC micro:bit",
 		"footer.disconnectButton": "Frakobl",
 		"footer.helpHeader": "Live graf",
 		"footer.helpContent": "Når du har forbundet en micro:bit kan du live se Accelerometer-data for alle tre akser på denne graf. Prøv at bevæge din forbundende micro:bit og se, hvordan den data der produceres af bevægelserne ser ud for computeren!",
@@ -101,7 +101,7 @@ export default {
 		// TRAINER MENU:
 		"menu.trainer.helpHeading": "Træner",
 		"menu.trainer.helpBody": "Træneren kigger på eksemplerne i klasserne og forsøger at 'lære', hvordan de forskellige klasser kan genkendes ved at finde mønstre i dataet. Her kan i træne en model, der kan genkende forskellige bevægelser.", //Derudover kan i indstille træneren, vælge hvordan træneren skal forstå dataet og oprette test-sæt.",
-		"menu.trainer.notConnected1": "Du har ikke tilkoblet en micro:bit.",
+		"menu.trainer.notConnected1": "Du har ikke tilkoblet en BBC micro:bit.",
 		"menu.trainer.notConnected2": "Gør dette vha. knappen nedenfor",
 		"menu.trainer.notEnoughDataHeader1": "Ikke nok data!\nGå til Data-siden",
 		"menu.trainer.notEnoughDataInfoBody": "Der er brug for minimum 2 klasser med 3 eksempler i hver for at kunne træne en model.",
@@ -124,10 +124,10 @@ export default {
 
 		"popup.connectMB.bluetooth.heading": "Tilslut med Bluetooth",
 		"popup.connectMB.bluetooth.cancelledConnection": "Du anullerede forbindelses-processen. Prøv igen hvis du ønsker at fortsætte.",
-		"popup.connectMB.bluetooth.step0": "Tilslut et batteri til din micro:bit",
-		"popup.connectMB.bluetooth.step1": "Tegn mønstret du ser på micro:bit'en",
+		"popup.connectMB.bluetooth.step0": "Tilslut et batteri til din BBC micro:bit",
+		"popup.connectMB.bluetooth.step1": "Tegn mønstret du ser på BBC micro:bit'en",
 		"popup.connectMB.bluetooth.step2": "Tryk på knappen nedenfor.",
-		"popup.connectMB.bluetooth.step3": "Vælg din micro:bit og tryk 'tilslut'.",
+		"popup.connectMB.bluetooth.step3": "Vælg din BBC micro:bit og tryk 'tilslut'.",
 		"popup.connectMB.bluetooth.connect": "Tilslut",
 
 		"popup.disconnectedWarning.input": "Din input-micro:bit mistede forbindelsen, vil du prøve igen?",
@@ -137,8 +137,8 @@ export default {
 
 		// NEW CONNECTION PROMPTS - TODO: Rename, merge with above and clean up
 
-		"connectMB.main.usbHeader": "DOWNLOAD PROGRAM TIL MICRO:BIT",
-		"connectMB.main.btHeader": "TILSLUT DIN MICRO:BIT VIA BLUETOOTH",
+		"connectMB.main.usbHeader": "DOWNLOAD PROGRAM TIL BBC MICRO:BIT",
+		"connectMB.main.btHeader": "TILSLUT DIN BBC MICRO:BIT VIA BLUETOOTH",
 		"connectMB.main.usbBody": "Hvis du ikke tidligere har downloadet programmet",
 		"connectMB.main.btBody": "Hvis du allerede har downloadet programmet",
 		"connectMB.main.connectButton": "Tilslut",
@@ -146,8 +146,8 @@ export default {
 
 		"connectMB.output.header": "En micro:bit er allerede forbundet",
 
-		"connectMB.usb.header": "DOWNLOAD PROGRAM TIL MICRO:BIT",
-		"connectMB.usb.body1": "Tilslut din micro:bit med USB-kabel og tryk på 'næste'",
+		"connectMB.usb.header": "DOWNLOAD PROGRAM TIL BBC MICRO:BIT",
+		"connectMB.usb.body1": "Tilslut din BBC micro:bit med USB-kabel og tryk på 'næste'",
 		"connectMB.usb.body2": "Tryk 'Find USB-enhed' og vælg 'BBC micro:bit CMSIS-DAP' eller 'DAPLink CMSIS-DAP' fra popup-beskeden som kommer",
 		"connectMB.usb.button1": "Næste",
 		"connectMB.usb.button2": "Find USB-enhed",
@@ -157,7 +157,7 @@ export default {
 		"connectMB.usb.done.body3": "Hvis du har et batteri til din micro:bit kan du nu tage usb-kablet ud og tilslutte batteriet i stedet.",
 		"connectMB.usb.done.body4": "Hvis du ikke har et batteri kan du fortsætte med at give din micro:bit strøm igennem usb-kablet.",
 
-		"connectMB.usb.manual.header": "Overfør fil til din microbit",
+		"connectMB.usb.manual.header": "Overfør fil til din BBC microbit",
 		"connectMB.usb.manual.manualDownload": "Hvis filen ikke downloadede automatisk tryk",
 		"connectMB.usb.manual.manualDownloadLink": "her",
 		"connectMB.usb.manual.done": "Færdig: Tilslut med bluetooth",

@@ -13,16 +13,15 @@
 	import CompatibilityChecker from "./script/compatibility/CompatibilityChecker";
 	import IncompatiblePlatformView from "./views/IncompatiblePlatformView.svelte";
 	import BluetoothIncompatibilityWarningDialog from "./components/BluetoothIncompatibilityWarningDialog.svelte";
+	import CookieManager from "./script/CookieManager";
 
 	ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
 	ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
 
-	// todo: maybe swap for cookies to avoid links causing the page to offer reconnect
-	const queryString = window.location.search
-	const urlParams = new URLSearchParams(queryString);
-	if (urlParams.has("conerr")) {
+	if (CookieManager.isReconnectFlagSet()) {
 		$state.offerReconnect = true;
 		$state.reconnectState = DeviceRequestStates.INPUT
+		CookieManager.unsetReconnectFlag();
 	}
 </script>
 

@@ -116,6 +116,7 @@ class Microbits {
 					request,
 					(microbit) => {
 						this.assignedInputMicrobit = microbit;
+						this.inputName = name;
 						connectionBehaviour.onConnected(name)
 						Microbits.listenToInputServices().then(() => {
 							connectionBehaviour.onReady();
@@ -124,6 +125,9 @@ class Microbits {
 						})
 					},
 					(manual) => {
+						if (this.isInputOutputTheSame()) {
+							ConnectionBehaviours.getOutputBehaviour().onDisconnected();
+						}
 						if (manual) {
 							ConnectionBehaviours.getInputBehaviour().onExpelled(manual, true);
 							ConnectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
@@ -135,9 +139,22 @@ class Microbits {
 					onFailedConnection,
 					(microbit) => {
 						connectionBehaviour.onConnected(name)
+						this.inputName = name;
 						this.assignedInputMicrobit = microbit;
 						Microbits.listenToInputServices().then(() => {
-							connectionBehaviour.onReady()
+							if (this.isInputOutputTheSame()) {
+								ConnectionBehaviours.getOutputBehaviour().onConnected(name);
+								this.assignedOutputMicrobit = microbit;
+								this.inputName = name;
+								Microbits.listenToOutputServices().then(() => {
+									connectionBehaviour.onReady()
+									ConnectionBehaviours.getOutputBehaviour().onReady();
+								}).catch((reason) => {
+									console.log(reason)
+								})
+							} else {
+								connectionBehaviour.onReady()
+							}
 						}).catch((reason) => {
 							console.log(reason)
 						})
@@ -358,6 +375,12 @@ class Microbits {
 		this.outputName = this.inputName;
 		this.outputVersion = this.inputVersion;
 		ConnectionBehaviours.getOutputBehaviour().onAssigned(this.assignedOutputMicrobit, this.outputName);
+		ConnectionBehaviours.getOutputBehaviour().onConnected(this.outputName);
+		this.listenToOutputServices().then(() => {
+			ConnectionBehaviours.getOutputBehaviour().onReady();
+		}).catch((e) => {
+			console.log(e)
+		});
 	}
 
 	public static getInputVersion(): MBSpecs.MBVersion {

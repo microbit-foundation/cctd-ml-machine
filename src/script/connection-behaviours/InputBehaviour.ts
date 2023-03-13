@@ -5,6 +5,7 @@ import { t } from "../../i18n";
 import { get } from "svelte/store";
 import MBSpecs from "../microbit-interfacing/MBSpecs";
 import LoggingDecorator from "./LoggingDecorator";
+import CookieManager from "../CookieManager";
 
 let text = get(t);
 t.subscribe((t) => (text = t));
@@ -130,18 +131,14 @@ class InputBehaviour extends LoggingDecorator {
 	}
 
 	/**
-	 * This is in case of an unrecoverable reconnect failure due to a bug in chrome/chromium
-	 * Refresh the page is the only known resolution
+	 * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
+	 * Refresh the page is the only known solution
 	 * @private
 	 */
 	private onCatastrophicError() {
-		let url = window.location.href;
-		if (url.indexOf('?') > -1){
-			url += '&conerr=input'
-		}else{
-			url += '?conerr=input'
-		}
-		window.location.href = url;
+		// Set flag to offer reconnect when page reloads
+		CookieManager.setReconnectFlag();
+		location.reload();
 	}
 }
 

@@ -39,6 +39,7 @@
     }}
   >
     {text}
+    <slot></slot>
   </button>
 </div>
 

@@ -11,7 +11,11 @@
 	//       If the one in 'OutputGesture.svelte' is used why do we have default value here?
 	export const trigger = () => {
 		if (Microbits.isOutputAssigned()) {
-			microbits.setOutputMatrix(matrix);
+			try {
+				microbits.setOutputMatrix(matrix);
+			} catch (e) {
+				console.log(e);
+			}
 		}
 	};
 

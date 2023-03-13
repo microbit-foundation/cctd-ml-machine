@@ -6,6 +6,9 @@ import type ConnectionBehaviour from "./ConnectionBehaviour";
  * Used for logging / Decorator pattern
  */
 abstract class LoggingDecorator implements ConnectionBehaviour {
+    onBluetoothConnectionError(error?:unknown): void {
+        console.log("An error occured while connecting.", error)
+    }
     private enableLogging: boolean = location.hostname == "localhost" && true
 
     onReady(): void {

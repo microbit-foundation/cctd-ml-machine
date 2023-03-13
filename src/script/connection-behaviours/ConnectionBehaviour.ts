@@ -43,6 +43,11 @@ interface ConnectionBehaviour {
 	onDisconnected(): void;
 
 	/**
+	 * What should happen when the micro:bit loses connection via Bluetooth
+	 */
+	onBluetoothConnectionError(error?: unknown): void;
+
+	/**
 	 * What should happen when the accelerometer changes.
 	 */
 	accelerometerChange(x: number, y: number, z: number): void;

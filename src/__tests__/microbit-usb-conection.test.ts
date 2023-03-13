@@ -13,7 +13,6 @@ describe("Microbit USB connection tests", () => {
 				predefined: undefined,
 				requestDevice(options?: USBDeviceRequestOptions): any {
 					const result = this.predefined ? this.predefined : Promise.resolve(new MockUSBDevice().build());
-					// @ts-ignore
 					this.predefined = undefined;
 					return Promise.resolve(result);
 				}

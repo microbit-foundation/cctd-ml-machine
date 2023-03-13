@@ -22,6 +22,17 @@ class InputBehaviour extends LoggingDecorator {
 	private reconnectTimeout: ReturnType<typeof setTimeout> = setTimeout(() => {/*empty*/},0);
 	private timeout = 4000;
 
+	onBluetoothConnectionError(error?: unknown) {
+		super.onBluetoothConnectionError(error);
+		state.update((s) => {
+			s.isConnected = false;
+			s.isInputAssigned = false;
+			s.offerReconnect = true;
+			s.reconnectState = DeviceRequestStates.INPUT;
+			return s;
+		});
+	}
+
 	onReady() {
 		super.onReady();
 		clearTimeout(this.reconnectTimeout)

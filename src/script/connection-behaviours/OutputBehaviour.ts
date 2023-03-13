@@ -13,6 +13,17 @@ class OutputBehaviour extends LoggingDecorator {
 	private reconnectTimeout: ReturnType<typeof setTimeout> = setTimeout(() => {/*empty*/},0);
 	private timeout = 4000;
 
+	onBluetoothConnectionError(error?: unknown) {
+		super.onBluetoothConnectionError(error);
+		state.update((s) => {
+			s.isOutputting = false;
+			s.offerReconnect = true;
+			s.isOutputAssigned = false;
+			s.reconnectState = DeviceRequestStates.OUTPUT;
+			return s;
+		});
+	}
+
 	onReady() {
 		super.onReady();
 		state.update(s => {

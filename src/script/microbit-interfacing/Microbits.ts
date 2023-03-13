@@ -95,22 +95,9 @@ class Microbits {
 		}
 
 		const connectionBehaviour = ConnectionBehaviours.getInputBehaviour();
-		const onFailedConnection = (err: Error) => {
-			if (err) {
-				if (err.message && err.message.includes("User cancelled the requestDevice() chooser")) {
-					// User just cancelled
-					connectionBehaviour.onCancelledBluetoothRequest();
-				} else {
-					throw err; // Todo: handle other cases and add events to connection behaviour interface
-				}
-			} else {
-				throw new Error("An unknown error occured while attempting to connect via Bluetooth")
-			}
-		};
-
 		try {
 			const request = await MicrobitBluetooth
-				.requestDevice(name, onFailedConnection);
+				.requestDevice(name, this.onFailedConnection(connectionBehaviour));
 			await MicrobitBluetooth
 				.createMicrobitBluetooth(
 					request,
@@ -138,7 +125,7 @@ class Microbits {
 						}
 						this.clearBluetoothServiceActionQueue();
 					},
-					onFailedConnection,
+					this.onFailedConnection(connectionBehaviour),
 					(microbit) => {
 						connectionBehaviour.onConnected(name)
 						this.inputName = name;
@@ -175,7 +162,7 @@ class Microbits {
 			return true;
 		} catch (e) {
 			console.log(e);
-			onFailedConnection(e as Error);
+			this.onFailedConnection(connectionBehaviour)(e as Error);
 		}
 		return false;
 	}
@@ -199,14 +186,9 @@ class Microbits {
 		console.assert(name.length == 5);
 
 		const connectionBehaviour: ConnectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
-		const onFailedConnection = (err: Error) => {
-			console.log(err)
-			connectionBehaviour.onCancelledBluetoothRequest();
-		};
-
 		try {
 			const request = await MicrobitBluetooth
-				.requestDevice(name, onFailedConnection);
+				.requestDevice(name, this.onFailedConnection(connectionBehaviour));
 
 			this.assignedOutputMicrobit = await MicrobitBluetooth
 				.createMicrobitBluetooth(
@@ -229,7 +211,7 @@ class Microbits {
 						}
 						this.clearBluetoothServiceActionQueue();
 					},
-					onFailedConnection,
+					this.onFailedConnection(connectionBehaviour),
 					(microbit) => {
 						this.assignedOutputMicrobit = microbit;
 						connectionBehaviour.onConnected(name)
@@ -248,9 +230,24 @@ class Microbits {
 			this.outputVersion = this.assignedOutputMicrobit.getVersion();
 			return true;
 		} catch (e) {
-			onFailedConnection(e as Error);
+			this.onFailedConnection(connectionBehaviour)(e as Error);
 		}
 		return false;
+	}
+
+	private static onFailedConnection(behaviour: ConnectionBehaviour) {
+		return (err: Error) => {
+			if (err) {
+				if (err.message && err.message.includes("User cancelled the requestDevice() chooser")) {
+					// User just cancelled
+					behaviour.onCancelledBluetoothRequest();
+				} else {
+					behaviour.onBluetoothConnectionError(err)
+				}
+			} else {
+				behaviour.onBluetoothConnectionError("Unknown error")
+			}
+		};
 	}
 
 	private static async listenToOutputServices(): Promise<void> {

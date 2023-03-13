@@ -119,7 +119,6 @@ export default {
 		"menu.model.connectOutputButton": "Tilslut output-micro:bit",
 		"menu.model.disconnect": "Frakobl output-micro:bit",
 		//CONNECT MICROBIT POP UP:
-		"popup.connectMB.alert.failToReadService": "Kunne ikke læse accelerometer! Prøv venligst igen.",
 
 		"popup.connectMB.main.bluetooth.subtitle": "Tilslut med Bluetooth",
 
@@ -335,7 +334,6 @@ export default {
 		"menu.model.connectOutputButton": "Connect output micro:bit",
 		"menu.model.disconnect": "Disconnect output micro:bit",
 		//CONNECT MICROBIT POP UP:
-		"popup.connectMB.alert.failToReadService": "Could not read accelerometer! Please try again.",
 
 		"popup.connectMB.main.bluetooth.subtitle": "Connect using Bluetooth",
 

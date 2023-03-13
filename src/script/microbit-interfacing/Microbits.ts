@@ -31,6 +31,10 @@ class Microbits {
 	private static outputVersion: MBSpecs.MBVersion | undefined;
 	private static linkedMicrobit: MicrobitUSB | undefined = undefined;
 
+	private static outputIO: BluetoothRemoteGATTCharacteristic | undefined;
+	private static outputMatrix: BluetoothRemoteGATTCharacteristic | undefined;
+	private static outputUart: BluetoothRemoteGATTCharacteristic | undefined;
+
 	private static bluetoothServiceActionQueue = writable<{ busy: boolean, queue: QueueElement[] }>({
 		busy: false,
 		queue: []
@@ -115,9 +119,8 @@ class Microbits {
 						connectionBehaviour.onConnected(name)
 						Microbits.listenToInputServices().then(() => {
 							connectionBehaviour.onReady();
-						}).catch((e) => {
-							console.log("Failed to listen")
-							console.log(e)
+						}).catch((reason) => {
+							console.log(reason)
 						})
 					},
 					(manual) => {
@@ -135,9 +138,8 @@ class Microbits {
 						this.assignedInputMicrobit = microbit;
 						Microbits.listenToInputServices().then(() => {
 							connectionBehaviour.onReady()
-						}).catch((e) => {
-							this.assignedInputMicrobit?.disconnect()
-							console.log(e)
+						}).catch((reason) => {
+							console.log(reason)
 						})
 					},
 					() => {
@@ -188,7 +190,15 @@ class Microbits {
 			this.assignedOutputMicrobit = await MicrobitBluetooth
 				.createMicrobitBluetooth(
 					request,
-					() => connectionBehaviour.onConnected(name),
+					(microbit) => {
+						this.assignedOutputMicrobit = microbit;
+						connectionBehaviour.onConnected(name)
+						this.listenToOutputServices().then(() => {
+							connectionBehaviour.onReady();
+						}).catch((e) => {
+							console.log(e)
+						});
+					},
 					(manual) => {
 						this.clearAssignedOutputReference();
 						if (manual) {
@@ -197,7 +207,19 @@ class Microbits {
 							ConnectionBehaviours.getOutputBehaviour().onDisconnected();
 						}
 					},
-					onFailedConnection
+					onFailedConnection,
+					(microbit) => {
+						this.assignedOutputMicrobit = microbit;
+						connectionBehaviour.onConnected(name)
+						this.listenToOutputServices().then(() => {
+							connectionBehaviour.onReady();
+						}).catch((e) => {
+							console.log(e)
+						});
+					},
+					() => {
+						connectionBehaviour.onExpelled(false, false);
+					}
 				);
 			connectionBehaviour.onAssigned(this.assignedOutputMicrobit, name);
 			this.outputName = name;
@@ -207,6 +229,16 @@ class Microbits {
 			onFailedConnection(e as Error);
 		}
 		return false;
+	}
+
+	private static async listenToOutputServices(): Promise<void> {
+		if (!this.isOutputConnected()) {
+			throw new Error("Could not listen to services, no microbit connected!")
+		}
+		this.outputIO = await this.getIOOf(this.assignedOutputMicrobit!);
+		this.outputMatrix = await this.getMatrixOf(this.assignedOutputMicrobit!);
+		const uartService = await this.assignedOutputMicrobit!.getUARTService();
+		this.outputUart = await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_RX);
 	}
 
 	/**
@@ -280,12 +312,14 @@ class Microbits {
 		}
 	}
 
-	public static async sendToOutputPin(data: any[]) { // todo: isn't part of the feature set for DR, not tested
+	public static sendToOutputPin(data: any[]) { // todo: isn't part of the feature set for DR, not tested
 		if (!this.isOutputAssigned()) {
 			throw new Error("No output microbit is connected, cannot send to pin.");
 		}
 
-		const IO = await this.getIOOf(this.assignedOutputMicrobit!);
+		if (!this.outputIO) {
+			throw new Error("Cannot send to output pin, have not subscribed to the IO service yet!")
+		}
 		const dataView = new DataView(new ArrayBuffer(data.length * 2));
 		data.forEach((point, index) => {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
@@ -295,20 +329,22 @@ class Microbits {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-template-expressions
 			outputting.set({ text: `Turn pin ${point.pin} ${point.on ? "on" : "off"}` });
 		});
-		this.addToServiceActionQueue(IO, dataView);
+		this.addToServiceActionQueue(this.outputIO, dataView);
 	}
 
-	public static async setOutputMatrix(matrix: boolean[]) {
+	public static setOutputMatrix(matrix: boolean[]) {
 		if (!this.isOutputAssigned()) {
 			throw new Error("No output microbit is connected, cannot set matrix.");
 		}
-		const service = await this.getMatrixOf(this.assignedOutputMicrobit!);
+		if (!this.outputMatrix) {
+			throw new Error("Cannot send to output matrix, have not subscribed to the matrix service yet!")
+		}
 		const dataView = new DataView(new ArrayBuffer(5));
 		for (let i = 0; i < 5; i++) {
 			dataView.setUint8(i, this.subarray(matrix, (0 + i * 5), (5 + i * 5))
 				.reduce((byte, bool) => byte << 1 | (bool ? 1 : 0), 0));
 		}
-		this.addToServiceActionQueue(service, dataView);
+		this.addToServiceActionQueue(this.outputMatrix, dataView);
 	}
 
 	public static useInputAsOutput() {
@@ -354,12 +390,14 @@ class Microbits {
 		return this.inputName;
 	}
 
-	public static async sendToOutputUart(type: string, value: string) {
+	public static sendToOutputUart(type: string, value: string) {
 		if (!this.assignedOutputMicrobit) {
 			throw new Error("No output microbit has been set");
 		}
-		const uartService = await this.assignedOutputMicrobit.getUARTService();
-		const uartCharacteristic = await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_RX);
+
+		if (!this.outputUart) {
+			throw new Error("Cannot send to uart. Have not subscribed to UART service yet!")
+		}
 
 		const view = new DataView(new ArrayBuffer(2 + value.length));
 
@@ -369,7 +407,7 @@ class Microbits {
 		}
 		view.setUint8(1 + value.length, "#".charCodeAt(0));
 
-		this.addToServiceActionQueue(uartCharacteristic, view);
+		this.addToServiceActionQueue(this.outputUart, view);
 	}
 
 	public static async linkMicrobit() {
@@ -426,6 +464,9 @@ class Microbits {
 		this.assignedOutputMicrobit = undefined;
 		this.outputName = undefined;
 		this.outputVersion = undefined;
+		this.outputIO = undefined;
+		this.outputUart = undefined;
+		this.outputMatrix = undefined;
 	}
 
 	private static clearAssignedInputReference() {

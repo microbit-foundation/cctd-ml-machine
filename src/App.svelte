@@ -7,8 +7,8 @@
 	import PageContentView from "./views/PageContentView.svelte";
 	import BottomBarMenuView from "./views/BottomBarMenuView.svelte";
 	import CookieBanner from "./components/cookie-bannner/CookieBanner.svelte";
-	import { fade } from "svelte/transition";
-	import { state } from "./script/stores/uiStore";
+	import {fade} from "svelte/transition";
+	import {DeviceRequestStates, state} from "./script/stores/uiStore";
 	import LoadingSpinner from "./components/LoadingSpinner.svelte";
 	import CompatibilityChecker from "./script/compatibility/CompatibilityChecker";
 	import IncompatiblePlatformView from "./views/IncompatiblePlatformView.svelte";
@@ -16,6 +16,14 @@
 
 	ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
 	ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
+
+	// todo: maybe swap for cookies to avoid links causing the page to offer reconnect
+	const queryString = window.location.search
+	const urlParams = new URLSearchParams(queryString);
+	if (urlParams.has("conerr")) {
+		$state.offerReconnect = true;
+		$state.reconnectState = DeviceRequestStates.INPUT
+	}
 </script>
 
 
@@ -35,8 +43,6 @@
 		<CookieBanner />
 		<OverlayView />
 		<BluetoothIncompatibilityWarningDialog />
-
-		<!-- <div class="h-full flex"> -->
 
 		<!-- SIDE BAR -->
 		<div

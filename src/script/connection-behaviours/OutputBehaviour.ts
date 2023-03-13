@@ -14,37 +14,27 @@ class OutputBehaviour extends LoggingDecorator {
 
 	onReady() {
 		super.onReady();
+		state.update(s => {
+			s.isOutputting = true;
+			return s;
+		})
 		clearTimeout(this.reconnectTimeout)
-		console.log("timeout cleared")
 	}
 
 	onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
 		super.onAssigned(microbitBluetooth, name)
-		informUser(text("alert.output.GATTserverInform"));
-		informUser(text("alert.output.microBitServiceInform"));
-		informUser(text("alert.output.connectingToComponents"));
-
-		state.update((s) => {
-			s.isOutputting = true;
-			s.isRequestingDevice = DeviceRequestStates.NONE;
-			s.offerReconnect = false;
+		state.update(s => {
+			s.isOutputAssigned = true;
 			return s;
-		});
-		// Reset connection timeout
-		clearTimeout(this.reconnectTimeout)
-		const catastrophic = () => this.onCatastrophicError();
-		this.reconnectTimeout = setTimeout(function() {
-			catastrophic();
-		}, this.timeout)
-		informUser(text("alert.output.nowConnectedInform"));
+		})
 	}
 
 	onExpelled(manual?: boolean, bothDisconnected?: boolean): void {
 		super.onExpelled(manual, bothDisconnected)
-		// Ensure state is updated
 		state.update((s) => {
 			s.isOutputting = false;
 			s.offerReconnect = !manual;
+			s.isOutputAssigned = false;
 			if (!bothDisconnected) {
 				s.reconnectState = DeviceRequestStates.OUTPUT;
 			}
@@ -71,21 +61,48 @@ class OutputBehaviour extends LoggingDecorator {
 
 	onConnected(name: string): void {
 		super.onConnected(name)
-		throw new Error("Not implemented")
+		informUser(text("alert.output.GATTserverInform"));
+		informUser(text("alert.output.microBitServiceInform"));
+		informUser(text("alert.output.connectingToComponents"));
+
+		state.update((s) => {
+			s.isOutputting = true;
+			s.isRequestingDevice = DeviceRequestStates.NONE;
+			s.offerReconnect = false;
+			return s;
+		});
+
+		// Reset connection timeout
+		clearTimeout(this.reconnectTimeout)
+		const catastrophic = () => this.onCatastrophicError();
+		this.reconnectTimeout = setTimeout(function() {
+			catastrophic();
+		}, this.timeout)
+		informUser(text("alert.output.nowConnectedInform"));
 	}
 
 	onDisconnected(): void {
 		super.onDisconnected()
-		throw new Error("Not implemented")
+		// Ensure state is updated
+		state.update((s) => {
+			s.isOutputting = false;
+			return s;
+		});
 	}
 
 	/**
 	 * This is in case of an unrecoverable reconnect failure due to a bug in chrome/chromium
-	 * Refresh the page is the only known resolution
+	 * Refresh the page is the only known solution
 	 * @private
 	 */
 	private onCatastrophicError() {
-		location.reload();
+		let url = window.location.href;
+		if (url.indexOf('?') > -1){
+			url += '&conerr=input' // leave as input for now
+		}else{
+			url += '?conerr=input'
+		}
+		window.location.href = url;
 	}
 }
 

@@ -97,6 +97,7 @@ export default {
 		"footer.disconnectButton": "Frakobl",
 		"footer.helpHeader": "Live graf",
 		"footer.helpContent": "Når du har forbundet en micro:bit kan du live se Accelerometer-data for alle tre akser på denne graf. Prøv at bevæge din forbundende micro:bit og se, hvordan den data der produceres af bevægelserne ser ud for computeren!",
+		"footer.reconnecting":"Genopretter forbindelsen. Vent venligst",
 		//DATA MENU:
 		"menu.data.helpHeading": "Data",
 		"menu.data.helpBody": "For at træne en model til at genkende forskellige bevægelser, skal vi have gode eksempler på 'god opførsel', som vi kan vise træneren. Her kan i oprette klasser (en type bevægelse) og optage eksempler til hver klasse. Der skal være mindst 2 klasser med hver 3 eksempler før træneren kan træne en model.",
@@ -315,6 +316,7 @@ export default {
 		"footer.disconnectButton": "Disconnect",
 		"footer.helpHeader": "Live graph",
 		"footer.helpContent": "Once you have connected a micro:bit you can watch the accelerometer data for all three axes on this graph in real time. Try moving your connected micro:bit to see what the data looks like to your computer!",
+		"footer.reconnecting":"Reconnecting. Please wait",
 		//DATA MENU:
 		"menu.data.helpHeading": "Data",
 		"menu.data.helpBody": "In order to train a model to recognize different movements, we need good examples of 'good behavior' that we can show the Trainer. Here you can create classes (types of gestures) and record examples for each class. There must be at least 2 classes with 3 examples each before the trainer can train a model.",

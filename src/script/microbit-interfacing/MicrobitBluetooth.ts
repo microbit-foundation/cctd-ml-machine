@@ -235,7 +235,6 @@ export class MicrobitBluetooth {
 	public async listenToAccelerometer(
 		onAccelerometerChanged: (x: number, y: number, z: number) => void
 	): Promise<void> {
-		console.log("Listening to accelerometer")
 		const accelerometerService: BluetoothRemoteGATTService =
 			await this.getAccelerometerService();
 		const accelerometerCharacteristic: BluetoothRemoteGATTCharacteristic =

@@ -29,6 +29,8 @@ export const state = writable<{
 	offerReconnect: boolean,
 	requestDeviceWasCancelled: boolean,
 	reconnectState: DeviceRequestStates,
+	isInputAssigned: boolean,
+	isOutputAssigned: boolean,
 	isLoading: boolean,
 }>({
 	isRequestingDevice: DeviceRequestStates.NONE,
@@ -42,6 +44,8 @@ export const state = writable<{
 	offerReconnect: false,
 	requestDeviceWasCancelled: false,
 	reconnectState: DeviceRequestStates.NONE,
+	isInputAssigned: false,
+	isOutputAssigned: false,
 	isLoading: true
 });
 

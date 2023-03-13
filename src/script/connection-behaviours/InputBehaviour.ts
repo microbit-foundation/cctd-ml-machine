@@ -1,4 +1,3 @@
-import type ConnectionBehaviour from "./ConnectionBehaviour";
 import type MicrobitBluetooth from "../microbit-interfacing/MicrobitBluetooth";
 import { alertUser, buttonPressed, DeviceRequestStates, informUser, state } from "../stores/uiStore";
 import { livedata } from "../stores/mlStore";
@@ -6,7 +5,6 @@ import { t } from "../../i18n";
 import { get } from "svelte/store";
 import MBSpecs from "../microbit-interfacing/MBSpecs";
 import LoggingDecorator from "./LoggingDecorator";
-import Microbits from "../microbit-interfacing/Microbits";
 
 let text = get(t);
 t.subscribe((t) => (text = t));
@@ -26,10 +24,17 @@ class InputBehaviour extends LoggingDecorator {
 	onReady() {
 		super.onReady();
 		clearTimeout(this.reconnectTimeout)
-		console.log("timeout cleared")
+		state.update((s) => {
+			s.isConnected = true;
+			return s;
+		});
 	}
 
 	onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
+		state.update(s => {
+			s.isInputAssigned = true;
+			return s;
+		})
 		super.onAssigned(microbitBluetooth, name)
 	}
 
@@ -37,6 +42,7 @@ class InputBehaviour extends LoggingDecorator {
 		super.onExpelled(manual, bothDisconnected)
 		state.update((s) => {
 			s.isConnected = false;
+			s.isInputAssigned = false;
 			s.offerReconnect = !manual;
 			s.reconnectState = DeviceRequestStates.INPUT;
 			return s;
@@ -67,14 +73,15 @@ class InputBehaviour extends LoggingDecorator {
 		informUser(text("alert.micro.GATTserverInform"));
 		informUser(text("alert.micro.microBitServiceInform"));
 		informUser(text("alert.micro.gettingDataInform"));
+
 		state.update((s) => {
-			s.isConnected = true;
 			s.isRequestingDevice = DeviceRequestStates.NONE;
 			s.offerReconnect = false;
 			return s;
 		});
 
-		// Reset connection timeout
+		// Works like this: If the MB manages to connect, wait `timeout` milliseconds
+		// if MB does not call onReady before that expires, refresh the page
 		clearTimeout(this.reconnectTimeout)
 		const catastrophic = () => this.onCatastrophicError();
 		this.reconnectTimeout = setTimeout(function() {
@@ -128,7 +135,13 @@ class InputBehaviour extends LoggingDecorator {
 	 * @private
 	 */
 	private onCatastrophicError() {
-		location.reload();
+		let url = window.location.href;
+		if (url.indexOf('?') > -1){
+			url += '&conerr=input'
+		}else{
+			url += '?conerr=input'
+		}
+		window.location.href = url;
 	}
 }
 

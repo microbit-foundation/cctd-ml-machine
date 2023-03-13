@@ -78,6 +78,16 @@ class Microbits {
 	}
 
 	/**
+	 * Whether the micro:bit assigned as output is currently connected
+	 */
+	public static isOutputReady(): boolean {
+		if (!this.isOutputConnected()) {
+			return false;
+		}
+		return !(!this.outputMatrix && !this.outputIO && !this.outputUart);
+	}
+
+	/**
 	 * Whether a micro:bit is linked (via USB)
 	 */
 	public static isMicrobitLinked(): boolean {

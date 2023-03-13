@@ -35,8 +35,6 @@
 		void connectionResult().then(didSucceed => {
 			if (didSucceed) {
 				onBluetoothConnected();
-			} else {
-				console.error("Connection failed!");
 			}
 			isConnecting = false;
 		});

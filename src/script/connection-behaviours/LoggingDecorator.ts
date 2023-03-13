@@ -6,7 +6,7 @@ import type ConnectionBehaviour from "./ConnectionBehaviour";
  * Used for logging / Decorator pattern
  */
 abstract class LoggingDecorator implements ConnectionBehaviour {
-    private enableLogging: boolean = location.hostname == "localhost" && false
+    private enableLogging: boolean = location.hostname == "localhost" && true
 
     onReady(): void {
         this.enableLogging && console.log("Is ready!")

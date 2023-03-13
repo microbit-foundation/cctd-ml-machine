@@ -183,7 +183,7 @@ function createModel(): ML5NeuralNetwork {
 		inputs: createInputs(modelSettings),
 		task: "classification",
 		debug: "false",
-		learningRate: get(settings).learningRate // Måske justerbart?
+		learningRate: get(settings).learningRate
 	};
 
 	// Initialize neuralNetwork from ml5js library
@@ -200,8 +200,6 @@ function finishedTraining() {
 		});
 		const { x, y, z } = getPrevData();
 		const input = makeInputs(x, y, z);
-		console.log("Inputs : ");
-		console.log(input);
 		get(model).classify(input, checkModelAndSetupPredictionInterval);
 	});
 }

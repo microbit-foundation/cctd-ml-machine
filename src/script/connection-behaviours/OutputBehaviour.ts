@@ -67,7 +67,6 @@ class OutputBehaviour extends LoggingDecorator {
 		informUser(text("alert.output.connectingToComponents"));
 
 		state.update((s) => {
-			s.isOutputting = true;
 			s.isRequestingDevice = DeviceRequestStates.NONE;
 			s.offerReconnect = false;
 			return s;

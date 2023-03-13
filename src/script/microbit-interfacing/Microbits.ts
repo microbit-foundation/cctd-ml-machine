@@ -132,9 +132,11 @@ class Microbits {
 							ConnectionBehaviours.getInputBehaviour().onExpelled(manual, true);
 							ConnectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
 							this.clearAssignedOutputReference();
+							this.clearAssignedInputReference();
 						} else {
 							connectionBehaviour.onDisconnected();
 						}
+						this.clearBluetoothServiceActionQueue();
 					},
 					onFailedConnection,
 					(microbit) => {
@@ -162,6 +164,8 @@ class Microbits {
 					() => {
 						ConnectionBehaviours.getInputBehaviour().onExpelled(false, true);
 						ConnectionBehaviours.getOutputBehaviour().onExpelled(false, true);
+						this.clearAssignedOutputReference();
+						this.clearAssignedInputReference();
 					}
 				);
 
@@ -217,12 +221,13 @@ class Microbits {
 						});
 					},
 					(manual) => {
-						this.clearAssignedOutputReference();
 						if (manual) {
+							this.clearAssignedOutputReference();
 							ConnectionBehaviours.getOutputBehaviour().onExpelled(manual);
 						} else {
 							ConnectionBehaviours.getOutputBehaviour().onDisconnected();
 						}
+						this.clearBluetoothServiceActionQueue();
 					},
 					onFailedConnection,
 					(microbit) => {
@@ -547,6 +552,10 @@ class Microbits {
 			newArr.push(arr[i]);
 		}
 		return newArr;
+	}
+
+	private static clearBluetoothServiceActionQueue() {
+		this.bluetoothServiceActionQueue.set({busy:false, queue: []})
 	}
 
 	private static async setGladSmiley(mb: MicrobitBluetooth) {

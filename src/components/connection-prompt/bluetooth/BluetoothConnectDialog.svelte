@@ -73,7 +73,13 @@
 	{#if $state.requestDeviceWasCancelled && !isConnecting}
 		<p class="text-red-500 mb-1">{$t("popup.connectMB.bluetooth.cancelledConnection")}</p>
 	{/if}
-	{#if !isConnecting}
+	{#if isConnecting}
+		<!-- Show spinner while connecting -->
+		<div class="w-650px flex flex-col justify-center items-center">
+			<p>{$t("popup.connectMB.bluetooth.connecting")}</p>
+			<img alt="loading" src="imgs/loadingspinner.gif" width="100px">
+		</div>
+	{:else}
 		<div class="grid grid-cols-3 mb-5 w-650px">
 			<div class="col-span-2 pt-5">
 				<p>1. {$t("popup.connectMB.bluetooth.step0")}</p>
@@ -88,16 +94,10 @@
 				/>
 			</div>
 		</div>
-		<!-- <div class="grid grid-cols-1 place-items-center w-full"> -->
 		<StandardButton
 			onClick={connectButtonClicked}
 			text={$t("popup.connectMB.bluetooth.connect")}
 		/>
-	{:else}
-		<div class="w-650px flex flex-col justify-center items-center">
-			<p>{$t("popup.connectMB.bluetooth.connecting")}</p>
-			<img alt="loading" src="imgs/loadingspinner.gif" width="100px">
-		</div>
 	{/if}
 	<!-- </div> -->
 

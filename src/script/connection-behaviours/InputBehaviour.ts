@@ -20,8 +20,13 @@ class InputBehaviour extends LoggingDecorator {
 	private smoothedAccelY = 0;
 	private smoothedAccelZ = 0;
 
-	public isAssigned(): boolean {
-		return get(state).isRecording;
+	private reconnectTimeout: ReturnType<typeof setTimeout> = setTimeout(() => {/*empty*/},0);
+	private timeout = 4000;
+
+	onReady() {
+		super.onReady();
+		clearTimeout(this.reconnectTimeout)
+		console.log("timeout cleared")
 	}
 
 	onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
@@ -49,7 +54,6 @@ class InputBehaviour extends LoggingDecorator {
 
 	onDisconnected(): void {
 		super.onDisconnected()
-		console.log(Microbits.isInputConnected())
 		state.update((s) => {
 			s.isConnected = false;
 			s.offerReconnect = false;
@@ -60,20 +64,22 @@ class InputBehaviour extends LoggingDecorator {
 
 	onConnected(name: string): void {
 		super.onConnected(name)
-
 		informUser(text("alert.micro.GATTserverInform"));
 		informUser(text("alert.micro.microBitServiceInform"));
 		informUser(text("alert.micro.gettingDataInform"));
-		try {
-			state.update((s) => {
-				s.isConnected = true;
-				s.isRequestingDevice = DeviceRequestStates.NONE;
-				s.offerReconnect = false;
-				return s;
-			});
-		} catch (e) {
-			alertUser(text("popup.connectMB.alert.failToReadService"));
-		}
+		state.update((s) => {
+			s.isConnected = true;
+			s.isRequestingDevice = DeviceRequestStates.NONE;
+			s.offerReconnect = false;
+			return s;
+		});
+
+		// Reset connection timeout
+		clearTimeout(this.reconnectTimeout)
+		const catastrophic = () => this.onCatastrophicError();
+		this.reconnectTimeout = setTimeout(function() {
+			catastrophic();
+		}, this.timeout)
 
 		informUser(text("alert.micro.nowConnectedInform"));
 	}
@@ -114,6 +120,15 @@ class InputBehaviour extends LoggingDecorator {
 				return obj;
 			});
 		}
+	}
+
+	/**
+	 * This is in case of an unrecoverable reconnect failure due to a bug in chrome/chromium
+	 * Refresh the page is the only known resolution
+	 * @private
+	 */
+	private onCatastrophicError() {
+		location.reload();
 	}
 }
 

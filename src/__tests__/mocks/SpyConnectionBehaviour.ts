@@ -73,6 +73,9 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
 	getConnectedName() {
 		return this.connectedName;
 	}
+
+	onReady(): void {
+	}
 }
 
 export default SpyConnectionBehaviour;

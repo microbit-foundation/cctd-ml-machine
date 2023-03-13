@@ -32,14 +32,15 @@ interface ConnectionBehaviour {
 	onConnected(name: string): void;
 
 	/**
+	 * What should happen when the microbit is ready?
+	 * (Has subscribed to all services)
+	 */
+	onReady(): void;
+
+	/**
 	 * What should happen when the micro:bit loses connection via Bluetooth
 	 */
 	onDisconnected(): void;
-
-	/**
-	 * Should return whether the micro:bit is assigned.
-	 */
-	isAssigned(): boolean;
 
 	/**
 	 * What should happen when the accelerometer changes.

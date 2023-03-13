@@ -238,13 +238,10 @@ export class MicrobitBluetooth {
 		console.log("Listening to accelerometer")
 		const accelerometerService: BluetoothRemoteGATTService =
 			await this.getAccelerometerService();
-		console.log("Got service")
 		const accelerometerCharacteristic: BluetoothRemoteGATTCharacteristic =
 			await accelerometerService.getCharacteristic(MBSpecs.Characteristics.ACCEL_DATA);
-		console.log("Got characteristic")
 
 		await accelerometerCharacteristic.startNotifications();
-		console.log("Started notifications")
 
 		accelerometerCharacteristic.addEventListener(
 			"characteristicvaluechanged",
@@ -258,8 +255,6 @@ export class MicrobitBluetooth {
 				onAccelerometerChanged(x, y, z);
 			}
 		);
-		console.log("Added listener")
-
 	}
 
 	/**
@@ -319,7 +314,6 @@ export class MicrobitBluetooth {
 			this.device.gatt!.connect().then(() => {
 				this.onReconnect?.(this)
 			}).catch(() => {
-				console.log("Failed reconnnect")
 				if (this.onReconnectFailed) {
 					void this.onReconnectFailed();
 				}

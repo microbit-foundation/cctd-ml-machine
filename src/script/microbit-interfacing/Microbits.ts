@@ -2,12 +2,12 @@
  * Entrypoint for the Microbit facade pattern
  */
 import ConnectionBehaviours from "../connection-behaviours/ConnectionBehaviours";
-import connectionBehaviours from "../connection-behaviours/ConnectionBehaviours";
 import { get, writable } from "svelte/store";
 import MBSpecs from "./MBSpecs";
 import MicrobitBluetooth from "./MicrobitBluetooth";
 import {outputting} from "../stores/uiStore";
 import MicrobitUSB from "./MicrobitUSB";
+import type ConnectionBehaviour from "../connection-behaviours/ConnectionBehaviour";
 
 type QueueElement = {
 	service: BluetoothRemoteGATTCharacteristic,
@@ -112,16 +112,18 @@ class Microbits {
 					request,
 					(microbit) => {
 						this.assignedInputMicrobit = microbit;
+						connectionBehaviour.onConnected(name)
 						Microbits.listenToInputServices().then(() => {
-							connectionBehaviour.onConnected(name)
+							connectionBehaviour.onReady();
 						}).catch((e) => {
-							console.log("HELLO")
+							console.log("Failed to listen")
+							console.log(e)
 						})
 					},
 					(manual) => {
 						if (manual) {
-							connectionBehaviours.getInputBehaviour().onExpelled(manual, true);
-							connectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
+							ConnectionBehaviours.getInputBehaviour().onExpelled(manual, true);
+							ConnectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
 							this.clearAssignedOutputReference();
 						} else {
 							connectionBehaviour.onDisconnected();
@@ -129,17 +131,18 @@ class Microbits {
 					},
 					onFailedConnection,
 					(microbit) => {
+						connectionBehaviour.onConnected(name)
+						this.assignedInputMicrobit = microbit;
 						Microbits.listenToInputServices().then(() => {
-							this.assignedInputMicrobit = microbit;
-							connectionBehaviour.onConnected(name)
+							connectionBehaviour.onReady()
 						}).catch((e) => {
 							this.assignedInputMicrobit?.disconnect()
 							console.log(e)
 						})
 					},
 					() => {
-						connectionBehaviours.getInputBehaviour().onExpelled(false, true);
-						connectionBehaviours.getOutputBehaviour().onExpelled(false, true);
+						ConnectionBehaviours.getInputBehaviour().onExpelled(false, true);
+						ConnectionBehaviours.getOutputBehaviour().onExpelled(false, true);
 					}
 				);
 
@@ -172,9 +175,10 @@ class Microbits {
 	public static async assignOutput(name: string): Promise<boolean> {
 		console.assert(name.length == 5);
 
-		const connectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
+		const connectionBehaviour: ConnectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
 		const onFailedConnection = (err: Error) => {
-			connectionBehaviour.onCancelledBluetoothRequest(err);
+			console.log(err)
+			connectionBehaviour.onCancelledBluetoothRequest();
 		};
 
 		try {
@@ -184,13 +188,13 @@ class Microbits {
 			this.assignedOutputMicrobit = await MicrobitBluetooth
 				.createMicrobitBluetooth(
 					request,
-					undefined,
+					() => connectionBehaviour.onConnected(name),
 					(manual) => {
 						this.clearAssignedOutputReference();
 						if (manual) {
-							connectionBehaviours.getOutputBehaviour().onExpelled(manual);
+							ConnectionBehaviours.getOutputBehaviour().onExpelled(manual);
 						} else {
-							connectionBehaviours.getOutputBehaviour().onDisconnected();
+							ConnectionBehaviours.getOutputBehaviour().onDisconnected();
 						}
 					},
 					onFailedConnection

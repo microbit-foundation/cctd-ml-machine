@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     branches:
-      - release-dr
+      - madsdk/add-github-build-and-deploy-action
 
 jobs:
   build:

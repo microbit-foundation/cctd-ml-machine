@@ -6,19 +6,22 @@ import MBSpecs from "../../script/microbit-interfacing/MBSpecs";
  * Use this for checking the micro:bit behaviour.
  */
 class SpyConnectionBehaviour implements ConnectionBehaviour {
-    onConnected(name: string): void {
-        throw new Error("Method not implemented.");
-    }
-    onDisconnected(): void {
-        throw new Error("Method not implemented.");
-    }
+
 	private hasConnected = false;
 	private hasDisconnected = false;
-	private wasManualDisconnect = false;
-	private wasBothDisconnect = false;
+	private wasExpelled = false;
+	private wasManualExpel = false;
+	private wasBothExpelled = false;
 	private hasFailedConnection = false;
 	private connectedName: string | undefined = undefined;
 	private connectedMicrobit: MicrobitBluetooth | undefined = undefined;
+
+	onConnected(name: string): void {
+		this.hasConnected = true;
+	}
+	onDisconnected(): void {
+		this.hasDisconnected = true;
+	}
 
 	accelerometerChange(x: number, y: number, z: number): void {
 	}
@@ -29,17 +32,17 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
 		this.connectedMicrobit = microbitBluetooth;
 	}
 
-	onCancelledBluetoothRequest(error?: Error): void {
+	onCancelledBluetoothRequest(): void {
 		this.hasFailedConnection = true;
 	}
 
-	onExpelled(manual?: boolean, bothDisconnected?: boolean): void {
-		this.hasDisconnected = true;
+	onExpelled(manual?: boolean, bothExpelled?: boolean): void {
+		this.wasExpelled = true;
 		if (manual) {
-			this.wasManualDisconnect = manual;
+			this.wasManualExpel = manual;
 		}
-		if (bothDisconnected) {
-			this.wasBothDisconnect = bothDisconnected;
+		if (bothExpelled) {
+			this.wasBothExpelled = bothExpelled;
 		}
 	}
 
@@ -51,11 +54,11 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
 	}
 
 	wasBothDisconnected(): boolean {
-		return this.wasBothDisconnect;
+		return this.wasBothExpelled;
 	}
 
 	wasManuallyDisconnected(): boolean {
-		return this.wasManualDisconnect;
+		return this.wasManualExpel;
 	}
 
 	hasConnectFired() {

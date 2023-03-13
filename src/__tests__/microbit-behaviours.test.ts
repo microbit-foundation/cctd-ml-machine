@@ -30,12 +30,15 @@ describe("Microbit behaviours tests", () => {
 					if (!options.filters) {
 						return Promise.reject(undefined);
 					}
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 					if (options.filters.length == 0) {
 						return Promise.reject(undefined);
 					}
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 					if (!options.filters[0].namePrefix) {
 						return Promise.reject(undefined);
 					}
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 					if (options.filters[0].namePrefix !== `BBC micro:bit [${microBitName}]`) {
 						return Promise.reject(undefined);
 					}
@@ -48,7 +51,7 @@ describe("Microbit behaviours tests", () => {
 	beforeEach(() => {
 		try {
 			Microbits.expelInputAndOutput();
-		} catch (_e) {
+		} catch (_e) { /*empty*/
 		}
 	});
 

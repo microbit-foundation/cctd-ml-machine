@@ -30,7 +30,7 @@
 <div
         bind:clientWidth={componentWidth}
         class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
-        class:bg-gray-300={$state.isInputAssigned && !$state.isInputConnected}
+        class:bg-gray-300={$state.isInputAssigned && !$state.isInputReady}
 >
     <MainConnectDialog
             bind:this={connectDialogReference}

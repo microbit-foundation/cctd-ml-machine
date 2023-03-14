@@ -35,6 +35,14 @@ class Microbits {
 	private static outputMatrix: BluetoothRemoteGATTCharacteristic | undefined;
 	private static outputUart: BluetoothRemoteGATTCharacteristic | undefined;
 
+	private static isInputReconnecting = false;
+	private static isOutputReconnecting = false;
+
+	// Set these flags if user disconnects while reconnecting, such that the GATT server can be disconnected when
+	// the micro:bit reestablishes a connection.
+	private static inputFlaggedForDisconnect = false;
+	private static outputFlaggedForDisconnect = false;
+
 	private static bluetoothServiceActionQueue = writable<{ busy: boolean, queue: QueueElement[] }>({
 		busy: false,
 		queue: []
@@ -126,19 +134,28 @@ class Microbits {
 							ConnectionBehaviours.getOutputBehaviour().onDisconnected();
 						}
 						if (manual) {
-							ConnectionBehaviours.getInputBehaviour().onExpelled(manual, true);
-							ConnectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
-							this.clearAssignedOutputReference();
-							this.clearAssignedInputReference();
+							if (this.isInputAssigned()) {
+								ConnectionBehaviours.getInputBehaviour().onExpelled(manual, true);
+								ConnectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
+								this.clearAssignedOutputReference();
+								this.clearAssignedInputReference();
+							}
 						} else {
 							connectionBehaviour.onDisconnected();
+							this.isInputReconnecting = true;
 						}
 						this.clearBluetoothServiceActionQueue();
 					},
 					this.onFailedConnection(connectionBehaviour),
 					(microbit) => {
+						this.isInputReconnecting = false;
 						connectionBehaviour.onConnected(name)
 						this.inputName = name;
+						if (this.inputFlaggedForDisconnect) {
+							microbit.disconnect();
+							this.inputFlaggedForDisconnect = false;
+							return;
+						}
 						this.assignedInputMicrobit = microbit;
 						Microbits.listenToInputServices().then(() => {
 							if (this.isInputOutputTheSame()) {
@@ -214,15 +231,24 @@ class Microbits {
 					},
 					(manual) => {
 						if (manual) {
-							this.clearAssignedOutputReference();
-							ConnectionBehaviours.getOutputBehaviour().onExpelled(manual);
+							if (this.isOutputAssigned()) {
+								ConnectionBehaviours.getOutputBehaviour().onExpelled(manual);
+								this.clearAssignedOutputReference();
+							}
 						} else {
+							this.isOutputReconnecting = true;
 							ConnectionBehaviours.getOutputBehaviour().onDisconnected();
 						}
 						this.clearBluetoothServiceActionQueue();
 					},
 					this.onFailedConnection(connectionBehaviour),
 					(microbit) => {
+						this.isOutputReconnecting = false;
+						if (this.outputFlaggedForDisconnect) {
+							this.outputFlaggedForDisconnect = false;
+							microbit.disconnect();
+							return;
+						}
 						this.assignedOutputMicrobit = microbit;
 						connectionBehaviour.onConnected(name)
 						this.listenToOutputServices().then(() => {
@@ -301,13 +327,29 @@ class Microbits {
 
 		if (this.isInputOutputTheSame()) {
 			// If they are the same, it suffices to disconnect one of them, doesn't matter which(in or output).
-			this.disconnectInputGATT();
+			if (this.isInputReconnecting) {
+				this.inputFlaggedForDisconnect = true;
+				ConnectionBehaviours.getInputBehaviour().onExpelled(true, true);
+				ConnectionBehaviours.getOutputBehaviour().onExpelled(true, true);
+			} else {
+				this.disconnectInputGATT();
+			}
 		} else {
 			if (this.isOutputAssigned()) {
-				this.disconnectOutputGATT();
+				if (this.isOutputReconnecting) {
+					this.outputFlaggedForDisconnect = true;
+					ConnectionBehaviours.getOutputBehaviour().onExpelled(true, true);
+				} else {
+					this.disconnectOutputGATT();
+				}
 			}
 			if (this.isInputAssigned()) {
-				this.disconnectInputGATT();
+				if (this.isInputReconnecting) {
+					this.inputFlaggedForDisconnect = true;
+					ConnectionBehaviours.getInputBehaviour().onExpelled(true, true);
+				} else {
+					this.disconnectInputGATT();
+				}
 			}
 		}
 		this.clearAssignedInputReference();
@@ -323,7 +365,11 @@ class Microbits {
 			this.clearAssignedOutputReference();
 			void this.setGladSmiley(this.assignedInputMicrobit!);
 		} else {
-			this.disconnectOutputGATT();
+			if (this.isOutputReconnecting) {
+				this.outputFlaggedForDisconnect = true;
+			} else {
+				this.disconnectOutputGATT();
+			}
 			this.clearAssignedOutputReference();
 		}
 	}
@@ -336,7 +382,11 @@ class Microbits {
 		if (this.isInputOutputTheSame()) {
 			this.expelInputAndOutput();
 		} else {
-			this.disconnectInputGATT();
+			if (this.isInputReconnecting) {
+				this.inputFlaggedForDisconnect = true;
+			} else {
+				this.disconnectInputGATT();
+			}
 			this.clearAssignedInputReference();
 		}
 	}

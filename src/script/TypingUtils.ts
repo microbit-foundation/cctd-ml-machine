@@ -1,11 +1,11 @@
 /**
  * Utility class for type annotation
  */
-class TypingUtils {
+const TypingUtils = {
     /**
      * Used to denote explicitly empty functions as `() => {}`
      */
-    public static emptyFunction = () => {/* Empty */}
+    emptyFunction: () => {/* Empty */}
 }
 
 export default TypingUtils;

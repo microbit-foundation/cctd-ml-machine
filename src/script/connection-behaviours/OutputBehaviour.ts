@@ -51,6 +51,7 @@ class OutputBehaviour extends LoggingDecorator {
 			}
 			return s;
 		});
+		clearTimeout(this.reconnectTimeout);
 	}
 
 	onCancelledBluetoothRequest(): void {

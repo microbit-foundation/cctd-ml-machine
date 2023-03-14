@@ -58,6 +58,7 @@ class InputBehaviour extends LoggingDecorator {
 			s.reconnectState = DeviceRequestStates.INPUT;
 			return s;
 		});
+		clearTimeout(this.reconnectTimeout);
 	}
 
 	onCancelledBluetoothRequest(): void {

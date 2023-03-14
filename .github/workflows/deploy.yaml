@@ -28,4 +28,4 @@ jobs:
           password: ${{ secrets.DEPLOY_KEY }}
           port: ${{ secrets.DEPLOY_PORT }}
           source: "./public/build/*"
-          target: "/home/deploy/test"
+          target: "/home/deploy/test2"

@@ -1,4 +1,11 @@
 /**
- * Used to denote explicitly empty functions as `() => {}`
+ * Utility class for type annotation
  */
-export const emptyFunction = () => {/* Empty */}
+class TypingUtils {
+    /**
+     * Used to denote explicitly empty functions as `() => {}`
+     */
+    public static emptyFunction = () => {/* Empty */}
+}
+
+export default TypingUtils;

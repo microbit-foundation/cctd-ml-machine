@@ -7,6 +7,7 @@
     import TextInformation from "../information/TextInformation.svelte";
     import Microbits from "../../script/microbit-interfacing/Microbits";
     import StandardButton from "../StandardButton.svelte";
+    import TypingUtils from "../../script/TypingUtils";
 
     let componentWidth: number;
     let connectDialogReference: MainConnectDialog;
@@ -77,7 +78,7 @@
                                                 color="red"
                                                 text={$t("menu.model.disconnect")}/>
                             {:else}
-                                <StandardButton onClick={()=>{/*Empty*/}}
+                                <StandardButton onClick={TypingUtils.emptyFunction}
                                                 color="gray"
                                                 text="">
                                     <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px">
@@ -95,7 +96,7 @@
                                             color="red"
                                             text={$t("footer.disconnectButton")}/>
                         {:else}
-                            <StandardButton onClick={() => {/*empty*/}}
+                            <StandardButton onClick={TypingUtils.emptyFunction}
                                             color="gray"
                                             text="">
                                 <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px">

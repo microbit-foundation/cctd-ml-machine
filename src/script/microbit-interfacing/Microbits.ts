@@ -150,7 +150,6 @@ class Microbits {
 					(microbit) => {
 						this.isInputReconnecting = false;
 						if (this.inputFlaggedForDisconnect) {
-							console.log("Input MB flagged for DC")
 							void this.disconnectInputSafely(microbit);
 							this.inputFlaggedForDisconnect = false;
 							return;

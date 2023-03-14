@@ -98,6 +98,7 @@ class OutputBehaviour extends LoggingDecorator {
 		// Ensure state is updated
 		state.update((s) => {
 			s.isOutputConnected = false;
+			s.isOutputReady = false;
 			return s;
 		});
 	}

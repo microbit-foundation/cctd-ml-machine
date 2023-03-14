@@ -23,32 +23,31 @@
     const outputDisconnectButtonClicked = () => {
         Microbits.expelOutput();
     };
-
-    $: showIsConnectingText = $state.isInputAssigned && !$state.isInputReady;
-
-
 </script>
 
 <!-- TODO: Reafactor and/or split up. Too long and nested component -->
 <div
         bind:clientWidth={componentWidth}
         class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
-        class:bg-gray-300={$state.isInputAssigned && !$state.isConnected}
+        class:bg-gray-300={$state.isInputAssigned && !$state.isInputConnected}
 >
     <MainConnectDialog
             bind:this={connectDialogReference}
     />
     {#if !$state.isInputAssigned}
+        <!-- No input microbit assigned -->
         <div class="h-full w-full flex justify-center bg-white">
             <StandardButton onClick={connectButtonClicked}
                             text={$t("footer.connectButtonNotConnected")}/>
         </div>
     {:else}
+        <!-- Input microbit is assigned -->
         <div class="relative w-full h-full">
             <div class="absolute w-full h-full">
                 <LiveGraph width={componentWidth}/>
             </div>
-            {#if showIsConnectingText}
+            {#if !$state.isInputReady}
+                <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->
                 <div class="absolute w-full h-full flex items-center justify-center text-white">
                     <div class="bg-[#EDBFD9] py-2 px-4 rounded-full" transition:fade>
                         <h1>{$t("footer.reconnecting")}</h1>
@@ -58,21 +57,22 @@
             <div class="w-full h-full p-0 m-0 absolute top-0 left-0">
                 <div class="float-left mt-2 ml-2">
                     <div class="float-left">
-                        <TextInformation
-                                titleText={$t("footer.helpHeader")}
-                                bodyText={$t("footer.helpContent")}
-                                isLightTheme={false}
-                                boxOffset={{x: 25, y: -50}}/>
+                        <TextInformation titleText={$t("footer.helpHeader")}
+                                         bodyText={$t("footer.helpContent")}
+                                         isLightTheme={false}
+                                         boxOffset={{x: 25, y: -50}}/>
                     </div>
                     <p class="float-left ml-10">Live</p>
                     <p class="float-left ml-1 -mt-3 text-3xl"
-                       class:text-red-500={$state.isConnected}
-                       class:text-gray-500={!$state.isConnected}>&#x2022;</p>
+                       class:text-red-500={$state.isInputReady}
+                       class:text-gray-500={!$state.isInputReady}>&#x2022;</p>
                 </div>
                 <div class="absolute right-2 top-2 m-0 float-right flex">
-                    {#if ($state.isPredicting || $state.isTraining) || $state.isOutputting}
+                    {#if ($state.isPredicting || $state.isTraining) || $state.isOutputConnected}
                         {#if $state.isOutputAssigned}
-                            {#if $state.isOutputting}
+                            <!-- Output is assigned -->
+                            {#if !$state.isOutputConnected || $state.isOutputReady}
+                                <!-- Output MB is not in the connection process -->
                                 <StandardButton onClick={outputDisconnectButtonClicked}
                                                 color="red"
                                                 text={$t("menu.model.disconnect")}/>
@@ -83,14 +83,14 @@
                                     <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px">
                                 </StandardButton>
                             {/if}
-
                         {:else}
                             <StandardButton onClick={connectButtonClicked}
                                             text={$t("menu.model.connectOutputButton")}/>
                         {/if}
                     {/if}
                     <div class="ml-2">
-                        {#if $state.isInputReady}
+                        {#if !$state.isInputConnected || $state.isInputReady}
+                            <!-- Input MB is not in the connection process -->
                             <StandardButton onClick={inputDisconnectButtonClicked}
                                             color="red"
                                             text={$t("footer.disconnectButton")}/>

@@ -10,7 +10,6 @@ export type ComplianceChoices = {
  */
 class CookieManager {
 	private static reconnectCookieName = "reconnect_flag";
-
 	private static complianceCookieName = "cookie_consent";
 	private static complianceCookieChangeEvent = new Event("complianceCookieChange");
 

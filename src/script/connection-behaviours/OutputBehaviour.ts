@@ -16,7 +16,7 @@ class OutputBehaviour extends LoggingDecorator {
 	onBluetoothConnectionError(error?: unknown) {
 		super.onBluetoothConnectionError(error);
 		state.update((s) => {
-			s.isOutputting = false;
+			s.isOutputConnected = false;
 			s.isOutputAssigned = false;
 			return s;
 		});
@@ -25,7 +25,7 @@ class OutputBehaviour extends LoggingDecorator {
 	onReady() {
 		super.onReady();
 		state.update(s => {
-			s.isOutputting = true;
+			s.isOutputReady = true;
 			return s;
 		})
 		clearTimeout(this.reconnectTimeout)
@@ -42,9 +42,10 @@ class OutputBehaviour extends LoggingDecorator {
 	onExpelled(manual?: boolean, bothDisconnected?: boolean): void {
 		super.onExpelled(manual, bothDisconnected)
 		state.update((s) => {
-			s.isOutputting = false;
+			s.isOutputConnected = false;
 			s.offerReconnect = !manual;
 			s.isOutputAssigned = false;
+			s.isOutputReady = false;
 			if (!bothDisconnected) {
 				s.reconnectState = DeviceRequestStates.OUTPUT;
 			}
@@ -55,7 +56,7 @@ class OutputBehaviour extends LoggingDecorator {
 	onCancelledBluetoothRequest(): void {
 		super.onCancelledBluetoothRequest()
 		state.update((s) => {
-			s.isOutputting = false;
+			s.isOutputConnected = false;
 			s.requestDeviceWasCancelled = true;
 			return s;
 		});
@@ -76,6 +77,7 @@ class OutputBehaviour extends LoggingDecorator {
 		informUser(text("alert.output.connectingToComponents"));
 
 		state.update((s) => {
+			s.isOutputConnected = true;
 			s.isRequestingDevice = DeviceRequestStates.NONE;
 			s.offerReconnect = false;
 			return s;
@@ -83,9 +85,9 @@ class OutputBehaviour extends LoggingDecorator {
 
 		// Reset connection timeout
 		clearTimeout(this.reconnectTimeout)
-		const catastrophic = () => this.onCatastrophicError();
+		const onTimeout = () => this.onCatastrophicError();
 		this.reconnectTimeout = setTimeout(function() {
-			catastrophic();
+			onTimeout();
 		}, this.timeout)
 		informUser(text("alert.output.nowConnectedInform"));
 	}
@@ -94,7 +96,7 @@ class OutputBehaviour extends LoggingDecorator {
 		super.onDisconnected()
 		// Ensure state is updated
 		state.update((s) => {
-			s.isOutputting = false;
+			s.isOutputConnected = false;
 			return s;
 		});
 	}

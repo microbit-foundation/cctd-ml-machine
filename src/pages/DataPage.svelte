@@ -24,7 +24,7 @@
 </script>
 
 <!-- Main pane -->
-{#if !hasSomeData() && !$state.isConnected}
+{#if !hasSomeData() && !$state.isInputConnected}
 	<!-- 'training page has same component. Extract' -->
 	<div class="w-full h-full grid grid-cols-1 items-center place-items-center text-center">
 

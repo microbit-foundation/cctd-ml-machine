@@ -25,8 +25,8 @@
 	}
 
 	export function startConnectionProcess(): void {
-		currentState = $state.isConnected ? ConnectionStates.START_OUTPUT : ConnectionStates.START;
-		deviceState = $state.isConnected ? DeviceRequestStates.OUTPUT : DeviceRequestStates.INPUT;
+		currentState = $state.isInputConnected ? ConnectionStates.START_OUTPUT : ConnectionStates.START;
+		deviceState = $state.isInputConnected ? DeviceRequestStates.OUTPUT : DeviceRequestStates.INPUT;
 	}
 
 	let currentState: ConnectionStates = ConnectionStates.NONE; // the current stage in the connection

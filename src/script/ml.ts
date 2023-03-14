@@ -414,7 +414,7 @@ export function classify() {
 		return;
 	}
 
-	if (!currentState.isConnected) return;
+	if (!currentState.isInputConnected) return;
 
 	// Get formatted version of previous data
 	const { x, y, z } = getPrevData();

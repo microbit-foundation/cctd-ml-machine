@@ -25,7 +25,7 @@ class InputBehaviour extends LoggingDecorator {
 	onBluetoothConnectionError(error?: unknown) {
 		super.onBluetoothConnectionError(error);
 		state.update((s) => {
-			s.isConnected = false;
+			s.isInputConnected = false;
 			s.isInputAssigned = false;
 			return s;
 		});
@@ -41,17 +41,17 @@ class InputBehaviour extends LoggingDecorator {
 	}
 
 	onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
+		super.onAssigned(microbitBluetooth, name)
 		state.update(s => {
 			s.isInputAssigned = true;
 			return s;
 		})
-		super.onAssigned(microbitBluetooth, name)
 	}
 
 	onExpelled(manual?: boolean, bothDisconnected?: boolean): void {
 		super.onExpelled(manual, bothDisconnected)
 		state.update((s) => {
-			s.isConnected = false;
+			s.isInputConnected = false;
 			s.isInputAssigned = false;
 			s.isInputReady = false;
 			s.offerReconnect = !manual;
@@ -64,7 +64,7 @@ class InputBehaviour extends LoggingDecorator {
 		super.onCancelledBluetoothRequest()
 		state.update((s) => {
 			s.requestDeviceWasCancelled = true;
-			s.isConnected = false;
+			s.isInputConnected = false;
 			return s;
 		});
 	}
@@ -72,7 +72,7 @@ class InputBehaviour extends LoggingDecorator {
 	onDisconnected(): void {
 		super.onDisconnected()
 		state.update((s) => {
-			s.isConnected = false;
+			s.isInputConnected = false;
 			s.offerReconnect = false;
 			s.isInputReady = false;
 			s.reconnectState = DeviceRequestStates.NONE;
@@ -87,7 +87,7 @@ class InputBehaviour extends LoggingDecorator {
 		informUser(text("alert.micro.gettingDataInform"));
 
 		state.update((s) => {
-			s.isConnected = true;
+			s.isInputConnected = true;
 			s.isRequestingDevice = DeviceRequestStates.NONE;
 			s.offerReconnect = false;
 			return s;
@@ -96,9 +96,9 @@ class InputBehaviour extends LoggingDecorator {
 		// Works like this: If the MB manages to connect, wait `timeout` milliseconds
 		// if MB does not call onReady before that expires, refresh the page
 		clearTimeout(this.reconnectTimeout)
-		const catastrophic = () => this.onCatastrophicError();
+		const onTimeout = () => this.onCatastrophicError();
 		this.reconnectTimeout = setTimeout(function() {
-			catastrophic();
+			onTimeout();
 		}, this.timeout)
 
 		informUser(text("alert.micro.nowConnectedInform"));

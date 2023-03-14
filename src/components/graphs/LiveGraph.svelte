@@ -69,7 +69,7 @@
 
 	// When state changes, update the state of the canvas
 	$: { 
-		const isConnected = $state.isConnected
+		const isConnected = $state.isInputConnected
 		updateCanvas(isConnected);
 	}
 

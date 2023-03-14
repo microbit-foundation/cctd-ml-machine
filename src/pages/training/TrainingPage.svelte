@@ -44,7 +44,7 @@
 </StandardDialog>
 <div class="w-full h-full grid grid-cols-1 items-center place-items-center text-center">
 
-	{#if !$state.isConnected}
+	{#if !$state.isInputConnected}
 		<div class="w-full">
 			<p class="w-4/5 text-white text-3xl bold m-auto">
 				{$t("menu.trainer.notConnected1")}

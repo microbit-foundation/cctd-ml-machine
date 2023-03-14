@@ -43,7 +43,7 @@
 	// Start and stop chart when microbit connect/disconnect
 	$: {
 		if (chart !== undefined) {
-			$state.isConnected ? chart.start() : chart.stop();
+			$state.isInputReady ? chart.start() : chart.stop();
 		}
 	}
 

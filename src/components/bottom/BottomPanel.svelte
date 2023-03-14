@@ -24,7 +24,7 @@
         Microbits.expelOutput();
     };
 
-    $: showIsConnectingText = $state.isInputAssigned && !$state.isConnected;
+    $: showIsConnectingText = $state.isInputAssigned && !$state.isInputReady;
 
 
 </script>
@@ -90,7 +90,7 @@
                         {/if}
                     {/if}
                     <div class="ml-2">
-                        {#if $state.isConnected}
+                        {#if $state.isInputReady}
                             <StandardButton onClick={inputDisconnectButtonClicked}
                                             color="red"
                                             text={$t("footer.disconnectButton")}/>

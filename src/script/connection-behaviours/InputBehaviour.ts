@@ -19,7 +19,7 @@ class InputBehaviour extends LoggingDecorator {
 	private smoothedAccelY = 0;
 	private smoothedAccelZ = 0;
 
-	private reconnectTimeout: ReturnType<typeof setTimeout> = setTimeout(() => {/*empty*/},0);
+	private reconnectTimeout = setTimeout(() => {/*empty*/},0);
 	private timeout = 4000;
 
 	onBluetoothConnectionError(error?: unknown) {
@@ -35,7 +35,7 @@ class InputBehaviour extends LoggingDecorator {
 		super.onReady();
 		clearTimeout(this.reconnectTimeout)
 		state.update((s) => {
-			s.isConnected = true;
+			s.isInputReady = true;
 			return s;
 		});
 	}
@@ -53,6 +53,7 @@ class InputBehaviour extends LoggingDecorator {
 		state.update((s) => {
 			s.isConnected = false;
 			s.isInputAssigned = false;
+			s.isInputReady = false;
 			s.offerReconnect = !manual;
 			s.reconnectState = DeviceRequestStates.INPUT;
 			return s;
@@ -73,6 +74,7 @@ class InputBehaviour extends LoggingDecorator {
 		state.update((s) => {
 			s.isConnected = false;
 			s.offerReconnect = false;
+			s.isInputReady = false;
 			s.reconnectState = DeviceRequestStates.NONE;
 			return s;
 		});
@@ -85,6 +87,7 @@ class InputBehaviour extends LoggingDecorator {
 		informUser(text("alert.micro.gettingDataInform"));
 
 		state.update((s) => {
+			s.isConnected = true;
 			s.isRequestingDevice = DeviceRequestStates.NONE;
 			s.offerReconnect = false;
 			return s;

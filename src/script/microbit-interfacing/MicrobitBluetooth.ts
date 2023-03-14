@@ -410,10 +410,8 @@ export class MicrobitBluetooth {
 			);
 
 			// fire the connect event and return the connection object
-			if (onConnect) {
-				if (gattServer.connected) {
-					onConnect(connection);
-				}
+			if (onConnect && gattServer.connected) {
+				onConnect(connection);
 			}
 
 			return connection;
@@ -421,7 +419,8 @@ export class MicrobitBluetooth {
 			if (onConnectFailed) {
 				onConnectFailed(e as Error);
 				if (microbitDevice.gatt !== undefined){
-					microbitDevice.gatt.disconnect() // In cause bluetooth was connected but some other error occurs, disconnect bluetooth to keep consistent state
+					// In case bluetooth was connected but some other error occurs, disconnect bluetooth to keep consistent state
+					microbitDevice.gatt.disconnect()
 				}
 			}
 			return Promise.reject("Failed to establish a connection!");

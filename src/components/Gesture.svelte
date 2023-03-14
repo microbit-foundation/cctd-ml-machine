@@ -43,6 +43,7 @@
 			return;
 		}
 
+		$state.isPredicting = false;
 		setTimeout(() => {
 			removeGesture(gesture);
 		}, 450);

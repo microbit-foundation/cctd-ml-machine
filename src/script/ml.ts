@@ -453,7 +453,7 @@ function handleResults(error: string | undefined, result: { confidence: number, 
 
 	for (const gesture of get(gestures)) {
 		if (String(gesture.ID) === bestGestureID) {
-			bestPrediction.set({...gesture, confidence: bestConf}); // 
+			bestPrediction.set({...gesture, confidence: bestConf});
 		}
 	}
 }

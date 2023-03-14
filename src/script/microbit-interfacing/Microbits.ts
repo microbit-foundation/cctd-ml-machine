@@ -8,6 +8,7 @@ import MicrobitBluetooth from "./MicrobitBluetooth";
 import {outputting} from "../stores/uiStore";
 import MicrobitUSB from "./MicrobitUSB";
 import type ConnectionBehaviour from "../connection-behaviours/ConnectionBehaviour";
+import TypingUtils from "../TypingUtils";
 
 type QueueElement = {
 	service: BluetoothRemoteGATTCharacteristic,
@@ -69,10 +70,8 @@ class Microbits {
 	 * Whether an output micro:bit is assigned
 	 */
 	public static isOutputAssigned(): boolean {
-		if (this.assignedOutputMicrobit === undefined) {
-			return false;
-		}
-		return this.assignedOutputMicrobit.isConnected();
+		return this.assignedOutputMicrobit !== undefined;
+
 	}
 
 	/**
@@ -116,6 +115,7 @@ class Microbits {
 		try {
 			const request = await MicrobitBluetooth
 				.requestDevice(name, this.onFailedConnection(connectionBehaviour));
+			console.log("Got device")
 			await MicrobitBluetooth
 				.createMicrobitBluetooth(
 					request,
@@ -149,13 +149,14 @@ class Microbits {
 					this.onFailedConnection(connectionBehaviour),
 					(microbit) => {
 						this.isInputReconnecting = false;
-						connectionBehaviour.onConnected(name)
-						this.inputName = name;
 						if (this.inputFlaggedForDisconnect) {
-							microbit.disconnect();
+							console.log("Input MB flagged for DC")
+							void this.disconnectInputSafely(microbit);
 							this.inputFlaggedForDisconnect = false;
 							return;
 						}
+						this.inputName = name;
+						connectionBehaviour.onConnected(name)
 						this.assignedInputMicrobit = microbit;
 						Microbits.listenToInputServices().then(() => {
 							if (this.isInputOutputTheSame()) {
@@ -192,6 +193,19 @@ class Microbits {
 			this.onFailedConnection(connectionBehaviour)(e as Error);
 		}
 		return false;
+	}
+
+	/**
+	 * For some reason, the function getPrimaryServices bricks if we do not listen to services before disconnecting
+	 * GATT server. Therefore, this function must be called if we intend to disconnect before listening to services
+	 * @param microbit The microbit we wish to disconnect from
+	 * @private
+	 */
+	private static async disconnectInputSafely(microbit: MicrobitBluetooth): Promise<void> {
+		await microbit.listenToAccelerometer(TypingUtils.emptyFunction);
+		await microbit.listenToButton("A", TypingUtils.emptyFunction);
+		await microbit.listenToButton("B", TypingUtils.emptyFunction);
+		microbit.disconnect();
 	}
 
 	private static async listenToInputServices(): Promise<void> {
@@ -246,7 +260,7 @@ class Microbits {
 						this.isOutputReconnecting = false;
 						if (this.outputFlaggedForDisconnect) {
 							this.outputFlaggedForDisconnect = false;
-							microbit.disconnect();
+							void this.disconnectOutputSafely(microbit);
 							return;
 						}
 						this.assignedOutputMicrobit = microbit;
@@ -286,6 +300,20 @@ class Microbits {
 		};
 	}
 
+	/**
+	 * For some reason, the function getPrimaryServices bricks if we do not listen to services before disconnecting
+	 * GATT server. Therefore, this function must be called if we intend to disconnect before listening to services
+	 * @param microbit The microbit we wish to disconnect from
+	 * @private
+	 */
+	private static async disconnectOutputSafely(microbit: MicrobitBluetooth): Promise<void> {
+		await this.getIOOf(microbit);
+		await this.getMatrixOf(microbit);
+		const uartService = await microbit.getUARTService();
+		await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_RX);
+		microbit.disconnect();
+	}
+
 	private static async listenToOutputServices(): Promise<void> {
 		if (!this.isOutputConnected()) {
 			throw new Error("Could not listen to services, no microbit connected!")
@@ -317,6 +345,9 @@ class Microbits {
 	}
 
 	public static isInputOutputTheSame() {
+		if (!this.isOutputAssigned() || !this.isInputAssigned()) {
+			return false;
+		}
 		return this.outputName == this.inputName; // todo: replace with bluetooth ID or something more unique than name
 	}
 

@@ -389,6 +389,8 @@ export class MicrobitBluetooth {
 		onReconnect?: (microbit: MicrobitBluetooth) => void,
 		onReconnectFailed?: () => void
 	): Promise<MicrobitBluetooth> {
+		console.log("Creating MB")
+
 		try {
 			if(microbitDevice.gatt === undefined){
 				console.warn('Missing gatt server on microbit device:', microbitDevice)
@@ -396,9 +398,11 @@ export class MicrobitBluetooth {
 			}
 			const gattServer: BluetoothRemoteGATTServer =
 				await microbitDevice.gatt.connect();
+			console.log("Got Gatt")
 
 			const microbitVersion: MBSpecs.MBVersion =
 				await MBSpecs.Utility.getModelNumber(gattServer);
+			console.log("Got model")
 
 			// Create the wrapper object.
 			const connection = new MicrobitBluetooth(
@@ -408,6 +412,8 @@ export class MicrobitBluetooth {
 				onReconnect,
 				onReconnectFailed
 			);
+
+			console.log("Created connection")
 
 			// fire the connect event and return the connection object
 			if (onConnect && gattServer.connected) {

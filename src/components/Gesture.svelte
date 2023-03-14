@@ -42,6 +42,7 @@
 		if (!window.confirm($t("alert.deleteGestureConfirm") + "\"" + gesture.name + "\"?")) {
 			return;
 		}
+		$state.isPredicting = false;
 
 		setTimeout(() => {
 			removeGesture(gesture);

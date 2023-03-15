@@ -57,13 +57,13 @@ class Microbits {
 	}
 
 	/**
-	 * Whether the micro:bit assigned as input is currently connected
+	 * Whether the microbit assigned as input is currently connected
 	 */
 	public static isInputConnected(): boolean {
 		if (!this.isInputAssigned()) {
 			return false;
 		}
-		return this.assignedInputMicrobit!.isConnected();
+		return this.getInput().isConnected();
 	}
 
 	/**
@@ -75,17 +75,17 @@ class Microbits {
 	}
 
 	/**
-	 * Whether the micro:bit assigned as output is currently connected
+	 * Whether the microbit assigned as output is currently connected
 	 */
 	public static isOutputConnected(): boolean {
 		if (!this.isOutputAssigned()) {
 			return false;
 		}
-		return this.assignedOutputMicrobit!.isConnected();
+		return this.getOutput().isConnected();
 	}
 
 	/**
-	 * Whether the micro:bit assigned as output is currently connected
+	 * Whether the microbit assigned as output is currently connected
 	 */
 	public static isOutputReady(): boolean {
 		if (!this.isOutputConnected()) {
@@ -102,6 +102,26 @@ class Microbits {
 	}
 
 	/**
+	 * The input MicrobitBluetooth object
+	 */
+	public static getInput(): MicrobitBluetooth {
+		if (!this.isInputAssigned() || !this.assignedInputMicrobit) {
+			throw new Error("Cannot get input microbit, it is not assigned!");
+		}
+		return this.assignedInputMicrobit;
+	}
+
+	/**
+	 * The output MicrobitBluetooth object
+	 */
+	public static getOutput(): MicrobitBluetooth {
+		if (!this.isOutputAssigned() || !this.assignedOutputMicrobit) {
+			throw new Error("Cannot get output microbit, it is not assigned!");
+		}
+		return this.assignedOutputMicrobit;
+	}
+
+	/**
 	 * Attempts to assign and connect via bluetooth.
 	 * @param name The expected name of the microbit.
 	 * @return Returns true if the connection was successful, else false.
@@ -115,7 +135,6 @@ class Microbits {
 		try {
 			const request = await MicrobitBluetooth
 				.requestDevice(name, this.onFailedConnection(connectionBehaviour));
-			console.log("Got device")
 			await MicrobitBluetooth
 				.createMicrobitBluetooth(
 					request,
@@ -150,6 +169,8 @@ class Microbits {
 					(microbit) => {
 						this.isInputReconnecting = false;
 						if (this.inputFlaggedForDisconnect) {
+							// User has disconnected during the reconnect process,
+							// and the connection was reestablished, disconnect safely
 							void this.disconnectInputSafely(microbit);
 							this.inputFlaggedForDisconnect = false;
 							return;
@@ -183,9 +204,9 @@ class Microbits {
 					}
 				);
 
-			connectionBehaviour.onAssigned(this.assignedInputMicrobit!, name);
+			connectionBehaviour.onAssigned(this.getInput(), name);
 			this.inputName = name;
-			this.inputVersion = this.assignedInputMicrobit!.getVersion();
+			this.inputVersion = this.getInput().getVersion();
 			return true;
 		} catch (e) {
 			console.log(e);
@@ -212,9 +233,9 @@ class Microbits {
 		if (!this.isInputConnected()) {
 			throw new Error("Could not listen to services, no microbit connected!")
 		}
-		await this.assignedInputMicrobit!.listenToAccelerometer(connectionBehaviour.accelerometerChange.bind(connectionBehaviour));
-		await this.assignedInputMicrobit!.listenToButton("A", connectionBehaviour.buttonChange.bind(connectionBehaviour));
-		await this.assignedInputMicrobit!.listenToButton("B", connectionBehaviour.buttonChange.bind(connectionBehaviour));
+		await this.getInput().listenToAccelerometer(connectionBehaviour.accelerometerChange.bind(connectionBehaviour));
+		await this.getInput().listenToButton("A", connectionBehaviour.buttonChange.bind(connectionBehaviour));
+		await this.getInput().listenToButton("B", connectionBehaviour.buttonChange.bind(connectionBehaviour));
 	}
 
 	/**
@@ -274,9 +295,9 @@ class Microbits {
 						connectionBehaviour.onExpelled(false, false);
 					}
 				);
-			connectionBehaviour.onAssigned(this.assignedOutputMicrobit, name);
+			connectionBehaviour.onAssigned(this.getOutput(), name);
 			this.outputName = name;
-			this.outputVersion = this.assignedOutputMicrobit.getVersion();
+			this.outputVersion = this.getOutput().getVersion();
 			return true;
 		} catch (e) {
 			this.onFailedConnection(connectionBehaviour)(e as Error);
@@ -317,9 +338,9 @@ class Microbits {
 		if (!this.isOutputConnected()) {
 			throw new Error("Could not listen to services, no microbit connected!")
 		}
-		this.outputIO = await this.getIOOf(this.assignedOutputMicrobit!);
-		this.outputMatrix = await this.getMatrixOf(this.assignedOutputMicrobit!);
-		const uartService = await this.assignedOutputMicrobit!.getUARTService();
+		this.outputIO = await this.getIOOf(this.getOutput());
+		this.outputMatrix = await this.getMatrixOf(this.getOutput());
+		const uartService = await this.getOutput().getUARTService();
 		this.outputUart = await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_RX);
 	}
 
@@ -357,29 +378,18 @@ class Microbits {
 
 		if (this.isInputOutputTheSame()) {
 			// If they are the same, it suffices to disconnect one of them, doesn't matter which(in or output).
-			if (this.isInputReconnecting) {
-				this.inputFlaggedForDisconnect = true;
-				ConnectionBehaviours.getInputBehaviour().onExpelled(true, true);
-				ConnectionBehaviours.getOutputBehaviour().onExpelled(true, true);
-			} else {
-				this.disconnectInputGATT();
-			}
+			ConnectionBehaviours.getInputBehaviour().onExpelled(true, true);
+			ConnectionBehaviours.getOutputBehaviour().onExpelled(true, true);
+			this.disconnectOrFlagInputGATT();
 		} else {
+			// Input and output are not the same, expel both of them
 			if (this.isOutputAssigned()) {
-				if (this.isOutputReconnecting) {
-					this.outputFlaggedForDisconnect = true;
-					ConnectionBehaviours.getOutputBehaviour().onExpelled(true, true);
-				} else {
-					this.disconnectOutputGATT();
-				}
+				ConnectionBehaviours.getOutputBehaviour().onExpelled(true, true);
+				this.disconnectOrFlagOutputGATT();
 			}
 			if (this.isInputAssigned()) {
-				if (this.isInputReconnecting) {
-					this.inputFlaggedForDisconnect = true;
-					ConnectionBehaviours.getInputBehaviour().onExpelled(true, true);
-				} else {
-					this.disconnectInputGATT();
-				}
+				ConnectionBehaviours.getInputBehaviour().onExpelled(true, true);
+				this.disconnectOrFlagInputGATT();
 			}
 		}
 		this.clearAssignedInputReference();
@@ -393,13 +403,9 @@ class Microbits {
 		ConnectionBehaviours.getOutputBehaviour().onExpelled(true);
 		if (this.isInputOutputTheSame()) {
 			this.clearAssignedOutputReference();
-			void this.setGladSmiley(this.assignedInputMicrobit!);
+			void this.setGladSmiley(this.getInput());
 		} else {
-			if (this.isOutputReconnecting) {
-				this.outputFlaggedForDisconnect = true;
-			} else {
-				this.disconnectOutputGATT();
-			}
+			this.disconnectOrFlagOutputGATT();
 			this.clearAssignedOutputReference();
 		}
 	}
@@ -412,16 +418,12 @@ class Microbits {
 		if (this.isInputOutputTheSame()) {
 			this.expelInputAndOutput();
 		} else {
-			if (this.isInputReconnecting) {
-				this.inputFlaggedForDisconnect = true;
-			} else {
-				this.disconnectInputGATT();
-			}
+			this.disconnectOrFlagInputGATT();
 			this.clearAssignedInputReference();
 		}
 	}
 
-	public static sendToOutputPin(data: any[]) { // todo: isn't part of the feature set for DR, not tested
+	public static sendToOutputPin(data: { pin: number; on: boolean; }[]) { // todo: isn't part of the feature set for DR, not tested
 		if (!this.isOutputAssigned()) {
 			throw new Error("No output microbit is connected, cannot send to pin.");
 		}
@@ -430,12 +432,9 @@ class Microbits {
 			throw new Error("Cannot send to output pin, have not subscribed to the IO service yet!")
 		}
 		const dataView = new DataView(new ArrayBuffer(data.length * 2));
-		data.forEach((point, index) => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-			dataView.setInt8(index * 2 + 0, point.pin);
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+		data.forEach((point: {pin: number, on: boolean}, index) => {
+			dataView.setInt8(index * 2, point.pin);
 			dataView.setInt8(index * 2 + 1, point.on ? 1 : 0);
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-template-expressions
 			outputting.set({ text: `Turn pin ${point.pin} ${point.on ? "on" : "off"}` });
 		});
 		this.addToServiceActionQueue(this.outputIO, dataView);
@@ -450,23 +449,23 @@ class Microbits {
 		}
 		const dataView = new DataView(new ArrayBuffer(5));
 		for (let i = 0; i < 5; i++) {
-			dataView.setUint8(i, this.subarray(matrix, (0 + i * 5), (5 + i * 5))
+			dataView.setUint8(i, this.subarray(matrix, (i * 5), (5 + i * 5))
 				.reduce((byte, bool) => byte << 1 | (bool ? 1 : 0), 0));
 		}
 		this.addToServiceActionQueue(this.outputMatrix, dataView);
 	}
 
 	public static useInputAsOutput() {
-		if (!this.assignedInputMicrobit) {
+		if (!this.isInputAssigned()) {
 			throw new Error("No input microbit has be defined! Please check that it is connected before using it");
 		}
 		if (!this.inputName) {
 			throw new Error("Something went wrong. Input microbit was specified, but without name!");
 		}
-		this.assignedOutputMicrobit = this.assignedInputMicrobit;
+		this.assignedOutputMicrobit = this.getInput();
 		this.outputName = this.inputName;
 		this.outputVersion = this.inputVersion;
-		ConnectionBehaviours.getOutputBehaviour().onAssigned(this.assignedOutputMicrobit, this.outputName);
+		ConnectionBehaviours.getOutputBehaviour().onAssigned(this.getOutput(), this.outputName);
 		ConnectionBehaviours.getOutputBehaviour().onConnected(this.outputName);
 		this.listenToOutputServices().then(() => {
 			ConnectionBehaviours.getOutputBehaviour().onReady();
@@ -534,11 +533,19 @@ class Microbits {
 		}
 	}
 
+	public static getLinked(): MicrobitUSB {
+		if (!this.isMicrobitLinked() || !this.linkedMicrobit) {
+			throw new Error("No microbit has been linked!")
+		}
+
+		return this.linkedMicrobit;
+	}
+
 	public static async unlinkMicrobit() {
 		if (!this.isMicrobitLinked()) {
 			throw new Error("Cannot disconnect USB. No USB microbit could be found");
 		}
-		await this.linkedMicrobit!.disconnect();
+		await this.getLinked().disconnect();
 	}
 
 	/**
@@ -549,32 +556,52 @@ class Microbits {
 		if (!this.isMicrobitLinked()) {
 			throw new Error("Cannot flash to USB, none are connected!");
 		}
-		const version = this.linkedMicrobit!.getModelNumber();
+		const version = this.getLinked().getModelNumber();
 		const hex = this.hexFiles[version]; // Note: For this we CANNOT use the universal hex file (don't know why)
-		return this.linkedMicrobit!.flashHex(hex, progressCallback);
+		return this.getLinked().flashHex(hex, progressCallback);
 	}
 
 	public static async getLinkedFriendlyName() {
 		if (!this.isMicrobitLinked()) {
 			throw new Error("Cannot get friendly name from USB, none are connected!");
 		}
-		return await this.linkedMicrobit!.getFriendlyName();
+		return await this.getLinked().getFriendlyName();
 	}
 
-	private static disconnectInputGATT() {
+	/**
+	 * Disconnects the GATT server, if available. Otherwise, it will be flagged for disconnect when it connects.
+	 * @private
+	 */
+	private static disconnectOrFlagInputGATT() {
 		if (!this.assignedInputMicrobit) {
 			throw new Error("No input micro:bit could be found while disconnecting from GATT");
 		}
-		this.assignedInputMicrobit.disconnect();
+		if (this.isInputReconnecting) {
+			this.inputFlaggedForDisconnect = true;
+		} else {
+			this.assignedInputMicrobit.disconnect();
+		}
 	}
 
-	private static disconnectOutputGATT() {
+	/**
+	 * Disconnects the GATT server, if available. Otherwise, it will be flagged for disconnect when it connects.
+	 * @private
+	 */
+	private static disconnectOrFlagOutputGATT() {
 		if (!this.assignedOutputMicrobit) {
 			throw new Error("No output micro:bit could be found while disconnecting from GATT");
 		}
-		this.assignedOutputMicrobit.disconnect();
+		if (this.isOutputReconnecting) {
+			this.outputFlaggedForDisconnect = true;
+		} else {
+			this.assignedOutputMicrobit.disconnect();
+		}
 	}
 
+	/**
+	 * Clears any held references to output microbit objects
+	 * @private
+	 */
 	private static clearAssignedOutputReference() {
 		this.assignedOutputMicrobit = undefined;
 		this.outputName = undefined;
@@ -584,6 +611,10 @@ class Microbits {
 		this.outputMatrix = undefined;
 	}
 
+	/**
+	 * Clears any held references to output microbit objects
+	 * @private
+	 */
 	private static clearAssignedInputReference() {
 		this.assignedInputMicrobit = undefined;
 		this.inputName = undefined;
@@ -610,7 +641,7 @@ class Microbits {
 			this.processServiceActionQueue();
 		}).catch(err => {
 			// Catches a characteristic not found error, preventing further output.
-			// Why does this happens is not clear.
+			// Why does this happens is not clear
 			console.log(err);
 			get(this.bluetoothServiceActionQueue).busy = false;
 			this.processServiceActionQueue();

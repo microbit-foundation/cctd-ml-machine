@@ -364,13 +364,19 @@ class Microbits {
 		return this.assignedInputMicrobit;
 	}
 
+	/**
+	 * Compares the input/output bluetooth device IDs to determine if they are the same device.
+	 */
 	public static isInputOutputTheSame() {
 		if (!this.isOutputAssigned() || !this.isInputAssigned()) {
 			return false;
 		}
-		return this.outputName == this.inputName; // todo: replace with bluetooth ID or something more unique than name
+		return this.getInput().getDevice().id == this.getOutput().getDevice().id;
 	}
 
+	/**
+	 * Expels both the input and output.
+	 */
 	public static expelInputAndOutput() {
 		if (!this.isInputAssigned() && !this.isOutputAssigned()) {
 			throw new Error("Could not disconnect microbits, none have been connected yet!");

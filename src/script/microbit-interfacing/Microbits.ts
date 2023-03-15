@@ -171,11 +171,13 @@ class Microbits {
 				return;
 			}
 			this.inputName = name;
-			connectionBehaviour.onConnected(name)
 			this.assignedInputMicrobit = microbit;
+			if (this.isInputOutputTheSame()) {
+				ConnectionBehaviours.getOutputBehaviour().onConnected(name);
+			}
+			connectionBehaviour.onConnected(name)
 			Microbits.listenToInputServices().then(() => {
 				if (this.isInputOutputTheSame()) {
-					ConnectionBehaviours.getOutputBehaviour().onConnected(name);
 					this.assignedOutputMicrobit = microbit;
 					this.inputName = name;
 					Microbits.listenToOutputServices().then(() => {
@@ -664,6 +666,15 @@ class Microbits {
 			// Catches a characteristic not found error, preventing further output.
 			// Why does this happens is not clear
 			console.log(err);
+			if (err) {
+				if ((err as DOMException).message.includes("GATT Service no longer exists")) {
+					this.listenToOutputServices().then(() => {
+						console.log("Attempted to fix missing gatt!")
+					}).catch(() => {
+						console.error("Failed to fix missing GATT service issue. Uncharted territory")
+					})
+				}
+			}
 			get(this.bluetoothServiceActionQueue).busy = false;
 			this.processServiceActionQueue();
 		});

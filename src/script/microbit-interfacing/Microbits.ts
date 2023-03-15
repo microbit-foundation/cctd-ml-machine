@@ -130,78 +130,85 @@ class Microbits {
 		if (name.length !== 5) {
 			throw new Error("Could not connect, the name specified must be of length 5!");
 		}
-
 		const connectionBehaviour = ConnectionBehaviours.getInputBehaviour();
+
+		const onInitialInputConnect = (microbit: MicrobitBluetooth) => {
+			this.assignedInputMicrobit = microbit;
+			this.inputName = name;
+			connectionBehaviour.onConnected(name)
+			Microbits.listenToInputServices().then(() => {
+				connectionBehaviour.onReady();
+			}).catch((reason) => {
+				console.log(reason)
+			})
+		}
+
+		const onInputDisconnect = (manual?: boolean) => {
+			if (this.isInputOutputTheSame()) {
+				ConnectionBehaviours.getOutputBehaviour().onDisconnected();
+			}
+			if (manual) {
+				if (this.isInputAssigned()) {
+					ConnectionBehaviours.getInputBehaviour().onExpelled(manual, true);
+					ConnectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
+					this.clearAssignedOutputReference();
+					this.clearAssignedInputReference();
+				}
+			} else {
+				connectionBehaviour.onDisconnected();
+				this.isInputReconnecting = true;
+			}
+			this.clearBluetoothServiceActionQueue();
+		}
+
+		const onInputReconnect = (microbit: MicrobitBluetooth) => {
+			this.isInputReconnecting = false;
+			if (this.inputFlaggedForDisconnect) {
+				// User has disconnected during the reconnect process,
+				// and the connection was reestablished, disconnect safely
+				void this.disconnectInputSafely(microbit);
+				this.inputFlaggedForDisconnect = false;
+				return;
+			}
+			this.inputName = name;
+			connectionBehaviour.onConnected(name)
+			this.assignedInputMicrobit = microbit;
+			Microbits.listenToInputServices().then(() => {
+				if (this.isInputOutputTheSame()) {
+					ConnectionBehaviours.getOutputBehaviour().onConnected(name);
+					this.assignedOutputMicrobit = microbit;
+					this.inputName = name;
+					Microbits.listenToOutputServices().then(() => {
+						connectionBehaviour.onReady()
+						ConnectionBehaviours.getOutputBehaviour().onReady();
+					}).catch((reason) => {
+						console.log(reason)
+					})
+				} else {
+					connectionBehaviour.onReady()
+				}
+			}).catch((reason) => {
+				console.log(reason)
+			})
+		}
+
+		const onInputReconnectFailed = () => {
+			ConnectionBehaviours.getInputBehaviour().onExpelled(false, true);
+			ConnectionBehaviours.getOutputBehaviour().onExpelled(false, true);
+			this.clearAssignedOutputReference();
+		}
+
 		try {
 			const request = await MicrobitBluetooth
 				.requestDevice(name, this.onFailedConnection(connectionBehaviour));
 			await MicrobitBluetooth
 				.createMicrobitBluetooth(
 					request,
-					(microbit) => {
-						this.assignedInputMicrobit = microbit;
-						this.inputName = name;
-						connectionBehaviour.onConnected(name)
-						Microbits.listenToInputServices().then(() => {
-							connectionBehaviour.onReady();
-						}).catch((reason) => {
-							console.log(reason)
-						})
-					},
-					(manual) => {
-						if (this.isInputOutputTheSame()) {
-							ConnectionBehaviours.getOutputBehaviour().onDisconnected();
-						}
-						if (manual) {
-							if (this.isInputAssigned()) {
-								ConnectionBehaviours.getInputBehaviour().onExpelled(manual, true);
-								ConnectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
-								this.clearAssignedOutputReference();
-								this.clearAssignedInputReference();
-							}
-						} else {
-							connectionBehaviour.onDisconnected();
-							this.isInputReconnecting = true;
-						}
-						this.clearBluetoothServiceActionQueue();
-					},
+					onInitialInputConnect,
+					onInputDisconnect,
 					this.onFailedConnection(connectionBehaviour),
-					(microbit) => {
-						this.isInputReconnecting = false;
-						if (this.inputFlaggedForDisconnect) {
-							// User has disconnected during the reconnect process,
-							// and the connection was reestablished, disconnect safely
-							void this.disconnectInputSafely(microbit);
-							this.inputFlaggedForDisconnect = false;
-							return;
-						}
-						this.inputName = name;
-						connectionBehaviour.onConnected(name)
-						this.assignedInputMicrobit = microbit;
-						Microbits.listenToInputServices().then(() => {
-							if (this.isInputOutputTheSame()) {
-								ConnectionBehaviours.getOutputBehaviour().onConnected(name);
-								this.assignedOutputMicrobit = microbit;
-								this.inputName = name;
-								Microbits.listenToOutputServices().then(() => {
-									connectionBehaviour.onReady()
-									ConnectionBehaviours.getOutputBehaviour().onReady();
-								}).catch((reason) => {
-									console.log(reason)
-								})
-							} else {
-								connectionBehaviour.onReady()
-							}
-						}).catch((reason) => {
-							console.log(reason)
-						})
-					},
-					() => {
-						ConnectionBehaviours.getInputBehaviour().onExpelled(false, true);
-						ConnectionBehaviours.getOutputBehaviour().onExpelled(false, true);
-						this.clearAssignedOutputReference();
-						this.clearAssignedInputReference();
-					}
+					onInputReconnect,
+					onInputReconnectFailed
 				);
 
 			connectionBehaviour.onAssigned(this.getInput(), name);
@@ -247,53 +254,61 @@ class Microbits {
 		console.assert(name.length == 5);
 
 		const connectionBehaviour: ConnectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
-		try {
-			const request = await MicrobitBluetooth
-				.requestDevice(name, this.onFailedConnection(connectionBehaviour));
 
-			this.assignedOutputMicrobit = await MicrobitBluetooth
+		const onInitialOutputConnect = (microbit: MicrobitBluetooth) => {
+			this.assignedOutputMicrobit = microbit;
+			connectionBehaviour.onConnected(name)
+			this.listenToOutputServices().then(() => {
+				connectionBehaviour.onReady();
+			}).catch((e) => {
+				console.log(e)
+			});
+		}
+
+		const onOutputDisconnect = (manual?: boolean) => {
+			if (manual) {
+				if (this.isOutputAssigned()) {
+					ConnectionBehaviours.getOutputBehaviour().onExpelled(manual);
+					this.clearAssignedOutputReference();
+				}
+			} else {
+				this.isOutputReconnecting = true;
+				ConnectionBehaviours.getOutputBehaviour().onDisconnected();
+			}
+			this.clearBluetoothServiceActionQueue();
+		}
+
+		const onOutputReconnect = (microbit: MicrobitBluetooth) => {
+			this.isOutputReconnecting = false;
+			if (this.outputFlaggedForDisconnect) {
+				this.outputFlaggedForDisconnect = false;
+				void this.disconnectOutputSafely(microbit);
+				return;
+			}
+			this.assignedOutputMicrobit = microbit;
+			connectionBehaviour.onConnected(name)
+			this.listenToOutputServices().then(() => {
+				connectionBehaviour.onReady();
+			}).catch((e) => {
+				console.log(e)
+			});
+		}
+
+		const onOutputReconnectFailed = () => {
+			connectionBehaviour.onExpelled(false, false);
+		}
+
+		try {
+			const bluetoothDevice = await MicrobitBluetooth
+				.requestDevice(name, this.onFailedConnection(connectionBehaviour));
+			await MicrobitBluetooth
 				.createMicrobitBluetooth(
-					request,
-					(microbit) => {
-						this.assignedOutputMicrobit = microbit;
-						connectionBehaviour.onConnected(name)
-						this.listenToOutputServices().then(() => {
-							connectionBehaviour.onReady();
-						}).catch((e) => {
-							console.log(e)
-						});
-					},
-					(manual) => {
-						if (manual) {
-							if (this.isOutputAssigned()) {
-								ConnectionBehaviours.getOutputBehaviour().onExpelled(manual);
-								this.clearAssignedOutputReference();
-							}
-						} else {
-							this.isOutputReconnecting = true;
-							ConnectionBehaviours.getOutputBehaviour().onDisconnected();
-						}
-						this.clearBluetoothServiceActionQueue();
-					},
+					bluetoothDevice,
+					onInitialOutputConnect,
+					onOutputDisconnect,
 					this.onFailedConnection(connectionBehaviour),
-					(microbit) => {
-						this.isOutputReconnecting = false;
-						if (this.outputFlaggedForDisconnect) {
-							this.outputFlaggedForDisconnect = false;
-							void this.disconnectOutputSafely(microbit);
-							return;
-						}
-						this.assignedOutputMicrobit = microbit;
-						connectionBehaviour.onConnected(name)
-						this.listenToOutputServices().then(() => {
-							connectionBehaviour.onReady();
-						}).catch((e) => {
-							console.log(e)
-						});
-					},
-					() => {
-						connectionBehaviour.onExpelled(false, false);
-					}
+					onOutputReconnect,
+					onOutputReconnectFailed
 				);
 			connectionBehaviour.onAssigned(this.getOutput(), name);
 			this.outputName = name;

@@ -436,7 +436,7 @@ function handleResults(error: string | undefined, result: { confidence: number, 
 		return;
 	}
 
-	let bestConf = 0;
+	let bestConfidence = 0;
 	let bestGestureID: string | undefined = undefined;
 
 	result.forEach((classPrediction) => {
@@ -445,15 +445,15 @@ function handleResults(error: string | undefined, result: { confidence: number, 
 			return confidenceMap;
 		});
 
-		if (classPrediction.confidence > bestConf) {
-			bestConf = classPrediction.confidence;
+		if (classPrediction.confidence > bestConfidence) {
+			bestConfidence = classPrediction.confidence;
 			bestGestureID = classPrediction.label;
 		}
 	});
 
 	for (const gesture of get(gestures)) {
 		if (String(gesture.ID) === bestGestureID) {
-			bestPrediction.set({...gesture, confidence: bestConf});
+			bestPrediction.set({...gesture, confidence: bestConfidence});
 		}
 	}
 }

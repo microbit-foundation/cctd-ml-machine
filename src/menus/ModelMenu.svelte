@@ -3,9 +3,9 @@
 	import { bestPrediction } from "../script/stores/mlStore";
 	import { t } from "../i18n";
 
-	let conf = $bestPrediction?.confidence ?? 0
-	conf = isNaN(conf) ? 0 : conf 
-	const confString = (Math.round(conf * 100)).toString() + "%"
+	let confidence = $bestPrediction?.confidence ?? 0
+	confidence = isNaN(confidence) ? 0 : confidence
+	const confidenceLabel = (Math.round(confidence * 100)).toString() + "%"
 
 </script>
 
@@ -28,7 +28,7 @@
 			</p>
 		</div>
 		<p class="text-4xl ml-5 mt-4 pb-4">
-			{confString}
+			{confidenceLabel}
 		</p>
 	{/if}
 </div>

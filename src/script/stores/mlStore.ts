@@ -148,6 +148,7 @@ export function updateGestureSoundOutput(gestureID: number, sound: SoundData | u
 		for (const gesture of gestures) {
 			if (gesture.ID === gestureID) {
 				gesture.output.sound = sound;
+				break
 			}
 		}
 		return gestures;
@@ -159,6 +160,7 @@ export function updateGestureLEDOutput(gestureID: number, matrix: boolean[]) {
 		for (const gesture of gestures) {
 			if (gesture.ID === gestureID) {
 				gesture.output.matrix = matrix;
+				break
 			}
 		}
 		return gestures;

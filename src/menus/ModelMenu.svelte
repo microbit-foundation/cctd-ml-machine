@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { state } from "../script/stores/uiStore";
-	import { bestPrediction, gestureConfidences } from "../script/stores/mlStore";
+	import { bestPrediction } from "../script/stores/mlStore";
 	import { t } from "../i18n";
+
+	let confidence = $bestPrediction?.confidence ?? 0
+	confidence = isNaN(confidence) ? 0 : confidence
+	const confidenceLabel = (Math.round(confidence * 100)).toString() + "%"
+
 </script>
 
 <div class="w-full text-center justify-center pt-5">
@@ -23,7 +28,7 @@
 			</p>
 		</div>
 		<p class="text-4xl ml-5 mt-4 pb-4">
-			{String(Math.round(($gestureConfidences[String($bestPrediction?.ID)]) * 100)) + "%"}
+			{confidenceLabel}
 		</p>
 	{/if}
 </div>

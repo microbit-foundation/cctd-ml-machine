@@ -200,8 +200,6 @@ function finishedTraining() {
 		});
 		const { x, y, z } = getPrevData();
 		const input = makeInputs(x, y, z);
-		console.log("Inputs : ");
-		console.log(input);
 		get(model).classify(input, checkModelAndSetupPredictionInterval);
 	});
 }
@@ -438,7 +436,7 @@ function handleResults(error: string | undefined, result: { confidence: number, 
 		return;
 	}
 
-	let bestConf = 0;
+	let bestConfidence = 0;
 	let bestGestureID: string | undefined = undefined;
 
 	result.forEach((classPrediction) => {
@@ -447,15 +445,15 @@ function handleResults(error: string | undefined, result: { confidence: number, 
 			return confidenceMap;
 		});
 
-		if (classPrediction.confidence > bestConf) {
-			bestConf = classPrediction.confidence;
+		if (classPrediction.confidence > bestConfidence) {
+			bestConfidence = classPrediction.confidence;
 			bestGestureID = classPrediction.label;
 		}
 	});
 
 	for (const gesture of get(gestures)) {
 		if (String(gesture.ID) === bestGestureID) {
-			bestPrediction.set(gesture);
+			bestPrediction.set({...gesture, confidence: bestConfidence});
 		}
 	}
 }

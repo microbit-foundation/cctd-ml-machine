@@ -5,6 +5,7 @@
 	import StandardButton from "../../../StandardButton.svelte";
 	import Microbits from "../../../../script/microbit-interfacing/Microbits";
 	import ImageSkeleton from "../../../skeletonloading/ImageSkeleton.svelte";
+	import Bowser from "bowser";
 
 	export let onConnectBluetoothClick: () => void;
 
@@ -20,6 +21,20 @@
 
 	onMount(() => downloadFirmware());
 
+	const browser = Bowser.getParser(window.navigator.userAgent);
+	const osName = browser.getOS().name ?? "unknown";
+
+	// See https://github.com/lancedikson/bowser/blob/master/src/constants.js
+	const getIllustrationGif = (os: string) => {
+		switch (os) {
+			case "Chrome OS": return "imgs/transfer_firmware_chromeos.gif"
+			case "Windows": return "imgs/transfer_firmware_windows.gif"
+			case "macOS": return "imgs/transfer_firmware_macos.gif"
+			default: return "imgs/transfer_firmware_macosgif"
+		}
+	}
+
+	const transferIllustration = getIllustrationGif(osName);
 </script>
 
 <main>
@@ -45,7 +60,7 @@
 				<ImageSkeleton alt="Transferring the firmware"
 											 castShadow
 											 height={104}
-											 src="imgs/transfer_firmware.gif"
+											 src="{transferIllustration}"
 											 width={290} />
 			</div>
 		</div>

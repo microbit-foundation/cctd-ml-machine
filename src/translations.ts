@@ -129,6 +129,7 @@ export default {
 		"popup.connectMB.bluetooth.step2": "Tryk på knappen nedenfor.",
 		"popup.connectMB.bluetooth.step3": "Vælg din BBC micro:bit og tryk 'tilslut'.",
 		"popup.connectMB.bluetooth.connect": "Tilslut",
+		"popup.connectMB.bluetooth.connecting": "Tilslutter...",
 
 		"popup.disconnectedWarning.input": "Din input-micro:bit mistede forbindelsen, vil du prøve igen?",
 		"popup.disconnectedWarning.output": "Din output-micro:bit mistede forbindelsen, vil du prøve igen?",
@@ -266,7 +267,6 @@ export default {
 		"content.data.choice.header": "Choice of class",
 		"content.data.choice.body": "Here, you choose which class you want to add data to. After having selected a class, you can either press the \"Record\" button below or press one of the buttons on your micro:bit to record a data segment. See the picture below.",
 
-
 		"content.data.dataDescription": "Here you can see the gathered data. ",
 		"content.data.addDataNoConnection": "You cannot add data without being connected with a micro:bit",
 		"content.data.noData": "You do not have any gestures to train on. Add the gestures you wish the micro:bit should learn to recognise.",
@@ -344,6 +344,7 @@ export default {
 		"popup.connectMB.bluetooth.step2": "Press the 'Connect' button below.",
 		"popup.connectMB.bluetooth.step3": "Select your micro:bit and press 'Connect'.",
 		"popup.connectMB.bluetooth.connect": "Connect",
+		"popup.connectMB.bluetooth.connecting": "Connecting...",
 
 		"popup.disconnectedWarning.input": "Your input micro:bit lost connection, do want to try again?",
 		"popup.disconnectedWarning.output": "Your output micro:bit lost connection, do want to try again?",

@@ -1,6 +1,6 @@
 # ML-Machine microbit v2 firmware
 
-This is a repository for the firmware that is used for ML-Machine. It is the version that will be given to users with v2 micro:bits. For the v1 .hex [go here](https://gitlab.au.dk/au-cs-ceed/ML-Microbit-cpp-version).
+This is a repository for the firmware that is used for ML-Machine. It is the version that will be given to users with v2 micro:bits.
 
 This repository is provides the tooling needed to compile a C/C++ CODAL program for the micro:bit v2 and produce a HEX file that can be downloaded to the device.
 

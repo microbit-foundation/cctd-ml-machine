@@ -68,8 +68,7 @@
 		<div class="flex justify-center">
 			<StandardButton
 				onClick={() => reconnect($state.reconnectState)}
-				text={reconnectButtonText}
-			/>
+			>{reconnectButtonText}</StandardButton>
 		</div>
 	</div>
 </div>

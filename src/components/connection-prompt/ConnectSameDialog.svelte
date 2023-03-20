@@ -22,9 +22,7 @@
         {$t("connectMB.outputMB.same")}
       </h1>
 
-      <StandardButton 
-        text={$t("connectMB.outputMB.sameButton")}
-      />
+      <StandardButton>{$t("connectMB.outputMB.sameButton")}</StandardButton>
   </div>
   <div 
     class="hover:cursor-pointer ml-2 border-gray-200 border border-solid rounded-lg p-6 shadow-lg"
@@ -34,9 +32,7 @@
         {$t("connectMB.outputMB.different")}
       </h1>
 
-      <StandardButton 
-        text={$t("connectMB.outputMB.otherButton")}
-      />
+      <StandardButton>{$t("connectMB.outputMB.otherButton")}</StandardButton>
   </div>
 </div>
 </main>

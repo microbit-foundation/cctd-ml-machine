@@ -86,10 +86,7 @@
 		</div>
 	</div>
 	<!-- <div class="grid grid-cols-1 place-items-center w-full"> -->
-	<StandardButton
-		onClick={connectButtonClicked}
-		text={$t("popup.connectMB.bluetooth.connect")}
-	/>
+	<StandardButton onClick={connectButtonClicked}>{$t("popup.connectMB.bluetooth.connect")}</StandardButton>
 	<!-- </div> -->
 
 </main>

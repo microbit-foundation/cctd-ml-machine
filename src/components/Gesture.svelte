@@ -216,13 +216,12 @@
 					<i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-[#63BFC2] transition ease " />
 				</div>
 				<StandardButton
-					text={$t("content.data.record")}
 					onClick={recordClicked}
 					stopPropagation={true}
 					small={true}
 					outlined={true}
 					fillOnHover={true}
-				/>
+				>{$t("content.data.record")}</StandardButton>
 				<!-- <p class="w-full text-center text-[#63BFC2]">
 					{$t("content.data.selected")}
 				</p>

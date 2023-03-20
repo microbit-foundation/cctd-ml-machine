@@ -5,12 +5,13 @@ import { get } from "svelte/store";
 import MBSpecs from "../microbit-interfacing/MBSpecs";
 import LoggingDecorator from "./LoggingDecorator";
 import CookieManager from "../CookieManager";
+import TypingUtils from "../TypingUtils";
 
 let text = get(t);
 t.subscribe(t => text = t);
 
 class OutputBehaviour extends LoggingDecorator {
-	private reconnectTimeout: ReturnType<typeof setTimeout> = setTimeout(() => {/*empty*/},0);
+	private reconnectTimeout: ReturnType<typeof setTimeout> = setTimeout(TypingUtils.emptyFunction,0);
 	private timeout = 4000;
 
 	onBluetoothConnectionError(error?: unknown) {

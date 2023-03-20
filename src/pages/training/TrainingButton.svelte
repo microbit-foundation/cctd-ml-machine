@@ -12,6 +12,5 @@
 	<StandardButton
 		color="pink"
 		onClick={trainModel}
-		text={$t(trainButtonLabel)}
-	/>
+	>{$t(trainButtonLabel)}</StandardButton>
 {/if}

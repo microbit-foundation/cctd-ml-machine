@@ -62,8 +62,7 @@
 						// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 						connectDialogReference.startConnectionProcess()
 					}}
-					text={$t("footer.connectButtonNotConnected")}
-				/>
+				>{$t("footer.connectButtonNotConnected")}</StandardButton>
 			</div>
 		</StandardDialog>
 		<MainConnectDialog

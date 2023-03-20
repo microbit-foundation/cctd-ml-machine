@@ -18,9 +18,7 @@
         <p class="mb-5">
           {$t("connectMB.main.usbBody")}
         </p>
-        <StandardButton 
-          text={$t("connectMB.main.installButton")}
-        />
+        <StandardButton>{$t("connectMB.main.installButton")}</StandardButton>
     </div>
     <div 
       class="hover:cursor-pointer ml-2 border-gray-200 border border-solid rounded-lg p-6 shadow-lg"
@@ -32,9 +30,7 @@
         <p class="mb-5">
           {$t("connectMB.main.btBody")}
         </p>
-        <StandardButton 
-          text={$t("connectMB.main.connectButton")}
-        />
+        <StandardButton>{$t("connectMB.main.connectButton")}</StandardButton>
     </div>
   </div>
 </main>

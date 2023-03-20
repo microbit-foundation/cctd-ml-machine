@@ -6,6 +6,7 @@ import { get } from "svelte/store";
 import MBSpecs from "../microbit-interfacing/MBSpecs";
 import LoggingDecorator from "./LoggingDecorator";
 import CookieManager from "../CookieManager";
+import TypingUtils from "../TypingUtils";
 
 let text = get(t);
 t.subscribe((t) => (text = t));
@@ -19,7 +20,7 @@ class InputBehaviour extends LoggingDecorator {
 	private smoothedAccelY = 0;
 	private smoothedAccelZ = 0;
 
-	private reconnectTimeout = setTimeout(() => {/*empty*/},0);
+	private reconnectTimeout = setTimeout(TypingUtils.emptyFunction,0);
 	private timeout = 4000;
 
 	onBluetoothConnectionError(error?: unknown) {

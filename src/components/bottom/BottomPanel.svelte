@@ -38,8 +38,7 @@
     {#if !$state.isInputAssigned}
         <!-- No input microbit assigned -->
         <div class="h-full w-full flex justify-center bg-white">
-            <StandardButton onClick={connectButtonClicked}
-                            text={$t("footer.connectButtonNotConnected")}/>
+            <StandardButton onClick={connectButtonClicked}>{$t("footer.connectButtonNotConnected")}</StandardButton>
         </div>
     {:else}
         <!-- Input microbit is assigned -->
@@ -75,30 +74,27 @@
                             {#if !$state.isOutputConnected || $state.isOutputReady}
                                 <!-- Output MB is not in the connection process -->
                                 <StandardButton onClick={outputDisconnectButtonClicked}
-                                                color="red"
-                                                text={$t("menu.model.disconnect")}/>
+                                                color="red">{$t("menu.model.disconnect")}</StandardButton>
                             {:else}
                                 <StandardButton onClick={TypingUtils.emptyFunction}
-                                                color="gray"
-                                                text="">
+                                                color="gray">
                                     <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px">
                                 </StandardButton>
                             {/if}
                         {:else}
-                            <StandardButton onClick={connectButtonClicked}
-                                            text={$t("menu.model.connectOutputButton")}/>
+                            <StandardButton onClick={connectButtonClicked}>
+                                {$t("menu.model.connectOutputButton")}
+                            </StandardButton>
                         {/if}
                     {/if}
                     <div class="ml-2">
                         {#if !$state.isInputConnected || $state.isInputReady}
                             <!-- Input MB is not in the connection process -->
                             <StandardButton onClick={inputDisconnectButtonClicked}
-                                            color="red"
-                                            text={$t("footer.disconnectButton")}/>
+                                            color="red">{$t("footer.disconnectButton")}</StandardButton>
                         {:else}
                             <StandardButton onClick={TypingUtils.emptyFunction}
-                                            color="gray"
-                                            text="">
+                                            color="gray">
                                 <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px">
                             </StandardButton>
                         {/if}

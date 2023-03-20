@@ -94,8 +94,7 @@
 		</div>
 		<StandardButton
 			onClick={connectButtonClicked}
-			text={$t("popup.connectMB.bluetooth.connect")}
-		/>
+		>{$t("popup.connectMB.bluetooth.connect")}</StandardButton>
 	{/if}
 	<!-- </div> -->
 

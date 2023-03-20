@@ -2,8 +2,9 @@
  * @jest-environment jsdom
  */
 import "svelte-jester";
-import EventEmittingMicrobitBluetooth from "../script/microbit-interfacing/EventEmittingMicrobitBluetooth";
-import MockBTDevice from "./mock-bluetooth/mock-microbit-bluetooth";
+import MicrobitBluetooth from "../script/microbit-interfacing/MicrobitBluetooth";
+import MockBTDevice from "./mocks/mock-microbit-bluetooth";
+import TypingUtils from "../script/TypingUtils";
 
 describe("Microbit Bluetooth interface tests", () => {
 
@@ -20,12 +21,15 @@ describe("Microbit Bluetooth interface tests", () => {
 					if (!options.filters) {
 						return Promise.reject(undefined);
 					}
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 					if (options.filters.length == 0) {
 						return Promise.reject(undefined);
 					}
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 					if (!options.filters[0].namePrefix) {
 						return Promise.reject(undefined);
 					}
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 					if (options.filters[0].namePrefix !== `BBC micro:bit [${microBitName}]`) {
 						return Promise.reject(undefined);
 					}
@@ -37,24 +41,51 @@ describe("Microbit Bluetooth interface tests", () => {
 
 	test("can create connection", async () => {
 		const mockBt = new MockBTDevice().withMicrobitVersion(2).build();
-		const con = await EventEmittingMicrobitBluetooth.createEventEmittingConnection(mockBt);
+		const con = await MicrobitBluetooth.createMicrobitBluetooth(
+			mockBt,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction
+		);
 		expect(con).toBeDefined();
 	});
 
 	test("Can read version", async () => {
 		const mockBt1 = new MockBTDevice().withMicrobitVersion(1).build();
-		const con1 = await EventEmittingMicrobitBluetooth.createEventEmittingConnection(mockBt1);
+		const con1 = await MicrobitBluetooth.createMicrobitBluetooth(
+			mockBt1,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction
+		);
 		expect(con1.getVersion()).toBe(1);
 
 		const mockBt2 = new MockBTDevice().withMicrobitVersion(2).build();
-		const con2 = await EventEmittingMicrobitBluetooth.createEventEmittingConnection(mockBt2);
+		const con2 = await MicrobitBluetooth.createMicrobitBluetooth(
+			mockBt2,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction
+		);
 		expect(con2.getVersion()).toBe(2);
 	});
 
 	test("On connect fires when connected", async () => {
 		const mockBt = new MockBTDevice().build();
 		let didFire = false;
-		await EventEmittingMicrobitBluetooth.createEventEmittingConnection(mockBt, () => didFire = true
+		await MicrobitBluetooth.createMicrobitBluetooth(
+			mockBt,
+			() => didFire = true,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction
 		);
 		expect(didFire).toBe(true);
 	});
@@ -63,12 +94,16 @@ describe("Microbit Bluetooth interface tests", () => {
 		const mockBt = new MockBTDevice().withFailingConnection().build();
 		let didFire = false;
 		try {
-			await EventEmittingMicrobitBluetooth.createEventEmittingConnection(mockBt, () => didFire = true
+			await MicrobitBluetooth.createMicrobitBluetooth(
+				mockBt,
+				() => didFire = true,
+				TypingUtils.emptyFunction,
+				TypingUtils.emptyFunction,
+				TypingUtils.emptyFunction,
+				TypingUtils.emptyFunction
 			);
 
-		} catch (e) {
-
-		}
+		} catch (e) { TypingUtils.emptyFunction() }
 		expect(didFire).toBe(false);
 	});
 
@@ -76,26 +111,28 @@ describe("Microbit Bluetooth interface tests", () => {
 		const mockBt = new MockBTDevice().withFailingConnection().build();
 		let didFire = false;
 		try {
-			await EventEmittingMicrobitBluetooth.createEventEmittingConnection(
+			await MicrobitBluetooth.createMicrobitBluetooth(
 				mockBt,
-				void 0,
-				void 0,
-				() => didFire = true
+				TypingUtils.emptyFunction,
+				TypingUtils.emptyFunction,
+				() => didFire = true,
+				TypingUtils.emptyFunction,
+				TypingUtils.emptyFunction
 			);
-		} catch (e) {
-
-		}
+		} catch (e) {TypingUtils.emptyFunction()}
 		expect(didFire).toBe(true);
 	});
 
 	test("onConnectFailed does not fire when connection succeeds", async () => {
 		const mockBt: BluetoothDevice = new MockBTDevice().build();
 		let didFire = false;
-		await EventEmittingMicrobitBluetooth.createEventEmittingConnection(
+		await MicrobitBluetooth.createMicrobitBluetooth(
 			mockBt,
-			void 0,
-			void 0,
-			() => didFire = true
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			() => didFire = true,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction
 		);
 
 		expect(didFire).toBe(false);
@@ -104,12 +141,15 @@ describe("Microbit Bluetooth interface tests", () => {
 	test("onDisconnect fires when gatt is disconnected", async () => {
 		const mockBt: BluetoothDevice = new MockBTDevice().build();
 		let didFire = false;
-		await EventEmittingMicrobitBluetooth.createEventEmittingConnection(
+		await MicrobitBluetooth.createMicrobitBluetooth(
 			mockBt,
-			void 0,
+			TypingUtils.emptyFunction,
 			() => {
 				didFire = true;
-			}
+			},
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction
 		);
 
 		mockBt.gatt!.disconnect();
@@ -118,14 +158,21 @@ describe("Microbit Bluetooth interface tests", () => {
 	});
 
 	test("Request device yields device", async () => {
-		const device = await EventEmittingMicrobitBluetooth.eventEmittingRequestDevice("vatav");
+		const device = await MicrobitBluetooth.requestDevice("vatav", TypingUtils.emptyFunction);
 		expect(device).toBeDefined();
 	});
 
 	test("Can connect to requested device", async () => {
-		const device = await EventEmittingMicrobitBluetooth.eventEmittingRequestDevice("vatav");
+		const device = await MicrobitBluetooth.requestDevice("vatav", TypingUtils.emptyFunction);
 
-		const con = await EventEmittingMicrobitBluetooth.createEventEmittingConnection(device);
+		const con = await MicrobitBluetooth.createMicrobitBluetooth(
+			device,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction,
+			TypingUtils.emptyFunction
+		);
 		expect(con).toBeDefined();
 		expect(con.isConnected()).toBe(true);
 	});

@@ -41,10 +41,10 @@
         if (selectedSound === undefined){
             return
         }
-        if (!Microbits.isBluetoothOutputConnected()) {
+        if (!Microbits.isOutputAssigned()) {
             return;
         }
-        if (Microbits.getBluetoothOutput().getVersion() === 1) {
+        if (Microbits.getAssignedOutput().getVersion() === 1) {
             const sound = new Audio(selectedSound.path);
             void sound.play();
         } else {

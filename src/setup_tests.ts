@@ -3,7 +3,7 @@ const util = require("util");
 // Required for the jest runtime
 TextDecoder = util.TextDecoder;
 
-// browser mock-bluetooth
+// browser mocks
 const setLang = (lang: string) => {
 	const localStorageMock = (function() {
 		let store = {

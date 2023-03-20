@@ -7,15 +7,22 @@
 	import PageContentView from "./views/PageContentView.svelte";
 	import BottomBarMenuView from "./views/BottomBarMenuView.svelte";
 	import CookieBanner from "./components/cookie-bannner/CookieBanner.svelte";
-	import { fade } from "svelte/transition";
-	import { state } from "./script/stores/uiStore";
+	import {fade} from "svelte/transition";
+	import {DeviceRequestStates, state} from "./script/stores/uiStore";
 	import LoadingSpinner from "./components/LoadingSpinner.svelte";
 	import CompatibilityChecker from "./script/compatibility/CompatibilityChecker";
 	import IncompatiblePlatformView from "./views/IncompatiblePlatformView.svelte";
 	import BluetoothIncompatibilityWarningDialog from "./components/BluetoothIncompatibilityWarningDialog.svelte";
+	import CookieManager from "./script/CookieManager";
 
 	ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
 	ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
+
+	if (CookieManager.isReconnectFlagSet()) {
+		$state.offerReconnect = true;
+		$state.reconnectState = DeviceRequestStates.INPUT
+		CookieManager.unsetReconnectFlag();
+	}
 </script>
 
 
@@ -35,8 +42,6 @@
 		<CookieBanner />
 		<OverlayView />
 		<BluetoothIncompatibilityWarningDialog />
-
-		<!-- <div class="h-full flex"> -->
 
 		<!-- SIDE BAR -->
 		<div

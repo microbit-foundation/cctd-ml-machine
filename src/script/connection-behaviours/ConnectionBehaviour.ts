@@ -7,30 +7,45 @@ import MBSpecs from "../microbit-interfacing/MBSpecs";
 interface ConnectionBehaviour {
 
 	/**
-	 * What should happen when the micro:bit is disconnected.
+	 * What should happen when the micro:bit is expelled.
 	 */
-	bluetoothDisconnect(manual?: boolean, bothDisconnected?: boolean): void;
+	onExpelled(manual?: boolean, bothExpelled?: boolean): void;
 
 	/**
-	 * What should happen on a bluetooth error. Usually occurs because of cancelled device requests.
-	 * @param {Error} error
-	 *      Error message
+	 * What should happen when the bluetooth device request is cancelled
 	 */
-	bluetoothConnectionError(error?: Error): void;
+	onCancelledBluetoothRequest(): void;
 
 	/**
-	 * What should happen when the micro:bit is connected via bluetooth
-	 * @param {MicrobitBluetooth} microbitBluetooth
-	 *      The connected micro:bit.
+	 * What should happen when the micro:bit is assigned
+	 * @param {MicrobitBluetooth} microbit
+	 *      The assigned micro:bit.
 	 * @param {string} name
 	 *      The name of the micro:bit.
 	 */
-	bluetoothConnect(microbitBluetooth: MicrobitBluetooth, name: string): void;
+	onAssigned(microbit: MicrobitBluetooth, name: string): void;
 
 	/**
-	 * Should return whether the micro:bit is connected.
+	 * What should happen when the micro:bit gets connected via Bluetooth
+	 * @param name Name of the micro:bit
 	 */
-	isConnected(): boolean;
+	onConnected(name: string): void;
+
+	/**
+	 * What should happen when the microbit is ready?
+	 * (Has subscribed to all services)
+	 */
+	onReady(): void;
+
+	/**
+	 * What should happen when the micro:bit loses connection via Bluetooth
+	 */
+	onDisconnected(): void;
+
+	/**
+	 * What should happen when the micro:bit loses connection via Bluetooth
+	 */
+	onBluetoothConnectionError(error?: unknown): void;
 
 	/**
 	 * What should happen when the accelerometer changes.

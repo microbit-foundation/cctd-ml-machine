@@ -6,8 +6,8 @@ import Microbits from "../script/microbit-interfacing/Microbits";
 import ConnectionBehaviours from "../script/connection-behaviours/ConnectionBehaviours";
 import OutputBehaviour from "../script/connection-behaviours/OutputBehaviour";
 import InputBehaviour from "../script/connection-behaviours/InputBehaviour";
-import SpyConnectionBehaviour from "./mock-bluetooth/SpyConnectionBehaviour";
-import MockBTDevice from "./mock-bluetooth/mock-microbit-bluetooth";
+import SpyConnectionBehaviour from "./mocks/SpyConnectionBehaviour";
+import MockBTDevice from "./mocks/mock-microbit-bluetooth";
 
 describe("Microbit facade tests", () => {
 	let spyInputBehaviour: SpyConnectionBehaviour;
@@ -47,7 +47,7 @@ describe("Microbit facade tests", () => {
 
 	beforeEach(() => {
 		try {
-			Microbits.disconnectBluetoothInputAndOutput();
+			Microbits.expelInputAndOutput();
 		} catch (_e) {
 		}
 	});
@@ -58,65 +58,65 @@ describe("Microbit facade tests", () => {
 	});
 
 	test("Input should not be connected before connecting", () => {
-		expect(Microbits.isBluetoothInputConnected()).toBeFalsy();
+		expect(Microbits.isInputAssigned()).toBeFalsy();
 	});
 
 	test("Input should be connected after connecting", async () => {
-		const wasConnected = await Microbits.connectBluetoothInput("vatav");
+		const wasConnected = await Microbits.assignInput("vatav");
 		expect(wasConnected).toBeTruthy();
-		expect(Microbits.isBluetoothInputConnected()).toBeTruthy();
-		expect(Microbits.isBluetoothOutputConnected()).toBeFalsy();
+		expect(Microbits.isInputAssigned()).toBeTruthy();
+		expect(Microbits.isOutputAssigned()).toBeFalsy();
 	});
 
 	test("Output should not be connected before connecting", () => {
-		expect(Microbits.isBluetoothOutputConnected()).toBeFalsy();
+		expect(Microbits.isOutputAssigned()).toBeFalsy();
 	});
 
 	test("Output should be connected after connecting", async () => {
-		const wasConnected = await Microbits.connectBluetoothOutput("vatav");
+		const wasConnected = await Microbits.assignOutput("vatav");
 		expect(wasConnected).toBeTruthy();
-		expect(Microbits.isBluetoothOutputConnected()).toBeTruthy();
-		expect(Microbits.isBluetoothInputConnected()).toBeFalsy();
+		expect(Microbits.isOutputAssigned()).toBeTruthy();
+		expect(Microbits.isInputAssigned()).toBeFalsy();
 	});
 
 	test("Can connect the same microbit to output and input", async () => {
-		const wasConnected = await Microbits.connectBluetoothInput("vatav");
+		const wasConnected = await Microbits.assignInput("vatav");
 		await Microbits.useInputAsOutput();
 		expect(wasConnected).toBeTruthy();
-		expect(Microbits.isBluetoothOutputConnected()).toBeTruthy();
-		expect(Microbits.isBluetoothInputConnected()).toBeTruthy();
+		expect(Microbits.isOutputAssigned()).toBeTruthy();
+		expect(Microbits.isInputAssigned()).toBeTruthy();
 		expect(Microbits.isInputOutputTheSame()).toBeTruthy();
 	});
 
 	test("When same, disconnecting input also disconnects output", async () => {
-		const wasConnected = await Microbits.connectBluetoothInput("vatav");
+		const wasConnected = await Microbits.assignInput("vatav");
 		await Microbits.useInputAsOutput();
 		expect(wasConnected).toBeTruthy();
-		Microbits.disconnectBluetoothInputAndOutput();
-		expect(Microbits.isBluetoothOutputConnected()).toBeFalsy();
-		expect(Microbits.isBluetoothInputConnected()).toBeFalsy();
+		Microbits.expelInputAndOutput();
+		expect(Microbits.isOutputAssigned()).toBeFalsy();
+		expect(Microbits.isInputAssigned()).toBeFalsy();
 	});
 
 	test("Can get connected input", async () => {
-		await Microbits.connectBluetoothInput("vatav");
-		expect(Microbits.getBluetoothInput()).toBeDefined();
+		await Microbits.assignInput("vatav");
+		expect(Microbits.getAssignedInput()).toBeDefined();
 	});
 
 	test("Can get connected output", async () => {
-		await Microbits.connectBluetoothOutput("vatav");
-		expect(Microbits.getBluetoothOutput()).toBeDefined();
+		await Microbits.assignOutput("vatav");
+		expect(Microbits.getAssignedOutput()).toBeDefined();
 	});
 
 	test("Should get correct name", async () => {
-		await Microbits.connectBluetoothOutput("vatav");
-		await Microbits.connectBluetoothInput("vatav");
+		await Microbits.assignOutput("vatav");
+		await Microbits.assignInput("vatav");
 		expect(Microbits.getOutputName()).toBe("vatav");
 		expect(Microbits.getInputName()).toBe("vatav");
 	});
 
 	test("Should get correct version", async () => {
-		await Microbits.connectBluetoothOutput("vatav");
-		await Microbits.connectBluetoothInput("vatav");
+		await Microbits.assignOutput("vatav");
+		await Microbits.assignInput("vatav");
 		expect(Microbits.getInputVersion()).toBe(2);
 		expect(Microbits.getOutputVersion()).toBe(2);
 	});

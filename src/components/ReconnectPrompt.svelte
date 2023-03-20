@@ -34,9 +34,9 @@
 
 		const connect = () => {
 			if (connectState == DeviceRequestStates.INPUT) {
-				return Microbits.connectBluetoothInput(name);
+				return Microbits.assignInput(name);
 			}
-			return Microbits.connectBluetoothOutput(name);
+			return Microbits.assignOutput(name);
 		};
 
 		void connect().then((didSucceed) => {
@@ -68,8 +68,7 @@
 		<div class="flex justify-center">
 			<StandardButton
 				onClick={() => reconnect($state.reconnectState)}
-				text={reconnectButtonText}
-			/>
+			>{reconnectButtonText}</StandardButton>
 		</div>
 	</div>
 </div>

@@ -25,8 +25,8 @@
 	}
 
 	export function startConnectionProcess(): void {
-		currentState = $state.isConnected ? ConnectionStates.START_OUTPUT : ConnectionStates.START;
-		deviceState = $state.isConnected ? DeviceRequestStates.OUTPUT : DeviceRequestStates.INPUT;
+		currentState = $state.isInputConnected ? ConnectionStates.START_OUTPUT : ConnectionStates.START;
+		deviceState = $state.isInputConnected ? DeviceRequestStates.OUTPUT : DeviceRequestStates.INPUT;
 	}
 
 	let currentState: ConnectionStates = ConnectionStates.NONE; // the current stage in the connection
@@ -36,14 +36,14 @@
 	let flashProgress = 0;
 
 	function onFoundUsbDevice() {
-		Microbits.getUSBFriendlyName().then(friendlyName => {// Find the name of the micro:bit
+		Microbits.getLinkedFriendlyName().then(friendlyName => {// Find the name of the micro:bit
 			if (deviceState === DeviceRequestStates.OUTPUT) {
 				btPatternOutput.set(MBSpecs.Utility.nameToPattern(friendlyName));
 			} else {
 				btPatternInput.set(MBSpecs.Utility.nameToPattern(friendlyName));
 			}
 
-			Microbits.flashHexToUSB(progress => {// Flash hex
+			Microbits.flashHexToLinked(progress => {// Flash hex
 				// Send users to download screen
 				if (currentState != ConnectionStates.USB_DOWNLOADING) {
 					currentState = ConnectionStates.USB_DOWNLOADING;

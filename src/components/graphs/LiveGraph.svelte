@@ -2,8 +2,8 @@
 	import { state } from "../../script/stores/uiStore";
 	import { livedata, settings } from "../../script/stores/mlStore";
 	import { onMount } from "svelte";
-	import { SmoothieChart, TimeSeries } from "../../script/smoothie.js";
 	import { get, type Unsubscriber } from "svelte/store";
+	import {SmoothieChart, TimeSeries} from "smoothie";
 
 	var canvas: HTMLCanvasElement | undefined = undefined;
 	var chart: SmoothieChart | undefined;
@@ -36,7 +36,7 @@
 			strokeStyle: "#4040ff44",
 			fillStyle: "#0000ff07"
 		});
-		chart.streamTo(canvas, 0);
+		chart.streamTo(<HTMLCanvasElement>canvas, 0);
 		chart.stop();
 	});
 

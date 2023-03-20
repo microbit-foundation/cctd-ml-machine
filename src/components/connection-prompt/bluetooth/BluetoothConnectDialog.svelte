@@ -68,25 +68,35 @@
 	<h1 class="mb-5 font-bold">
 		{$t("popup.connectMB.bluetooth.heading")}
 	</h1>
-	{#if $state.requestDeviceWasCancelled}
+	{#if $state.requestDeviceWasCancelled && !isConnecting}
 		<p class="text-red-500 mb-1">{$t("popup.connectMB.bluetooth.cancelledConnection")}</p>
 	{/if}
-	<div class="grid grid-cols-3 mb-5 w-650px">
-		<div class="col-span-2 pt-5">
-			<p>1. {$t("popup.connectMB.bluetooth.step0")}</p>
-			<p>2. {$t("popup.connectMB.bluetooth.step1")}</p>
-			<p>3. {$t("popup.connectMB.bluetooth.step2")}</p>
-			<p>4. {$t("popup.connectMB.bluetooth.step3")}</p>
+	{#if isConnecting}
+		<!-- Show spinner while connecting -->
+		<div class="w-650px flex flex-col justify-center items-center">
+			<p>{$t("popup.connectMB.bluetooth.connecting")}</p>
+			<img alt="loading" src="imgs/loadingspinner.gif" width="100px">
 		</div>
-		<div>
-			<PatternMatrix
-				matrix={$patternMatrixState}
-				onMatrixChange={updateMatrix}
-			/>
+	{:else}
+		<div class="grid grid-cols-3 mb-5 w-650px">
+			<div class="col-span-2 pt-5">
+				<p>1. {$t("popup.connectMB.bluetooth.step0")}</p>
+				<p>2. {$t("popup.connectMB.bluetooth.step1")}</p>
+				<p>3. {$t("popup.connectMB.bluetooth.step2")}</p>
+				<p>4. {$t("popup.connectMB.bluetooth.step3")}</p>
+			</div>
+			<div>
+				<PatternMatrix
+					matrix={$patternMatrixState}
+					onMatrixChange={updateMatrix}
+				/>
+			</div>
 		</div>
-	</div>
-	<!-- <div class="grid grid-cols-1 place-items-center w-full"> -->
-	<StandardButton onClick={connectButtonClicked}>{$t("popup.connectMB.bluetooth.connect")}</StandardButton>
+		<StandardButton
+			onClick={connectButtonClicked}
+			text={$t("popup.connectMB.bluetooth.connect")}
+		/>
+	{/if}
 	<!-- </div> -->
 
 </main>

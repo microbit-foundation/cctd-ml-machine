@@ -14,7 +14,6 @@ module.exports = {
 	},
 	env: {
 		es6: true,
-		node: true,
 		browser: true
 	},
 	overrides: [
@@ -30,7 +29,8 @@ module.exports = {
 		"svelte3/ignore-styles": () => true
 	},
 	"globals": {
-		"NodeJS": true
+		"NodeJS": true,
+		"process": true
 	},
 	plugins: ["svelte3", "@typescript-eslint"],
 	ignorePatterns: ["node_modules"]

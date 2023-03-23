@@ -1,13 +1,14 @@
 import MicrobitBluetooth from "../microbit-interfacing/MicrobitBluetooth";
 import MBSpecs from "../microbit-interfacing/MBSpecs";
 import type ConnectionBehaviour from "./ConnectionBehaviour";
+import Environment from "../Environment";
 
 /**
  * Used for logging / Decorator pattern
  */
 abstract class LoggingDecorator implements ConnectionBehaviour {
 
-    private enableLogging: boolean = location.hostname == "localhost" && true
+    private enableLogging: boolean = Environment.isInDevelopment && true
 
     // For preventing spam of accelerometer data
     private logTimer = new Date().getTime();

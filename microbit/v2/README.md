@@ -1,10 +1,11 @@
 # ML-Machine microbit v2 firmware
 
-This is a repository for the firmware that is used for ML-Machine. It is the version that will be given to users with v2 micro:bits.
+This is the folder for the micro:bit software that is used for ML-Machine. It is the version that will be given to users with v2 micro:bits.
 
-This repository is provides the tooling needed to compile a C/C++ CODAL program for the micro:bit v2 and produce a HEX file that can be downloaded to the device.
+This folder provides the tooling needed to compile a C/C++ CODAL program for the micro:bit v2 and produce a HEX file that can be downloaded to the device.
 
-This repository acts as a fork of [Lancaster's Microbit v2 samples repository](https://github.com/lancaster-university/microbit-v2-samples), but without the samples.
+This originated as a fork of [Lancaster's Microbit v2 samples repository](https://github.com/lancaster-university/microbit-v2-samples).
+That repository is a good starting place if one wishes to learn more about development for micro:bits.
 
 # Installation
 You need some open source pre-requisites to build this repo. You can either install these tools yourself, or use the docker image provided below.
@@ -16,7 +17,7 @@ You need some open source pre-requisites to build this repo. You can either inst
 
 **OR**
 
-One can use docker instead of downloading these dependencies
+One can use docker instead of downloading these dependencies (read about this here [here](https://github.com/lancaster-university/microbit-v2-samples))
 
 # Building without docker
 - Clone this repository
@@ -235,33 +236,3 @@ python3 build.py -c
 mv $(pwd)/MICROBIT.hex /volumes/MICROBIT/MICROBIT.hex
 ```
 
-
-# Building with docker, not required nor recommended (Section from Lancasters repository)
-You can use the [Dockerfile](https://gitlab.au.dk/au-cs-ceed/ml-microbit-v2-cpp-version/-/blob/main/Dockerfile) provided to build the samples, or your own project sources, without installing additional dependencies.
-
-Run the following command to build the image locally; the .bin and .hex files from a successful compile will be placed in a new `out/` directory:
-
-```
-    docker build -t microbit-tools --output out .
-```
-
-To omit the final output stage (for CI, for example) run without the `--output` arguments:
-
-```
-    docker build -t microbit-tools .
-```
-**Note**: Depending on whether or not the issue has been resolved, this may result in a broken .hex file. It is recommended to build it manually instead and following the guide above instead.
-
-# Debugging, not required (section from lancasters repository)
-If you are using Visual Studio Code, there is a working debugging environment already set up for you, allowing you to set breakpoints and observe the micro:bit's memory. To get it working, follow these steps:
-
-1. Install either [OpenOCD](http://openocd.org) or [PyOCD](https://github.com/pyocd/pyOCD).
-2. Install the `marus25.cortex-debug` VS Code extension.
-3. Build your program.
-4. Click the Run and Debug option in the toolbar.
-5. Two debugging options are provided: one for OpenOCD, and one for PyOCD. Select the correct one depending on the debugger you installed.
-
-This should launch the debugging environment for you. To set breakpoints, you can click to the left of the line number of where you want to stop.
-
-# Sources
-Originally this is cloned from [Microbit-v2-examples repository from lancaster](https://github.com/lancaster-university/microbit-v2-samples)

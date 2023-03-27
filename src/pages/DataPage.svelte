@@ -10,6 +10,7 @@
 	import MainConnectDialog from "../components/connection-prompt/ConnectDialogContainer.svelte";
 	import NewGestureButton from "../components/NewGestureButton.svelte";
 	import StandardButton from "../components/StandardButton.svelte";
+	import {startConnectionProcess} from "../script/stores/connectDialogStore";
 
 	let isConnectionDialogOpen = false;
 
@@ -59,8 +60,7 @@
 				<StandardButton
 					onClick={() => {
 						isConnectionDialogOpen = false; 
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-						connectDialogReference.startConnectionProcess()
+						startConnectionProcess()
 					}}
 				>{$t("footer.connectButtonNotConnected")}</StandardButton>
 			</div>

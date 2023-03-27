@@ -6,38 +6,23 @@
 	import DownloadingDialog from "./usb/DownloadingDialog.svelte";
 	import FindUsbDialog from "./usb/FindUsbDialog.svelte";
 	import ManualInstallTutorial from "./usb/manual/ManualInstallTutorial.svelte";
-	import { DeviceRequestStates, state } from "../../script/stores/uiStore";
+	import {
+		ConnectDialogStates,
+		connectionDialogState,
+		DeviceRequestStates
+	} from "../../script/stores/connectDialogStore";
 	import ConnectSameDialog from "./ConnectSameDialog.svelte";
 	import Microbits from "../../script/microbit-interfacing/Microbits";
-	import { btPatternInput, btPatternOutput } from "../../script/stores/connectionStore";
+	import {btPatternInput, btPatternOutput} from "../../script/stores/connectionStore";
 	import MBSpecs from "../../script/microbit-interfacing/MBSpecs";
 
-
-	enum ConnectionStates {
-		NONE, // No connection in progress -> Dialog box closed
-		START, // Initial box with choice between usb installation and bluetooth connection
-		START_OUTPUT, // Initial box if input microbit is already connected. Choice between same and other microbit for output
-		BLUETOOTH, // Main bluetooth connect prompt, with pattern drawing
-		USB_START, // Initial usb installation prompt
-		USB_DOWNLOADING, // Downloading usb program status bar prompt
-		USB_DONE, // Installation done prompt
-		MANUAL_TUTORIAL // Prompt with tutorial gif for manual installation (and downloading of program)
-	}
-
-	export function startConnectionProcess(): void {
-		currentState = $state.isInputConnected ? ConnectionStates.START_OUTPUT : ConnectionStates.START;
-		deviceState = $state.isInputConnected ? DeviceRequestStates.OUTPUT : DeviceRequestStates.INPUT;
-	}
-
-	let currentState: ConnectionStates = ConnectionStates.NONE; // the current stage in the connection
-	let deviceState: DeviceRequestStates = DeviceRequestStates.NONE; // TODO: Rename. This is 'simply' if its the first or second microbit to be connected
-	let selectedMicrobitVersion: 1 | 2; // Used exclusively if manual program installation is required
+	let selectedMicrobitVersion: MBSpecs.MBVersion; // Used exclusively if manual program installation is required
 
 	let flashProgress = 0;
 
 	function onFoundUsbDevice() {
 		Microbits.getLinkedFriendlyName().then(friendlyName => {// Find the name of the micro:bit
-			if (deviceState === DeviceRequestStates.OUTPUT) {
+			if ($connectionDialogState.deviceState === DeviceRequestStates.OUTPUT) {
 				btPatternOutput.set(MBSpecs.Utility.nameToPattern(friendlyName));
 			} else {
 				btPatternInput.set(MBSpecs.Utility.nameToPattern(friendlyName));
@@ -45,71 +30,71 @@
 
 			Microbits.flashHexToLinked(progress => {// Flash hex
 				// Send users to download screen
-				if (currentState != ConnectionStates.USB_DOWNLOADING) {
-					currentState = ConnectionStates.USB_DOWNLOADING;
+				if ($connectionDialogState.connectionState != ConnectDialogStates.USB_DOWNLOADING) {
+					$connectionDialogState.connectionState = ConnectDialogStates.USB_DOWNLOADING;
 				}
 				flashProgress = progress;
 			}).then(() => {// Finished flashing successfully
-				currentState = ConnectionStates.USB_DONE;
+				$connectionDialogState.connectionState = ConnectDialogStates.USB_DONE;
 			}).catch(() => {// Error during flashing process
-				currentState = ConnectionStates.MANUAL_TUTORIAL;
+				$connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
 			});
 		}).catch(() => { // Couldn't find name. Set to manual transfer progress instead
-			currentState = ConnectionStates.MANUAL_TUTORIAL;
+			$connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
 		});
 	}
 
 	function onManualTransferSelectVersion(version: 1 | 2) {
 		selectedMicrobitVersion = version;
-		currentState = ConnectionStates.MANUAL_TUTORIAL;
+		$connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
 	}
 
 	function connectSame() {
 		Microbits.useInputAsOutput();
-		currentState = ConnectionStates.NONE;
+		$connectionDialogState.connectionState = ConnectDialogStates.NONE;
 	}
 </script>
 
 <main>
 	<StandardDialog
-		isOpen={currentState !== ConnectionStates.NONE}
-		onClose={() => currentState = ConnectionStates.NONE}
+		isOpen={$connectionDialogState.connectionState !== ConnectDialogStates.NONE}
+		onClose={() => $connectionDialogState.connectionState = ConnectDialogStates.NONE}
 	>
 
-		{#if currentState === ConnectionStates.START}
+		{#if $connectionDialogState.connectionState === ConnectDialogStates.START}
 			<StartDialog
-				onStartBluetoothClick={() => currentState = ConnectionStates.BLUETOOTH}
-				onStartUsbClick={() => currentState = ConnectionStates.USB_START}
+				onStartBluetoothClick={() => $connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH}
+				onStartUsbClick={() => $connectionDialogState.connectionState = ConnectDialogStates.USB_START}
 			/>
 
-		{:else if currentState === ConnectionStates.START_OUTPUT}
+		{:else if $connectionDialogState.connectionState === ConnectDialogStates.START_OUTPUT}
 			<ConnectSameDialog
 				onConnectSameClick={connectSame}
-				onConnectDifferentClick={() => currentState = ConnectionStates.START}
+				onConnectDifferentClick={() => $connectionDialogState.connectionState = ConnectDialogStates.START}
 			/>
 
-		{:else if currentState === ConnectionStates.BLUETOOTH}
+		{:else if $connectionDialogState.connectionState === ConnectDialogStates.BLUETOOTH}
 			<BluetoothConnectDialog
-				onBluetoothConnected={() => {currentState = ConnectionStates.NONE}}
-				deviceState={deviceState}
+				onBluetoothConnected={() => {$connectionDialogState.connectionState = ConnectDialogStates.NONE}}
+				deviceState={$connectionDialogState.deviceState}
 			/>
 
-		{:else if currentState === ConnectionStates.USB_START}
+		{:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_START}
 			<FindUsbDialog
 				onFoundUsb={onFoundUsbDevice}
 			/>
 
-		{:else if currentState === ConnectionStates.USB_DOWNLOADING}
+		{:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DOWNLOADING}
 			<DownloadingDialog transferProgress={flashProgress} />
 
-		{:else if currentState === ConnectionStates.USB_DONE}
+		{:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DONE}
 			<DoneDownloadingDialog
-				onConnectBluetoothClick={() => currentState = ConnectionStates.BLUETOOTH }
+				onConnectBluetoothClick={() => $connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH }
 			/>
 
-		{:else if currentState === ConnectionStates.MANUAL_TUTORIAL}
+		{:else if $connectionDialogState.connectionState === ConnectDialogStates.MANUAL_TUTORIAL}
 			<ManualInstallTutorial
-				onConnectBluetoothClick={() => currentState = ConnectionStates.BLUETOOTH}
+				onConnectBluetoothClick={() => $connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH}
 			/>
 		{/if}
 

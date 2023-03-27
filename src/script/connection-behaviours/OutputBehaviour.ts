@@ -1,11 +1,12 @@
 import type MicrobitBluetooth from "../microbit-interfacing/MicrobitBluetooth";
-import { DeviceRequestStates, informUser, state } from "../stores/uiStore";
+import { informUser, state } from "../stores/uiStore";
 import { t } from "../../i18n";
 import { get } from "svelte/store";
 import MBSpecs from "../microbit-interfacing/MBSpecs";
 import LoggingDecorator from "./LoggingDecorator";
 import CookieManager from "../CookieManager";
 import TypingUtils from "../TypingUtils";
+import {DeviceRequestStates} from "../stores/connectDialogStore";
 
 let text = get(t);
 t.subscribe(t => text = t);

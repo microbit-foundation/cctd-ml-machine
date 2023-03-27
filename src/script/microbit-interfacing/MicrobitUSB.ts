@@ -78,7 +78,6 @@ class MicrobitUSB extends CortexM {
 			const serial = await this.readMem32(
 				MBSpecs.USBSpecs.FICR + MBSpecs.USBSpecs.DEVICE_ID_1
 			);
-			console.log(serial);
 			result = MBSpecs.Utility.serialNumberToName(serial);
 		} catch (e: unknown) {
 			console.log(e);

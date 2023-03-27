@@ -48,7 +48,11 @@
 	}
 
 	// Draw on graph to display that users are recording
-	$: recordingStarted($state.isRecording || $state.isTesting);
+	// The jagged edges problem is caused by repeating the recordingStarted function.
+	// We will simply block the recording from starting, while it's recording
+	let blockRecordingStart = false;
+	$: recordingStarted(($state.isRecording || $state.isTesting) && !blockRecordingStart);
+
 
 	// Function to clearly diplay the area in which users are recording
 	function recordingStarted(isRecording: boolean): void {
@@ -61,9 +65,11 @@
 		recordLines.append(new Date().getTime(), 2.3, false);
 
 		// Wait a second and set end line
+		blockRecordingStart = true;
 		setTimeout(() => {
 			recordLines.append(new Date().getTime() - 1, 2.3, false);
 			recordLines.append(new Date().getTime(), -2, false);
+			blockRecordingStart = false;
 		}, get(settings).duration);
 	}
 

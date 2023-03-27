@@ -3,9 +3,9 @@
 	import { bestPrediction } from "../script/stores/mlStore";
 	import { t } from "../i18n";
 
-	let confidence = $bestPrediction?.confidence ?? 0
+	$: confidence = $bestPrediction?.confidence ?? 0
 	confidence = isNaN(confidence) ? 0 : confidence
-	const confidenceLabel = (Math.round(confidence * 100)).toString() + "%"
+	$: confidenceLabel = (Math.round(confidence * 100)).toString() + "%"
 
 </script>
 

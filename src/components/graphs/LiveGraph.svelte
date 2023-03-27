@@ -51,12 +51,12 @@
 	// The jagged edges problem is caused by repeating the recordingStarted function.
 	// We will simply block the recording from starting, while it's recording
 	let blockRecordingStart = false;
-	$: recordingStarted(($state.isRecording || $state.isTesting) && !blockRecordingStart);
+	$: recordingStarted($state.isRecording || $state.isTesting);
 
 
 	// Function to clearly diplay the area in which users are recording
 	function recordingStarted(isRecording: boolean): void {
-		if (!isRecording) {
+		if (!isRecording || blockRecordingStart) {
 			return;
 		}
 

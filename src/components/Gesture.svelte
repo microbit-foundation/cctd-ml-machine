@@ -80,7 +80,7 @@
 				addRecording(gesture.ID, recording);
 				informUser("Færdiggjort optagelse"); // TODO: Translations
 			} else {
-				alertUser("Micro:Bit frakoblede under optagelse"); // TODO: Translations
+				alertUser($t("alert.recording.disconnectedDuringRecording")); // TODO: Translations
 			}
 		}, recordingDuration);
 	}

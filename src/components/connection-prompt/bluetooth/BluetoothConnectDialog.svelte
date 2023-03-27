@@ -35,8 +35,9 @@
 		void connectionResult().then(didSucceed => {
 			if (didSucceed) {
 				onBluetoothConnected();
+			} else {
+				isConnecting = false;
 			}
-			isConnecting = false;
 		});
 	};
 

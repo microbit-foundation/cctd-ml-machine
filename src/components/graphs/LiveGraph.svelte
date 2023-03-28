@@ -2,8 +2,8 @@
 	import { state } from "../../script/stores/uiStore";
 	import { livedata, settings } from "../../script/stores/mlStore";
 	import { onMount } from "svelte";
-	import { SmoothieChart, TimeSeries } from "../../script/smoothie.js";
 	import { get, type Unsubscriber } from "svelte/store";
+	import {SmoothieChart, TimeSeries} from "smoothie";
 
 	var canvas: HTMLCanvasElement | undefined = undefined;
 	var chart: SmoothieChart | undefined;
@@ -36,23 +36,27 @@
 			strokeStyle: "#4040ff44",
 			fillStyle: "#0000ff07"
 		});
-		chart.streamTo(canvas, 0);
+		chart.streamTo(<HTMLCanvasElement>canvas, 0);
 		chart.stop();
 	});
 
 	// Start and stop chart when microbit connect/disconnect
 	$: {
 		if (chart !== undefined) {
-			$state.isConnected ? chart.start() : chart.stop();
+			$state.isInputReady ? chart.start() : chart.stop();
 		}
 	}
 
 	// Draw on graph to display that users are recording
+	// The jagged edges problem is caused by repeating the recordingStarted function.
+	// We will simply block the recording from starting, while it's recording
+	let blockRecordingStart = false;
 	$: recordingStarted($state.isRecording || $state.isTesting);
+
 
 	// Function to clearly diplay the area in which users are recording
 	function recordingStarted(isRecording: boolean): void {
-		if (!isRecording) {
+		if (!isRecording || blockRecordingStart) {
 			return;
 		}
 
@@ -61,15 +65,17 @@
 		recordLines.append(new Date().getTime(), 2.3, false);
 
 		// Wait a second and set end line
+		blockRecordingStart = true;
 		setTimeout(() => {
 			recordLines.append(new Date().getTime() - 1, 2.3, false);
 			recordLines.append(new Date().getTime(), -2, false);
+			blockRecordingStart = false;
 		}, get(settings).duration);
 	}
 
 	// When state changes, update the state of the canvas
 	$: { 
-		const isConnected = $state.isConnected
+		const isConnected = $state.isInputConnected
 		updateCanvas(isConnected);
 	}
 

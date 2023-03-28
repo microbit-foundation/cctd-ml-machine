@@ -4,10 +4,11 @@
 	import { t } from "../../../i18n";
 	import { onDestroy, onMount } from "svelte";
 	import StandardButton from "../../StandardButton.svelte";
-	import { DeviceRequestStates, state } from "../../../script/stores/uiStore";
+	import { state } from "../../../script/stores/uiStore";
 	import { btPatternInput, btPatternOutput } from "../../../script/stores/connectionStore";
 	import type { Writable } from "svelte/store";
 	import Microbits from "../../../script/microbit-interfacing/Microbits";
+	import {DeviceRequestStates} from "../../../script/stores/connectDialogStore";
 
 	// callbacks
 	export let deviceState: DeviceRequestStates;
@@ -26,9 +27,9 @@
 		let name = MBSpecs.Utility.patternToName($patternMatrixState);
 		const connectionResult = () => {
 			if (deviceState == DeviceRequestStates.INPUT) {
-				return Microbits.connectBluetoothInput(name);
+				return Microbits.assignInput(name);
 			} else {
-				return Microbits.connectBluetoothOutput(name);
+				return Microbits.assignOutput(name);
 			}
 		};
 
@@ -36,9 +37,8 @@
 			if (didSucceed) {
 				onBluetoothConnected();
 			} else {
-				console.error("Connection failed!");
+				isConnecting = false;
 			}
-			isConnecting = false;
 		});
 	};
 
@@ -96,8 +96,7 @@
 		</div>
 		<StandardButton
 			onClick={connectButtonClicked}
-			text={$t("popup.connectMB.bluetooth.connect")}
-		/>
+		>{$t("popup.connectMB.bluetooth.connect")}</StandardButton>
 	{/if}
 	<!-- </div> -->
 

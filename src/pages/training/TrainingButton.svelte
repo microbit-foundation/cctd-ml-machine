@@ -8,10 +8,9 @@
 	$: trainButtonLabel = !$state.isPredicting ? "menu.trainer.trainModelButton" : "menu.trainer.trainNewModelButton";
 </script>
 
-{#if sufficientData && $state.isConnected && !$state.isTraining}
+{#if sufficientData && $state.isInputConnected && !$state.isTraining}
 	<StandardButton
 		color="pink"
 		onClick={trainModel}
-		text={$t(trainButtonLabel)}
-	/>
+	>{$t(trainButtonLabel)}</StandardButton>
 {/if}

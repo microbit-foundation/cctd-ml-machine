@@ -11,7 +11,7 @@ name: Deploy web app to Azure Static Web Apps
 
 env:
   APP_LOCATION: "/" # location of your client code
-  APP_ARTIFACT_LOCATION: "/public" # location of client code build output
+  APP_ARTIFACT_LOCATION: "/dist" # location of client code build output
 
 on:
   push:
@@ -27,6 +27,14 @@ permissions:
   contents: read
 
 jobs:
+  Jest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Tests
+        run: |
+          npm install 
+          npm test
   build_and_deploy:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest

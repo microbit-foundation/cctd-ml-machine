@@ -25,10 +25,7 @@
 			{$t("connectMB.usb.done.body4")}
 		</p>
 
-		<StandardButton
-			onClick={onConnectBluetoothClick}
-			text={$t("popup.connectMB.main.bluetooth.subtitle")}
-		/>
+		<StandardButton onClick={onConnectBluetoothClick}>{$t("popup.connectMB.main.bluetooth.subtitle")}</StandardButton>
 	</div>
 
 </main>

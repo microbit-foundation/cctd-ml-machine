@@ -6,8 +6,8 @@ import Microbits from "../script/microbit-interfacing/Microbits";
 import ConnectionBehaviours from "../script/connection-behaviours/ConnectionBehaviours";
 import OutputBehaviour from "../script/connection-behaviours/OutputBehaviour";
 import InputBehaviour from "../script/connection-behaviours/InputBehaviour";
-import SpyConnectionBehaviour from "./mock-bluetooth/SpyConnectionBehaviour";
-import MockBTDevice from "./mock-bluetooth/mock-microbit-bluetooth";
+import SpyConnectionBehaviour from "./mocks/SpyConnectionBehaviour";
+import MockBTDevice from "./mocks/mock-microbit-bluetooth";
 
 describe("Microbit behaviours tests", () => {
 	let spyInputBehaviour: SpyConnectionBehaviour;
@@ -30,12 +30,15 @@ describe("Microbit behaviours tests", () => {
 					if (!options.filters) {
 						return Promise.reject(undefined);
 					}
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 					if (options.filters.length == 0) {
 						return Promise.reject(undefined);
 					}
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 					if (!options.filters[0].namePrefix) {
 						return Promise.reject(undefined);
 					}
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 					if (options.filters[0].namePrefix !== `BBC micro:bit [${microBitName}]`) {
 						return Promise.reject(undefined);
 					}
@@ -47,36 +50,36 @@ describe("Microbit behaviours tests", () => {
 
 	beforeEach(() => {
 		try {
-			Microbits.disconnectBluetoothInputAndOutput();
-		} catch (_e) {
+			Microbits.expelInputAndOutput();
+		} catch (_e) { /*empty*/
 		}
 	});
 
 	describe("input behaviour tests", () => {
 
 		test("bluetoothConnect fires when connected", async () => {
-			await Microbits.connectBluetoothInput("vatav");
+			await Microbits.assignInput("vatav");
 			expect(spyInputBehaviour.hasConnectFired()).toBeTruthy();
 			expect(spyInputBehaviour.getConnectedName()).toBe("vatav");
 			expect(spyInputBehaviour.didFailConnection()).toBeFalsy();
 		});
 
 		test("bluetoothConnectionError fires when connection fails", async () => {
-			await Microbits.connectBluetoothInput("noooo");
+			await Microbits.assignInput("noooo");
 			expect(spyInputBehaviour.didFailConnection()).toBeTruthy();
 		});
 
 		test("bluetoothDisconnect fires when disconnected manually", async () => {
-			await Microbits.connectBluetoothInput("vatav");
-			Microbits.disconnectBluetoothInput();
+			await Microbits.assignInput("vatav");
+			Microbits.expelInput();
 			expect(spyInputBehaviour.wasDisconnected()).toBeTruthy();
 			expect(spyInputBehaviour.wasManuallyDisconnected()).toBeTruthy();
 			expect(spyInputBehaviour.wasBothDisconnected()).toBeTruthy();
 		});
 
 		test("bluetoothDisconnect fires when both disconnected manually", async () => {
-			await Microbits.connectBluetoothInput("vatav");
-			Microbits.disconnectBluetoothInputAndOutput();
+			await Microbits.assignInput("vatav");
+			Microbits.expelInputAndOutput();
 			expect(spyInputBehaviour.wasDisconnected()).toBeTruthy();
 			expect(spyInputBehaviour.wasManuallyDisconnected()).toBeTruthy();
 			expect(spyInputBehaviour.wasBothDisconnected()).toBeTruthy();
@@ -86,28 +89,28 @@ describe("Microbit behaviours tests", () => {
 	describe("Output behaviour tests", () => {
 
 		test("bluetoothConnect fires when connected", async () => {
-			await Microbits.connectBluetoothOutput("vatav");
+			await Microbits.assignOutput("vatav");
 			expect(spyOutputBehaviour.hasConnectFired()).toBeTruthy();
 			expect(spyOutputBehaviour.getConnectedName()).toBe("vatav");
 			expect(spyOutputBehaviour.didFailConnection()).toBeFalsy();
 		});
 
 		test("bluetoothConnectionError fires when connection fails", async () => {
-			await Microbits.connectBluetoothOutput("noooo");
+			await Microbits.assignOutput("noooo");
 			expect(spyOutputBehaviour.didFailConnection()).toBeTruthy();
 		});
 
 		test("bluetoothDisconnect fires when disconnected manually", async () => {
-			await Microbits.connectBluetoothOutput("vatav");
-			Microbits.disconnectBluetoothOutput();
+			await Microbits.assignOutput("vatav");
+			Microbits.expelOutput();
 			expect(spyOutputBehaviour.wasDisconnected()).toBeTruthy();
 			expect(spyOutputBehaviour.wasManuallyDisconnected()).toBeTruthy();
 			expect(spyOutputBehaviour.wasBothDisconnected()).toBeTruthy();
 		});
 
 		test("bluetoothDisconnect fires when both disconnected manually", async () => {
-			await Microbits.connectBluetoothOutput("vatav");
-			Microbits.disconnectBluetoothInputAndOutput();
+			await Microbits.assignOutput("vatav");
+			Microbits.expelInputAndOutput();
 			expect(spyOutputBehaviour.wasDisconnected()).toBeTruthy();
 			expect(spyOutputBehaviour.wasManuallyDisconnected()).toBeTruthy();
 			expect(spyOutputBehaviour.wasBothDisconnected()).toBeTruthy();

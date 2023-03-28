@@ -85,18 +85,16 @@
 			</div>
 			<div class="flex w-1/4 flex-row mr-4">
 				<div class="flex-1 flex-col m-auto pl-4 pr-4">
-					<StandardButton 
-						text={$t("cookies.banner.buttons.accept")}
+					<StandardButton
 						color="blue"
 						onClick={acceptClicked}
-					/>
+					>{$t("cookies.banner.buttons.accept")}</StandardButton>
 				</div>
 				<div class="flex-1 flex-col m-auto pl-4 pr-4">
 					<StandardButton 
 						color="gray"
-						text={$t("cookies.banner.buttons.reject")}
 						onClick={rejectClicked}
-					/>
+					>{$t("cookies.banner.buttons.reject")}</StandardButton>
 				</div>
 			</div>
 		</div>

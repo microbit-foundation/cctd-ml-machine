@@ -1,13 +1,13 @@
-import EventEmittingMicrobitUSB from "../../script/microbit-interfacing/EventEmittingMicrobitUSB";
 import USBConfiguration from "dapjs";
 import USBInterface from "dapjs";
 import USBAlternateInterface from "dapjs";
+import MicrobitUSB from "../../script/microbit-interfacing/MicrobitUSB";
 
 class SimpleUSBInterfaceAlternate implements USBAlternateInterface {
-	alternateSetting: number = 0;
-	interfaceClass: number = 0;
-	interfaceSubclass: number = 0;
-	interfaceProtocol: number = 0;
+	alternateSetting = 0;
+	interfaceClass = 0;
+	interfaceSubclass = 0;
+	interfaceProtocol = 0;
 	interfaceName?: string;
 	endpoints: USBEndpoint[] = [];
 }
@@ -16,7 +16,7 @@ class SimpleUSBInterface implements USBInterface {
 	interfaceNumber: number;
 	alternate: USBAlternateInterface;
 	alternates: USBAlternateInterface[] = [];
-	claimed: boolean = false;
+	claimed = false;
 
 	constructor() {
 		this.alternate = new SimpleUSBInterfaceAlternate();
@@ -52,8 +52,8 @@ class MockUSBDevice implements USBDevice {
 	readonly usbVersionMinor: number = 0;
 	readonly usbVersionSubminor: number = 0;
 	readonly vendorId: number = 0;
-	interfaceNumber: number = 0;
-	public serialNumber: string = "";
+	interfaceNumber = 0;
+	public serialNumber = "";
 
 	public withSerialNumber(serno: string) {
 		this.serialNumber = serno;
@@ -132,7 +132,7 @@ class MockUSBDevice implements USBDevice {
 
 export default MockUSBDevice;
 
-export class TestableMicrobitUSB extends EventEmittingMicrobitUSB {
+export class TestableMicrobitUSB extends MicrobitUSB {
 	/** Just overrides the protected constructor to be able to use the Mock USB device to test */
 	public constructor(usbDevice: USBDevice) {
 		super(usbDevice);

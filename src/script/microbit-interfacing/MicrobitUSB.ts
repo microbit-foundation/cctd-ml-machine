@@ -25,7 +25,7 @@ class MicrobitUSB extends CortexM {
 	 * Open prompt for USB connection.
 	 * @returns {Promise<MicrobitUSB>} A promise that resolves to a new MicrobitUSB object.
 	 */
-	protected static async requestConnection(): Promise<MicrobitUSB | undefined> {
+	public static async requestConnection(): Promise<MicrobitUSB | undefined> {
 		const requestOptions: USBDeviceRequestOptions = {
 			filters: [
 				{
@@ -58,7 +58,7 @@ class MicrobitUSB extends CortexM {
 	 * Read more: https://support.microbit.org/support/solutions/articles/19000035697-what-are-the-usb-vid-pid-numbers-for-micro-bit
 	 * @returns The hardware model of the micro:bit. Either 1 or 2.
 	 */
-	public getModelNumber(): 1 | 2 {
+	public getModelNumber(): MBSpecs.MBVersion {
 		const sernoPrefix: string = this.usbDevice.serialNumber!
 			.toString()
 			.substring(0, 4);
@@ -78,7 +78,6 @@ class MicrobitUSB extends CortexM {
 			const serial = await this.readMem32(
 				MBSpecs.USBSpecs.FICR + MBSpecs.USBSpecs.DEVICE_ID_1
 			);
-			console.log(serial);
 			result = MBSpecs.Utility.serialNumberToName(serial);
 		} catch (e: unknown) {
 			console.log(e);
@@ -97,7 +96,7 @@ class MicrobitUSB extends CortexM {
 	 * @param {string} hex The hex file to flash. (As a link)
 	 * @param {(progress: number) => void} progressCallback A callback for progress.
 	 */
-	protected async flashHex(
+	public async flashHex(
 		hex: string,
 		progressCallback: (progress: number) => void
 	): Promise<void> {

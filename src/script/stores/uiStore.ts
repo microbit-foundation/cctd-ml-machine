@@ -3,15 +3,12 @@ import type { CompatibilityStatus } from "../compatibility/CompatibilityChecker"
 import CompatibilityChecker from "../compatibility/CompatibilityChecker";
 import { t } from "../../i18n";
 import { gestures } from "./mlStore";
+import {DeviceRequestStates} from "./connectDialogStore";
 
 // TODO: Rename? Split up further?
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
-
-export enum DeviceRequestStates {
-	NONE, INPUT, OUTPUT
-}
 
 export const compatibility = writable<CompatibilityStatus>(CompatibilityChecker.checkCompatibility());
 export const isBluetoothWarningDialogOpen = writable<boolean>(get(compatibility) ? !get(compatibility).bluetooth : false);
@@ -23,12 +20,16 @@ export const state = writable<{
 	isTesting: boolean,
 	isRecording: boolean,
 	isTraining: boolean,
-	isConnected: boolean,
+	isInputConnected: boolean,
+	isOutputConnected: boolean,
 	isPredicting: boolean,
-	isOutputting: boolean,
 	offerReconnect: boolean,
 	requestDeviceWasCancelled: boolean,
 	reconnectState: DeviceRequestStates,
+	isInputReady: boolean,
+	isInputAssigned: boolean,
+	isOutputAssigned: boolean,
+	isOutputReady: boolean,
 	isLoading: boolean,
 }>({
 	isRequestingDevice: DeviceRequestStates.NONE,
@@ -36,12 +37,16 @@ export const state = writable<{
 	isTesting: false,
 	isRecording: false,
 	isTraining: false,
-	isConnected: false,
+	isInputConnected: false,
+	isOutputConnected: false,
 	isPredicting: false,
-	isOutputting: false,
 	offerReconnect: false,
 	requestDeviceWasCancelled: false,
 	reconnectState: DeviceRequestStates.NONE,
+	isInputReady: false,
+	isInputAssigned: false,
+	isOutputAssigned: false,
+	isOutputReady: false,
 	isLoading: true
 });
 
@@ -90,7 +95,7 @@ function assessStateStatus(bool = true): { isReady: boolean, msg: string } {
 	if (currentState.isRecording) return { isReady: false, msg: text("alert.isRecording") };
 	if (currentState.isTesting) return { isReady: false, msg: text("alert.isTesting") };
 	if (currentState.isTraining) return { isReady: false, msg: text("alert.isTraining") };
-	if (!currentState.isConnected && bool) return { isReady: false, msg: text("alert.isNotConnected") };
+	if (!currentState.isInputConnected && bool) return { isReady: false, msg: text("alert.isNotConnected") };
 
 	return { isReady: true, msg: "" };
 }

@@ -80,7 +80,7 @@
 				addRecording(gesture.ID, recording);
 				informUser("Færdiggjort optagelse"); // TODO: Translations
 			} else {
-				alertUser("Micro:Bit frakoblede under optagelse"); // TODO: Translations
+				alertUser($t("alert.recording.disconnectedDuringRecording")); // TODO: Translations
 			}
 		}, recordingDuration);
 	}
@@ -98,7 +98,7 @@
 	// If gesture is already selected, the selection is removed.
 	// If bluetooth is not connected, open connection prompt by calling callback
 	function selectClicked(): void {
-		if (!$state.isConnected) {
+		if (!$state.isInputConnected) {
 			chosenGesture.update((gesture) => {
 				gesture = null;
 				return gesture;
@@ -217,13 +217,12 @@
 					<i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-[#63BFC2] transition ease " />
 				</div>
 				<StandardButton
-					text={$t("content.data.record")}
 					onClick={recordClicked}
 					stopPropagation={true}
 					small={true}
 					outlined={true}
 					fillOnHover={true}
-				/>
+				>{$t("content.data.record")}</StandardButton>
 				<!-- <p class="w-full text-center text-[#63BFC2]">
 					{$t("content.data.selected")}
 				</p>

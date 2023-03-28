@@ -151,21 +151,26 @@ namespace MBSpecs {
 		 * @param {BluetoothRemoteGATTServer} gattServer The GATT server to read from.
 		 * @return {Promise<number>} The model number of the micro:bit. 1 for the original, 2 for the new.
 		 */
-		public static async getModelNumber(gattServer: BluetoothRemoteGATTServer): Promise<1 | 2> {
-			const deviceInfo = await gattServer.getPrimaryService(Services.DEVICE_INFO_SERVICE);
-			// TODO: Next line has been observed to fail. Proper error handling needed.
-			const modelNumber = await deviceInfo.getCharacteristic(Characteristics.MODEL_NUMBER);
+		public static async getModelNumber(gattServer: BluetoothRemoteGATTServer): Promise<MBSpecs.MBVersion> {
+			try {
+				const deviceInfo = await gattServer.getPrimaryService(Services.DEVICE_INFO_SERVICE);
 
-			// Read the value and convert it to UTF-8 (as specified in the Bluetooth specification).
-			const modelNumberValue = await modelNumber.readValue();
-			const decodedModelNumber = new TextDecoder().decode(modelNumberValue);
+				// TODO: Next line has been observed to fail. Proper error handling needed.
+				const modelNumber = await deviceInfo.getCharacteristic(Characteristics.MODEL_NUMBER);
 
-			// The model number either reads "BBC micro:bit" or "BBC micro:bit V2.0". Still unsure if those are the only cases.
-			if (decodedModelNumber.toLowerCase() === "BBC micro:bit".toLowerCase()) {
-				return 1;
-			}
-			if (decodedModelNumber.toLowerCase().includes("BBC micro:bit v2".toLowerCase())) {
-				return 2;
+				// Read the value and convert it to UTF-8 (as specified in the Bluetooth specification).
+				const modelNumberValue = await modelNumber.readValue();
+				const decodedModelNumber = new TextDecoder().decode(modelNumberValue);
+
+				// The model number either reads "BBC micro:bit" or "BBC micro:bit V2.0". Still unsure if those are the only cases.
+				if (decodedModelNumber.toLowerCase() === "BBC micro:bit".toLowerCase()) {
+					return 1;
+				}
+				if (decodedModelNumber.toLowerCase().includes("BBC micro:bit v2".toLowerCase())) {
+					return 2;
+				}
+			} catch (e) {
+				console.log(e)
 			}
 			// Something went wrong
 			throw new Error("Could not read model number");
@@ -224,7 +229,6 @@ namespace MBSpecs {
 		 * @returns {boolean[]} The pairing pattern
 		 */
 		public static nameToPattern(name: string): boolean[] {
-			console.log("Name", name);
 
 			const pattern: boolean[] = new Array<boolean>(25).fill(true);
 
@@ -235,7 +239,6 @@ namespace MBSpecs {
 
 			for (let column = 0; column < USBSpecs.MICROBIT_NAME_LENGTH; column++) {
 				for (let row = 0; row < USBSpecs.MICROBIT_NAME_LENGTH; row++) {
-					console.log(column, row, this.CODEBOOK_BLUETOOTH[row][column], name.charAt(column));
 					if (this.CODEBOOK_BLUETOOTH[row][column] === name.charAt(column)) {
 						break;
 					}

@@ -1,6 +1,5 @@
 <script lang="ts">
 
-  export let text: string
   export let color: "red" | "blue" | "gray" | "pink" = "blue"
   export let onClick: () => void = () => {return}
   export let stopPropagation = false
@@ -17,14 +16,13 @@
 
 </script>
 
-<!-- TODO: Considder swapping 'text' for a slots setup -->
 <div class="grid grid-cols-1 content-center place-items-center">
   <button
     style="--color: {bgColors[color]};"
     class="
       outline-none
-      font-bold rounded-full 
-      shadow-black shadow-xl"
+      font-bold rounded-full
+      shadow-gray-400 shadow-lg"
     class:small={small}
     class:normal={!small}
     class:outlined={outlined}
@@ -38,7 +36,7 @@
       onClick()
     }}
   >
-    {text}
+    <slot></slot>
   </button>
 </div>
 

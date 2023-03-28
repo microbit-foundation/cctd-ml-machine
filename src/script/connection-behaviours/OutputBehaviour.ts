@@ -1,59 +1,66 @@
 import type MicrobitBluetooth from "../microbit-interfacing/MicrobitBluetooth";
-import { DeviceRequestStates, informUser, state } from "../stores/uiStore";
+import { informUser, state } from "../stores/uiStore";
 import { t } from "../../i18n";
-import type ConnectionBehaviour from "./ConnectionBehaviour";
 import { get } from "svelte/store";
 import MBSpecs from "../microbit-interfacing/MBSpecs";
+import LoggingDecorator from "./LoggingDecorator";
+import CookieManager from "../CookieManager";
+import TypingUtils from "../TypingUtils";
+import {DeviceRequestStates} from "../stores/connectDialogStore";
 
 let text = get(t);
 t.subscribe(t => text = t);
 
-class OutputBehaviour implements ConnectionBehaviour {
-	isConnected(): boolean {
-		return get(state).isOutputting;
-	}
+class OutputBehaviour extends LoggingDecorator {
+	private reconnectTimeout: ReturnType<typeof setTimeout> = setTimeout(TypingUtils.emptyFunction,0);
+	private timeout = 4000;
 
-	bluetoothConnect(microbitBluetooth: MicrobitBluetooth, name: string) {
-		informUser(text("alert.output.GATTserverInform"));
-		informUser(text("alert.output.microBitServiceInform"));
-		informUser(text("alert.output.connectingToComponents"));
-
+	onBluetoothConnectionError(error?: unknown) {
+		super.onBluetoothConnectionError(error);
 		state.update((s) => {
-			s.isOutputting = true;
-			s.isRequestingDevice = DeviceRequestStates.NONE;
-			s.offerReconnect = false;
+			s.isOutputConnected = false;
+			s.isOutputAssigned = false;
 			return s;
 		});
-		informUser(text("alert.output.nowConnectedInform"));
 	}
 
-	bluetoothDisconnect(manual?: boolean, bothDisconnected?: boolean): void {
-		// Ensure state is updated
+	onReady() {
+		super.onReady();
+		state.update(s => {
+			s.isOutputReady = true;
+			return s;
+		})
+		clearTimeout(this.reconnectTimeout)
+	}
+
+	onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
+		super.onAssigned(microbitBluetooth, name)
+		state.update(s => {
+			s.isOutputAssigned = true;
+			return s;
+		})
+	}
+
+	onExpelled(manual?: boolean, bothDisconnected?: boolean): void {
+		super.onExpelled(manual, bothDisconnected)
 		state.update((s) => {
-			s.isOutputting = false;
+			s.isOutputConnected = false;
 			s.offerReconnect = !manual;
+			s.isOutputAssigned = false;
+			s.isOutputReady = false;
 			if (!bothDisconnected) {
 				s.reconnectState = DeviceRequestStates.OUTPUT;
 			}
 			return s;
 		});
+		clearTimeout(this.reconnectTimeout);
 	}
 
-	bluetoothConnectionError(error?: Error): void {
-		if (error) {
-			if (error.message) {
-				if (error.message.includes("User cancelled the requestDevice() chooser")) {
-					// User just cancelled
-					state.update((s) => {
-						s.requestDeviceWasCancelled = true;
-						return s;
-					});
-				}
-			}
-			console.log(error);
-		}
+	onCancelledBluetoothRequest(): void {
+		super.onCancelledBluetoothRequest()
 		state.update((s) => {
-			s.isOutputting = false;
+			s.isOutputConnected = false;
+			s.requestDeviceWasCancelled = true;
 			return s;
 		});
 	}
@@ -64,6 +71,49 @@ class OutputBehaviour implements ConnectionBehaviour {
 
 	buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {
 		return;
+	}
+
+	onConnected(name: string): void {
+		super.onConnected(name)
+		informUser(text("alert.output.GATTserverInform"));
+		informUser(text("alert.output.microBitServiceInform"));
+		informUser(text("alert.output.connectingToComponents"));
+
+		state.update((s) => {
+			s.isOutputConnected = true;
+			s.isRequestingDevice = DeviceRequestStates.NONE;
+			s.offerReconnect = false;
+			return s;
+		});
+
+		// Reset connection timeout
+		clearTimeout(this.reconnectTimeout)
+		const onTimeout = () => this.onCatastrophicError();
+		this.reconnectTimeout = setTimeout(function() {
+			onTimeout();
+		}, this.timeout)
+		informUser(text("alert.output.nowConnectedInform"));
+	}
+
+	onDisconnected(): void {
+		super.onDisconnected()
+		// Ensure state is updated
+		state.update((s) => {
+			s.isOutputConnected = false;
+			s.isOutputReady = false;
+			return s;
+		});
+	}
+
+	/**
+	 * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
+	 * Refresh the page is the only known solution
+	 * @private
+	 */
+	private onCatastrophicError() {
+		// Set flag to offer reconnect when page reloads
+		CookieManager.setReconnectFlag();
+		location.reload();
 	}
 }
 

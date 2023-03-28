@@ -16,7 +16,7 @@
 	<div class="border
               bg-opacity-75 border-solid min-h-20
               text-warm-gray-50 border-white
-              border-opacity-30 shadow shadow-black select-none
+              border-opacity-30 shadow-sm shadow-gray-500 select-none
               transition duration-300
 							rounded-full bg-[#EDBFD9]"
 			 class:bg-[#63BFC2]={isExpanded}

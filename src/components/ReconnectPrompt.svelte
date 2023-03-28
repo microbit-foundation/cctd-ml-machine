@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { horizontalSlide } from "../script/transitions";
 	import StandardButton from "../components/StandardButton.svelte";
-	import { DeviceRequestStates, state } from "../script/stores/uiStore";
+	import { state } from "../script/stores/uiStore";
 	import { t } from "../i18n";
 	import { btPatternInput, btPatternOutput } from "../script/stores/connectionStore";
 	import MBSpecs from "../script/microbit-interfacing/MBSpecs";
 	import Microbits from "../script/microbit-interfacing/Microbits";
+	import {DeviceRequestStates} from "../script/stores/connectDialogStore";
 
 	let reconnectText: string;
 	let reconnectButtonText: string;
@@ -34,9 +35,9 @@
 
 		const connect = () => {
 			if (connectState == DeviceRequestStates.INPUT) {
-				return Microbits.connectBluetoothInput(name);
+				return Microbits.assignInput(name);
 			}
-			return Microbits.connectBluetoothOutput(name);
+			return Microbits.assignOutput(name);
 		};
 
 		void connect().then((didSucceed) => {
@@ -68,8 +69,7 @@
 		<div class="flex justify-center">
 			<StandardButton
 				onClick={() => reconnect($state.reconnectState)}
-				text={reconnectButtonText}
-			/>
+			>{reconnectButtonText}</StandardButton>
 		</div>
 	</div>
 </div>

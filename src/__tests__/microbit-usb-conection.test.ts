@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import "svelte-jester";
-import MockUSBDevice, { TestableMicrobitUSB } from "./mock-bluetooth/mock-usb";
+import MockUSBDevice, { TestableMicrobitUSB } from "./mocks/mock-usb";
 
 describe("Microbit USB connection tests", () => {
 
@@ -13,7 +13,6 @@ describe("Microbit USB connection tests", () => {
 				predefined: undefined,
 				requestDevice(options?: USBDeviceRequestOptions): any {
 					const result = this.predefined ? this.predefined : Promise.resolve(new MockUSBDevice().build());
-					// @ts-ignore
 					this.predefined = undefined;
 					return Promise.resolve(result);
 				}

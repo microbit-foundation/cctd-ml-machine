@@ -10,6 +10,7 @@
 	import MainConnectDialog from "../components/connection-prompt/ConnectDialogContainer.svelte";
 	import NewGestureButton from "../components/NewGestureButton.svelte";
 	import StandardButton from "../components/StandardButton.svelte";
+	import {startConnectionProcess} from "../script/stores/connectDialogStore";
 
 	let isConnectionDialogOpen = false;
 
@@ -24,7 +25,7 @@
 </script>
 
 <!-- Main pane -->
-{#if !hasSomeData() && !$state.isConnected}
+{#if !hasSomeData() && !$state.isInputConnected}
 	<!-- 'training page has same component. Extract' -->
 	<div class="w-full h-full grid grid-cols-1 items-center place-items-center text-center">
 
@@ -59,11 +60,9 @@
 				<StandardButton
 					onClick={() => {
 						isConnectionDialogOpen = false; 
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-						connectDialogReference.startConnectionProcess()
+						startConnectionProcess()
 					}}
-					text={$t("footer.connectButtonNotConnected")}
-				/>
+				>{$t("footer.connectButtonNotConnected")}</StandardButton>
 			</div>
 		</StandardDialog>
 		<MainConnectDialog

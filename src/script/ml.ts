@@ -183,7 +183,7 @@ function createModel(): ML5NeuralNetwork {
 		inputs: createInputs(modelSettings),
 		task: "classification",
 		debug: "false",
-		learningRate: get(settings).learningRate // Måske justerbart?
+		learningRate: get(settings).learningRate
 	};
 
 	// Initialize neuralNetwork from ml5js library
@@ -414,7 +414,7 @@ export function classify() {
 		return;
 	}
 
-	if (!currentState.isConnected) return;
+	if (!currentState.isInputConnected) return;
 
 	// Get formatted version of previous data
 	const { x, y, z } = getPrevData();

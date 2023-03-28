@@ -9,6 +9,7 @@ export default {
 
 		//In gesture.svelte
 		"alert.data.classNameLengthAlert": "Navne må kun bestå af 25 tegn",
+		"alert.recording.disconnectedDuringRecording":"micro:bit frakoblede under optagelse",
 
 		//In output.js
 		"alert.output.GATTserverInform": "Tilkobling til GATT server...",
@@ -223,6 +224,7 @@ export default {
 
 		//In gesture.svelte
 		"alert.data.classNameLengthAlert": "Names must consists of maximum 25 characters.",
+		"alert.recording.disconnectedDuringRecording":"micro:bit disconnected during recording",
 
 		//In output.js
 		"alert.output.GATTserverInform": "Connecting to GATT server...",

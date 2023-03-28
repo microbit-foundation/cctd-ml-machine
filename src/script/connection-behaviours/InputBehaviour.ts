@@ -1,5 +1,5 @@
 import type MicrobitBluetooth from "../microbit-interfacing/MicrobitBluetooth";
-import { alertUser, buttonPressed, DeviceRequestStates, informUser, state } from "../stores/uiStore";
+import { alertUser, buttonPressed, informUser, state } from "../stores/uiStore";
 import { livedata } from "../stores/mlStore";
 import { t } from "../../i18n";
 import { get } from "svelte/store";
@@ -7,6 +7,7 @@ import MBSpecs from "../microbit-interfacing/MBSpecs";
 import LoggingDecorator from "./LoggingDecorator";
 import CookieManager from "../CookieManager";
 import TypingUtils from "../TypingUtils";
+import {DeviceRequestStates} from "../stores/connectDialogStore";
 
 let text = get(t);
 t.subscribe((t) => (text = t));

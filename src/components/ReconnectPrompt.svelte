@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { horizontalSlide } from "../script/transitions";
 	import StandardButton from "../components/StandardButton.svelte";
-	import { DeviceRequestStates, state } from "../script/stores/uiStore";
+	import { state } from "../script/stores/uiStore";
 	import { t } from "../i18n";
 	import { btPatternInput, btPatternOutput } from "../script/stores/connectionStore";
 	import MBSpecs from "../script/microbit-interfacing/MBSpecs";
 	import Microbits from "../script/microbit-interfacing/Microbits";
+	import {DeviceRequestStates} from "../script/stores/connectDialogStore";
 
 	let reconnectText: string;
 	let reconnectButtonText: string;

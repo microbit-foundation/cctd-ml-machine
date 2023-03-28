@@ -3,15 +3,12 @@ import type { CompatibilityStatus } from "../compatibility/CompatibilityChecker"
 import CompatibilityChecker from "../compatibility/CompatibilityChecker";
 import { t } from "../../i18n";
 import { gestures } from "./mlStore";
+import {DeviceRequestStates} from "./connectDialogStore";
 
 // TODO: Rename? Split up further?
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
-
-export enum DeviceRequestStates {
-	NONE, INPUT, OUTPUT
-}
 
 export const compatibility = writable<CompatibilityStatus>(CompatibilityChecker.checkCompatibility());
 export const isBluetoothWarningDialogOpen = writable<boolean>(get(compatibility) ? !get(compatibility).bluetooth : false);

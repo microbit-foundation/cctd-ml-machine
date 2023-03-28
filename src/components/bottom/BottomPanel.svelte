@@ -3,18 +3,18 @@
     import LiveGraph from "../graphs/LiveGraph.svelte";
     import {fade} from "svelte/transition";
     import {t} from "../../i18n";
-    import MainConnectDialog from "../connection-prompt/ConnectDialogContainer.svelte";
+    import ConnectDialogContainer from "../connection-prompt/ConnectDialogContainer.svelte";
     import TextInformation from "../information/TextInformation.svelte";
     import Microbits from "../../script/microbit-interfacing/Microbits";
     import StandardButton from "../StandardButton.svelte";
     import TypingUtils from "../../script/TypingUtils";
+    import {startConnectionProcess} from "../../script/stores/connectDialogStore";
 
     let componentWidth: number;
-    let connectDialogReference: MainConnectDialog;
+    let connectDialogReference: ConnectDialogContainer;
 
     const connectButtonClicked = () => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        connectDialogReference.startConnectionProcess();
+        startConnectionProcess();
     };
 
     const inputDisconnectButtonClicked = () => {
@@ -32,7 +32,7 @@
         class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
         class:bg-gray-300={$state.isInputAssigned && !$state.isInputReady}
 >
-    <MainConnectDialog
+    <ConnectDialogContainer
             bind:this={connectDialogReference}
     />
     {#if !$state.isInputAssigned}

@@ -4,10 +4,11 @@
 	import { t } from "../../../i18n";
 	import { onDestroy, onMount } from "svelte";
 	import StandardButton from "../../StandardButton.svelte";
-	import { DeviceRequestStates, state } from "../../../script/stores/uiStore";
+	import { state } from "../../../script/stores/uiStore";
 	import { btPatternInput, btPatternOutput } from "../../../script/stores/connectionStore";
 	import type { Writable } from "svelte/store";
 	import Microbits from "../../../script/microbit-interfacing/Microbits";
+	import {DeviceRequestStates} from "../../../script/stores/connectDialogStore";
 
 	// callbacks
 	export let deviceState: DeviceRequestStates;

@@ -27,5 +27,5 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
           port: ${{ secrets.DEPLOY_PORT }}
-          source: "./public"
+          source: "./dist"
           target: "/home/www/aarhus-ml-machine"

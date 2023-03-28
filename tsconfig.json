@@ -7,7 +7,8 @@
   "exclude": [
     "node_modules/*",
     "__sapper__/*",
-    "public/*"
+    "public/*",
+    "svelte.config.js"
   ],
   "compilerOptions": {
     "lib": ["DOM", "ES6", "WebWorker"],

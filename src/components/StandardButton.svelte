@@ -21,8 +21,8 @@
     style="--color: {bgColors[color]};"
     class="
       outline-none
-      font-bold rounded-full 
-      shadow-black shadow-xl"
+      font-bold rounded-full
+      shadow-gray-400 shadow-lg"
     class:small={small}
     class:normal={!small}
     class:outlined={outlined}

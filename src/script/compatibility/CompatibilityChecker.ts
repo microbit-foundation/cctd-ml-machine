@@ -6,6 +6,7 @@ import {
 	WebBluetoothCompatibility as BTComp,
 	WebUSBCompatibility as USBComp
 } from "./CompatibilityList";
+import Environment from "../Environment";
 
 export type CompatibilityStatus = {
 	bluetooth: boolean,
@@ -39,11 +40,11 @@ class CompatibilityChecker {
 		let platformType = browser.getPlatform().type;
 
 		// If platform won't report what it is, just assume desktop (ChromeOS doesnt report it)
-		if (platformType === undefined) {
+		if (platformType == undefined) {
 			platformType = "desktop";
 		}
-		const isInDevelopment = location.hostname === "localhost";
-		const isPlatformAllowed = isInDevelopment || !nonAllowedPlatforms.includes(platformType);
+		const isPlatformAllowed = Environment.isInDevelopment || !nonAllowedPlatforms.includes(platformType);
+
 		return {
 			bluetooth: isBluetoothSupported,
 			usb: isUsbSupported,

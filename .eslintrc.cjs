@@ -29,7 +29,8 @@ module.exports = {
 		"svelte3/ignore-styles": () => true
 	},
 	"globals": {
-		"NodeJS": true
+		"NodeJS": true,
+		"process": true
 	},
 	plugins: ["svelte3", "@typescript-eslint"],
 	ignorePatterns: ["node_modules"]

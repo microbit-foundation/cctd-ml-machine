@@ -78,8 +78,10 @@ export function tfTrainModel() {
 	const labels = [];
 	const numberofClasses = gestureData.length;
 
-	gestureData.forEach((MLClass, index, array) => {
+	gestureData.forEach((MLClass, index) => {
 		MLClass.recordings.forEach(recording => {
+
+			// prepare features
 			const x = recording.data.x;
 			const y = recording.data.y;
 			const z = recording.data.z;
@@ -92,9 +94,16 @@ export function tfTrainModel() {
 			});
 			
 			features.push(dataExample);
+
+			// Prepare labels
+			const label = new Array(numberofClasses).fill(0,0, numberofClasses);
+			label[index] = 1;
+			labels.push(label);
+
 	});
 
 	console.log("features", features);
+	console.log("labels:", labels);
 });
 
 

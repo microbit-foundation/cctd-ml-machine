@@ -15,6 +15,7 @@ import { peaks, standardDeviation, totalAcceleration } from "./datafunctions";
 import { get, type Unsubscriber } from "svelte/store";
 import { t } from "../i18n";
 import { ML5NeuralNetwork, neuralNetwork } from "ml5";
+import * as tf from "@tensorflow/tfjs";
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
@@ -35,8 +36,28 @@ let unsubscribeFromSettings: Unsubscriber | undefined = undefined;
 let predictionInterval: NodeJS.Timeout | undefined = undefined;
 
 
+function tfCreateModel() {
+	//const shape = get(settings).includedAxes * get(settings).includedParameters;
+
+    const input = tf.input({shape: [15]});
+    const normalizer = tf.layers.batchNormalization().apply(input);
+    const dense = tf.layers.dense({units: 16, activation: 'relu'}).apply(normalizer);
+    const softmax = tf.layers.dense({units: 2, activation: 'softmax'}).apply(dense);
+    const model = tf.model({inputs: input, outputs: softmax});
+
+	model.compile({
+		loss: 'categoricalCrossentropy',
+		optimizer:  tf.train.sgd(0.5),
+		metrics: ["accuracy"]
+	});
+
+    return model;
+}
+
 // Functioned called when user activates a model-training.
 export function trainModel() {
+
+
 	state.update(obj => {
 		obj.isTraining = true;
 		return obj;
@@ -60,9 +81,13 @@ export function trainModel() {
 
 	// Create neural network with user-specified settings
 	const nn: ML5NeuralNetwork = createModel();
+	const tfModel = tfCreateModel()
+	tfModel.summary();
 
 	// Fetch data
 	const gestureData = get(gestures);
+
+	console.log("Gesture data:", gestureData);
 
 	// Assess if any points are equal across all data
 	gestureData.forEach(type => {

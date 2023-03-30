@@ -54,9 +54,56 @@ function tfCreateModel() {
     return model;
 }
 
+export function tfTrainModel() {
+	// state.update(obj => {
+	// 	obj.isTraining = true;
+	// 	return obj;
+	// });
+	// if (!isTrainingAllowed()) {
+	// 	state.update(obj => {
+	// 		obj.isTraining = false;
+	// 		return obj;
+	// 	});
+	// 	return;
+	// }
+
+	// informUser(text("alert.beginModelSetup"));
+
+	//const nn = tfCreateModel();
+
+	// Fetch data
+	const gestureData = get(gestures);
+	console.log(gestureData);
+	const features = []
+	const labels = [];
+	const numberofClasses = gestureData.length;
+
+	gestureData.forEach((MLClass, index, array) => {
+		MLClass.recordings.forEach(recording => {
+			const x = recording.data.x;
+			const y = recording.data.y;
+			const z = recording.data.z;
+
+			const inputs = makeInputs(x, y, z);
+			const dataExample = [];
+
+			Object.keys(inputs).forEach( key => {
+				dataExample.push(inputs[key])
+			});
+			
+			features.push(dataExample);
+	});
+
+	console.log("features", features);
+});
+
+
+
+}
+
 // Functioned called when user activates a model-training.
 export function trainModel() {
-
+	tfTrainModel();
 
 	state.update(obj => {
 		obj.isTraining = true;
@@ -80,14 +127,12 @@ export function trainModel() {
 	// console.log("Create Model")
 
 	// Create neural network with user-specified settings
-	const nn: ML5NeuralNetwork = createModel();
-	const tfModel = tfCreateModel()
-	tfModel.summary();
+	// const nn: ML5NeuralNetwork = createModel();
+	// const tfModel = tfCreateModel()
+	// tfModel.summary();
 
 	// Fetch data
 	const gestureData = get(gestures);
-
-	console.log("Gesture data:", gestureData);
 
 	// Assess if any points are equal across all data
 	gestureData.forEach(type => {

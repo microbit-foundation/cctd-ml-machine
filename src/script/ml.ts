@@ -104,6 +104,24 @@ export function tfTrainModel() {
 
 	console.log("features", features);
 	console.log("labels:", labels);
+
+	const tensorFeatures = tf.tensor(features);
+	const tensorlabels = tf.tensor(labels);
+
+	const nn = tfCreateModel();
+
+	function onBatchEnd(_, logs) {
+		console.log('Accuracy', logs.acc);
+	}
+
+	nn.fit(tensorFeatures, tensorlabels, {
+		epochs: 80,
+		batchSize: 16,
+		validationSplit: 0.1,
+		callbacks: {onBatchEnd}
+	}).then( info => {
+		console.log('Final accuracy', info.history.acc);
+	});
 });
 
 
@@ -114,85 +132,84 @@ export function tfTrainModel() {
 export function trainModel() {
 	tfTrainModel();
 
-	state.update(obj => {
-		obj.isTraining = true;
-		return obj;
-	});
-	if (!isTrainingAllowed()) {
-		state.update(obj => {
-			obj.isTraining = false;
-			return obj;
-		});
-		return;
-	}
-
-	informUser(text("alert.beginModelSetup"));
-
-	// Update state to prevent other functions
 	// state.update(obj => {
 	// 	obj.isTraining = true;
 	// 	return obj;
 	// });
-	// console.log("Create Model")
+	// if (!isTrainingAllowed()) {
+	// 	state.update(obj => {
+	// 		obj.isTraining = false;
+	// 		return obj;
+	// 	});
+	// 	return;
+	// }
 
-	// Create neural network with user-specified settings
-	// const nn: ML5NeuralNetwork = createModel();
-	// const tfModel = tfCreateModel()
-	// tfModel.summary();
+	// informUser(text("alert.beginModelSetup"));
 
-	// Fetch data
-	const gestureData = get(gestures);
+	// // Update state to prevent other functions
+	// // state.update(obj => {
+	// // 	obj.isTraining = true;
+	// // 	return obj;
+	// // });
+	// // console.log("Create Model")
 
-	// Assess if any points are equal across all data
-	gestureData.forEach(type => {
-		const output = {
-			gesture: String(type.ID)
-		};
+	// // Create neural network with user-specified settings
+	// // const nn: ML5NeuralNetwork = createModel();
+	
 
-		type.recordings.forEach(recording => {
-			const x = recording.data.x;
-			const y = recording.data.y;
-			const z = recording.data.z;
+	// // Fetch data
+	// const gestureData = get(gestures);
 
-			const inputs = makeInputs(x, y, z);
+	// // Assess if any points are equal across all data
+	// gestureData.forEach(type => {
+	// 	const output = {
+	// 		gesture: String(type.ID)
+	// 	};
 
-			nn.addData(inputs, output);
-		});
-	});
+	// 	type.recordings.forEach(recording => {
+	// 		const x = recording.data.x;
+	// 		const y = recording.data.y;
+	// 		const z = recording.data.z;
 
-	// Normalize data
-	nn.normalizeData();
+	// 		const inputs = makeInputs(x, y, z);
 
-	// Remove faultily normalized data
-	nn.data.training.forEach(obj => {
-		Object.keys(obj.xs).forEach(key => {
-			if (isNaN(obj.xs[key] ?? "NaN")) {
-				obj.xs[key] = 0;
-			}
-		});
-	});
+	// 		nn.addData(inputs, output);
+	// 	});
+	// });
 
-	// Options for training the model
-	const trainingOptions = {
-		epochs: get(settings).numEpochs
-		// batchSize?
-	};
+	// // Normalize data
+	// nn.normalizeData();
 
-	informUser(text("alert.trainingModel"));
+	// // Remove faultily normalized data
+	// nn.data.training.forEach(obj => {
+	// 	Object.keys(obj.xs).forEach(key => {
+	// 		if (isNaN(obj.xs[key] ?? "NaN")) {
+	// 			obj.xs[key] = 0;
+	// 		}
+	// 	});
+	// });
 
-	model.set(nn);
+	// // Options for training the model
+	// const trainingOptions = {
+	// 	epochs: get(settings).numEpochs
+	// 	// batchSize?
+	// };
 
-	trainingTimerPromise = new Promise((resolve) => {
-		// console.log("Timer setup")
-		setTimeout(() => {
-			// console.log("Timer resolve")
-			resolve(true);
-		}, 2500);
-		// Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
-		// See "finishedTraining" function to see how this works
-	});
+	// informUser(text("alert.trainingModel"));
 
-	nn.train(trainingOptions, whileTraining, finishedTraining);
+	// model.set(nn);
+
+	// trainingTimerPromise = new Promise((resolve) => {
+	// 	// console.log("Timer setup")
+	// 	setTimeout(() => {
+	// 		// console.log("Timer resolve")
+	// 		resolve(true);
+	// 	}, 2500);
+	// 	// Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
+	// 	// See "finishedTraining" function to see how this works
+	// });
+
+	// nn.train(trainingOptions, whileTraining, finishedTraining);
 
 	// ML5 opens a console during training. To prevent this, it is set to display=none
 	const tfjsVisorContainer = document.getElementById("tfjs-visor-container");

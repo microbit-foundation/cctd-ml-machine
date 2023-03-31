@@ -7,7 +7,9 @@ export default {
                 secondary: "#2CCAC0",
                 secondarytext: "#ffffff",
                 info: "#98A2B3",
-                warning:"#FF7777"
+                infolight: "#93c5fd",
+                warning:"#FF7777",
+                disabled:"#8892A3"
             },
         },
     },

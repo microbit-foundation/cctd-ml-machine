@@ -73,7 +73,7 @@
 	<!-- Draw all 25 boxes -->
 	{#each matrix as isOn, i}
 		<div
-			class="{isOn ? 'bg-[#63BFC2] border-[#63BFC2]' : 'bg-gray-300 border-gray-300'} border-3 rounded transition ease"
+			class="{isOn ? 'bg-secondary border-secondary' : 'bg-gray-300 border-gray-300'} border-3 rounded transition ease"
 			class:turnedOn={isOn}
 			class:turnedOff={!isOn}
 			class:border-teal-500={highlighted[i]}

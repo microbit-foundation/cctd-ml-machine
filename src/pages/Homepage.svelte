@@ -2,8 +2,8 @@
 	import { t } from "../i18n";
 	import FrontPageTopBar from "../components/top/FrontPageTopBar.svelte";
 	import FrontPageContentTile from "../components/FrontPageContentTile.svelte";
-	import DoItYourselfMachineLearningTile from "../components/content-tiles/DoItYourselfMachineLearningTile.svelte";
-	import IntroVideoTile from "../components/content-tiles/IntroVideoTile.svelte";
+	import DoItYourselfMachineLearningTile from "./home-page-content-tiles/DoItYourselfMachineLearningTile.svelte";
+	import IntroVideoTile from "./home-page-content-tiles/IntroVideoTile.svelte";
 
 	// Just add the content titles you wish to put on front page, in the order you wish them to be there
 	const contentTiles = [

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {t} from "../../i18n.js";
-    import ImageSkeleton from "../skeletonloading/ImageSkeleton.svelte";
+    import {t} from "../../i18n";
+    import ImageSkeleton from "../../components/skeletonloading/ImageSkeleton.svelte";
 </script>
 
 <p class="text-lg mb-2 font-semibold">

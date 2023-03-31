@@ -1,5 +1,5 @@
 <script lang="ts">
-import {t} from "../../i18n.js";
+import {t} from "../../i18n";
 </script>
 
 <p class="text-lg mb-2 font-semibold">

@@ -57,6 +57,14 @@ function tfCreateModel() : LayersModel {
     return model;
 }
 
+function tfConvertDataToTfFormat(data : Map<accData, number>) : number[] {
+	const dataExample : number[] = [];
+	for(const value of data.values()) {
+		dataExample.push(value)
+	}
+	return dataExample
+}
+
 export function tfTrainModel() {
 	state.update(obj => {
 		obj.isTraining = true;
@@ -90,14 +98,7 @@ export function tfTrainModel() {
 			const z = recording.data.z;
 
 			const inputs : Map<accData, number> = makeInputs(x, y, z);
-			const dataExample : number[] = [];
-
-			for(const value of inputs.values()) {
-				dataExample.push(value)
-			}
-
-			
-			features.push(dataExample);
+			features.push(tfConvertDataToTfFormat(inputs));
 
 			// Prepare labels
 			const label : number[] = new Array(numberofClasses) as number[];
@@ -125,7 +126,8 @@ export function tfTrainModel() {
 		validationSplit: 0.1,
 		//callbacks: {onBatchEnd} // <-- use this to make loading animation
 	}).then( info => {
-		console.log('Final accuracy', info.history.acc);
+		console.log('Final accuracy', info.history.acc)
+		finishedTraining();
 	}).catch(err => console.log("tensorflow training process failed:", err));
 
 	model.set(nn);
@@ -302,8 +304,11 @@ function finishedTraining() {
 			return obj;
 		});
 		const { x, y, z } = getPrevData();
-		const input = makeInputs(x, y, z);
-		get(model).classify(input, checkModelAndSetupPredictionInterval);
+		const input : Map<accData, number> = makeInputs(x, y, z);
+		const tfInput : number[] = tfConvertDataToTfFormat(input);
+		const inputTensor = tf.tensor([tfInput]);
+		get(model).predict(inputTensor); // TODO: Reimplement checkmModel? how do we check if the prediction was cuccessful?
+		setupPredictionInterval()
 	});
 }
 
@@ -507,7 +512,7 @@ export function classify() {
 	const { x, y, z } = getPrevData();
 
 	// Turn the data into an object of up to 12 parameters
-	const input = makeInputs(x, y, z);
+	const input  = makeInputs(x, y, z);
 
 	// Pass parameters to classify
 	get(model).classify(input, handleResults);

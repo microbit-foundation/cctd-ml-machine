@@ -16,6 +16,7 @@ import { get, type Unsubscriber } from "svelte/store";
 import { t } from "../i18n";
 import { ML5NeuralNetwork, neuralNetwork } from "ml5";
 import * as tf from "@tensorflow/tfjs";
+import { LayersModel } from "@tensorflow/tfjs";
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
@@ -35,8 +36,10 @@ let unsubscribeFromSettings: Unsubscriber | undefined = undefined;
 // Variable for accessing the predictionInterval
 let predictionInterval: NodeJS.Timeout | undefined = undefined;
 
+type accData = "ax_max" | "ax_min" | "ax_std" | "ax_peaks" | "ax_total" | "ay_max" | "ay_min" | "ay_std" | "ay_peaks" | "ay_total" | "az_max" | "az_min" | "az_std" | "az_peaks" | "az_total";
 
-function tfCreateModel() {
+
+function tfCreateModel() : LayersModel {
 	//const shape = get(settings).includedAxes * get(settings).includedParameters;
 
     const input = tf.input({shape: [15]});
@@ -55,28 +58,28 @@ function tfCreateModel() {
 }
 
 export function tfTrainModel() {
-	// state.update(obj => {
-	// 	obj.isTraining = true;
-	// 	return obj;
-	// });
-	// if (!isTrainingAllowed()) {
-	// 	state.update(obj => {
-	// 		obj.isTraining = false;
-	// 		return obj;
-	// 	});
-	// 	return;
-	// }
+	state.update(obj => {
+		obj.isTraining = true;
+		return obj;
+	});
+	if (!isTrainingAllowed()) {
+		state.update(obj => {
+			obj.isTraining = false;
+			return obj;
+		});
+		return;
+	}
 
-	// informUser(text("alert.beginModelSetup"));
+	informUser(text("alert.beginModelSetup"));
 
-	//const nn = tfCreateModel();
 
 	// Fetch data
 	const gestureData = get(gestures);
 	console.log(gestureData);
-	const features = []
-	const labels = [];
-	const numberofClasses = gestureData.length;
+	const features : Array<number[]> = []
+	const labels : Array<number[]> = [];
+	const numberofClasses : number = gestureData.length;
+
 
 	gestureData.forEach((MLClass, index) => {
 		MLClass.recordings.forEach(recording => {
@@ -86,17 +89,19 @@ export function tfTrainModel() {
 			const y = recording.data.y;
 			const z = recording.data.z;
 
-			const inputs = makeInputs(x, y, z);
-			const dataExample = [];
+			const inputs : Map<accData, number> = makeInputs(x, y, z);
+			const dataExample : number[] = [];
 
-			Object.keys(inputs).forEach( key => {
-				dataExample.push(inputs[key])
-			});
+			for(const value of inputs.values()) {
+				dataExample.push(value)
+			}
+
 			
 			features.push(dataExample);
 
 			// Prepare labels
-			const label = new Array(numberofClasses).fill(0,0, numberofClasses);
+			const label : number[] = new Array(numberofClasses) as number[];
+			label.fill(0,0, numberofClasses);
 			label[index] = 1;
 			labels.push(label);
 
@@ -108,20 +113,22 @@ export function tfTrainModel() {
 	const tensorFeatures = tf.tensor(features);
 	const tensorlabels = tf.tensor(labels);
 
-	const nn = tfCreateModel();
+	const nn : LayersModel = tfCreateModel();
 
-	function onBatchEnd(_, logs) {
-		console.log('Accuracy', logs.acc);
-	}
+	// function onBatchEnd(_, logs) {
+	// 	console.log('Accuracy', logs.acc);
+	// }
 
 	nn.fit(tensorFeatures, tensorlabels, {
-		epochs: 80,
+		epochs: get(settings).numEpochs,
 		batchSize: 16,
 		validationSplit: 0.1,
-		callbacks: {onBatchEnd}
+		//callbacks: {onBatchEnd} // <-- use this to make loading animation
 	}).then( info => {
 		console.log('Final accuracy', info.history.acc);
-	});
+	}).catch(err => console.log("tensorflow training process failed:", err));
+
+	model.set(nn);
 });
 
 
@@ -132,84 +139,84 @@ export function tfTrainModel() {
 export function trainModel() {
 	tfTrainModel();
 
+	state.update(obj => {
+		obj.isTraining = true;
+		return obj;
+	});
+	if (!isTrainingAllowed()) {
+		state.update(obj => {
+			obj.isTraining = false;
+			return obj;
+		});
+		return;
+	}
+
+	informUser(text("alert.beginModelSetup"));
+
+	// Update state to prevent other functions
 	// state.update(obj => {
 	// 	obj.isTraining = true;
 	// 	return obj;
 	// });
-	// if (!isTrainingAllowed()) {
-	// 	state.update(obj => {
-	// 		obj.isTraining = false;
-	// 		return obj;
-	// 	});
-	// 	return;
-	// }
+	// console.log("Create Model")
 
-	// informUser(text("alert.beginModelSetup"));
-
-	// // Update state to prevent other functions
-	// // state.update(obj => {
-	// // 	obj.isTraining = true;
-	// // 	return obj;
-	// // });
-	// // console.log("Create Model")
-
-	// // Create neural network with user-specified settings
-	// // const nn: ML5NeuralNetwork = createModel();
+	// Create neural network with user-specified settings
+	// const nn: ML5NeuralNetwork = createModel();
 	
 
-	// // Fetch data
-	// const gestureData = get(gestures);
+	// Fetch data
+	const gestureData = get(gestures);
 
-	// // Assess if any points are equal across all data
-	// gestureData.forEach(type => {
-	// 	const output = {
-	// 		gesture: String(type.ID)
-	// 	};
+	// Assess if any points are equal across all data
+	gestureData.forEach(type => {
+		const output = {
+			gesture: String(type.ID)
+		};
 
-	// 	type.recordings.forEach(recording => {
-	// 		const x = recording.data.x;
-	// 		const y = recording.data.y;
-	// 		const z = recording.data.z;
+		type.recordings.forEach(recording => {
+			const x = recording.data.x;
+			const y = recording.data.y;
+			const z = recording.data.z;
 
-	// 		const inputs = makeInputs(x, y, z);
+			const inputs = makeInputs(x, y, z);
 
-	// 		nn.addData(inputs, output);
-	// 	});
-	// });
+			nn.addData(inputs, output);
+		});
+	});
 
-	// // Normalize data
-	// nn.normalizeData();
+	// Normalize data
+	nn.normalizeData();
 
-	// // Remove faultily normalized data
-	// nn.data.training.forEach(obj => {
-	// 	Object.keys(obj.xs).forEach(key => {
-	// 		if (isNaN(obj.xs[key] ?? "NaN")) {
-	// 			obj.xs[key] = 0;
-	// 		}
-	// 	});
-	// });
+	// Remove faultily normalized data
+	nn.data.training.forEach(obj => {
+		Object.keys(obj.xs).forEach(key => {
+			if (isNaN(obj.xs[key] ?? "NaN")) {
+				obj.xs[key] = 0;
+			}
+		});
+	});
 
-	// // Options for training the model
-	// const trainingOptions = {
-	// 	epochs: get(settings).numEpochs
-	// 	// batchSize?
-	// };
+	// Options for training the model
+	const trainingOptions = {
+		epochs: get(settings).numEpochs
+		// batchSize?
+	};
 
-	// informUser(text("alert.trainingModel"));
+	informUser(text("alert.trainingModel"));
 
-	// model.set(nn);
+	model.set(nn);
 
-	// trainingTimerPromise = new Promise((resolve) => {
-	// 	// console.log("Timer setup")
-	// 	setTimeout(() => {
-	// 		// console.log("Timer resolve")
-	// 		resolve(true);
-	// 	}, 2500);
-	// 	// Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
-	// 	// See "finishedTraining" function to see how this works
-	// });
+	trainingTimerPromise = new Promise((resolve) => {
+		// console.log("Timer setup")
+		setTimeout(() => {
+			// console.log("Timer resolve")
+			resolve(true);
+		}, 2500);
+		// Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
+		// See "finishedTraining" function to see how this works
+	});
 
-	// nn.train(trainingOptions, whileTraining, finishedTraining);
+	nn.train(trainingOptions, whileTraining, finishedTraining);
 
 	// ML5 opens a console during training. To prevent this, it is set to display=none
 	const tfjsVisorContainer = document.getElementById("tfjs-visor-container");
@@ -333,21 +340,21 @@ function whileTraining(epoch: number, loss: { val_loss: number, val_acc: number,
 // The return object.
 
 type InputObjectType = {
-	ax_max: number | undefined,
-	ax_min: number | undefined,
-	ax_std: number | undefined,
-	ax_peaks: number | undefined,
-	ax_total: number | undefined,
-	ay_max: number | undefined,
-	ay_min: number | undefined,
-	ay_std: number | undefined,
-	ay_peaks: number | undefined,
-	ay_total: number | undefined,
-	az_max: number | undefined,
-	az_min: number | undefined,
-	az_std: number | undefined,
-	az_peaks: number | undefined,
-	az_total: number | undefined
+	"ax_max": number | undefined,
+	"ax_min": number | undefined,
+	"ax_std": number | undefined,
+	"ax_peaks": number | undefined,
+	"ax_total": number | undefined,
+	"ay_max": number | undefined,
+	"ay_min": number | undefined,
+	"ay_std": number | undefined,
+	"ay_peaks": number | undefined,
+	"ay_total": number | undefined,
+	"az_max": number | undefined,
+	"az_min": number | undefined,
+	"az_std": number | undefined,
+	"az_peaks": number | undefined,
+	"az_total": number | undefined
 }
 
 const perturbate_input = (x: number[], y: number[], z: number[]) => {
@@ -366,7 +373,7 @@ const perturbate_input = (x: number[], y: number[], z: number[]) => {
 	};
 };
 
-export function makeInputs(x: number[], y: number[], z: number[]) {
+export function makeInputs(x: number[], y: number[], z: number[]) : Map<accData, number> {
 
 	// Add some noise to the dataset, this is to deal with the NaN predictions
 	const perturbed_values = perturbate_input(x, y, z);
@@ -374,23 +381,7 @@ export function makeInputs(x: number[], y: number[], z: number[]) {
 	y = perturbed_values.peturb_y;
 	z = perturbed_values.peturb_z;
 
-	const obj: InputObjectType = {
-		ax_max: undefined,
-		ax_min: undefined,
-		ax_std: undefined,
-		ax_peaks: undefined,
-		ax_total: undefined,
-		ay_max: undefined,
-		ay_min: undefined,
-		ay_std: undefined,
-		ay_peaks: undefined,
-		ay_total: undefined,
-		az_max: undefined,
-		az_min: undefined,
-		az_std: undefined,
-		az_peaks: undefined,
-		az_total: undefined
-	};
+	const obj: Map <accData, number> = new Map();
 
 	if (!modelSettings) {
 		modelSettings = {
@@ -400,55 +391,55 @@ export function makeInputs(x: number[], y: number[], z: number[]) {
 	}
 	if (modelSettings.axes[0]) {
 		if (modelSettings.params[0]) {
-			obj.ax_max = Math.max(...x);
+			obj.set("ax_max", Math.max(...x));
 		}
 		if (modelSettings.params[1]) {
-			obj.ax_min = Math.min(...x);
+			obj.set("ax_min",  Math.min(...x));
 		}
 		if (modelSettings.params[2]) {
-			obj.ax_std = standardDeviation(x);
+			obj.set("ax_std", standardDeviation(x));
 		}
 		if (modelSettings.params[3]) {
-			obj.ax_peaks = peaks(x).numPeaks;
+			obj.set("ax_peaks", peaks(x).numPeaks);
 		}
 		if (modelSettings.params[4]) {
-			obj.ax_total = totalAcceleration(x);
+			obj.set("ax_total", totalAcceleration(x));
 		}
 	}
 
 	if (modelSettings.axes[1]) {
 		if (modelSettings.params[0]) {
-			obj.ay_max = Math.max(...y);
+			obj.set("ay_max", Math.max(...y));
 		}
 		if (modelSettings.params[1]) {
-			obj.ay_min = Math.min(...y);
+			obj.set("ay_min", Math.min(...y));
 		}
 		if (modelSettings.params[2]) {
-			obj.ay_std = standardDeviation(y);
+			obj.set("ay_std", standardDeviation(y));
 		}
 		if (modelSettings.params[3]) {
-			obj.ay_peaks = peaks(y).numPeaks;
+			obj.set("ay_peaks", peaks(y).numPeaks);
 		}
 		if (modelSettings.params[4]) {
-			obj.ay_total = totalAcceleration(y);
+			obj.set("ay_total", totalAcceleration(y));
 		}
 	}
 
 	if (modelSettings.axes[2]) {
 		if (modelSettings.params[0]) {
-			obj.az_max = Math.max(...z);
+			obj.set("az_max", Math.max(...z));
 		}
 		if (modelSettings.params[1]) {
-			obj.az_min = Math.min(...z);
+			obj.set("az_min", Math.min(...z));
 		}
 		if (modelSettings.params[2]) {
-			obj.az_std = standardDeviation(z);
+			obj.set("az_std", standardDeviation(z));
 		}
 		if (modelSettings.params[3]) {
-			obj.az_peaks = peaks(z).numPeaks;
+			obj.set("az_peaks", peaks(z).numPeaks);
 		}
 		if (modelSettings.params[4]) {
-			obj.az_total = totalAcceleration(z);
+			obj.set("az_total", totalAcceleration(z));
 		}
 	}
 

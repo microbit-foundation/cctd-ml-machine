@@ -16,7 +16,7 @@ import { get, type Unsubscriber } from "svelte/store";
 import { t } from "../i18n";
 import { ML5NeuralNetwork, neuralNetwork } from "ml5";
 import * as tf from "@tensorflow/tfjs";
-import { LayersModel } from "@tensorflow/tfjs";
+import { LayersModel, SymbolicTensor } from "@tensorflow/tfjs";
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
@@ -45,7 +45,7 @@ function tfCreateModel() : LayersModel {
     const input = tf.input({shape: [15]});
     const normalizer = tf.layers.batchNormalization().apply(input);
     const dense = tf.layers.dense({units: 16, activation: 'relu'}).apply(normalizer);
-    const softmax = tf.layers.dense({units: 2, activation: 'softmax'}).apply(dense);
+    const softmax = tf.layers.dense({units: 2, activation: 'softmax'}).apply(dense) as SymbolicTensor;
     const model = tf.model({inputs: input, outputs: softmax});
 
 	model.compile({

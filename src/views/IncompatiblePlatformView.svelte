@@ -2,10 +2,10 @@
 	import { t } from "../i18n";
 </script>
 
-<main class="h-screen w-screen bg-[#63BFC2] flex flex-col justify-center items-center">
-	<p class="mb-4 text-white font-extrabold text-5xl">
-		{"ultra:bit"}
+<main class="h-screen w-screen bg-secondary flex flex-col justify-center items-center">
+	<p class="mb-4 text-secondarytext font-extrabold text-5xl">
+		{"ML-Machine"}
 	</p>
-	<p>{$t("compatibility.platform.notSupported")}</p>
-	<p>{$t("compatibility.platform.notSupported.joinDesktop")}</p>
+	<p class="text-primarytext">{$t("compatibility.platform.notSupported")}</p>
+	<p class="text-primarytext">{$t("compatibility.platform.notSupported.joinDesktop")}</p>
 </main>

@@ -209,7 +209,7 @@ export default {
 		"popup.connectMB.USBCompatibility.transferStep.step2": "Træk filen over i micro:bit'en gennem din computers stifinder.",
 		"popup.connectMB.USBCompatibility.transferStep.step3": "Når overførslen er færdig, kan du tilslutte din micro:bit med Bluetooth.",
 
-		"compatibility.platform.notSupported": "Værktøjet er ikke understøttet på mobil.",
+		"compatibility.platform.notSupported": "Værktøjet er ikke understøttet på din nuværende platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Vi ses på computer."
 
 	},
@@ -423,7 +423,7 @@ export default {
 		"popup.connectMB.USBCompatibility.transferStep.step2": "Drag the file onto the micro:bit on your computer's file explorer.",
 		"popup.connectMB.USBCompatibility.transferStep.step3": "Once the file has finished transferring, the micro:bit can be connected using Bluetooth.",
 
-		"compatibility.platform.notSupported": "The tool is not supported on mobile.",
+		"compatibility.platform.notSupported": "The tool is not supported on your current platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Join us on desktop."
 
 	}

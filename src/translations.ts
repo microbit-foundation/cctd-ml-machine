@@ -38,7 +38,6 @@ export default {
 		"content.index.contactButton": "Kontakt os",
 		"content.index.contactBody": "Hvis du finder fejl og mangler på denne platform, skal du være velkommen til at skrive til os. Hvis du har andre efterspørgsler, ideer eller generel interesse, skal du være velkommen til at kontakte os. Skaberne af denne platform kan kontaktes på:",
 		"content.index.contactMail": "keb@cs.au.dk",
-		"content.index.ultrabit": "ultra:bit",
 		"content.index.acknowledgement": "Udviklet af Center for Computational Thinking og Design, Aarhus Universitet",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Klik for at ændre navnet",
@@ -210,7 +209,7 @@ export default {
 		"popup.connectMB.USBCompatibility.transferStep.step2": "Træk filen over i micro:bit'en gennem din computers stifinder.",
 		"popup.connectMB.USBCompatibility.transferStep.step3": "Når overførslen er færdig, kan du tilslutte din micro:bit med Bluetooth.",
 
-		"compatibility.platform.notSupported": "Værktøjet er ikke understøttet på mobil.",
+		"compatibility.platform.notSupported": "Værktøjet er ikke understøttet på din nuværende platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Vi ses på computer."
 
 	},
@@ -253,7 +252,6 @@ export default {
 		"content.index.contactButton": "Contact us",
 		"content.index.contactBody": "If you find errors and omissions on this platform, please feel free to write us. If you have any other requests, ideas or general interests, please feel free to contact us. The creators of this platform can be contacted at:",
 		"content.index.contactMail": "keb@cs.au.dk",
-		"content.index.ultrabit": "ultra:bit",
 		"content.index.acknowledgement": "Developed by Center for Computational Thinking and Design, Aarhus University",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Press here to change name",
@@ -425,7 +423,7 @@ export default {
 		"popup.connectMB.USBCompatibility.transferStep.step2": "Drag the file onto the micro:bit on your computer's file explorer.",
 		"popup.connectMB.USBCompatibility.transferStep.step3": "Once the file has finished transferring, the micro:bit can be connected using Bluetooth.",
 
-		"compatibility.platform.notSupported": "The tool is not supported on mobile.",
+		"compatibility.platform.notSupported": "The tool is not supported on your current platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Join us on desktop."
 
 	}

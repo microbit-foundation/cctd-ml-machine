@@ -44,7 +44,7 @@
 	</div>
 
 	<p class="mb-8 text-white font-extrabold text-3xl">
-		{$t("content.index.ultrabit")}
+		{"ML-Machine"}
 	</p>
 	<div class="text-white absolute right-10 top-5 focus:outline-none">
 		<button

@@ -17,24 +17,9 @@
 		expandedId = value;
 	});
 
-	/** The following adds a preloader, and detects once image has loaded for the sidebar.
-	 *  The result should be that once the image is loaded, it will be cached, and when fetched
-	 *  by the bgElem, it should be significantly faster. My test resulted in 300ms for first fetch and 45ms for second.
-	 *  Could be improved by utilising the <img> element instead. Then we could just use the onload event for that.*/
-	const imageUrl = "imgs/sidebar_background.svg";
-	let bgElem: HTMLElement;
-	let bgImg = document.createElement("img");
-	bgImg.src = imageUrl;
-	bgImg.addEventListener("load", () => {
-		bgElem.style.backgroundImage = "url('" + bgImg.src + "')";
-		$state.isLoading = false;
-	});
-	bgImg.src = imageUrl;
 </script>
 
-<div
-	bind:this={bgElem}
-	class="relative flex flex-col w-full p-5 pl-5 pr-5 border-r border-solid border-black border-opacity-40 shadow-2xl">
+<div class="bg-gradient-to-b from-primary to-secondary relative flex flex-col w-full p-5 pl-5 pr-5 border-r border-solid border-black border-opacity-40 shadow-2xl">
 	<div class="absolute bottom-15 -left-2">
 		<img
 			alt="decoration arrows"

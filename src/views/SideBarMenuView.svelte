@@ -43,7 +43,7 @@
 		/>
 	</div>
 
-	<p class="mb-8 text-white font-extrabold text-3xl">
+	<p class="mb-8 text-secondarytext font-extrabold text-3xl">
 		{"ML-Machine"}
 	</p>
 	<div class="text-white absolute right-10 top-5 focus:outline-none">

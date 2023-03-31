@@ -74,10 +74,10 @@
                             {#if !$state.isOutputConnected || $state.isOutputReady}
                                 <!-- Output MB is not in the connection process -->
                                 <StandardButton onClick={outputDisconnectButtonClicked}
-                                                color="red">{$t("menu.model.disconnect")}</StandardButton>
+                                                color="warning">{$t("menu.model.disconnect")}</StandardButton>
                             {:else}
                                 <StandardButton onClick={TypingUtils.emptyFunction}
-                                                color="gray">
+                                                color="disabled">
                                     <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px">
                                 </StandardButton>
                             {/if}
@@ -91,10 +91,10 @@
                         {#if !$state.isInputConnected || $state.isInputReady}
                             <!-- Input MB is not in the connection process -->
                             <StandardButton onClick={inputDisconnectButtonClicked}
-                                            color="red">{$t("footer.disconnectButton")}</StandardButton>
+                                            color="warning">{$t("footer.disconnectButton")}</StandardButton>
                         {:else}
                             <StandardButton onClick={TypingUtils.emptyFunction}
-                                            color="gray">
+                                            color="disabled">
                                 <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px">
                             </StandardButton>
                         {/if}

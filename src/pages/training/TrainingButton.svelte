@@ -9,8 +9,5 @@
 </script>
 
 {#if sufficientData && $state.isInputConnected && !$state.isTraining}
-	<StandardButton
-		color="pink"
-		onClick={trainModel}
-	>{$t(trainButtonLabel)}</StandardButton>
+	<StandardButton onClick={trainModel}>{$t(trainButtonLabel)}</StandardButton>
 {/if}

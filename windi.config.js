@@ -7,8 +7,10 @@ export default {
                 secondary: "#2CCAC0",
                 secondarytext: "#FFFFFF",
                 info: "#98A2B3",
+                backgrounddark:"#F5F5F5",
+                infolight: "#93c5fd",
                 warning:"#FF7777",
-                backgrounddark:"#F5F5F5"
+                disabled:"#8892A3"
             },
         },
     },

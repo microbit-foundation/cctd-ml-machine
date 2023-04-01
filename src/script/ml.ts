@@ -116,15 +116,15 @@ export function tfTrainModel() {
 
 	const nn : LayersModel = tfCreateModel();
 
-	// function onBatchEnd(_, logs) {
-	// 	console.log('Accuracy', logs.acc);
-	// }
+	function onEpochEnd(logs) {
+		console.log('Accuracyyyy', logs);
+	}
 
 	nn.fit(tensorFeatures, tensorlabels, {
 		epochs: get(settings).numEpochs,
 		batchSize: 16,
 		validationSplit: 0.1,
-		//callbacks: {onBatchEnd} // <-- use this to make loading animation
+		callbacks: {onEpochEnd} // <-- use this to make loading animation
 	}).then( info => {
 		console.log('Final accuracy', info.history.acc)
 		finishedTraining();

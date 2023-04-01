@@ -41,7 +41,7 @@
 				</p>
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<video class="h-[300px] self-center" controls width=450 poster="imgs/data-trainer-thumpnail.png">
-					<source src="https://mlmachine0video0storage.blob.core.windows.net/ml-machine-videos/Ultrabit_01_Introvideo_Datatræneren.mp4" type="video/mp4">
+					<source src="https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4" type="video/mp4">
 				</video>
 			</div>
 		</div>

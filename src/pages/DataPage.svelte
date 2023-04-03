@@ -28,17 +28,16 @@
 {#if !hasSomeData() && !$state.isInputConnected}
 	<!-- 'training page has same component. Extract' -->
 	<div class="w-full h-full grid grid-cols-1 items-center place-items-center text-center">
-
-		<div class="w-full">
-			<p class="w-4/5 text-white text-3xl bold m-auto">
+		<div class="w-full text-primarytext">
+			<p class="w-4/5 text-3xl bold m-auto">
 				{$t("menu.trainer.notConnected1")}
 			</p>
-			<p class="w-4/5 text-white text-3xl  bold m-auto">
+			<p class="w-4/5 text-3xl  bold m-auto">
 				{$t("menu.trainer.notConnected2")}
 			</p>
 			<div class="text-center ml-auto mr-auto mb-2 mt-10 ">
 				<img
-					class="m-auto"
+					class="m-auto arrow-filter-color"
 					src="imgs/down_arrow.svg"
 					alt="down arrow icon"
 					width="100px"
@@ -50,10 +49,8 @@
 	<main class="pl-2 mt-24 w-full">
 		<StandardDialog
 			isOpen={isConnectionDialogOpen}
-			onClose={() => isConnectionDialogOpen = false}
-		>
+			onClose={() => isConnectionDialogOpen = false} >
 			<div class="w-70 text-center">
-
 				<p class="mb-5">
 					{$t("content.data.addDataNoConnection")}
 				</p>
@@ -96,7 +93,7 @@
 			</div>
 		{:else}
 			<div class="flex justify-center">
-				<div class="text-center text-xl w-1/2 text-bold text-white">
+				<div class="text-center text-xl w-1/2 text-bold text-primarytext">
 					<p>{$t("content.data.noData")}</p>
 				</div>
 			</div>
@@ -111,3 +108,9 @@
 		<NewGestureButton />
 	</main>
 {/if}
+
+<style>
+	.arrow-filter-color {
+		filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+	}
+</style>

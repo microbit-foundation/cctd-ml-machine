@@ -118,7 +118,7 @@
         
     <!-- ARROW -->
     <div class="text-center ml-auto mr-auto">
-        <img class="m-auto arrow-base-color"
+        <img class="m-auto"
              class:arrow-base-color={!triggered}
              class:arrow-triggered-color={triggered}
             src={"imgs/right_arrow.svg"}

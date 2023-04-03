@@ -72,20 +72,22 @@
 			<div class=" p-0 relative flex h-7">
 				<div class="absolute left-3 flex">
 					<TextInformation
+						isLightTheme={false}
 						iconText={$t("content.data.classification")}
 						titleText={$t("content.data.classHelpHeader")}
 						bodyText={$t("content.data.classHelpBody")} />
 				</div>
 				<div class="absolute left-55 flex">
 					<InformationBase
-						text={$t("content.data.choice")}>
-						<RecordInformationContent />
+							isLightTheme={false}
+							text={$t("content.data.choice")}>
+						<RecordInformationContent isLightTheme={false} />
 					</InformationBase>
 				</div>
 				{#if hasSomeData()}
 					<div class="absolute left-92 flex">
-
 						<TextInformation
+							isLightTheme={false}
 							iconText={$t("content.data.data")}
 							titleText={$t("content.data.data")}
 							bodyText={$t("content.data.dataDescription")} />

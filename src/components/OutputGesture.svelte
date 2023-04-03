@@ -71,14 +71,14 @@
     <!-- NAMES AND CONFIDENCE METER -->
     <div class="h-146px heavy-shadow self-center
                 items-center flex border border-solid
-                border-gray-200 p-2 bg-white rounded-xl">
+                border-info p-2 bg-white rounded-xl">
         <div class="w-36 text-center font-semibold rounded-xl
                     px-1 py-1 border border-gray-300
-                    border-solid mr-2 break-words">
+                    border-dashed mr-2 break-words">
             <h3>{gesture.name}</h3>
         </div>
 
-        <input class="h-25 rotate-90"
+        <input class="h-25 rotate-90 accent-primary"
                 type="range"
                 orient="vertical"
                 name=""
@@ -90,10 +90,10 @@
         <!-- METER -->
         <div class="w-4 h-25 relative">
             <div class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
-                <div class="absolute w-5 {triggered ? 'bg-blue-500' : 'bg-gray-400'} z-index: -10"
+                <div class="absolute w-5 {triggered ? 'bg-primary' : 'bg-info'} z-index: -10"
                      style="height: {100 * $gestureConfidences[gesture.ID]}px; margin-top: {100 -
             100 * $gestureConfidences[gesture.ID]}px;" />
-                <div class="absolute w-5 bg-blue-500"
+                <div class="absolute w-5 bg-primary"
                         style="height: 1px; margin-top: {6.5 -
             0.068 * requiredConfidenceLevel}rem;" />
                 <div class="absolute">
@@ -117,16 +117,18 @@
     </div>
         
     <!-- ARROW -->
-    <div class="text-center ml-auto mr-auto" class:invert={triggered}>
-        <img class="m-auto "
-            src={triggered ? "imgs/right_arrow_blue.svg" : "imgs/right_arrow.svg"}
+    <div class="text-center ml-auto mr-auto">
+        <img class="m-auto arrow-base-color"
+             class:arrow-base-color={!triggered}
+             class:arrow-triggered-color={triggered}
+            src={"imgs/right_arrow.svg"}
             alt="right arrow icon"
             width="30px"/>
     </div>
 
     <!-- OUTPUT SETTINGS -->
     <div class="relative flex items-center">
-        <div class=" w-180px relative rounded-xl bg-transparent heavy-shadow h-full">
+        <div class=" w-180px relative rounded-xl bg-transparent heavy-shadow h-full border-1 border-info">
             <ImageSkeleton src="imgs/blank_microbit.svg"
                            alt="microbit guide"
                            width={180}
@@ -161,10 +163,19 @@
         writing-mode: bt-lr; /* IE */
         -webkit-appearance: slider-vertical; /* WebKit */
         width: 20px;
+        background: #13bba4;
     }
 
     .heavy-shadow {
 		/* filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.459)); */
         box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.2);
 	}
+
+    .arrow-triggered-color {
+        filter: invert(31%) sepia(20%) saturate(4422%) hue-rotate(194deg) brightness(88%) contrast(82%);
+    }
+
+    .arrow-base-color {
+        filter: invert(30%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    }
 </style>

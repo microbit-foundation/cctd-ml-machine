@@ -49,7 +49,7 @@
             {#if !$state.isInputReady}
                 <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->
                 <div class="absolute w-full h-full flex items-center justify-center text-secondarytext">
-                    <div class="bg-secondary bg-opacity-65 py-2 px-4 rounded-full" transition:fade>
+                    <div class="bg-secondary bg-opacity-80 py-2 px-4 rounded-full" transition:fade>
                         <h1>{$t("footer.reconnecting")}</h1>
                     </div>
                 </div>

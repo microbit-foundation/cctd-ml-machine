@@ -14,7 +14,6 @@ import {
 import { peaks, standardDeviation, totalAcceleration } from "./datafunctions";
 import { get, type Unsubscriber } from "svelte/store";
 import { t } from "../i18n";
-import { ML5NeuralNetwork, neuralNetwork } from "ml5";
 import * as tf from "@tensorflow/tfjs";
 import { LayersModel, SymbolicTensor, Tensor } from "@tensorflow/tfjs";
 
@@ -39,33 +38,33 @@ let predictionInterval: NodeJS.Timeout | undefined = undefined;
 type accData = "ax_max" | "ax_min" | "ax_std" | "ax_peaks" | "ax_total" | "ay_max" | "ay_min" | "ay_std" | "ay_peaks" | "ay_total" | "az_max" | "az_min" | "az_std" | "az_peaks" | "az_total";
 
 
-function tfCreateModel() : LayersModel {
+function createModel(): LayersModel {
 	//const shape = get(settings).includedAxes * get(settings).includedParameters;
 
-    const input = tf.input({shape: [15]});
-    const normalizer = tf.layers.batchNormalization().apply(input);
-    const dense = tf.layers.dense({units: 16, activation: 'relu'}).apply(normalizer);
-    const softmax = tf.layers.dense({units: 2, activation: 'softmax'}).apply(dense) as SymbolicTensor;
-    const model = tf.model({inputs: input, outputs: softmax});
+	const input = tf.input({ shape: [15] });
+	const normalizer = tf.layers.batchNormalization().apply(input);
+	const dense = tf.layers.dense({ units: 16, activation: 'relu' }).apply(normalizer);
+	const softmax = tf.layers.dense({ units: 2, activation: 'softmax' }).apply(dense) as SymbolicTensor;
+	const model = tf.model({ inputs: input, outputs: softmax });
 
 	model.compile({
 		loss: 'categoricalCrossentropy',
-		optimizer:  tf.train.sgd(0.5),
+		optimizer: tf.train.sgd(0.5),
 		metrics: ["accuracy"]
 	});
 
-    return model;
+	return model;
 }
 
-function tfConvertDataToTfFormat(data : Map<accData, number>) : number[] {
-	const dataExample : number[] = [];
-	for(const value of data.values()) {
+function tfConvertDataToTfFormat(data: Map<accData, number>): number[] {
+	const dataExample: number[] = [];
+	for (const value of data.values()) {
 		dataExample.push(value)
 	}
 	return dataExample
 }
 
-export function tfTrainModel() {
+export function trainModel() {
 	state.update(obj => {
 		obj.isTraining = true;
 		return obj;
@@ -84,9 +83,9 @@ export function tfTrainModel() {
 	// Fetch data
 	const gestureData = get(gestures);
 	console.log(gestureData);
-	const features : Array<number[]> = []
-	const labels : Array<number[]> = [];
-	const numberofClasses : number = gestureData.length;
+	const features: Array<number[]> = []
+	const labels: Array<number[]> = [];
+	const numberofClasses: number = gestureData.length;
 
 
 	gestureData.forEach((MLClass, index) => {
@@ -97,145 +96,50 @@ export function tfTrainModel() {
 			const y = recording.data.y;
 			const z = recording.data.z;
 
-			const inputs : Map<accData, number> = makeInputs(x, y, z);
+			const inputs: Map<accData, number> = makeInputs(x, y, z);
 			features.push(tfConvertDataToTfFormat(inputs));
 
 			// Prepare labels
-			const label : number[] = new Array(numberofClasses) as number[];
-			label.fill(0,0, numberofClasses);
+			const label: number[] = new Array(numberofClasses) as number[];
+			label.fill(0, 0, numberofClasses);
 			label[index] = 1;
 			labels.push(label);
 
+		});
+
+		console.log("features", features);
+		console.log("labels:", labels);
+
+		const tensorFeatures = tf.tensor(features);
+		const tensorlabels = tf.tensor(labels);
+
+		const nn: LayersModel = createModel();
+
+
+		trainingTimerPromise = new Promise((resolve) => {
+			// console.log("Timer setup")
+			setTimeout(() => {
+				// console.log("Timer resolve")
+				resolve(true);
+			}, 2500);
+			// Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
+			// See "finishedTraining" function to see how this works
+		});
+
+		nn.fit(tensorFeatures, tensorlabels, {
+			epochs: get(settings).numEpochs,
+			batchSize: 16,
+			validationSplit: 0.1,
+			//callbacks: { onEpochEnd } // <-- use this to make loading animation
+		}).then(info => {
+			console.log('Final accuracy', info.history.acc)
+			finishedTraining();
+		}).catch(err => console.log("tensorflow training process failed:", err));
+
+		model.set(nn);
 	});
-
-	console.log("features", features);
-	console.log("labels:", labels);
-
-	const tensorFeatures = tf.tensor(features);
-	const tensorlabels = tf.tensor(labels);
-
-	const nn : LayersModel = tfCreateModel();
-
-	function onEpochEnd(logs) {
-		// console.log('Accuracyyyy', logs);
-	}
-
-	trainingTimerPromise = new Promise((resolve) => {
-		// console.log("Timer setup")
-		setTimeout(() => {
-			// console.log("Timer resolve")
-			resolve(true);
-		}, 2500);
-		// Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
-		// See "finishedTraining" function to see how this works
-	});
-
-	nn.fit(tensorFeatures, tensorlabels, {
-		epochs: get(settings).numEpochs,
-		batchSize: 16,
-		validationSplit: 0.1,
-		callbacks: {onEpochEnd} // <-- use this to make loading animation
-	}).then( info => {
-		console.log('Final accuracy', info.history.acc)
-		finishedTraining();
-	}).catch(err => console.log("tensorflow training process failed:", err));
-
-	model.set(nn);
-});
-
-
-
 }
 
-// Functioned called when user activates a model-training.
-export function trainModel() {
-	tfTrainModel();
-
-	state.update(obj => {
-		obj.isTraining = true;
-		return obj;
-	});
-	if (!isTrainingAllowed()) {
-		state.update(obj => {
-			obj.isTraining = false;
-			return obj;
-		});
-		return;
-	}
-
-	informUser(text("alert.beginModelSetup"));
-
-	// Update state to prevent other functions
-	// state.update(obj => {
-	// 	obj.isTraining = true;
-	// 	return obj;
-	// });
-	// console.log("Create Model")
-
-	// Create neural network with user-specified settings
-	// const nn: ML5NeuralNetwork = createModel();
-	
-
-	// Fetch data
-	const gestureData = get(gestures);
-
-	// Assess if any points are equal across all data
-	gestureData.forEach(type => {
-		const output = {
-			gesture: String(type.ID)
-		};
-
-		type.recordings.forEach(recording => {
-			const x = recording.data.x;
-			const y = recording.data.y;
-			const z = recording.data.z;
-
-			const inputs = makeInputs(x, y, z);
-
-			nn.addData(inputs, output);
-		});
-	});
-
-	// Normalize data
-	nn.normalizeData();
-
-	// Remove faultily normalized data
-	nn.data.training.forEach(obj => {
-		Object.keys(obj.xs).forEach(key => {
-			if (isNaN(obj.xs[key] ?? "NaN")) {
-				obj.xs[key] = 0;
-			}
-		});
-	});
-
-	// Options for training the model
-	const trainingOptions = {
-		epochs: get(settings).numEpochs
-		// batchSize?
-	};
-
-	informUser(text("alert.trainingModel"));
-
-	model.set(nn);
-
-	trainingTimerPromise = new Promise((resolve) => {
-		// console.log("Timer setup")
-		setTimeout(() => {
-			// console.log("Timer resolve")
-			resolve(true);
-		}, 2500);
-		// Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
-		// See "finishedTraining" function to see how this works
-	});
-
-	nn.train(trainingOptions, whileTraining, finishedTraining);
-
-	// ML5 opens a console during training. To prevent this, it is set to display=none
-	const tfjsVisorContainer = document.getElementById("tfjs-visor-container");
-	if (tfjsVisorContainer != null) {
-		tfjsVisorContainer.style.display = "none";
-	}
-}
 
 export function isParametersLegal(): boolean {
 	const s = get(settings);
@@ -284,27 +188,6 @@ export function sufficientGestureData(gestureData: GestureData[], messageUser: b
 	return sufficientData;
 }
 
-// Returns model with the settings during initiation of training
-// Saves settings to ensure future predictions fits the model.
-function createModel(): ML5NeuralNetwork {
-	// Save model settings at the time of training.
-	modelSettings = {
-		axes: get(settings).includedAxes,
-		params: get(settings).includedParameters
-	};
-
-	// Options for the neural network
-	const options = {
-		inputs: createInputs(modelSettings),
-		task: "classification",
-		debug: "false",
-		learningRate: get(settings).learningRate
-	};
-
-	// Initialize neuralNetwork from ml5js library
-	return neuralNetwork(options);
-}
-
 // Set state to not-Training and initiate prediction.
 function finishedTraining() {
 	// Wait for promise to resolve, to ensure a minimum of 2.5 sec of training from users perspective
@@ -323,7 +206,7 @@ function finishedTraining() {
 }
 
 function checkModelAndSetupPredictionInterval
-(error: string | undefined, result: { confidence: number, label: string }[]) {
+	(error: string | undefined, result: { confidence: number, label: string }[]) {
 	if (error !== undefined) {
 		trainingStatus.update(() => TrainingStatus.Failure);
 		return;
@@ -388,7 +271,7 @@ const perturbate_input = (x: number[], y: number[], z: number[]) => {
 	};
 };
 
-export function makeInputs(x: number[], y: number[], z: number[]) : Map<accData, number> {
+export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, number> {
 
 	// Add some noise to the dataset, this is to deal with the NaN predictions
 	const perturbed_values = perturbate_input(x, y, z);
@@ -396,7 +279,7 @@ export function makeInputs(x: number[], y: number[], z: number[]) : Map<accData,
 	y = perturbed_values.peturb_y;
 	z = perturbed_values.peturb_z;
 
-	const obj: Map <accData, number> = new Map();
+	const obj: Map<accData, number> = new Map();
 
 	if (!modelSettings) {
 		modelSettings = {
@@ -409,7 +292,7 @@ export function makeInputs(x: number[], y: number[], z: number[]) : Map<accData,
 			obj.set("ax_max", Math.max(...x));
 		}
 		if (modelSettings.params[1]) {
-			obj.set("ax_min",  Math.min(...x));
+			obj.set("ax_min", Math.min(...x));
 		}
 		if (modelSettings.params[2]) {
 			obj.set("ax_std", standardDeviation(x));
@@ -520,16 +403,45 @@ export function classify() {
 
 	// Get formatted version of previous data
 	const { x, y, z } = getPrevData();
-	const input : Map<accData, number> = makeInputs(x, y, z);
-	const tfInput : number[] = tfConvertDataToTfFormat(input);
+	const input: Map<accData, number> = makeInputs(x, y, z);
+	const tfInput: number[] = tfConvertDataToTfFormat(input);
 	const inputTensor = tf.tensor([tfInput]);
-	const prediction : Tensor = get(model).predict(inputTensor) as Tensor;
+	const prediction: Tensor = get(model).predict(inputTensor) as Tensor;
 	//console.log("prediction:", prediction.print());
 	prediction.data().then(data => {
-		console.log("Prediction:", data[0]);
+		console.log("Prediction:", data);
+		tfHandlePrediction(data as Float32Array);
 	}).catch(err => console.log("Prediction error:", err));
 	// if prediction succeeded <-- how do we check this?
-	
+
+}
+
+function tfHandlePrediction(result: Float32Array) {
+	let bestConfidence = 0;
+	let bestGestureID: string | undefined = undefined;
+
+	const gestureData = get(gestures);
+
+	gestureData.forEach(({ name }, index) => {
+		gestureConfidences.update(confidenceMap => {
+			confidenceMap[name] = result[index];
+			return confidenceMap;
+		})
+
+		console.log("result[index]", result[index]);
+		console.log("bestConfidence", bestConfidence);
+
+		if (result[index] > bestConfidence) {
+			bestConfidence = result[index];
+			bestGestureID = name;
+		}
+	});
+
+	for (const gesture of get(gestures)) {
+		if (String(gesture.ID) === bestGestureID) {
+			bestPrediction.set({ ...gesture, confidence: bestConfidence });
+		}
+	}
 }
 
 // Once classified the results from the algorithm is sent
@@ -559,7 +471,7 @@ function handleResults(error: string | undefined, result: { confidence: number, 
 
 	for (const gesture of get(gestures)) {
 		if (String(gesture.ID) === bestGestureID) {
-			bestPrediction.set({...gesture, confidence: bestConfidence});
+			bestPrediction.set({ ...gesture, confidence: bestConfidence });
 		}
 	}
 }

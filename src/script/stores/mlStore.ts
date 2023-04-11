@@ -1,7 +1,6 @@
 import { persistantWritable } from "./storeUtil";
 import { get, writable } from "svelte/store";
 import { t } from "../../i18n";
-import { ML5NeuralNetwork } from "ml5";
 import { LayersModel } from "@tensorflow/tfjs-layers";
 
 let text: (key: string, vars?: object) => string = get(t);

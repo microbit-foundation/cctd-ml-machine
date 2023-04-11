@@ -47,7 +47,7 @@
     padding: 12px 40px;
   }
   .small {
-    padding: 4px 14px;
+    padding: 1px 10px;
   }
   .outlined {
     color: var(--color);

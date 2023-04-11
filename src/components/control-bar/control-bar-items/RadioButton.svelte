@@ -9,5 +9,5 @@
 
 <div class="flex items-center">
     <input type="radio" id="radio_{identifier}_{label}" class="w-4 h-4" name={identifier} value="{label}" on:change={onChange}/>
-    <label for="radio_{identifier}_{label}" class="ml-1">{label}</label>
+    <label for="radio_{identifier}_{label}" class="ml-1 text-secondarytext text-bold">{label}</label>
 </div>

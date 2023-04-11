@@ -16,7 +16,7 @@ import { get, type Unsubscriber } from "svelte/store";
 import { t } from "../i18n";
 import { ML5NeuralNetwork, neuralNetwork } from "ml5";
 import * as tf from "@tensorflow/tfjs";
-import { LayersModel, SymbolicTensor } from "@tensorflow/tfjs";
+import { LayersModel, SymbolicTensor, Tensor } from "@tensorflow/tfjs";
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
@@ -117,8 +117,18 @@ export function tfTrainModel() {
 	const nn : LayersModel = tfCreateModel();
 
 	function onEpochEnd(logs) {
-		console.log('Accuracyyyy', logs);
+		// console.log('Accuracyyyy', logs);
 	}
+
+	trainingTimerPromise = new Promise((resolve) => {
+		// console.log("Timer setup")
+		setTimeout(() => {
+			// console.log("Timer resolve")
+			resolve(true);
+		}, 2500);
+		// Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
+		// See "finishedTraining" function to see how this works
+	});
 
 	nn.fit(tensorFeatures, tensorlabels, {
 		epochs: get(settings).numEpochs,
@@ -303,11 +313,11 @@ function finishedTraining() {
 			obj.isTraining = false;
 			return obj;
 		});
-		const { x, y, z } = getPrevData();
-		const input : Map<accData, number> = makeInputs(x, y, z);
-		const tfInput : number[] = tfConvertDataToTfFormat(input);
-		const inputTensor = tf.tensor([tfInput]);
-		get(model).predict(inputTensor); // TODO: Reimplement checkmModel? how do we check if the prediction was cuccessful?
+		// const { x, y, z } = getPrevData();
+		// const input : Map<accData, number> = makeInputs(x, y, z);
+		// const tfInput : number[] = tfConvertDataToTfFormat(input);
+		// const inputTensor = tf.tensor([tfInput]);
+		// get(model).predict(inputTensor); // TODO: Reimplement checkmModel? how do we check if the prediction was cuccessful?
 		setupPredictionInterval()
 	});
 }
@@ -330,15 +340,15 @@ function checkModelAndSetupPredictionInterval
 
 // For each epoch, whileTraining is called.
 // Updates trainingState, which components can listen to.
-function whileTraining(epoch: number, loss: { val_loss: number, val_acc: number, loss: number, acc: number }) {
-	const numEpochs = get(settings).numEpochs + 1;
+// function whileTraining(epoch: number, loss: { val_loss: number, val_acc: number, loss: number, acc: number }) {
+// 	const numEpochs = get(settings).numEpochs + 1;
 
-	trainingState.set({
-		percentage: Math.round((epoch / numEpochs) * 100),
-		loss: loss.val_loss,
-		epochs: epoch
-	});
-}
+// 	trainingState.set({
+// 		percentage: Math.round((epoch / numEpochs) * 100),
+// 		loss: loss.val_loss,
+// 		epochs: epoch
+// 	});
+// }
 
 // makeInput reduces array of x, y and z inputs to a single object with values.
 // Depending on user settings. There will be anywhere between 1-12 parameters in
@@ -510,12 +520,16 @@ export function classify() {
 
 	// Get formatted version of previous data
 	const { x, y, z } = getPrevData();
-
-	// Turn the data into an object of up to 12 parameters
-	const input  = makeInputs(x, y, z);
-
-	// Pass parameters to classify
-	get(model).classify(input, handleResults);
+	const input : Map<accData, number> = makeInputs(x, y, z);
+	const tfInput : number[] = tfConvertDataToTfFormat(input);
+	const inputTensor = tf.tensor([tfInput]);
+	const prediction : Tensor = get(model).predict(inputTensor) as Tensor;
+	//console.log("prediction:", prediction.print());
+	prediction.data().then(data => {
+		console.log("Prediction:", data[0]);
+	}).catch(err => console.log("Prediction error:", err));
+	// if prediction succeeded <-- how do we check this?
+	
 }
 
 // Once classified the results from the algorithm is sent

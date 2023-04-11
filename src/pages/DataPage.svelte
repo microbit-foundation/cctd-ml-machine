@@ -25,27 +25,11 @@
 	};
 
 	let connectDialogReference: MainConnectDialog;
-
-	const radioButtons: RadioButtonAction[] = [
-		{
-			onSelect:() => {console.log("select1")},
-			label:"test1"
-		},
-		{
-			onSelect:() => {console.log("select2")},
-			label:"test2"
-		},
-		{
-			onSelect:() => {console.log("select3")},
-			label:"test3"
-		}
-	]
 </script>
 
 <!-- Main pane -->
 <main class="w-full">
 	<ControlBar>
-		<RadioGroup items={radioButtons}/>
 	</ControlBar>
 	<div class="mt-24 pl-2">
 		{#if !hasSomeData() && !$state.isInputConnected}

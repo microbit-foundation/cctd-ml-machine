@@ -52,8 +52,8 @@
 
 
 <main 
-  class="h-146px w-146px ml-8 self-center items-center border-5 
-         heavy-shadow border-solid border bg-white rounded-lg cursor-pointer relative"
+  class="h-146px w-146px ml-8 self-center items-center border-1
+         heavy-shadow border-solid border-info bg-white rounded-lg cursor-pointer relative"
   on:click={onToggleSound}
 >
 

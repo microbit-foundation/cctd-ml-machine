@@ -40,11 +40,13 @@ type accData = "ax_max" | "ax_min" | "ax_std" | "ax_peaks" | "ax_total" | "ay_ma
 
 function createModel(): LayersModel {
 	//const shape = get(settings).includedAxes * get(settings).includedParameters;
+	const gestureData = get(gestures);
+	const numberofClasses: number = gestureData.length;
 
 	const input = tf.input({ shape: [15] });
 	const normalizer = tf.layers.batchNormalization().apply(input);
 	const dense = tf.layers.dense({ units: 16, activation: 'relu' }).apply(normalizer);
-	const softmax = tf.layers.dense({ units: 2, activation: 'softmax' }).apply(dense) as SymbolicTensor;
+	const softmax = tf.layers.dense({ units: numberofClasses, activation: 'softmax' }).apply(dense) as SymbolicTensor;
 	const model = tf.model({ inputs: input, outputs: softmax });
 
 	model.compile({
@@ -418,13 +420,13 @@ export function classify() {
 
 function tfHandlePrediction(result: Float32Array) {
 	let bestConfidence = 0;
-	let bestGestureID: string | undefined = undefined;
+	let bestGestureID: number | undefined = undefined;
 
 	const gestureData = get(gestures);
 
-	gestureData.forEach(({ name }, index) => {
+	gestureData.forEach(({ ID }, index) => {
 		gestureConfidences.update(confidenceMap => {
-			confidenceMap[name] = result[index];
+			confidenceMap[ID] = result[index];
 			return confidenceMap;
 		})
 
@@ -433,12 +435,16 @@ function tfHandlePrediction(result: Float32Array) {
 
 		if (result[index] > bestConfidence) {
 			bestConfidence = result[index];
-			bestGestureID = name;
+			bestGestureID = ID;
 		}
 	});
 
+	console.log("Best gesture id", bestGestureID);
+
 	for (const gesture of get(gestures)) {
-		if (String(gesture.ID) === bestGestureID) {
+		console.log("Gesture ID", gesture.ID);
+		if (gesture.ID === bestGestureID) {
+			console.log("best prediction!", gesture.ID);
 			bestPrediction.set({ ...gesture, confidence: bestConfidence });
 		}
 	}

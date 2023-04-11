@@ -4,7 +4,7 @@
 
   export let text: string | undefined = undefined
   export let underlineText = true
-  export let isLightTheme = true;
+  export let isLightTheme: boolean = true;
   export let boxOffset: {x: number, y: number} = {x: 0, y: 0}
   export let width = 300
 

@@ -2,7 +2,7 @@
   import { t } from "../../i18n";
   import ImageSkeleton from "../skeletonloading/ImageSkeleton.svelte";
   import {getInfoBoxColors} from "../../script/InformationComponentUtility";
-  export let isLightTheme = true
+  export let isLightTheme: boolean = true
 
   const colors = getInfoBoxColors(isLightTheme)
   const textColor = colors.textColor;

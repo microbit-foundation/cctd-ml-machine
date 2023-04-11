@@ -11,6 +11,9 @@
 	import NewGestureButton from "../components/NewGestureButton.svelte";
 	import StandardButton from "../components/StandardButton.svelte";
 	import {startConnectionProcess} from "../script/stores/connectDialogStore";
+    import ControlBar from "../components/control-bar/ControlBar.svelte";
+    import RadioGroup from "../components/control-bar/control-bar-items/RadioGroup.svelte";
+    import type { RadioButtonAction } from "../script/ControlBarItems";
 
 	let isConnectionDialogOpen = false;
 
@@ -22,92 +25,112 @@
 	};
 
 	let connectDialogReference: MainConnectDialog;
+
+	const radioButtons: RadioButtonAction[] = [
+		{
+			onSelect:() => {console.log("select1")},
+			label:"test1"
+		},
+		{
+			onSelect:() => {console.log("select2")},
+			label:"test2"
+		},
+		{
+			onSelect:() => {console.log("select3")},
+			label:"test3"
+		}
+	]
 </script>
 
 <!-- Main pane -->
-{#if !hasSomeData() && !$state.isInputConnected}
-	<!-- 'training page has same component. Extract' -->
-	<div class="w-full h-full grid grid-cols-1 items-center place-items-center text-center">
-		<div class="w-full text-primarytext">
-			<p class="w-4/5 text-3xl bold m-auto">
-				{$t("menu.trainer.notConnected1")}
-			</p>
-			<p class="w-4/5 text-3xl  bold m-auto">
-				{$t("menu.trainer.notConnected2")}
-			</p>
-			<div class="text-center ml-auto mr-auto mb-2 mt-10 ">
-				<img
-					class="m-auto arrow-filter-color"
-					src="imgs/down_arrow.svg"
-					alt="down arrow icon"
-					width="100px"
-				/>
-			</div>
-		</div>
-	</div>
-{:else}
-	<main class="pl-2 mt-24 w-full">
-		<StandardDialog
-			isOpen={isConnectionDialogOpen}
-			onClose={() => isConnectionDialogOpen = false} >
-			<div class="w-70 text-center">
-				<p class="mb-5">
-					{$t("content.data.addDataNoConnection")}
-				</p>
-				<StandardButton
-					onClick={() => {
-						isConnectionDialogOpen = false; 
-						startConnectionProcess()
-					}}
-				>{$t("footer.connectButtonNotConnected")}</StandardButton>
-			</div>
-		</StandardDialog>
-		<MainConnectDialog
-			bind:this={connectDialogReference} />
-
-		{#if $gestures.length > 0}
-			<div class=" p-0 relative flex h-7">
-				<div class="absolute left-3 flex">
-					<TextInformation
-						isLightTheme={false}
-						iconText={$t("content.data.classification")}
-						titleText={$t("content.data.classHelpHeader")}
-						bodyText={$t("content.data.classHelpBody")} />
-				</div>
-				<div class="absolute left-55 flex">f
-					<InformationBase
-							isLightTheme={false}
-							text={$t("content.data.choice")}>
-						<RecordInformationContent isLightTheme={false} />
-					</InformationBase>
-				</div>
-				{#if hasSomeData()}
-					<div class="absolute left-92 flex">
-						<TextInformation
-							isLightTheme={false}
-							iconText={$t("content.data.data")}
-							titleText={$t("content.data.data")}
-							bodyText={$t("content.data.dataDescription")} />
+<main class="w-full">
+	<ControlBar>
+		<RadioGroup items={radioButtons}/>
+	</ControlBar>
+	<div class="mt-24 pl-2">
+		{#if !hasSomeData() && !$state.isInputConnected}
+			<!-- 'training page has same component. Extract' -->
+			<div class="w-full h-full grid grid-cols-1 items-center place-items-center text-center">
+				<div class="w-full text-primarytext">
+					<p class="w-4/5 text-3xl bold m-auto">
+						{$t("menu.trainer.notConnected1")}
+					</p>
+					<p class="w-4/5 text-3xl  bold m-auto">
+						{$t("menu.trainer.notConnected2")}
+					</p>
+					<div class="text-center ml-auto mr-auto mb-2 mt-10 ">
+						<img
+							class="m-auto arrow-filter-color"
+							src="imgs/down_arrow.svg"
+							alt="down arrow icon"
+							width="100px"
+						/>
 					</div>
-				{/if}
+				</div>
 			</div>
 		{:else}
-			<div class="flex justify-center">
-				<div class="text-center text-xl w-1/2 text-bold text-primarytext">
-					<p>{$t("content.data.noData")}</p>
+			<StandardDialog
+				isOpen={isConnectionDialogOpen}
+				onClose={() => isConnectionDialogOpen = false} >
+				<div class="w-70 text-center">
+					<p class="mb-5">
+						{$t("content.data.addDataNoConnection")}
+					</p>
+					<StandardButton
+						onClick={() => {
+							isConnectionDialogOpen = false; 
+							startConnectionProcess()
+						}}
+					>{$t("footer.connectButtonNotConnected")}</StandardButton>
 				</div>
-			</div>
+			</StandardDialog>
+			<MainConnectDialog
+				bind:this={connectDialogReference} />
+
+			{#if $gestures.length > 0}
+				<div class=" p-0 relative flex h-7">
+					<div class="absolute left-3 flex">
+						<TextInformation
+							isLightTheme={false}
+							iconText={$t("content.data.classification")}
+							titleText={$t("content.data.classHelpHeader")}
+							bodyText={$t("content.data.classHelpBody")} />
+					</div>
+					<div class="absolute left-55 flex">f
+						<InformationBase
+								isLightTheme={false}
+								text={$t("content.data.choice")}>
+							<RecordInformationContent isLightTheme={false} />
+						</InformationBase>
+					</div>
+					{#if hasSomeData()}
+						<div class="absolute left-92 flex">
+							<TextInformation
+								isLightTheme={false}
+								iconText={$t("content.data.data")}
+								titleText={$t("content.data.data")}
+								bodyText={$t("content.data.dataDescription")} />
+						</div>
+					{/if}
+				</div>
+			{:else}
+				<div class="flex justify-center">
+					<div class="text-center text-xl w-1/2 text-bold text-primarytext">
+						<p>{$t("content.data.noData")}</p>
+					</div>
+				</div>
+			{/if}
+			<!-- Display all gestures -->
+			{#each $gestures as gesture (gesture.ID)}
+				<Gesture
+					bind:gesture
+					onNoMicrobitSelect={() => isConnectionDialogOpen = true}
+				/>
+			{/each}
+			<NewGestureButton />
 		{/if}
-		<!-- Display all gestures -->
-		{#each $gestures as gesture (gesture.ID)}
-			<Gesture
-				bind:gesture
-				onNoMicrobitSelect={() => isConnectionDialogOpen = true}
-			/>
-		{/each}
-		<NewGestureButton />
-	</main>
-{/if}
+	</div>
+</main>
 
 <style>
 	.arrow-filter-color {

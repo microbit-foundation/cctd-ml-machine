@@ -7,7 +7,7 @@ import {
 	getPrevData,
 	model,
 	settings,
-	trainingState,
+	//trainingState,
 	TrainingStatus,
 	trainingStatus
 } from "./stores/mlStore";
@@ -136,7 +136,10 @@ export function trainModel() {
 		}).then(info => {
 			console.log('Final accuracy', info.history.acc)
 			finishedTraining();
-		}).catch(err => console.log("tensorflow training process failed:", err));
+		}).catch(err => {
+			trainingStatus.update(() => TrainingStatus.Failure);
+			console.error("tensorflow training process failed:", err);
+		});
 
 		model.set(nn);
 	});
@@ -198,28 +201,8 @@ function finishedTraining() {
 			obj.isTraining = false;
 			return obj;
 		});
-		// const { x, y, z } = getPrevData();
-		// const input : Map<accData, number> = makeInputs(x, y, z);
-		// const tfInput : number[] = tfConvertDataToTfFormat(input);
-		// const inputTensor = tf.tensor([tfInput]);
-		// get(model).predict(inputTensor); // TODO: Reimplement checkmModel? how do we check if the prediction was cuccessful?
 		setupPredictionInterval()
 	});
-}
-
-function checkModelAndSetupPredictionInterval
-	(error: string | undefined, result: { confidence: number, label: string }[]) {
-	if (error !== undefined) {
-		trainingStatus.update(() => TrainingStatus.Failure);
-		return;
-	}
-	for (const classResult of result) {
-		if (isNaN(classResult.confidence)) {
-			trainingStatus.update(() => TrainingStatus.Failure);
-			return;
-		}
-	}
-	setupPredictionInterval();
 }
 
 
@@ -239,23 +222,6 @@ function checkModelAndSetupPredictionInterval
 // Depending on user settings. There will be anywhere between 1-12 parameters in
 // The return object.
 
-type InputObjectType = {
-	"ax_max": number | undefined,
-	"ax_min": number | undefined,
-	"ax_std": number | undefined,
-	"ax_peaks": number | undefined,
-	"ax_total": number | undefined,
-	"ay_max": number | undefined,
-	"ay_min": number | undefined,
-	"ay_std": number | undefined,
-	"ay_peaks": number | undefined,
-	"ay_total": number | undefined,
-	"az_max": number | undefined,
-	"az_min": number | undefined,
-	"az_std": number | undefined,
-	"az_peaks": number | undefined,
-	"az_total": number | undefined
-}
 
 const perturbate_input = (x: number[], y: number[], z: number[]) => {
 	const max_perturbation = 0.00000000000005;
@@ -411,11 +377,8 @@ export function classify() {
 	const prediction: Tensor = get(model).predict(inputTensor) as Tensor;
 	//console.log("prediction:", prediction.print());
 	prediction.data().then(data => {
-		console.log("Prediction:", data);
 		tfHandlePrediction(data as Float32Array);
-	}).catch(err => console.log("Prediction error:", err));
-	// if prediction succeeded <-- how do we check this?
-
+	}).catch(err => console.error("Prediction error:", err));
 }
 
 function tfHandlePrediction(result: Float32Array) {
@@ -430,53 +393,14 @@ function tfHandlePrediction(result: Float32Array) {
 			return confidenceMap;
 		})
 
-		console.log("result[index]", result[index]);
-		console.log("bestConfidence", bestConfidence);
-
 		if (result[index] > bestConfidence) {
 			bestConfidence = result[index];
 			bestGestureID = ID;
 		}
 	});
 
-	console.log("Best gesture id", bestGestureID);
-
 	for (const gesture of get(gestures)) {
-		console.log("Gesture ID", gesture.ID);
 		if (gesture.ID === bestGestureID) {
-			console.log("best prediction!", gesture.ID);
-			bestPrediction.set({ ...gesture, confidence: bestConfidence });
-		}
-	}
-}
-
-// Once classified the results from the algorithm is sent
-// to components through the prediction store.
-function handleResults(error: string | undefined, result: { confidence: number, label: string }[]) {
-	// console.log(error, result)
-	if (error !== undefined) {
-		alertUser(error);
-		console.error(error);
-		return;
-	}
-
-	let bestConfidence = 0;
-	let bestGestureID: string | undefined = undefined;
-
-	result.forEach((classPrediction) => {
-		gestureConfidences.update(confidenceMap => {
-			confidenceMap[classPrediction.label] = classPrediction.confidence;
-			return confidenceMap;
-		});
-
-		if (classPrediction.confidence > bestConfidence) {
-			bestConfidence = classPrediction.confidence;
-			bestGestureID = classPrediction.label;
-		}
-	});
-
-	for (const gesture of get(gestures)) {
-		if (String(gesture.ID) === bestGestureID) {
 			bestPrediction.set({ ...gesture, confidence: bestConfidence });
 		}
 	}
@@ -485,32 +409,32 @@ function handleResults(error: string | undefined, result: { confidence: number, 
 // creates input parameters for the algortihm.
 // Utilizes the learningParameter array and the user settings to
 // Create an option array which the learning algorithm takes in.
-function createInputs(s: { axes: boolean[]; params: boolean[]; }) {
-	const learningParameters = [
-		"ax_max",
-		"ax_min",
-		"ax_std",
-		"ax_peaks",
-		"ax_total",
-		"ay_max",
-		"ay_min",
-		"ay_std",
-		"ay_peaks",
-		"ay_total",
-		"az_max",
-		"az_min",
-		"az_std",
-		"az_peaks",
-		"az_total"
-	];
-	const options: string[] = [];
-	for (let axNum = 0; axNum < s.axes.length; axNum++) {
-		for (let paramNum = 0; paramNum < s.params.length; paramNum++) {
-			if (s.axes[axNum] && s.params[paramNum]) {
-				const lookup = axNum * 5 + paramNum;
-				options.push(learningParameters[lookup]);
-			}
-		}
-	}
-	return options;
-}
+// function createInputs(s: { axes: boolean[]; params: boolean[]; }) {
+// 	const learningParameters = [
+// 		"ax_max",
+// 		"ax_min",
+// 		"ax_std",
+// 		"ax_peaks",
+// 		"ax_total",
+// 		"ay_max",
+// 		"ay_min",
+// 		"ay_std",
+// 		"ay_peaks",
+// 		"ay_total",
+// 		"az_max",
+// 		"az_min",
+// 		"az_std",
+// 		"az_peaks",
+// 		"az_total"
+// 	];
+// 	const options: string[] = [];
+// 	for (let axNum = 0; axNum < s.axes.length; axNum++) {
+// 		for (let paramNum = 0; paramNum < s.params.length; paramNum++) {
+// 			if (s.axes[axNum] && s.params[paramNum]) {
+// 				const lookup = axNum * 5 + paramNum;
+// 				options.push(learningParameters[lookup]);
+// 			}
+// 		}
+// 	}
+// 	return options;
+// }

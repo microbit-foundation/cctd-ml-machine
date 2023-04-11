@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {slide} from "svelte/transition"
 	import { state } from "../script/stores/uiStore";
 	import { bestPrediction } from "../script/stores/mlStore";
 	import { t } from "../i18n";
@@ -9,7 +10,7 @@
 
 </script>
 
-<div class="w-full text-center justify-center pt-5">
+<div class="w-full text-center justify-center pt-5" transition:slide>
 	{#if !$state.isPredicting}
 		<div
 			class="h-34 w-34 m-auto mb-8 border-2 border-white border-opacity-30 rounded-lg border-dashed font-bold text-warm-gray-300"

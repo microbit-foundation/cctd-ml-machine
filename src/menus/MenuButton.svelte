@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { SvelteComponent } from "svelte";
 	import TextInformation from "../components/information/TextInformation.svelte";
 	import { t } from "../i18n";
 
@@ -8,17 +7,13 @@
 	export let helpDescription: string;
 	export let onClickFunction: () => void;
 	export let isExpanded: boolean;
-
-	export const expandedButtonContent: typeof SvelteComponent | undefined = undefined;
-
 </script>
 <div>
 	<div class="border
-              bg-opacity-75 border-solid min-h-20
-              text-warm-gray-50 border-white
-              border-opacity-30 shadow-sm shadow-gray-500 select-none
-              transition duration-300
-							rounded-full bg-[#EDBFD9]"
+              bg-opacity-75 border-solid border-3 border-opacity-80 min-h-20
+              text-secondarytext border-secondary
+              select-none transition duration-300
+              rounded-full bg-primary"
 			 class:bg-[#63BFC2]={isExpanded}
 			 class:bg-opacity-95={isExpanded}
 			 class:cursor-pointer={!isExpanded}

@@ -3,10 +3,8 @@
 	import Menus from "../script/navigation/Menus";
 	import Navigation from "../script/navigation/Navigation";
 	import { Pages } from "../script/navigation/Pages";
-	import { t } from "../i18n";
 	import MenuButton from "../menus/MenuButton.svelte";
 	import { get } from "svelte/store";
-	import { state } from "../script/stores/uiStore";
 
 	const goToHomePage = () => {
 		Navigation.setCurrentPage(Pages.HOMEPAGE);

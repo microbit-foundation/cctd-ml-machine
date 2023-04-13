@@ -109,26 +109,21 @@ export function trainModel() {
 
 		});
 
-		console.log("features", features);
-		console.log("labels:", labels);
-
 		const tensorFeatures = tf.tensor(features);
-		const tensorlabels = tf.tensor(labels);
+		const tensorLabels = tf.tensor(labels);
 
 		const nn: LayersModel = createModel();
 
 
 		trainingTimerPromise = new Promise((resolve) => {
-			// console.log("Timer setup")
 			setTimeout(() => {
-				// console.log("Timer resolve")
 				resolve(true);
 			}, 2500);
 			// Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
 			// See "finishedTraining" function to see how this works
 		});
 
-		nn.fit(tensorFeatures, tensorlabels, {
+		nn.fit(tensorFeatures, tensorLabels, {
 			epochs: get(settings).numEpochs,
 			batchSize: 16,
 			validationSplit: 0.1,

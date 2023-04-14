@@ -85,11 +85,11 @@
 
 <!-- Main pane -->
 <main class="h-full flex flex-col">
-	<div>
-		<ControlBar></ControlBar>
-	</div>
-	<div>
-		{#if $state.isPredicting}
+	{#if $state.isPredicting}
+		<div>
+			<ControlBar></ControlBar>
+		</div>
+		<div>
 			<div class="relative flex h-8 mt-4">
 				<div class="absolute left-5 flex">
 					<TextInformation
@@ -160,16 +160,16 @@
 					</div>
 				</div>
 			{/if}
-		{:else}
-			<div class="w-full h-full grid grid-cols-1 items-center place-items-center text-center">
-				<p class='w-3/4 text-primarytext text-3xl bold'>
-					{$t("content.model.trainModelFirstHeading")}
-					<br>
-					{$t("content.model.trainModelFirstBody")}
-				</p>
-			</div>
-		{/if}
-	</div>
+		</div>
+	{:else}
+		<div class="flex flex-col flex-grow justify-center">
+			<p class='text-primarytext text-center text-3xl bold'>
+				{$t("content.model.trainModelFirstHeading")}
+				<br>
+				{$t("content.model.trainModelFirstBody")}
+			</p>
+		</div>
+	{/if}
 </main>
 
 <style>

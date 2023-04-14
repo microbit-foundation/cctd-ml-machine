@@ -42,7 +42,6 @@
 
 </StandardDialog>
 <div class="flex flex-col h-full">
-	<ControlBar></ControlBar>
 	<div class="flex flex-col flex-grow justify-center items-center text-center">
 		{#if !$state.isInputConnected}
 			<div>

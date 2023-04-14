@@ -1,6 +1,5 @@
 <script lang="ts">
 </script>
-
-<main class="h-12 flex w-full items-center bg-primary shadow-md">
+<div class="h-12 pl-2 pr-2 flex w-full items-center bg-backgroundlight shadow-md">
 	<slot></slot>
-</main>
+</div>

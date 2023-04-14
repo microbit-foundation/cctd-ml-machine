@@ -7,6 +7,7 @@
   export let small = false
   export let outlined = false
   export let fillOnHover = false
+  export let bold = true
 
   const bgColors: {[key: variants]: string} = {
     "primary": windi.theme.extend.colors.primary,
@@ -14,17 +15,15 @@
     "warning": windi.theme.extend.colors.warning,
     "info": windi.theme.extend.colors.info,
     "infolight": windi.theme.extend.colors.infolight,
-    "disabled": windi.theme.extend.colors.disabled
+    "disabled": windi.theme.extend.colors.disabled,
   }
-
 </script>
 
 <div class="grid grid-cols-1 content-center place-items-center">
   <button
-    style="--color: {bgColors[color]};"
-    class="outline-none
-           font-bold rounded-full
-           shadow-gray-400 shadow-md"
+    style="--color: {bgColors[color]}; --border-width: {bold ? '2px' : '1px'}"
+    class="outline-none rounded-full shadow-md"
+    class:font-bold={bold}
     class:small={small}
     class:normal={!small}
     class:outlined={outlined}
@@ -53,7 +52,7 @@
     color: var(--color);
     border-style: solid;
     border-color: var(--color);
-    border-width: 2px;
+    border-width: var(--border-width);
   }
   .filled {
     background-color: var(--color);

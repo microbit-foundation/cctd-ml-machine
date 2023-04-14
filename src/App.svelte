@@ -32,7 +32,7 @@
 	<IncompatiblePlatformView />
 {:else}
 	{#if $state.isLoading}
-		<main class="h-screen w-screen bg-secondary flex absolute z-10" transition:fade>
+		<main class="h-screen w-screen bg-primary flex absolute z-10" transition:fade>
 			<LoadingSpinner />
 		</main>
 	{/if}

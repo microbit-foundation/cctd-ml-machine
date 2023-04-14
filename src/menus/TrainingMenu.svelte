@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { slide } from "svelte/transition"
 	import { state } from "../script/stores/uiStore";
 	import { t } from "../i18n";
 	import ImageSkeleton from "../components/skeletonloading/ImageSkeleton.svelte";
 </script>
 
-<div class="h-40 w-40 m-auto mt-2 flex flex-col justify-center">
+<div class="h-40 w-40 m-auto mt-2 flex flex-col justify-center" transition:slide>
 	{#if $state.isPredicting}
 		<div class="text-white text-center flex flex-col justify-center items-center">
 			<ImageSkeleton alt="Model Icon"

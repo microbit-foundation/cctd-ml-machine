@@ -8,7 +8,8 @@
     "node_modules/*",
     "__sapper__/*",
     "public/*",
-    "svelte.config.js"
+    "svelte.config.js",
+    "windi.config.js"
   ],
   "compilerOptions": {
     "lib": ["DOM", "ES6", "WebWorker"],

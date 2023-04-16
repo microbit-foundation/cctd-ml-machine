@@ -215,30 +215,7 @@ function finishedTraining() {
 // Depending on user settings. There will be anywhere between 1-12 parameters in
 // The return object.
 
-
-const perturbate_input = (x: number[], y: number[], z: number[]) => {
-	const max_perturbation = 0.00000000000005;
-	const perturbate = (n: number) => {
-		let perturbation_amount = 0;
-		while (perturbation_amount === 0) {
-			perturbation_amount = Math.random() * max_perturbation - max_perturbation;
-		}
-		return n + perturbation_amount;
-	};
-	return {
-		peturb_x: x.map((n) => perturbate(n)),
-		peturb_y: y.map((n) => perturbate(n)),
-		peturb_z: z.map((n) => perturbate(n))
-	};
-};
-
 export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, number> {
-
-	// Add some noise to the dataset, this is to deal with the NaN predictions
-	const perturbed_values = perturbate_input(x, y, z);
-	x = perturbed_values.peturb_x;
-	y = perturbed_values.peturb_y;
-	z = perturbed_values.peturb_z;
 
 	const obj: Map<accData, number> = new Map();
 

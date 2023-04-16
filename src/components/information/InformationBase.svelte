@@ -1,12 +1,18 @@
 <script lang="ts">
 
+  import {getInfoBoxColors} from "../../script/InformationComponentUtility";
+
   export let text: string | undefined = undefined
   export let underlineText = true
+  export let isLightTheme = true;
   export let boxOffset: {x: number, y: number} = {x: 0, y: 0}
   export let width = 300
-  export let backgroundColor = "rgba(231, 229, 228, 1)"
-  export let iconColor  = "rgba(255,255,255,0.5)"
-  export let iconTextColor  = "rgba(255,255,255,1)"
+
+  const colors = getInfoBoxColors(isLightTheme)
+
+  const backgroundColor=colors.backgroundColor;
+  const iconColor=colors.iconColor;
+  const iconTextColor=colors.iconTextColor;
 
   let isOpen  = false
 
@@ -55,7 +61,7 @@
 
     {#if isOpen}
       <div 
-        class="fixed z-10000 rounded-md p-3 cursor-default"
+        class="fixed z-10 rounded-md p-3 cursor-default"
         style="top: {boxTop}px; left: {boxLeft}px; width: {width}px; background-color:{backgroundColor}"
         on:click|stopPropagation
       >

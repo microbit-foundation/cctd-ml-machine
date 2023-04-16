@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { slide } from "svelte/transition"
 	import { gestures } from "../script/stores/mlStore";
 	import { t } from "../i18n";
 
@@ -9,7 +10,7 @@
 	);
 </script>
 
-<div class="w-full text-center justify-center pt-5 pb-7">
+<div class="w-full text-center justify-center pt-5 pb-7" transition:slide>
 	<p class="text-7xl mb-4">{numberOfRecodings}</p>
 	<p class="text-xl">{$t("menu.data.examples")}</p>
 </div>

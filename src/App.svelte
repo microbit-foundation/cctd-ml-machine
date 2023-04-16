@@ -32,7 +32,7 @@
 	<IncompatiblePlatformView />
 {:else}
 	{#if $state.isLoading}
-		<main class="h-screen w-screen bg-[#63BFC2] flex absolute z-10" transition:fade>
+		<main class="h-screen w-screen bg-primary flex absolute z-10" transition:fade>
 			<LoadingSpinner />
 		</main>
 	{/if}
@@ -51,7 +51,7 @@
 			<SideBarMenuView />
 		</div>
 
-		<div class=" h-full w-full overflow-y-hidden overflow-x-auto flex flex-col bg-[#63BFC2] shadow-2xl">
+		<div class=" h-full w-full overflow-y-hidden overflow-x-auto flex flex-col bg-backgrounddark shadow-2xl">
 
 			<!-- CONTENT -->
 			<div class="relative z-1 flex-1 overflow-y-auto flex-row">

@@ -1,12 +1,11 @@
 <script lang="ts">
   import { t, locale, locales } from "../../i18n";
   import StandardDialog from "../dialogs/StandardDialog.svelte"
-  
   let isContactDialogOpen = false
-
 </script>
 
-<main class="pt-5 pb-3 h-15 w-full">
+<!-- This is probably going to change with the control-bar -->
+<main class="pt-5 pb-3 h-15 w-full bg-white shadow-md">
   <StandardDialog
     isOpen={isContactDialogOpen}
     onClose={() => isContactDialogOpen = false}
@@ -21,15 +20,14 @@
         </a>
       </p>
   </StandardDialog>
-
-  <select class="bg-[#63BFC2] outline-none float-right text-white ml-2 mr-2 pl-2 pr-2" bind:value={$locale}>
+  <select class="outline-none float-right text-primarytext ml-2 mr-2 pl-2 pr-2" bind:value={$locale}>
     {#each locales as l}
         <option value={l}>{l}</option>
     {/each}
   </select>
   <button
   on:click={() => isContactDialogOpen = !isContactDialogOpen}
-    class="border outline-none border-solid rounded-full ml-2 mr-2 pl-4 pr-4 float-right text-white pl-2 pr-2">
+    class="border outline-none border-solid rounded-full ml-2 mr-2 pl-4 pr-4 float-right text-primarytext pl-2 pr-2">
       {$t("content.index.contactButton")}
   </button>
   <div class="h-full ml-10 flex items-center">

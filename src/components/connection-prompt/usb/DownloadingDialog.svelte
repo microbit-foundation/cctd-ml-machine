@@ -16,7 +16,7 @@
         <div class="flex-1 mr-2">
           <div class="w-full h-2 bg-gray-200 rounded">
             <div
-              class="h-2 bg-green-400 rounded"
+              class="h-2 bg-secondary rounded"
               style="width: {transferProgress * 100}%;"
             />
           </div>

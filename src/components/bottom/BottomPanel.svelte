@@ -48,8 +48,8 @@
             </div>
             {#if !$state.isInputReady}
                 <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->
-                <div class="absolute w-full h-full flex items-center justify-center text-white">
-                    <div class="bg-[#EDBFD9] py-2 px-4 rounded-full" transition:fade>
+                <div class="absolute w-full h-full flex items-center justify-center text-secondarytext">
+                    <div class="bg-secondary bg-opacity-80 py-2 px-4 rounded-full" transition:fade>
                         <h1>{$t("footer.reconnecting")}</h1>
                     </div>
                 </div>
@@ -74,10 +74,10 @@
                             {#if !$state.isOutputConnected || $state.isOutputReady}
                                 <!-- Output MB is not in the connection process -->
                                 <StandardButton onClick={outputDisconnectButtonClicked}
-                                                color="red">{$t("menu.model.disconnect")}</StandardButton>
+                                                color="warning">{$t("menu.model.disconnect")}</StandardButton>
                             {:else}
                                 <StandardButton onClick={TypingUtils.emptyFunction}
-                                                color="gray">
+                                                color="disabled">
                                     <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px">
                                 </StandardButton>
                             {/if}
@@ -91,10 +91,10 @@
                         {#if !$state.isInputConnected || $state.isInputReady}
                             <!-- Input MB is not in the connection process -->
                             <StandardButton onClick={inputDisconnectButtonClicked}
-                                            color="red">{$t("footer.disconnectButton")}</StandardButton>
+                                            color="warning">{$t("footer.disconnectButton")}</StandardButton>
                         {:else}
                             <StandardButton onClick={TypingUtils.emptyFunction}
-                                            color="gray">
+                                            color="disabled">
                                 <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px">
                             </StandardButton>
                         {/if}

@@ -115,7 +115,7 @@
 			</div>
 		</div>
 
-		<div class=" w-729px pt-0 pl-2">
+		<div class="w-729px pt-0 pl-2">
 			<!-- Display all gestures and their output capabilities -->
 			{#each $gestures as gesture}
 				<OutputGesture
@@ -139,7 +139,7 @@
 					</div>
 					<div class="text-center ml-0 mb-2 mt-8">
 						<img
-						class="m-auto"
+						class="m-auto arrow-filter-color"
 						src="imgs/down_arrow.svg"
 						alt="down arrow icon"
 						width="80px"
@@ -161,7 +161,7 @@
 		{/if}
 	{:else}
 		<div class="w-full h-full grid grid-cols-1 items-center place-items-center text-center">
-			<p class='w-3/4 text-white text-3xl bold'>
+			<p class='w-3/4 text-primarytext text-3xl bold'>
 				{$t("content.model.trainModelFirstHeading")}
 				<br>
 				{$t("content.model.trainModelFirstBody")}
@@ -169,3 +169,9 @@
 		</div>
 	{/if}
 </main>
+
+<style>
+	.arrow-filter-color {
+		filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+	}
+</style>

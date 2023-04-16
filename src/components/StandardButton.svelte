@@ -1,17 +1,20 @@
 <script lang="ts">
-
-  export let color: "red" | "blue" | "gray" | "pink" = "blue"
+  import windi from "./../../windi.config.js"
+  type variants = "secondary" | "primary" | "warning" | "info" | "infolight" | "disabled"
+  export let color: variants = "secondary"
   export let onClick: () => void = () => {return}
   export let stopPropagation = false
   export let small = false
   export let outlined = false
   export let fillOnHover = false
 
-  const bgColors: {[key: string]: string} = {
-    "blue": "#63BFC2",
-    "red": "#FF7777",
-    "gray": "gray",
-    "pink": "#EDBFD9"
+  const bgColors: {[key: variants]: string} = {
+    "primary": windi.theme.extend.colors.primary,
+    "secondary": windi.theme.extend.colors.secondary,
+    "warning": windi.theme.extend.colors.warning,
+    "info": windi.theme.extend.colors.info,
+    "infolight": windi.theme.extend.colors.infolight,
+    "disabled": windi.theme.extend.colors.disabled
   }
 
 </script>
@@ -19,10 +22,9 @@
 <div class="grid grid-cols-1 content-center place-items-center">
   <button
     style="--color: {bgColors[color]};"
-    class="
-      outline-none
-      font-bold rounded-full
-      shadow-gray-400 shadow-lg"
+    class="outline-none
+           font-bold rounded-full
+           shadow-gray-400 shadow-md"
     class:small={small}
     class:normal={!small}
     class:outlined={outlined}

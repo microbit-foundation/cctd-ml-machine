@@ -24,7 +24,6 @@ export default {
 		"alert.deleteGestureConfirm": "Er du sikker på at du vil slette klassen ",
 		//In ml.ts
 		"alert.beginModelSetup": "Påbegynder opsætning af model",
-		"alert.trainingModel": "Træner modellen",
 		"alert.twoGestures": "Du skal have mindst to klasser",
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
@@ -238,7 +237,6 @@ export default {
 		"alert.deleteGestureConfirm": "Are you sure you want to delete the class ",
 		//In ml.ts
 		"alert.beginModelSetup": "Initiating model setup",
-		"alert.trainingModel": "Training the model",
 		"alert.twoGestures": "You need at least two classes",
 		"alert.oneDataRepresentation": "You need at least one data representation",
 		"alert.recordingsPerGesture": "You need at least three examples per class",

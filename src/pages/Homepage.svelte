@@ -7,6 +7,7 @@
 		from "../components/control-bar/control-bar-items/ContactUsControlBarButton.svelte";
 	import SelectLanguageControlBarDropdown
 		from "../components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte";
+    import { t } from "../i18n";
 
 	// Just add the content titles you wish to put on front page, in the order you wish them to be there
 	const contentTiles = [
@@ -18,6 +19,7 @@
 <main>
 	<ControlBar>
 		<div class="w-full">
+			<div class="float-left">{$t("content.index.acknowledgement")}</div>
 			<div class="float-right flex flex-row">
 				<ContactUsControlBarButton/>
 				<SelectLanguageControlBarDropdown/>

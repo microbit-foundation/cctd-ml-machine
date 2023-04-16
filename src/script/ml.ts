@@ -41,12 +41,12 @@ type accData = "ax_max" | "ax_min" | "ax_std" | "ax_peaks" | "ax_total" | "ay_ma
 function createModel(): LayersModel {
 	//const shape = get(settings).includedAxes * get(settings).includedParameters;
 	const gestureData = get(gestures);
-	const numberofClasses: number = gestureData.length;
+	const numberOfClasses: number = gestureData.length;
 
 	const input = tf.input({ shape: [15] });
 	const normalizer = tf.layers.batchNormalization().apply(input);
 	const dense = tf.layers.dense({ units: 16, activation: 'relu' }).apply(normalizer);
-	const softmax = tf.layers.dense({ units: numberofClasses, activation: 'softmax' }).apply(dense) as SymbolicTensor;
+	const softmax = tf.layers.dense({ units: numberOfClasses, activation: 'softmax' }).apply(dense) as SymbolicTensor;
 	const model = tf.model({ inputs: input, outputs: softmax });
 
 	model.compile({
@@ -58,12 +58,12 @@ function createModel(): LayersModel {
 	return model;
 }
 
-function tfConvertDataToTfFormat(data: Map<accData, number>): number[] {
-	const dataExample: number[] = [];
+function dataMapToFeatureArray(data: Map<accData, number>): number[] {
+	const features: number[] = [];
 	for (const value of data.values()) {
-		dataExample.push(value)
+		features.push(value)
 	}
-	return dataExample
+	return features;
 }
 
 export function trainModel() {
@@ -84,7 +84,6 @@ export function trainModel() {
 
 	// Fetch data
 	const gestureData = get(gestures);
-	console.log(gestureData);
 	const features: Array<number[]> = []
 	const labels: Array<number[]> = [];
 	const numberofClasses: number = gestureData.length;
@@ -99,7 +98,7 @@ export function trainModel() {
 			const z = recording.data.z;
 
 			const inputs: Map<accData, number> = makeInputs(x, y, z);
-			features.push(tfConvertDataToTfFormat(inputs));
+			features.push(dataMapToFeatureArray(inputs));
 
 			// Prepare labels
 			const label: number[] = new Array(numberofClasses) as number[];
@@ -128,8 +127,7 @@ export function trainModel() {
 			batchSize: 16,
 			validationSplit: 0.1,
 			//callbacks: { onEpochEnd } // <-- use this to make loading animation
-		}).then(info => {
-			console.log('Final accuracy', info.history.acc)
+		}).then(() => {
 			finishedTraining();
 		}).catch(err => {
 			trainingStatus.update(() => TrainingStatus.Failure);
@@ -367,10 +365,9 @@ export function classify() {
 	// Get formatted version of previous data
 	const { x, y, z } = getPrevData();
 	const input: Map<accData, number> = makeInputs(x, y, z);
-	const tfInput: number[] = tfConvertDataToTfFormat(input);
+	const tfInput: number[] = dataMapToFeatureArray(input);
 	const inputTensor = tf.tensor([tfInput]);
 	const prediction: Tensor = get(model).predict(inputTensor) as Tensor;
-	//console.log("prediction:", prediction.print());
 	prediction.data().then(data => {
 		tfHandlePrediction(data as Float32Array);
 	}).catch(err => console.error("Prediction error:", err));

@@ -5,7 +5,7 @@
 	import ImageSkeleton from "../components/skeletonloading/ImageSkeleton.svelte";
 </script>
 
-<div class="h-40 w-40 m-auto mt-2 flex flex-col justify-center" transition:slide>
+<div class="h-40 w-40 m-auto mt-2 flex flex-col justify-center">
 	{#if $state.isPredicting}
 		<div class="text-white text-center flex flex-col justify-center items-center">
 			<ImageSkeleton alt="Model Icon"

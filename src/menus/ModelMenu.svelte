@@ -10,7 +10,7 @@
 
 </script>
 
-<div class="w-full text-center justify-center pt-5" transition:slide>
+<div class="w-full text-center justify-center pt-5">
 	{#if !$state.isPredicting}
 		<div
 			class="h-34 w-34 m-auto mb-8 border-2 border-white border-opacity-30 rounded-lg border-dashed font-bold text-warm-gray-300"

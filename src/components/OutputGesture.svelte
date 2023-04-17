@@ -69,9 +69,9 @@
 
 <main class=" pl-3 mb-4 justify-center items-center layout-grid">
     <!-- NAMES AND CONFIDENCE METER -->
-    <div class="h-146px heavy-shadow self-center
+    <div class="h-146px self-center
                 items-center flex border border-solid
-                border-info p-2 bg-white rounded-xl">
+                border-primaryborder p-2 bg-white rounded-xl">
         <div class="w-36 text-center font-semibold rounded-xl
                     px-1 py-1 border border-gray-300
                     border-dashed mr-2 break-words">
@@ -128,7 +128,7 @@
 
     <!-- OUTPUT SETTINGS -->
     <div class="relative flex items-center">
-        <div class=" w-180px relative rounded-xl bg-transparent heavy-shadow h-full border-1 border-info">
+        <div class=" w-180px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
             <ImageSkeleton src="imgs/blank_microbit.svg"
                            alt="microbit guide"
                            width={180}

@@ -11,6 +11,7 @@ export default {
                 infolight: "#93c5fd",
                 warning:"#FF7777",
                 disabled:"#8892A3",
+                primaryborder:"#E5E7EB",
                 infobglight:"#E7E5E4",
                 infobgdark:"#57534E",
                 infoiconlight: "#FFFFFF7F",

@@ -181,7 +181,7 @@
 	<div class="items-center flex mb-1">
 		<!-- Title of gesture-->
 		<div class="grid grid-cols-5 place-items-center
-								border border-solid border-gray-200
+								border border-solid border-primaryborder
 								mb-2 p-2 bg-white rounded-xl
 								w-50 h-30 ml-2">
 			<div class="w-40 col-start-2 col-end-5 text-center
@@ -200,7 +200,7 @@
 
 		{#if $chosenGesture !== gesture}
 			<div
-				class="border text-center border-solid border-gray-200 mb-2 p-2 bg-white rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
+				class="border text-center border-solid border-primaryborder mb-2 p-2 bg-white rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
 				on:click={selectClicked}>
 				<div class="w-full text-center">
 					<i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-black-500 transition ease " />
@@ -211,7 +211,7 @@
 			</div>
 		{:else}
 			<div
-				class="border selected text-center border-solid border-gray-200 mb-2 p-2 bg-white shadow-xl rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
+				class="border selected text-center border-solid border-primaryborder mb-2 p-2 bg-white shadow-xl rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
 				on:click={selectClicked}>
 				<div class="w-full text-center">
 					<i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-[#63BFC2] transition ease " />
@@ -235,7 +235,7 @@
 		<!-- Show recording for each recording -->
 		{#if gesture.recordings.length > 0}
 			<div
-				class="flex border border-solid border-gray-200 mb-2 p-2 bg-white rounded-xl h-30">
+				class="flex border border-solid border-primaryborder mb-2 p-2 bg-white rounded-xl h-30">
 
 				{#each gesture.recordings as recording (String(gesture.ID) + String(recording.ID))}
 					<Recording

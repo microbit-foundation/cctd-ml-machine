@@ -90,28 +90,22 @@
 	{#if $state.isPredicting}
 		<div class="p-0 relative flex h-31 pt-24">
 			<div class="absolute left-5 flex">
-				<TextInformation
-					iconText={$t("content.model.output.prediction.iconTitle")}
-					titleText={$t("content.model.output.prediction.descriptionTitle")}
-					bodyText={$t("content.model.output.prediction.descriptionBody")}
-				/>
-
+				<TextInformation isLightTheme={false}
+								 iconText={$t("content.model.output.prediction.iconTitle")}
+								 titleText={$t("content.model.output.prediction.descriptionTitle")}
+								 bodyText={$t("content.model.output.prediction.descriptionBody")}/>
 			</div>
 			<div class="absolute left-69 flex">
-				<TextInformation
-					iconText={$t("content.model.output.ledOutput.descriptionTitle")}
-					titleText={$t("content.model.output.ledOutput.descriptionTitle")}
-					bodyText={$t("content.model.output.ledOutput.descriptionBody")}
-				/>
-
+				<TextInformation isLightTheme={false}
+								 iconText={$t("content.model.output.ledOutput.descriptionTitle")}
+								 titleText={$t("content.model.output.ledOutput.descriptionTitle")}
+								 bodyText={$t("content.model.output.ledOutput.descriptionBody")}/>
 			</div>
 			<div class="absolute left-122 flex">
-				<TextInformation
-					iconText={$t("content.model.output.sound.iconTitle")}
-					titleText={$t("content.model.output.sound.descriptionTitle")}
-					bodyText={$t("content.model.output.sound.descriptionBody")}
-				/>
-
+				<TextInformation isLightTheme={false}
+								 iconText={$t("content.model.output.sound.iconTitle")}
+								 titleText={$t("content.model.output.sound.descriptionTitle")}
+								 bodyText={$t("content.model.output.sound.descriptionBody")}/>
 			</div>
 		</div>
 

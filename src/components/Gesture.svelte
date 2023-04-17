@@ -260,10 +260,8 @@
 </main>
 
 <style>
-
     .selected {
         filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.459));
     }
-
 </style>
 

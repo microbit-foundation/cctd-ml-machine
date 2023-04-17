@@ -166,11 +166,6 @@
         background: #13bba4;
     }
 
-    .heavy-shadow {
-		/* filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.459)); */
-        box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.2);
-	}
-
     .arrow-triggered-color {
         filter: invert(31%) sepia(20%) saturate(4422%) hue-rotate(194deg) brightness(88%) contrast(82%);
     }

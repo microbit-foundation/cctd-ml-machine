@@ -107,6 +107,7 @@ export function trainModel() {
 			labels.push(label);
 
 		});
+	});
 
 		const tensorFeatures = tf.tensor(features);
 		const tensorLabels = tf.tensor(labels);
@@ -122,20 +123,19 @@ export function trainModel() {
 			// See "finishedTraining" function to see how this works
 		});
 
+		const onTrainEnd = () => finishedTraining();
+		
 		nn.fit(tensorFeatures, tensorLabels, {
 			epochs: get(settings).numEpochs,
 			batchSize: 16,
 			validationSplit: 0.1,
-			//callbacks: { onEpochEnd } // <-- use this to make loading animation
-		}).then(() => {
-			finishedTraining();
+			callbacks: {onTrainEnd} // onEpochEnd <-- use this to make loading animation
 		}).catch(err => {
 			trainingStatus.update(() => TrainingStatus.Failure);
 			console.error("tensorflow training process failed:", err);
 		});
 
 		model.set(nn);
-	});
 }
 
 

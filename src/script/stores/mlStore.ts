@@ -67,8 +67,8 @@ export type MlSettings = {
 const initialSettings: MlSettings = {
 	duration: 1800,
 	numEpochs: 80,
-	numSamples: 60,
-	minSamples: 50,
+	numSamples: 80,
+	minSamples: 80,
 	updatesPrSecond: 4,
 	learningRate: 0.5,
 	includedAxes: [true, true, true],
@@ -180,7 +180,7 @@ export const trainingStatus = writable<TrainingStatus>(TrainingStatus.Untrained)
 
 // Stores and manages previous data-elements. Used for classifying current gesture
 // TODO: Only used for 'getPrevData' (which is only used for ml.ts). Do we even want this as global state?
-export const prevData = writable<LiveData[]>(new Array(get(settings).numSamples));
+export const prevData = writable<LiveData[]>(new Array(get(settings).minSamples));
 
 let liveDataIndex = 0;
 livedata.subscribe(data => {
@@ -189,7 +189,7 @@ livedata.subscribe(data => {
 		return prevDataArray;
 	});
 	liveDataIndex++;
-	if (liveDataIndex >= get(settings).numSamples) {
+	if (liveDataIndex >= get(settings).minSamples) {
 		liveDataIndex = 0;
 	}
 });

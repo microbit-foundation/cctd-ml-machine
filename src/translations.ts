@@ -40,8 +40,6 @@ export default {
 		"content.index.acknowledgement": "Udviklet af Center for Computational Thinking og Design, Aarhus Universitet",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Klik for at ændre navnet",
-		"content.data.select": "Vælg",
-		"content.data.selected": "Valgt",
 		"content.data.record": "Optag",
 		"content.data.addData": "Tilføj data",
 		"content.data.classHelpHeader": "Klasse",
@@ -253,8 +251,6 @@ export default {
 		"content.index.acknowledgement": "Developed by Center for Computational Thinking and Design, Aarhus University",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Press here to change name",
-		"content.data.select": "Select",
-		"content.data.selected": "Selected",
 		"content.data.record": "Record",
 		"content.data.addData": "Add Data",
 		"content.data.classHelpHeader": "Class",

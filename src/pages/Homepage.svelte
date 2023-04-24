@@ -16,22 +16,26 @@
 	]
 
 </script>
-<main>
-	<ControlBar>
-		<div class="w-full">
-			<div class="float-left">{$t("content.index.acknowledgement")}</div>
-			<div class="float-right flex flex-row">
-				<ContactUsControlBarButton/>
-				<SelectLanguageControlBarDropdown/>
+<main class="h-full flex flex-col">
+	<div>
+		<ControlBar>
+			<div class="w-full">
+				<div class="float-right flex flex-row">
+					<ContactUsControlBarButton/>
+					<SelectLanguageControlBarDropdown/>
+				</div>
 			</div>
-		</div>
-	</ControlBar>
-	<div class="p-10 pb-2 pt-2  mt-3">
+		</ControlBar>
+	</div>
+	<div class="p-10 pb-2 pt-2 mt-3">
 		<div class="grid-container grid-cols-2 min-w-800px">
 			{#each contentTiles as contentTile}
 				<FrontPageContentTile contentComponent={contentTile}/>
 			{/each}
 		</div>
+	</div>
+	<div class="flex-grow flex items-end">
+		<div class="pb-2 pl-10"><p>{$t("content.index.acknowledgement")}</p></div>
 	</div>
 </main>
 

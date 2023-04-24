@@ -267,7 +267,7 @@ export default {
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Training Failed",
-		"content.trainer.failure.body": "The training did not result in a useable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
+		"content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
 		"content.trainer.failure.todo": "Return to the data page and change your data.",
 		// MODEL PAGE:
 		"content.model.trainModelFirstHeading": "Train the model first!",

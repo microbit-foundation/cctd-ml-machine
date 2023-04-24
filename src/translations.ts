@@ -7,7 +7,7 @@ export default {
 		"alert.micro.gettingDataInform": "Anskaffer data",
 		"alert.micro.nowConnectedInform": "Micro:bit er nu tilkoblet",
 
-		//In gesture.svelte
+		//In gesture.svelte 
 		"alert.data.classNameLengthAlert": "Navne må kun bestå af 25 tegn",
 		"alert.recording.disconnectedDuringRecording":"micro:bit frakoblede under optagelse",
 

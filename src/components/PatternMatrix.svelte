@@ -1,93 +1,3 @@
-<script lang="ts">
-
-  export let onMatrixChange: (matrix: boolean[]) => void
-	export let matrix: boolean[];
-
-	let highlighted: boolean[] = new Array<boolean>(25).fill(false);
-
-  /** If bad matrix given to component => reset */
-  // This should never happen
-  // TODO: Clean this function. Consider going from 1d array to 2d
-  if (!(matrix instanceof Array) || matrix.length !== 25) {
-    matrix = new Array<boolean>(25);
-    for (let i = 0; i < 25; i++) {
-      matrix[i] = false;
-    }
-  }
-
-	const setElement = (i: number, state: boolean): void => {
-		matrix[i] = state;
-		const effectedSquares = getColumnOf(i);
-
-		effectedSquares.forEach((value) => {
-			if (value.position <= 0) {
-				matrix[value.index] = state;
-			} else {
-				matrix[value.index] = false;
-			}
-		});
-
-    onMatrixChange(matrix);
-	};
-
-
-	type PairingSquare = {
-		index: number,
-		position: number
-	}
-
-	const getColumnOf = (inx: number): PairingSquare[] => {
-		const result = [];
-		for (let j = inx % 5; j < 25; j += 5) {
-			result.push({ index: j, position: Math.sign(inx - j) });
-		}
-		return result;
-	};
-
-	const mouseLeftDrawingArea = () => {
-		for (let j = 0; j < highlighted.length; j++) {
-			highlighted[j] = false;
-		}
-	};
-
-	const elementHover = (i: number, mouseEvent: MouseEvent | undefined = undefined) => {
-
-		const affectedColumns = getColumnOf(i);
-		for (let j = 0; j < highlighted.length; j++) {
-			highlighted[j] = false;
-		}
-		affectedColumns.forEach((value) => {
-			highlighted[value.index] = value.position <= 0;
-		});
-
-
-		if (mouseEvent !== undefined && mouseEvent.buttons === 1){
-			setElement(i, true);
-		}
-
-	};
-</script>
-
-<!-- PATTERN MATRIX -->
-<main class="buttonGrid select-none" on:mouseleave={mouseLeftDrawingArea}>
-	<!-- Draw all 25 boxes -->
-	{#each matrix as isOn, i}
-		<div
-			class="{isOn ? 'bg-secondary border-secondary' : 'bg-gray-300 border-gray-300'} border-3 rounded transition ease"
-			class:turnedOn={isOn}
-			class:turnedOff={!isOn}
-			class:border-teal-500={highlighted[i]}
-			on:mousedown={() => {
-        setElement(i, true);
-      }}
-      on:mouseenter={(e) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        elementHover(i, e);
-      }}
-    />
-  {/each}
-</main>
-
 <style>
   .buttonGrid {
     display: grid;
@@ -95,11 +5,11 @@
     grid-template-rows: repeat(5, 19%);
     gap: 2px 2px;
     grid-template-areas:
-      ". . . . ."
-      ". . . . ."
-      ". . . . ."
-      ". . . . ."
-      ". . . . .";
+      '. . . . .'
+      '. . . . .'
+      '. . . . .'
+      '. . . . .'
+      '. . . . .';
     height: 150px;
     width: 150px;
   }
@@ -135,3 +45,90 @@
     }
   }
 </style>
+
+<script lang="ts">
+  export let onMatrixChange: (matrix: boolean[]) => void;
+  export let matrix: boolean[];
+
+  let highlighted: boolean[] = new Array<boolean>(25).fill(false);
+
+  /** If bad matrix given to component => reset */
+  // This should never happen
+  // TODO: Clean this function. Consider going from 1d array to 2d
+  if (!(matrix instanceof Array) || matrix.length !== 25) {
+    matrix = new Array<boolean>(25);
+    for (let i = 0; i < 25; i++) {
+      matrix[i] = false;
+    }
+  }
+
+  const setElement = (i: number, state: boolean): void => {
+    matrix[i] = state;
+    const effectedSquares = getColumnOf(i);
+
+    effectedSquares.forEach(value => {
+      if (value.position <= 0) {
+        matrix[value.index] = state;
+      } else {
+        matrix[value.index] = false;
+      }
+    });
+
+    onMatrixChange(matrix);
+  };
+
+  type PairingSquare = {
+    index: number;
+    position: number;
+  };
+
+  const getColumnOf = (inx: number): PairingSquare[] => {
+    const result = [];
+    for (let j = inx % 5; j < 25; j += 5) {
+      result.push({ index: j, position: Math.sign(inx - j) });
+    }
+    return result;
+  };
+
+  const mouseLeftDrawingArea = () => {
+    for (let j = 0; j < highlighted.length; j++) {
+      highlighted[j] = false;
+    }
+  };
+
+  const elementHover = (i: number, mouseEvent: MouseEvent | undefined = undefined) => {
+    const affectedColumns = getColumnOf(i);
+    for (let j = 0; j < highlighted.length; j++) {
+      highlighted[j] = false;
+    }
+    affectedColumns.forEach(value => {
+      highlighted[value.index] = value.position <= 0;
+    });
+
+    if (mouseEvent !== undefined && mouseEvent.buttons === 1) {
+      setElement(i, true);
+    }
+  };
+</script>
+
+<!-- PATTERN MATRIX -->
+<main class="buttonGrid select-none" on:mouseleave="{mouseLeftDrawingArea}">
+  <!-- Draw all 25 boxes -->
+  {#each matrix as isOn, i}
+    <div
+      class="{isOn
+        ? 'bg-secondary border-secondary'
+        : 'bg-gray-300 border-gray-300'} border-3 rounded transition ease"
+      class:turnedOn="{isOn}"
+      class:turnedOff="{!isOn}"
+      class:border-teal-500="{highlighted[i]}"
+      on:mousedown="{() => {
+        setElement(i, true);
+      }}"
+      on:mouseenter="{e => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        elementHover(i, e);
+      }}">
+    </div>
+  {/each}
+</main>

@@ -24,7 +24,6 @@
     </p>
 
     <StandardButton onClick="{onConnectBluetoothClick}"
-      >{$t('popup.connectMB.main.bluetooth.subtitle')}</StandardButton
-    >
+      >{$t('popup.connectMB.main.bluetooth.subtitle')}</StandardButton>
   </div>
 </main>

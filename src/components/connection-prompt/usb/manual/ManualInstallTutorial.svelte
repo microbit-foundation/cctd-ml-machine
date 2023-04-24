@@ -50,8 +50,7 @@
     </p>
     <p
       class="hover:cursor-pointer text-red-500 underline"
-      on:click="{() => downloadFirmware()}"
-    >
+      on:click="{() => downloadFirmware()}">
       {$t('connectMB.usb.manual.manualDownloadLink')}
     </p>
   </div>
@@ -68,14 +67,12 @@
           castShadow
           height="{104}"
           src="{transferIllustration}"
-          width="{290}"
-        />
+          width="{290}" />
       </div>
     </div>
   </div>
   <div class="grid grid-cols-1 place-items-center w-full">
     <StandardButton onClick="{onConnectBluetoothClick}"
-      >{$t('connectMB.usb.manual.done')}</StandardButton
-    >
+      >{$t('connectMB.usb.manual.done')}</StandardButton>
   </div>
 </main>

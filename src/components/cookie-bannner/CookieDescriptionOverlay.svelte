@@ -55,8 +55,7 @@
 
 <div
   class="justify-center items-center content-center w-150 h-150 bg-white m-auto"
-  transition:slide
->
+  transition:slide>
   <!-- CLOSE ICON -->
   <div class="w-150 h-150 p-3">
     <div>
@@ -86,8 +85,7 @@
           {#each cookieDeleteManuals as manual}
             <li>
               <a class="text-blue-400" href="{manual.link}" target="_blank"
-                >{manual.browser}</a
-              >
+                >{manual.browser}</a>
             </li>
           {/each}
         </ul>

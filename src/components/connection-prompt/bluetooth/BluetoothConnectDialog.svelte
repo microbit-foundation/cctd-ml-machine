@@ -96,8 +96,7 @@
       </div>
     </div>
     <StandardButton onClick="{connectButtonClicked}"
-      >{$t('popup.connectMB.bluetooth.connect')}</StandardButton
-    >
+      >{$t('popup.connectMB.bluetooth.connect')}</StandardButton>
   {/if}
   <!-- </div> -->
 </main>

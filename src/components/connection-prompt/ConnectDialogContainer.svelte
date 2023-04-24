@@ -69,28 +69,24 @@
 <main>
   <StandardDialog
     isOpen="{$connectionDialogState.connectionState !== ConnectDialogStates.NONE}"
-    onClose="{() => ($connectionDialogState.connectionState = ConnectDialogStates.NONE)}"
-  >
+    onClose="{() => ($connectionDialogState.connectionState = ConnectDialogStates.NONE)}">
     {#if $connectionDialogState.connectionState === ConnectDialogStates.START}
       <StartDialog
         onStartBluetoothClick="{() =>
           ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}"
         onStartUsbClick="{() =>
-          ($connectionDialogState.connectionState = ConnectDialogStates.USB_START)}"
-      />
+          ($connectionDialogState.connectionState = ConnectDialogStates.USB_START)}" />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.START_OUTPUT}
       <ConnectSameDialog
         onConnectSameClick="{connectSame}"
         onConnectDifferentClick="{() =>
-          ($connectionDialogState.connectionState = ConnectDialogStates.START)}"
-      />
+          ($connectionDialogState.connectionState = ConnectDialogStates.START)}" />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.BLUETOOTH}
       <BluetoothConnectDialog
         onBluetoothConnected="{() => {
           $connectionDialogState.connectionState = ConnectDialogStates.NONE;
         }}"
-        deviceState="{$connectionDialogState.deviceState}"
-      />
+        deviceState="{$connectionDialogState.deviceState}" />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_START}
       <FindUsbDialog onFoundUsb="{onFoundUsbDevice}" />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DOWNLOADING}
@@ -98,13 +94,11 @@
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DONE}
       <DoneDownloadingDialog
         onConnectBluetoothClick="{() =>
-          ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}"
-      />
+          ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}" />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.MANUAL_TUTORIAL}
       <ManualInstallTutorial
         onConnectBluetoothClick="{() =>
-          ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}"
-      />
+          ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}" />
     {/if}
   </StandardDialog>
 </main>

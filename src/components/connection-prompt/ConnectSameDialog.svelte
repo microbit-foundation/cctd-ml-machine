@@ -15,8 +15,7 @@
   <div class="grid grid-cols-2 w-600px text-center">
     <div
       class="hover:cursor-pointer mr-2 border-gray-200 border border-solid rounded-lg p-6 shadow-lg"
-      on:click="{onConnectSameClick}"
-    >
+      on:click="{onConnectSameClick}">
       <h1 class="font-bold mb-6">
         {$t('connectMB.outputMB.same')}
       </h1>
@@ -25,8 +24,7 @@
     </div>
     <div
       class="hover:cursor-pointer ml-2 border-gray-200 border border-solid rounded-lg p-6 shadow-lg"
-      on:click="{onConnectDifferentClick}"
-    >
+      on:click="{onConnectDifferentClick}">
       <h1 class="font-bold mb-6">
         {$t('connectMB.outputMB.different')}
       </h1>

@@ -30,15 +30,13 @@
 <div
   bind:clientWidth="{componentWidth}"
   class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
-  class:bg-gray-300="{$state.isInputAssigned && !$state.isInputReady}"
->
+  class:bg-gray-300="{$state.isInputAssigned && !$state.isInputReady}">
   <ConnectDialogContainer bind:this="{connectDialogReference}" />
   {#if !$state.isInputAssigned}
     <!-- No input microbit assigned -->
     <div class="h-full w-full flex justify-center bg-white">
       <StandardButton onClick="{connectButtonClicked}"
-        >{$t('footer.connectButtonNotConnected')}</StandardButton
-      >
+        >{$t('footer.connectButtonNotConnected')}</StandardButton>
     </div>
   {:else}
     <!-- Input microbit is assigned -->
@@ -49,8 +47,7 @@
       {#if !$state.isInputReady}
         <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->
         <div
-          class="absolute w-full h-full flex items-center justify-center text-secondarytext"
-        >
+          class="absolute w-full h-full flex items-center justify-center text-secondarytext">
           <div class="bg-secondary bg-opacity-80 py-2 px-4 rounded-full" transition:fade>
             <h1>{$t('footer.reconnecting')}</h1>
           </div>
@@ -63,15 +60,13 @@
               titleText="{$t('footer.helpHeader')}"
               bodyText="{$t('footer.helpContent')}"
               isLightTheme="{false}"
-              boxOffset="{{ x: 25, y: -50 }}"
-            />
+              boxOffset="{{ x: 25, y: -50 }}" />
           </div>
           <p class="float-left ml-10">Live</p>
           <p
             class="float-left ml-1 -mt-3 text-3xl"
             class:text-red-500="{$state.isInputReady}"
-            class:text-gray-500="{!$state.isInputReady}"
-          >
+            class:text-gray-500="{!$state.isInputReady}">
             &#x2022;
           </p>
         </div>
@@ -82,8 +77,7 @@
               {#if !$state.isOutputConnected || $state.isOutputReady}
                 <!-- Output MB is not in the connection process -->
                 <StandardButton onClick="{outputDisconnectButtonClicked}" color="warning"
-                  >{$t('menu.model.disconnect')}</StandardButton
-                >
+                  >{$t('menu.model.disconnect')}</StandardButton>
               {:else}
                 <StandardButton onClick="{TypingUtils.emptyFunction}" color="disabled">
                   <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
@@ -94,13 +88,12 @@
                 {$t('menu.model.connectOutputButton')}
               </StandardButton>
             {/if}
-          {/if} 
+          {/if}
           <div class="ml-2">
             {#if !$state.isInputConnected || $state.isInputReady}
               <!-- Input MB is not in the connection process -->
               <StandardButton onClick="{inputDisconnectButtonClicked}" color="warning"
-                >{$t('footer.disconnectButton')}</StandardButton
-              >
+                >{$t('footer.disconnectButton')}</StandardButton>
             {:else}
               <StandardButton onClick="{TypingUtils.emptyFunction}" color="disabled">
                 <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />

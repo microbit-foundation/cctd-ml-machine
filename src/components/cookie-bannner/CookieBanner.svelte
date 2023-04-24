@@ -36,19 +36,16 @@
   isOpen="{isCookieDialogOpen}"
   onClose="{() => {
     return;
-  }}"
->
+  }}">
   <StandardDialog
     isOpen="{isDescriptionDialogOpen}"
-    onClose="{() => (isDescriptionDialogOpen = false)}"
-  >
+    onClose="{() => (isDescriptionDialogOpen = false)}">
     <CookieDescriptionOverlay />
   </StandardDialog>
   <div out:fly class="fixed bottom-0 w-full bg-white">
     <select
       class="absolute bg-white right-5 top-5 text-primarytext ml-2 mr-2 pl-2 pr-2"
-      bind:value="{$locale}"
-    >
+      bind:value="{$locale}">
       {#each locales as l}
         <option value="{l}">{l}</option>
       {/each}
@@ -81,8 +78,7 @@
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
                 e.preventDefault();
                 isDescriptionDialogOpen = true;
-              }}"
-            >
+              }}">
               {$t('cookies.banner.text.readMore.here')}
             </a>
           </p>
@@ -91,12 +87,10 @@
       </div>
       <div class="flex w-2/5 flex-row mr-4 justify-center">
         <StandardButton onClick="{acceptClicked}"
-          >{$t('cookies.banner.buttons.accept')}</StandardButton
-        >
+          >{$t('cookies.banner.buttons.accept')}</StandardButton>
         <div class="mr-4"></div>
         <StandardButton color="warning" onClick="{rejectClicked}"
-          >{$t('cookies.banner.buttons.reject')}</StandardButton
-        >
+          >{$t('cookies.banner.buttons.reject')}</StandardButton>
       </div>
     </div>
   </div>

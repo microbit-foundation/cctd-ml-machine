@@ -40,8 +40,7 @@
         ? onFindUsbClick
         : () => {
             step = 2;
-          }}"
-    >
+          }}">
       {$t(step === 1 ? 'connectMB.usb.button1' : 'connectMB.usb.button2')}
     </StandardButton>
   </div>

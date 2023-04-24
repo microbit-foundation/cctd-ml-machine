@@ -37,6 +37,7 @@
   import OutputSoundSelector from './output/OutputSoundSelector.svelte';
   import Microbits from '../script/microbit-interfacing/Microbits';
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
+  import GestureTilePart from "./GestureTilePart.svelte";
 
   // Variables for component
   export let gesture: GestureData;
@@ -99,19 +100,17 @@
   let hasLoadedMicrobitImage = false;
 </script>
 
-<main class=" pl-3 mb-4 justify-center items-center layout-grid">
+<main class="pl-3 mb-4 justify-center items-center layout-grid">
   <!-- NAMES AND CONFIDENCE METER -->
-  <div
-    class="h-146px self-center
-                items-center flex border border-solid
-                border-primaryborder p-2 bg-white rounded-xl">
+  <GestureTilePart>
+  <div class="items-center flex p-2">
     <div
       class="w-36 text-center font-semibold rounded-xl
                     px-1 py-1 border border-gray-300
                     border-dashed mr-2 break-words">
       <h3>{gesture.name}</h3>
     </div>
-
+    <div class="h-31"></div>
     <input
       class="h-25 rotate-90 accent-primary"
       type="range"
@@ -147,13 +146,14 @@
         <div></div>
       </div>
     </div>
-    <div class="relative float-right h-full mt-2" style="top:-12px">
+    <div class="relative self-start">
       <TextInformation
         titleText="{$t('content.model.classification.helpHeading')}"
         bodyText="{$t('content.model.classification.helpBody')}"
         isLightTheme="{false}" />
     </div>
   </div>
+  </GestureTilePart>
 
   <!-- ARROW -->
   <div class="text-center ml-auto mr-auto">
@@ -169,17 +169,17 @@
   <!-- OUTPUT SETTINGS -->
   <div class="relative flex items-center">
     <div
-      class=" w-180px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
+      class="w-177px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
       <ImageSkeleton
         src="imgs/blank_microbit.svg"
         alt="microbit guide"
-        width="{180}"
-        height="{146}"
+        width="{177}"
+        height="{144}"
         loadingColorSecondary="#818181"
         loadingColorPrimary="#4A4A4A"
         onLoaded="{() => (hasLoadedMicrobitImage = true)}" />
       <div
-        class="bg-black p-0 m-0 absolute top-10 left-13.5 w-18 h-18"
+        class="bg-black p-0 m-0 absolute top-9 left-12.7"
         class:hidden="{!hasLoadedMicrobitImage}"
         on:click="{onUserInteraction}">
         <OutputMatrix bind:trigger="{triggerFunctions[0]}" gesture="{gesture}" />

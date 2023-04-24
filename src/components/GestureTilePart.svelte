@@ -1,3 +1,18 @@
-<div class="border-1 border-primaryborder border-solid rounded bg-backgroundlight">
-  Hello world
+<script lang="ts">
+  export let elevated = false;
+  export let mr = false;
+  export let ml = false;
+  export let small = false;
+</script>
+
+<div
+  class="border-1 border-primaryborder border-solid rounded-xl bg-backgroundlight"
+  class:h-30={small}
+  class:h-36={!small}
+  class:shadow-md={elevated}
+  class:ml-2={ml && small}
+  class:mr-2={mr && small}
+  class:ml-5={ml && !small}
+  class:mr-5={mr && !small}>
+  <slot />
 </div>

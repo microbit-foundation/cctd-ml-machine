@@ -8,6 +8,7 @@
   export let outlined = false
   export let fillOnHover = false
   export let bold = true
+  export let shadows = true;
 
   const bgColors: {[key: variants]: string} = {
     "primary": windi.theme.extend.colors.primary,
@@ -22,7 +23,8 @@
 <div class="grid grid-cols-1 content-center place-items-center">
   <button
     style="--color: {bgColors[color]}; --border-width: {bold ? '2px' : '1px'}"
-    class="outline-none rounded-full shadow-md"
+    class="outline-none rounded-full"
+    class:shadow-md={shadows}
     class:font-bold={bold}
     class:small={small}
     class:normal={!small}

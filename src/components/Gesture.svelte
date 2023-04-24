@@ -193,7 +193,7 @@
     <!-- Title of gesture-->
     <div
       class="grid grid-cols-5 place-items-center
-								border border-solid border-gray-200
+								border border-solid border-primaryborder
 								mb-2 p-2 bg-white rounded-xl
 								w-50 h-30 ml-2">
       <div
@@ -217,7 +217,7 @@
 
     {#if $chosenGesture !== gesture}
       <div
-        class="border text-center border-solid border-gray-200 mb-2 p-2 bg-white rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
+        class="border text-center border-solid border-primaryborder mb-2 p-2 bg-white rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
         on:click="{selectClicked}">
         <div class="w-full text-center">
           <i
@@ -230,7 +230,7 @@
       </div>
     {:else}
       <div
-        class="border selected text-center border-solid border-gray-200 mb-2 p-2 bg-white shadow-xl rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
+        class="border selected text-center border-solid border-primaryborder mb-2 p-2 bg-white shadow-xl rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
         on:click="{selectClicked}">
         <div class="w-full text-center">
           <i
@@ -255,7 +255,7 @@
     <!-- Show recording for each recording -->
     {#if gesture.recordings.length > 0}
       <div
-        class="flex border border-solid border-gray-200 mb-2 p-2 bg-white rounded-xl h-30">
+        class="flex border border-solid border-primaryborder mb-2 p-2 bg-white rounded-xl h-30">
         {#each gesture.recordings as recording (String(gesture.ID) + String(recording.ID))}
           <Recording recording="{recording}" onDelete="{deleteRecording}" />
         {/each}

@@ -11,11 +11,6 @@
     background: #13bba4;
   }
 
-  .heavy-shadow {
-    /* filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.459)); */
-    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.2);
-  }
-
   .arrow-triggered-color {
     filter: invert(31%) sepia(20%) saturate(4422%) hue-rotate(194deg) brightness(88%)
       contrast(82%);
@@ -107,9 +102,9 @@
 <main class=" pl-3 mb-4 justify-center items-center layout-grid">
   <!-- NAMES AND CONFIDENCE METER -->
   <div
-    class="h-146px heavy-shadow self-center
+    class="h-146px self-center
                 items-center flex border border-solid
-                border-info p-2 bg-white rounded-xl">
+                border-primaryborder p-2 bg-white rounded-xl">
     <div
       class="w-36 text-center font-semibold rounded-xl
                     px-1 py-1 border border-gray-300
@@ -174,7 +169,7 @@
   <!-- OUTPUT SETTINGS -->
   <div class="relative flex items-center">
     <div
-      class=" w-180px relative rounded-xl bg-transparent heavy-shadow h-full border-1 border-info">
+      class=" w-180px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
       <ImageSkeleton
         src="imgs/blank_microbit.svg"
         alt="microbit guide"

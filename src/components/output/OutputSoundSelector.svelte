@@ -85,7 +85,7 @@
 
 <main
   class="h-146px w-146px ml-8 self-center items-center border-1
-         heavy-shadow border-solid border-info bg-white rounded-lg cursor-pointer relative"
+             border-solid border-primaryborder bg-white rounded-lg cursor-pointer relative"
   on:click="{onToggleSound}">
   <i
     class="absolute text-center top-42px left-38px fa fa-volume-up text-6xl  text-[#63BFC2]"

@@ -1,6 +1,10 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  extends: ['eslint:recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking'
+  ],
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
@@ -15,6 +19,7 @@ module.exports = {
   overrides: [
     {
       files: ['*.svelte'],
+      processor:'svelte3/svelte3',
       parserOptions: {
         parser: '@typescript-eslint/parser',
       },

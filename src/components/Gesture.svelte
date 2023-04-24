@@ -75,7 +75,7 @@
 			$state.isRecording = false;
 			isThisRecording = false;
 			unsubscribe();
-			if (get(settings).minSamples <= newData.x.length) {
+			if (get(settings).numSamples <= newData.x.length) {
 				const recording = { ID: Date.now(), data: newData } as RecordingData;
 				addRecording(gesture.ID, recording);
 				informUser("Færdiggjort optagelse"); // TODO: Translations

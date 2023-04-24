@@ -85,7 +85,7 @@
 							titleText={$t("content.data.classHelpHeader")}
 							bodyText={$t("content.data.classHelpBody")} />
 					</div>
-					<div class="absolute left-55 flex">f
+					<div class="absolute left-55 flex">
 						<InformationBase
 								isLightTheme={false}
 								text={$t("content.data.choice")}>

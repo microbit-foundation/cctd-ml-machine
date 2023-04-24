@@ -8,6 +8,7 @@ export default {
                 secondarytext: "#FFFFFF",
                 info: "#98A2B3",
                 backgrounddark:"#F5F5F5",
+                backgroundlight:"#ffffff",
                 infolight: "#93c5fd",
                 warning:"#FF7777",
                 disabled:"#8892A3",

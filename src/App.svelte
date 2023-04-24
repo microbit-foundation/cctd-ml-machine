@@ -1,33 +1,3 @@
-<style global windi:preflights:global windi:safelist:global>
-  .textAnimation {
-    animation: 3s textAni ease;
-  }
-
-  @font-face {
-    font-family: ultrabit;
-    src: url(/ultrabit/fonts/ultrabit.ttf) format('truetype');
-  }
-
-  .font-ultrabit {
-    font-family: 'ultrabit', serif;
-  }
-
-  @keyframes textAni {
-    0% {
-      opacity: 0;
-    }
-    3% {
-      opacity: 1;
-    }
-    97% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-</style>
-
 <script lang="ts">
   import ConnectionBehaviours from './script/connection-behaviours/ConnectionBehaviours';
   import InputBehaviour from './script/connection-behaviours/InputBehaviour';
@@ -77,8 +47,8 @@
       <SideBarMenuView />
     </div>
 
-    <div
-      class="h-full w-full overflow-y-hidden overflow-x-auto flex flex-col bg-backgrounddark shadow-2xl">
+    <div class="h-full w-full overflow-y-hidden overflow-x-auto
+     			flex flex-col bg-backgrounddark shadow-2xl">
       <!-- CONTENT -->
       <div class="relative z-1 flex-1 overflow-y-auto flex-row">
         <PageContentView />
@@ -92,3 +62,33 @@
     <!-- </div> -->
   </main>
 {/if}
+
+<style global windi:preflights:global windi:safelist:global>
+	.textAnimation {
+		animation: 3s textAni ease;
+	}
+
+	@font-face {
+		font-family: ultrabit;
+		src: url(/ultrabit/fonts/ultrabit.ttf) format('truetype');
+	}
+
+	.font-ultrabit {
+		font-family: 'ultrabit', serif;
+	}
+
+	@keyframes textAni {
+		0% {
+			opacity: 0;
+		}
+		3% {
+			opacity: 1;
+		}
+		97% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+</style>

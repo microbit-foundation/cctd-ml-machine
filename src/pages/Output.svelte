@@ -15,73 +15,73 @@
 	import { fade } from "svelte/transition";
 	import ControlBar from "../components/control-bar/ControlBar.svelte";
 
-	// In case of manual classification, variables for evaluation
-	let recordingTime = 0;
-	// let lastRecording;
+  // In case of manual classification, variables for evaluation
+  let recordingTime = 0;
+  // let lastRecording;
 
-	// Bool flags to know whether output microbit popup should be show
-	let hasClosedPopup = false
-	let hasInteracted = false
+  // Bool flags to know whether output microbit popup should be show
+  let hasClosedPopup = false;
+  let hasInteracted = false;
 
-	function onUserInteraction(): void{
-		hasInteracted = true
-	}
+  function onUserInteraction(): void {
+    hasInteracted = true;
+  }
 
-	/**
-	 * Classify based on button click
-	 */
-	// method for recording gesture for that specific gesture
-	function classifyClicked() {
-		if (!isReady()) return;
+  /**
+   * Classify based on button click
+   */
+  // method for recording gesture for that specific gesture
+  function classifyClicked() {
+    if (!isReady()) return;
 
-		$state.isRecording = true;
-		// lastRecording = undefined;
-		informUser("Optager");
+    $state.isRecording = true;
+    // lastRecording = undefined;
+    informUser('Optager');
 
-		// Get duration
-		const duration = get(settings).duration;
+    // Get duration
+    const duration = get(settings).duration;
 
-		// Loading interval
-		const loadingInterval = setInterval(() => {
-			recordingTime++;
-		}, duration / 30);
+    // Loading interval
+    const loadingInterval = setInterval(() => {
+      recordingTime++;
+    }, duration / 30);
 
-		// TODO: Clean this up to avoid 'firstMount' hack
-		// Once duration is over (1000ms default), stop recording
-		setTimeout(() => {
-			clearInterval(loadingInterval);
-			// lastRecording = getPrevData();
-			$state.isRecording = false;
-			recordingTime = 0;
-			classify();
-		}, duration);
-	}
+    // TODO: Clean this up to avoid 'firstMount' hack
+    // Once duration is over (1000ms default), stop recording
+    setTimeout(() => {
+      clearInterval(loadingInterval);
+      // lastRecording = getPrevData();
+      $state.isRecording = false;
+      recordingTime = 0;
+      classify();
+    }, duration);
+  }
 
-	// When microbit buttons are pressed, this is called
-	// Assess whether settings match with button-clicked.
-	// If so, the gesture calls the recording function.
-	function triggerButtonsClicked(buttons: { buttonA: 0 | 1; buttonB: 0 | 1; }) {
-		if (firstMount) {
-			return;
-		}
+  // When microbit buttons are pressed, this is called
+  // Assess whether settings match with button-clicked.
+  // If so, the gesture calls the recording function.
+  function triggerButtonsClicked(buttons: { buttonA: 0 | 1; buttonB: 0 | 1 }) {
+    if (firstMount) {
+      return;
+    }
 
-		let shouldClassify: boolean = !get(settings).automaticClassification &&
-			(buttons.buttonA === 1 || buttons.buttonB === 1)
+    let shouldClassify: boolean =
+      !get(settings).automaticClassification &&
+      (buttons.buttonA === 1 || buttons.buttonB === 1);
 
-		if ( shouldClassify ){
-			classifyClicked();
-		}
-	}
+    if (shouldClassify) {
+      classifyClicked();
+    }
+  }
 
-	// Hack to avoid classifying when visiting the webpage
-	let firstMount = true;
-	onMount(() => {
-		firstMount = false;
-	});
+  // Hack to avoid classifying when visiting the webpage
+  let firstMount = true;
+  onMount(() => {
+    firstMount = false;
+  });
 
-	$: triggerButtonsClicked($buttonPressed);
+  $: triggerButtonsClicked($buttonPressed);
 </script>
-
 
 <!-- Main pane -->
 <main class="h-full flex flex-col">

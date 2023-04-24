@@ -1,20 +1,19 @@
 <!-- Left-hand side menu -->
 <script lang="ts">
-	import Menus from "../script/navigation/Menus";
-	import Navigation from "../script/navigation/Navigation";
-	import { Pages } from "../script/navigation/Pages";
-	import MenuButton from "../menus/MenuButton.svelte";
-	import { get } from "svelte/store";
+  import Menus from '../script/navigation/Menus';
+  import Navigation from '../script/navigation/Navigation';
+  import { Pages } from '../script/navigation/Pages';
+  import MenuButton from '../menus/MenuButton.svelte';
+  import { get } from 'svelte/store';
 
-	const goToHomePage = () => {
-		Navigation.setCurrentPage(Pages.HOMEPAGE);
-	};
+  const goToHomePage = () => {
+    Navigation.setCurrentPage(Pages.HOMEPAGE);
+  };
 
-	let expandedId = -1;
-	Menus.getOpenMenuId().subscribe(value => {
-		expandedId = value;
-	});
-
+  let expandedId = -1;
+  Menus.getOpenMenuId().subscribe(value => {
+    expandedId = value;
+  });
 </script>
 <div class="bg-gradient-to-b from-primary to-secondary relative flex flex-col w-full shadow-2xl">
 	<!-- flush top bar -->

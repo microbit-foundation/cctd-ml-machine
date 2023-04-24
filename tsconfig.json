@@ -18,6 +18,7 @@
     "esModuleInterop": true,
     "importsNotUsedAsValues": "remove",
     "strict": true,
+    "verbatimModuleSyntax": false,
     "types": [
       "jest"
     ]

@@ -9,37 +9,34 @@
 
   const sufficientData = hasSufficientData();
 
-	let isFailedTrainingDialogOpen = false;
+  let isFailedTrainingDialogOpen = false;
 
-	$ : {
-		if ($trainingStatus === TrainingStatus.Failure) {
-			isFailedTrainingDialogOpen = true;
-			trainingStatus.update(() => TrainingStatus.Untrained);
-		}
-	}
-
-
+  $: {
+    if ($trainingStatus === TrainingStatus.Failure) {
+      isFailedTrainingDialogOpen = true;
+      trainingStatus.update(() => TrainingStatus.Untrained);
+    }
+  }
 </script>
 
 <StandardDialog
-	isOpen={isFailedTrainingDialogOpen}
-	onClose={() => isFailedTrainingDialogOpen = false}
->
-	<div class="justify-center items-center content-center w-150 bg-white m-auto"
-		 transition:slide>
-		<div>
-			<p class="text-warning font-bold text-center text-xl mb-5">
-				{$t("content.trainer.failure.header")}
-			</p>
-			<p class="mb-3">
-				{$t("content.trainer.failure.body")}
-			</p>
-			<p class="font-bold">
-				{$t("content.trainer.failure.todo")}
-			</p>
-		</div>
-	</div>
-
+  isOpen={isFailedTrainingDialogOpen}
+  onClose={() => (isFailedTrainingDialogOpen = false)}>
+  <div
+    class="justify-center items-center content-center w-150 bg-white m-auto"
+    transition:slide>
+    <div>
+      <p class="text-warning font-bold text-center text-xl mb-5">
+        {$t('content.trainer.failure.header')}
+      </p>
+      <p class="mb-3">
+        {$t('content.trainer.failure.body')}
+      </p>
+      <p class="font-bold">
+        {$t('content.trainer.failure.todo')}
+      </p>
+    </div>
+  </div>
 </StandardDialog>
 <div class="flex flex-col h-full">
 	<div class="flex flex-col flex-grow justify-center items-center text-center">

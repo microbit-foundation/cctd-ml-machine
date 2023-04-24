@@ -15,16 +15,16 @@
 	import TypingUtils from "../script/TypingUtils";
 	import ExpandableControlBarMenu from "../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte";
 
-	let isConnectionDialogOpen = false;
+  let isConnectionDialogOpen = false;
 
-	$: hasSomeData = (): boolean => {
-		if ($gestures.length === 0) {
-			return false;
-		}
-		return $gestures.some((gesture => gesture.recordings.length > 0));
-	};
+  $: hasSomeData = (): boolean => {
+    if ($gestures.length === 0) {
+      return false;
+    }
+    return $gestures.some(gesture => gesture.recordings.length > 0);
+  };
 
-	let connectDialogReference: MainConnectDialog;
+  let connectDialogReference: MainConnectDialog;
 </script>
 
 <!-- Main pane -->
@@ -123,6 +123,7 @@
 
 <style>
 	.arrow-filter-color {
-		filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+		filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%)
+		contrast(100%);
 	}
 </style>

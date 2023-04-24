@@ -1,7 +1,7 @@
-import ContentViewNavigator from "./ContentViewNavigator";
+import ContentViewNavigator from './ContentViewNavigator';
 
 abstract class PageSelectorStrategy {
-	abstract navigate(contentViewNavigation: ContentViewNavigator): void;
+  abstract navigate(contentViewNavigation: ContentViewNavigator): void;
 }
 
 export default PageSelectorStrategy;

@@ -1,7 +1,7 @@
 import { persistantWritable } from "./storeUtil";
 import { get, writable } from "svelte/store";
 import { t } from "../../i18n";
-import { ML5NeuralNetwork } from "ml5";
+import { LayersModel } from "@tensorflow/tfjs-layers";
 
 let text: (key: string, vars?: object) => string = get(t);
 t.subscribe(t => text = t);
@@ -174,7 +174,7 @@ export const gestureConfidences = writable<{ [id: string]: number }>({});
 export const bestPrediction = writable<GestureData | undefined>(undefined);
 
 // Store for components to assess model status
-export const model = writable<ML5NeuralNetwork>(undefined);
+export const model = writable<LayersModel>(undefined);
 
 export const trainingStatus = writable<TrainingStatus>(TrainingStatus.Untrained);
 

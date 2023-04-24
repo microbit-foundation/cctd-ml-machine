@@ -116,7 +116,7 @@
         </div>
       </div>
 
-      <div class="pl-2">
+      <div class="pl-1">
         <!-- Display all gestures and their output capabilities -->
         {#each $gestures as gesture}
           <OutputGesture {gesture} {onUserInteraction} />

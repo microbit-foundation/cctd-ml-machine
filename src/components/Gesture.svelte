@@ -1,9 +1,3 @@
-<style>
-  .selected {
-    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.459));
-  }
-</style>
-
 <script lang="ts">
   import { get } from 'svelte/store';
   import {
@@ -28,6 +22,7 @@
   import { t } from '../i18n';
   import StandardButton from './StandardButton.svelte';
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
+  import GestureTilePart from './GestureTilePart.svelte';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -182,98 +177,85 @@
 
   <div
     class="bg-red-600 h-1.5 rounded-full absolute mt-123px ml-14px"
-    style="{isThisRecording
+    style={isThisRecording
       ? 'transition: ' +
         /* TODO: Clean this up! : */ (recordingDuration / 1000).toString() +
         's linear; width: 97%;'
-      : 'width:0;'}">
-  </div>
+      : 'width:0;'} />
 
   <div class="items-center flex mb-1">
     <!-- Title of gesture-->
-    <div
-      class="grid grid-cols-5 place-items-center
-								border border-solid border-gray-200
-								mb-2 p-2 bg-white rounded-xl
-								w-50 h-30 ml-2">
-      <div
-        class="w-40 col-start-2 col-end-5 text-center
+    <GestureTilePart mr small>
+      <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
+        <div
+          class="w-40 col-start-2 col-end-5 text-center
 									font-semibold transition ease
 									rounded-xl border border-gray-300
 									border-solid hover:bg-gray-100">
-        <h3
-          bind:textContent="{gesture.name}"
-          contenteditable
-          on:click="{titleClicked}"
-          on:keypress="{onTitleKeypress}">
-        </h3>
-      </div>
-      <button class="pl-3 col-start-5 place-self-start justify-self-end outline-none">
-        <i
-          class="far fa-times-circle fa-lg text-light-800 hover:text-black transition ease"
-          on:click="{removeClicked}"></i>
-      </button>
-    </div>
-
-    {#if $chosenGesture !== gesture}
-      <div
-        class="border text-center border-solid border-gray-200 mb-2 p-2 bg-white rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
-        on:click="{selectClicked}">
-        <div class="w-full text-center">
-          <i
-            class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-black-500 transition ease "
-          ></i>
+          <h3
+            bind:textContent={gesture.name}
+            contenteditable
+            on:click={titleClicked}
+            on:keypress={onTitleKeypress} />
         </div>
-        <p class="w-full text-center">
-          {$t('content.data.addData')}
-        </p>
-      </div>
-    {:else}
-      <div
-        class="border selected text-center border-solid border-gray-200 mb-2 p-2 bg-white shadow-xl rounded-xl w-35 h-30 ml-2 mr-2 cursor-pointer"
-        on:click="{selectClicked}">
-        <div class="w-full text-center">
+        <button class="pl-3 col-start-5 place-self-start justify-self-end outline-none">
           <i
-            class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-[#63BFC2] transition ease "
-          ></i>
-        </div>
-        <StandardButton
-          onClick="{recordClicked}"
-          stopPropagation="{true}"
-          small="{true}"
-          outlined="{true}"
-          fillOnHover="{true}">{$t('content.data.record')}</StandardButton>
-        <!-- <p class="w-full text-center text-[#63BFC2]">
-					{$t("content.data.selected")}
-				</p>
-				<div>
-					meh
-				</div> -->
+            class="far fa-times-circle fa-lg text-light-800 hover:text-black transition ease"
+            on:click={removeClicked} />
+        </button>
       </div>
-    {/if}
+    </GestureTilePart>
 
+    <GestureTilePart small mr elevated={$chosenGesture === gesture}>
+      {#if $chosenGesture !== gesture}
+        <div class="text-center w-35 cursor-pointer" on:click={selectClicked}>
+          <div class="w-full text-center">
+            <i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext" />
+          </div>
+          <p class="w-full text-center">
+            {$t('content.data.addData')}
+          </p>
+        </div>
+      {:else}
+        <div class="text-center w-35 cursor-pointer" on:click={selectClicked}>
+          <div class="w-full text-center">
+            <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" />
+          </div>
+          <StandardButton
+            onClick={recordClicked}
+            stopPropagation
+            small
+            shadows={false}
+            outlined
+            fillOnHover>{$t('content.data.record')}</StandardButton>
+        </div>
+      {/if}
+    </GestureTilePart>
     <!-- Show recording for each recording -->
     {#if gesture.recordings.length > 0}
-      <div
-        class="flex border border-solid border-gray-200 mb-2 p-2 bg-white rounded-xl h-30">
-        {#each gesture.recordings as recording (String(gesture.ID) + String(recording.ID))}
-          <Recording recording="{recording}" onDelete="{deleteRecording}" />
-        {/each}
-      </div>
-    {:else if $chosenGesture === gesture}
-      <div
-        class="relative float-left text-left h-30 w-60 bg-white border rounded-xl justify-start flex gap-1 m-0 -mt-2">
-        <div class="text-left float-left mt-auto mb-auto ml-3">
-          <ImageSkeleton
-            height="{95}"
-            width="{140}"
-            src="imgs/microbit_record_guide.svg"
-            alt="microbit recording guide" />
+      <GestureTilePart small>
+        <div class="flex p-2 h-30">
+          {#each gesture.recordings as recording (String(gesture.ID) + String(recording.ID))}
+            <Recording {recording} onDelete={deleteRecording} />
+          {/each}
         </div>
-        <p class=" text-center absolute w-60px right-23px top-30px">
-          {$t('content.index.recordButtonDescription')}
-        </p>
-      </div>
+      </GestureTilePart>
+    {:else if $chosenGesture === gesture}
+      <GestureTilePart small>
+        <div
+          class="relative float-left text-left h-30 w-60 justify-start flex">
+          <div class="text-left float-left mt-auto mb-auto ml-3">
+            <ImageSkeleton
+              height={95}
+              width={140}
+              src="imgs/microbit_record_guide.svg"
+              alt="microbit recording guide" />
+          </div>
+          <p class=" text-center absolute w-60px right-23px top-30px">
+            {$t('content.index.recordButtonDescription')}
+          </p>
+        </div>
+      </GestureTilePart>
     {/if}
   </div>
 </main>

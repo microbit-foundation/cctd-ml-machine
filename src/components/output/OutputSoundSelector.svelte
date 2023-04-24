@@ -1,13 +1,7 @@
-<style>
-  .heavy-shadow {
-    /* filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.459)); */
-    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.2);
-  }
-</style>
-
 <script lang="ts">
   import { onMount } from 'svelte';
   import { t } from '../../i18n';
+  import GestureTilePart from '../GestureTilePart.svelte';
 
   export let onSoundSelection: (
     sound: { name: string; path: string; id: string } | undefined,
@@ -83,30 +77,31 @@
   });
 </script>
 
-<main
-  class="h-146px w-146px ml-8 self-center items-center border-1
-         heavy-shadow border-solid border-info bg-white rounded-lg cursor-pointer relative"
-  on:click="{onToggleSound}">
-  <i
-    class="absolute text-center top-42px left-38px fa fa-volume-up text-6xl  text-[#63BFC2]"
-  ></i>
-  {#if !hasEnabledSound}
-    <i class="absolute top-42px left-38px fas fa-slash text-6xl text-[#63BFC2]"></i>
-  {/if}
-
-  {#if hasEnabledSound}
-    <select
-      class="bg-white border rounded text-center absolute bottom-2 ml-13px mr-13px w-120px"
-      bind:value="{selectedSound}"
-      on:change="{() => onSoundSelection(selectedSound)}"
-      on:click="{e => {
-        // eslint-disable-next-line
-        e.stopPropagation();
-      }}"
-      disabled="{!hasEnabledSound}">
-      {#each soundArray as option}
-        <option value="{option}">{option.name}</option>
-      {/each}
-    </select>
-  {/if}
-</main>
+<GestureTilePart ml>
+  <div
+    class="w-146px h-full cursor-pointer relative"
+    on:click={onToggleSound}>
+    <div class="w-full h-full text-center text-80px">
+      <i
+        class="fa fa-volume-up absolute text-secondary left-6.5 top-6" />
+      {#if !hasEnabledSound}
+        <i class="fas fa-slash absolute text-secondary left-6.5 top-6" />
+      {/if}
+      </div>
+    {#if hasEnabledSound}
+      <select
+        class="bg-white border rounded text-center absolute bottom-2 ml-13px mr-13px w-120px"
+        bind:value={selectedSound}
+        on:change={() => onSoundSelection(selectedSound)}
+        on:click={e => {
+          // eslint-disable-next-line
+          e.stopPropagation();
+        }}
+        disabled={!hasEnabledSound}>
+        {#each soundArray as option}
+          <option value={option}>{option.name}</option>
+        {/each}
+      </select>
+    {/if}
+  </div>
+</GestureTilePart>

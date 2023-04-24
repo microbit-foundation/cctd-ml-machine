@@ -40,8 +40,6 @@ export default {
 		"content.index.acknowledgement": "Udviklet af Center for Computational Thinking og Design, Aarhus Universitet",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Klik for at ændre navnet",
-		"content.data.select": "Vælg",
-		"content.data.selected": "Valgt",
 		"content.data.record": "Optag",
 		"content.data.addData": "Tilføj data",
 		"content.data.classHelpHeader": "Klasse",
@@ -253,8 +251,6 @@ export default {
 		"content.index.acknowledgement": "Developed by Center for Computational Thinking and Design, Aarhus University",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Press here to change name",
-		"content.data.select": "Select",
-		"content.data.selected": "Selected",
 		"content.data.record": "Record",
 		"content.data.addData": "Add Data",
 		"content.data.classHelpHeader": "Class",
@@ -271,7 +267,7 @@ export default {
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Training Failed",
-		"content.trainer.failure.body": "The training did not result in a useable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
+		"content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
 		"content.trainer.failure.todo": "Return to the data page and change your data.",
 		// MODEL PAGE:
 		"content.model.trainModelFirstHeading": "Train the model first!",

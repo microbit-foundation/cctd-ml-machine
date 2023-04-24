@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { slide } from 'svelte/transition';
-  import { gestures } from '../script/stores/mlStore';
-  import { t } from '../i18n';
+	import { slide } from "svelte/transition"
+	import { gestures } from "../script/stores/mlStore";
+	import { t } from "../i18n";
 
-  // Count of amount of recordings
-  $: numberOfRecodings = $gestures.reduce(
-    (sum, val) => (sum += val.recordings.length),
-    0,
-  );
+	// Count of amount of recordings
+	$: numberOfRecodings = $gestures.reduce(
+		(sum, val) => (sum += val.recordings.length),
+		0
+	);
 </script>
 
-<div class="w-full text-center justify-center pt-5 pb-7" transition:slide>
-  <p class="text-7xl mb-4">{numberOfRecodings}</p>
-  <p class="text-xl">{$t('menu.data.examples')}</p>
+<div class="w-full text-center justify-center pt-5 pb-7">
+	<p class="text-7xl mb-4">{numberOfRecodings}</p>
+	<p class="text-xl">{$t("menu.data.examples")}</p>
 </div>

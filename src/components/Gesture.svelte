@@ -17,6 +17,7 @@
 	import { t } from "../i18n";
 	import StandardButton from "./StandardButton.svelte";
 	import ImageSkeleton from "./skeletonloading/ImageSkeleton.svelte";
+	import GestureTilePart from "./GestureTilePart.svelte";
 
 	// Variables for component
 	export let onNoMicrobitSelect: () => void;
@@ -171,7 +172,6 @@
 
 <main class="flex-row flex">
 	<!-- Recordingbar to show recording-progress -->
-
 	<div class="bg-red-600 h-1.5 rounded-full absolute mt-123px ml-14px"
 			 style={isThisRecording
 			? "transition: " + /* TODO: Clean this up! : */ (recordingDuration/1000).toString() +"s linear; width: 97%;"
@@ -188,6 +188,7 @@
 									font-semibold transition ease
 									rounded-xl border border-gray-300
 									border-solid hover:bg-gray-100">
+
 				<h3 bind:textContent={gesture.name}
 						contenteditable
 						on:click={titleClicked}

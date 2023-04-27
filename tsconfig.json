@@ -16,8 +16,10 @@
     "importsNotUsedAsValues": "remove",
     "strict": true,
     "verbatimModuleSyntax": false,
+    "ignoreDeprecations": "5.0",
     "types": [
-      "jest"
+      "jest",
+      "svelte"
     ]
   },
   "files": [

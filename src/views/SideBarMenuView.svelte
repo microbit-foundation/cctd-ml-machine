@@ -15,54 +15,56 @@
     expandedId = value;
   });
 </script>
-<div class="bg-gradient-to-b from-primary to-secondary relative flex flex-col w-full shadow-2xl">
-	<!-- flush top bar -->
-	<div class="h-12 shadow-md w-full flex justify-center">
-		<p class="text-secondarytext font-extrabold self-center text-3xl">
-			{"ML-Machine"}
-		</p>
-		<div class="text-white self-center ml-4 focus:outline-none">
-			<button class="rounded hover:bg-white
+
+<div
+  class="bg-gradient-to-b from-primary to-secondary relative flex flex-col w-full shadow-2xl">
+  <!-- flush top bar -->
+  <div class="h-12 shadow-md w-full flex justify-center">
+    <p class="text-secondarytext font-extrabold self-center text-3xl">
+      {'ML-Machine'}
+    </p>
+    <div class="text-white self-center ml-4 focus:outline-none">
+      <button
+        class="rounded hover:bg-white
 						   hover:bg-opacity-10 duration-100
 						   select-none outline-none"
-					on:click={goToHomePage}>
-				<i class="fas fa-home text-2xl outline-none" />
-			</button>
-		</div>
-	</div>
+        on:click={goToHomePage}>
+        <i class="fas fa-home text-2xl outline-none" />
+      </button>
+    </div>
+  </div>
 
-	<!-- Menu -->
-	<div class="p-5 pl-5 pr-5">
-		<div class="absolute bottom-15 -left-2">
-			<img alt="decoration arrows"
-				 src="imgs/partial_red_arrows.svg"
-				 width="225px"/>
-		</div>
+  <!-- Menu -->
+  <div class="p-5 pl-5 pr-5">
+    <div class="absolute bottom-15 -left-2">
+      <img alt="decoration arrows" src="imgs/partial_red_arrows.svg" width="225px" />
+    </div>
 
-		<div class="relative">
-			{#each get(Menus.getMenuStore()) as menu, id}
-				<MenuButton
-					onClickFunction={() => {
-						Navigation.setCurrentPage(menu.navigationPage)
-					}}
-					title={menu.title}
-					helpTitle={menu.infoBubbleTitle}
-					helpDescription={menu.infoBubbleContent}
-					isExpanded={expandedId === id}>
-					<svelte:component
-						this={expandedId === id ? menu.expandedButtonContent : menu.collapsedButtonContent} />
-				</MenuButton>
-				{#if id !== get(Menus.getMenuStore()).length - 1}
-					<div class="text-center ml-auto mr-auto mb-1 mt-1">
-						<img
-							class="m-auto"
-							src="imgs/down_arrow.svg"
-							alt="down arrow icon"
-							width="30px"
-						/>
-					</div>
-				{/if}
-			{/each}
-		</div>
-	</div>
+    <div class="relative">
+      {#each get(Menus.getMenuStore()) as menu, id}
+        <MenuButton
+          onClickFunction={() => {
+            Navigation.setCurrentPage(menu.navigationPage);
+          }}
+          title={menu.title}
+          helpTitle={menu.infoBubbleTitle}
+          helpDescription={menu.infoBubbleContent}
+          isExpanded={expandedId === id}>
+          <svelte:component
+            this={expandedId === id
+              ? menu.expandedButtonContent
+              : menu.collapsedButtonContent} />
+        </MenuButton>
+        {#if id !== get(Menus.getMenuStore()).length - 1}
+          <div class="text-center ml-auto mr-auto mb-1 mt-1">
+            <img
+              class="m-auto"
+              src="imgs/down_arrow.svg"
+              alt="down arrow icon"
+              width="30px" />
+          </div>
+        {/if}
+      {/each}
+    </div>
+  </div>
 </div>

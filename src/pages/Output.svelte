@@ -100,19 +100,26 @@
             titleText={$t('content.model.output.prediction.descriptionTitle')}
             bodyText={$t('content.model.output.prediction.descriptionBody')} />
         </div>
-        <div class="absolute left-69 flex">
+        <div class="absolute left-78 flex">
           <TextInformation
             isLightTheme={false}
             iconText={$t('content.model.output.ledOutput.descriptionTitle')}
             titleText={$t('content.model.output.ledOutput.descriptionTitle')}
             bodyText={$t('content.model.output.ledOutput.descriptionBody')} />
         </div>
-        <div class="absolute left-122 flex">
+        <div class="absolute left-125 flex">
           <TextInformation
             isLightTheme={false}
             iconText={$t('content.model.output.sound.iconTitle')}
             titleText={$t('content.model.output.sound.descriptionTitle')}
             bodyText={$t('content.model.output.sound.descriptionBody')} />
+        </div>
+        <div class="absolute left-167 flex">
+          <TextInformation
+            isLightTheme={false}
+            iconText={$t('content.model.output.pin.iconTitle')}
+            titleText={$t('content.model.output.pin.descriptionTitle')}
+            bodyText={$t('content.model.output.pin.descriptionBody')} />
         </div>
       </div>
 

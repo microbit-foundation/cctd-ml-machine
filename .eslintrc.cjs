@@ -3,7 +3,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking'
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   parserOptions: {
     ecmaVersion: 2020,
@@ -19,7 +19,7 @@ module.exports = {
   overrides: [
     {
       files: ['*.svelte'],
-      processor:'svelte3/svelte3',
+      processor: 'svelte3/svelte3',
       parserOptions: {
         parser: '@typescript-eslint/parser',
       },
@@ -36,5 +36,5 @@ module.exports = {
     process: true,
   },
   plugins: ['svelte3', '@typescript-eslint'],
-  ignorePatterns: ['node_modules'],
+  ignorePatterns: ['node_modules', 'svelte.config.js', '.eslintrc.cjs'],
 };

@@ -172,7 +172,7 @@
   }
 </script>
 
-<main class="flex-row flex">
+<main class="flex-row flex mb-2">
   <!-- Recordingbar to show recording-progress -->
 
   <div

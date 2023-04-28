@@ -1,4 +1,4 @@
-const util = require('util');
+import util from 'util';
 
 // Required for the jest runtime
 TextDecoder = util.TextDecoder;

@@ -2,7 +2,6 @@ export default {
 	"da": { // APPROXIMATE SORTING ORDER: First alphabetically, then order of appearance from top to bottom of page
 		// ALERTS:
 		//In micro.js
-		"alert.micro.GATTserverInform": "Tilkobling til GATT server...",
 		"alert.micro.microBitServiceInform": "Tilkobling til Micro:bit services...",
 		"alert.micro.gettingDataInform": "Anskaffer data",
 		"alert.micro.nowConnectedInform": "Micro:bit er nu tilkoblet",
@@ -219,7 +218,6 @@ export default {
 	"en": {
 		// ALERTS:
 		//In micro.js
-		"alert.micro.GATTserverInform": "Connecting to GATT server...",
 		"alert.micro.microBitServiceInform": "Connecting to Micro:bit services...",
 		"alert.micro.gettingDataInform": "Getting data",
 		"alert.micro.nowConnectedInform": "Micro:bit is now connected",

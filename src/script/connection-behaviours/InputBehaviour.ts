@@ -1,5 +1,5 @@
 import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { alertUser, buttonPressed, informUser, state } from '../stores/uiStore';
+import { buttonPressed, state } from '../stores/uiStore';
 import { livedata } from '../stores/mlStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
@@ -84,9 +84,6 @@ class InputBehaviour extends LoggingDecorator {
 
   onConnected(name: string): void {
     super.onConnected(name);
-    informUser(text('alert.micro.GATTserverInform'));
-    informUser(text('alert.micro.microBitServiceInform'));
-    informUser(text('alert.micro.gettingDataInform'));
 
     state.update(s => {
       s.isInputConnected = true;
@@ -102,8 +99,6 @@ class InputBehaviour extends LoggingDecorator {
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, this.timeout);
-
-    informUser(text('alert.micro.nowConnectedInform'));
   }
 
   accelerometerChange(x: number, y: number, z: number): void {

@@ -1,5 +1,5 @@
 import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { informUser, state } from '../stores/uiStore';
+import { state } from '../stores/uiStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
@@ -78,9 +78,6 @@ class OutputBehaviour extends LoggingDecorator {
 
   onConnected(name: string): void {
     super.onConnected(name);
-    informUser(text('alert.output.GATTserverInform'));
-    informUser(text('alert.output.microBitServiceInform'));
-    informUser(text('alert.output.connectingToComponents'));
 
     state.update(s => {
       s.isOutputConnected = true;
@@ -95,7 +92,6 @@ class OutputBehaviour extends LoggingDecorator {
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, this.timeout);
-    informUser(text('alert.output.nowConnectedInform'));
   }
 
   onDisconnected(): void {

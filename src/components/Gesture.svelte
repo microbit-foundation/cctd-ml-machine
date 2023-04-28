@@ -1,12 +1,6 @@
 <script lang="ts">
   import { get } from 'svelte/store';
-  import {
-    alertUser,
-    buttonPressed,
-    informUser,
-    isReady,
-    state,
-  } from '../script/stores/uiStore';
+  import { alertUser, buttonPressed, isReady, state } from '../script/stores/uiStore';
   import {
     addRecording,
     chosenGesture,
@@ -62,7 +56,6 @@
     }
 
     $state.isRecording = true;
-    informUser('Optager');
     isThisRecording = true;
 
     // New array for data
@@ -83,7 +76,6 @@
       if (get(settings).numSamples <= newData.x.length) {
         const recording = { ID: Date.now(), data: newData } as RecordingData;
         addRecording(gesture.ID, recording);
-        informUser('Færdiggjort optagelse'); // TODO: Translations
       } else {
         alertUser($t('alert.recording.disconnectedDuringRecording')); // TODO: Translations
       }
@@ -242,8 +234,7 @@
       </GestureTilePart>
     {:else if $chosenGesture === gesture}
       <GestureTilePart small>
-        <div
-          class="relative float-left text-left h-30 w-60 justify-start flex">
+        <div class="relative float-left text-left h-30 w-60 justify-start flex">
           <div class="text-left float-left mt-auto mb-auto ml-3">
             <ImageSkeleton
               height={95}

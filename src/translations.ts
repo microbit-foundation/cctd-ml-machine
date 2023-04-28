@@ -1,19 +1,10 @@
 export default {
 	"da": { // APPROXIMATE SORTING ORDER: First alphabetically, then order of appearance from top to bottom of page
 		// ALERTS:
-		//In micro.js
-		"alert.micro.gettingDataInform": "Anskaffer data",
-		"alert.micro.nowConnectedInform": "Micro:bit er nu tilkoblet",
-
 		//In gesture.svelte 
 		"alert.data.classNameLengthAlert": "Navne må kun bestå af 25 tegn",
 		"alert.recording.disconnectedDuringRecording":"micro:bit frakoblede under optagelse",
 
-		//In output.js
-		"alert.output.GATTserverInform": "Tilkobling til GATT server...",
-		"alert.output.microBitServiceInform": "Tilkobling til Micro:bit services...",
-		"alert.output.connectingToComponents": "Anskaffer forbindelse til enkelte komponenter...",
-		"alert.output.nowConnectedInform": "Micro:bit er nu tilkoblet",
 		//In common.js
 		"alert.isRecording": "Du er i gang med at optage!",
 		"alert.isTesting": "Du er i gang med at optage!",
@@ -216,19 +207,10 @@ export default {
 	},
 	"en": {
 		// ALERTS:
-		//In micro.js
-		"alert.micro.gettingDataInform": "Getting data",
-		"alert.micro.nowConnectedInform": "Micro:bit is now connected",
-
 		//In gesture.svelte
 		"alert.data.classNameLengthAlert": "Names must consists of maximum 25 characters.",
 		"alert.recording.disconnectedDuringRecording":"micro:bit disconnected during recording",
 
-		//In output.js
-		"alert.output.GATTserverInform": "Connecting to GATT server...",
-		"alert.output.microBitServiceInform": "Connecting to Micro:bit services...",
-		"alert.output.connectingToComponents": "Establishing connections to separate components...",
-		"alert.output.nowConnectedInform": "Micro:bit is connected",
 		//In common.js
 		"alert.isRecording": "You are currently recording!",
 		"alert.isTesting": "You are currently recording!",

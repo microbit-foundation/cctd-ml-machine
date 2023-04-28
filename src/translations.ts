@@ -12,7 +12,6 @@ export default {
 		"alert.isNotConnected": "Din Micro:bit skal være tilsluttet!",
 		"alert.deleteGestureConfirm": "Er du sikker på at du vil slette klassen ",
 		//In ml.ts
-		"alert.beginModelSetup": "Påbegynder opsætning af model",
 		"alert.twoGestures": "Du skal have mindst to klasser",
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
@@ -218,7 +217,6 @@ export default {
 		"alert.isNotConnected": "Your Micro:bit should be connected!",
 		"alert.deleteGestureConfirm": "Are you sure you want to delete the class ",
 		//In ml.ts
-		"alert.beginModelSetup": "Initiating model setup",
 		"alert.twoGestures": "You need at least two classes",
 		"alert.oneDataRepresentation": "You need at least one data representation",
 		"alert.recordingsPerGesture": "You need at least three examples per class",

@@ -89,11 +89,16 @@ export const settings = writable<MlSettings>(initialSettings);
 
 export const chosenGesture = writable<GestureData | null>(null);
 
-export function addGesture(name: string): void {
+function updateToUntrainedState() {
   state.update(s => {
     s.isPredicting = false;
     return s;
   });
+  trainingStatus.set(TrainingStatus.Untrained);
+}
+
+export function addGesture(name: string): void {
+  updateToUntrainedState();
   gestures.update(gestures => {
     return [
       ...gestures,
@@ -108,6 +113,7 @@ export function addGesture(name: string): void {
 }
 
 export function removeGesture(gesture: GestureData) {
+  updateToUntrainedState();
   gestures.update(gestures => {
     const index = gestures.indexOf(gesture);
     if (index > -1) {
@@ -118,6 +124,8 @@ export function removeGesture(gesture: GestureData) {
 }
 
 export function addRecording(gestureID: number, recording: RecordingData) {
+  updateToUntrainedState();
+
   gestures.update(gestures => {
     for (const gesture of gestures) {
       if (gesture.ID === gestureID) {
@@ -132,6 +140,7 @@ export function addRecording(gestureID: number, recording: RecordingData) {
 // Following function are inefficient. Consider other data structure for
 // "gestures"
 export function removeRecording(gestureID: number, recordingID: number) {
+  updateToUntrainedState();
   gestures.update(gestures => {
     for (const gesture of gestures) {
       if (gesture.ID === gestureID) {

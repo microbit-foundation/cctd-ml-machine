@@ -166,9 +166,14 @@
   <div class="text-center w-15">
     <img
       class="m-auto"
-      class:arrow-base-color={!triggered}
-      class:arrow-triggered-color={triggered}
+      class:hidden={!triggered}
       src={'imgs/right_arrow.svg'}
+      alt="right arrow icon"
+      width="30px" />
+    <img
+      class="m-auto"
+      class:hidden={triggered}
+      src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />
   </div>

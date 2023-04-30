@@ -6,9 +6,6 @@
 
   $: confidence = $bestPrediction?.confidence ?? 0;
   confidence = isNaN(confidence) ? 0 : confidence;
-  $: if (!$state.isInputConnected) {
-    confidence = 0;
-  }
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
 </script>
 
@@ -26,11 +23,11 @@
     <div
       class="grid break-words mr-auto ml-auto w-3/4 h-70px border-2 rounded-lg border-solid text-center align-center content-center">
       <p class="w-full max-w-[100%] text-2xl break-all">
-        {$bestPrediction?.name ?? ''}
+        {!$state.isInputReady ? '' : $bestPrediction?.name ?? ''}
       </p>
     </div>
     <p class="text-4xl ml-5 mt-4 pb-4">
-      {confidenceLabel}
+      {$state.isInputReady ? confidenceLabel : '0%'}
     </p>
   {/if}
 </div>

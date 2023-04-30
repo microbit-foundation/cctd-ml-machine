@@ -37,12 +37,11 @@
   let selectedPin: number = 0;
 
   let requiredConfidenceLevel = 80;
+  $: currentConfidenceLevel = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
   // $: gesture.output.sound = selectedSound
 
   // $: if (shouldTrigger(requiredConfidenceLevel, confidenceLevel, triggered)) triggerComponnets();
-  $: if (
-    shouldTrigger(requiredConfidenceLevel, $gestureConfidences[gesture.ID], triggered)
-  ) {
+  $: if (shouldTrigger(requiredConfidenceLevel, currentConfidenceLevel, triggered)) {
     triggerComponnets();
     playSound();
     triggerOutputPin();
@@ -126,8 +125,8 @@
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
           <div
             class="absolute w-5 {triggered ? 'bg-primary' : 'bg-info'} z-index: -10"
-            style="height: {100 * $gestureConfidences[gesture.ID]}px; margin-top: {100 -
-              100 * $gestureConfidences[gesture.ID]}px;" />
+            style="height: {100 * currentConfidenceLevel}px; margin-top: {100 -
+              100 * currentConfidenceLevel}px;" />
           <div
             class="absolute w-5 bg-primary"
             style="height: 1px; margin-top: {6.5 -
@@ -163,7 +162,7 @@
       width="30px" />
     <img
       class="m-auto"
-      class:hidden={!triggered}
+      class:hidden={!triggered || !$state.isInputReady}
       src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />

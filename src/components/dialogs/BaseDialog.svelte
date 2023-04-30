@@ -1,24 +1,30 @@
 <script lang="ts">
-  import { fly } from 'svelte/transition';
-
+	import { fly } from "svelte/transition";
+ 
   export let isOpen: boolean;
-  export let onClose: () => void;
+  export let onClose: () => void
 
-  function handleKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      onClose();
+  function handleKeyPress(event: KeyboardEvent){
+    if (event.key === "Escape"){
+      event.preventDefault()
+      onClose()
     }
   }
+
 </script>
 
-<svelte:window on:keydown="{handleKeyPress}" />
+<svelte:window 
+  on:keydown={handleKeyPress}
+/>
 
 {#if isOpen}
-  <div
-    transition:fly
-    class="z-10000 fixed top-0 left-0 bg-black/50 bg-blend-darken h-screen w-screen flex justify-center items-center"
-    on:click="{onClose}">
-    <slot />
-  </div>
+    <div 
+      transition:fly
+      class="z-10000 fixed top-0 left-0 bg-black/50 bg-blend-darken 
+             h-screen w-screen flex justify-center items-center"
+      on:click={onClose}
+    >
+      <slot></slot>
+    </div>
 {/if}
+ 

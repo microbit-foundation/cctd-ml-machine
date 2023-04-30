@@ -1,6 +1,9 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
-  "include": ["src/**/*", "src/node_modules/**/*"],
+  "include": [
+    "src/**/*",
+    "src/node_modules"
+  ],
   "exclude": [
     "node_modules/*",
     "__sapper__/*",
@@ -15,11 +18,8 @@
     "esModuleInterop": true,
     "importsNotUsedAsValues": "remove",
     "strict": true,
-    "verbatimModuleSyntax": false,
-    "ignoreDeprecations": "5.0",
     "types": [
-      "jest",
-      "svelte"
+      "jest"
     ]
   },
   "files": [

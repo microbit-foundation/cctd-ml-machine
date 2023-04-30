@@ -14,7 +14,7 @@ from https://www.dr.dk/om-dr/designmanager/dr-brands/ultrabit
 
 ### colors
 
-example 
+example
 
 ```sveltehtml 
 <script>

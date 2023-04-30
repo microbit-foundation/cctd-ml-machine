@@ -12,52 +12,47 @@
 	import StandardButton from "../components/StandardButton.svelte";
 	import {startConnectionProcess} from "../script/stores/connectDialogStore";
     import ControlBar from "../components/control-bar/ControlBar.svelte";
-	import TypingUtils from "../script/TypingUtils";
-	import ExpandableControlBarMenu from "../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte";
+    import RadioGroup from "../components/control-bar/control-bar-items/RadioGroup.svelte";
+    import type { RadioButtonAction } from "../script/ControlBarItems";
 
-  let isConnectionDialogOpen = false;
+	let isConnectionDialogOpen = false;
 
-  $: hasSomeData = (): boolean => {
-    if ($gestures.length === 0) {
-      return false;
-    }
-    return $gestures.some(gesture => gesture.recordings.length > 0);
-  };
+	$: hasSomeData = (): boolean => {
+		if ($gestures.length === 0) {
+			return false;
+		}
+		return $gestures.some((gesture => gesture.recordings.length > 0));
+	};
 
-  let connectDialogReference: MainConnectDialog;
+	let connectDialogReference: MainConnectDialog;
 </script>
 
 <!-- Main pane -->
-<main class="h-full flex flex-col">
-	<div>
+<main class="w-full">
 	<ControlBar>
-		<ExpandableControlBarMenu>
-			<p>test</p>
-		</ExpandableControlBarMenu>
 	</ControlBar>
-	</div>
-	{#if !hasSomeData() && !$state.isInputConnected}
-		<!-- 'training page has same component. Extract' -->
-		<div class="flex flex-col flex-grow justify-center">
-			<div class="w-full text-primarytext">
-				<p class="text-center text-3xl bold m-auto">
-					{$t("menu.trainer.notConnected1")}
-				</p>
-				<p class="text-center text-3xl  bold m-auto">
-					{$t("menu.trainer.notConnected2")}
-				</p>
-				<div class="text-center ml-auto mr-auto mb-2 mt-10 ">
-					<img
-						class="m-auto arrow-filter-color"
-						src="imgs/down_arrow.svg"
-						alt="down arrow icon"
-						width="100px"
-					/>
+	<div class="mt-24 pl-2">
+		{#if !hasSomeData() && !$state.isInputConnected}
+			<!-- 'training page has same component. Extract' -->
+			<div class="w-full h-full grid grid-cols-1 items-center place-items-center text-center">
+				<div class="w-full text-primarytext">
+					<p class="w-4/5 text-3xl bold m-auto">
+						{$t("menu.trainer.notConnected1")}
+					</p>
+					<p class="w-4/5 text-3xl  bold m-auto">
+						{$t("menu.trainer.notConnected2")}
+					</p>
+					<div class="text-center ml-auto mr-auto mb-2 mt-10 ">
+						<img
+							class="m-auto arrow-filter-color"
+							src="imgs/down_arrow.svg"
+							alt="down arrow icon"
+							width="100px"
+						/>
+					</div>
 				</div>
 			</div>
-		</div>
-	{:else}
-		<div class="mt-4 ml-3">
+		{:else}
 			<StandardDialog
 				isOpen={isConnectionDialogOpen}
 				onClose={() => isConnectionDialogOpen = false} >
@@ -67,7 +62,7 @@
 					</p>
 					<StandardButton
 						onClick={() => {
-							isConnectionDialogOpen = false;
+							isConnectionDialogOpen = false; 
 							startConnectionProcess()
 						}}
 					>{$t("footer.connectButtonNotConnected")}</StandardButton>
@@ -85,7 +80,7 @@
 							titleText={$t("content.data.classHelpHeader")}
 							bodyText={$t("content.data.classHelpBody")} />
 					</div>
-					<div class="absolute left-55 flex">
+					<div class="absolute left-55 flex">f
 						<InformationBase
 								isLightTheme={false}
 								text={$t("content.data.choice")}>
@@ -117,13 +112,12 @@
 				/>
 			{/each}
 			<NewGestureButton />
-		</div>
-	{/if}
+		{/if}
+	</div>
 </main>
 
 <style>
 	.arrow-filter-color {
-		filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%)
-		contrast(100%);
+		filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
 	}
 </style>

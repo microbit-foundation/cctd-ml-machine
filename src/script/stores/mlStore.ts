@@ -1,7 +1,7 @@
 import { persistantWritable } from "./storeUtil";
 import { get, writable } from "svelte/store";
 import { t } from "../../i18n";
-import { LayersModel } from "@tensorflow/tfjs-layers";
+import { ML5NeuralNetwork } from "ml5";
 
 let text: (key: string, vars?: object) => string = get(t);
 t.subscribe(t => text = t);
@@ -67,8 +67,8 @@ export type MlSettings = {
 const initialSettings: MlSettings = {
 	duration: 1800,
 	numEpochs: 80,
-	numSamples: 80,
-	minSamples: 80,
+	numSamples: 60,
+	minSamples: 50,
 	updatesPrSecond: 4,
 	learningRate: 0.5,
 	includedAxes: [true, true, true],
@@ -174,13 +174,13 @@ export const gestureConfidences = writable<{ [id: string]: number }>({});
 export const bestPrediction = writable<GestureData | undefined>(undefined);
 
 // Store for components to assess model status
-export const model = writable<LayersModel>(undefined);
+export const model = writable<ML5NeuralNetwork>(undefined);
 
 export const trainingStatus = writable<TrainingStatus>(TrainingStatus.Untrained);
 
 // Stores and manages previous data-elements. Used for classifying current gesture
 // TODO: Only used for 'getPrevData' (which is only used for ml.ts). Do we even want this as global state?
-export const prevData = writable<LiveData[]>(new Array(get(settings).minSamples));
+export const prevData = writable<LiveData[]>(new Array(get(settings).numSamples));
 
 let liveDataIndex = 0;
 livedata.subscribe(data => {
@@ -189,7 +189,7 @@ livedata.subscribe(data => {
 		return prevDataArray;
 	});
 	liveDataIndex++;
-	if (liveDataIndex >= get(settings).minSamples) {
+	if (liveDataIndex >= get(settings).numSamples) {
 		liveDataIndex = 0;
 	}
 });

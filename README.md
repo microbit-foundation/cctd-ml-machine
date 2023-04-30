@@ -83,7 +83,7 @@ Running the platform locally requires the package manager [npm](https://www.npmj
 1. Download or clone this repository
 2. In the terminal, run command `npm install` inside the project directory.
 3. Once installed, run `npm run dev` to launch the application.
-4. Access the application from http://localhost:5173/
+4. Access the application from http://localhost:5000/
 
 ### Dependencies
 

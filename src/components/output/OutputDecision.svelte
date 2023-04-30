@@ -18,7 +18,7 @@
     {
       name: $t("content.model.output.optionSound"),
       component: Sound,
-      id: 1, 
+      id: 1,
     },
   ];
 

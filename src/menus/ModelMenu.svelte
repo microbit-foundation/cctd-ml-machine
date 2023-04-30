@@ -4,9 +4,11 @@
   import { bestPrediction } from '../script/stores/mlStore';
   import { t } from '../i18n';
 
-  $: confidence = $bestPrediction?.confidence ?? 0;
+  $: confidence = $state.isInputReady ? $bestPrediction?.confidence ?? 0 : 0;
   confidence = isNaN(confidence) ? 0 : confidence;
+
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
+  $: predictionLabel = !$state.isInputReady ? '' : $bestPrediction?.name ?? '';
 </script>
 
 <div class="w-full text-center justify-center pt-5">
@@ -23,11 +25,11 @@
     <div
       class="grid break-words mr-auto ml-auto w-3/4 h-70px border-2 rounded-lg border-solid text-center align-center content-center">
       <p class="w-full max-w-[100%] text-2xl break-all">
-        {!$state.isInputReady ? '' : $bestPrediction?.name ?? ''}
+        {predictionLabel}
       </p>
     </div>
     <p class="text-4xl ml-5 mt-4 pb-4">
-      {$state.isInputReady ? confidenceLabel : '0%'}
+      {confidenceLabel}
     </p>
   {/if}
 </div>

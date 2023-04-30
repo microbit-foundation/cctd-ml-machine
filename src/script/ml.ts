@@ -15,6 +15,7 @@ import { peaks, standardDeviation, totalAcceleration } from "./datafunctions";
 import { get, type Unsubscriber } from "svelte/store";
 import { t } from "../i18n";
 import { ML5NeuralNetwork, neuralNetwork } from "ml5";
+import { compileModel } from "ml4f";
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
@@ -192,6 +193,40 @@ function createModel(): ML5NeuralNetwork {
 
 // Set state to not-Training and initiate prediction.
 function finishedTraining() {
+
+	
+	const modelName = 'my-model'
+
+	// Retrieve model_meta.json
+	console.log(JSON.stringify(get(model).neuralNetworkData.meta))
+
+	// Retrieve the model and place in local storage. 
+	// Is it better to store in session storage, privacy concerns?
+
+
+	let mode = get(model).neuralNetwork.model;
+	mode.save(`localstorage://${modelName}`);
+
+	const cres = compileModel(mode, {})
+  	console.log(cres.js)
+
+	// const model_topology = localStorage.getItem(`tensorflowjs_models/${modelName}/model_topology`)
+	// const weight_specs = localStorage.getItem(`tensorflowjs_models/${modelName}/weight_specs`)
+	// const weight_data = localStorage.getItem(`tensorflowjs_models/${modelName}/weight_data`)
+
+	// const weights_manifest = {
+	// 	modelTopology: model_topology,
+	// 	weightsManifest: [
+	// 		{
+	// 			paths: [`./${modelName}.weights.bin`],
+	// 			weights: weight_specs
+	// 		},
+	// 	],
+	// };
+
+	// console.log(JSON.stringify(weights_manifest))
+
+
 	// Wait for promise to resolve, to ensure a minimum of 2.5 sec of training from users perspective
 	void trainingTimerPromise.then(() => {
 		state.update(obj => {

@@ -75,6 +75,7 @@
     "chartjs-chart-pcp": "^4.1.1",
     "dapjs": "^2.3.0",
     "js-cookie": "^3.0.1",
+    "ml4f": "^1.6.0",
     "ml5": "^0.12.2",
     "postcss": "^8.4.21",
     "smoothie": "^1.36.1",

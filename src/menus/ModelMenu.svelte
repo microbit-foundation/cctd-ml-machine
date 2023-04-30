@@ -6,6 +6,9 @@
 
   $: confidence = $bestPrediction?.confidence ?? 0;
   confidence = isNaN(confidence) ? 0 : confidence;
+  $: if (!$state.isInputConnected) {
+    confidence = 0;
+  }
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
 </script>
 

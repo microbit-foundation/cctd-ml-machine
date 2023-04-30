@@ -24,6 +24,7 @@
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import PinSelector from './output/PinSelector.svelte';
+  import { state } from '../script/stores/uiStore';
 
   // Variables for component
   export let gesture: GestureData;
@@ -156,13 +157,13 @@
   <div class="text-center w-15">
     <img
       class="m-auto"
-      class:hidden={!triggered}
+      class:hidden={triggered}
       src={'imgs/right_arrow.svg'}
       alt="right arrow icon"
       width="30px" />
     <img
       class="m-auto"
-      class:hidden={triggered}
+      class:hidden={!triggered}
       src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />

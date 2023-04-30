@@ -5,16 +5,6 @@
     width: 20px;
     background: #13bba4;
   }
-
-  .arrow-triggered-color {
-    filter: invert(31%) sepia(20%) saturate(4422%) hue-rotate(194deg) brightness(88%)
-      contrast(82%);
-  }
-
-  .arrow-base-color {
-    filter: invert(30%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%)
-      contrast(100%);
-  }
 </style>
 
 <script lang="ts">

@@ -7,16 +7,17 @@ import LoggingDecorator from './LoggingDecorator';
 import CookieManager from '../CookieManager';
 import TypingUtils from '../TypingUtils';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
+import Microbits from "../microbit-interfacing/Microbits";
 
 let text = get(t);
 t.subscribe(t => (text = t));
 
 class OutputBehaviour extends LoggingDecorator {
-  private reconnectTimeout: ReturnType<typeof setTimeout> = setTimeout(
+  private reconnectTimeout: NodeJS.Timeout = setTimeout(
     TypingUtils.emptyFunction,
     0,
   );
-  private timeout = 4000;
+  private reconnectTimeoutTime = 5000;
 
   onBluetoothConnectionError(error?: unknown) {
     super.onBluetoothConnectionError(error);
@@ -29,6 +30,14 @@ class OutputBehaviour extends LoggingDecorator {
 
   onReady() {
     super.onReady();
+    // Reset any output pins currently active.
+    const pinResetArguments = []
+    for (let i = 0; i<10; i++) {
+      const argument = {pin: i, on:false}
+      pinResetArguments.push(argument);
+    }
+    Microbits.sendToOutputPin(pinResetArguments)
+
     state.update(s => {
       s.isOutputReady = true;
       return s;
@@ -86,12 +95,12 @@ class OutputBehaviour extends LoggingDecorator {
       return s;
     });
 
-    // Reset connection timeout
+    // Reset connection reconnectTimeoutTime
     clearTimeout(this.reconnectTimeout);
     const onTimeout = () => this.onCatastrophicError();
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
-    }, this.timeout);
+    }, this.reconnectTimeoutTime);
   }
 
   onDisconnected(): void {

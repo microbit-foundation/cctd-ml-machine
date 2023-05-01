@@ -21,7 +21,7 @@ class InputBehaviour extends LoggingDecorator {
   private smoothedAccelZ = 0;
 
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
-  private timeout = 4000;
+  private reconnectTimeoutTime = 5000;
 
   onBluetoothConnectionError(error?: unknown) {
     super.onBluetoothConnectionError(error);
@@ -92,13 +92,13 @@ class InputBehaviour extends LoggingDecorator {
       return s;
     });
 
-    // Works like this: If the MB manages to connect, wait `timeout` milliseconds
+    // Works like this: If the MB manages to connect, wait `reconnectTimeoutTime` milliseconds
     // if MB does not call onReady before that expires, refresh the page
     clearTimeout(this.reconnectTimeout);
     const onTimeout = () => this.onCatastrophicError();
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
-    }, this.timeout);
+    }, this.reconnectTimeoutTime);
   }
 
   accelerometerChange(x: number, y: number, z: number): void {

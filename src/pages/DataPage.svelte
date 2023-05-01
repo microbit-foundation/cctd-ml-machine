@@ -65,7 +65,7 @@
           bold={false}
           outlined
           color="primary">
-          {'Download dataset'}
+          {$t('content.data.controlbar.button.downloadData')}
         </StandardButton>
       </ExpandableControlBarMenu>
     </ControlBar>

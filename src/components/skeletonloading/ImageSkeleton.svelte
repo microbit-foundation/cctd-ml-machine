@@ -5,8 +5,8 @@
   export let src: string;
   export let width: number | undefined = undefined;
   export let height: number | undefined = undefined;
-  export let spin: boolean = false;
-  export let castShadow: boolean = false;
+  export let spin = false;
+  export let castShadow = false;
   export let loadingColorPrimary: string | undefined = undefined;
   export let loadingColorSecondary: string | undefined = undefined;
   export let onLoaded: (() => void) | undefined = undefined;
@@ -21,22 +21,22 @@
 </script>
 
 <img
-  alt="{alt}"
-  class:animate-duration-[10s]="{spin}"
-  class:animate-spin="{spin}"
-  class:hidden="{!hasLoaded}"
-  class:shadow-md="{castShadow}"
-  height="{height}"
-  on:load="{onLoad}"
-  src="{src}"
-  width="{width}" />
+  {alt}
+  class:animate-duration-[10s]={spin}
+  class:animate-spin={spin}
+  class:hidden={!hasLoaded}
+  class:shadow-md={castShadow}
+  {height}
+  on:load={onLoad}
+  {src}
+  {width} />
 
 {#if !hasLoaded}
   <div>
     <Skeleton
-      height="{height}"
-      width="{width}"
-      primaryColor="{loadingColorPrimary}"
-      secondaryColor="{loadingColorSecondary}" />
+      {height}
+      {width}
+      primaryColor={loadingColorPrimary}
+      secondaryColor={loadingColorSecondary} />
   </div>
 {/if}

@@ -5,7 +5,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   export let onPinSelect: (pin: number) => void;
 
-  let selectedPin = 0;
+  let selectedPin = StaticConfiguration.defaultOutputPin;
 
   const onPinSelected = () => {
     onPinSelect(selectedPin);

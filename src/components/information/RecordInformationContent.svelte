@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { t } from "../../i18n";
-  import ImageSkeleton from "../skeletonloading/ImageSkeleton.svelte";
-  import {getInfoBoxColors} from "../../script/InformationComponentUtility";
-  export let isLightTheme: boolean = true
+  import { t } from '../../i18n';
+  import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
+  import { getInfoBoxColors } from '../../script/InformationComponentUtility';
+  export let isLightTheme = true;
 
   const colors = getInfoBoxColors(isLightTheme);
   const textColor = colors.textColor;
@@ -19,9 +19,9 @@
     <div class="w-full float-left">
       <ImageSkeleton
         alt="microbit recording guide"
-        height="{134}"
+        height={134}
         src="imgs/microbit_record_guide.svg"
-        width="{200}" />
+        width={200} />
     </div>
     <p class=" text-center absolute w-60px right-10px top-35px">
       {$t('content.index.recordButtonDescription')}

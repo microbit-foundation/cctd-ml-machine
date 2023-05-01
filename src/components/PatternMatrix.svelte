@@ -54,7 +54,6 @@
 
   /** If bad matrix given to component => reset */
   // This should never happen
-  // TODO: Clean this function. Consider going from 1d array to 2d
   if (!(matrix instanceof Array) || matrix.length !== 25) {
     matrix = new Array<boolean>(25);
     for (let i = 0; i < 25; i++) {
@@ -112,23 +111,22 @@
 </script>
 
 <!-- PATTERN MATRIX -->
-<main class="buttonGrid select-none" on:mouseleave="{mouseLeftDrawingArea}">
+<main class="buttonGrid select-none" on:mouseleave={mouseLeftDrawingArea}>
   <!-- Draw all 25 boxes -->
   {#each matrix as isOn, i}
     <div
       class="{isOn
         ? 'bg-secondary border-secondary'
         : 'bg-gray-300 border-gray-300'} border-3 rounded transition ease"
-      class:turnedOn="{isOn}"
-      class:turnedOff="{!isOn}"
-      class:border-teal-500="{highlighted[i]}"
-      on:mousedown="{() => {
+      class:turnedOn={isOn}
+      class:turnedOff={!isOn}
+      class:border-teal-500={highlighted[i]}
+      on:mousedown={() => {
         setElement(i, true);
-      }}"
-      on:mouseenter="{e => {
+      }}
+      on:mouseenter={e => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         elementHover(i, e);
-      }}">
-    </div>
+      }} />
   {/each}
 </main>

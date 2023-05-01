@@ -27,27 +27,32 @@
     isCookieDialogOpen = false;
   };
 
+  const readMoreClicked = (e: Event) => {
+    e.preventDefault();
+    isDescriptionDialogOpen = true;
+  };
+
   onMount(() => {
     isCookieDialogOpen = !CookieManager.isComplianceSet();
   });
 </script>
 
 <BaseDialog
-  isOpen="{isCookieDialogOpen}"
-  onClose="{() => {
+  isOpen={isCookieDialogOpen}
+  onClose={() => {
     return;
-  }}">
+  }}>
   <StandardDialog
-    isOpen="{isDescriptionDialogOpen}"
-    onClose="{() => (isDescriptionDialogOpen = false)}">
+    isOpen={isDescriptionDialogOpen}
+    onClose={() => (isDescriptionDialogOpen = false)}>
     <CookieDescriptionOverlay />
   </StandardDialog>
   <div out:fly class="fixed bottom-0 w-full bg-white">
     <select
       class="absolute bg-white right-5 top-5 text-primarytext ml-2 mr-2 pl-2 pr-2"
-      bind:value="{$locale}">
+      bind:value={$locale}>
       {#each locales as l}
-        <option value="{l}">{l}</option>
+        <option value={l}>{l}</option>
       {/each}
     </select>
     <div class="ml-auto mr-auto mt-5">
@@ -67,29 +72,21 @@
           <p>
             {$t('cookies.banner.text.description')}
           </p>
-          <div class="mb-2"></div>
+          <div class="mb-2" />
           <p>
             {$t('cookies.banner.text.readMore')}
-            <a
-              href="/"
-              class="text-secondary font-bold"
-              on:click="{e => {
-                // Fix this. Why does ts consider this 'any'?
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-                e.preventDefault();
-                isDescriptionDialogOpen = true;
-              }}">
+            <a href="/" class="text-secondary font-bold" on:click={readMoreClicked}>
               {$t('cookies.banner.text.readMore.here')}
             </a>
           </p>
-          <div class="mb-2"></div>
+          <div class="mb-2" />
         </div>
       </div>
       <div class="flex w-2/5 flex-row mr-4 justify-center">
-        <StandardButton onClick="{acceptClicked}"
+        <StandardButton onClick={acceptClicked}
           >{$t('cookies.banner.buttons.accept')}</StandardButton>
-        <div class="mr-4"></div>
-        <StandardButton color="warning" onClick="{rejectClicked}"
+        <div class="mr-4" />
+        <StandardButton color="warning" onClick={rejectClicked}
           >{$t('cookies.banner.buttons.reject')}</StandardButton>
       </div>
     </div>

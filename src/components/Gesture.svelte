@@ -17,6 +17,7 @@
   import StandardButton from './StandardButton.svelte';
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
+  import StaticConfiguration from '../StaticConfiguration';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -77,7 +78,7 @@
         const recording = { ID: Date.now(), data: newData } as RecordingData;
         addRecording(gesture.ID, recording);
       } else {
-        alertUser($t('alert.recording.disconnectedDuringRecording')); // TODO: Translations
+        alertUser($t('alert.recording.disconnectedDuringRecording'));
       }
     }, recordingDuration);
   }
@@ -130,8 +131,6 @@
   }
 
   function onTitleKeypress(event: KeyboardEvent) {
-    const maxTitleLength = 25; // todo: Add to a config store?
-
     // Check backspace, delete and enter before alerting user, because we don't want to pop a warning when
     // the user is at 25 characters, but is pressing enter.
     if (event.code === 'Backspace' || event.code === 'Delete') {
@@ -144,7 +143,7 @@
       }
       return true;
     }
-    if (gesture.name.length >= maxTitleLength) {
+    if (gesture.name.length >= StaticConfiguration.gestureNameMaxLength) {
       event.preventDefault();
       alertUser($t('alert.data.classNameLengthAlert'));
       return false;
@@ -152,7 +151,6 @@
   }
 
   // Make function depend on buttonsPressed store.
-  // TODO: Inelegant. Rewrite
   let declaring = true;
   $: {
     if (!declaring) {

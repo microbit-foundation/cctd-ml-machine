@@ -41,6 +41,9 @@ export default {
 		"content.data.addDataNoConnection": "Du kan ikke tilføje data, uden at være tilsluttet en micro:bit",
 		"content.data.noData": "Du har ingen bevægelser at træne med. Tilføj nogle bevægelser, som du vil træne din BBC micro:bit til at genkende.",
 
+		"content.data.controlbar.button.clearData": "Ryd eksempler",
+		"content.data.controlbar.button.clearData.confirm": "Er du sikker på at du vil slette alle eksempler?\nDette kan ikke fortrydes.",
+
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Træning mislykkedes",
 		"content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
@@ -246,6 +249,9 @@ export default {
 		"content.data.dataDescription": "Here you can see the gathered data. ",
 		"content.data.addDataNoConnection": "You cannot add data without being connected with a micro:bit",
 		"content.data.noData": "You do not have any gestures to train on. Add the gestures you wish the micro:bit should learn to recognise.",
+
+		"content.data.controlbar.button.clearData": "Clear examples",
+		"content.data.controlbar.button.clearData.confirm": "Are you sure you wish to delete all gesture examples?\nThis cannot be undone.",
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Training Failed",

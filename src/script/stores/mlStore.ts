@@ -16,6 +16,10 @@ export type RecordingData = {
   };
 };
 
+export function clearGestures() {
+  gestures.set([]);
+}
+
 export type GestureData = {
   name: string;
   ID: number;

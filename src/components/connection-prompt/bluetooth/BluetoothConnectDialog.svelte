@@ -75,7 +75,7 @@
     {$t('popup.connectMB.bluetooth.heading')}
   </h1>
   {#if $state.requestDeviceWasCancelled && !isConnecting}
-    <p class="text-red-500 mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
+    <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
   {/if}
   {#if isConnecting}
     <!-- Show spinner while connecting -->
@@ -92,10 +92,10 @@
         <p>4. {$t('popup.connectMB.bluetooth.step3')}</p>
       </div>
       <div>
-        <PatternMatrix matrix="{$patternMatrixState}" onMatrixChange="{updateMatrix}" />
+        <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
       </div>
     </div>
-    <StandardButton onClick="{connectButtonClicked}"
+    <StandardButton onClick={connectButtonClicked}
       >{$t('popup.connectMB.bluetooth.connect')}</StandardButton>
   {/if}
   <!-- </div> -->

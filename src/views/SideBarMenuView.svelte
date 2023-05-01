@@ -5,6 +5,7 @@
   import { Pages } from '../script/navigation/Pages';
   import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
+  import Environment from '../script/Environment.js';
 
   const goToHomePage = () => {
     Navigation.setCurrentPage(Pages.HOMEPAGE);
@@ -21,7 +22,7 @@
   <!-- flush top bar -->
   <div class="h-12 shadow-md w-full flex justify-center">
     <p class="text-secondarytext font-extrabold self-center text-3xl">
-      {'ML-Machine'}
+      {Environment.pageTitle}
     </p>
     <div class="text-white self-center ml-4 focus:outline-none">
       <button

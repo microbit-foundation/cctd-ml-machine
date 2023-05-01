@@ -16,6 +16,18 @@ export type RecordingData = {
   };
 };
 
+export function loadDatasetFromFile(file) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const contents = e.target.result;
+    if (typeof contents === 'string') {
+      const gestureData: GestureData[] = JSON.parse(contents) as GestureData[];
+      gestures.set(gestureData);
+    }
+  };
+  reader.readAsText(file as Blob);
+}
+
 export function downloadDataset() {
   const element = document.createElement('a');
   element.setAttribute(

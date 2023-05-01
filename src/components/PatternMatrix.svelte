@@ -112,23 +112,23 @@
 </script>
 
 <!-- PATTERN MATRIX -->
-<main class="buttonGrid select-none" on:mouseleave="{mouseLeftDrawingArea}">
+<main class="buttonGrid select-none" on:mouseleave={mouseLeftDrawingArea}>
   <!-- Draw all 25 boxes -->
   {#each matrix as isOn, i}
     <div
-      class="{isOn
-        ? 'bg-secondary border-secondary'
-        : 'bg-gray-300 border-gray-300'} border-3 rounded transition ease"
-      class:turnedOn="{isOn}"
-      class:turnedOff="{!isOn}"
-      class:border-teal-500="{highlighted[i]}"
-      on:mousedown="{() => {
+      class="rounded"
+      class:border-3={highlighted[i]}
+      class:turnedOn={isOn}
+      class:turnedOff={!isOn}
+      class:bg-secondary={isOn}
+      class:border-secondary={highlighted[i]}
+      class:bg-gray-300={!isOn}
+      on:mousedown={() => {
         setElement(i, true);
-      }}"
-      on:mouseenter="{e => {
+      }}
+      on:mouseenter={e => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         elementHover(i, e);
-      }}">
-    </div>
+      }} />
   {/each}
 </main>

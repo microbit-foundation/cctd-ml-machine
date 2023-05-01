@@ -71,6 +71,7 @@
           onClick={onClearGestures}
           bold={false}
           outlined
+          shadows={false}
           color="primary">
           {$t('content.data.controlbar.button.clearData')}
         </StandardButton>
@@ -81,6 +82,7 @@
           onClick={onDownloadGestures}
           bold={false}
           outlined
+          shadows={false}
           color="primary">
           {$t('content.data.controlbar.button.downloadData')}
         </StandardButton>
@@ -92,6 +94,7 @@
           bold={false}
           outlined
           isFileInput
+          shadows={false}
           color="primary">
           {$t('content.data.controlbar.button.uploadData')}
         </StandardButton>

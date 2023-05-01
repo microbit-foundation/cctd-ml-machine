@@ -54,6 +54,8 @@ jobs:
           action: "upload"
           app_location: ${{ env.APP_LOCATION }}
           app_artifact_location: ${{ env.APP_ARTIFACT_LOCATION }}
+        env:
+          VITE_TITLE: ML-Machine
 
   close:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

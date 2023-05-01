@@ -7,7 +7,7 @@
 
 <script lang="ts">
   import OutputGesture from '../components/OutputGesture.svelte';
-  import { buttonPressed, informUser, isReady, state } from '../script/stores/uiStore';
+  import { buttonPressed, isReady, state } from '../script/stores/uiStore';
   import { gestures, settings } from '../script/stores/mlStore';
   import { get } from 'svelte/store';
   import { onMount } from 'svelte';
@@ -38,7 +38,6 @@
 
     $state.isRecording = true;
     // lastRecording = undefined;
-    informUser('Optager');
 
     // Get duration
     const duration = get(settings).duration;

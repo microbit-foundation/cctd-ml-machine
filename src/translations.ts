@@ -1,21 +1,10 @@
 export default {
 	"da": { // APPROXIMATE SORTING ORDER: First alphabetically, then order of appearance from top to bottom of page
 		// ALERTS:
-		//In micro.js
-		"alert.micro.GATTserverInform": "Tilkobling til GATT server...",
-		"alert.micro.microBitServiceInform": "Tilkobling til Micro:bit services...",
-		"alert.micro.gettingDataInform": "Anskaffer data",
-		"alert.micro.nowConnectedInform": "Micro:bit er nu tilkoblet",
-
 		//In gesture.svelte 
 		"alert.data.classNameLengthAlert": "Navne må kun bestå af 25 tegn",
 		"alert.recording.disconnectedDuringRecording":"micro:bit frakoblede under optagelse",
 
-		//In output.js
-		"alert.output.GATTserverInform": "Tilkobling til GATT server...",
-		"alert.output.microBitServiceInform": "Tilkobling til Micro:bit services...",
-		"alert.output.connectingToComponents": "Anskaffer forbindelse til enkelte komponenter...",
-		"alert.output.nowConnectedInform": "Micro:bit er nu tilkoblet",
 		//In common.js
 		"alert.isRecording": "Du er i gang med at optage!",
 		"alert.isTesting": "Du er i gang med at optage!",
@@ -23,7 +12,6 @@ export default {
 		"alert.isNotConnected": "Din Micro:bit skal være tilsluttet!",
 		"alert.deleteGestureConfirm": "Er du sikker på at du vil slette klassen ",
 		//In ml.ts
-		"alert.beginModelSetup": "Påbegynder opsætning af model",
 		"alert.twoGestures": "Du skal have mindst to klasser",
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
@@ -218,21 +206,10 @@ export default {
 	},
 	"en": {
 		// ALERTS:
-		//In micro.js
-		"alert.micro.GATTserverInform": "Connecting to GATT server...",
-		"alert.micro.microBitServiceInform": "Connecting to Micro:bit services...",
-		"alert.micro.gettingDataInform": "Getting data",
-		"alert.micro.nowConnectedInform": "Micro:bit is now connected",
-
 		//In gesture.svelte
 		"alert.data.classNameLengthAlert": "Names must consists of maximum 25 characters.",
 		"alert.recording.disconnectedDuringRecording":"micro:bit disconnected during recording",
 
-		//In output.js
-		"alert.output.GATTserverInform": "Connecting to GATT server...",
-		"alert.output.microBitServiceInform": "Connecting to Micro:bit services...",
-		"alert.output.connectingToComponents": "Establishing connections to separate components...",
-		"alert.output.nowConnectedInform": "Micro:bit is connected",
 		//In common.js
 		"alert.isRecording": "You are currently recording!",
 		"alert.isTesting": "You are currently recording!",
@@ -240,7 +217,6 @@ export default {
 		"alert.isNotConnected": "Your Micro:bit should be connected!",
 		"alert.deleteGestureConfirm": "Are you sure you want to delete the class ",
 		//In ml.ts
-		"alert.beginModelSetup": "Initiating model setup",
 		"alert.twoGestures": "You need at least two classes",
 		"alert.oneDataRepresentation": "You need at least one data representation",
 		"alert.recordingsPerGesture": "You need at least three examples per class",

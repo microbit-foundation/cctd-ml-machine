@@ -1,4 +1,4 @@
-import { alertUser, informUser, state } from './stores/uiStore';
+import { alertUser, state } from './stores/uiStore';
 import {
   bestPrediction,
   gestureConfidences,
@@ -93,8 +93,6 @@ export function trainModel() {
     });
     return;
   }
-
-  informUser(text('alert.beginModelSetup'));
 
   // Fetch data
   const gestureData = get(gestures);

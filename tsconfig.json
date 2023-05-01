@@ -6,7 +6,8 @@
     "__sapper__/*",
     "public/*",
     "svelte.config.js",
-    "windi.config.js"
+    "windi.config.js",
+    "src/setup_tests.ts"
   ],
   "compilerOptions": {
     "lib": ["DOM", "ES6", "WebWorker"],

@@ -17,7 +17,7 @@ class OutputBehaviour extends LoggingDecorator {
     TypingUtils.emptyFunction,
     0,
   );
-  private timeout = 4000;
+  private reconnectTimeoutTime = 5000;
 
   onBluetoothConnectionError(error?: unknown) {
     super.onBluetoothConnectionError(error);
@@ -95,12 +95,12 @@ class OutputBehaviour extends LoggingDecorator {
       return s;
     });
 
-    // Reset connection timeout
+    // Reset connection reconnectTimeoutTime
     clearTimeout(this.reconnectTimeout);
     const onTimeout = () => this.onCatastrophicError();
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
-    }, this.timeout);
+    }, this.reconnectTimeoutTime);
   }
 
   onDisconnected(): void {

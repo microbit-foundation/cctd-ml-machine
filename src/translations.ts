@@ -44,6 +44,7 @@ export default {
 		"content.data.controlbar.button.clearData": "Ryd eksempler",
 		"content.data.controlbar.button.clearData.confirm": "Er du sikker på at du vil slette alle eksempler?\nDette kan ikke fortrydes.",
 		"content.data.controlbar.button.downloadData": "Download dataset",
+		"content.data.controlbar.button.uploadData": "Upload dataset",
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Træning mislykkedes",
@@ -254,6 +255,7 @@ export default {
 		"content.data.controlbar.button.clearData": "Clear examples",
 		"content.data.controlbar.button.clearData.confirm": "Are you sure you wish to delete all gesture examples?\nThis cannot be undone.",
 		"content.data.controlbar.button.downloadData": "Download dataset",
+		"content.data.controlbar.button.uploadData": "Upload dataset",
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Training Failed",

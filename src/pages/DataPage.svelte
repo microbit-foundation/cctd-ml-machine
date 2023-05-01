@@ -93,7 +93,7 @@
           outlined
           isFileInput
           color="primary">
-          {"$t('content.data.controlbar.button.downloadData')"}
+          {$t('content.data.controlbar.button.uploadData')}
         </StandardButton>
       </ExpandableControlBarMenu>
     </ControlBar>

@@ -51,6 +51,10 @@ type accData =
   | 'az_peaks'
   | 'az_total';
 
+export function clearGestures() {
+  gestures.set([]);
+}
+
 function createModel(): LayersModel {
   //const shape = get(settings).includedAxes * get(settings).includedParameters;
   const gestureData = get(gestures);

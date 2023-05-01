@@ -20,6 +20,7 @@
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
   import ControlBar from '../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
+  import { clearGestures } from '../script/ml';
 
   let isConnectionDialogOpen = false;
 
@@ -30,13 +31,13 @@
     return $gestures.some(gesture => gesture.recordings.length > 0);
   };
 
-  let connectDialogReference: MainConnectDialog;
-
-  const clearGestures = () => {
+  const onClearGestures = () => {
     if (confirm($t('content.data.controlbar.button.clearData.confirm'))) {
-      $gestures = [];
+      clearGestures();
     }
   };
+
+  let connectDialogReference: MainConnectDialog;
 </script>
 
 <!-- Main pane -->
@@ -47,7 +48,7 @@
         <StandardButton
           fillOnHover
           small
-          onClick={clearGestures}
+          onClick={onClearGestures}
           bold={false}
           outlined
           color="primary">

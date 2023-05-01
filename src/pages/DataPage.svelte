@@ -8,7 +8,7 @@
 <script lang="ts">
   import Gesture from '../components/Gesture.svelte';
   import { state } from '../script/stores/uiStore';
-  import { gestures } from '../script/stores/mlStore';
+  import { clearGestures, gestures } from '../script/stores/mlStore';
   import { t } from '../i18n';
   import InformationBase from '../components/information/InformationBase.svelte';
   import TextInformation from '../components/information/TextInformation.svelte';
@@ -20,7 +20,6 @@
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
   import ControlBar from '../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
-  import { clearGestures } from '../script/ml';
 
   let isConnectionDialogOpen = false;
 

@@ -16,6 +16,22 @@ export type RecordingData = {
   };
 };
 
+export function downloadDataset() {
+  const element = document.createElement('a');
+  element.setAttribute(
+    'href',
+    'data:application/json;charset=utf-8,' +
+      encodeURIComponent(JSON.stringify(get(gestures), null, 2)),
+  );
+  element.setAttribute('download', 'dataset');
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+  document.body.removeChild(element);
+}
+
 export function clearGestures() {
   gestures.set([]);
 }

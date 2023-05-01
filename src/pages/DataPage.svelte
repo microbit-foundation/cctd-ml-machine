@@ -8,7 +8,7 @@
 <script lang="ts">
   import Gesture from '../components/Gesture.svelte';
   import { state } from '../script/stores/uiStore';
-  import { clearGestures, gestures } from '../script/stores/mlStore';
+  import { clearGestures, downloadDataset, gestures } from '../script/stores/mlStore';
   import { t } from '../i18n';
   import InformationBase from '../components/information/InformationBase.svelte';
   import TextInformation from '../components/information/TextInformation.svelte';
@@ -36,6 +36,10 @@
     }
   };
 
+  const onDownloadGestures = () => {
+    downloadDataset();
+  };
+
   let connectDialogReference: MainConnectDialog;
 </script>
 
@@ -52,6 +56,16 @@
           outlined
           color="primary">
           {$t('content.data.controlbar.button.clearData')}
+        </StandardButton>
+        <div class="ml-2" />
+        <StandardButton
+          fillOnHover
+          small
+          onClick={onDownloadGestures}
+          bold={false}
+          outlined
+          color="primary">
+          {'Download dataset'}
         </StandardButton>
       </ExpandableControlBarMenu>
     </ControlBar>

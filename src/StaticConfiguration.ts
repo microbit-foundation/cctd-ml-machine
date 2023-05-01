@@ -7,5 +7,8 @@ class StaticConfiguration {
 
   // How many pins do we wish to provide output for?
   public static readonly numberOfAvailablePins = 10;
+
+  // What name should a downloaded hex file have?
+  public static readonly downloadedHexFilename = 'firmware.hex';
 }
 export default StaticConfiguration;

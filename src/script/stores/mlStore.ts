@@ -16,9 +16,12 @@ export type RecordingData = {
   };
 };
 
-export function loadDatasetFromFile(file) {
+export function loadDatasetFromFile(file: File) {
   const reader = new FileReader();
-  reader.onload = function (e) {
+  reader.onload = function (e: ProgressEvent<FileReader>) {
+    if (!e.target) {
+      return;
+    }
     const contents = e.target.result;
     if (typeof contents === 'string') {
       const gestureData: GestureData[] = JSON.parse(contents) as GestureData[];

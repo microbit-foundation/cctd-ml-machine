@@ -1,4 +1,4 @@
-// Colors for ML-Machine
+//Ml-Machine colors
 
 export default {
   theme: {

@@ -36,6 +36,7 @@
   import BluetoothIncompatibilityWarningDialog from './components/BluetoothIncompatibilityWarningDialog.svelte';
   import CookieManager from './script/CookieManager';
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
+  import Environment from './script/Environment';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -45,6 +46,8 @@
     $state.reconnectState = DeviceRequestStates.INPUT;
     CookieManager.unsetReconnectFlag();
   }
+
+  document.title = Environment.pageTitle;
 </script>
 
 {#if !CompatibilityChecker.checkCompatibility().platformAllowed}

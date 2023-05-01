@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import WindiCSS from 'vite-plugin-windicss';
 import { sveltePreprocess } from 'svelte-preprocess/dist/autoProcess';
+import EnvironmentPlugin from 'vite-plugin-environment';
 
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
@@ -17,6 +18,7 @@ export default defineConfig({
       },
     }),
     WindiCSS(),
+    EnvironmentPlugin('all'),
   ],
   build: {
     rollupOptions: {

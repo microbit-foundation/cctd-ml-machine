@@ -2,10 +2,10 @@
   import { each, onMount } from 'svelte/internal';
   import GestureTilePart from './../GestureTilePart.svelte';
   import { t } from '../../i18n';
+  import StaticConfiguration from '../../StaticConfiguration';
   export let onPinSelect: (pin: number) => void;
 
-  let selectedPin: number = 0;
-  const maxPin = 9;
+  let selectedPin = 0;
 
   const onPinSelected = () => {
     onPinSelect(selectedPin);
@@ -26,7 +26,7 @@
       on:click={e => {
         e.stopPropagation();
       }}>
-      {#each { length: maxPin + 1 } as _, i}
+      {#each { length: StaticConfiguration.numberOfAvailablePins } as _, i}
         <option value={i}>{i}</option>
       {/each}
     </select>

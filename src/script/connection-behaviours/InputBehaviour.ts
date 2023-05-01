@@ -8,6 +8,7 @@ import LoggingDecorator from './LoggingDecorator';
 import CookieManager from '../CookieManager';
 import TypingUtils from '../TypingUtils';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
+import StaticConfiguration from '../../StaticConfiguration';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -21,7 +22,6 @@ class InputBehaviour extends LoggingDecorator {
   private smoothedAccelZ = 0;
 
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
-  private reconnectTimeoutTime = 5000;
 
   onBluetoothConnectionError(error?: unknown) {
     super.onBluetoothConnectionError(error);
@@ -92,13 +92,13 @@ class InputBehaviour extends LoggingDecorator {
       return s;
     });
 
-    // Works like this: If the MB manages to connect, wait `reconnectTimeoutTime` milliseconds
+    // Works like this: If the MB manages to connect, wait `reconnectTimeoutDuration` milliseconds
     // if MB does not call onReady before that expires, refresh the page
     clearTimeout(this.reconnectTimeout);
     const onTimeout = () => this.onCatastrophicError();
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
-    }, this.reconnectTimeoutTime);
+    }, StaticConfiguration.reconnectTimeoutDuration);
   }
 
   accelerometerChange(x: number, y: number, z: number): void {

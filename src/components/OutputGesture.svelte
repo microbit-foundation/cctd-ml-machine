@@ -5,16 +5,6 @@
     width: 20px;
     background: #13bba4;
   }
-
-  .arrow-triggered-color {
-    filter: invert(31%) sepia(20%) saturate(4422%) hue-rotate(194deg) brightness(88%)
-      contrast(82%);
-  }
-
-  .arrow-base-color {
-    filter: invert(30%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%)
-      contrast(100%);
-  }
 </style>
 
 <script lang="ts">
@@ -34,6 +24,7 @@
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import PinSelector from './output/PinSelector.svelte';
+  import { state } from '../script/stores/uiStore';
 
   // Variables for component
   export let gesture: GestureData;
@@ -46,12 +37,11 @@
   let selectedPin: number = 0;
 
   let requiredConfidenceLevel = 80;
+  $: currentConfidenceLevel = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
   // $: gesture.output.sound = selectedSound
 
   // $: if (shouldTrigger(requiredConfidenceLevel, confidenceLevel, triggered)) triggerComponnets();
-  $: if (
-    shouldTrigger(requiredConfidenceLevel, $gestureConfidences[gesture.ID], triggered)
-  ) {
+  $: if (shouldTrigger(requiredConfidenceLevel, currentConfidenceLevel, triggered)) {
     triggerComponnets();
     playSound();
     triggerOutputPin();
@@ -135,8 +125,8 @@
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
           <div
             class="absolute w-5 {triggered ? 'bg-primary' : 'bg-info'} z-index: -10"
-            style="height: {100 * $gestureConfidences[gesture.ID]}px; margin-top: {100 -
-              100 * $gestureConfidences[gesture.ID]}px;" />
+            style="height: {100 * currentConfidenceLevel}px; margin-top: {100 -
+              100 * currentConfidenceLevel}px;" />
           <div
             class="absolute w-5 bg-primary"
             style="height: 1px; margin-top: {6.5 -
@@ -166,9 +156,14 @@
   <div class="text-center w-15">
     <img
       class="m-auto"
-      class:arrow-base-color={!triggered}
-      class:arrow-triggered-color={triggered}
+      class:hidden={triggered}
       src={'imgs/right_arrow.svg'}
+      alt="right arrow icon"
+      width="30px" />
+    <img
+      class="m-auto"
+      class:hidden={!triggered || !$state.isInputReady}
+      src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />
   </div>

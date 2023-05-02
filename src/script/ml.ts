@@ -15,11 +15,7 @@ import { peaks, standardDeviation, totalAcceleration } from "./datafunctions";
 import { get, type Unsubscriber } from "svelte/store";
 import { t } from "../i18n";
 import { ML5NeuralNetwork, neuralNetwork } from "ml5";
-import { compileModel } from "ml4f";
-import MemoryMap from 'nrf-intel-hex'
-//import MemoryMap = require("nrf-intel-hex")
-
-//import * as MemoryMap from 'nrf-intel-hex'
+import { generateModel } from './modelCompiler'
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
@@ -198,54 +194,7 @@ function createModel(): ML5NeuralNetwork {
 // Set state to not-Training and initiate prediction.
 async function finishedTraining() {
 
-	
-		// Retrieve model_meta.json
-		var meta = JSON.parse(JSON.stringify(get(model).neuralNetworkData.meta))
-
-		// Turn bufs into bytes
-		const bufs = findValues(meta)
-		const maxbufs = bufs[0]
-		const minbufs = bufs[1]
-	
-		const max_bytes = new ArrayBuffer(4 * maxbufs.length) // Size of int8 is 4
-		const max_view = new DataView(max_bytes)
-		for (let i = 0; i < maxbufs.length; i++) {
-			max_view.setFloat32(i * 4, maxbufs[i], true)
-		}
-	
-		const min_bytes = new ArrayBuffer(4 * minbufs.length) // Size of int8 is 4
-		const min_view = new DataView(min_bytes)
-		for (let i = 0; i < minbufs.length; i++) {
-			min_view.setFloat32(i * 4, minbufs[i], true)
-		}
-	
-		console.log(max_bytes)
-		console.log(min_bytes)
-	
-		let mode = get(model).neuralNetwork.model;
-	
-		const cres = compileModel(mode, {})
-	
-		// Retrieve MICROBIT_NO_MODEL (located in firmware)
-		const hex_file_name = 'firmware/MICROBIT_NO_MODEL.hex'
-		const hexFile: Response = await fetch(hex_file_name);
-		const hexstring_no_model = await hexFile.text()
-	
-		const memoryMap = MemoryMap.fromHex(hexstring_no_model)
-
-		const model_base = 0x40000
-
-		// Place maxbuf
-		memoryMap.set(model_base, new Uint8Array(max_bytes))
-		// Place minbuf
-		memoryMap.set(model_base + 4 * maxbufs.length, new Uint8Array(min_bytes))
-		// Place model
-		memoryMap.set(model_base + 2 * 4 * maxbufs.length, cres.machineCode)
-		
-		console.log(memoryMap.asHexString())
-
-		get(model).save()
-
+	generateModel()
 
 	// Wait for promise to resolve, to ensure a minimum of 2.5 sec of training from users perspective
 	void trainingTimerPromise.then(() => {
@@ -259,36 +208,7 @@ async function finishedTraining() {
 	});
 }
 
-function findValues(json: any): [Array<number>, Array<number>] {
 
-	// Is there a better way to test if a field is JSON?
-	function isJson(x: any) {
-		return (x === Object(x) && !Array.isArray(x))
-	}
-
-	function traverse(string: any) {
-		for (var key in string) {
-			if (isJson(string[key])) {
-				traverse(string[key])
-			} else {
-				if (key === 'max') {
-					maxs.push(string[key])
-				} else if (key === 'min') {
-					mins.push(string[key])
-				}
-
-			}
-		}
-	}
-	
-	const maxs: Array<number> = [];
-	const mins: Array<number> = [];
-	traverse(json)
-	// Remove last value
-	maxs.pop()
-	mins.pop()
-	return [maxs,mins]
-}
 
 function checkModelAndSetupPredictionInterval
 (error: string | undefined, result: { confidence: number, label: string }[]) {

@@ -16,7 +16,10 @@ import { get, type Unsubscriber } from "svelte/store";
 import { t } from "../i18n";
 import { ML5NeuralNetwork, neuralNetwork } from "ml5";
 import { compileModel } from "ml4f";
-import { MemoryMap } from 'nrf-intel-hex'
+import MemoryMap from 'nrf-intel-hex'
+//import MemoryMap = require("nrf-intel-hex")
+
+//import * as MemoryMap from 'nrf-intel-hex'
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
@@ -226,31 +229,22 @@ async function finishedTraining() {
 		// Retrieve MICROBIT_NO_MODEL (located in firmware)
 		const hex_file_name = 'firmware/MICROBIT_NO_MODEL.hex'
 		const hexFile: Response = await fetch(hex_file_name);
-		const string = hexFile.text()
+		const hexstring_no_model = await hexFile.text()
 	
-		try {
-	
-			let intelHexString =
-			":100000000102030405060708090A0B0C0D0E0F1068\n" +
-			":00000001FF";
-	
-			console.log(MemoryMap)
-	
-			let memoryMap = MemoryMap.fromHex(intelHexString)
-			console.log(memoryMap)
-		} catch (error) {
-			console.log(error) 
-			console.error(error)
-		}
+		const memoryMap = MemoryMap.fromHex(hexstring_no_model)
+
+		const model_base = 0x40000
+
+		// Place maxbuf
+		memoryMap.set(model_base, new Uint8Array(max_bytes))
+		// Place minbuf
+		memoryMap.set(model_base + 4 * maxbufs.length, new Uint8Array(min_bytes))
+		// Place model
+		memoryMap.set(model_base + 2 * 4 * maxbufs.length, cres.machineCode)
 		
-	
-		// console.log(memoryMap)
-		
-		// const model_base = 0x40000
-		// memoryMap.set(model_base, max_bytes)
-		// memoryMap.set(model_base + 2 * 4 * maxbufs.length, cres.machineCode)
-		
-		// console.log(memoryMap.asHexString)
+		console.log(memoryMap.asHexString())
+
+		get(model).save()
 
 
 	// Wait for promise to resolve, to ensure a minimum of 2.5 sec of training from users perspective

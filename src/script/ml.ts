@@ -16,6 +16,7 @@ import { get, type Unsubscriber } from "svelte/store";
 import { t } from "../i18n";
 import { ML5NeuralNetwork, neuralNetwork } from "ml5";
 import { compileModel } from "ml4f";
+import { MemoryMap } from 'nrf-intel-hex'
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => text = t);
@@ -192,39 +193,64 @@ function createModel(): ML5NeuralNetwork {
 }
 
 // Set state to not-Training and initiate prediction.
-function finishedTraining() {
+async function finishedTraining() {
 
 	
-	const modelName = 'my-model'
+		// Retrieve model_meta.json
+		var meta = JSON.parse(JSON.stringify(get(model).neuralNetworkData.meta))
 
-	// Retrieve model_meta.json
-	console.log(JSON.stringify(get(model).neuralNetworkData.meta))
-
-	// Retrieve the model and place in local storage. 
-	// Is it better to store in session storage, privacy concerns?
-
-
-	let mode = get(model).neuralNetwork.model;
-	mode.save(`localstorage://${modelName}`);
-
-	const cres = compileModel(mode, {})
-  	console.log(cres.js)
-
-	// const model_topology = localStorage.getItem(`tensorflowjs_models/${modelName}/model_topology`)
-	// const weight_specs = localStorage.getItem(`tensorflowjs_models/${modelName}/weight_specs`)
-	// const weight_data = localStorage.getItem(`tensorflowjs_models/${modelName}/weight_data`)
-
-	// const weights_manifest = {
-	// 	modelTopology: model_topology,
-	// 	weightsManifest: [
-	// 		{
-	// 			paths: [`./${modelName}.weights.bin`],
-	// 			weights: weight_specs
-	// 		},
-	// 	],
-	// };
-
-	// console.log(JSON.stringify(weights_manifest))
+		// Turn bufs into bytes
+		const bufs = findValues(meta)
+		const maxbufs = bufs[0]
+		const minbufs = bufs[1]
+	
+		const max_bytes = new ArrayBuffer(4 * maxbufs.length) // Size of int8 is 4
+		const max_view = new DataView(max_bytes)
+		for (let i = 0; i < maxbufs.length; i++) {
+			max_view.setFloat32(i * 4, maxbufs[i], true)
+		}
+	
+		const min_bytes = new ArrayBuffer(4 * minbufs.length) // Size of int8 is 4
+		const min_view = new DataView(min_bytes)
+		for (let i = 0; i < minbufs.length; i++) {
+			min_view.setFloat32(i * 4, minbufs[i], true)
+		}
+	
+		console.log(max_bytes)
+		console.log(min_bytes)
+	
+		let mode = get(model).neuralNetwork.model;
+	
+		const cres = compileModel(mode, {})
+	
+		// Retrieve MICROBIT_NO_MODEL (located in firmware)
+		const hex_file_name = 'firmware/MICROBIT_NO_MODEL.hex'
+		const hexFile: Response = await fetch(hex_file_name);
+		const string = hexFile.text()
+	
+		try {
+	
+			let intelHexString =
+			":100000000102030405060708090A0B0C0D0E0F1068\n" +
+			":00000001FF";
+	
+			console.log(MemoryMap)
+	
+			let memoryMap = MemoryMap.fromHex(intelHexString)
+			console.log(memoryMap)
+		} catch (error) {
+			console.log(error) 
+			console.error(error)
+		}
+		
+	
+		// console.log(memoryMap)
+		
+		// const model_base = 0x40000
+		// memoryMap.set(model_base, max_bytes)
+		// memoryMap.set(model_base + 2 * 4 * maxbufs.length, cres.machineCode)
+		
+		// console.log(memoryMap.asHexString)
 
 
 	// Wait for promise to resolve, to ensure a minimum of 2.5 sec of training from users perspective
@@ -237,6 +263,37 @@ function finishedTraining() {
 		const input = makeInputs(x, y, z);
 		get(model).classify(input, checkModelAndSetupPredictionInterval);
 	});
+}
+
+function findValues(json: any): [Array<number>, Array<number>] {
+
+	// Is there a better way to test if a field is JSON?
+	function isJson(x: any) {
+		return (x === Object(x) && !Array.isArray(x))
+	}
+
+	function traverse(string: any) {
+		for (var key in string) {
+			if (isJson(string[key])) {
+				traverse(string[key])
+			} else {
+				if (key === 'max') {
+					maxs.push(string[key])
+				} else if (key === 'min') {
+					mins.push(string[key])
+				}
+
+			}
+		}
+	}
+	
+	const maxs: Array<number> = [];
+	const mins: Array<number> = [];
+	traverse(json)
+	// Remove last value
+	maxs.pop()
+	mins.pop()
+	return [maxs,mins]
 }
 
 function checkModelAndSetupPredictionInterval

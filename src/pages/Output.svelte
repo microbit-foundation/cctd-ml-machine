@@ -75,7 +75,6 @@
     }
   }
 
-  // Hack to avoid classifying when visiting the webpage
   let firstMount = true;
   onMount(() => {
     firstMount = false;

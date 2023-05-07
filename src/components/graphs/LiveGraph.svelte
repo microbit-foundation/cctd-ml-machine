@@ -43,7 +43,15 @@
   // Start and stop chart when microbit connect/disconnect
   $: {
     if (chart !== undefined) {
-      $state.isInputReady ? chart.start() : chart.stop();
+      if ($state.isInputReady) {
+        if (!$state.isTraining) {
+          chart!.start();
+        } else {
+          chart.stop();
+        }
+      } else {
+        chart.stop();
+      }
     }
   }
 
@@ -108,5 +116,5 @@
 </script>
 
 <main>
-  <canvas bind:this="{canvas}" height="160" id="smoothie-chart" width="{width}"></canvas>
+  <canvas bind:this={canvas} height="160" id="smoothie-chart" {width} />
 </main>

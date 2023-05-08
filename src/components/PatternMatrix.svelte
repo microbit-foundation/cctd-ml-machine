@@ -54,7 +54,6 @@
 
   /** If bad matrix given to component => reset */
   // This should never happen
-  // TODO: Clean this function. Consider going from 1d array to 2d
   if (!(matrix instanceof Array) || matrix.length !== 25) {
     matrix = new Array<boolean>(25);
     for (let i = 0; i < 25; i++) {

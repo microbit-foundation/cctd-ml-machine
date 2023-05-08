@@ -56,9 +56,6 @@ export default {
 		"content.model.trainModelFirstBody": "Gå til 'Træner'-siden",
 		"content.model.classification.helpHeading": "Sandsynligheds-meteret",
 		"content.model.classification.helpBody": "For hver forudsigelse, vil modellen producere et procent-tal, der beskriver hvor sikker modellen er i sin fordusigelse. Dette meter går fra 0% til 100%. Med slideren ved siden af, kan du bestemme grænsen for, hvor sikker modellen skal være i sin forudsigelse for at lave et output (fx afspille en lyd)",
-		"content.model.output.affect": "Påvirk",
-		"content.model.output.optionPin": "Pin",
-		"content.model.output.optionSound": "Lyd",
 		"content.model.output.soundOptionCongratulations": "Tillykke",
 		"content.model.output.soundOptionHighPitchBeep": "Højtone Bip",
 		"content.model.output.soundOptionLowPitchBeep": "Lavtone Bip",
@@ -206,7 +203,12 @@ export default {
 		"popup.connectMB.USBCompatibility.transferStep.step3": "Når overførslen er færdig, kan du tilslutte din micro:bit med Bluetooth.",
 
 		"compatibility.platform.notSupported": "Værktøjet er ikke understøttet på din nuværende platform.",
-		"compatibility.platform.notSupported.joinDesktop": "Vi ses på computer."
+		"compatibility.platform.notSupported.joinDesktop": "Vi ses på computer.",
+
+		// CONNECTION LOST DIALOG
+
+		"dialog.connection.lost.header": "Forbindelse offline",
+		"dialog.connection.lost.body": "Vi kan ikke oprette forbindelse til internettet, nogle funktioner virker muligvis ikke som forventet."
 
 	},
 	"en": {
@@ -266,9 +268,6 @@ export default {
 		"content.model.trainModelFirstBody": "Go to the 'Trainer' page",
 		"content.model.classification.helpHeading": "Probabil-ometer",
 		"content.model.classification.helpBody": "For each prediction you make, the model will produce a percentage that describes how confident the model is in its prediction. This meter goes from 0% to 100%. With the slider next to it, you can determine the limit of how certain the model should be in its preduction to make an output (e.g. play a sound)",
-		"content.model.output.affect": "Affect",
-		"content.model.output.optionPin": "Pin",
-		"content.model.output.optionSound": "Sound",
 		"content.model.output.soundOptionCongratulations": "Congratulations",
 		"content.model.output.soundOptionHighPitchBeep": "High pitch beep",
 		"content.model.output.soundOptionLowPitchBeep": "Low pitch beep",
@@ -416,8 +415,12 @@ export default {
 		"popup.connectMB.USBCompatibility.transferStep.step3": "Once the file has finished transferring, the micro:bit can be connected using Bluetooth.",
 
 		"compatibility.platform.notSupported": "The tool is not supported on your current platform.",
-		"compatibility.platform.notSupported.joinDesktop": "Join us on desktop."
+		"compatibility.platform.notSupported.joinDesktop": "Join us on desktop.",
 
+		// CONNECTION LOST DIALOG
+
+		"dialog.connection.lost.header": "Connection offline",
+		"dialog.connection.lost.body": "Your internet connection is offline, some features may not work properly"
 	}
 };
   

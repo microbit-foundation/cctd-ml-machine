@@ -7,7 +7,6 @@ import {
   getPrevData,
   model,
   settings,
-  //trainingState,
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
@@ -52,7 +51,6 @@ type accData =
   | 'az_total';
 
 function createModel(): LayersModel {
-  //const shape = get(settings).includedAxes * get(settings).includedParameters;
   const gestureData = get(gestures);
   const numberOfClasses: number = gestureData.length;
 
@@ -207,18 +205,6 @@ function finishedTraining() {
     setupPredictionInterval();
   });
 }
-
-// For each epoch, whileTraining is called.
-// Updates trainingState, which components can listen to.
-// function whileTraining(epoch: number, loss: { val_loss: number, val_acc: number, loss: number, acc: number }) {
-// 	const numEpochs = get(settings).numEpochs + 1;
-
-// 	trainingState.set({
-// 		percentage: Math.round((epoch / numEpochs) * 100),
-// 		loss: loss.val_loss,
-// 		epochs: epoch
-// 	});
-// }
 
 // makeInput reduces array of x, y and z inputs to a single object with values.
 // Depending on user settings. There will be anywhere between 1-12 parameters in
@@ -386,36 +372,3 @@ function tfHandlePrediction(result: Float32Array) {
     }
   }
 }
-
-// creates input parameters for the algortihm.
-// Utilizes the learningParameter array and the user settings to
-// Create an option array which the learning algorithm takes in.
-// function createInputs(s: { axes: boolean[]; params: boolean[]; }) {
-// 	const learningParameters = [
-// 		"ax_max",
-// 		"ax_min",
-// 		"ax_std",
-// 		"ax_peaks",
-// 		"ax_total",
-// 		"ay_max",
-// 		"ay_min",
-// 		"ay_std",
-// 		"ay_peaks",
-// 		"ay_total",
-// 		"az_max",
-// 		"az_min",
-// 		"az_std",
-// 		"az_peaks",
-// 		"az_total"
-// 	];
-// 	const options: string[] = [];
-// 	for (let axNum = 0; axNum < s.axes.length; axNum++) {
-// 		for (let paramNum = 0; paramNum < s.params.length; paramNum++) {
-// 			if (s.axes[axNum] && s.params[paramNum]) {
-// 				const lookup = axNum * 5 + paramNum;
-// 				options.push(learningParameters[lookup]);
-// 			}
-// 		}
-// 	}
-// 	return options;
-// }

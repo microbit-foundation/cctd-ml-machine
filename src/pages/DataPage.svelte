@@ -1,10 +1,3 @@
-<style>
-  .arrow-filter-color {
-    filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%)
-      contrast(100%);
-  }
-</style>
-
 <script lang="ts">
   import Gesture from '../components/Gesture.svelte';
   import { state } from '../script/stores/uiStore';
@@ -25,6 +18,8 @@
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
   import ControlBar from '../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
+  import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
+  import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -63,62 +58,16 @@
 <!-- Main pane -->
 <main class="h-full flex flex-col">
   <div>
-    <ControlBar>
-      <ExpandableControlBarMenu>
-        <StandardButton
-          fillOnHover
-          small
-          onClick={onClearGestures}
-          bold={false}
-          outlined
-          shadows={false}
-          color="primary">
-          {$t('content.data.controlbar.button.clearData')}
-        </StandardButton>
-        <div class="ml-2" />
-        <StandardButton
-          fillOnHover
-          small
-          onClick={onDownloadGestures}
-          bold={false}
-          outlined
-          shadows={false}
-          color="primary">
-          {$t('content.data.controlbar.button.downloadData')}
-        </StandardButton>
-        <div class="ml-2" />
-        <StandardButton
-          fillOnHover
-          small
-          onClick={onUploadGestures}
-          bold={false}
-          outlined
-          isFileInput
-          shadows={false}
-          color="primary">
-          {$t('content.data.controlbar.button.uploadData')}
-        </StandardButton>
-      </ExpandableControlBarMenu>
-    </ControlBar>
+    <DataPageControlBar
+      clearDisabled={$gestures.length === 0}
+      downloadDisabled={$gestures.length === 0}
+      {onClearGestures}
+      {onDownloadGestures}
+      {onUploadGestures} />
   </div>
   {#if !hasSomeData() && !$state.isInputConnected}
-    <!-- 'training page has same component. Extract' -->
     <div class="flex flex-col flex-grow justify-center">
-      <div class="w-full text-primarytext">
-        <p class="text-center text-3xl bold m-auto">
-          {$t('menu.trainer.notConnected1')}
-        </p>
-        <p class="text-center text-3xl  bold m-auto">
-          {$t('menu.trainer.notConnected2')}
-        </p>
-        <div class="text-center ml-auto mr-auto mb-2 mt-10 ">
-          <img
-            class="m-auto arrow-filter-color"
-            src="imgs/down_arrow.svg"
-            alt="down arrow icon"
-            width="100px" />
-        </div>
-      </div>
+      <PleaseConnectFirst />
     </div>
   {:else}
     <div class="mt-4 ml-3">

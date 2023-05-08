@@ -63,7 +63,6 @@ export function peaks(
   if (y === undefined || y.length < lag + 2) {
     throw ` ## y data array to short(${y.length}) for given lag of ${lag}`;
   }
-  // console.log(`lag, threshold, influence: ${lag}, ${threshold}, ${influence}`)
 
   // init variables
   const signals = Array(y.length).fill(0) as number[];
@@ -78,7 +77,6 @@ export function peaks(
   // console.log("2: " + stdFilter.toString())
 
   for (let i = lag; i < y.length; i++) {
-    // console.log(`${y[i]}, ${avgFilter[i-1]}, ${threshold}, ${stdFilter[i-1]}`)
     // added in Math.abs(y[i] - avgFilter[i - 1]) > 0.1 to account for peak detection when differences are very small
     if (
       Math.abs(y[i] - avgFilter[i - 1]) > 0.1 &&

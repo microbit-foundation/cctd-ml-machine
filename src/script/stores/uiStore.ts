@@ -75,9 +75,8 @@ export function alertUser(text: string): void {
 }
 
 // Assess whether an action is allowed. Alert user if not
-// TODO: Rename 'bool' arg. What is it?
-export function isReady(bool = true, alertIfNotReady = true): boolean {
-  const status = assessStateStatus(bool);
+export function isReady(actionAllowed = true, alertIfNotReady = true): boolean {
+  const status = assessStateStatus(actionAllowed);
 
   if (!status.isReady && alertIfNotReady) {
     alertUser(status.msg);
@@ -87,14 +86,13 @@ export function isReady(bool = true, alertIfNotReady = true): boolean {
 }
 
 // Assess status and return message to alert user.
-// TODO: Fix naming of 'bool' param. What is it?
-function assessStateStatus(bool = true): { isReady: boolean; msg: string } {
+function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: string } {
   const currentState = get(state);
 
   if (currentState.isRecording) return { isReady: false, msg: text('alert.isRecording') };
   if (currentState.isTesting) return { isReady: false, msg: text('alert.isTesting') };
   if (currentState.isTraining) return { isReady: false, msg: text('alert.isTraining') };
-  if (!currentState.isInputConnected && bool)
+  if (!currentState.isInputConnected && actionAllowed)
     return { isReady: false, msg: text('alert.isNotConnected') };
 
   return { isReady: true, msg: '' };
@@ -110,10 +108,7 @@ export const hasSufficientData = (): boolean => {
   return !get(gestures).some(gesture => gesture.recordings.length < 3);
 };
 
-//TODO: switch to booleans?
 export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
   buttonA: 0,
   buttonB: 0,
 });
-
-// export {}

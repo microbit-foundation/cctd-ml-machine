@@ -1,12 +1,21 @@
+<style>
+  .hovering {
+    transition: 0.2s ease;
+    transform: scale(1.3);
+  }
+  .underline {
+    text-decoration: underline;
+  }
+</style>
+
 <script lang="ts">
+  import { getInfoBoxColors } from '../../script/InformationComponentUtility';
 
-  import {getInfoBoxColors} from "../../script/InformationComponentUtility";
-
-  export let text: string | undefined = undefined
-  export let underlineText = true
-  export let isLightTheme: boolean = true;
-  export let boxOffset: {x: number, y: number} = {x: 0, y: 0}
-  export let width = 300
+  export let text: string | undefined = undefined;
+  export let underlineText = true;
+  export let isLightTheme = true;
+  export let boxOffset: { x: number; y: number } = { x: 0, y: 0 };
+  export let width = 300;
 
   const colors = getInfoBoxColors(isLightTheme);
 
@@ -34,15 +43,15 @@
 
 <div
   class="cursor-pointer w-auto flex"
-  on:mouseenter="{() => onMouseEnter()}"
-  on:mouseleave="{() => (isOpen = false)}"
-  bind:clientWidth="{w}"
-  bind:clientHeight="{h}"
-  bind:this="{domNode}">
+  on:mouseenter={() => onMouseEnter()}
+  on:mouseleave={() => (isOpen = false)}
+  bind:clientWidth={w}
+  bind:clientHeight={h}
+  bind:this={domNode}>
   {#if text !== undefined}
     <p
       class="text-white w-auto h-auto mr-0 whitespace-pre-line"
-      class:underline="{underlineText}"
+      class:underline={underlineText}
       style="color: {iconTextColor}">
       {text}
     </p>
@@ -51,8 +60,8 @@
   <i
     class="far fa-question-circle flex text-white
              w-auto h-auto mr-0 ml-1 mt-4px"
-    class:hovering="{isOpen}"
-    style="color: {iconColor}"></i>
+    class:hovering={isOpen}
+    style="color: {iconColor}" />
 
   {#if isOpen}
     <div
@@ -63,15 +72,3 @@
     </div>
   {/if}
 </div>
-
-<style>
-  .hovering {
-      transition: 0.2s ease;
-      transform: scale(1.3);
-  }
-  .underline {
-    text-decoration: underline;
-  }
-
-</style>
-

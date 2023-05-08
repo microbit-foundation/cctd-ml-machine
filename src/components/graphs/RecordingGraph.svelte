@@ -4,7 +4,7 @@
 
   export let data: { x: number[]; y: number[]; z: number[] };
 
-  function getConfig(): ChartConfiguration {
+  function getConfig(): ChartConfiguration<string, number, string> {
     const x: { x: number; y: number }[] = [];
     const y: { x: number; y: number }[] = [];
     const z: { x: number; y: number }[] = [];
@@ -80,4 +80,4 @@
   }
 </script>
 
-<Graph config="{getConfig()}" />
+<Graph config={getConfig()} />

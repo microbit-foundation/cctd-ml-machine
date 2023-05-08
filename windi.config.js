@@ -12,7 +12,7 @@ export default {
         backgrounddark: '#F5F5F5',
         backgroundlight: '#ffffff',
         infolight: '#93c5fd',
-        warning: '#FFaaaa',
+        warning: '#ffaaaa',
         disabled: '#8892A3',
         primaryborder: '#E5E7EB',
         infobglight: '#E7E5E4',

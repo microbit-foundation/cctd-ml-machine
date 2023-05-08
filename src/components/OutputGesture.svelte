@@ -25,6 +25,7 @@
   import GestureTilePart from './GestureTilePart.svelte';
   import PinSelector from './output/PinSelector.svelte';
   import { state } from '../script/stores/uiStore';
+  import StaticConfiguration from '../StaticConfiguration';
 
   // Variables for component
   export let gesture: GestureData;
@@ -34,15 +35,20 @@
   let triggered = false;
   let triggerFunctions: (() => void)[] = [];
   let selectedSound: SoundData | undefined = gesture.output.sound;
-  let selectedPin: number = 0;
+  let selectedPin = StaticConfiguration.defaultOutputPin;
 
-  let requiredConfidenceLevel = 80;
+  let requiredConfidenceLevel = StaticConfiguration.defaultRequiredConfidence;
   $: currentConfidenceLevel = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
   // $: gesture.output.sound = selectedSound
 
+  const triggerComponents = () =>
+    triggerFunctions.forEach(triggerFunc => {
+      triggerFunc();
+    });
+
   // $: if (shouldTrigger(requiredConfidenceLevel, confidenceLevel, triggered)) triggerComponnets();
   $: if (shouldTrigger(requiredConfidenceLevel, currentConfidenceLevel, triggered)) {
-    triggerComponnets();
+    triggerComponents();
     playSound();
     triggerOutputPin();
   }
@@ -60,7 +66,7 @@
     Microbits.sendToOutputPin([{ pin: selectedPin, on: true }]);
     setTimeout(() => {
       Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
-    }, 1500);
+    }, StaticConfiguration.pinToggleTime);
   }
 
   function playSound() {
@@ -89,12 +95,6 @@
     if (oldTriggered) return false;
     return true;
   }
-
-  const triggerComponnets = () =>
-    triggerFunctions.forEach(triggerFunc => {
-      triggerFunc();
-    });
-
   let hasLoadedMicrobitImage = false;
 </script>
 

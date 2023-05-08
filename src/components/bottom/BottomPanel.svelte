@@ -7,8 +7,9 @@
   import TextInformation from '../information/TextInformation.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import StandardButton from '../StandardButton.svelte';
-  import TypingUtils from '../../script/TypingUtils';
   import { startConnectionProcess } from '../../script/stores/connectDialogStore';
+  import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
+  import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -26,23 +27,22 @@
   };
 </script>
 
-<!-- TODO: Reafactor and/or split up. Too long and nested component -->
 <div
-  bind:clientWidth="{componentWidth}"
+  bind:clientWidth={componentWidth}
   class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
-  class:bg-gray-300="{$state.isInputAssigned && !$state.isInputReady}">
-  <ConnectDialogContainer bind:this="{connectDialogReference}" />
+  class:bg-gray-300={$state.isInputAssigned && !$state.isInputReady}>
+  <ConnectDialogContainer bind:this={connectDialogReference} />
   {#if !$state.isInputAssigned}
     <!-- No input microbit assigned -->
     <div class="h-full w-full flex justify-center bg-white">
-      <StandardButton onClick="{connectButtonClicked}"
+      <StandardButton onClick={connectButtonClicked}
         >{$t('footer.connectButtonNotConnected')}</StandardButton>
     </div>
   {:else}
     <!-- Input microbit is assigned -->
     <div class="relative w-full h-full">
       <div class="absolute w-full h-full">
-        <LiveGraph width="{componentWidth}" />
+        <LiveGraph width={componentWidth} />
       </div>
       {#if !$state.isInputReady}
         <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->
@@ -54,52 +54,15 @@
         </div>
       {/if}
       <div class="w-full h-full p-0 m-0 absolute top-0 left-0">
+        <!-- The live text and info box -->
         <div class="float-left mt-2 ml-2">
-          <div class="float-left">
-            <TextInformation
-              titleText="{$t('footer.helpHeader')}"
-              bodyText="{$t('footer.helpContent')}"
-              isLightTheme="{false}"
-              boxOffset="{{ x: 25, y: -50 }}" />
-          </div>
-          <p class="float-left ml-10">Live</p>
-          <p
-            class="float-left ml-1 -mt-3 text-3xl"
-            class:text-red-500="{$state.isInputReady}"
-            class:text-gray-500="{!$state.isInputReady}">
-            &#x2022;
-          </p>
+          <LiveGraphInformationSection />
         </div>
-        <div class="absolute right-2 top-2 m-0 float-right flex">
-          {#if $state.isPredicting || $state.isTraining || $state.isOutputConnected}
-            {#if $state.isOutputAssigned}
-              <!-- Output is assigned -->
-              {#if !$state.isOutputConnected || $state.isOutputReady}
-                <!-- Output MB is not in the connection process -->
-                <StandardButton onClick="{outputDisconnectButtonClicked}" color="warning"
-                  >{$t('menu.model.disconnect')}</StandardButton>
-              {:else}
-                <StandardButton onClick="{TypingUtils.emptyFunction}" color="disabled">
-                  <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
-                </StandardButton>
-              {/if}
-            {:else}
-              <StandardButton onClick="{connectButtonClicked}">
-                {$t('menu.model.connectOutputButton')}
-              </StandardButton>
-            {/if}
-          {/if}
-          <div class="ml-2">
-            {#if !$state.isInputConnected || $state.isInputReady}
-              <!-- Input MB is not in the connection process -->
-              <StandardButton onClick="{inputDisconnectButtonClicked}" color="warning"
-                >{$t('footer.disconnectButton')}</StandardButton>
-            {:else}
-              <StandardButton onClick="{TypingUtils.emptyFunction}" color="disabled">
-                <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
-              </StandardButton>
-            {/if}
-          </div>
+        <div class="absolute right-2 top-2 m-0 float-right">
+          <ConnectedLiveGraphButtons
+            onInputDisconnectButtonClicked={inputDisconnectButtonClicked}
+            onOutputConnectButtonClicked={connectButtonClicked}
+            onOutputDisconnectButtonClicked={outputDisconnectButtonClicked} />
         </div>
       </div>
     </div>

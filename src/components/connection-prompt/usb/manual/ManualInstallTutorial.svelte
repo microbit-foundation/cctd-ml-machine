@@ -8,17 +8,7 @@
 
   export let onConnectBluetoothClick: () => void;
 
-  // TODO: Somewhat hacky and ugly. Clean this up
-  function downloadFirmware() {
-    const a = document.createElement('a');
-    a.href = Microbits.hexFiles.universal;
-    a.download = 'firmware.hex';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
-  onMount(() => downloadFirmware());
+  onMount(() => Microbits.downloadFirmware());
 
   const browser = Bowser.getParser(window.navigator.userAgent);
   const osName = browser.getOS().name ?? 'unknown';
@@ -33,7 +23,7 @@
       case 'macOS':
         return 'imgs/transfer_firmware_macos.gif';
       default:
-        return 'imgs/transfer_firmware_macosgif';
+        return 'imgs/transfer_firmware_macos.gif';
     }
   };
 
@@ -50,7 +40,7 @@
     </p>
     <p
       class="hover:cursor-pointer text-red-500 underline"
-      on:click="{() => downloadFirmware()}">
+      on:click={() => Microbits.downloadFirmware()}>
       {$t('connectMB.usb.manual.manualDownloadLink')}
     </p>
   </div>
@@ -65,14 +55,14 @@
         <ImageSkeleton
           alt="Transferring the firmware"
           castShadow
-          height="{104}"
-          src="{transferIllustration}"
-          width="{290}" />
+          height={104}
+          src={transferIllustration}
+          width={290} />
       </div>
     </div>
   </div>
   <div class="grid grid-cols-1 place-items-center w-full">
-    <StandardButton onClick="{onConnectBluetoothClick}"
+    <StandardButton onClick={onConnectBluetoothClick}
       >{$t('connectMB.usb.manual.done')}</StandardButton>
   </div>
 </main>

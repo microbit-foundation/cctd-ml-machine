@@ -8,8 +8,6 @@ export const locale = persistantWritable('lang', initialLang);
 
 export const locales: string[] = Object.keys(translations);
 
-// TODO: Types on vars
-// TODO: Do we even want to keep vars? Never used I think (Jon)
 function translate(locale: string, key: string, vars: object): string {
   // Let's throw some errors if we're trying to use keys/locales that don't exist.
   // We could improve this by using Typescript and/or fallback values.

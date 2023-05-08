@@ -62,7 +62,6 @@
     if (!hasEnabledSound) {
       return;
     }
-    // TODO: Rethink this. Not very elegant
     // If a sound is saved, match it up with the possible options, to make it display properly in the html
     for (let i = 0; i < soundArray.length; i++) {
       if (selectedSound !== undefined && selectedSound.id === soundArray[i].id) {
@@ -78,16 +77,13 @@
 </script>
 
 <GestureTilePart ml>
-  <div
-    class="w-146px h-full cursor-pointer relative"
-    on:click={onToggleSound}>
+  <div class="w-146px h-full cursor-pointer relative" on:click={onToggleSound}>
     <div class="w-full h-full text-center text-80px">
-      <i
-        class="fa fa-volume-up absolute text-secondary left-6.5 top-6" />
+      <i class="fa fa-volume-up absolute text-secondary left-6.5 top-6" />
       {#if !hasEnabledSound}
         <i class="fas fa-slash absolute text-secondary left-6.5 top-6" />
       {/if}
-      </div>
+    </div>
     {#if hasEnabledSound}
       <select
         class="bg-white border rounded text-center absolute bottom-2 ml-13px mr-13px w-120px"

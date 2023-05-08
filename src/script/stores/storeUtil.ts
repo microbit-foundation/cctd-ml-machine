@@ -54,8 +54,6 @@ function shouldUseStored<T>(storedObject: unknown, initValue: T): boolean {
   return areMatchingTypes(initValue, storedPersistObject.value);
 }
 
-// TODO: Unit test function to make sure it works more generally
-// TODO: Handle cases where one is null and the other is not
 // Recursively checks if to variables of unknown type matches each
 // other type and structure wise
 // Due to javascript being a dumb language without proper typing, this cannot check

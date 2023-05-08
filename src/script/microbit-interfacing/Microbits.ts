@@ -9,6 +9,7 @@ import { outputting } from '../stores/uiStore';
 import MicrobitUSB from './MicrobitUSB';
 import type ConnectionBehaviour from '../connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
+import StaticConfiguration from '../../StaticConfiguration';
 
 type QueueElement = {
   service: BluetoothRemoteGATTCharacteristic;
@@ -57,6 +58,18 @@ class Microbits {
    */
   public static isInputAssigned(): boolean {
     return this.assignedInputMicrobit !== undefined;
+  }
+
+  /**
+   * Downloads the universal HEX on the users' computer.
+   */
+  public static downloadFirmware(): void {
+    const a = document.createElement('a');
+    a.href = Microbits.hexFiles.universal;
+    a.download = StaticConfiguration.downloadedHexFilename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   /**

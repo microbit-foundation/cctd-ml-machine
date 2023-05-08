@@ -112,7 +112,7 @@ behaviour of the platform and micro:bits.
 #### Confidence threshold
 
 Determines how confident the model has to be for a feedback action to be taken for the given gesture. This is a slider
-located to the right of the label and can be adjusted to make the model more sensitive, the default value is 90%, and
+located to the right of the label and can be adjusted to make the model more sensitive, the default value is 80%, and
 can be changes for each gesture.
 
 Immediately besides it, a confidence-meter shows how confident the model currently is and will change as you perform

@@ -11,11 +11,70 @@ is recorded. These recordings will be processed by a machine-learning algorithm 
 differentiate the recording and feedback process we allow for two micro:bits to be connected. One will act as a
 recording, or input device and another will act as a feedback, or output device.
 
-## Using ML-Machine
+<div style="margin-left: 10%; margin-right: 10%">
+<img style="border-radius: 5px" src="https://user-images.githubusercontent.com/6570193/236807377-5308b9c5-20e1-4a87-83cd-a2e0d822124b.png" alt="">
+</div>
+
+## Building ML-Machine
 
 ML-Machine can be found at [ML-Machine.org](https://ml-machine.org/) free to use.
 Using the platform requires at least one micro:bit, but two is recommended, especially if you are planning on using any
 of the I/O feedback.
+
+### Running the application locally
+
+Alternatively the application can be run locally on your computer without compromising the capabilities of the software.
+
+1. Ensure you have [nodejs](https://nodejs.org/) and the package manager [npm](https://www.npmjs.com/)
+2. Download or clone this repository
+3. In the terminal, run command `npm install` inside the project directory.
+4. Once installed, run `npm run dev` to launch the application.
+5. Access the application from http://localhost:5173/
+
+List of commands can be found below.
+
+
+### ```npm run dev```
+
+This starts the development environment using Vite. This should be used when developing as it supports hot-reload/live reload.
+
+We recommend starting here.
+
+### ```npm test```
+
+Runs the test suite. Tests are driven by the framework [Jest](https://jestjs.io/). Runs all tests inside the folder `./src/__tests__/`.
+
+If you do not plan to contribute to the project, you may safely ignore this.
+
+### ```npm run check```
+
+Runs the svelte-check procedure. This will check for various usability issues, unused variables and checks types. This is seldom used, and equivalent checks are performed through Vite and Typescript. Use as a supplement when finalizing a commit. 
+
+### ```npm run build```
+
+Creates a build for the application. Using Vite, the application will be built and placed in the `./dist/` folder.
+
+Use this if you are going to deploy the application on a webserver, or if you wish to use `npm start` to run the application.
+
+### ```npm start```
+
+This starts a server, hosting the contents of `./dist/`. This folder is built by running `npm run build`.
+
+This will expose the application to the network on the default port (5173).
+
+
+### Hex files
+
+Programs on your micro:bit is contained inside the .hex format files. The files we use can be found in `./public/firmware/`.
+The file must be uploaded to your micro:bit in order to use the application. 
+
+Note: The application can upload the program to the micro:bit, there is no need for manual installation of hex files prior to launching the application.
+
+The source code for these programs are written in c++ and can be found in the folder `./microbit/`. 
+
+If you wish to alter the micro:bit programs, you will need a few tools that depends on which micro:bit version you wish to build for. In the folder `./microbit/` lies a README.md with further instructions, which you can visit by clicking [here](./microbit/)
+
+## Using ML-Machine
 
 ### Connecting your micro:bit
 
@@ -73,17 +132,6 @@ speaker audio.
 
 Select the I/O pin you wish to turn on in response to a gesture detection. Combine this with circuitry to make gesture
 recognition perform actions outside the platform such as turning on motors or LEDs.
-
-### Getting started locally
-
-Alternatively the software can be run locally on your computer without compromising the capabilities of the software.
-
-Running the platform locally requires the package manager [npm](https://www.npmjs.com/)
-
-1. Download or clone this repository
-2. In the terminal, run command `npm install` inside the project directory.
-3. Once installed, run `npm run dev` to launch the application.
-4. Access the application from http://localhost:5173/
 
 ### Dependencies
 

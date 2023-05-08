@@ -49,7 +49,6 @@
       return;
     };
     img.onerror = ev => {
-      // Errors do not indicate bad connection, just bad request/response, such as image do not exist
       connectionOk = false;
       clearTimeout(connectionTimer);
       setTimeout(() => {

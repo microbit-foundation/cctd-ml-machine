@@ -3,6 +3,7 @@
   import StandardDialog from './dialogs/StandardDialog.svelte';
   import TypingUtils from '../script/TypingUtils';
   import { t } from '../i18n.js';
+  import StaticConfiguration from '../StaticConfiguration';
 
   /*
   Connection check works like this:
@@ -11,8 +12,6 @@
   3 - Use onerror and onload to determine whether or not it was successfully loaded
    */
   const pingDestination = 'https://ml-machine.org/favicon.png';
-
-  const pingTimeoutTime = 1500; // How long should we attempt to load before considering it a failure?
 
   const getAnimatedDots = (numOfDots: number) => {
     return `•`.repeat(numOfDots);
@@ -46,7 +45,7 @@
       clearTimeout(connectionTimer);
       setTimeout(() => {
         checkConnection();
-      }, 3000);
+      }, StaticConfiguration.connectionLostTimeoutDuration);
       return;
     };
     img.onerror = ev => {
@@ -55,7 +54,7 @@
       clearTimeout(connectionTimer);
       setTimeout(() => {
         checkConnection();
-      }, 3000);
+      }, StaticConfiguration.connectionLostTimeoutDuration);
       return;
     };
 
@@ -64,7 +63,7 @@
     connectionTimer = setTimeout(() => {
       connectionOk = false;
       checkConnection();
-    }, pingTimeoutTime);
+    }, StaticConfiguration.connectionLostTimeoutDuration);
   };
 
   onMount(() => {

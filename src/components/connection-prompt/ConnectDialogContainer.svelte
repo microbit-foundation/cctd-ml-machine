@@ -15,8 +15,15 @@
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { btPatternInput, btPatternOutput } from '../../script/stores/connectionStore';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
+  import { onMount } from 'svelte';
+  import { state } from '../../script/stores/uiStore';
+  import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
 
   let flashProgress = 0;
+
+  onMount(() => {
+    $state.brokenFirmwareDetected = false;
+  });
 
   function onFoundUsbDevice() {
     Microbits.getLinkedFriendlyName()
@@ -47,14 +54,16 @@
             $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
           });
       })
-      .catch(() => {
+      .catch((e: Error) => {
         // Couldn't find name. Set to manual transfer progress instead
-        $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
+        if (e.message.includes('No valid interfaces found')) {
+          // Edge case, caused by a bad micro:bit firmware
+          $state.brokenFirmwareDetected = true;
+          $connectionDialogState.connectionState = ConnectDialogStates.BAD_FIRMWARE;
+        } else {
+          $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
+        }
       });
-  }
-
-  function onManualTransferSelectVersion() {
-    $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
   }
 
   function connectSame() {
@@ -86,6 +95,8 @@
         deviceState={$connectionDialogState.deviceState} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_START}
       <FindUsbDialog onFoundUsb={onFoundUsbDevice} />
+    {:else if $connectionDialogState.connectionState === ConnectDialogStates.BAD_FIRMWARE}
+      <BrokenFirmwareDetected />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DOWNLOADING}
       <DownloadingDialog transferProgress={flashProgress} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DONE}

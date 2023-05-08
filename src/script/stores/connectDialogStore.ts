@@ -15,6 +15,7 @@ export enum ConnectDialogStates {
   USB_DOWNLOADING, // Downloading usb program status bar prompt
   USB_DONE, // Installation done prompt
   MANUAL_TUTORIAL, // Prompt with tutorial gif for manual installation (and downloading of program)
+  BAD_FIRMWARE, // We detected an issue with the firmware of the micro:bit trying to transfer program.
 }
 
 export const connectionDialogState = writable<{

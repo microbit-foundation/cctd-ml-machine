@@ -3,6 +3,7 @@
   import { fade } from 'svelte/transition';
   import { message, state } from '../script/stores/uiStore';
   import ReconnectPrompt from '../components/ReconnectPrompt.svelte';
+  import ConnectionOfflineWarning from '../components/ConnectionOfflineWarning.svelte';
 
   // Helps show error messages on top of page
   let latestMessage = '';
@@ -44,4 +45,5 @@
   {#if $state.offerReconnect}
     <ReconnectPrompt />
   {/if}
+  <ConnectionOfflineWarning />
 </div>

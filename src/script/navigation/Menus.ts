@@ -14,6 +14,12 @@ export type MenuProperties = {
   expandedButtonContent: typeof SvelteComponent;
 };
 
+export enum MenuID {
+  DATA = 0,
+  TRAINING = 1,
+  MODEL = 2,
+}
+
 /**
  * Wrapper for the menu logic, use navigation if possible, this is for fine-grained control of menus.
  */
@@ -58,7 +64,7 @@ class Menus {
     return this.currentlyOpen;
   }
 
-  public static openMenu(id: number) {
+  public static openMenu(id: MenuID) {
     this.currentlyOpen.set(id);
   }
 

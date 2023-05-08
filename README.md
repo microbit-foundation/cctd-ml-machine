@@ -152,7 +152,7 @@ ML-Machine utilises several packages, most notable of which are the following:
 If you experience an issue or have a question regarding the platform please do not hesitate to raise an issue. The
 maintainers will answer to any issues raised as quickly as possible.
 
-#### Code contributions
+#### Code contributions & code of conduct
 
 If you have an improvement on you wish to share with please read the [contributing](CONTRIBUTING.md) page. There you
 will find information about how to contribute. The maintainers will review the changes as soon as possible.

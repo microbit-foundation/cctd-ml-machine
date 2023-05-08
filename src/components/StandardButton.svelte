@@ -26,11 +26,13 @@
 
 <script lang="ts">
   import windi from './../../windi.config.js';
+  import TypingUtils from '../script/TypingUtils';
   type variants = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight' | 'disabled';
   export let color: variants = 'secondary';
   export let onClick: () => void = () => {
     return;
   };
+  export let disabled = false;
   export let stopPropagation = false;
   export let small = false;
   export let outlined = false;
@@ -59,6 +61,7 @@
     <input class="hidden" bind:this={fileInputElement} type="file" />
   {/if}
   <button
+    {disabled}
     style="--color: {bgColors[color]}; --border-width: {bold ? '2px' : '1px'}"
     class="outline-none rounded-full"
     class:shadow-md={shadows}
@@ -67,7 +70,9 @@
     class:normal={!small}
     class:outlined
     class:filled={!outlined}
-    class:fillOnHover
+    class:fillOnHover={fillOnHover && !disabled}
+    class:cursor-pointer={!disabled}
+    class:cursor-default={disabled}
     on:click={e => {
       if (stopPropagation) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call

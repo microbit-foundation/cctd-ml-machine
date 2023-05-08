@@ -61,9 +61,8 @@
   {/if}
   <button
     {disabled}
-    style="--color: {bgColors[disabled ? 'disabled' : color]}; --border-width: {bold
-      ? '2px'
-      : '1px'}"
+    style="--color: {bgColors[disabled ? 'disabled' : color]}
+    ; --border-width: {bold ? '2px' : '1px'}"
     class="outline-none rounded-full"
     class:shadow-md={shadows}
     class:font-bold={bold}

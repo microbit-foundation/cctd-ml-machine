@@ -139,7 +139,7 @@ ML-Machine utilises several packages, most notable of which are the following:
 
 - [Svelte](https://github.com/sveltejs/svelte) provides the web-development framework.
 - [Windi CSS](https://github.com/windicss/windicss) provides our styling tool.
-- [TensorFlowJS](https://github.com/tensorflow/tfjs) provides machine learning capabilities.
+- [TensorFlow.js](https://github.com/tensorflow/tfjs) provides machine learning capabilities.
 - [Smoothie Charts](https://github.com/joewalnes/smoothie) and [chart.js](https://github.com/chartjs/Chart.js) provides
   a visualisation kit.
 

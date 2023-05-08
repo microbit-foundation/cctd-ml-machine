@@ -13,9 +13,9 @@
   import { onMount } from 'svelte';
   import { classify } from '../script/ml';
   import { t } from '../i18n';
-  import TextInformation from '../components/information/TextInformation.svelte';
   import { fade } from 'svelte/transition';
   import ControlBar from '../components/control-bar/ControlBar.svelte';
+  import Information from '../components/information/Information.svelte';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -92,28 +92,28 @@
     <div>
       <div class="relative flex h-8 mt-4">
         <div class="absolute left-5 flex">
-          <TextInformation
+          <Information
             isLightTheme={false}
             iconText={$t('content.model.output.prediction.iconTitle')}
             titleText={$t('content.model.output.prediction.descriptionTitle')}
             bodyText={$t('content.model.output.prediction.descriptionBody')} />
         </div>
         <div class="absolute left-78 flex">
-          <TextInformation
+          <Information
             isLightTheme={false}
             iconText={$t('content.model.output.ledOutput.descriptionTitle')}
             titleText={$t('content.model.output.ledOutput.descriptionTitle')}
             bodyText={$t('content.model.output.ledOutput.descriptionBody')} />
         </div>
         <div class="absolute left-125 flex">
-          <TextInformation
+          <Information
             isLightTheme={false}
             iconText={$t('content.model.output.sound.iconTitle')}
             titleText={$t('content.model.output.sound.descriptionTitle')}
             bodyText={$t('content.model.output.sound.descriptionBody')} />
         </div>
         <div class="absolute left-167 flex">
-          <TextInformation
+          <Information
             isLightTheme={false}
             iconText={$t('content.model.output.pin.iconTitle')}
             titleText={$t('content.model.output.pin.descriptionTitle')}

@@ -18,7 +18,6 @@
     type SoundData,
   } from '../script/stores/mlStore';
   import { t } from '../i18n';
-  import TextInformation from './information/TextInformation.svelte';
   import OutputSoundSelector from './output/OutputSoundSelector.svelte';
   import Microbits from '../script/microbit-interfacing/Microbits';
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
@@ -26,6 +25,7 @@
   import PinSelector from './output/PinSelector.svelte';
   import { state } from '../script/stores/uiStore';
   import StaticConfiguration from '../StaticConfiguration';
+  import Information from './information/Information.svelte';
 
   // Variables for component
   export let gesture: GestureData;
@@ -144,7 +144,7 @@
         </div>
       </div>
       <div class="relative self-start">
-        <TextInformation
+        <Information
           titleText={$t('content.model.classification.helpHeading')}
           bodyText={$t('content.model.classification.helpBody')}
           isLightTheme={false} />

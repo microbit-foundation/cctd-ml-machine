@@ -1,12 +1,12 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import { state } from '../../script/stores/uiStore';
-  import TextInformation from '../information/TextInformation.svelte';
+  import Information from '../information/Information.svelte';
 </script>
 
 <div class="flex flex-row">
   <div>
-    <TextInformation
+    <Information
       titleText={$t('footer.helpHeader')}
       bodyText={$t('footer.helpContent')}
       isLightTheme={false}

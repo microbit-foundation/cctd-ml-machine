@@ -1,5 +1,4 @@
-import windi from './../../windi.config.js';
-
+import windi from '../../../windi.config.js';
 export const getInfoBoxColors = (isLightTheme: boolean) => {
   return {
     backgroundColor: isLightTheme

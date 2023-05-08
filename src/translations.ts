@@ -203,7 +203,12 @@ export default {
 		"popup.connectMB.USBCompatibility.transferStep.step3": "Når overførslen er færdig, kan du tilslutte din micro:bit med Bluetooth.",
 
 		"compatibility.platform.notSupported": "Værktøjet er ikke understøttet på din nuværende platform.",
-		"compatibility.platform.notSupported.joinDesktop": "Vi ses på computer."
+		"compatibility.platform.notSupported.joinDesktop": "Vi ses på computer.",
+
+		// CONNECTION LOST DIALOG
+
+		"dialog.connection.lost.header": "Forbindelse offline",
+		"dialog.connection.lost.body": "Vi kan ikke oprette forbindelse til internettet, nogle funktioner virker muligvis ikke som forventet."
 
 	},
 	"en": {
@@ -410,8 +415,12 @@ export default {
 		"popup.connectMB.USBCompatibility.transferStep.step3": "Once the file has finished transferring, the micro:bit can be connected using Bluetooth.",
 
 		"compatibility.platform.notSupported": "The tool is not supported on your current platform.",
-		"compatibility.platform.notSupported.joinDesktop": "Join us on desktop."
+		"compatibility.platform.notSupported.joinDesktop": "Join us on desktop.",
 
+		// CONNECTION LOST DIALOG
+
+		"dialog.connection.lost.header": "Connection offline",
+		"dialog.connection.lost.body": "Your internet connection is offline, some features may not work properly"
 	}
 };
   

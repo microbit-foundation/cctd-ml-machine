@@ -2,8 +2,17 @@
   import { onMount } from 'svelte';
   import StandardDialog from './dialogs/StandardDialog.svelte';
   import TypingUtils from '../script/TypingUtils';
+  import { t } from '../i18n.js';
 
+  /*
+  Connection check works like this:
+  1 - Create image component
+  2 - Set favicon into it as src
+  3 - Use onerror and onload to determine whether or not it was successfully loaded
+   */
   const pingDestination = 'https://ml-machine.org/favicon.png';
+
+  const pingTimeoutTime = 1500; // How long should we attempt to load before considering it a failure?
 
   const getAnimatedDots = (numOfDots: number) => {
     return `•`.repeat(numOfDots);
@@ -24,8 +33,13 @@
 
   let connectionTimer: NodeJS.Timeout = setTimeout(TypingUtils.emptyFunction);
   let connectionOk = true;
+
+  let img = new Image();
+
   const checkConnection = () => {
-    const img = new Image();
+    // Delete and recreate element to avoid memory leak
+    img.remove();
+    img = new Image();
     img.onload = () => {
       connectionOk = true;
       isOpen = true;
@@ -50,7 +64,7 @@
     connectionTimer = setTimeout(() => {
       connectionOk = false;
       checkConnection();
-    }, 3000);
+    }, pingTimeoutTime);
   };
 
   onMount(() => {
@@ -63,10 +77,12 @@
 
 {#if !connectionOk}
   <StandardDialog {isOpen} onClose={() => (isOpen = false)}>
-    <div class="w-80">
-      <p class="text-warning font-bold text-center text-lg">Connection offline</p>
+    <div class="w-100">
+      <p class="text-warning font-bold text-center text-lg">
+        {$t('dialog.connection.lost.header')}
+      </p>
       <p class="text-primarytext text-left">
-        Your internet connection is offline, some features may not work properly
+        {$t('dialog.connection.lost.body')}
       </p>
       <p>{animatedDots}</p>
     </div>

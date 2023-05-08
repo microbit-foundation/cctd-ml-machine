@@ -26,7 +26,6 @@
 
 <script lang="ts">
   import windi from './../../windi.config.js';
-  import TypingUtils from '../script/TypingUtils';
   type variants = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight' | 'disabled';
   export let color: variants = 'secondary';
   export let onClick: () => void = () => {
@@ -62,7 +61,9 @@
   {/if}
   <button
     {disabled}
-    style="--color: {bgColors[color]}; --border-width: {bold ? '2px' : '1px'}"
+    style="--color: {bgColors[disabled ? 'disabled' : color]}; --border-width: {bold
+      ? '2px'
+      : '1px'}"
     class="outline-none rounded-full"
     class:shadow-md={shadows}
     class:font-bold={bold}

@@ -38,7 +38,6 @@ export const state = writable<{
   isOutputAssigned: boolean;
   isOutputReady: boolean;
   isLoading: boolean;
-  brokenFirmwareDetected: boolean;
 }>({
   isRequestingDevice: DeviceRequestStates.NONE,
   isFlashingDevice: false,
@@ -56,7 +55,6 @@ export const state = writable<{
   isOutputAssigned: false,
   isOutputReady: false,
   isLoading: false,
-  brokenFirmwareDetected: false,
 });
 
 // Message store to propagate allow all components to inform users.

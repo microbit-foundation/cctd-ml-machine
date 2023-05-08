@@ -19,20 +19,23 @@
     <p>
       {$t('connectMB.usb.firmwareBroken.content1')}
     </p>
-    <p class="mt-2">
+    <p class="mt-2 font-bold">
       {$t('connectMB.usb.firmwareBroken.content2')}
     </p>
 
-    <p class="mb-2">
+    <p class="mt-2">
       {$t('connectMB.usb.firmwareBroken.content3')}
+    </p>
+
+    <p class="mb-2">
+      {$t('connectMB.usb.firmwareBroken.content4')}
       <a
         class="text-link underline"
         href="https://microbit.org/get-started/user-guide/firmware/"
-        >{$t('connectMB.usb.firmwareBroken.content3.website')}</a>
+        >{$t('connectMB.usb.firmwareBroken.content4.website')}</a>
     </p>
     <StandardButton
       onClick={() => {
-        $state.brokenFirmwareDetected = false;
         $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
       }}>{$t('connectMB.usb.firmwareBroken.button.skip')}</StandardButton>
   </div>

@@ -21,10 +21,6 @@
 
   let flashProgress = 0;
 
-  onMount(() => {
-    $state.brokenFirmwareDetected = false;
-  });
-
   function onFoundUsbDevice() {
     Microbits.getLinkedFriendlyName()
       .then(friendlyName => {
@@ -58,7 +54,6 @@
         // Couldn't find name. Set to manual transfer progress instead
         if (e.message.includes('No valid interfaces found')) {
           // Edge case, caused by a bad micro:bit firmware
-          $state.brokenFirmwareDetected = true;
           $connectionDialogState.connectionState = ConnectDialogStates.BAD_FIRMWARE;
         } else {
           $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;

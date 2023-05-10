@@ -32,4 +32,9 @@
 </div>
 <p>
   {$t('content.index.setupBody2')}
+</p> 
+<br>
+<p>
+{$t("content.index.oldVersion")} <a href="https://v1.ml-machine.org/">v1.ml-machine.org/</a>
 </p>
+

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "start": "vite dist",
+    "start": "vite dist --host",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "jest"
   },

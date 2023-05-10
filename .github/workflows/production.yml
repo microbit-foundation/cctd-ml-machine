@@ -7,7 +7,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Deploy web app to Azure Static Web Apps
+name: Production deployment
 
 env:
   APP_LOCATION: "/" # location of your client code

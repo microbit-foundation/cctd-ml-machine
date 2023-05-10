@@ -54,7 +54,7 @@ export const state = writable<{
   isInputAssigned: false,
   isOutputAssigned: false,
   isOutputReady: false,
-  isLoading: false,
+  isLoading: true,
 });
 
 // Message store to propagate allow all components to inform users.

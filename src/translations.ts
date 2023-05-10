@@ -157,10 +157,19 @@ export default {
 		"connectMB.usb.manual.manualDownloadLink": "her",
 		"connectMB.usb.manual.done": "Færdig: Tilslut med bluetooth",
 
+		"connectMB.usb.firmwareBroken.warning":"Vi opdagede en fejl med din micro:bit",
+		"connectMB.usb.firmwareBroken.content1":"Din version af micro:bit og firmware har velkendte fejl, som forhindre os i at uploade programmet til din micro:bit.",
+		"connectMB.usb.firmwareBroken.content2":"For at fortsætte nu skal du overføre programmet manuel eller opdatere din micro:bit",
+		"connectMB.usb.firmwareBroken.content3":"Vi anbefaler at du opdatere din micro:bit's firmware version til den nyeste for rette op på denne fejl.",
+		"connectMB.usb.firmwareBroken.content4":"Du kan finde en guide til hvordan du gør på ",
+		"connectMB.usb.firmwareBroken.content4.website":"micro:bit fondens hjemmeside",
+		"connectMB.usb.firmwareBroken.button.skip":"Spring over og overfør manuelt",
+
 		"connectMB.outputMB.same": "Brug samme BBC micro:bit",
 		"connectMB.outputMB.different": "Tilslut anden BBC micro:bit",
 		"connectMB.outputMB.sameButton": "Samme",
 		"connectMB.outputMB.otherButton": "Anden",
+
 
 		// COOKIE BANNER
 
@@ -370,6 +379,14 @@ export default {
 		"connectMB.usb.manual.manualDownload": "If the file did not automatically download press",
 		"connectMB.usb.manual.manualDownloadLink": "here",
 		"connectMB.usb.manual.done": "Done: Connect using bluetooth",
+
+		"connectMB.usb.firmwareBroken.warning":"We detected issues with your micro:bit firmware",
+		"connectMB.usb.firmwareBroken.content1":"The version of micro:bit and firmware have known issues, that prevent us from uploading the program to it.",
+		"connectMB.usb.firmwareBroken.content2":"To proceed, you will have to transfer manually, or update your micro:bit's firmware.",
+		"connectMB.usb.firmwareBroken.content3":"We recommend that you upgrade the firmware of your micro:bit to the latest version to fix this issue.",
+		"connectMB.usb.firmwareBroken.content4":"A guide on how can be found on the ",
+		"connectMB.usb.firmwareBroken.content4.website":"micro:bit foundation's website",
+		"connectMB.usb.firmwareBroken.button.skip":"Skip and transfer manually",
 
 		"connectMB.outputMB.same": "Use the same micro:bit",
 		"connectMB.outputMB.different": "Connect another micro:bit",

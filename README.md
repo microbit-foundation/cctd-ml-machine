@@ -9,7 +9,7 @@ feedback action is taken.
 To learn to recognise a gesture, a label is created for which a set of example movements with the micro:bit
 is recorded. These recordings will be processed by a machine-learning algorithm to recognise future examples. To
 differentiate the recording and feedback process we allow for two micro:bits to be connected. One will act as a
-recording, or input device and another will act as a feedback, or output device.
+recording, or input device and another will act as feedback, or output device.
 
 ## Using ML-Machine
 
@@ -37,7 +37,7 @@ gesture in the future.
 ### Training the model
 
 To train the predictive model on the given gesture examples, go to the trainer tab of the menu. Select the train model
-option and wait until it has finished. The time this takes is dependent on how many example you gave each gesture and
+option and wait until it has finished. The time this takes is dependent on how many examples you gave each gesture and
 how many gestures the model has to learn.
 
 ### Recognising gestures

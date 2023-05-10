@@ -2,14 +2,14 @@ import { model } from "./stores/mlStore";
 import { get } from 'svelte/store'
 import { compileModel } from "ml4f";
 import MemoryMap from 'nrf-intel-hex'
-
+import Microbits from "./microbit-interfacing/Microbits";
 
 export async function generateModel() {
   const no_model_hexfile = 'firmware/MICROBIT_NO_MODEL.hex'
   const model_base = 0x40000
 
   // Retrieve model_meta.json
-  var meta = JSON.parse(JSON.stringify(get(model).neuralNetworkData.meta))
+  var meta = get(model).neuralNetworkData.meta
 
   // Turn normalisation buffers into bytes
   const bufs = findValues(meta)
@@ -35,13 +35,13 @@ export async function generateModel() {
   
   const hexfile_with_model = memoryMap.asHexString()
   console.log(hexfile_with_model)
-  downloadTDevice(hexfile_with_model)
-  
+  downloadToDevice(hexfile_with_model)
+
   // get(model).save()
 }
 
-// Download hexfile to microbit (would it be better to flash it?)
-function downloadTDevice(hex: string) {
+// Download hexfile to microbit (without flashing it)
+function downloadToDevice(hex: string) {
   const finished_model_name = 'MICROBIT.hex'
   const blob = new Blob([hex], { type: 'text/plain;charset=utf-8;' });
   const link = document.createElement('a');

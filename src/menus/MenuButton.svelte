@@ -5,8 +5,8 @@
 </style>
 
 <script lang="ts">
-  import TextInformation from '../components/information/TextInformation.svelte';
   import { t } from '../i18n';
+  import Information from '../components/information/Information.svelte';
 
   export let title: string;
   export let helpTitle: string;
@@ -35,7 +35,7 @@
         {$t(title)}
       </p>
       <div class="absolute top-3px right-12">
-        <TextInformation
+        <Information
           bodyText={$t(helpDescription)}
           boxOffset={{ x: -200, y: 30 }}
           titleText={$t(helpTitle)}

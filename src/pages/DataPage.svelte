@@ -8,18 +8,15 @@
     loadDatasetFromFile,
   } from '../script/stores/mlStore';
   import { t } from '../i18n';
-  import InformationBase from '../components/information/InformationBase.svelte';
-  import TextInformation from '../components/information/TextInformation.svelte';
-  import RecordInformationContent from '../components/information/RecordInformationContent.svelte';
+  import RecordInformationContent from '../components/datacollection/RecordInformationContent.svelte';
   import StandardDialog from '../components/dialogs/StandardDialog.svelte';
   import MainConnectDialog from '../components/connection-prompt/ConnectDialogContainer.svelte';
   import NewGestureButton from '../components/NewGestureButton.svelte';
   import StandardButton from '../components/StandardButton.svelte';
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
-  import ControlBar from '../components/control-bar/ControlBar.svelte';
-  import ExpandableControlBarMenu from '../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
+  import Information from '../components/information/Information.svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -90,20 +87,20 @@
       {#if $gestures.length > 0}
         <div class=" p-0 relative flex h-7">
           <div class="absolute left-3 flex">
-            <TextInformation
+            <Information
               isLightTheme={false}
               iconText={$t('content.data.classification')}
               titleText={$t('content.data.classHelpHeader')}
               bodyText={$t('content.data.classHelpBody')} />
           </div>
           <div class="absolute left-55 flex">
-            <InformationBase isLightTheme={false} text={$t('content.data.choice')}>
+            <Information isLightTheme={false} iconText={$t('content.data.choice')}>
               <RecordInformationContent isLightTheme={false} />
-            </InformationBase>
+            </Information>
           </div>
           {#if hasSomeData()}
             <div class="absolute left-92 flex">
-              <TextInformation
+              <Information
                 isLightTheme={false}
                 iconText={$t('content.data.data')}
                 titleText={$t('content.data.data')}

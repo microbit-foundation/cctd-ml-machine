@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
-  import { getInfoBoxColors } from '../../script/InformationComponentUtility';
+  import { getInfoBoxColors } from '../information/InformationComponentUtility';
   export let isLightTheme = true;
 
   const colors = getInfoBoxColors(isLightTheme);

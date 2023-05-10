@@ -4,7 +4,6 @@
   import { fade } from 'svelte/transition';
   import { t } from '../../i18n';
   import ConnectDialogContainer from '../connection-prompt/ConnectDialogContainer.svelte';
-  import TextInformation from '../information/TextInformation.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import StandardButton from '../StandardButton.svelte';
   import { startConnectionProcess } from '../../script/stores/connectDialogStore';

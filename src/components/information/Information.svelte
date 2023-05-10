@@ -1,27 +1,15 @@
-<style>
-  .hovering {
-    transition: 0.2s ease;
-    transform: scale(1.3);
-  }
-  .underline {
-    text-decoration: underline;
-  }
-</style>
-
 <script lang="ts">
-  import { getInfoBoxColors } from '../../script/InformationComponentUtility';
+  import { getInfoBoxColors } from './InformationComponentUtility';
 
-  export let text: string | undefined = undefined;
-  export let underlineText = true;
-  export let isLightTheme = true;
+  export let underlineIconText = true;
   export let boxOffset: { x: number; y: number } = { x: 0, y: 0 };
   export let width = 300;
+  export let isLightTheme = true;
+  export let iconText: string | undefined = undefined;
+  export let titleText: string | undefined = undefined;
+  export let bodyText: string | undefined = undefined;
 
   const colors = getInfoBoxColors(isLightTheme);
-
-  const backgroundColor = colors.backgroundColor;
-  const iconColor = colors.iconColor;
-  const iconTextColor = colors.iconTextColor;
 
   let isOpen = false;
 
@@ -48,12 +36,12 @@
   bind:clientWidth={w}
   bind:clientHeight={h}
   bind:this={domNode}>
-  {#if text !== undefined}
+  {#if iconText !== undefined}
     <p
       class="text-white w-auto h-auto mr-0 whitespace-pre-line"
-      class:underline={underlineText}
-      style="color: {iconTextColor}">
-      {text}
+      class:underline={underlineIconText}
+      style="color: {colors.iconTextColor}">
+      {iconText}
     </p>
   {/if}
 
@@ -61,13 +49,29 @@
     class="far fa-question-circle flex text-white
              w-auto h-auto mr-0 ml-1 mt-4px"
     class:hovering={isOpen}
-    style="color: {iconColor}" />
+    style="color: {colors.iconColor}" />
 
   {#if isOpen}
     <div
       class="fixed z-10 rounded-md p-3 cursor-default"
-      style="top: {boxTop}px; left: {boxLeft}px; width: {width}px; background-color:{backgroundColor}"
+      style="top: {boxTop}px; left: {boxLeft}px; width: {width}px; background-color:{colors.backgroundColor}"
       on:click|stopPropagation>
+      {#if titleText}
+        <p
+          class="font-bold text-left mb-1 mt-1 text-sm"
+          style="color: {colors.textColor}">
+          {titleText}
+        </p>
+      {/if}
+      {#if bodyText}
+        <p
+          class="text-sm text-left"
+          style="color: {colors.textColor}"
+          class:blackText={isLightTheme}
+          class:whiteText={!isLightTheme}>
+          {bodyText}
+        </p>
+      {/if}
       <slot />
     </div>
   {/if}

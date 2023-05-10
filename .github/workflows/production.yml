@@ -16,11 +16,11 @@ env:
 on:
   push:
     branches:
-      - 172-setup-deployment-pipeline-for-a-production-branch
+      - production
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
-      - 172-setup-deployment-pipeline-for-a-production-branch
+      - production
 
 permissions:
   issues: write

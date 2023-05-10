@@ -58,7 +58,7 @@ jobs:
           VITE_TITLE: ML-Machine
 
   close:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    # if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close
     steps:

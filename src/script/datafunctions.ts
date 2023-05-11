@@ -41,6 +41,14 @@ export function standardDeviation(values: number[]): number {
   return stdDev;
 }
 
+export function rootMeanSquare(values: number[]): number {
+  const squareDiffs = values.map(function (value) {
+    const sqrDiff = value * value;
+    return sqrDiff;
+  });
+  return Math.sqrt(average(squareDiffs));
+}
+
 export function totalAcceleration(data: number[]): number {
   return data.reduce((sum, val) => sum + Math.abs(val));
 }

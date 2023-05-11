@@ -12,6 +12,8 @@ function average(data: number[]): number {
   return avg;
 }
 
+
+
 export function standardDeviation(values: number[]): number {
   const avg = average(values);
 
@@ -35,7 +37,7 @@ function sum(a: number[]): number {
   return a.reduce((acc, val) => acc + val);
 }
 
-function mean(a: number[]): number {
+export function mean(a: number[]): number {
   return sum(a) / a.length;
 }
 

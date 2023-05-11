@@ -49,6 +49,18 @@ export function rootMeanSquare(values: number[]): number {
   return Math.sqrt(average(squareDiffs));
 }
 
+export function zeroCrossingRate(signal: number[]): number {
+  let count = 0;
+  for (let i = 1; i < signal.length; i++) {
+    if ((signal[i] >= 0 && signal[i - 1] < 0) || (signal[i] < 0 && signal[i - 1] >= 0)) {
+      count++;
+    }
+  }
+  const zeroCrossingRate = count / (signal.length - 1);
+  return zeroCrossingRate;
+}
+
+
 export function totalAcceleration(data: number[]): number {
   return data.reduce((sum, val) => sum + Math.abs(val));
 }

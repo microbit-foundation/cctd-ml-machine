@@ -12,7 +12,19 @@ function average(data: number[]): number {
   return avg;
 }
 
+export function variance(values: number[]): number {
+  const avg = average(values);
 
+  const squareDiffs = values.map(function (value) {
+    const diff = value - avg;
+    const sqrDiff = diff * diff;
+    return sqrDiff;
+  });
+
+  const avgSquareDiff = average(squareDiffs);
+
+  return avgSquareDiff;
+}
 
 export function standardDeviation(values: number[]): number {
   const avg = average(values);

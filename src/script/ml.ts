@@ -10,7 +10,7 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import { peaks, standardDeviation, totalAcceleration } from './datafunctions';
+import { peaks, standardDeviation, totalAcceleration, mean, zeroCrossingRate} from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
@@ -35,16 +35,20 @@ let predictionInterval: NodeJS.Timeout | undefined = undefined;
 
 type accData =
   | 'ax_max'
+  | 'ax_mean'
   | 'ax_min'
   | 'ax_std'
   | 'ax_peaks'
   | 'ax_total'
+  | 'ax_zcr'
   | 'ay_max'
+  | 'ay_mean'
   | 'ay_min'
   | 'ay_std'
   | 'ay_peaks'
   | 'ay_total'
   | 'az_max'
+  | 'az_mean'
   | 'az_min'
   | 'az_std'
   | 'az_peaks'
@@ -54,7 +58,7 @@ function createModel(): LayersModel {
   const gestureData = get(gestures);
   const numberOfClasses: number = gestureData.length;
 
-  const input = tf.input({ shape: [15] });
+  const input = tf.input({ shape: [6] });
   const normalizer = tf.layers.batchNormalization().apply(input);
   const dense = tf.layers.dense({ units: 16, activation: 'relu' }).apply(normalizer);
   const softmax = tf.layers
@@ -106,6 +110,7 @@ export function trainModel() {
       const z = recording.data.z;
 
       const inputs: Map<accData, number> = makeInputs(x, y, z);
+      console.log(inputs);
       features.push(dataMapToFeatureArray(inputs));
 
       // Prepare labels
@@ -221,7 +226,7 @@ export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, 
   }
   if (modelSettings.axes[0]) {
     if (modelSettings.params[0]) {
-      obj.set('ax_max', Math.max(...x));
+      obj.set('ax_mean', mean(x));
     }
     if (modelSettings.params[1]) {
       obj.set('ax_min', Math.min(...x));
@@ -235,43 +240,46 @@ export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, 
     if (modelSettings.params[4]) {
       obj.set('ax_total', totalAcceleration(x));
     }
-  }
-
-  if (modelSettings.axes[1]) {
-    if (modelSettings.params[0]) {
-      obj.set('ay_max', Math.max(...y));
-    }
-    if (modelSettings.params[1]) {
-      obj.set('ay_min', Math.min(...y));
-    }
-    if (modelSettings.params[2]) {
-      obj.set('ay_std', standardDeviation(y));
-    }
-    if (modelSettings.params[3]) {
-      obj.set('ay_peaks', peaks(y).numPeaks);
-    }
     if (modelSettings.params[4]) {
-      obj.set('ay_total', totalAcceleration(y));
+      obj.set('ax_zcr', zeroCrossingRate(x));
     }
   }
 
-  if (modelSettings.axes[2]) {
-    if (modelSettings.params[0]) {
-      obj.set('az_max', Math.max(...z));
-    }
-    if (modelSettings.params[1]) {
-      obj.set('az_min', Math.min(...z));
-    }
-    if (modelSettings.params[2]) {
-      obj.set('az_std', standardDeviation(z));
-    }
-    if (modelSettings.params[3]) {
-      obj.set('az_peaks', peaks(z).numPeaks);
-    }
-    if (modelSettings.params[4]) {
-      obj.set('az_total', totalAcceleration(z));
-    }
-  }
+  // if (modelSettings.axes[1]) {
+  //   if (modelSettings.params[0]) {
+  //     obj.set('ay_mean', mean(y));
+  //   }
+  //   if (modelSettings.params[1]) {
+  //     obj.set('ay_min', Math.min(...y));
+  //   }
+  //   if (modelSettings.params[2]) {
+  //     obj.set('ay_std', standardDeviation(y));
+  //   }
+  //   if (modelSettings.params[3]) {
+  //     obj.set('ay_peaks', peaks(y).numPeaks);
+  //   }
+  //   if (modelSettings.params[4]) {
+  //     obj.set('ay_total', totalAcceleration(y));
+  //   }
+  // }
+
+  // if (modelSettings.axes[2]) {
+  //   if (modelSettings.params[0]) {
+  //     obj.set('az_mean', mean(z));
+  //   }
+  //   if (modelSettings.params[1]) {
+  //     obj.set('az_min', Math.min(...z));
+  //   }
+  //   if (modelSettings.params[2]) {
+  //     obj.set('az_std', standardDeviation(z));
+  //   }
+  //   if (modelSettings.params[3]) {
+  //     obj.set('az_peaks', peaks(z).numPeaks);
+  //   }
+  //   if (modelSettings.params[4]) {
+  //     obj.set('az_total', totalAcceleration(z));
+  //   }
+  //}
 
   return obj;
 }
@@ -337,6 +345,7 @@ export function classify() {
   // Get formatted version of previous data
   const { x, y, z } = getPrevData();
   const input: Map<accData, number> = makeInputs(x, y, z);
+  console.log("unputs", input);
   const tfInput: number[] = dataMapToFeatureArray(input);
   const inputTensor = tf.tensor([tfInput]);
   const prediction: Tensor = get(model).predict(inputTensor) as Tensor;

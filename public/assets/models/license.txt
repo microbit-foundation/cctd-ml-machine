@@ -1,0 +1,11 @@
+Model Information:
+* title:	Microbit Assemby
+* source:	https://sketchfab.com/3d-models/microbit-assemby-f0c6ec58eefc47afaab08d8de07e1158
+* author:	jezd (https://sketchfab.com/jezd)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Microbit Assemby" (https://sketchfab.com/3d-models/microbit-assemby-f0c6ec58eefc47afaab08d8de07e1158) by jezd (https://sketchfab.com/jezd) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

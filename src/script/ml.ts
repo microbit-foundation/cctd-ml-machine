@@ -10,7 +10,7 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import { peaks, standardDeviation, totalAcceleration, mean, zeroCrossingRate} from './datafunctions';
+import { peaks, standardDeviation, totalAcceleration, mean, zeroCrossingRate, variance, rootMeanSquare} from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
@@ -41,6 +41,8 @@ type accData =
   | 'ax_peaks'
   | 'ax_total'
   | 'ax_zcr'
+  | 'ax_var'
+  | 'ax_rms'
   | 'ay_max'
   | 'ay_mean'
   | 'ay_min'
@@ -57,8 +59,9 @@ type accData =
 function createModel(): LayersModel {
   const gestureData = get(gestures);
   const numberOfClasses: number = gestureData.length;
+  const inputShape = [get(settings).includedParameters.filter((bool) => bool).length * get(settings).includedAxes.filter((bool) => bool).length];
 
-  const input = tf.input({ shape: [6] });
+  const input = tf.input({ shape: inputShape });
   const normalizer = tf.layers.batchNormalization().apply(input);
   const dense = tf.layers.dense({ units: 16, activation: 'relu' }).apply(normalizer);
   const softmax = tf.layers
@@ -226,7 +229,7 @@ export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, 
   }
   if (modelSettings.axes[0]) {
     if (modelSettings.params[0]) {
-      obj.set('ax_mean', mean(x));
+      obj.set('ax_max', Math.max(...x));
     }
     if (modelSettings.params[1]) {
       obj.set('ax_min', Math.min(...x));
@@ -240,46 +243,55 @@ export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, 
     if (modelSettings.params[4]) {
       obj.set('ax_total', totalAcceleration(x));
     }
-    if (modelSettings.params[4]) {
+    if (modelSettings.params[5]) {
+      obj.set('ax_mean', mean(x));
+    }
+    if (modelSettings.params[6]) {
       obj.set('ax_zcr', zeroCrossingRate(x));
+    }
+    if (modelSettings.params[7]) {
+      obj.set('ax_var', variance(x));
+    }
+     if (modelSettings.params[8]) {
+      obj.set('ax_rms', rootMeanSquare(x));
+    }
+  }
+  // To do: Update other states
+  if (modelSettings.axes[1]) {
+    if (modelSettings.params[0]) {
+      obj.set('ay_mean', mean(y));
+    }
+    if (modelSettings.params[1]) {
+      obj.set('ay_min', Math.min(...y));
+    }
+    if (modelSettings.params[2]) {
+      obj.set('ay_std', standardDeviation(y));
+    }
+    if (modelSettings.params[3]) {
+      obj.set('ay_peaks', peaks(y).numPeaks);
+    }
+    if (modelSettings.params[4]) {
+      obj.set('ay_total', totalAcceleration(y));
     }
   }
 
-  // if (modelSettings.axes[1]) {
-  //   if (modelSettings.params[0]) {
-  //     obj.set('ay_mean', mean(y));
-  //   }
-  //   if (modelSettings.params[1]) {
-  //     obj.set('ay_min', Math.min(...y));
-  //   }
-  //   if (modelSettings.params[2]) {
-  //     obj.set('ay_std', standardDeviation(y));
-  //   }
-  //   if (modelSettings.params[3]) {
-  //     obj.set('ay_peaks', peaks(y).numPeaks);
-  //   }
-  //   if (modelSettings.params[4]) {
-  //     obj.set('ay_total', totalAcceleration(y));
-  //   }
-  // }
-
-  // if (modelSettings.axes[2]) {
-  //   if (modelSettings.params[0]) {
-  //     obj.set('az_mean', mean(z));
-  //   }
-  //   if (modelSettings.params[1]) {
-  //     obj.set('az_min', Math.min(...z));
-  //   }
-  //   if (modelSettings.params[2]) {
-  //     obj.set('az_std', standardDeviation(z));
-  //   }
-  //   if (modelSettings.params[3]) {
-  //     obj.set('az_peaks', peaks(z).numPeaks);
-  //   }
-  //   if (modelSettings.params[4]) {
-  //     obj.set('az_total', totalAcceleration(z));
-  //   }
-  //}
+  if (modelSettings.axes[2]) {
+    if (modelSettings.params[0]) {
+      obj.set('az_mean', mean(z));
+    }
+    if (modelSettings.params[1]) {
+      obj.set('az_min', Math.min(...z));
+    }
+    if (modelSettings.params[2]) {
+      obj.set('az_std', standardDeviation(z));
+    }
+    if (modelSettings.params[3]) {
+      obj.set('az_peaks', peaks(z).numPeaks);
+    }
+    if (modelSettings.params[4]) {
+      obj.set('az_total', totalAcceleration(z));
+    }
+  }
 
   return obj;
 }

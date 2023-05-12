@@ -5,6 +5,8 @@
   import Live3DUtility, { type Vector3 } from "./Live3DUtility";
   import { currentData } from '../../script/stores/mlStore';
 
+  // TODO: The file has a lot of hardcoded (somewhat arbitrary) number values. Go through them and check if a refactor is in order
+
   /**
    * EXPORTS
    */
@@ -74,7 +76,7 @@
 
 
     // TODO: Remove local functions (probably not too bad with functions this simple, but still)
-    
+
     // Following two map the actual length of the latest data point to distance for the camera.
     // X and Y need different mappings than Z, as Z points up/downwards and therefore require different
     // mapping.
@@ -174,8 +176,6 @@
     updater = setInterval(updateFrame, 25);
     renderer = utility.instantiateRenderer(canvas, width, height);
     renderer.render(scene, camera)
-    console.log('INITIAL:', camera.position)  
-    console.log(renderer)
   });
 
   function updateCanvasSize(height: number, width: number) {

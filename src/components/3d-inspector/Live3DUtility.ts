@@ -1,15 +1,14 @@
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-// import { GLTFLoader } from "THREE/examples/jsm/loaders/GLTFLoader.js";
-// import { GLTFLoader } from THREE.
 
-class Utility {
+class Live3DUtility {
   private loader: GLTFLoader;
 
   constructor() {
     this.loader = new GLTFLoader();
   }
 
+  // TODO: Fix naming
   createSceneWith(array: THREE.Object3D<THREE.Event>[]){
     return new THREE.Scene().add(...array);
   }
@@ -18,8 +17,7 @@ class Utility {
     const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
     renderer.setClearColor("#ffffff", 0);
     renderer.setSize(width, height);
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    // renderer.outputColorSpace = THREE.SRGBColorSpace; // Check if this works
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.5;
     renderer.setPixelRatio(window.devicePixelRatio)
@@ -46,6 +44,8 @@ class Utility {
   instantiateCameraSetup (width: number, height: number, perspective = 85) {
     const camera = new THREE.PerspectiveCamera(perspective, width / height, 0.1, 1000);
 
+    // TODO: Consider changing camera y-position as the model is quite low in the screen
+    //       (would require rework of zooming functionality)
     // Position
     camera.position.z = 5;
     camera.position.x = 5;
@@ -137,4 +137,4 @@ export type Vector3 = {
   z: number;
 };
 
-export default Utility;
+export default Live3DUtility;

@@ -7,10 +7,15 @@ class Smoother {
    * @param smoothingPercentage number between 0 and 1 dictating the percentage a number influences the smoothed number. The closer to 1, the stronger smoothing is applied. If number is outside of bounds, things will break.
    * @param initial initial value. Is not necessary.
    */
-  constructor(smoothingPercentage: number, initial?: number) {
-    if(1 <= smoothingPercentage || smoothingPercentage <= 0) throw Error("SmoothingPercentage cannot be set outside of bounds 0 to 1 (Including bounds)")
-    this.smoothingPercentage = smoothingPercentage;
-    this.sum = initial ?? 0;
+  constructor(smoothingPercentage: number, initial=0) {
+    if (1 <= smoothingPercentage || smoothingPercentage <= 0) {
+      console.warn(
+        `SmoothingPercentage cannot be set outside of bounds 0 to 1 (Including bounds). 
+        Setting default bounds`
+      )
+    }
+    this.smoothingPercentage = Math.min(Math.max(smoothingPercentage, 0.001), 0.999) ;
+    this.sum = initial;
   }
   
   /**

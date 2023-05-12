@@ -11,7 +11,6 @@
   export let smoothing = false;
   export let width: number;
   export let height: number;
-  // export let currentDataPoint = { x: 0, y: 0, z: 0 };
 
   /**
    * VARIABLES DEFINED IN FUNCTIONS OR FROM ELEMENTS
@@ -60,12 +59,13 @@
   }
 
   function handleNewDataPoint(data: Vector3) {
-    if (data?.x === undefined || data?.y === undefined || data?.z === undefined)
-      return;
     lastDataPoint = data;
     updateCameraTarget(data);
   }
 
+  // TODO: Consider refactoring this to use cam location params. 
+  //       If the camera location is changed to control where the model is in the canvas, the 
+  //       values in this function needs changing to match
   function updateCameraTarget(data: Vector3) {
     let setCurrentDistance =
       cameraTargetDistance === -100 || cameraCurrentDistance === -100;
@@ -79,8 +79,8 @@
     };
 
     const mapToCameraDistanceZ = (val: number): number => {
-      if (val < 0) return val * -1;
-      return val * 1.4;
+      if (val < 0) return val * -.7;
+      return val * 1.5;
     };
 
     // Which ever number is largest, decides the distance of the camera.

@@ -49,7 +49,7 @@ class Live3DUtility {
     // Position
     camera.position.z = 5;
     camera.position.x = 5;
-    camera.position.y = 2;
+    camera.position.y = 4;
 
     // Rotation
     camera.lookAt(new THREE.Vector3(-5, -2, -5));

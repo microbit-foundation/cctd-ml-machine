@@ -20,9 +20,9 @@
       <div>
         <ImageSkeleton
           alt="microbit guide"
-          height="{114}"
+          height={114}
           src="imgs/microbit_guide.svg"
-          width="{200}" />
+          width={200} />
       </div>
     </div>
     <p class="absolute text-center w-60px right-0px top-30px">
@@ -32,9 +32,9 @@
 </div>
 <p>
   {$t('content.index.setupBody2')}
-</p> 
-<br>
-<p>
-{$t("content.index.oldVersion")} <a href="https://www.v0.ml-machine.org/">v0.ml-machine.org/</a>
 </p>
-
+<br />
+<p>
+  {$t('content.index.oldVersion')}
+  <a class="text-link" href="https://www.v0.ml-machine.org/">v0.ml-machine.org/</a>
+</p>

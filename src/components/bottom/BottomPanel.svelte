@@ -70,7 +70,7 @@
           
         </div>
         <div class="absolute right-0">
-          <Live3DView width={160} height={160} currentDataPoint={{x: .2, y:0, z:0}}/>
+          <Live3DView width={160} height={160} />
 
         </div>
       </div>

@@ -24,7 +24,8 @@ export function loadDatasetFromFile(file: File) {
     }
     const contents = e.target.result;
     if (typeof contents === 'string') {
-      const gestureData: GestureData[] = JSON.parse(contents) as GestureData[];
+      // TODO: fix the following really unsafe parsing and casting
+      const gestureData: GestureData[] = JSON.parse(contents) as GestureData[]; 
       gestures.set(gestureData);
     }
   };
@@ -115,7 +116,14 @@ const initialSettings: MlSettings = {
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);
 
-export const livedata = writable<LiveData>({} as LiveData);
+export const livedata = writable<LiveData>({
+  accelX: 0,
+  accelY: 0,
+  accelZ: 0,
+  smoothedAccelX: 0,
+  smoothedAccelY: 0,
+  smoothedAccelZ: 0,
+});
 
 export const currentData = 
   writable<{x: number, y: number, z:number}>({x: 0, y: 0, z: 0})

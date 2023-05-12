@@ -16,7 +16,8 @@
    * VARIABLES DEFINED IN FUNCTIONS OR FROM ELEMENTS
    */
   let microbitModel: THREE.Scene;
-  let canvas: HTMLCanvasElement, renderer: THREE.WebGLRenderer;
+  let canvas: HTMLCanvasElement; 
+  let renderer: THREE.WebGLRenderer;
   let updater: NodeJS.Timer | undefined;
 
   /**
@@ -114,8 +115,8 @@
   // When called. Update bars are updated with the latest information.
   // Camera distance and position is updated and lastly three.JS renders a new frame
   function updateFrame() {
-    if (microbitModel === undefined) return;
-    if (canvas === undefined) return;
+    if (microbitModel === undefined) return; // TODO: If microbit model can ever be undefined, it has the wrong type 
+    if (canvas === undefined) return; // TODO: If canvas can ever be undefined, it has the wrong type 
 
     updateBarSizes({
       x: xSmoother.process(lastDataPoint.x),
@@ -168,6 +169,9 @@
   onMount(() => {
     updater = setInterval(updateFrame, 25);
     renderer = utility.instantiateRenderer(canvas, width, height);
+    renderer.render(scene, camera)
+    console.log('INITIAL:', camera.position)  
+    console.log(renderer)
   });
 
   function updateCanvasSize(height: number, width: number) {

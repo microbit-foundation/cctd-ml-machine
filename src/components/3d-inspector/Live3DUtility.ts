@@ -44,8 +44,6 @@ class Live3DUtility {
   instantiateCameraSetup (width: number, height: number, perspective = 85) {
     const camera = new THREE.PerspectiveCamera(perspective, width / height, 0.1, 1000);
 
-    // TODO: Consider changing camera y-position as the model is quite low in the screen
-    //       (would require rework of zooming functionality)
     // Position
     camera.position.z = 5;
     camera.position.x = 5;

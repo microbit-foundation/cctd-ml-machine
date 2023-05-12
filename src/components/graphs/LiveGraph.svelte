@@ -5,6 +5,9 @@
   import { get, type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
 
+  // Updates width to ensure that the canvas fills the whole screen
+  export let width: number;
+
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
   let lineX = new TimeSeries();
@@ -45,7 +48,7 @@
     if (chart !== undefined) {
       if ($state.isInputReady) {
         if (!$state.isTraining) {
-          chart!.start();
+          chart.start();
         } else {
           chart.stop();
         }
@@ -111,8 +114,7 @@
     }
   }
 
-  // Updates width to ensure that the canvas fills the whole screen
-  export let width: number;
+
 </script>
 
 <main>

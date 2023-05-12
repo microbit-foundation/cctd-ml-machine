@@ -68,9 +68,13 @@
   //       If the camera location is changed to control where the model is in the canvas, the 
   //       values in this function needs changing to match
   function updateCameraTarget(data: Vector3) {
+    // TODO: Setting distances to -100 and using that to check seems like a bad hack. Fix   
     let setCurrentDistance =
       cameraTargetDistance === -100 || cameraCurrentDistance === -100;
 
+
+    // TODO: Remove local functions (probably not too bad with functions this simple, but still)
+    
     // Following two map the actual length of the latest data point to distance for the camera.
     // X and Y need different mappings than Z, as Z points up/downwards and therefore require different
     // mapping.

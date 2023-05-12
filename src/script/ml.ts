@@ -49,12 +49,18 @@ type accData =
   | 'ay_std'
   | 'ay_peaks'
   | 'ay_total'
+  | 'ay_zcr'
+  | 'ay_var'
+  | 'ay_rms'
   | 'az_max'
   | 'az_mean'
   | 'az_min'
   | 'az_std'
   | 'az_peaks'
-  | 'az_total';
+  | 'az_total'
+  | 'az_zcr'
+  | 'az_var'
+  | 'az_rms';
 
 function createModel(): LayersModel {
   const gestureData = get(gestures);
@@ -219,7 +225,7 @@ function finishedTraining() {
 // The return object.
 
 export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, number> {
-  const obj: Map<accData, number> = new Map();
+  const dataRep: Map<accData, number> = new Map();
 
   if (!modelSettings) {
     modelSettings = {
@@ -227,73 +233,42 @@ export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, 
       params: get(settings).includedParameters,
     };
   }
-  if (modelSettings.axes[0]) {
+
+  const calculateRepForAxis = (axis: number[], preName: string) => {
     if (modelSettings.params[0]) {
-      obj.set('ax_max', Math.max(...x));
+      dataRep.set(preName + '_max' as accData, Math.max(...x));
     }
     if (modelSettings.params[1]) {
-      obj.set('ax_min', Math.min(...x));
+      dataRep.set(preName + '_min' as accData, Math.min(...x));
     }
     if (modelSettings.params[2]) {
-      obj.set('ax_std', standardDeviation(x));
+      dataRep.set(preName + '_std' as accData, standardDeviation(x));
     }
     if (modelSettings.params[3]) {
-      obj.set('ax_peaks', peaks(x).numPeaks);
+      dataRep.set(preName + '_peaks' as accData, peaks(x).numPeaks);
     }
     if (modelSettings.params[4]) {
-      obj.set('ax_total', totalAcceleration(x));
+      dataRep.set(preName + '_total' as accData, totalAcceleration(x));
     }
     if (modelSettings.params[5]) {
-      obj.set('ax_mean', mean(x));
+      dataRep.set(preName + '_mean' as accData, mean(x));
     }
     if (modelSettings.params[6]) {
-      obj.set('ax_zcr', zeroCrossingRate(x));
+      dataRep.set(preName +  '_zcr' as accData, zeroCrossingRate(x));
     }
     if (modelSettings.params[7]) {
-      obj.set('ax_var', variance(x));
+      dataRep.set(preName + '_var' as accData, variance(x));
     }
-     if (modelSettings.params[8]) {
-      obj.set('ax_rms', rootMeanSquare(x));
-    }
-  }
-  // To do: Update other states
-  if (modelSettings.axes[1]) {
-    if (modelSettings.params[0]) {
-      obj.set('ay_mean', mean(y));
-    }
-    if (modelSettings.params[1]) {
-      obj.set('ay_min', Math.min(...y));
-    }
-    if (modelSettings.params[2]) {
-      obj.set('ay_std', standardDeviation(y));
-    }
-    if (modelSettings.params[3]) {
-      obj.set('ay_peaks', peaks(y).numPeaks);
-    }
-    if (modelSettings.params[4]) {
-      obj.set('ay_total', totalAcceleration(y));
+    if (modelSettings.params[8]) {
+      dataRep.set(preName + '_rms' as accData, rootMeanSquare(x));
     }
   }
 
-  if (modelSettings.axes[2]) {
-    if (modelSettings.params[0]) {
-      obj.set('az_mean', mean(z));
-    }
-    if (modelSettings.params[1]) {
-      obj.set('az_min', Math.min(...z));
-    }
-    if (modelSettings.params[2]) {
-      obj.set('az_std', standardDeviation(z));
-    }
-    if (modelSettings.params[3]) {
-      obj.set('az_peaks', peaks(z).numPeaks);
-    }
-    if (modelSettings.params[4]) {
-      obj.set('az_total', totalAcceleration(z));
-    }
-  }
+  if (modelSettings.axes[0]) calculateRepForAxis(x, 'ax');
+  if (modelSettings.axes[1]) calculateRepForAxis(y, 'ay');
+  if (modelSettings.axes[2]) calculateRepForAxis(z, 'az');
 
-  return obj;
+  return dataRep;
 }
 
 // Set the global state. Telling components, that the program is prediction

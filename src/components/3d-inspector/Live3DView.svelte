@@ -2,7 +2,8 @@
   import { onDestroy, onMount } from "svelte";
   import * as THREE from "three";
   import Smoother from "../../script/utils/Smoother";
-  import Utility, { type Vector3 } from "./Live3DUtility";
+  import Live3DUtility, { type Vector3 } from "./Live3DUtility";
+  import { currentData } from '../../script/stores/mlStore';
 
   /**
    * EXPORTS
@@ -10,7 +11,7 @@
   export let smoothing = false;
   export let width: number;
   export let height: number;
-  export let currentDataPoint = { x: 0, y: 0, z: 0 };
+  // export let currentDataPoint = { x: 0, y: 0, z: 0 };
 
   /**
    * VARIABLES DEFINED IN FUNCTIONS OR FROM ELEMENTS
@@ -22,7 +23,7 @@
   /**
    * ASSIGNED VARIABLES
    */
-  const utility = new Utility();
+  const utility = new Live3DUtility();
   let scene = new THREE.Scene();
   const xSmoother = new Smoother(smoothing ? 0.65 : 0.001);
   const ySmoother = new Smoother(smoothing ? 0.65 : 0.001);
@@ -47,7 +48,7 @@
   /**
    * Setup reactive functionality
    */
-  $: handleNewDataPoint(currentDataPoint);
+  $: handleNewDataPoint($currentData);
   $: updateCanvasSize(height, width);
 
   function onMicrobitModelLoad(model: THREE.Scene) {

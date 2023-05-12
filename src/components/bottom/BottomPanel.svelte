@@ -9,7 +9,7 @@
   import { startConnectionProcess } from '../../script/stores/connectDialogStore';
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
-    import Live3DView from '../3d-inspector/Live3DView.svelte';
+  import Live3DView from '../3d-inspector/Live3DView.svelte';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -71,7 +71,6 @@
         </div>
         <div class="absolute right-0">
           <Live3DView width={160} height={160} />
-
         </div>
       </div>
   {/if}

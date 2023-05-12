@@ -1,11 +1,7 @@
 import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
-// import { t } from '../../i18n';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
-
-// let text: (key: string, vars?: object) => string = get(t);
-// t.subscribe(t => (text = t));
 
 export type RecordingData = {
   ID: number;
@@ -141,7 +137,6 @@ livedata.subscribe(data => {
 export const settings = writable<MlSettings>(initialSettings);
 
 // Store for current gestures
-
 export const chosenGesture = writable<GestureData | null>(null);
 
 function updateToUntrainedState() {
@@ -192,7 +187,7 @@ export function addRecording(gestureID: number, recording: RecordingData) {
   });
 }
 
-// Following function are inefficient. Consider other data structure for
+// Following function is inefficient. Consider other data structure for
 // "gestures"
 export function removeRecording(gestureID: number, recordingID: number) {
   updateToUntrainedState();

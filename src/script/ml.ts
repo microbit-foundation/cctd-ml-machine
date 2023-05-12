@@ -10,7 +10,7 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import { peaks, standardDeviation, totalAcceleration, mean, zeroCrossingRate, variance, rootMeanSquare} from './datafunctions';
+import { peaks, standardDeviation, totalAcceleration, mean, zeroCrossingRate, variance, rootMeanSquare, PeaksFilter, MinFilter, TotalFilter, SDFilter, FilterOutput, MaxFilter} from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
@@ -62,10 +62,25 @@ type accData =
   | 'az_var'
   | 'az_rms';
 
+
+enum Filters {
+  MAX,
+  MEAN,
+  MIN,
+  STD,
+  PEAKS,
+  TOTAL,
+  ZCR,
+  VAR,
+  RMS,
+}
+
+const selectedFilters: Filters[] = [Filters.MAX];
+
 function createModel(): LayersModel {
   const gestureData = get(gestures);
   const numberOfClasses: number = gestureData.length;
-  const inputShape = [get(settings).includedParameters.filter((bool) => bool).length * get(settings).includedAxes.filter((bool) => bool).length];
+  const inputShape = [selectedFilters.length * 3];
 
   const input = tf.input({ shape: inputShape });
   const normalizer = tf.layers.batchNormalization().apply(input);
@@ -114,13 +129,9 @@ export function trainModel() {
   gestureData.forEach((MLClass, index) => {
     MLClass.recordings.forEach(recording => {
       // prepare features
-      const x = recording.data.x;
-      const y = recording.data.y;
-      const z = recording.data.z;
-
-      const inputs: Map<accData, number> = makeInputs(x, y, z);
+      const inputs: number[] = makeInputs(recording.data);
       console.log(inputs);
-      features.push(dataMapToFeatureArray(inputs));
+      features.push(inputs);
 
       // Prepare labels
       const label: number[] = new Array(numberofClasses) as number[];
@@ -224,8 +235,8 @@ function finishedTraining() {
 // Depending on user settings. There will be anywhere between 1-12 parameters in
 // The return object.
 
-export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, number> {
-  const dataRep: Map<accData, number> = new Map();
+export function makeInputs(sample: {x: number[], y: number[], z: number[]}): number[] {
+  const dataRep: number[] = [];
 
   if (!modelSettings) {
     modelSettings = {
@@ -234,39 +245,29 @@ export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, 
     };
   }
 
-  const calculateRepForAxis = (axis: number[], preName: string) => {
-    if (modelSettings.params[0]) {
-      dataRep.set(preName + '_max' as accData, Math.max(...x));
-    }
-    if (modelSettings.params[1]) {
-      dataRep.set(preName + '_min' as accData, Math.min(...x));
-    }
-    if (modelSettings.params[2]) {
-      dataRep.set(preName + '_std' as accData, standardDeviation(x));
-    }
-    if (modelSettings.params[3]) {
-      dataRep.set(preName + '_peaks' as accData, peaks(x).numPeaks);
-    }
-    if (modelSettings.params[4]) {
-      dataRep.set(preName + '_total' as accData, totalAcceleration(x));
-    }
-    if (modelSettings.params[5]) {
-      dataRep.set(preName + '_mean' as accData, mean(x));
-    }
-    if (modelSettings.params[6]) {
-      dataRep.set(preName +  '_zcr' as accData, zeroCrossingRate(x));
-    }
-    if (modelSettings.params[7]) {
-      dataRep.set(preName + '_var' as accData, variance(x));
-    }
-    if (modelSettings.params[8]) {
-      dataRep.set(preName + '_rms' as accData, rootMeanSquare(x));
+  function filterToFilterOutput (filter: Filters): FilterOutput {
+    switch (filter) {
+      case Filters.MAX:
+        return new MaxFilter();
+      case Filters.MIN:
+        return new MinFilter();
+      case Filters.STD:
+        return new SDFilter();
+      case Filters.PEAKS:
+        return new PeaksFilter();
+      case Filters.TOTAL:
+        return new TotalFilter();
+      default:
+        throw new Error('Filter not found');
     }
   }
 
-  if (modelSettings.axes[0]) calculateRepForAxis(x, 'ax');
-  if (modelSettings.axes[1]) calculateRepForAxis(y, 'ay');
-  if (modelSettings.axes[2]) calculateRepForAxis(z, 'az');
+  selectedFilters.forEach(filter => {
+    const filterOutput = filterToFilterOutput(filter);
+    dataRep.push(filterOutput.computeOutput(sample.x));
+    dataRep.push(filterOutput.computeOutput(sample.y));
+    dataRep.push(filterOutput.computeOutput(sample.z));
+  });
 
   return dataRep;
 }
@@ -330,11 +331,10 @@ export function classify() {
   if (!currentState.isInputConnected) return;
 
   // Get formatted version of previous data
-  const { x, y, z } = getPrevData();
-  const input: Map<accData, number> = makeInputs(x, y, z);
+  const data = getPrevData();
+  const input: number[] = makeInputs(data);
   console.log("unputs", input);
-  const tfInput: number[] = dataMapToFeatureArray(input);
-  const inputTensor = tf.tensor([tfInput]);
+  const inputTensor = tf.tensor([input]);
   const prediction: Tensor = get(model).predict(inputTensor) as Tensor;
   prediction
     .data()

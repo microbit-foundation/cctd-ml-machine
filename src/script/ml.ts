@@ -10,7 +10,7 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import { peaks, standardDeviation, totalAcceleration, mean, zeroCrossingRate, variance, rootMeanSquare, PeaksFilter, MinFilter, TotalFilter, SDFilter, FilterOutput, MaxFilter} from './datafunctions';
+import {PeaksFilter, MinFilter, TotalAccFilter, SDFilter, FilterOutput, MaxFilter, MeanFilter, ZeroCrossingRateFilter, RootMeanSquareFilter} from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
@@ -69,13 +69,12 @@ enum Filters {
   MIN,
   STD,
   PEAKS,
-  TOTAL,
+  ACC,
   ZCR,
-  VAR,
   RMS,
 }
 
-const selectedFilters: Filters[] = [Filters.MAX];
+const selectedFilters: Filters[] = [Filters.MAX, Filters.MEAN, Filters.MIN, Filters.STD, Filters.PEAKS, Filters.ACC, Filters.ZCR, Filters.RMS];
 
 function createModel(): LayersModel {
   const gestureData = get(gestures);
@@ -255,8 +254,14 @@ export function makeInputs(sample: {x: number[], y: number[], z: number[]}): num
         return new SDFilter();
       case Filters.PEAKS:
         return new PeaksFilter();
-      case Filters.TOTAL:
-        return new TotalFilter();
+      case Filters.ACC:
+        return new TotalAccFilter();
+      case Filters.MEAN:
+        return new MeanFilter();
+      case Filters.ZCR:
+        return new ZeroCrossingRateFilter();
+      case Filters.RMS:
+        return new RootMeanSquareFilter();
       default:
         throw new Error('Filter not found');
     }

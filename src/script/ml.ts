@@ -33,34 +33,6 @@ let unsubscribeFromSettings: Unsubscriber | undefined = undefined;
 // Variable for accessing the predictionInterval
 let predictionInterval: NodeJS.Timeout | undefined = undefined;
 
-type accData =
-  | 'ax_max'
-  | 'ax_mean'
-  | 'ax_min'
-  | 'ax_std'
-  | 'ax_peaks'
-  | 'ax_total'
-  | 'ax_zcr'
-  | 'ax_var'
-  | 'ax_rms'
-  | 'ay_max'
-  | 'ay_mean'
-  | 'ay_min'
-  | 'ay_std'
-  | 'ay_peaks'
-  | 'ay_total'
-  | 'ay_zcr'
-  | 'ay_var'
-  | 'ay_rms'
-  | 'az_max'
-  | 'az_mean'
-  | 'az_min'
-  | 'az_std'
-  | 'az_peaks'
-  | 'az_total'
-  | 'az_zcr'
-  | 'az_var'
-  | 'az_rms';
 
 
 enum Filters {
@@ -96,14 +68,6 @@ function createModel(): LayersModel {
   });
 
   return model;
-}
-
-function dataMapToFeatureArray(data: Map<accData, number>): number[] {
-  const features: number[] = [];
-  for (const value of data.values()) {
-    features.push(value);
-  }
-  return features;
 }
 
 export function trainModel() {
@@ -230,11 +194,10 @@ function finishedTraining() {
   });
 }
 
-// makeInput reduces array of x, y and z inputs to a single object with values.
+// makeInput reduces array of x, y and z inputs to a single number array with values.
 // Depending on user settings. There will be anywhere between 1-12 parameters in
-// The return object.
 
-export function makeInputs(sample: {x: number[], y: number[], z: number[]}): number[] {
+function makeInputs(sample: {x: number[], y: number[], z: number[]}): number[] {
   const dataRep: number[] = [];
 
   if (!modelSettings) {

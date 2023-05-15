@@ -1,11 +1,7 @@
 import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
-import { t } from '../../i18n';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
-
-let text: (key: string, vars?: object) => string = get(t);
-t.subscribe(t => (text = t));
 
 export type RecordingData = {
   ID: number;
@@ -24,7 +20,8 @@ export function loadDatasetFromFile(file: File) {
     }
     const contents = e.target.result;
     if (typeof contents === 'string') {
-      const gestureData: GestureData[] = JSON.parse(contents) as GestureData[];
+      // TODO: fix the following really unsafe parsing and casting
+      const gestureData: GestureData[] = JSON.parse(contents) as GestureData[]; 
       gestures.set(gestureData);
     }
   };
@@ -115,13 +112,31 @@ const initialSettings: MlSettings = {
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);
 
-export const livedata = writable<LiveData>({} as LiveData);
+export const livedata = writable<LiveData>({
+  accelX: 0,
+  accelY: 0,
+  accelZ: 0,
+  smoothedAccelX: 0,
+  smoothedAccelY: 0,
+  smoothedAccelZ: 0,
+});
+
+export const currentData = 
+  writable<{x: number, y: number, z:number}>({x: 0, y: 0, z: 0})
+
+livedata.subscribe(data => {
+  currentData.set({
+    x: data.smoothedAccelX, 
+    y: data.smoothedAccelY,
+    z: data.smoothedAccelZ
+  })
+})
+
 
 // Store with ML-Algorithm settings
 export const settings = writable<MlSettings>(initialSettings);
 
 // Store for current gestures
-
 export const chosenGesture = writable<GestureData | null>(null);
 
 function updateToUntrainedState() {
@@ -172,7 +187,7 @@ export function addRecording(gestureID: number, recording: RecordingData) {
   });
 }
 
-// Following function are inefficient. Consider other data structure for
+// Following function is inefficient. Consider other data structure for
 // "gestures"
 export function removeRecording(gestureID: number, recordingID: number) {
   updateToUntrainedState();

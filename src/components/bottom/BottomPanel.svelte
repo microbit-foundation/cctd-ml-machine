@@ -10,7 +10,7 @@
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
   import Live3DView from '../3d-inspector/Live3DView.svelte';
-    import BaseDialog from '../dialogs/BaseDialog.svelte';
+  import BaseDialog from '../dialogs/BaseDialog.svelte';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -27,8 +27,7 @@
     Microbits.expelOutput();
   };
 
-  let isLive3DOpen = false
-
+  let isLive3DOpen = false;
 </script>
 
 <div
@@ -43,7 +42,6 @@
       <StandardButton onClick={connectButtonClicked}
         >{$t('footer.connectButtonNotConnected')}</StandardButton>
     </div>
-    
   {:else}
     <!-- Input microbit is assigned -->
     <div class="relative w-full h-full">
@@ -69,33 +67,25 @@
           <ConnectedLiveGraphButtons
             onInputDisconnectButtonClicked={inputDisconnectButtonClicked}
             onOutputConnectButtonClicked={connectButtonClicked}
-            onOutputDisconnectButtonClicked={outputDisconnectButtonClicked}
-          />
+            onOutputDisconnectButtonClicked={outputDisconnectButtonClicked} />
         </div>
-          
-        </div>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div 
-          class="absolute right-0 cursor-pointer hover:bg-blue-400 hover:bg-opacity-10 transition" 
-          on:click={() => isLive3DOpen = true}
-        >
-          <Live3DView width={160} height={160} />
-        </div>
-        <BaseDialog
-          isOpen={isLive3DOpen}
-          onClose={() => isLive3DOpen = false}
-        >
-          <!-- hardcoded margin-left matches the size of the sidebar -->
-          <div 
-            class="ml-75 border-gray-200 overflow-hidden border border-solid relative bg-white rounded-1 shadow-dark-400 shadow-md flex justify-center"
-            style="height: calc(100vh - 160px); width: calc(100vh - 160px);"
-
-          >
-            <div class="-mt-5 w-full h-full justify-center align-middle flex items-center">
-              <Live3DView width={600} height={600} smoothing/>
-            </div>
-          </div>
-        </BaseDialog>
       </div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div
+        class="absolute right-0 cursor-pointer hover:bg-blue-400 hover:bg-opacity-10 transition"
+        on:click={() => (isLive3DOpen = true)}>
+        <Live3DView width={160} height={160} />
+      </div>
+      <BaseDialog isOpen={isLive3DOpen} onClose={() => (isLive3DOpen = false)}>
+        <!-- hardcoded margin-left matches the size of the sidebar -->
+        <div
+          class="ml-75 border-gray-200 overflow-hidden border border-solid relative bg-white rounded-1 shadow-dark-400 shadow-md flex justify-center"
+          style="height: calc(100vh - 160px); width: calc(100vh - 160px);">
+          <div class="-mt-5 w-full h-full justify-center align-middle flex items-center">
+            <Live3DView width={600} height={600} smoothing />
+          </div>
+        </div>
+      </BaseDialog>
+    </div>
   {/if}
 </div>

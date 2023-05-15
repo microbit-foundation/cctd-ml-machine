@@ -6,6 +6,8 @@
   <p class="mb-4 text-secondarytext font-extrabold text-5xl">
     {'ML-Machine'}
   </p>
-  <p class="text-primarytext">{$t('compatibility.platform.notSupported')}</p>
+  <p class="text-primarytext text-center mb-2">
+    {$t('compatibility.platform.notSupported')}
+  </p>
   <p class="text-primarytext">{$t('compatibility.platform.notSupported.joinDesktop')}</p>
 </main>

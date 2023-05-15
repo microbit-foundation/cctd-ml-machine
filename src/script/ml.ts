@@ -3,6 +3,8 @@ import {
   bestPrediction,
   gestureConfidences,
   type GestureData,
+  Filters,
+  Axes,
   gestures,
   getPrevData,
   model,
@@ -21,7 +23,7 @@ t.subscribe(t => (text = t));
 
 // Whenever model is trained, the settings at the time is saved in this variable
 // Such that prediction continues on with the same settings as during training
-let modelSettings: { axes: boolean[]; params: boolean[] };
+let modelSettings: { axes: Axes[]; filters: Filters[] };
 
 // Hacky "timer" to pad the training time if needed
 let trainingTimerPromise: Promise<boolean>;
@@ -33,25 +35,10 @@ let unsubscribeFromSettings: Unsubscriber | undefined = undefined;
 // Variable for accessing the predictionInterval
 let predictionInterval: NodeJS.Timeout | undefined = undefined;
 
-
-
-enum Filters {
-  MAX,
-  MEAN,
-  MIN,
-  STD,
-  PEAKS,
-  ACC,
-  ZCR,
-  RMS,
-}
-
-const selectedFilters: Filters[] = [Filters.MAX, Filters.MEAN, Filters.MIN, Filters.STD, Filters.PEAKS, Filters.ACC, Filters.ZCR, Filters.RMS];
-
 function createModel(): LayersModel {
   const gestureData = get(gestures);
   const numberOfClasses: number = gestureData.length;
-  const inputShape = [selectedFilters.length * 3];
+  const inputShape = [get(settings).includedFilters.length * get(settings).includedAxes.length];
 
   const input = tf.input({ shape: inputShape });
   const normalizer = tf.layers.batchNormalization().apply(input);
@@ -83,6 +70,12 @@ export function trainModel() {
     return;
   }
 
+  // Freeze modelSetting untill next training
+  modelSettings = {
+    axes: get(settings).includedAxes,
+    filters: get(settings).includedFilters,
+  };
+
   // Fetch data
   const gestureData = get(gestures);
   const features: Array<number[]> = [];
@@ -93,7 +86,6 @@ export function trainModel() {
     MLClass.recordings.forEach(recording => {
       // prepare features
       const inputs: number[] = makeInputs(recording.data);
-      console.log(inputs);
       features.push(inputs);
 
       // Prepare labels
@@ -135,8 +127,8 @@ export function trainModel() {
 export function isParametersLegal(): boolean {
   const s = get(settings);
   return (
-    s.includedAxes.reduce((sum, x) => sum || x) &&
-    s.includedParameters.reduce((sum, x) => sum || x)
+    s.includedAxes.length > 0 &&
+    s.includedFilters.length > 0
   );
 }
 
@@ -201,13 +193,10 @@ function makeInputs(sample: {x: number[], y: number[], z: number[]}): number[] {
   const dataRep: number[] = [];
 
   if (!modelSettings) {
-    modelSettings = {
-      axes: get(settings).includedAxes,
-      params: get(settings).includedParameters,
-    };
+    throw new Error('Model settings not found');
   }
 
-  function filterToFilterOutput (filter: Filters): FilterOutput {
+  function determineFilter (filter: Filters): FilterOutput {
     switch (filter) {
       case Filters.MAX:
         return new MaxFilter();
@@ -230,11 +219,13 @@ function makeInputs(sample: {x: number[], y: number[], z: number[]}): number[] {
     }
   }
 
-  selectedFilters.forEach(filter => {
-    const filterOutput = filterToFilterOutput(filter);
-    dataRep.push(filterOutput.computeOutput(sample.x));
-    dataRep.push(filterOutput.computeOutput(sample.y));
-    dataRep.push(filterOutput.computeOutput(sample.z));
+  // We use modelSettings to determine which filters to use. In this way the classify funciton
+  // will be called with the same filters and axes untill the next training
+  modelSettings.filters.forEach(filter => {
+    const filterOutput = determineFilter(filter);
+    if (modelSettings.axes.includes(Axes.X)) dataRep.push(filterOutput.computeOutput(sample.x));
+    if (modelSettings.axes.includes(Axes.Y)) dataRep.push(filterOutput.computeOutput(sample.y));
+    if (modelSettings.axes.includes(Axes.Z)) dataRep.push(filterOutput.computeOutput(sample.z));
   });
 
   return dataRep;
@@ -301,7 +292,6 @@ export function classify() {
   // Get formatted version of previous data
   const data = getPrevData();
   const input: number[] = makeInputs(data);
-  console.log("unputs", input);
   const inputTensor = tf.tensor([input]);
   const prediction: Tensor = get(model).predict(inputTensor) as Tensor;
   prediction

@@ -1,11 +1,7 @@
 import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
-import { t } from '../../i18n';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
-
-let text: (key: string, vars?: object) => string = get(t);
-t.subscribe(t => (text = t));
 
 export type RecordingData = {
   ID: number;
@@ -85,6 +81,23 @@ export enum TrainingStatus {
   Failure,
 }
 
+export enum Filters {
+  MAX,
+  MEAN,
+  MIN,
+  STD,
+  PEAKS,
+  ACC,
+  ZCR,
+  RMS,
+}
+
+export enum Axes {
+  X,
+  Y,
+  Z,
+}
+
 export type MlSettings = {
   duration: number; // Duration of recording
   numEpochs: number; // Number of epochs for ML
@@ -92,8 +105,8 @@ export type MlSettings = {
   minSamples: number; // minimum number of samples for reliable detection (when detecting gestures)
   updatesPrSecond: number; // Times algorithm predicts data pr second
   learningRate: number;
-  includedAxes: boolean[];
-  includedParameters: boolean[];
+  includedAxes: Axes[];
+  includedFilters: Filters[];
   preferableButton: 'A' | 'B' | 'AB';
   automaticClassification: boolean;
   output: boolean;
@@ -106,8 +119,8 @@ const initialSettings: MlSettings = {
   minSamples: 80,
   updatesPrSecond: 4,
   learningRate: 0.5,
-  includedAxes: [true, true, true],
-  includedParameters: [true, true, true, true, true, true, true, true],
+  includedAxes: [Axes.X, Axes.Y, Axes.Z],
+  includedFilters: [Filters.MAX, Filters.MEAN, Filters.MIN, Filters.STD, Filters.PEAKS, Filters.ACC, Filters.ZCR, Filters.RMS],
   preferableButton: 'AB',
   automaticClassification: true,
   output: true,

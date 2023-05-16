@@ -2,6 +2,7 @@ import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
+import { Filters, Axes } from '../datafunctions';
 
 export type RecordingData = {
   ID: number;
@@ -79,23 +80,6 @@ export enum TrainingStatus {
   Untrained,
   Success,
   Failure,
-}
-
-export enum Filters {
-  MAX,
-  MEAN,
-  MIN,
-  STD,
-  PEAKS,
-  ACC,
-  ZCR,
-  RMS,
-}
-
-export enum Axes {
-  X,
-  Y,
-  Z,
 }
 
 export type MlSettings = {

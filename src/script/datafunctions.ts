@@ -1,3 +1,20 @@
+export enum Filters {
+  MAX,
+  MEAN,
+  MIN,
+  STD,
+  PEAKS,
+  ACC,
+  ZCR,
+  RMS,
+}
+
+export enum Axes {
+  X,
+  Y,
+  Z,
+}
+
 export interface FilterOutput {
   computeOutput(data: number[]): number;
 }
@@ -113,6 +130,29 @@ function stddev(arr: number[]): number {
     return acc + (val - arr_mean) * (val - arr_mean);
   };
   return Math.sqrt(arr.reduce(r, 0.0) / arr.length);
+}
+
+export function determineFilter (filter: Filters): FilterOutput {
+  switch (filter) {
+    case Filters.MAX:
+      return new MaxFilter();
+    case Filters.MIN:
+      return new MinFilter();
+    case Filters.STD:
+      return new SDFilter();
+    case Filters.PEAKS:
+      return new PeaksFilter();
+    case Filters.ACC:
+      return new TotalAccFilter();
+    case Filters.MEAN:
+      return new MeanFilter();
+    case Filters.ZCR:
+      return new ZeroCrossingRateFilter();
+    case Filters.RMS:
+      return new RootMeanSquareFilter();
+    default:
+      throw new Error('Filter not found');
+  }
 }
 
 

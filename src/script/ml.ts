@@ -3,8 +3,6 @@ import {
   bestPrediction,
   gestureConfidences,
   type GestureData,
-  Filters,
-  Axes,
   gestures,
   getPrevData,
   model,
@@ -12,7 +10,11 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import {PeaksFilter, MinFilter, TotalAccFilter, SDFilter, FilterOutput, MaxFilter, MeanFilter, ZeroCrossingRateFilter, RootMeanSquareFilter} from './datafunctions';
+import {
+  Filters, 
+  Axes,
+  determineFilter
+} from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
@@ -187,36 +189,13 @@ function finishedTraining() {
 }
 
 // makeInput reduces array of x, y and z inputs to a single number array with values.
-// Depending on user settings. There will be anywhere between 1-12 parameters in
+// Depending on user settings. There will be anywhere between 1-24 parameters in
 
 function makeInputs(sample: {x: number[], y: number[], z: number[]}): number[] {
   const dataRep: number[] = [];
 
   if (!modelSettings) {
     throw new Error('Model settings not found');
-  }
-
-  function determineFilter (filter: Filters): FilterOutput {
-    switch (filter) {
-      case Filters.MAX:
-        return new MaxFilter();
-      case Filters.MIN:
-        return new MinFilter();
-      case Filters.STD:
-        return new SDFilter();
-      case Filters.PEAKS:
-        return new PeaksFilter();
-      case Filters.ACC:
-        return new TotalAccFilter();
-      case Filters.MEAN:
-        return new MeanFilter();
-      case Filters.ZCR:
-        return new ZeroCrossingRateFilter();
-      case Filters.RMS:
-        return new RootMeanSquareFilter();
-      default:
-        throw new Error('Filter not found');
-    }
   }
 
   // We use modelSettings to determine which filters to use. In this way the classify funciton

@@ -1,9 +1,12 @@
 <script lang="ts">
   import { state } from '../../script/stores/uiStore';
-  import { livedata, settings } from '../../script/stores/mlStore';
+  import { currentData, settings } from '../../script/stores/mlStore';
   import { onMount } from 'svelte';
   import { get, type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
+
+  // Updates width to ensure that the canvas fills the whole screen
+  export let width: number;
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
@@ -45,7 +48,7 @@
     if (chart !== undefined) {
       if ($state.isInputReady) {
         if (!$state.isTraining) {
-          chart!.start();
+          chart.start();
         } else {
           chart.stop();
         }
@@ -87,20 +90,17 @@
   }
 
   let unsubscribeFromData: Unsubscriber | undefined;
-  let i = 0;
 
   // If state is connected. Start updating the graph whenever there is new data
   // From the Micro:Bit
   function updateCanvas(isConnected: boolean) {
     // TODO: Clean this
     if (isConnected) {
-      unsubscribeFromData = livedata.subscribe(data => {
-        if (i % 4 === 0) {
+      unsubscribeFromData = currentData.subscribe(data => {
           const t = new Date().getTime();
-          lineX.append(t, data.smoothedAccelX, false);
-          lineY.append(t, data.smoothedAccelY, false);
-          lineZ.append(t, data.smoothedAccelZ, false);
-        }
+          lineX.append(t, data.x, false);
+          lineY.append(t, data.y, false);
+          lineZ.append(t, data.z, false);
       });
 
       // Else if we're currently subscribed to data. Unsubscribe.
@@ -111,8 +111,7 @@
     }
   }
 
-  // Updates width to ensure that the canvas fills the whole screen
-  export let width: number;
+
 </script>
 
 <main>

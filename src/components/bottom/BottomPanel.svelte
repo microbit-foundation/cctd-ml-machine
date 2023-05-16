@@ -72,7 +72,7 @@
       </div>
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
-        class="absolute right-0 cursor-pointer hover:bg-blue-400 hover:bg-opacity-10 transition"
+        class="absolute right-0 cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
         on:click={() => (isLive3DOpen = true)}>
         <Live3DView width={160} height={160} />
       </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { get } from 'svelte/store';
-  import { alertUser, buttonPressed, isReady, state } from '../script/stores/uiStore';
+  import { alertUser, buttonPressed, isReady, state, microbitInteraction, MicrobitInteractions} from '../script/stores/uiStore';
   import {
     addRecording,
     chosenGesture,
@@ -11,7 +11,6 @@
     removeRecording,
     settings,
   } from '../script/stores/mlStore';
-
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
   import StandardButton from './StandardButton.svelte';
@@ -118,14 +117,14 @@
   // Assess whether settings match with button-clicked.
   // If so, the gesture calls the recording function.
   function triggerButtonsClicked(buttons: { buttonA: 0 | 1; buttonB: 0 | 1 }): void {
-    const set = get(settings);
+    const triggerButton = get(microbitInteraction);
     if ($chosenGesture !== gesture) {
       return;
     }
     if (
-      set.preferableButton === 'AB' ||
-      (buttons.buttonA && set.preferableButton === 'A') ||
-      (set.preferableButton === 'B' && buttons.buttonB)
+      triggerButton === MicrobitInteractions.AB ||
+      (buttons.buttonA && triggerButton === MicrobitInteractions.A) ||
+      (buttons.buttonB && triggerButton === MicrobitInteractions.B)
     )
       recordClicked();
   }

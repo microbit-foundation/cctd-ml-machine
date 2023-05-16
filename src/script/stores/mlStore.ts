@@ -2,6 +2,8 @@ import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
+import { Filters, Axes } from '../datafunctions';
+
 
 export type RecordingData = {
   ID: number;
@@ -82,32 +84,28 @@ export enum TrainingStatus {
   Failure,
 }
 
-export type MlSettings = {
+type MlSettings = {
   duration: number; // Duration of recording
-  numEpochs: number; // Number of epochs for ML
   numSamples: number; // number of samples in one recording (when recording samples)
   minSamples: number; // minimum number of samples for reliable detection (when detecting gestures)
+  automaticClassification: boolean; // If true, automatically classify gestures
   updatesPrSecond: number; // Times algorithm predicts data pr second
+  numEpochs: number; // Number of epochs for ML
   learningRate: number;
-  includedAxes: boolean[];
-  includedParameters: boolean[];
-  preferableButton: 'A' | 'B' | 'AB';
-  automaticClassification: boolean;
-  output: boolean;
+  includedAxes: Axes[];
+  includedFilters: Filters[];
 };
 
 const initialSettings: MlSettings = {
   duration: 1800,
-  numEpochs: 80,
   numSamples: 80,
   minSamples: 80,
-  updatesPrSecond: 4,
-  learningRate: 0.5,
-  includedAxes: [true, true, true],
-  includedParameters: [true, true, true, true, true],
-  preferableButton: 'AB',
   automaticClassification: true,
-  output: true,
+  updatesPrSecond: 4,
+  numEpochs: 80,
+  learningRate: 0.5,
+  includedAxes: [Axes.X, Axes.Y, Axes.Z],
+  includedFilters: [Filters.MAX, Filters.MEAN, Filters.MIN, Filters.STD, Filters.PEAKS, Filters.ACC, Filters.ZCR, Filters.RMS],
 };
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);

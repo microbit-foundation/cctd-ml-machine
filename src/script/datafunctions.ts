@@ -60,8 +60,8 @@ export class PeaksFilter implements FilterOutput {
   
     let peaksCounter = 0;
   
-    if (data === undefined || data.length < lag + 2) {
-      throw ` ## y data array to short(${data.length}) for given lag of ${lag}`;
+    if (data.length < lag + 2) {
+      throw new Error('data sample is too short');
     }
   
     // init variables

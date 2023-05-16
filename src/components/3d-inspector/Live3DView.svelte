@@ -17,8 +17,8 @@
   /**
    * VARIABLES DEFINED IN FUNCTIONS OR FROM ELEMENTS
    */
-  let microbitModel: THREE.Scene;
-  let canvas: HTMLCanvasElement; 
+  let microbitModel: THREE.Scene; // TODO: We have undefined checks for these, but their types do not indicate they could ever be undefined 
+  let canvas: HTMLCanvasElement; // TODO: We have undefined checks for these, but their types do not indicate they could ever be undefined
   let renderer: THREE.WebGLRenderer;
   let updater: NodeJS.Timer | undefined;
 
@@ -175,7 +175,6 @@
   onMount(() => {
     updater = setInterval(updateFrame, 25);
     renderer = utility.instantiateRenderer(canvas, width, height);
-    renderer.render(scene, camera)
   });
 
   function updateCanvasSize(height: number, width: number) {
@@ -190,4 +189,6 @@
   }
 </script>
 
-<canvas class="scene" id="3dmodel" bind:this={canvas} {width} {height} />
+<div class="justify-center align-middle flex">    
+    <canvas class="scene" id="3dmodel" bind:this={canvas} {width} {height} />
+</div>

@@ -11,13 +11,14 @@ export class MeanFilter implements FilterOutput {
 export class SDFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     const mean = data.reduce((a, b) => a + b) / data.length;
-    return Math.sqrt(data.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / data.length);
+    return Math.sqrt(data.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / data.length);
   }
 }
 
 export class RootMeanSquareFilter implements FilterOutput {
   computeOutput(data: number[]): number {
-    return Math.sqrt(data.map(x => Math.pow(x, 2)).reduce((a, b) => a + b) / data.length);
+    const res =  Math.sqrt(data.reduce((a, b) => a + Math.pow(b, 2), 0) / data.length);
+    return res;
   }
 }
 

@@ -84,26 +84,26 @@ export enum TrainingStatus {
 
 type MlSettings = {
   duration: number; // Duration of recording
-  numEpochs: number; // Number of epochs for ML
   numSamples: number; // number of samples in one recording (when recording samples)
   minSamples: number; // minimum number of samples for reliable detection (when detecting gestures)
+  automaticClassification: boolean; // If true, automatically classify gestures
   updatesPrSecond: number; // Times algorithm predicts data pr second
+  numEpochs: number; // Number of epochs for ML
   learningRate: number;
   includedAxes: Axes[];
   includedFilters: Filters[];
-  automaticClassification: boolean;
 };
 
 const initialSettings: MlSettings = {
   duration: 1800,
-  numEpochs: 80,
   numSamples: 80,
   minSamples: 80,
+  automaticClassification: true,
   updatesPrSecond: 4,
+  numEpochs: 80,
   learningRate: 0.5,
   includedAxes: [Axes.X, Axes.Y, Axes.Z],
   includedFilters: [Filters.MAX, Filters.MEAN, Filters.MIN, Filters.STD, Filters.PEAKS, Filters.ACC, Filters.ZCR, Filters.RMS],
-  automaticClassification: true,
 };
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);

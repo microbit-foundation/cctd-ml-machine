@@ -15,31 +15,31 @@ export enum Axes {
   Z,
 }
 
-export interface FilterOutput {
+interface FilterOutput {
   computeOutput(data: number[]): number;
 }
 
-export class MeanFilter implements FilterOutput {
+class MeanFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     return data.reduce((a, b) => a + b) / data.length;
   }
 }
 
-export class SDFilter implements FilterOutput {
+class SDFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     const mean = data.reduce((a, b) => a + b) / data.length;
     return Math.sqrt(data.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / data.length);
   }
 }
 
-export class RootMeanSquareFilter implements FilterOutput {
+class RootMeanSquareFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     const res =  Math.sqrt(data.reduce((a, b) => a + Math.pow(b, 2), 0) / data.length);
     return res;
   }
 }
 
-export class ZeroCrossingRateFilter implements FilterOutput {
+class ZeroCrossingRateFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     let count = 0;
     for (let i = 1; i < data.length; i++) { 
@@ -51,25 +51,25 @@ export class ZeroCrossingRateFilter implements FilterOutput {
   }
 }
 
-export class TotalAccFilter implements FilterOutput {
+class TotalAccFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     return data.reduce((a, b) => a + Math.abs(b));
   }
 }
 
-export class MaxFilter implements FilterOutput {
+class MaxFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     return Math.max(...data);
   }
 }
 
-export class MinFilter implements FilterOutput {
+class MinFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     return Math.min(...data);
   }
 }
 
-export class PeaksFilter implements FilterOutput {
+class PeaksFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     const lag = 5;
     const threshold = 3.5;
@@ -120,7 +120,7 @@ export class PeaksFilter implements FilterOutput {
   }
 }
 
-export function mean(a: number[]): number {
+function mean(a: number[]): number {
   return a.reduce((acc, val) => acc + val) / a.length;
 }
 

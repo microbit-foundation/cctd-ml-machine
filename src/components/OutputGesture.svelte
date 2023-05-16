@@ -26,6 +26,7 @@
   import { state } from '../script/stores/uiStore';
   import StaticConfiguration from '../StaticConfiguration';
   import Information from './information/Information.svelte';
+  import { PinTurnOnState } from './output/PinSelectorUtil';
 
   // Variables for component
   export let gesture: GestureData;
@@ -35,7 +36,7 @@
   let triggered = false;
   let triggerFunctions: (() => void)[] = [];
   let selectedSound: SoundData | undefined = gesture.output.sound;
-  let selectedPin = StaticConfiguration.defaultOutputPin;
+  let selectedPin: string = StaticConfiguration.defaultOutputPin;
 
   let requiredConfidenceLevel = StaticConfiguration.defaultRequiredConfidence;
   $: currentConfidenceLevel = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
@@ -46,7 +47,6 @@
       triggerFunc();
     });
 
-  // $: if (shouldTrigger(requiredConfidenceLevel, confidenceLevel, triggered)) triggerComponnets();
   $: if (shouldTrigger(requiredConfidenceLevel, currentConfidenceLevel, triggered)) {
     triggerComponents();
     playSound();
@@ -63,10 +63,18 @@
     if (!Microbits.isOutputReady()) {
       return;
     }
-    Microbits.sendToOutputPin([{ pin: selectedPin, on: true }]);
-    setTimeout(() => {
-      Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
-    }, StaticConfiguration.pinToggleTime);
+
+    Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: true }]);
+    if (turnOnState === PinTurnOnState.X_TIME) {
+      setTimeout(() => {
+        Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: false }]);
+      }, turnOnTime);
+    }
+    StaticConfiguration.supportedPins.forEach(pin => {
+      if (pin != selectedPin) {
+        Microbits.sendToOutputPin([{ pin: parseInt(pin), on: false }]);
+      }
+    });
   }
 
   function playSound() {
@@ -83,6 +91,21 @@
       void Microbits.sendToOutputUart('s', selectedSound.id);
     }
   }
+
+  const onPinSelect = (selected: string) => {
+    selectedPin = selected;
+  };
+
+  let turnOnTime = StaticConfiguration.defaultPinToggleTime;
+  let turnOnState = StaticConfiguration.defaultPinTurnOnState;
+
+  const onTurnOnTimeSelect = (state: {
+    turnOnState: PinTurnOnState;
+    turnOnTime: number;
+  }) => {
+    turnOnState = state.turnOnState;
+    turnOnTime = state.turnOnTime;
+  };
 
   function shouldTrigger(
     requiredConfidence: number,
@@ -191,8 +214,10 @@
   </div>
   <div class="ml-4">
     <PinSelector
-      onPinSelect={pin => {
-        selectedPin = pin;
-      }} />
+      {selectedPin}
+      {turnOnState}
+      {turnOnTime}
+      {onPinSelect}
+      {onTurnOnTimeSelect} />
   </div>
 </main>

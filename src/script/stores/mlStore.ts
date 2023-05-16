@@ -82,7 +82,7 @@ export enum TrainingStatus {
   Failure,
 }
 
-export type MlSettings = {
+type MlSettings = {
   duration: number; // Duration of recording
   numEpochs: number; // Number of epochs for ML
   numSamples: number; // number of samples in one recording (when recording samples)
@@ -91,9 +91,7 @@ export type MlSettings = {
   learningRate: number;
   includedAxes: Axes[];
   includedFilters: Filters[];
-  preferableButton: 'A' | 'B' | 'AB';
   automaticClassification: boolean;
-  output: boolean;
 };
 
 const initialSettings: MlSettings = {
@@ -105,9 +103,7 @@ const initialSettings: MlSettings = {
   learningRate: 0.5,
   includedAxes: [Axes.X, Axes.Y, Axes.Z],
   includedFilters: [Filters.MAX, Filters.MEAN, Filters.MIN, Filters.STD, Filters.PEAKS, Filters.ACC, Filters.ZCR, Filters.RMS],
-  preferableButton: 'AB',
   automaticClassification: true,
-  output: true,
 };
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);

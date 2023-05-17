@@ -8,8 +8,6 @@
   export let height: number;
 
   const webGlCompatible = $compatibility.webGL
-  console.log("webGlCompatible:", webGlCompatible)
-
 </script>
 
 {#if webGlCompatible}

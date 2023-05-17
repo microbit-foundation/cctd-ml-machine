@@ -3,7 +3,7 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 // TODO: Why is this a class? No methods mutates object state, and 
 // only one method uses class state. 
-// Refacor to pute functions and simply crate the loader where needed
+// Refacor to pure functions and simply create the loader where needed
 class Live3DUtility {
   private loader: GLTFLoader;
 

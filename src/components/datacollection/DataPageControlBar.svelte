@@ -8,7 +8,7 @@
   export let clearDisabled = false;
   export let onClearGestures: () => void;
   export let onDownloadGestures: () => void;
-  export let onUploadGestures: () => void;
+  export let onUploadGestures: (e: Event) => void;
 </script>
 
 <ControlBar>

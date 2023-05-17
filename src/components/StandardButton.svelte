@@ -27,10 +27,12 @@
 <script lang="ts">
   import windi from './../../windi.config.js';
   type variants = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight' | 'disabled';
+  
   export let color: variants = 'secondary';
-  export let onClick: () => void = () => {
-    return;
-  };
+  export let onClick: (e: Event | undefined) => void
+  //  = () => {
+  //   return;
+  // };
   export let disabled = false;
   export let stopPropagation = false;
   export let small = false;
@@ -40,7 +42,7 @@
   export let bold = true;
   export let shadows = true;
 
-  const bgColors: { [key: variants]: string } = {
+  const bgColors: { [key in variants]: string } = {
     primary: windi.theme.extend.colors.primary,
     secondary: windi.theme.extend.colors.secondary,
     warning: windi.theme.extend.colors.warning,

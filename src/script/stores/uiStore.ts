@@ -1,6 +1,5 @@
 import { get, writable } from 'svelte/store';
-import type { CompatibilityStatus } from '../compatibility/CompatibilityChecker';
-import CompatibilityChecker from '../compatibility/CompatibilityChecker';
+import CompatibilityChecker,  { type CompatibilityStatus } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
 import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';

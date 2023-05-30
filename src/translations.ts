@@ -47,6 +47,7 @@ export default {
 		"content.data.controlbar.button.downloadData": "Download dataset",
 		"content.data.controlbar.button.uploadData": "Upload dataset",
 
+
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Træning mislykkedes",
 		"content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
@@ -214,6 +215,7 @@ export default {
 
 		"compatibility.platform.notSupported": "Værktøjet er ikke understøttet på din nuværende platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Vi ses på computer.",
+		"compatibility.webgl.notSupported": "WebGL er ikke tilgængelig. Aktiver WebGL for at se 3D data.",
 
 		// CONNECTION LOST DIALOG
 
@@ -435,6 +437,7 @@ export default {
 
 		"compatibility.platform.notSupported": "The tool is not supported on your current platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Join us on desktop.",
+		"compatibility.webgl.notSupported": "WebGL not available. Enable WebGL to see 3D data view.",
 
 		// CONNECTION LOST DIALOG
 

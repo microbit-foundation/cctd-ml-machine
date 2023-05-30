@@ -17,6 +17,7 @@
   import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
+    import { onMount } from 'svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -39,18 +40,45 @@
 
   // TODO: Error handling if no files
   const onUploadGestures = (e: Event) => {
-    const files = (<HTMLInputElement>e.target).files;
-    if (!files) {
-      return;
-    }
-    const file = files[0];
-    if (!file) {
-      return;
-    }
-    loadDatasetFromFile(file);
+    filePicker.click()
+    // const fileInputElement = document.createElement('input')
+    // fileInputElement.type = 'file'
+    // fileInputElement.accept = 'application/JSON'
+    // fileInputElement.onchange = () => {
+      
+    // }
+    
+
+    // const files = (<HTMLInputElement>e.target).files;
+    // if (!files) {
+    //   return;
+    // }
+    // const file = files[0];
+    // if (!file) {
+    //   return;
+    // }
+    // loadDatasetFromFile(file);
   };
 
   let connectDialogReference: MainConnectDialog;
+
+  let filePicker: HTMLInputElement
+  onMount(() => {
+    filePicker = document.createElement('input')
+    filePicker.type = 'file'
+    filePicker.accept = 'application/JSON'
+    filePicker.onchange = () => {
+      if (filePicker.files == null || filePicker.files.length < 1){
+        return
+      }
+      const f = filePicker.files[0]
+      loadDatasetFromFile(f)
+    }
+    return () => {
+      filePicker.remove()
+    }
+  })
+
 </script>
 
 <!-- Main pane -->

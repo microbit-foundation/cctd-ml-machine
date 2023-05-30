@@ -33,11 +33,9 @@
   export let color: variants = 'secondary';
   export let onClick: (e: Event) => void = TypingUtils.emptyFunction
   export let disabled = false;
-  export let stopPropagation = false; // TODO: Consider extracting a 'FileButton' which wraps this component instead of having special cases to handle files in this button component
   export let small = false;
   export let outlined = false;
   export let fillOnHover = false;
-  export let isFileInput = false; // TODO: Consider extracting a 'FileButton' which wraps this component instead of having special cases to handle files in this button component
   export let bold = true;
   export let shadows = true;
 
@@ -49,29 +47,10 @@
     infolight: windi.theme.extend.colors.infolight,
     disabled: windi.theme.extend.colors.disabled,
   };
-  let fileInputElement: HTMLInputElement;
-  const handleFileInput = () => {
-    fileInputElement.click();
-    fileInputElement.onchange = onClick;
-  };
-
-  const onClickWrapper = (event: Event) => {
-    if (stopPropagation) {
-        event.stopPropagation();
-      }
-      if (isFileInput) {
-        handleFileInput();
-      } else {
-        onClick(event);
-      }
-  }
 
 </script>
 
 <div class="grid grid-cols-1 content-center place-items-center">
-  {#if isFileInput}
-    <input class="hidden" bind:this={fileInputElement} type="file" />
-  {/if}
   <button
     {disabled}
     style="--color: {bgColors[disabled ? 'disabled' : color]}
@@ -86,7 +65,7 @@
     class:fillOnHover={fillOnHover && !disabled}
     class:cursor-pointer={!disabled}
     class:cursor-default={disabled}
-    on:click={onClickWrapper}
+    on:click={onClick}
   >
     <slot />
   </button>

@@ -43,7 +43,6 @@
       onClick={onUploadGestures}
       bold={false}
       outlined
-      isFileInput
       shadows={false}
       color="primary">
       {$t('content.data.controlbar.button.uploadData')}

@@ -50,7 +50,8 @@
   }
 
   // method for recording data point for that specific gesture
-  function recordClicked(): void {
+  function recordClicked(e?: Event): void {
+    e?.stopPropagation();
     if (!isReady()) {
       return;
     }
@@ -212,7 +213,6 @@
           </div>
           <StandardButton
             onClick={recordClicked}
-            stopPropagation
             small
             shadows={false}
             outlined

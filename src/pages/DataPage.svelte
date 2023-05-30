@@ -37,6 +37,7 @@
     downloadDataset();
   };
 
+  // TODO: Error handling if no files
   const onUploadGestures = (e: Event) => {
     const files = (<HTMLInputElement>e.target).files;
     if (!files) {

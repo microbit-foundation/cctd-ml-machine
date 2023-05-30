@@ -25,20 +25,19 @@
 </style>
 
 <script lang="ts">
+  import TypingUtils from '../script/TypingUtils.js';
   import windi from './../../windi.config.js';
+
   type variants = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight' | 'disabled';
   
   export let color: variants = 'secondary';
-  export let onClick: (e: Event | undefined) => void
-  //  = () => {
-  //   return;
-  // };
+  export let onClick: (e: Event) => void = TypingUtils.emptyFunction
   export let disabled = false;
-  export let stopPropagation = false;
+  export let stopPropagation = false; // TODO: Consider extracting a 'FileButton' which wraps this component instead of having special cases to handle files in this button component
   export let small = false;
   export let outlined = false;
   export let fillOnHover = false;
-  export let isFileInput = false;
+  export let isFileInput = false; // TODO: Consider extracting a 'FileButton' which wraps this component instead of having special cases to handle files in this button component
   export let bold = true;
   export let shadows = true;
 
@@ -55,6 +54,18 @@
     fileInputElement.click();
     fileInputElement.onchange = onClick;
   };
+
+  const onClickWrapper = (event: Event) => {
+    if (stopPropagation) {
+        event.stopPropagation();
+      }
+      if (isFileInput) {
+        handleFileInput();
+      } else {
+        onClick(event);
+      }
+  }
+
 </script>
 
 <div class="grid grid-cols-1 content-center place-items-center">
@@ -75,17 +86,8 @@
     class:fillOnHover={fillOnHover && !disabled}
     class:cursor-pointer={!disabled}
     class:cursor-default={disabled}
-    on:click={e => {
-      if (stopPropagation) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        e.stopPropagation();
-      }
-      if (isFileInput) {
-        handleFileInput();
-      } else {
-        onClick();
-      }
-    }}>
+    on:click={onClickWrapper}
+  >
     <slot />
   </button>
 </div>

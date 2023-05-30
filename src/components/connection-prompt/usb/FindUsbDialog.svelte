@@ -36,11 +36,11 @@
       {/if}
     </div>
     <StandardButton
-      onClick="{step === 2
+      onClick={step === 2
         ? onFindUsbClick
         : () => {
             step = 2;
-          }}">
+          }}>
       {$t(step === 1 ? 'connectMB.usb.button1' : 'connectMB.usb.button2')}
     </StandardButton>
   </div>

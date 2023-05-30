@@ -39,28 +39,9 @@
   };
 
   // TODO: Error handling if no files
-  const onUploadGestures = (e: Event) => {
+  const onUploadGestures = () => {
     filePicker.click()
-    // const fileInputElement = document.createElement('input')
-    // fileInputElement.type = 'file'
-    // fileInputElement.accept = 'application/JSON'
-    // fileInputElement.onchange = () => {
-      
-    // }
-    
-
-    // const files = (<HTMLInputElement>e.target).files;
-    // if (!files) {
-    //   return;
-    // }
-    // const file = files[0];
-    // if (!file) {
-    //   return;
-    // }
-    // loadDatasetFromFile(file);
   };
-
-  let connectDialogReference: MainConnectDialog;
 
   let filePicker: HTMLInputElement
   onMount(() => {
@@ -68,7 +49,7 @@
     filePicker.type = 'file'
     filePicker.accept = 'application/JSON'
     filePicker.onchange = () => {
-      if (filePicker.files == null || filePicker.files.length < 1){
+      if (filePicker.files == null || filePicker.files.length < 1){ 
         return
       }
       const f = filePicker.files[0]
@@ -111,7 +92,7 @@
             }}>{$t('footer.connectButtonNotConnected')}</StandardButton>
         </div>
       </StandardDialog>
-      <MainConnectDialog bind:this={connectDialogReference} />
+      <MainConnectDialog />
 
       {#if $gestures.length > 0}
         <div class=" p-0 relative flex h-7">

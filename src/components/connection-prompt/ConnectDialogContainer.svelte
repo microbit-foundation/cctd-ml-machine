@@ -15,8 +15,6 @@
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { btPatternInput, btPatternOutput } from '../../script/stores/connectionStore';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import { onMount } from 'svelte';
-  import { state } from '../../script/stores/uiStore';
   import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
 
   let flashProgress = 0;

@@ -24,7 +24,6 @@
 </script>
 
 <div class="h-26 w-40 pr-3 pt-1 bg-white relative">
-  <!-- <div class="relative"> -->
     {#if hide}
       <div
         transition:fade
@@ -34,14 +33,9 @@
           w-40
           bg-white
         "
-      >
-    </div>
+      />
     {/if}
     <RecordingGraph data="{recording.data}" />
-  <!-- {/if} -->
-  <!-- </div> -->
-  <!-- Deleting button -->
-  <!-- <div class="relative"> -->
     <button class="absolute -left-2.8px top-0px outline-none">
       <div class="relative">
         <i class="z-1 absolute fas fa-circle fa-lg text-white" />
@@ -51,8 +45,4 @@
           on:click="{deleteClicked}" />
       </div>
     </button>
-    <!-- <RecordingGraph data="{recording.data}" /> -->
-
-  <!-- </div> -->
-  <!-- Graph for recording data -->
 </div>

@@ -1,10 +1,18 @@
 <script lang="ts">
-  import type { ChartConfiguration } from 'chart.js';
-  import Graph from './Graph.svelte';
+  import { onMount } from 'svelte';
+  import { 
+    Chart, 
+    ChartConfiguration, 
+    ChartTypeRegistry, 
+    LineController, 
+    LineElement, 
+    LinearScale,
+    PointElement 
+  } from 'chart.js';
 
   export let data: { x: number[]; y: number[]; z: number[] };
 
-  function getConfig(): ChartConfiguration<string, number, string> {
+  function getConfig(): ChartConfiguration<keyof ChartTypeRegistry, {x: number, y: number}[], string> {
     const x: { x: number; y: number }[] = [];
     const y: { x: number; y: number }[] = [];
     const z: { x: number; y: number }[] = [];
@@ -78,6 +86,23 @@
       },
     };
   }
+
+  let canvas: HTMLCanvasElement;
+  onMount(() => {
+    Chart.register([LinearScale, LineController, PointElement, LineElement]);
+    const chart = new Chart(canvas.getContext('2d') ?? new HTMLCanvasElement(), getConfig());
+    return () => {
+      chart.destroy()
+    }
+  });
+
+
 </script>
 
-<Graph config={getConfig()} />
+<canvas 
+  bind:this="{canvas}" 
+  on:mouseenter={() => console.log("Enter")}
+  on:mouseleave={() => console.log("Leave")}
+  on:mousemove={() => console.log("Move")}
+  
+/>

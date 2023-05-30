@@ -53,6 +53,7 @@
       }
       const f = filePicker.files[0]
       loadDatasetFromFile(f)
+      filePicker.value = '' // To trick element to trigger onChange if same file selected
     }
     return () => {
       filePicker.remove()

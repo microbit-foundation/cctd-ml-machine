@@ -10,11 +10,7 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import {
-  Filters, 
-  Axes,
-  determineFilter
-} from './datafunctions';
+import { Filters, Axes, determineFilter } from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
@@ -40,7 +36,9 @@ let predictionInterval: NodeJS.Timeout | undefined = undefined;
 function createModel(): LayersModel {
   const gestureData = get(gestures);
   const numberOfClasses: number = gestureData.length;
-  const inputShape = [get(settings).includedFilters.length * get(settings).includedAxes.length];
+  const inputShape = [
+    get(settings).includedFilters.length * get(settings).includedAxes.length,
+  ];
 
   const input = tf.input({ shape: inputShape });
   const normalizer = tf.layers.batchNormalization().apply(input);
@@ -128,10 +126,7 @@ export function trainModel() {
 
 export function isParametersLegal(): boolean {
   const s = get(settings);
-  return (
-    s.includedAxes.length > 0 &&
-    s.includedFilters.length > 0
-  );
+  return s.includedAxes.length > 0 && s.includedFilters.length > 0;
 }
 
 // Assess whether
@@ -191,7 +186,7 @@ function finishedTraining() {
 // makeInput reduces array of x, y and z inputs to a single number array with values.
 // Depending on user settings. There will be anywhere between 1-24 parameters in
 
-function makeInputs(sample: {x: number[], y: number[], z: number[]}): number[] {
+function makeInputs(sample: { x: number[]; y: number[]; z: number[] }): number[] {
   const dataRep: number[] = [];
 
   if (!modelSettings) {
@@ -202,9 +197,12 @@ function makeInputs(sample: {x: number[], y: number[], z: number[]}): number[] {
   // will be called with the same filters and axes untill the next training
   modelSettings.filters.forEach(filter => {
     const filterOutput = determineFilter(filter);
-    if (modelSettings.axes.includes(Axes.X)) dataRep.push(filterOutput.computeOutput(sample.x));
-    if (modelSettings.axes.includes(Axes.Y)) dataRep.push(filterOutput.computeOutput(sample.y));
-    if (modelSettings.axes.includes(Axes.Z)) dataRep.push(filterOutput.computeOutput(sample.z));
+    if (modelSettings.axes.includes(Axes.X))
+      dataRep.push(filterOutput.computeOutput(sample.x));
+    if (modelSettings.axes.includes(Axes.Y))
+      dataRep.push(filterOutput.computeOutput(sample.y));
+    if (modelSettings.axes.includes(Axes.Z))
+      dataRep.push(filterOutput.computeOutput(sample.z));
   });
 
   return dataRep;

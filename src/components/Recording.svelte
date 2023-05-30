@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { fade } from 'svelte/transition';
   import type { RecordingData } from '../script/stores/mlStore';
   import RecordingGraph from './graphs/RecordingGraph.svelte';
 
@@ -10,7 +11,9 @@
 
   // Method for propagating deletion of recording
   function deleteClicked() {
-    if (hide) return;
+    if (hide) {
+      return;
+    }
 
     hide = true;
     setTimeout(() => {
@@ -20,25 +23,36 @@
   }
 </script>
 
-<main class="h-26 w-40 pr-3 pt-1 bg-white">
-  <div class="relative">
-    <div
-      class="absolute h-26 w-40 transition ease
-								{hide ? 'bg-white duration-500' : 'bg-transparent'}">
+<div class="h-26 w-40 pr-3 pt-1 bg-white relative">
+  <!-- <div class="relative"> -->
+    {#if hide}
+      <div
+        transition:fade
+        class="
+          absolute 
+          h-26
+          w-40
+          bg-white
+        "
+      >
     </div>
-  </div>
+    {/if}
+    <RecordingGraph data="{recording.data}" />
+  <!-- {/if} -->
+  <!-- </div> -->
   <!-- Deleting button -->
-  <div class="relative">
-    <button class="absolute -left-2.8px -top-6px outline-none">
+  <!-- <div class="relative"> -->
+    <button class="absolute -left-2.8px top-0px outline-none">
       <div class="relative">
-        <i class="z-1 absolute fas fa-circle fa-lg text-white"></i>
+        <i class="z-1 absolute fas fa-circle fa-lg text-white" />
         <i
           class="z-2 absolute far fa-times-circle fa-lg transition
 									ease cursor-pointer text-light-800 hover:text-black"
-          on:click="{deleteClicked}"></i>
+          on:click="{deleteClicked}" />
       </div>
     </button>
-  </div>
+    <!-- <RecordingGraph data="{recording.data}" /> -->
+
+  <!-- </div> -->
   <!-- Graph for recording data -->
-  <RecordingGraph data="{recording.data}" />
-</main>
+</div>

@@ -17,7 +17,7 @@
   import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
-    import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -38,7 +38,6 @@
     downloadDataset();
   };
 
-  // TODO: Error handling if no files
   const onUploadGestures = () => {
     filePicker.click()
   };

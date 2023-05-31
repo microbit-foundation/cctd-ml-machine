@@ -1,9 +1,9 @@
 import { get, writable } from 'svelte/store';
-import type { CompatibilityStatus } from '../compatibility/CompatibilityChecker';
-import CompatibilityChecker from '../compatibility/CompatibilityChecker';
+import CompatibilityChecker,  { type CompatibilityStatus } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
 import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
+import exp from 'constants';
 
 // TODO: Rename? Split up further?
 
@@ -112,3 +112,9 @@ export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
   buttonA: 0,
   buttonB: 0,
 });
+
+export enum MicrobitInteractions {A, B, AB}
+
+const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;
+
+export const microbitInteraction = writable<MicrobitInteractions>(initialMicrobitInteraction);

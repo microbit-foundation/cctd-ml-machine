@@ -17,6 +17,7 @@
   import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
+  import { onMount } from 'svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -37,19 +38,27 @@
     downloadDataset();
   };
 
-  const onUploadGestures = (e: Event) => {
-    const files = (<HTMLInputElement>e.target).files;
-    if (!files) {
-      return;
-    }
-    const file = files[0];
-    if (!file) {
-      return;
-    }
-    loadDatasetFromFile(file);
+  const onUploadGestures = () => {
+    filePicker.click()
   };
 
-  let connectDialogReference: MainConnectDialog;
+  let filePicker: HTMLInputElement
+  onMount(() => {
+    filePicker = document.createElement('input')
+    filePicker.type = 'file'
+    filePicker.accept = 'application/JSON'
+    filePicker.onchange = () => {
+      if (filePicker.files == null || filePicker.files.length < 1){ 
+        return
+      }
+      const f = filePicker.files[0]
+      loadDatasetFromFile(f)
+    }
+    return () => {
+      filePicker.remove()
+    }
+  })
+
 </script>
 
 <!-- Main pane -->
@@ -82,7 +91,7 @@
             }}>{$t('footer.connectButtonNotConnected')}</StandardButton>
         </div>
       </StandardDialog>
-      <MainConnectDialog bind:this={connectDialogReference} />
+      <MainConnectDialog />
 
       {#if $gestures.length > 0}
         <div class=" p-0 relative flex h-7">

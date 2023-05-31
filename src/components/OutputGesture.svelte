@@ -47,10 +47,10 @@
       triggerFunc();
     });
 
+  $: triggerOutputPin(requiredConfidenceLevel, currentConfidenceLevel, triggered);
   $: if (shouldTrigger(requiredConfidenceLevel, currentConfidenceLevel, triggered)) {
     triggerComponents();
     playSound();
-    triggerOutputPin();
   }
 
   function onSoundSelected(sound: SoundData | undefined): void {
@@ -59,22 +59,29 @@
     onUserInteraction();
   }
 
-  function triggerOutputPin() {
+  function triggerOutputPin(requiredLevel, currentLevel, oldTriggered) {
+    currentLevel = currentLevel * 100;
     if (!Microbits.isOutputReady()) {
       return;
     }
-
-    Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: true }]);
-    if (turnOnState === PinTurnOnState.X_TIME) {
-      setTimeout(() => {
-        Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: false }]);
-      }, turnOnTime);
-    }
-    StaticConfiguration.supportedPins.forEach(pin => {
-      if (pin != selectedPin) {
-        Microbits.sendToOutputPin([{ pin: parseInt(pin), on: false }]);
+    if (oldTriggered) {
+      if (currentLevel < requiredLevel) {
+        // Was triggered but is not anymore.
+        if (turnOnState === PinTurnOnState.ALL_TIME) {
+          Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: false }]);
+        }
       }
-    });
+    } else {
+      if (currentLevel > requiredLevel) {
+        // Was not triggered, but is now.
+        Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: true }]);
+        if (turnOnState === PinTurnOnState.X_TIME) {
+          setTimeout(() => {
+            Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: false }]);
+          }, turnOnTime);
+        }
+      }
+    }
   }
 
   function playSound() {
@@ -94,6 +101,7 @@
 
   const onPinSelect = (selected: string) => {
     selectedPin = selected;
+    refreshAfterChange();
   };
 
   let turnOnTime = StaticConfiguration.defaultPinToggleTime;
@@ -105,6 +113,12 @@
   }) => {
     turnOnState = state.turnOnState;
     turnOnTime = state.turnOnTime;
+    refreshAfterChange();
+  };
+
+  const refreshAfterChange = () => {
+    Microbits.resetIOPins();
+    triggerOutputPin(requiredConfidenceLevel, currentConfidenceLevel, false);
   };
 
   function shouldTrigger(

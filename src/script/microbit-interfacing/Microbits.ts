@@ -40,6 +40,13 @@ class Microbits {
   private static isInputReconnecting = false;
   private static isOutputReconnecting = false;
 
+  /**
+   * Maps pin to the number of times, it has been asked to turn on.
+   * This is done to avoid race conditions, where one gesture tells a pin to turn off, while another tells it to turn on.
+   * If map.get(1) > 0, then we should not send messages to turn off the pin.
+   */
+  private static ioPinMessages: Map<number, number> = new Map<number, number>();
+
   // Set these flags if user disconnects while reconnecting, such that the GATT server can be disconnected when
   // the micro:bit reestablishes a connection.
   private static inputFlaggedForDisconnect = false;
@@ -435,7 +442,9 @@ class Microbits {
   }
 
   /**
-   * Expels both the input and output.
+   * Expels the output and output microbit, disconnecting it without attempting to reconnect.
+   * If the function is called while the micro:bit is reconnecting, it will be disconnected as soon as it has connected.
+   * @throws {Error} Throws an error if no micro:bit is assigned.
    */
   public static expelInputAndOutput() {
     if (!this.isInputAssigned() && !this.isOutputAssigned()) {
@@ -462,6 +471,11 @@ class Microbits {
     this.clearAssignedOutputReference();
   }
 
+  /**
+   * Expels the output microbit, disconnecting it without attempting to reconnect.
+   * If the function is called while the micro:bit is reconnecting, it will be disconnected as soon as it has connected.
+   * @throws {Error} Throws an error if no output micro:bit is assigned.
+   */
   public static expelOutput() {
     if (!this.isOutputAssigned()) {
       throw new Error('Cannot disconnect, no output micro:bit is connected');
@@ -476,6 +490,11 @@ class Microbits {
     }
   }
 
+  /**
+   * Expels the input microbit, disconnecting it without attempting to reconnect.
+   * If the function is called while the micro:bit is reconnecting, it will be disconnected as soon as it has connected.
+   * @throws {Error} Throws an error if no input micro:bit is assigned.
+   */
   public static expelInput() {
     if (!this.isInputAssigned()) {
       throw new Error('Cannot disconnect, no input micro:bit is connected');
@@ -489,8 +508,11 @@ class Microbits {
     }
   }
 
+  /**
+   * @param { { pin: number; on: boolean }[] } data The pins and their states
+   * @throws {Error} Throws an error if no output microbit is assigned, or no outputIO service could be found.
+   */
   public static sendToOutputPin(data: { pin: number; on: boolean }[]) {
-    // todo: isn't part of the feature set for DR, not tested
     if (!this.isOutputAssigned()) {
       throw new Error('No output microbit is connected, cannot send to pin.');
     }
@@ -500,13 +522,46 @@ class Microbits {
         'Cannot send to output pin, have not subscribed to the IO service yet!',
       );
     }
-    const dataView = new DataView(new ArrayBuffer(data.length * 2));
-    data.forEach((point: { pin: number; on: boolean }, index) => {
-      dataView.setInt8(index * 2, point.pin);
-      dataView.setInt8(index * 2 + 1, point.on ? 1 : 0);
-      outputting.set({ text: `Turn pin ${point.pin} ${point.on ? 'on' : 'off'}` });
-    });
+    if (!this.ioPinMessages) {
+      this.ioPinMessages = new Map<number, number>();
+    }
+    for (const msg of data) {
+      if (!this.ioPinMessages.has(msg.pin)) {
+        this.ioPinMessages.set(msg.pin, 0); // initialise if not already initialised
+      }
+      const currentPinValue: number = this.ioPinMessages.get(msg.pin);
+      this.ioPinMessages.set(msg.pin, Math.max(0, currentPinValue + (2 * msg.on - 1)));
+    }
+    for (const [key, value] of this.ioPinMessages) {
+      if (value == 0) {
+        this.sendIOPinMessage({ pin: key, on: false });
+      } else {
+        this.sendIOPinMessage({ pin: key, on: true });
+      }
+    }
+  }
+
+  private static sendIOPinMessage(data: { pin: number; on: boolean }) {
+    const dataView = new DataView(new ArrayBuffer(2));
+    dataView.setInt8(0, data.pin);
+    dataView.setInt8(1, data.on ? 1 : 0);
+    outputting.set({ text: `Turn pin ${data.pin} ${data.on ? 'on' : 'off'}` });
+    if (!this.outputIO) {
+      throw new Error(
+        'Cannot send to output pin, have not subscribed to the IO service yet!',
+      );
+    }
     this.addToServiceActionQueue(this.outputIO, dataView);
+  }
+
+  public static resetIOPins() {
+    this.ioPinMessages = new Map<number, number>();
+    if (!this.isOutputReady()) {
+      return;
+    }
+    StaticConfiguration.supportedPins.forEach(value => {
+      this.sendIOPinMessage({ pin: parseInt(value), on: false });
+    });
   }
 
   public static setOutputMatrix(matrix: boolean[]) {

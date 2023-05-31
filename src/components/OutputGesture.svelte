@@ -40,6 +40,12 @@
   let selectedPin: string = gesture.output.outputPin
     ? gesture.output.outputPin.pin
     : StaticConfiguration.defaultOutputPin;
+  let turnOnTime = gesture.output.outputPin
+    ? gesture.output.outputPin.turnOnTime
+    : StaticConfiguration.defaultPinToggleTime;
+  let turnOnState = gesture.output.outputPin
+    ? gesture.output.outputPin.pinState
+    : StaticConfiguration.defaultPinTurnOnState;
 
   let requiredConfidenceLevel = StaticConfiguration.defaultRequiredConfidence;
   $: currentConfidenceLevel = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
@@ -106,9 +112,6 @@
     refreshAfterChange();
     updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
   };
-
-  let turnOnTime = StaticConfiguration.defaultPinToggleTime;
-  let turnOnState = StaticConfiguration.defaultPinTurnOnState;
 
   const onTurnOnTimeSelect = (state: {
     turnOnState: PinTurnOnState;

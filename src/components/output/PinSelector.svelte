@@ -72,17 +72,27 @@
   </div>
 
   <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-row w-full mt-2 justify-around">
+      <div class="flex flex-col">
+        <input
+          type="radio"
+          bind:group={selectedTurnOnState}
+          on:change={onTurnOnStateSelect}
+          on:click|stopPropagation
+          value={PinTurnOnState.ALL_TIME} />
+        <p>{$t('content.model.output.pin.option.allTime')}</p>
+      </div>
+      <div class="flex flex-col">
+        <input
+          type="radio"
+          bind:group={selectedTurnOnState}
+          on:change={onTurnOnStateSelect}
+          on:click|stopPropagation
+          value={PinTurnOnState.X_TIME} />
+        <p>{$t('content.model.output.pin.option.xTime')}</p>
+      </div>
+    </div>
     <div class="w-40">
-      <select
-        class="bg-white border mt-4 mb-2 rounded text-center"
-        bind:value={selectedTurnOnState}
-        on:change={onTurnOnStateSelect}
-        on:click|stopPropagation>
-        <option value={PinTurnOnState.ALL_TIME}
-          ><p>{$t('content.model.output.pin.option.allTime')}</p></option>
-        <option value={PinTurnOnState.X_TIME}
-          ><p>{$t('content.model.output.pin.option.xTime')}</p></option>
-      </select>
       {#if turnOnState === PinTurnOnState.X_TIME}
         <div class="flex flex-row justify-center">
           <p class="mr-2">{$t('content.model.output.pin.seconds')}</p>

@@ -16,6 +16,7 @@
     updateGestureSoundOutput,
     type GestureData,
     type SoundData,
+    updateGesturePinOutput,
   } from '../script/stores/mlStore';
   import { t } from '../i18n';
   import OutputSoundSelector from './output/OutputSoundSelector.svelte';
@@ -36,7 +37,9 @@
   let triggered = false;
   let triggerFunctions: (() => void)[] = [];
   let selectedSound: SoundData | undefined = gesture.output.sound;
-  let selectedPin: string = StaticConfiguration.defaultOutputPin;
+  let selectedPin: string = gesture.output.outputPin
+    ? gesture.output.outputPin.pin
+    : StaticConfiguration.defaultOutputPin;
 
   let requiredConfidenceLevel = StaticConfiguration.defaultRequiredConfidence;
   $: currentConfidenceLevel = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
@@ -102,6 +105,7 @@
   const onPinSelect = (selected: string) => {
     selectedPin = selected;
     refreshAfterChange();
+    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
   };
 
   let turnOnTime = StaticConfiguration.defaultPinToggleTime;
@@ -114,6 +118,7 @@
     turnOnState = state.turnOnState;
     turnOnTime = state.turnOnTime;
     refreshAfterChange();
+    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
   };
 
   const refreshAfterChange = () => {

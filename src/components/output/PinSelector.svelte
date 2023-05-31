@@ -92,7 +92,7 @@
         <p>{$t('content.model.output.pin.option.xTime')}</p>
       </div>
     </div>
-    <div class="w-40">
+    <div class="w-40 mt-4">
       {#if turnOnState === PinTurnOnState.X_TIME}
         <div class="flex flex-row justify-center">
           <p class="mr-2">{$t('content.model.output.pin.seconds')}</p>

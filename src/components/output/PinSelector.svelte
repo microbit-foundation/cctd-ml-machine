@@ -2,6 +2,8 @@
   import GestureTilePart from './../GestureTilePart.svelte';
   import StaticConfiguration from '../../StaticConfiguration';
   import { PinTurnOnState } from './PinSelectorUtil';
+  import { t } from '../../i18n.js';
+  import MBSpecs from '../../script/microbit-interfacing/MBSpecs.js';
   export let onPinSelect: (pin: string) => void;
   export let onTurnOnTimeSelect: ({
     turnOnState: PinTurnOnState,
@@ -26,40 +28,12 @@
     });
   };
 
-  const pins = [
-    '3',
-    '0',
-    '4',
-    '5',
-    '6',
-    '7',
-    '1',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '2',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '3V',
-    '18',
-    '19',
-    '20',
-    '21',
-    'GND',
-    '24',
-  ];
-
   const largePins = ['0', '1', '2', '3V', 'GND'];
 </script>
 
 <GestureTilePart>
   <div class="flex flex-row">
-    {#each pins as val, index}
+    {#each MBSpecs.IO_PIN_LAYOUT as val, index}
       {#if StaticConfiguration.supportedPins.includes(val)}
         <!-- This are pins we support, make them selectable and yellow -->
         {#if largePins.includes(val)}
@@ -104,12 +78,14 @@
         bind:value={selectedTurnOnState}
         on:change={onTurnOnStateSelect}
         on:click|stopPropagation>
-        <option value={PinTurnOnState.ALL_TIME}><p>Tændt hele tiden</p></option>
-        <option value={PinTurnOnState.X_TIME}><p>Tænd i X sekunder</p></option>
+        <option value={PinTurnOnState.ALL_TIME}
+          ><p>{$t('content.model.output.pin.option.allTime')}</p></option>
+        <option value={PinTurnOnState.X_TIME}
+          ><p>{$t('content.model.output.pin.option.xTime')}</p></option>
       </select>
       {#if turnOnState === PinTurnOnState.X_TIME}
         <div class="flex flex-row justify-center">
-          <p class="mr-2">Sekunder</p>
+          <p class="mr-2">{$t('content.model.output.pin.seconds')}</p>
           <input
             type="number"
             on:change={onTurnOnStateSelect}
@@ -120,19 +96,3 @@
     </div>
   </div>
 </GestureTilePart>
-
-<!--
-<div class="p-4 h-full w-40 flex flex-col justify-between py-8">
-    <p class="text-center">{$t('content.model.output.pin.selectPin')}</p>
-    <select
-      class="bg-white border rounded text-center"
-      bind:value={selectedPin}
-      on:change={onPinSelected}
-      on:click|stopPropagation>
-      {#each { length: StaticConfiguration.numberOfAvailablePins } as _, i}
-        <option value={i}>{i}</option>
-      {/each}
-    </select>
-  </div>
-
--->

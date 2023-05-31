@@ -67,6 +67,10 @@ export default {
 		
 		"content.model.output.pin.selectPin": "Output pin",
 
+		"content.model.output.pin.option.allTime": "Tændt hele tiden",
+		"content.model.output.pin.option.xTime": "Tændt i X sekunder",
+		"content.model.output.pin.seconds": "Sekunder",
+
 		"content.model.output.prediction.iconTitle": "Forudsigelse",
 		"content.model.output.prediction.descriptionTitle": "Forudsigelse",
 		"content.model.output.prediction.descriptionBody": "Her kan du se, hvilken klasse din model forudsiger den nuværende bevægelse til at være. Du kan se i meteret hvor sikker modellen er i sin forudsigelse.",
@@ -289,7 +293,11 @@ export default {
 		"content.model.output.soundOptionHugeMistake": "Huge Mistake",
 
 		"content.model.output.pin.selectPin": "Output pin",
-		
+
+		"content.model.output.pin.option.allTime": "On while predicted",
+		"content.model.output.pin.option.xTime": "On for X amount",
+		"content.model.output.pin.seconds": "Seconds",
+
 		"content.model.output.prediction.iconTitle": "Prediction",
 		"content.model.output.prediction.descriptionTitle": "Prediction",
 		"content.model.output.prediction.descriptionBody": "Here you can see the model's prediction of the current gesture. In the meter, you can see how confident the model is in the prediction.",

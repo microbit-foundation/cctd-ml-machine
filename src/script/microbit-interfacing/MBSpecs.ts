@@ -119,6 +119,37 @@ namespace MBSpecs {
   }
 
   /**
+   * Ordered list of all IO pins. Labelled as strings, such as '0', '3V', 'GND'
+   */
+  export const IO_PIN_LAYOUT = [
+    '3',
+    '0',
+    '4',
+    '5',
+    '6',
+    '7',
+    '1',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
+    '2',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '3V',
+    '18',
+    '19',
+    '20',
+    '21',
+    'GND',
+    '24',
+  ];
+
+  /**
    * Utilities for working with the micro:bit's Bluetooth Profile.
    */
   export class Utility {

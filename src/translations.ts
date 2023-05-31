@@ -65,8 +65,6 @@ export default {
 		"content.model.output.soundOptionMistake": "Fejl",
 		"content.model.output.soundOptionHugeMistake": "Kæmpe fejl",
 		
-		"content.model.output.pin.selectPin": "Output pin",
-
 		"content.model.output.pin.option.allTime": "Tændt hele tiden",
 		"content.model.output.pin.option.xTime": "Tændt i X sekunder",
 		"content.model.output.pin.seconds": "Sekunder",
@@ -291,8 +289,6 @@ export default {
 		"content.model.output.soundOptionLoser": "Loser",
 		"content.model.output.soundOptionMistake": "Mistake",
 		"content.model.output.soundOptionHugeMistake": "Huge Mistake",
-
-		"content.model.output.pin.selectPin": "Output pin",
 
 		"content.model.output.pin.option.allTime": "On while predicted",
 		"content.model.output.pin.option.xTime": "On for X amount",

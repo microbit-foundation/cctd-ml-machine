@@ -529,8 +529,9 @@ class Microbits {
       if (!this.ioPinMessages.has(msg.pin)) {
         this.ioPinMessages.set(msg.pin, 0); // initialise if not already initialised
       }
-      const currentPinValue: number = this.ioPinMessages.get(msg.pin);
-      this.ioPinMessages.set(msg.pin, Math.max(0, currentPinValue + (2 * msg.on - 1)));
+      const currentPinValue: number = this.ioPinMessages.get(msg.pin)!;
+      const deltaValue = msg.on ? 1 : -1;
+      this.ioPinMessages.set(msg.pin, Math.max(0, currentPinValue + deltaValue));
     }
     for (const [key, value] of this.ioPinMessages) {
       if (value == 0) {

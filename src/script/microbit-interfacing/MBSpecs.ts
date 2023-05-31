@@ -119,7 +119,7 @@ namespace MBSpecs {
   }
 
   /**
-   * Ordered list of all IO pins. Labelled as strings, such as '0', '3V', 'GND'
+   * Ordered list of all IO pins. Labelled as strings, such as '0', '2', '3V', 'GND', etc.
    */
   export const IO_PIN_LAYOUT = [
     '3',

@@ -81,6 +81,9 @@
 
 		{:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_START}
 			<FindUsbDialog
+				onUsbLinkError={() => {
+					$connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
+				}}
 				onFoundUsb={onFoundUsbDevice}
 			/>
 

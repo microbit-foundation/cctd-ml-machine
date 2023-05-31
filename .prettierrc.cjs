@@ -8,5 +8,5 @@ module.exports = {
 	svelteStrictMode: true,
 	svelteBracketNewLine: true,
 	svelteIndentScriptAndStyle: true,
-	trailingComma: "always"
+	trailingComma: "all"
 };

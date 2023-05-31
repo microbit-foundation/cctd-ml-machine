@@ -43,7 +43,7 @@
 
   let requiredConfidenceLevel = StaticConfiguration.defaultRequiredConfidence;
   $: currentConfidenceLevel = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
-  // $: gesture.output.sound = selectedSound
+  $: isConfidenceOverThreshold = requiredConfidenceLevel <= currentConfidenceLevel * 100;
 
   const triggerComponents = () =>
     triggerFunctions.forEach(triggerFunc => {
@@ -63,19 +63,18 @@
   }
 
   function triggerOutputPin(requiredLevel, currentLevel, oldTriggered) {
-    currentLevel = currentLevel * 100;
     if (!Microbits.isOutputReady()) {
       return;
     }
     if (oldTriggered) {
-      if (currentLevel < requiredLevel) {
+      if (!isConfidenceOverThreshold) {
         // Was triggered but is not anymore.
         if (turnOnState === PinTurnOnState.ALL_TIME) {
           Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: false }]);
         }
       }
     } else {
-      if (currentLevel > requiredLevel) {
+      if (isConfidenceOverThreshold) {
         // Was not triggered, but is now.
         Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: true }]);
         if (turnOnState === PinTurnOnState.X_TIME) {
@@ -126,17 +125,17 @@
     triggerOutputPin(requiredConfidenceLevel, currentConfidenceLevel, false);
   };
 
-  function shouldTrigger(
+  const shouldTrigger = (
     requiredConfidence: number,
     confidence: number,
     oldTriggered: boolean,
-  ) {
-    triggered = requiredConfidence <= confidence * 100;
+  ) => {
+    triggered = isConfidenceOverThreshold as boolean;
     if (!triggered) return false;
     if (!$settings.automaticClassification) return true;
-    if (oldTriggered) return false;
-    return true;
-  }
+    return !oldTriggered;
+  };
+
   let hasLoadedMicrobitImage = false;
 </script>
 

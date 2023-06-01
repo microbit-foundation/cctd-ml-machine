@@ -13,6 +13,7 @@
   export let data: { x: number[]; y: number[]; z: number[] };
 
   let verticalLineX = NaN
+  let hoverIndex = NaN
   const verticalLineCol = 'black'
   const verticalLineWidth = 1
 
@@ -101,11 +102,17 @@
             if (!args.inChartArea || args.event.type == 'mouseout'){
               // TODO: Close/reset stuff for dialog/modal
               verticalLineX = NaN
+              hoverIndex = NaN
               return
             }
             // TODO: If dialog/modal is closed, open it
             // TODO: Update modal data
             verticalLineX = args.event.x ?? NaN
+            if (args.event.native != null){
+              hoverIndex = chart.getElementsAtEventForMode(args.event.native, 'nearest', {}, true)[0].index
+            } else {
+              hoverIndex = NaN
+            }
           },
           afterDraw: function (chart) {
             var ctx = chart.ctx
@@ -156,23 +163,16 @@
 <div 
   class="h-full w-full relative"
 >
-  <!-- <div class="z-1 h-full w-full absolute">
-
-    <div
-      on:mousemove|stopPropagation
-      class="h-21 bg-gray-400 w-0.5 absolute"
-      style="margin-left: {30}px;"
-    />
-    <p
-      on:mousemove|stopPropagation
-      style="margin-left: {26}px;"
-      class="absolute mt-20"
-    >
-    {0}
-  </p> -->
+  <div class="z-1 h-full w-full absolute">
+    {#if !isNaN(hoverIndex)}
+      <p
+        style="margin-left: {verticalLineX-19}px; pointer-events:none;"
+        class="absolute mt-20 w-10 text-center"
+      >
+        {hoverIndex}
+      </p>
+    {/if}
   
-  <canvas 
-    bind:this={canvas}
-  />
-  <!-- </div> -->
+    <canvas bind:this={canvas} />
+  </div>
 </div>

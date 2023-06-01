@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { fade } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
   import type { RecordingData } from '../script/stores/mlStore';
   import RecordingGraph from './graphs/RecordingGraph.svelte';
 

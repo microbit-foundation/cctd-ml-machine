@@ -12,13 +12,25 @@
   }
 </script>
 
-<svelte:window on:keydown="{handleKeyPress}" />
+<svelte:window on:keydown={handleKeyPress} />
 
 {#if isOpen}
   <div
     transition:fly
-    class="z-10000 fixed top-0 left-0 bg-black/50 bg-blend-darken h-screen w-screen flex justify-center items-center"
-    on:click="{onClose}">
+    class="
+      z-10000 
+      fixed 
+      top-0 
+      left-0 
+      bg-black/50 
+      bg-blend-darken 
+      h-screen 
+      w-screen 
+      flex 
+      justify-center 
+      items-center
+    "
+    on:click={onClose}>
     <slot />
   </div>
 {/if}

@@ -4,7 +4,7 @@
   import { PinTurnOnState } from './PinSelectorUtil';
   import { t } from '../../i18n.js';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs.js';
-  export let onPinSelect: (pin: string) => void;
+  export let onPinSelect: (pin: MBSpecs.UsableIOPin) => void;
   export let onTurnOnTimeSelect: ({
     turnOnState: PinTurnOnState,
     turnOnTime: number,
@@ -12,12 +12,12 @@
 
   export let turnOnTime: number;
   export let turnOnState: PinTurnOnState;
-  export let selectedPin: number;
+  export let selectedPin: string;
 
   let selectedTurnOnState = turnOnState;
   let turnOnTimeInSeconds = turnOnTime / 1000;
 
-  const onPinSelected = (pin: string) => {
+  const onPinSelected = (pin: MBSpecs.UsableIOPin) => {
     onPinSelect(pin);
   };
 
@@ -28,14 +28,14 @@
     });
   };
 
-  const largePins = ['0', '1', '2', '3V', 'GND'];
+  const largePins: MBSpecs.IOPin[] = [0, 1, 2, '3V', 'GND'];
 </script>
 
 <GestureTilePart>
   <div class="flex flex-row">
     {#each MBSpecs.IO_PIN_LAYOUT as val, index}
       {#if StaticConfiguration.supportedPins.includes(val)}
-        <!-- This are pins we support, make them selectable and yellow -->
+        <!-- These are pins we support, make them selectable and yellow -->
         {#if largePins.includes(val)}
           <!-- Large pins -->
           <div

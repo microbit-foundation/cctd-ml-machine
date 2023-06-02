@@ -2,6 +2,7 @@
  * Static configuration values. These values are not expected to change, while the application is running.
  */
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
+import MBSpecs from './script/microbit-interfacing/MBSpecs';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
@@ -11,8 +12,8 @@ class StaticConfiguration {
   public static readonly connectionLostTimeoutDuration: number = 3000;
 
   // Which pins are supported?
-  public static supportedPins = ['0', '1', '2'];
-  public static readonly defaultOutputPin = '0'; // Which pin should be selected by default?
+  public static supportedPins: MBSpecs.UsableIOPin[] = [0, 1, 2];
+  public static readonly defaultOutputPin: MBSpecs.UsableIOPin = 0; // Which pin should be selected by default?
   // In milliseconds, after turning on, how long should an output be on for?
   public static readonly defaultPinToggleTime = 1500;
   public static readonly defaultPinTurnOnState: PinTurnOnState = PinTurnOnState.X_TIME;

@@ -4,6 +4,7 @@ import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
 import { Filters, Axes } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
+import MBSpecs from '../microbit-interfacing/MBSpecs';
 
 export type RecordingData = {
   ID: number;
@@ -61,7 +62,7 @@ export type GestureData = {
 export type GestureOutput = {
   matrix?: boolean[];
   sound?: SoundData;
-  outputPin?: { pin: string; pinState: PinTurnOnState; turnOnTime: number };
+  outputPin?: { pin: MBSpecs.UsableIOPin; pinState: PinTurnOnState; turnOnTime: number };
 };
 
 export type SoundData = {
@@ -233,7 +234,7 @@ export function updateGestureSoundOutput(
 
 export function updateGesturePinOutput(
   gestureID: number,
-  pin: string,
+  pin: MBSpecs.UsableIOPin,
   state: PinTurnOnState,
   time: number,
 ) {

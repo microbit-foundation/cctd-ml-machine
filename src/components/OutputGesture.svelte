@@ -28,6 +28,7 @@
   import StaticConfiguration from '../StaticConfiguration';
   import Information from './information/Information.svelte';
   import { PinTurnOnState } from './output/PinSelectorUtil';
+  import MBSpecs from '../script/microbit-interfacing/MBSpecs';
 
   // Variables for component
   export let gesture: GestureData;
@@ -37,7 +38,7 @@
   let triggered = false;
   let triggerFunctions: (() => void)[] = [];
   let selectedSound: SoundData | undefined = gesture.output.sound;
-  let selectedPin: string = gesture.output.outputPin
+  let selectedPin: MBSpecs.UsableIOPin = gesture.output.outputPin
     ? gesture.output.outputPin.pin
     : StaticConfiguration.defaultOutputPin;
   let turnOnTime = gesture.output.outputPin
@@ -72,22 +73,18 @@
     if (!Microbits.isOutputReady()) {
       return;
     }
-    if (oldTriggered) {
-      if (!isConfidenceOverThreshold) {
-        // Was triggered but is not anymore.
-        if (turnOnState === PinTurnOnState.ALL_TIME) {
-          Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: false }]);
-        }
+    if (oldTriggered && !isConfidenceOverThreshold) {
+      // Was triggered but is not anymore.
+      if (turnOnState === PinTurnOnState.ALL_TIME) {
+        Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
       }
-    } else {
-      if (isConfidenceOverThreshold) {
-        // Was not triggered, but is now.
-        Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: true }]);
-        if (turnOnState === PinTurnOnState.X_TIME) {
-          setTimeout(() => {
-            Microbits.sendToOutputPin([{ pin: parseInt(selectedPin), on: false }]);
-          }, turnOnTime);
-        }
+    } else if (isConfidenceOverThreshold) {
+      // Was not triggered, but is now.
+      Microbits.sendToOutputPin([{ pin: selectedPin, on: true }]);
+      if (turnOnState === PinTurnOnState.X_TIME) {
+        setTimeout(() => {
+          Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
+        }, turnOnTime);
       }
     }
   }
@@ -107,7 +104,7 @@
     }
   }
 
-  const onPinSelect = (selected: string) => {
+  const onPinSelect = (selected: MBSpecs.UsableIOPin) => {
     selectedPin = selected;
     refreshAfterChange();
     updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);

@@ -45,7 +45,10 @@ class Microbits {
    * This is done to avoid race conditions, where one gesture tells a pin to turn off, while another tells it to turn on.
    * If map.get(1) > 0, then we should not send messages to turn off the pin.
    */
-  private static ioPinMessages: Map<number, number> = new Map<number, number>();
+  private static ioPinMessages: Map<MBSpecs.UsableIOPin, number> = new Map<
+    MBSpecs.UsableIOPin,
+    number
+  >();
 
   // Set these flags if user disconnects while reconnecting, such that the GATT server can be disconnected when
   // the micro:bit reestablishes a connection.
@@ -512,7 +515,7 @@ class Microbits {
    * @param { { pin: number; on: boolean }[] } data The pins and their states
    * @throws {Error} Throws an error if no output microbit is assigned, or no outputIO service could be found.
    */
-  public static sendToOutputPin(data: { pin: number; on: boolean }[]) {
+  public static sendToOutputPin(data: { pin: MBSpecs.UsableIOPin; on: boolean }[]) {
     if (!this.isOutputAssigned()) {
       throw new Error('No output microbit is connected, cannot send to pin.');
     }
@@ -523,7 +526,7 @@ class Microbits {
       );
     }
     if (!this.ioPinMessages) {
-      this.ioPinMessages = new Map<number, number>();
+      this.ioPinMessages = new Map<MBSpecs.UsableIOPin, number>();
     }
     for (const msg of data) {
       if (!this.ioPinMessages.has(msg.pin)) {
@@ -534,15 +537,11 @@ class Microbits {
       this.ioPinMessages.set(msg.pin, Math.max(0, currentPinValue + deltaValue));
     }
     for (const [key, value] of this.ioPinMessages) {
-      if (value == 0) {
-        this.sendIOPinMessage({ pin: key, on: false });
-      } else {
-        this.sendIOPinMessage({ pin: key, on: true });
-      }
+      this.sendIOPinMessage({ pin: key, on: value != 0 });
     }
   }
 
-  private static sendIOPinMessage(data: { pin: number; on: boolean }) {
+  private static sendIOPinMessage(data: { pin: MBSpecs.UsableIOPin; on: boolean }) {
     const dataView = new DataView(new ArrayBuffer(2));
     dataView.setInt8(0, data.pin);
     dataView.setInt8(1, data.on ? 1 : 0);
@@ -556,12 +555,12 @@ class Microbits {
   }
 
   public static resetIOPins() {
-    this.ioPinMessages = new Map<number, number>();
+    this.ioPinMessages = new Map<MBSpecs.UsableIOPin, number>();
     if (!this.isOutputReady()) {
       return;
     }
     StaticConfiguration.supportedPins.forEach(value => {
-      this.sendIOPinMessage({ pin: parseInt(value), on: false });
+      this.sendIOPinMessage({ pin: value, on: false });
     });
   }
 

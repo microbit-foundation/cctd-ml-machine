@@ -91,7 +91,11 @@
         }}
         deviceState={$connectionDialogState.deviceState} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_START}
-      <FindUsbDialog onFoundUsb={onFoundUsbDevice} />
+      <FindUsbDialog
+        onUsbLinkError={() => {
+          $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
+        }}
+        onFoundUsb={onFoundUsbDevice} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.BAD_FIRMWARE}
       <BrokenFirmwareDetected />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DOWNLOADING}

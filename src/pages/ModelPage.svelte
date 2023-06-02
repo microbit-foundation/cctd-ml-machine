@@ -16,6 +16,7 @@
   import { fade } from 'svelte/transition';
   import ControlBar from '../components/control-bar/ControlBar.svelte';
   import Information from '../components/information/Information.svelte';
+  import Microbits from '../script/microbit-interfacing/Microbits';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -78,6 +79,7 @@
   let firstMount = true;
   onMount(() => {
     firstMount = false;
+    Microbits.resetIOPins();
   });
 
   $: triggerButtonsClicked($buttonPressed);

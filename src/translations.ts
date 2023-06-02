@@ -65,7 +65,9 @@ export default {
 		"content.model.output.soundOptionMistake": "Fejl",
 		"content.model.output.soundOptionHugeMistake": "Kæmpe fejl",
 		
-		"content.model.output.pin.selectPin": "Output pin",
+		"content.model.output.pin.option.allTime": "Altid tændt",
+		"content.model.output.pin.option.xTime": "Tænd på tid",
+		"content.model.output.pin.seconds": "Sekunder",
 
 		"content.model.output.prediction.iconTitle": "Forudsigelse",
 		"content.model.output.prediction.descriptionTitle": "Forudsigelse",
@@ -288,8 +290,10 @@ export default {
 		"content.model.output.soundOptionMistake": "Mistake",
 		"content.model.output.soundOptionHugeMistake": "Huge Mistake",
 
-		"content.model.output.pin.selectPin": "Output pin",
-		
+		"content.model.output.pin.option.allTime": "Always on",
+		"content.model.output.pin.option.xTime": "For time",
+		"content.model.output.pin.seconds": "Seconds",
+
 		"content.model.output.prediction.iconTitle": "Prediction",
 		"content.model.output.prediction.descriptionTitle": "Prediction",
 		"content.model.output.prediction.descriptionBody": "Here you can see the model's prediction of the current gesture. In the meter, you can see how confident the model is in the prediction.",

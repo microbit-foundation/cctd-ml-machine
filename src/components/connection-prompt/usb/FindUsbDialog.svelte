@@ -4,12 +4,14 @@
   import Microbits from '../../../script/microbit-interfacing/Microbits';
 
   export let onFoundUsb: () => void;
+  export let onUsbLinkError: () => void;
 
   function onFindUsbClick() {
     Microbits.linkMicrobit()
       .then(() => onFoundUsb())
-      .catch(e => {
+      .catch((e: Error) => {
         console.log(e);
+        onUsbLinkError();
       });
   }
 

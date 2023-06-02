@@ -1,3 +1,4 @@
+import { writable } from 'svelte/store'
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
@@ -139,3 +140,12 @@ export type Vector3 = {
 };
 
 export default Live3DUtility;
+
+export const graphInspectorState = 
+  writable<{isOpen: boolean, dataPoint: Vector3, inspectorPosition: {x: number, y: number} }>(
+    {
+      isOpen: false,
+      dataPoint: {x: 0, y: 0, z: 0},
+      inspectorPosition: {x: 0, y: 0}
+    }
+  )

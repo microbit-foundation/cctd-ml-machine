@@ -2,8 +2,7 @@
   import { onDestroy, onMount } from "svelte";
   import * as THREE from "three";
   import Smoother from "../../script/utils/Smoother";
-  import Live3DUtility, { type Vector3 } from "./Live3DUtility";
-  import { currentData } from '../../script/stores/mlStore';
+  import Live3DUtility, { type Vector3 } from "./View3DUtility";
 
   // TODO: The file has a lot of hardcoded (somewhat arbitrary) number values. Go through them and check if a refactor is in order
 
@@ -13,6 +12,7 @@
   export let smoothing = false;
   export let width: number;
   export let height: number;
+  export let dataPoint: Vector3;
 
   /**
    * VARIABLES DEFINED IN FUNCTIONS OR FROM ELEMENTS
@@ -50,7 +50,10 @@
   /**
    * Setup reactive functionality
    */
-  $: handleNewDataPoint($currentData);
+  $: {
+    lastDataPoint = dataPoint
+    updateCameraTarget(dataPoint)
+  }
   $: updateCanvasSize(height, width);
 
   function onMicrobitModelLoad(model: THREE.Scene) {
@@ -59,11 +62,6 @@
     microbitModel.lookAt(new THREE.Vector3(0, 0, -1));
     microbitModel.position.add(new THREE.Vector3(-5, -5, -5));
     updateFrame();
-  }
-
-  function handleNewDataPoint(data: Vector3) {
-    lastDataPoint = data;
-    updateCameraTarget(data);
   }
 
   // TODO: Consider refactoring this to use cam location params. 
@@ -81,12 +79,16 @@
     // X and Y need different mappings than Z, as Z points up/downwards and therefore require different
     // mapping.
     const mapToCameraDistance = (val: number): number => {
-      if (val < 0) return val * -1.5;
+      if (val < 0) {
+        return val * -1.5;
+      }
       return val * 0.6;
     };
 
     const mapToCameraDistanceZ = (val: number): number => {
-      if (val < 0) return val * -.7;
+      if (val < 0) {
+        return val * -.7;
+      }
       return val * 1.5;
     };
 
@@ -97,7 +99,9 @@
       mapToCameraDistance(data.y),
       mapToCameraDistanceZ(data.z)
     );
-    if (setCurrentDistance) cameraCurrentDistance = cameraTargetDistance;
+    if (setCurrentDistance) {
+      cameraCurrentDistance = cameraTargetDistance;
+    }
   }
 
   /**
@@ -121,8 +125,14 @@
   // When called. Update bars are updated with the latest information.
   // Camera distance and position is updated and lastly three.JS renders a new frame
   function updateFrame() {
-    if (microbitModel === undefined) return; // TODO: If microbit model can ever be undefined, it has the wrong type 
-    if (canvas === undefined) return; // TODO: If canvas can ever be undefined, it has the wrong type 
+    if (microbitModel === undefined) {
+      // TODO: If microbit model can ever be undefined, it has the wrong type 
+      return;
+    } 
+    if (canvas === undefined) {
+      // TODO: If canvas can ever be undefined, it has the wrong type 
+      return;
+    } 
 
     updateBarSizes({
       x: xSmoother.process(lastDataPoint.x),
@@ -142,18 +152,23 @@
    * Which moves towards the target
    */
   function updateCameraDistanceVariable(): void {
+    // TODO: What does the -0.07 and / 6 mean in this? Clean up code
     const diff = Math.max(
       -0.07,
       (cameraTargetDistance - cameraCurrentDistance) / 6
     );
 
-    if (diff < 0) lastIncrease++;
+    if (diff < 0) {
+      lastIncrease++;
+    }
     else {
       cameraCurrentDistance += diff;
       lastIncrease = 0;
     }
 
-    if (25 < lastIncrease) cameraCurrentDistance += diff;
+    if (25 < lastIncrease) {
+      cameraCurrentDistance += diff;
+    }
   }
 
   /**
@@ -162,14 +177,19 @@
    */
   function updateCameraPosition(distance: number): void {
     distance = distance * 1.6 - 0.6;
-    if (distance < 0.2) distance = 0.2;
+    if (distance < 0.2) {
+      distance = 0.2;
+    }
     camera.position.z = -2 + 7 * distance;
     camera.position.x = -2 + 7 * distance;
     camera.position.y = -4 + 5 * distance;
   }
 
   onDestroy(() => {
-    if (updater !== undefined) clearInterval(updater);
+    if (updater !== undefined) {
+      clearInterval(updater);
+    }
+    canvas.remove()
   });
 
   onMount(() => {

@@ -18,8 +18,14 @@
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
+  import RecordingInspector from '../components/3d-inspector/RecordingInspector.svelte';
+  import { Vector3, graphInspectorState } from '../components/3d-inspector/View3DUtility';
 
   let isConnectionDialogOpen = false;
+  $: isInspectorOpen = $graphInspectorState.isOpen
+  let inspectedDataPoint: Vector3 = {x: 0, y: 0, z: 0}
+  let inspectorPosition: {x: number, y: number} = {x: 0, y: 0}
+
 
   $: hasSomeData = (): boolean => {
     if ($gestures.length === 0) {
@@ -41,6 +47,17 @@
   const onUploadGestures = () => {
     filePicker.click()
   };
+
+  const updateInspector = (newPoint: Vector3, newPosition: {x: number, y: number}) => {
+    inspectedDataPoint = newPoint
+    inspectorPosition = newPosition
+    isInspectorOpen = true
+  }
+
+  const closeInspector = () => {
+    isInspectorOpen = false
+  }
+
 
   let filePicker: HTMLInputElement
   onMount(() => {
@@ -64,6 +81,12 @@
 
 <!-- Main pane -->
 <main class="h-full flex flex-col">
+  <RecordingInspector 
+    dataPoint={$graphInspectorState.dataPoint} 
+    position={$graphInspectorState.inspectorPosition} 
+    isOpen={isInspectorOpen}
+    size={250}
+  />
   <div>
     <DataPageControlBar
       clearDisabled={$gestures.length === 0}
@@ -129,7 +152,8 @@
       {#each $gestures as gesture (gesture.ID)}
         <Gesture
           bind:gesture
-          onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
+          onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} 
+        />
       {/each}
       <NewGestureButton />
     </div>

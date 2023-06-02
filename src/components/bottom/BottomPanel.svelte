@@ -10,7 +10,8 @@
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
   import BaseDialog from '../dialogs/BaseDialog.svelte';
-  import Live3DViewCompatabilityWrapper from '../3d-inspector/Live3DViewCompatabilityWrapper.svelte';
+  import Live3DViewCompatabilityWrapper from '../3d-inspector/View3D.svelte';
+    import View3DLive from '../3d-inspector/View3DLive.svelte';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -74,7 +75,7 @@
       <div
         class="absolute right-0 cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
         on:click={() => (isLive3DOpen = true)}>
-        <Live3DViewCompatabilityWrapper width={160} height={160} />
+        <View3DLive width={160} height={160} freeze={isLive3DOpen}/>
       </div>
       <BaseDialog isOpen={isLive3DOpen} onClose={() => (isLive3DOpen = false)}>
         <!-- hardcoded margin-left matches the size of the sidebar -->
@@ -82,7 +83,7 @@
           class="ml-75 border-gray-200 overflow-hidden border border-solid relative bg-white rounded-1 shadow-dark-400 shadow-md flex justify-center"
           style="height: calc(100vh - 160px); width: calc(100vh - 160px);">
           <div class="-mt-5 w-full h-full justify-center align-middle flex items-center">
-            <Live3DViewCompatabilityWrapper width={600} height={600} smoothing />
+            <View3DLive width={600} height={600} smoothing />
           </div>
         </div>
       </BaseDialog>

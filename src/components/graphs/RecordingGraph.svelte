@@ -9,6 +9,9 @@
     LinearScale,
     PointElement,
   } from 'chart.js';
+  import { graphInspectorState } from '../3d-inspector/View3DUtility';
+  import RecordingInspector from '../3d-inspector/RecordingInspector.svelte';
+    import { element } from 'svelte/internal';
 
   export let data: { x: number[]; y: number[]; z: number[] };
 
@@ -16,6 +19,59 @@
   let hoverIndex = NaN
   const verticalLineCol = 'black'
   const verticalLineWidth = 1
+
+  const getDataByIndex = (index: number) => {
+    if (isNaN(index)){
+      return {x: 0, y: 0, z: 0}
+    }
+    return {
+      x: data.x[index],
+      y: data.y[index],
+      z: data.z[index],
+    }
+  }
+
+  const lengthOfGraphsInPixels = 134;
+  const ratio = (1 / data.x.length) * lengthOfGraphsInPixels;
+  // let dataPointInFocusIndex = 0; // 10 to 144
+  // let inspectorActive = false;
+  // let inspectedDataPoint = writable({ x: 0, y: 0, z: 0 });
+  let topElement: HTMLDivElement;
+  const inspectorMarginInPixels = 5;
+
+    /**
+   * Positions in regards to size of modal following these rules:
+   * - It prefers center-aligning with element in focus (The recording). Moves into view if circle
+   * escapes the left or right side.
+   * - It prefers showing downwards. Changes to upwards if downwards is not possible.
+   * - It always positions at an offset from the element in focus.
+   */
+   function generatePositionOfInspector(rect: DOMRect, size: number): {x: number, y: number} {
+    const rectCenterX = (rect.left + rect.right) / 2;
+    let x = 0,
+      y = 0;
+
+    // Calculate x value
+    if (rectCenterX < size / 2) {
+    } else if (window.innerWidth - rectCenterX < size / 2)
+      x = window.innerWidth - size;
+    else x = rectCenterX - size / 2;
+
+    // Calculate y value
+    if (window.innerHeight - rect.bottom - 15 < size) {
+      y = rect.top - inspectorMarginInPixels - size;
+    } else {
+      y = rect.bottom + inspectorMarginInPixels;
+    }
+
+    return { x, y };
+  }
+
+  function generateSizeOfInspector(rect: DOMRect): number {
+    return (window.innerHeight - rect.height) / 2 - inspectorMarginInPixels;
+  }
+
+
 
   function getConfig(): ChartConfiguration<keyof ChartTypeRegistry, {x: number, y: number}[], string> {
     const x: { x: number; y: number }[] = [];
@@ -87,19 +143,16 @@
             },
           },
         },
-        // onClick: (e) => {
-        //   console.log(e)
-        // },
-        // onHover: (e) => {
-        //   e.native?.()
-        //   console.log(e)
-        // }
       },
       plugins: [
         {
           id: 'mouseLine',
           afterEvent: (chart, args) => {
-            if (!args.inChartArea || args.event.type == 'mouseout'){
+            if (!args.inChartArea || args.event.type === 'mouseout'){
+              // graphInspectorState.update(s => {
+              //   s.isOpen = false
+              //   return s
+              // })
               // TODO: Close/reset stuff for dialog/modal
               verticalLineX = NaN
               hoverIndex = NaN
@@ -110,6 +163,10 @@
             verticalLineX = args.event.x ?? NaN
             if (args.event.native != null){
               hoverIndex = chart.getElementsAtEventForMode(args.event.native, 'nearest', {}, true)[0].index
+              // graphInspectorState.update(s => {
+              //   s.isOpen = true
+              //   return s
+              // })
             } else {
               hoverIndex = NaN
             }
@@ -143,6 +200,13 @@
   // function closeInspector() {
 
   // }
+  // $ : {
+  //   graphInspectorState.update(s => {
+  //     s.isOpen = !isNaN(hoverIndex)
+  //     s.dataPoint = {x: data.x[hoverIndex], y: data.y[hoverIndex], z: data.z[hoverIndex]}
+  //     return s
+  //   })
+  // }
 
 
   let canvas: HTMLCanvasElement;
@@ -160,13 +224,14 @@
 
 </script>
 
-<div 
+<div
+  bind:this={topElement}
   class="h-full w-full relative"
 >
   <div class="z-1 h-full w-full absolute">
     {#if !isNaN(hoverIndex)}
       <p
-        style="margin-left: {verticalLineX-19}px; pointer-events:none;"
+        style="margin-left: {verticalLineX-20}px; pointer-events:none;"
         class="absolute mt-20 w-10 text-center"
       >
         {hoverIndex}
@@ -175,4 +240,10 @@
   
     <canvas bind:this={canvas} />
   </div>
+  <RecordingInspector 
+    dataPoint={getDataByIndex(hoverIndex)} 
+    position={{x: 0, y: 0}} 
+    isOpen={!isNaN(hoverIndex)}
+    size={250}
+  />
 </div>

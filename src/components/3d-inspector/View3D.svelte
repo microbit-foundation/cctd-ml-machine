@@ -1,20 +1,23 @@
 <script lang="ts">
-    import { t } from "../../i18n";
+  import { t } from "../../i18n";
   import { compatibility } from "../../script/stores/uiStore";
-  import Live3DView from "./Live3DView.svelte";
+  import View3DUnsafe from "./View3DUnsafe.svelte";
+  import { Vector3 } from './View3DUtility';
 
   export let smoothing = false;
   export let width: number;
   export let height: number;
+  export let dataPoint: Vector3;
 
   const webGlCompatible = $compatibility.webGL
 </script>
 
 {#if webGlCompatible}
-  <Live3DView 
-    smoothing={smoothing}
-    width={width}
-    height={height}
+  <View3DUnsafe 
+    {smoothing}
+    {width}
+    {height}
+    {dataPoint}
   />
 {:else}
   <div 

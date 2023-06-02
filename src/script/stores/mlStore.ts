@@ -2,9 +2,10 @@ import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
-import { Filters, Axes } from '../datafunctions';
+import { Axes, Filters } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
+import StaticConfiguration from '../../StaticConfiguration';
 
 export type RecordingData = {
   ID: number;
@@ -167,7 +168,13 @@ export function addGesture(name: string): void {
         name,
         ID: Date.now(),
         recordings: [],
-        output: {},
+        output: {
+          outputPin: {
+            pin: StaticConfiguration.defaultOutputPin,
+            pinState: StaticConfiguration.defaultPinTurnOnState,
+            turnOnTime: StaticConfiguration.defaultPinToggleTime,
+          },
+        },
       },
     ];
   });

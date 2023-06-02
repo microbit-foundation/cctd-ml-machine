@@ -73,9 +73,9 @@
     if (!Microbits.isOutputReady()) {
       return;
     }
-    if (oldTriggered && !isConfidenceOverThreshold) {
-      // Was triggered but is not anymore.
-      if (turnOnState === PinTurnOnState.ALL_TIME) {
+    if (oldTriggered) {
+      if (!isConfidenceOverThreshold && turnOnState === PinTurnOnState.ALL_TIME) {
+        // Was triggered but is not anymore.
         Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
       }
     } else if (isConfidenceOverThreshold) {

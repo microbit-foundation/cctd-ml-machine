@@ -2,8 +2,10 @@ import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
-import { Filters, Axes } from '../datafunctions';
-
+import { Axes, Filters } from '../datafunctions';
+import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
+import MBSpecs from '../microbit-interfacing/MBSpecs';
+import StaticConfiguration from '../../StaticConfiguration';
 
 export type RecordingData = {
   ID: number;
@@ -23,7 +25,7 @@ export function loadDatasetFromFile(file: File) {
     const contents = e.target.result;
     if (typeof contents === 'string') {
       // TODO: fix the following really unsafe parsing and casting
-      const gestureData: GestureData[] = JSON.parse(contents) as GestureData[]; 
+      const gestureData: GestureData[] = JSON.parse(contents) as GestureData[];
       gestures.set(gestureData);
     }
   };
@@ -61,6 +63,7 @@ export type GestureData = {
 export type GestureOutput = {
   matrix?: boolean[];
   sound?: SoundData;
+  outputPin?: { pin: MBSpecs.UsableIOPin; pinState: PinTurnOnState; turnOnTime: number };
 };
 
 export type SoundData = {
@@ -105,7 +108,16 @@ const initialSettings: MlSettings = {
   numEpochs: 80,
   learningRate: 0.5,
   includedAxes: [Axes.X, Axes.Y, Axes.Z],
-  includedFilters: [Filters.MAX, Filters.MEAN, Filters.MIN, Filters.STD, Filters.PEAKS, Filters.ACC, Filters.ZCR, Filters.RMS],
+  includedFilters: [
+    Filters.MAX,
+    Filters.MEAN,
+    Filters.MIN,
+    Filters.STD,
+    Filters.PEAKS,
+    Filters.ACC,
+    Filters.ZCR,
+    Filters.RMS,
+  ],
 };
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);
@@ -119,17 +131,19 @@ export const livedata = writable<LiveData>({
   smoothedAccelZ: 0,
 });
 
-export const currentData = 
-  writable<{x: number, y: number, z:number}>({x: 0, y: 0, z: 0})
+export const currentData = writable<{ x: number; y: number; z: number }>({
+  x: 0,
+  y: 0,
+  z: 0,
+});
 
 livedata.subscribe(data => {
   currentData.set({
-    x: data.smoothedAccelX, 
+    x: data.smoothedAccelX,
     y: data.smoothedAccelY,
-    z: data.smoothedAccelZ
-  })
-})
-
+    z: data.smoothedAccelZ,
+  });
+});
 
 // Store with ML-Algorithm settings
 export const settings = writable<MlSettings>(initialSettings);
@@ -154,7 +168,13 @@ export function addGesture(name: string): void {
         name,
         ID: Date.now(),
         recordings: [],
-        output: {},
+        output: {
+          outputPin: {
+            pin: StaticConfiguration.defaultOutputPin,
+            pinState: StaticConfiguration.defaultPinTurnOnState,
+            turnOnTime: StaticConfiguration.defaultPinToggleTime,
+          },
+        },
       },
     ];
   });
@@ -212,6 +232,27 @@ export function updateGestureSoundOutput(
     for (const gesture of gestures) {
       if (gesture.ID === gestureID) {
         gesture.output.sound = sound;
+        break;
+      }
+    }
+    return gestures;
+  });
+}
+
+export function updateGesturePinOutput(
+  gestureID: number,
+  pin: MBSpecs.UsableIOPin,
+  state: PinTurnOnState,
+  time: number,
+) {
+  gestures.update(gestures => {
+    for (const gesture of gestures) {
+      if (gesture.ID === gestureID) {
+        gesture.output.outputPin = {
+          pin: pin,
+          pinState: state,
+          turnOnTime: time,
+        };
         break;
       }
     }

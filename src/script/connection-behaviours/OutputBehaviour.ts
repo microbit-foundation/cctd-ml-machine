@@ -28,11 +28,11 @@ class OutputBehaviour extends LoggingDecorator {
   onReady() {
     super.onReady();
     // Reset any output pins currently active.
-    const pinResetArguments = [];
-    for (let i = 0; i < StaticConfiguration.numberOfAvailablePins; i++) {
-      const argument = { pin: i, on: false };
+    const pinResetArguments: { pin: number; on: boolean }[] = [];
+    StaticConfiguration.supportedPins.forEach(pin => {
+      const argument = { pin: parseInt(pin), on: false };
       pinResetArguments.push(argument);
-    }
+    });
     Microbits.sendToOutputPin(pinResetArguments);
 
     state.update(s => {

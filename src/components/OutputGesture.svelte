@@ -16,6 +16,7 @@
     updateGestureSoundOutput,
     type GestureData,
     type SoundData,
+    updateGesturePinOutput,
   } from '../script/stores/mlStore';
   import { t } from '../i18n';
   import OutputSoundSelector from './output/OutputSoundSelector.svelte';
@@ -26,6 +27,8 @@
   import { state } from '../script/stores/uiStore';
   import StaticConfiguration from '../StaticConfiguration';
   import Information from './information/Information.svelte';
+  import { PinTurnOnState } from './output/PinSelectorUtil';
+  import MBSpecs from '../script/microbit-interfacing/MBSpecs';
 
   // Variables for component
   export let gesture: GestureData;
@@ -35,22 +38,29 @@
   let triggered = false;
   let triggerFunctions: (() => void)[] = [];
   let selectedSound: SoundData | undefined = gesture.output.sound;
-  let selectedPin = StaticConfiguration.defaultOutputPin;
+  let selectedPin: MBSpecs.UsableIOPin = gesture.output.outputPin
+    ? gesture.output.outputPin.pin
+    : StaticConfiguration.defaultOutputPin;
+  let turnOnTime = gesture.output.outputPin
+    ? gesture.output.outputPin.turnOnTime
+    : StaticConfiguration.defaultPinToggleTime;
+  let turnOnState = gesture.output.outputPin
+    ? gesture.output.outputPin.pinState
+    : StaticConfiguration.defaultPinTurnOnState;
 
   let requiredConfidenceLevel = StaticConfiguration.defaultRequiredConfidence;
   $: currentConfidenceLevel = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
-  // $: gesture.output.sound = selectedSound
+  $: isConfidenceOverThreshold = requiredConfidenceLevel <= currentConfidenceLevel * 100;
 
   const triggerComponents = () =>
     triggerFunctions.forEach(triggerFunc => {
       triggerFunc();
     });
 
-  // $: if (shouldTrigger(requiredConfidenceLevel, confidenceLevel, triggered)) triggerComponnets();
+  $: triggerOutputPin(requiredConfidenceLevel, currentConfidenceLevel, triggered);
   $: if (shouldTrigger(requiredConfidenceLevel, currentConfidenceLevel, triggered)) {
     triggerComponents();
     playSound();
-    triggerOutputPin();
   }
 
   function onSoundSelected(sound: SoundData | undefined): void {
@@ -59,14 +69,24 @@
     onUserInteraction();
   }
 
-  function triggerOutputPin() {
+  function triggerOutputPin(requiredLevel, currentLevel, oldTriggered) {
     if (!Microbits.isOutputReady()) {
       return;
     }
-    Microbits.sendToOutputPin([{ pin: selectedPin, on: true }]);
-    setTimeout(() => {
-      Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
-    }, StaticConfiguration.pinToggleTime);
+    if (oldTriggered) {
+      if (!isConfidenceOverThreshold && turnOnState === PinTurnOnState.ALL_TIME) {
+        // Was triggered but is not anymore.
+        Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
+      }
+    } else if (isConfidenceOverThreshold) {
+      // Was not triggered, but is now.
+      Microbits.sendToOutputPin([{ pin: selectedPin, on: true }]);
+      if (turnOnState === PinTurnOnState.X_TIME) {
+        setTimeout(() => {
+          Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
+        }, turnOnTime);
+      }
+    }
   }
 
   function playSound() {
@@ -84,17 +104,38 @@
     }
   }
 
-  function shouldTrigger(
+  const onPinSelect = (selected: MBSpecs.UsableIOPin) => {
+    selectedPin = selected;
+    refreshAfterChange();
+    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
+  };
+
+  const onTurnOnTimeSelect = (state: {
+    turnOnState: PinTurnOnState;
+    turnOnTime: number;
+  }) => {
+    turnOnState = state.turnOnState;
+    turnOnTime = state.turnOnTime;
+    refreshAfterChange();
+    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
+  };
+
+  const refreshAfterChange = () => {
+    Microbits.resetIOPins();
+    triggerOutputPin(requiredConfidenceLevel, currentConfidenceLevel, false);
+  };
+
+  const shouldTrigger = (
     requiredConfidence: number,
     confidence: number,
     oldTriggered: boolean,
-  ) {
-    triggered = requiredConfidence <= confidence * 100;
+  ) => {
+    triggered = isConfidenceOverThreshold as boolean;
     if (!triggered) return false;
     if (!$settings.automaticClassification) return true;
-    if (oldTriggered) return false;
-    return true;
-  }
+    return !oldTriggered;
+  };
+
   let hasLoadedMicrobitImage = false;
 </script>
 
@@ -191,8 +232,10 @@
   </div>
   <div class="ml-4">
     <PinSelector
-      onPinSelect={pin => {
-        selectedPin = pin;
-      }} />
+      {selectedPin}
+      {turnOnState}
+      {turnOnTime}
+      {onPinSelect}
+      {onTurnOnTimeSelect} />
   </div>
 </main>

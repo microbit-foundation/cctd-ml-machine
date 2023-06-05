@@ -39,30 +39,29 @@
   };
 
   const onUploadGestures = () => {
-    filePicker.click()
+    filePicker.click();
   };
 
-  let filePicker: HTMLInputElement
+  let filePicker: HTMLInputElement;
   onMount(() => {
-    filePicker = document.createElement('input')
-    filePicker.type = 'file'
-    filePicker.accept = 'application/JSON'
+    filePicker = document.createElement('input');
+    filePicker.type = 'file';
+    filePicker.accept = 'application/JSON';
     filePicker.onchange = () => {
-      if (filePicker.files == null || filePicker.files.length < 1){ 
-        return
+      if (filePicker.files == null || filePicker.files.length < 1) {
+        return;
       }
-      const f = filePicker.files[0]
-      loadDatasetFromFile(f)
-    }
+      const f = filePicker.files[0];
+      loadDatasetFromFile(f);
+    };
     return () => {
-      filePicker.remove()
-    }
-  })
-
+      filePicker.remove();
+    };
+  });
 </script>
 
 <!-- Main pane -->
-<main class="h-full flex flex-col">
+<main class="h-full inline-block min-w-full">
   <div>
     <DataPageControlBar
       clearDisabled={$gestures.length === 0}
@@ -72,7 +71,7 @@
       {onUploadGestures} />
   </div>
   {#if !hasSomeData() && !$state.isInputConnected}
-    <div class="flex flex-col flex-grow justify-center">
+    <div class="mt-4">
       <PleaseConnectFirst />
     </div>
   {:else}

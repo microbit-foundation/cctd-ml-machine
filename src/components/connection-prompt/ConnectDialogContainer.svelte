@@ -44,7 +44,7 @@
             $connectionDialogState.connectionState = ConnectDialogStates.USB_DONE;
           })
           .catch(() => {
-            // Error during flashing process
+            // Error during flashing process            
             $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
           });
       })

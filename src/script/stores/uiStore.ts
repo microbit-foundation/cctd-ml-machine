@@ -1,9 +1,8 @@
 import { get, writable } from 'svelte/store';
-import CompatibilityChecker,  { type CompatibilityStatus } from '../compatibility/CompatibilityChecker';
+import { type CompatibilityStatus, checkCompatibility} from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
 import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
-import exp from 'constants';
 
 // TODO: Rename? Split up further?
 
@@ -11,8 +10,9 @@ let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
 export const compatibility = writable<CompatibilityStatus>(
-  CompatibilityChecker.checkCompatibility(),
+  checkCompatibility(),
 );
+
 export const isBluetoothWarningDialogOpen = writable<boolean>(
   get(compatibility) ? !get(compatibility).bluetooth : false,
 );

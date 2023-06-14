@@ -10,7 +10,7 @@
     Microbits.linkMicrobit()
       .then(() => onFoundUsb())
       .catch((e: Error) => {
-        console.log(e)
+        console.log(e);
         onUsbLinkError();
       });
   }

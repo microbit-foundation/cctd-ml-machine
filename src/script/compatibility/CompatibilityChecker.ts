@@ -12,7 +12,7 @@ export type CompatibilityStatus = {
   bluetooth: boolean;
   usb: boolean;
   platformAllowed: boolean;
-  webGL: boolean,
+  webGL: boolean;
 };
 
 export function checkCompatibility(): CompatibilityStatus {

@@ -11,12 +11,14 @@
   } from 'chart.js';
   import { graphInspectorState } from '../3d-inspector/View3DUtility';
   import RecordingInspector from '../3d-inspector/RecordingInspector.svelte';
-    import { element } from 'svelte/internal';
+  import { element } from 'svelte/internal';
 
   export let data: { x: number[]; y: number[]; z: number[] };
 
   let verticalLineX = NaN
   let hoverIndex = NaN
+  let modalPosition = {x: 0, y: 0};
+  let modalSize = 250;
   const verticalLineCol = 'black'
   const verticalLineWidth = 1
 
@@ -36,8 +38,15 @@
   // let dataPointInFocusIndex = 0; // 10 to 144
   // let inspectorActive = false;
   // let inspectedDataPoint = writable({ x: 0, y: 0, z: 0 });
-  let topElement: HTMLDivElement;
+  let componentElement: HTMLDivElement;
   const inspectorMarginInPixels = 5;
+
+
+  function recomputeModalParams(){
+    const rect = componentElement.getBoundingClientRect()
+    modalSize = generateSizeOfInspector(rect)
+    modalPosition = generatePositionOfInspector(rect, modalSize)
+  }
 
     /**
    * Positions in regards to size of modal following these rules:
@@ -48,11 +57,12 @@
    */
    function generatePositionOfInspector(rect: DOMRect, size: number): {x: number, y: number} {
     const rectCenterX = (rect.left + rect.right) / 2;
-    let x = 0,
-      y = 0;
+    let x = 0;
+    let y = 0;
 
     // Calculate x value
     if (rectCenterX < size / 2) {
+      // What the hell is this if structure
     } else if (window.innerWidth - rectCenterX < size / 2)
       x = window.innerWidth - size;
     else x = rectCenterX - size / 2;
@@ -70,8 +80,6 @@
   function generateSizeOfInspector(rect: DOMRect): number {
     return (window.innerHeight - rect.height) / 2 - inspectorMarginInPixels;
   }
-
-
 
   function getConfig(): ChartConfiguration<keyof ChartTypeRegistry, {x: number, y: number}[], string> {
     const x: { x: number; y: number }[] = [];
@@ -149,24 +157,16 @@
           id: 'mouseLine',
           afterEvent: (chart, args) => {
             if (!args.inChartArea || args.event.type === 'mouseout'){
-              // graphInspectorState.update(s => {
-              //   s.isOpen = false
-              //   return s
-              // })
-              // TODO: Close/reset stuff for dialog/modal
               verticalLineX = NaN
               hoverIndex = NaN
               return
             }
-            // TODO: If dialog/modal is closed, open it
-            // TODO: Update modal data
             verticalLineX = args.event.x ?? NaN
             if (args.event.native != null){
+              if (isNaN(hoverIndex)){
+                recomputeModalParams()
+              }
               hoverIndex = chart.getElementsAtEventForMode(args.event.native, 'nearest', {}, true)[0].index
-              // graphInspectorState.update(s => {
-              //   s.isOpen = true
-              //   return s
-              // })
             } else {
               hoverIndex = NaN
             }
@@ -225,7 +225,7 @@
 </script>
 
 <div
-  bind:this={topElement}
+  bind:this={componentElement}
   class="h-full w-full relative"
 >
   <div class="z-1 h-full w-full absolute">
@@ -242,8 +242,8 @@
   </div>
   <RecordingInspector 
     dataPoint={getDataByIndex(hoverIndex)} 
-    position={{x: 0, y: 0}} 
+    position={modalPosition} 
     isOpen={!isNaN(hoverIndex)}
-    size={250}
+    size={modalSize}
   />
 </div>

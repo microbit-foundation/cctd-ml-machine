@@ -29,7 +29,7 @@
   import BottomBarMenuView from './views/BottomBarMenuView.svelte';
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
   import { fade } from 'svelte/transition';
-  import { compatibility, state } from './script/stores/uiStore';
+  import { state } from './script/stores/uiStore';
   import LoadingSpinner from './components/LoadingSpinner.svelte';
   import { checkCompatibility } from './script/compatibility/CompatibilityChecker';
   import IncompatiblePlatformView from './views/IncompatiblePlatformView.svelte';

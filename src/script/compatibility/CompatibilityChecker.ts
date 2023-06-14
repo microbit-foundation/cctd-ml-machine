@@ -13,12 +13,11 @@ export type CompatibilityStatus = {
   usb: boolean;
   platformAllowed: boolean;
   webGL: boolean,
-  webUSB: boolean
 };
 
 export function checkCompatibility(): CompatibilityStatus {
   if (localStorage.getItem('isTesting')) {
-    return { bluetooth: true, usb: true, platformAllowed: true, webGL: true, webUSB: true };
+    return { bluetooth: true, usb: true, platformAllowed: true, webGL: true };
   }
   const browser = Bowser.getParser(window.navigator.userAgent);
   const browserName = browser.getBrowser().name ?? 'unknown';
@@ -28,17 +27,9 @@ export function checkCompatibility(): CompatibilityStatus {
   // TODO: Handle webgl1 vs webgl2 in relation to threejs
   const webGL = canvas.getContext("webgl") instanceof WebGLRenderingContext
 
-  const webUSB = false // Check for this is async, so another function is used
-  // try {
-  //   await navigator.usb.getDevices()
-  //   webUSB = true
-  // } catch {
-  //   webUSB = false
-  // }
-
   const browserVersion = browser.getBrowserVersion();
   if (!browserVersion) {
-    return { bluetooth: false, usb: false, platformAllowed: true, webGL: webGL, webUSB };
+    return { bluetooth: false, usb: false, platformAllowed: true, webGL: webGL };
   }
   const majorVersion = browser.getBrowserVersion().split('.')[0];
   const minorVersion = browser.getBrowserVersion().split('.')[1];
@@ -60,18 +51,6 @@ export function checkCompatibility(): CompatibilityStatus {
     usb: isUsbSupported,
     platformAllowed: isPlatformAllowed,
     webGL: webGL,
-    webUSB: webUSB
   };
 }
 
-export async function checkUSBCompatibility(): Promise<boolean> {
-  try {
-    await navigator.usb.getDevices()
-    return true
-  } catch {
-    return false
-  }
-}
-// }
-
-// export default CompatibilityChecker;

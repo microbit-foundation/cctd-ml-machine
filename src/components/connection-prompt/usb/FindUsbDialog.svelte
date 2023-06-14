@@ -9,7 +9,8 @@
   function onFindUsbClick() {
     Microbits.linkMicrobit()
       .then(() => onFoundUsb())
-      .catch(() => {
+      .catch((e: Error) => {
+        console.log(e)
         onUsbLinkError();
       });
   }

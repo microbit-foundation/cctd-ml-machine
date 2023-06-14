@@ -1,9 +1,5 @@
 import { get, writable } from 'svelte/store';
-import { 
-  type CompatibilityStatus, 
-  checkCompatibility, 
-  checkUSBCompatibility 
-} from '../compatibility/CompatibilityChecker';
+import { type CompatibilityStatus, checkCompatibility} from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
 import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
@@ -16,13 +12,6 @@ t.subscribe(t => (text = t));
 export const compatibility = writable<CompatibilityStatus>(
   checkCompatibility(),
 );
-
-void checkUSBCompatibility().then(webUSB => 
-  compatibility.update(old => {
-    old.webUSB = webUSB
-    return old
-  })
-)
 
 export const isBluetoothWarningDialogOpen = writable<boolean>(
   get(compatibility) ? !get(compatibility).bluetooth : false,

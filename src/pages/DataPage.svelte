@@ -45,42 +45,41 @@
   };
 
   const onUploadGestures = () => {
-    filePicker.click()
+    filePicker.click();
   };
 
   const updateInspector = (newPoint: Vector3, newPosition: {x: number, y: number}) => {
-    inspectedDataPoint = newPoint
-    inspectorPosition = newPosition
-    isInspectorOpen = true
+    inspectedDataPoint = newPoint;
+    inspectorPosition = newPosition;
+    isInspectorOpen = true;
   }
 
   const closeInspector = () => {
-    isInspectorOpen = false
+    isInspectorOpen = false;
   }
 
 
-  let filePicker: HTMLInputElement
+  let filePicker: HTMLInputElement;
   onMount(() => {
-    filePicker = document.createElement('input')
-    filePicker.type = 'file'
-    filePicker.accept = 'application/JSON'
+    filePicker = document.createElement('input');
+    filePicker.type = 'file';
+    filePicker.accept = 'application/JSON';
     filePicker.onchange = () => {
-      if (filePicker.files == null || filePicker.files.length < 1){ 
-        return
+      if (filePicker.files == null || filePicker.files.length < 1) {
+        return;
       }
-      const f = filePicker.files[0]
-      loadDatasetFromFile(f)
-      filePicker.value = '' // To trick element to trigger onChange if same file selected
+      const f = filePicker.files[0];
+      loadDatasetFromFile(f);
+      filePicker.value = ''; // To trick element to trigger onChange if same file selected
     }
     return () => {
-      filePicker.remove()
-    }
-  })
-
+      filePicker.remove();
+    };
+  });
 </script>
 
 <!-- Main pane -->
-<main class="h-full flex flex-col">
+<main class="h-full inline-block min-w-full">
   <RecordingInspector 
     dataPoint={$graphInspectorState.dataPoint} 
     position={$graphInspectorState.inspectorPosition} 
@@ -96,7 +95,7 @@
       {onUploadGestures} />
   </div>
   {#if !hasSomeData() && !$state.isInputConnected}
-    <div class="flex flex-col flex-grow justify-center">
+    <div class="mt-4">
       <PleaseConnectFirst />
     </div>
   {:else}

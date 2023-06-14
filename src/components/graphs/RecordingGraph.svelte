@@ -50,8 +50,8 @@
    */
    function generatePositionOfInspector(rect: DOMRect, size: number): {x: number, y: number} {
     const rectCenterX = (rect.left + rect.right) / 2;
+    
     let x = rectCenterX - size / 2;
-
     x = Math.max(0, x)
     x = Math.min(x, window.innerWidth - size)
 

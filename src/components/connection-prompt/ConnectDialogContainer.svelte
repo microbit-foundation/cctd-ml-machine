@@ -43,16 +43,12 @@
             // Finished flashing successfully
             $connectionDialogState.connectionState = ConnectDialogStates.USB_DONE;
           })
-          .catch((e) => {
-            // Error during flashing process
-            console.log("HERE:", e)
-            
+          .catch(() => {
+            // Error during flashing process            
             $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
-
           });
       })
       .catch((e: Error) => {
-        console.log("HERE:", e)
         // Couldn't find name. Set to manual transfer progress instead
         if (e.message.includes('No valid interfaces found')) {
           // Edge case, caused by a bad micro:bit firmware

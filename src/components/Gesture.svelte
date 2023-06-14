@@ -17,7 +17,6 @@
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
-    import { Vector3 } from './3d-inspector/View3DUtility';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;

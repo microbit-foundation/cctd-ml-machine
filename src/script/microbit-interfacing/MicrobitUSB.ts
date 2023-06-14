@@ -24,7 +24,7 @@ class MicrobitUSB extends CortexM {
    * Open prompt for USB connection.
    * @returns {Promise<MicrobitUSB>} A promise that resolves to a new MicrobitUSB object.
    */
-  public static async requestConnection(): Promise<MicrobitUSB | undefined> {
+  public static async requestConnection(): Promise<MicrobitUSB> {
     const requestOptions: USBDeviceRequestOptions = {
       filters: [
         {

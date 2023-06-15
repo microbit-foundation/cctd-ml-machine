@@ -5,8 +5,6 @@
   import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
   import Environment from '../script/Environment.js';
-    // import { navigate } from '../script/navigation/Routing';
-    // import { Paths } from '../script/navigation/Paths';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath

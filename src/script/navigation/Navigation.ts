@@ -55,8 +55,8 @@ export const currentComponent = derived(
 )
 
 export function navigate(path: Paths){
-    currentPage.set({ 
-      currentComponent: getRoutedComponent(path), 
-      currentPath: path
-    })
+  currentPage.set({ 
+    currentComponent: getRoutedComponent(path), 
+    currentPath: path
+  })
 }

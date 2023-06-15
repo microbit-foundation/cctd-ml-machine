@@ -12,8 +12,11 @@
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
   import TrainingButton from './TrainingButton.svelte';
-  import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
+    import { Paths, navigate } from '../../script/navigation/Navigation';
+    // import { navigate } from '../../script/navigation/Routing';
+    // import { Paths } from '../../script/navigation/Paths';
+  // import { Paths, navigate } from '../../script/navigation/Navigation';
 
   const sufficientData = hasSufficientData();
 
@@ -47,6 +50,11 @@
   </div>
 </StandardDialog>
 <div class="flex flex-col h-full">
+  <button on:click={() => {
+    navigate(Paths.FILTERS)
+  }}>
+    FILTRE2
+  </button>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
     {#if !$state.isInputConnected}
       <PleaseConnectFirst />

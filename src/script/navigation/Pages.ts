@@ -1,6 +1,0 @@
-export enum Pages {
-  HOMEPAGE,
-  DATAPAGE,
-  TRAININGPAGE,
-  MODELPAGE,
-}

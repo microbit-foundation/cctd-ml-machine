@@ -1,29 +1,62 @@
-import HomePageSelector from './page-selectors/HomePageSelector';
-import ContentViewNavigator from './ContentViewNavigator';
-import DataPageSelector from './page-selectors/DataPageSelector';
-import TrainingPageSelector from './page-selectors/TrainingPageSelector';
-import ModelPageSelector from './page-selectors/ModelPageSelector';
-import { Pages } from './Pages';
+import { Writable, writable, derived } from 'svelte/store'
+import { SvelteComponent } from 'svelte'
+import FilterPage from '../../pages/FilterPage.svelte'
+import Homepage from '../../pages/Homepage.svelte'
+import DataPage from '../../pages/DataPage.svelte'
+import TrainingPage from '../../pages/training/TrainingPage.svelte'
+import ModelPage from '../../pages/ModelPage.svelte'
 
-/**
- * Navigates using a strategy pattern checkout navigation/page-selectors for strategies.
- */
-class Navigation {
-  private static readonly pageSelectorStrategies = new Map([
-    [Pages.HOMEPAGE, new HomePageSelector()],
-    [Pages.DATAPAGE, new DataPageSelector()],
-    [Pages.TRAININGPAGE, new TrainingPageSelector()],
-    [Pages.MODELPAGE, new ModelPageSelector()],
-  ]);
-
-  public static setCurrentPage(page: Pages) {
-    const selectorStrategy = this.pageSelectorStrategies.get(page);
-    if (!selectorStrategy) {
-      throw Error(`No selector could be found for the given page, ${page}`);
-    }
-
-    selectorStrategy.navigate(new ContentViewNavigator());
-  }
+export enum Paths {
+  HOME = "/",
+  DATA = "data",
+  TRAINING = "training",
+  MODEL = "model",
+  FILTERS = "filters"
 }
 
-export default Navigation;
+// This could be done more elegantly with a map, but that causes vite hot reloading
+// issues due to circular imports
+function getRoutedComponent(path: Paths) {
+  switch (path) {
+    case Paths.HOME:
+      return Homepage
+    case Paths.DATA:
+      return DataPage
+    case Paths.TRAINING:
+      return TrainingPage
+    case Paths.MODEL:
+      return ModelPage
+    case Paths.FILTERS:
+      return FilterPage
+    }
+    // Hacky way of ensuring exhaustive switch statement (at compile time) 
+    // since typescript does not have this by default.
+    const exhaustiveCheck: never = path;
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    throw new Error(`Non Exhaustive switch. ${exhaustiveCheck} not handled.`)
+}
+
+const currentPage: Writable<{
+  currentPath: Paths, 
+  currentComponent: typeof SvelteComponent
+}> = writable({ 
+  currentPath: Paths.HOME, 
+  currentComponent: Homepage 
+});
+
+export const currentPath = derived(
+  currentPage,
+  $currentPage => $currentPage.currentPath
+)
+
+export const currentComponent = derived(
+  currentPage,
+  $currentPage => $currentPage.currentComponent
+)
+
+export function navigate(path: Paths){
+    currentPage.set({ 
+      currentComponent: getRoutedComponent(path), 
+      currentPath: path
+    })
+}

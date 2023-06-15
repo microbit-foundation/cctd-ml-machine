@@ -1,20 +1,24 @@
 <!-- Left-hand side menu -->
 <script lang="ts">
-  import Menus from '../script/navigation/Menus';
-  import Navigation from '../script/navigation/Navigation';
-  import { Pages } from '../script/navigation/Pages';
+  import Menus, { MenuProperties } from '../script/navigation/Menus';
+  import { Paths, currentPath, navigate } from '../script/navigation/Navigation';
   import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
   import Environment from '../script/Environment.js';
+    // import { navigate } from '../script/navigation/Routing';
+    // import { Paths } from '../script/navigation/Paths';
 
-  const goToHomePage = () => {
-    Navigation.setCurrentPage(Pages.HOMEPAGE);
-  };
+  $: shouldBeExpanded = (menuProps: MenuProperties) => {
+    let path = $currentPath
+    if (menuProps.navigationPath === path){
+      return true
+    }
+    if (menuProps.additionalExpandPages === undefined) {
+      return false
+    }
+    return menuProps.additionalExpandPages.includes(path)
+  }
 
-  let expandedId = -1;
-  Menus.getOpenMenuId().subscribe(value => {
-    expandedId = value;
-  });
 </script>
 
 <div
@@ -29,7 +33,7 @@
         class="rounded hover:bg-white
 						   hover:bg-opacity-10 duration-100
 						   select-none outline-none"
-        on:click={goToHomePage}>
+        on:click={() => navigate(Paths.HOME)}>
         <i class="fas fa-home text-2xl outline-none" />
       </button>
     </div>
@@ -45,14 +49,14 @@
       {#each get(Menus.getMenuStore()) as menu, id}
         <MenuButton
           onClickFunction={() => {
-            Navigation.setCurrentPage(menu.navigationPage);
+            navigate(menu.navigationPath)
           }}
           title={menu.title}
           helpTitle={menu.infoBubbleTitle}
           helpDescription={menu.infoBubbleContent}
-          isExpanded={expandedId === id}>
+          isExpanded={shouldBeExpanded(menu)}>
           <svelte:component
-            this={expandedId === id
+            this={shouldBeExpanded(menu)
               ? menu.expandedButtonContent
               : menu.collapsedButtonContent} />
         </MenuButton>

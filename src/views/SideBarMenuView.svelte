@@ -11,10 +11,10 @@
     if (menuProps.navigationPath === path){
       return true
     }
-    if (menuProps.additionalExpandPages === undefined) {
+    if (menuProps.additionalExpandPaths === undefined) {
       return false
     }
-    return menuProps.additionalExpandPages.includes(path)
+    return menuProps.additionalExpandPaths.includes(path)
   }
 
 </script>

@@ -12,7 +12,7 @@ export type MenuProperties = {
   navigationPath: Paths;
   collapsedButtonContent: typeof SvelteComponent | undefined;
   expandedButtonContent: typeof SvelteComponent;
-  additionalExpandPages?: Paths[]
+  additionalExpandPaths?: Paths[]
 };
 
 /**
@@ -36,7 +36,7 @@ class Menus {
       collapsedButtonContent: undefined,
       expandedButtonContent: NewTrainerMenu,
       navigationPath: Paths.TRAINING,
-      additionalExpandPages: [Paths.FILTERS]
+      additionalExpandPaths: [Paths.FILTERS]
     },
     {
       title: 'menu.model.helpHeading',

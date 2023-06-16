@@ -21,6 +21,8 @@ ML-Machine can be found at [ML-Machine.org](https://ml-machine.org/) free to use
 Using the platform requires at least one micro:bit, but two is recommended, especially if you are planning on using any
 of the I/O feedback.
 
+You can find the version on the main branch at [main.ML-Machine.org](https://main.ml-machine.org/). It will have the newest features but may not be stable and features will be removed or changed without any warnings so do not rely on this version.
+
 ### Running the application locally
 
 Alternatively the application can be run locally on your computer without compromising the capabilities of the software.

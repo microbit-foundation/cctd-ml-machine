@@ -145,8 +145,6 @@ ML-Machine utilises several packages, most notable of which are the following:
 
 ## Contributions
 
-### Contributing
-
 #### Issues
 
 If you experience an issue or have a question regarding the platform please do not hesitate to raise an issue. The
@@ -163,7 +161,9 @@ ML-Machine is a platform created by the Center for Computational Thinking and De
 
 ## License
 
-[MIT](license) © Center for Computational Thinking and Design, Aarhus University
+[MIT](license) © Center for Computational Thinking and Design at Aarhus University and contributors
+
+[SPDX-License-Identifier: MIT](LICENSE)
 
 ## Code of Conduct
 

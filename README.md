@@ -165,6 +165,10 @@ ML-Machine is a platform created by the Center for Computational Thinking and De
 
 [SPDX-License-Identifier: MIT](LICENSE)
 
+We use dependencies via the NPM registry as specified by the package.json file under common Open Source licenses.
+
+The repository includes forks of Lancaster's micro:bit-samples repositories for micro:bit [https://github.com/lancaster-university/microbit-samples](V1) and [https://github.com/lancaster-university/microbit-v2-samples](V2). They are MIT licensed.
+
 ## Code of Conduct
 
 In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation. Please see our code of conduct on the [contributing](CONTRIBUTING.md) page and Micro:bit Educational Foundation's [code of conduct](https://microbit.org/safeguarding/) which outlines our expectations for all those that participate in the community and details on how to report any concerns and what would happen should breaches occur.

@@ -47,6 +47,7 @@ export default {
 		"content.data.controlbar.button.downloadData": "Download dataset",
 		"content.data.controlbar.button.uploadData": "Upload dataset",
 
+
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Træning mislykkedes",
 		"content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
@@ -64,7 +65,9 @@ export default {
 		"content.model.output.soundOptionMistake": "Fejl",
 		"content.model.output.soundOptionHugeMistake": "Kæmpe fejl",
 		
-		"content.model.output.pin.selectPin": "Output pin",
+		"content.model.output.pin.option.allTime": "Altid tændt",
+		"content.model.output.pin.option.xTime": "Tænd på tid",
+		"content.model.output.pin.seconds": "Sekunder",
 
 		"content.model.output.prediction.iconTitle": "Forudsigelse",
 		"content.model.output.prediction.descriptionTitle": "Forudsigelse",
@@ -214,6 +217,7 @@ export default {
 
 		"compatibility.platform.notSupported": "Værktøjet er ikke understøttet på din nuværende platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Vi ses på computer.",
+		"compatibility.webgl.notSupported": "WebGL er ikke tilgængelig. Aktiver WebGL for at se 3D data.",
 
 		// CONNECTION LOST DIALOG
 
@@ -286,8 +290,10 @@ export default {
 		"content.model.output.soundOptionMistake": "Mistake",
 		"content.model.output.soundOptionHugeMistake": "Huge Mistake",
 
-		"content.model.output.pin.selectPin": "Output pin",
-		
+		"content.model.output.pin.option.allTime": "Always on",
+		"content.model.output.pin.option.xTime": "For time",
+		"content.model.output.pin.seconds": "Seconds",
+
 		"content.model.output.prediction.iconTitle": "Prediction",
 		"content.model.output.prediction.descriptionTitle": "Prediction",
 		"content.model.output.prediction.descriptionBody": "Here you can see the model's prediction of the current gesture. In the meter, you can see how confident the model is in the prediction.",
@@ -435,6 +441,7 @@ export default {
 
 		"compatibility.platform.notSupported": "The tool is not supported on your current platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Join us on desktop.",
+		"compatibility.webgl.notSupported": "WebGL not available. Enable WebGL to see 3D data view.",
 
 		// CONNECTION LOST DIALOG
 

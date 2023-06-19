@@ -15,8 +15,6 @@
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { btPatternInput, btPatternOutput } from '../../script/stores/connectionStore';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import { onMount } from 'svelte';
-  import { state } from '../../script/stores/uiStore';
   import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
 
   let flashProgress = 0;
@@ -46,7 +44,7 @@
             $connectionDialogState.connectionState = ConnectDialogStates.USB_DONE;
           })
           .catch(() => {
-            // Error during flashing process
+            // Error during flashing process            
             $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
           });
       })
@@ -89,7 +87,11 @@
         }}
         deviceState={$connectionDialogState.deviceState} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_START}
-      <FindUsbDialog onFoundUsb={onFoundUsbDevice} />
+      <FindUsbDialog
+        onUsbLinkError={() => {
+          $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
+        }}
+        onFoundUsb={onFoundUsbDevice} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.BAD_FIRMWARE}
       <BrokenFirmwareDetected />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DOWNLOADING}

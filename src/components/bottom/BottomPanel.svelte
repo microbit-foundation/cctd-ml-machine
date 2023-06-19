@@ -9,6 +9,9 @@
   import { startConnectionProcess } from '../../script/stores/connectDialogStore';
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
+  import BaseDialog from '../dialogs/BaseDialog.svelte';
+  import Live3DViewCompatabilityWrapper from '../3d-inspector/View3D.svelte';
+    import View3DLive from '../3d-inspector/View3DLive.svelte';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -24,6 +27,8 @@
   const outputDisconnectButtonClicked = () => {
     Microbits.expelOutput();
   };
+
+  let isLive3DOpen = false;
 </script>
 
 <div
@@ -31,6 +36,7 @@
   class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
   class:bg-gray-300={$state.isInputAssigned && !$state.isInputReady}>
   <ConnectDialogContainer bind:this={connectDialogReference} />
+
   {#if !$state.isInputAssigned}
     <!-- No input microbit assigned -->
     <div class="h-full w-full flex justify-center bg-white">
@@ -41,7 +47,7 @@
     <!-- Input microbit is assigned -->
     <div class="relative w-full h-full">
       <div class="absolute w-full h-full">
-        <LiveGraph width={componentWidth} />
+        <LiveGraph width={componentWidth - 160} />
       </div>
       {#if !$state.isInputReady}
         <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->
@@ -52,7 +58,8 @@
           </div>
         </div>
       {/if}
-      <div class="w-full h-full p-0 m-0 absolute top-0 left-0">
+      <div
+        class="h-full p-0 m-0 absolute top-0 left-0 right-40 border-r border-solid border-black border-opacity-60">
         <!-- The live text and info box -->
         <div class="float-left mt-2 ml-2">
           <LiveGraphInformationSection />
@@ -64,6 +71,22 @@
             onOutputDisconnectButtonClicked={outputDisconnectButtonClicked} />
         </div>
       </div>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div
+        class="absolute right-0 cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
+        on:click={() => (isLive3DOpen = true)}>
+        <View3DLive width={160} height={160} freeze={isLive3DOpen}/>
+      </div>
+      <BaseDialog isOpen={isLive3DOpen} onClose={() => (isLive3DOpen = false)}>
+        <!-- hardcoded margin-left matches the size of the sidebar -->
+        <div
+          class="ml-75 border-gray-200 overflow-hidden border border-solid relative bg-white rounded-1 shadow-dark-400 shadow-md flex justify-center"
+          style="height: calc(100vh - 160px); width: calc(100vh - 160px);">
+          <div class="-mt-5 w-full h-full justify-center align-middle flex items-center">
+            <View3DLive width={600} height={600} smoothing />
+          </div>
+        </div>
+      </BaseDialog>
     </div>
   {/if}
 </div>

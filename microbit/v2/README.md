@@ -14,6 +14,7 @@ You need some open source pre-requisites to build this repo. You can either inst
 - [Github desktop](https://desktop.github.com/)
 - [CMake](https://cmake.org/download/)
 - [Python 3](https://www.python.org/downloads/)
+- For OS X you may need command line tools for xcode. Install using `xcode-select --install`
 
 **OR**
 
@@ -21,9 +22,15 @@ One can use docker instead of downloading these dependencies (read about this he
 
 # Building without docker
 - Clone this repository
-- In the root of this repository type `python3 build.py` or `python build.py` depending on python version
-- The hex file will be built `MICROBIT.HEX` and placed in the root folder.
+- In the folder `/microbit/v2` type `execute python3 build.py` or `python build.py` depending on python version
+- The hex file will be built `MICROBIT.HEX` and placed in the `/microbit/v2` folder.
 - If at some point any config changes are made outside any .cpp files run `python3 build.py -c`. The `-c` flag will clear the build files. If this is not done the changes to config will not take effect.
+
+**Note**: for OS X users receiving the error 
+
+```xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun```
+
+install xcode command line tools using `xcode-select --install`
 
 ### Broken .hex fix
 If at some point the HEX file doesn't seem to work, but compiles fine, check `codal.json` to see if the following is missing.

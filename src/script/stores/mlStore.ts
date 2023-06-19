@@ -1,11 +1,11 @@
 import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
-import { t } from '../../i18n';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
-
-let text: (key: string, vars?: object) => string = get(t);
-t.subscribe(t => (text = t));
+import { Axes, Filters } from '../datafunctions';
+import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
+import MBSpecs from '../microbit-interfacing/MBSpecs';
+import StaticConfiguration from '../../StaticConfiguration';
 
 export type RecordingData = {
   ID: number;
@@ -24,6 +24,7 @@ export function loadDatasetFromFile(file: File) {
     }
     const contents = e.target.result;
     if (typeof contents === 'string') {
+      // TODO: fix the following really unsafe parsing and casting
       const gestureData: GestureData[] = JSON.parse(contents) as GestureData[];
       gestures.set(gestureData);
     }
@@ -62,6 +63,7 @@ export type GestureData = {
 export type GestureOutput = {
   matrix?: boolean[];
   sound?: SoundData;
+  outputPin?: { pin: MBSpecs.UsableIOPin; pinState: PinTurnOnState; turnOnTime: number };
 };
 
 export type SoundData = {
@@ -85,43 +87,68 @@ export enum TrainingStatus {
   Failure,
 }
 
-export type MlSettings = {
+type MlSettings = {
   duration: number; // Duration of recording
-  numEpochs: number; // Number of epochs for ML
   numSamples: number; // number of samples in one recording (when recording samples)
   minSamples: number; // minimum number of samples for reliable detection (when detecting gestures)
+  automaticClassification: boolean; // If true, automatically classify gestures
   updatesPrSecond: number; // Times algorithm predicts data pr second
+  numEpochs: number; // Number of epochs for ML
   learningRate: number;
-  includedAxes: boolean[];
-  includedParameters: boolean[];
-  preferableButton: 'A' | 'B' | 'AB';
-  automaticClassification: boolean;
-  output: boolean;
+  includedAxes: Axes[];
+  includedFilters: Filters[];
 };
 
 const initialSettings: MlSettings = {
   duration: 1800,
-  numEpochs: 80,
   numSamples: 80,
   minSamples: 80,
-  updatesPrSecond: 4,
-  learningRate: 0.5,
-  includedAxes: [true, true, true],
-  includedParameters: [true, true, true, true, true],
-  preferableButton: 'AB',
   automaticClassification: true,
-  output: true,
+  updatesPrSecond: 4,
+  numEpochs: 80,
+  learningRate: 0.5,
+  includedAxes: [Axes.X, Axes.Y, Axes.Z],
+  includedFilters: [
+    Filters.MAX,
+    Filters.MEAN,
+    Filters.MIN,
+    Filters.STD,
+    Filters.PEAKS,
+    Filters.ACC,
+    Filters.ZCR,
+    Filters.RMS,
+  ],
 };
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);
 
-export const livedata = writable<LiveData>({} as LiveData);
+export const livedata = writable<LiveData>({
+  accelX: 0,
+  accelY: 0,
+  accelZ: 0,
+  smoothedAccelX: 0,
+  smoothedAccelY: 0,
+  smoothedAccelZ: 0,
+});
+
+export const currentData = writable<{ x: number; y: number; z: number }>({
+  x: 0,
+  y: 0,
+  z: 0,
+});
+
+livedata.subscribe(data => {
+  currentData.set({
+    x: data.smoothedAccelX,
+    y: data.smoothedAccelY,
+    z: data.smoothedAccelZ,
+  });
+});
 
 // Store with ML-Algorithm settings
 export const settings = writable<MlSettings>(initialSettings);
 
 // Store for current gestures
-
 export const chosenGesture = writable<GestureData | null>(null);
 
 function updateToUntrainedState() {
@@ -141,7 +168,13 @@ export function addGesture(name: string): void {
         name,
         ID: Date.now(),
         recordings: [],
-        output: {},
+        output: {
+          outputPin: {
+            pin: StaticConfiguration.defaultOutputPin,
+            pinState: StaticConfiguration.defaultPinTurnOnState,
+            turnOnTime: StaticConfiguration.defaultPinToggleTime,
+          },
+        },
       },
     ];
   });
@@ -172,7 +205,7 @@ export function addRecording(gestureID: number, recording: RecordingData) {
   });
 }
 
-// Following function are inefficient. Consider other data structure for
+// Following function is inefficient. Consider other data structure for
 // "gestures"
 export function removeRecording(gestureID: number, recordingID: number) {
   updateToUntrainedState();
@@ -199,6 +232,27 @@ export function updateGestureSoundOutput(
     for (const gesture of gestures) {
       if (gesture.ID === gestureID) {
         gesture.output.sound = sound;
+        break;
+      }
+    }
+    return gestures;
+  });
+}
+
+export function updateGesturePinOutput(
+  gestureID: number,
+  pin: MBSpecs.UsableIOPin,
+  state: PinTurnOnState,
+  time: number,
+) {
+  gestures.update(gestures => {
+    for (const gesture of gestures) {
+      if (gesture.ID === gestureID) {
+        gesture.output.outputPin = {
+          pin: pin,
+          pinState: state,
+          turnOnTime: time,
+        };
         break;
       }
     }

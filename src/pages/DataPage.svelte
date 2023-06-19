@@ -17,6 +17,7 @@
   import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
+  import { onMount } from 'svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -37,23 +38,31 @@
     downloadDataset();
   };
 
-  const onUploadGestures = (e: Event) => {
-    const files = (<HTMLInputElement>e.target).files;
-    if (!files) {
-      return;
-    }
-    const file = files[0];
-    if (!file) {
-      return;
-    }
-    loadDatasetFromFile(file);
+  const onUploadGestures = () => {
+    filePicker.click();
   };
 
-  let connectDialogReference: MainConnectDialog;
+  let filePicker: HTMLInputElement;
+  onMount(() => {
+    filePicker = document.createElement('input');
+    filePicker.type = 'file';
+    filePicker.accept = 'application/JSON';
+    filePicker.onchange = () => {
+      if (filePicker.files == null || filePicker.files.length < 1) {
+        return;
+      }
+      const f = filePicker.files[0];
+      loadDatasetFromFile(f);
+      filePicker.value = ''; // To trick element to trigger onChange if same file selected
+    }
+    return () => {
+      filePicker.remove();
+    };
+  });
 </script>
 
 <!-- Main pane -->
-<main class="h-full flex flex-col">
+<main class="h-full inline-block min-w-full">
   <div>
     <DataPageControlBar
       clearDisabled={$gestures.length === 0}
@@ -63,7 +72,7 @@
       {onUploadGestures} />
   </div>
   {#if !hasSomeData() && !$state.isInputConnected}
-    <div class="flex flex-col flex-grow justify-center">
+    <div class="mt-4">
       <PleaseConnectFirst />
     </div>
   {:else}
@@ -82,7 +91,7 @@
             }}>{$t('footer.connectButtonNotConnected')}</StandardButton>
         </div>
       </StandardDialog>
-      <MainConnectDialog bind:this={connectDialogReference} />
+      <MainConnectDialog />
 
       {#if $gestures.length > 0}
         <div class=" p-0 relative flex h-7">
@@ -119,7 +128,8 @@
       {#each $gestures as gesture (gesture.ID)}
         <Gesture
           bind:gesture
-          onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
+          onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} 
+        />
       {/each}
       <NewGestureButton />
     </div>

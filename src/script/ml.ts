@@ -10,7 +10,7 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import { peaks, standardDeviation, totalAcceleration } from './datafunctions';
+import { Filters, Axes, determineFilter } from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
@@ -21,7 +21,7 @@ t.subscribe(t => (text = t));
 
 // Whenever model is trained, the settings at the time is saved in this variable
 // Such that prediction continues on with the same settings as during training
-let modelSettings: { axes: boolean[]; params: boolean[] };
+let modelSettings: { axes: Axes[]; filters: Filters[] };
 
 // Hacky "timer" to pad the training time if needed
 let trainingTimerPromise: Promise<boolean>;
@@ -33,28 +33,14 @@ let unsubscribeFromSettings: Unsubscriber | undefined = undefined;
 // Variable for accessing the predictionInterval
 let predictionInterval: NodeJS.Timeout | undefined = undefined;
 
-type accData =
-  | 'ax_max'
-  | 'ax_min'
-  | 'ax_std'
-  | 'ax_peaks'
-  | 'ax_total'
-  | 'ay_max'
-  | 'ay_min'
-  | 'ay_std'
-  | 'ay_peaks'
-  | 'ay_total'
-  | 'az_max'
-  | 'az_min'
-  | 'az_std'
-  | 'az_peaks'
-  | 'az_total';
-
 function createModel(): LayersModel {
   const gestureData = get(gestures);
   const numberOfClasses: number = gestureData.length;
+  const inputShape = [
+    get(settings).includedFilters.length * get(settings).includedAxes.length,
+  ];
 
-  const input = tf.input({ shape: [15] });
+  const input = tf.input({ shape: inputShape });
   const normalizer = tf.layers.batchNormalization().apply(input);
   const dense = tf.layers.dense({ units: 16, activation: 'relu' }).apply(normalizer);
   const softmax = tf.layers
@@ -71,14 +57,6 @@ function createModel(): LayersModel {
   return model;
 }
 
-function dataMapToFeatureArray(data: Map<accData, number>): number[] {
-  const features: number[] = [];
-  for (const value of data.values()) {
-    features.push(value);
-  }
-  return features;
-}
-
 export function trainModel() {
   state.update(obj => {
     obj.isTraining = true;
@@ -92,6 +70,12 @@ export function trainModel() {
     return;
   }
 
+  // Freeze modelSetting untill next training
+  modelSettings = {
+    axes: get(settings).includedAxes,
+    filters: get(settings).includedFilters,
+  };
+
   // Fetch data
   const gestureData = get(gestures);
   const features: Array<number[]> = [];
@@ -101,12 +85,8 @@ export function trainModel() {
   gestureData.forEach((MLClass, index) => {
     MLClass.recordings.forEach(recording => {
       // prepare features
-      const x = recording.data.x;
-      const y = recording.data.y;
-      const z = recording.data.z;
-
-      const inputs: Map<accData, number> = makeInputs(x, y, z);
-      features.push(dataMapToFeatureArray(inputs));
+      const inputs: number[] = makeInputs(recording.data);
+      features.push(inputs);
 
       // Prepare labels
       const label: number[] = new Array(numberofClasses) as number[];
@@ -146,10 +126,7 @@ export function trainModel() {
 
 export function isParametersLegal(): boolean {
   const s = get(settings);
-  return (
-    s.includedAxes.reduce((sum, x) => sum || x) &&
-    s.includedParameters.reduce((sum, x) => sum || x)
-  );
+  return s.includedAxes.length > 0 && s.includedFilters.length > 0;
 }
 
 // Assess whether
@@ -206,74 +183,29 @@ function finishedTraining() {
   });
 }
 
-// makeInput reduces array of x, y and z inputs to a single object with values.
-// Depending on user settings. There will be anywhere between 1-12 parameters in
-// The return object.
+// makeInput reduces array of x, y and z inputs to a single number array with values.
+// Depending on user settings. There will be anywhere between 1-24 parameters in
 
-export function makeInputs(x: number[], y: number[], z: number[]): Map<accData, number> {
-  const obj: Map<accData, number> = new Map();
+function makeInputs(sample: { x: number[]; y: number[]; z: number[] }): number[] {
+  const dataRep: number[] = [];
 
   if (!modelSettings) {
-    modelSettings = {
-      axes: get(settings).includedAxes,
-      params: get(settings).includedParameters,
-    };
-  }
-  if (modelSettings.axes[0]) {
-    if (modelSettings.params[0]) {
-      obj.set('ax_max', Math.max(...x));
-    }
-    if (modelSettings.params[1]) {
-      obj.set('ax_min', Math.min(...x));
-    }
-    if (modelSettings.params[2]) {
-      obj.set('ax_std', standardDeviation(x));
-    }
-    if (modelSettings.params[3]) {
-      obj.set('ax_peaks', peaks(x).numPeaks);
-    }
-    if (modelSettings.params[4]) {
-      obj.set('ax_total', totalAcceleration(x));
-    }
+    throw new Error('Model settings not found');
   }
 
-  if (modelSettings.axes[1]) {
-    if (modelSettings.params[0]) {
-      obj.set('ay_max', Math.max(...y));
-    }
-    if (modelSettings.params[1]) {
-      obj.set('ay_min', Math.min(...y));
-    }
-    if (modelSettings.params[2]) {
-      obj.set('ay_std', standardDeviation(y));
-    }
-    if (modelSettings.params[3]) {
-      obj.set('ay_peaks', peaks(y).numPeaks);
-    }
-    if (modelSettings.params[4]) {
-      obj.set('ay_total', totalAcceleration(y));
-    }
-  }
+  // We use modelSettings to determine which filters to use. In this way the classify funciton
+  // will be called with the same filters and axes untill the next training
+  modelSettings.filters.forEach(filter => {
+    const filterOutput = determineFilter(filter);
+    if (modelSettings.axes.includes(Axes.X))
+      dataRep.push(filterOutput.computeOutput(sample.x));
+    if (modelSettings.axes.includes(Axes.Y))
+      dataRep.push(filterOutput.computeOutput(sample.y));
+    if (modelSettings.axes.includes(Axes.Z))
+      dataRep.push(filterOutput.computeOutput(sample.z));
+  });
 
-  if (modelSettings.axes[2]) {
-    if (modelSettings.params[0]) {
-      obj.set('az_max', Math.max(...z));
-    }
-    if (modelSettings.params[1]) {
-      obj.set('az_min', Math.min(...z));
-    }
-    if (modelSettings.params[2]) {
-      obj.set('az_std', standardDeviation(z));
-    }
-    if (modelSettings.params[3]) {
-      obj.set('az_peaks', peaks(z).numPeaks);
-    }
-    if (modelSettings.params[4]) {
-      obj.set('az_total', totalAcceleration(z));
-    }
-  }
-
-  return obj;
+  return dataRep;
 }
 
 // Set the global state. Telling components, that the program is prediction
@@ -335,10 +267,9 @@ export function classify() {
   if (!currentState.isInputConnected) return;
 
   // Get formatted version of previous data
-  const { x, y, z } = getPrevData();
-  const input: Map<accData, number> = makeInputs(x, y, z);
-  const tfInput: number[] = dataMapToFeatureArray(input);
-  const inputTensor = tf.tensor([tfInput]);
+  const data = getPrevData();
+  const input: number[] = makeInputs(data);
+  const inputTensor = tf.tensor([input]);
   const prediction: Tensor = get(model).predict(inputTensor) as Tensor;
   prediction
     .data()

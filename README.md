@@ -147,22 +147,28 @@ ML-Machine utilises several packages, most notable of which are the following:
 
 ## Contributions
 
-### Contributing
-
 #### Issues
 
 If you experience an issue or have a question regarding the platform please do not hesitate to raise an issue. The
 maintainers will answer to any issues raised as quickly as possible.
 
-#### Code contributions & code of conduct
+#### Code contributions
 
 If you have an improvement on you wish to share with please read the [contributing](CONTRIBUTING.md) page. There you
 will find information about how to contribute. The maintainers will review the changes as soon as possible.
 
 ### Credits
 
-ML-Machine is a platform created by the Center for Computational Thinking and Design (see [CCTD.dk](https://cctd.dk)) at Aarhus University for empowering education in the emerging fields of technology and computation.
+ML-Machine is a platform created by the Center for Computational Thinking and Design (see [CCTD.dk](https://cctd.au.dk)) at Aarhus University for empowering education in the emerging fields of technology and computation.
 
 ## License
 
-[MIT](license) © Center for Computational Thinking and Design, Aarhus University
+[MIT](LICENSE) © Center for Computational Thinking and Design at Aarhus University and contributors.
+
+We use dependencies via the NPM registry as specified by the package.json file under common Open Source licenses.
+
+The repository includes forks of Lancaster's micro:bit-samples repositories for micro:bit [V1](https://github.com/lancaster-university/microbit-samples) and [V2](https://github.com/lancaster-university/microbit-v2-samples). They are MIT licensed.
+
+## Code of Conduct
+
+In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation. Please see our code of conduct on the [contributing](CONTRIBUTING.md) page and Micro:bit Educational Foundation's [code of conduct](https://microbit.org/safeguarding/) which outlines our expectations for all those that participate in the community and details on how to report any concerns and what would happen should breaches occur.

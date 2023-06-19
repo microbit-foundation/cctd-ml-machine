@@ -157,17 +157,15 @@ will find information about how to contribute. The maintainers will review the c
 
 ### Credits
 
-ML-Machine is a platform created by the Center for Computational Thinking and Design (see [CCTD.dk](https://cctd.dk)) at Aarhus University for empowering education in the emerging fields of technology and computation.
+ML-Machine is a platform created by the Center for Computational Thinking and Design (see [CCTD.dk](https://cctd.au.dk)) at Aarhus University for empowering education in the emerging fields of technology and computation.
 
 ## License
 
-[MIT](license) © Center for Computational Thinking and Design at Aarhus University and contributors
-
-[SPDX-License-Identifier: MIT](LICENSE)
+[MIT](LICENSE) © Center for Computational Thinking and Design at Aarhus University and contributors.
 
 We use dependencies via the NPM registry as specified by the package.json file under common Open Source licenses.
 
-The repository includes forks of Lancaster's micro:bit-samples repositories for micro:bit [https://github.com/lancaster-university/microbit-samples](V1) and [https://github.com/lancaster-university/microbit-v2-samples](V2). They are MIT licensed.
+The repository includes forks of Lancaster's micro:bit-samples repositories for micro:bit [V1](https://github.com/lancaster-university/microbit-samples) and [V2](https://github.com/lancaster-university/microbit-v2-samples). They are MIT licensed.
 
 ## Code of Conduct
 

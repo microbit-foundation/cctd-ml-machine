@@ -5,7 +5,7 @@
   export let boxOffset: { x: number; y: number } = { x: 0, y: 0 };
   export let width = 300;
   export let isLightTheme = true;
-  // TODO: This makes the component a weird combination of a general component which can handle all kinds of 
+  // TODO: This makes the component a weird combination of a general component which can handle all kinds of
   //       children, and a component specialised for text. In my opinion (Jon) this should be split up into one general
   //       and one for text (which uses the general one)
   export let iconText: string | undefined = undefined;
@@ -15,6 +15,7 @@
   const colors = getInfoBoxColors(isLightTheme);
 
   let isOpen = false;
+  let lockedOpen = false;
 
   let w: number;
   let h: number;
@@ -29,6 +30,8 @@
     boxTop = h + 5 + boxOffset.y + domRect.y; // hardcoded values to provide a 'nice' starting point
     boxLeft = w - 20 + boxOffset.x + domRect.x;
     isOpen = true;
+    console.log(domRect, boxTop, boxLeft);
+    console.log(domNode);
   }
 </script>
 
@@ -54,7 +57,7 @@
     class:hovering={isOpen}
     style="color: {colors.iconColor}" />
 
-  {#if isOpen}
+  {#if isOpen || lockedOpen}
     <div
       class="fixed z-10 rounded-md p-3 cursor-default"
       style="top: {boxTop}px; left: {boxLeft}px; width: {width}px; background-color:{colors.backgroundColor}"

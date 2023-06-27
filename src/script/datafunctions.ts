@@ -1,19 +1,23 @@
-export enum Filters {
-  MAX,
-  MEAN,
-  MIN,
-  STD,
-  PEAKS,
-  ACC,
-  ZCR,
-  RMS,
-}
+export const Filters = {
+  MAX: 'max',
+  MEAN: 'mean',
+  MIN: 'min',
+  STD: 'std',
+  PEAKS: 'peaks',
+  ACC: 'acc',
+  ZCR: 'zcr',
+  RMS: 'rms',
+} as const;
 
-export enum Axes {
-  X,
-  Y,
-  Z,
-}
+export type FilterType = (typeof Filters)[keyof typeof Filters];
+
+export const Axes = {
+  X: 'x',
+  Y: 'y',
+  Z: 'z',
+} as const;
+
+export type AxesType = (typeof Axes)[keyof typeof Axes];
 
 interface FilterOutput {
   computeOutput(data: number[]): number;
@@ -34,7 +38,7 @@ class SDFilter implements FilterOutput {
 
 class RootMeanSquareFilter implements FilterOutput {
   computeOutput(data: number[]): number {
-    const res =  Math.sqrt(data.reduce((a, b) => a + Math.pow(b, 2), 0) / data.length);
+    const res = Math.sqrt(data.reduce((a, b) => a + Math.pow(b, 2), 0) / data.length);
     return res;
   }
 }
@@ -42,7 +46,7 @@ class RootMeanSquareFilter implements FilterOutput {
 class ZeroCrossingRateFilter implements FilterOutput {
   computeOutput(data: number[]): number {
     let count = 0;
-    for (let i = 1; i < data.length; i++) { 
+    for (let i = 1; i < data.length; i++) {
       if ((data[i] >= 0 && data[i - 1] < 0) || (data[i] < 0 && data[i - 1] >= 0)) {
         count++;
       }
@@ -74,23 +78,23 @@ class PeaksFilter implements FilterOutput {
     const lag = 5;
     const threshold = 3.5;
     const influence = 0.5;
-  
+
     let peaksCounter = 0;
-  
+
     if (data.length < lag + 2) {
       throw new Error('data sample is too short');
     }
-  
+
     // init variables
     const signals = Array(data.length).fill(0) as number[];
     const filteredY = data.slice(0);
     const lead_in = data.slice(0, lag);
-  
+
     const avgFilter: number[] = [];
     avgFilter[lag - 1] = mean(lead_in);
     const stdFilter: number[] = [];
     stdFilter[lag - 1] = stddev(lead_in);
-  
+
     for (let i = lag; i < data.length; i++) {
       if (
         Math.abs(data[i] - avgFilter[i - 1]) > 0.1 &&
@@ -110,7 +114,7 @@ class PeaksFilter implements FilterOutput {
         signals[i] = 0; // no signal
         filteredY[i] = data[i];
       }
-  
+
       // adjust the filters
       const y_lag = filteredY.slice(i - lag, i);
       avgFilter[i] = mean(y_lag);
@@ -132,7 +136,7 @@ function stddev(arr: number[]): number {
   return Math.sqrt(arr.reduce(r, 0.0) / arr.length);
 }
 
-export function determineFilter (filter: Filters): FilterOutput {
+export function determineFilter(filter: FilterType): FilterOutput {
   switch (filter) {
     case Filters.MAX:
       return new MaxFilter();
@@ -154,5 +158,3 @@ export function determineFilter (filter: Filters): FilterOutput {
       throw new Error('Filter not found');
   }
 }
-
-

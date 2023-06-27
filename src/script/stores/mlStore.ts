@@ -2,7 +2,7 @@ import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
-import { Axes, Filters } from '../datafunctions';
+import { Axes, AxesType, Filters, FilterType } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import StaticConfiguration from '../../StaticConfiguration';
@@ -95,8 +95,8 @@ type MlSettings = {
   updatesPrSecond: number; // Times algorithm predicts data pr second
   numEpochs: number; // Number of epochs for ML
   learningRate: number;
-  includedAxes: Axes[];
-  includedFilters: Filters[];
+  includedAxes: AxesType[];
+  includedFilters: Set<FilterType>;
 };
 
 const initialSettings: MlSettings = {
@@ -108,7 +108,7 @@ const initialSettings: MlSettings = {
   numEpochs: 80,
   learningRate: 0.5,
   includedAxes: [Axes.X, Axes.Y, Axes.Z],
-  includedFilters: [
+  includedFilters: new Set<FilterType>([
     Filters.MAX,
     Filters.MEAN,
     Filters.MIN,
@@ -117,8 +117,11 @@ const initialSettings: MlSettings = {
     Filters.ACC,
     Filters.ZCR,
     Filters.RMS,
-  ],
+  ]),
 };
+
+// Store with ML-Algorithm settings
+export const settings = writable<MlSettings>(initialSettings);
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);
 
@@ -144,9 +147,6 @@ livedata.subscribe(data => {
     z: data.smoothedAccelZ,
   });
 });
-
-// Store with ML-Algorithm settings
-export const settings = writable<MlSettings>(initialSettings);
 
 // Store for current gestures
 export const chosenGesture = writable<GestureData | null>(null);

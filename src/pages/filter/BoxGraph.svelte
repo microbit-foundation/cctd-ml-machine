@@ -1,18 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { Vector3 } from '../../components/3d-inspector/View3DUtility';
-  import { Chart, ChartTypeRegistry, registerables } from 'chart.js';
+  import {
+    Chart,
+    ChartConfiguration,
+    ChartData,
+    ChartType,
+    ChartTypeRegistry,
+    registerables,
+  } from 'chart.js';
   import { state } from '../../script/stores/uiStore';
   import { currentData } from '../../script/stores/mlStore';
-
-  // type dataRepType = {
-  //   name: string,
-  //   points: {
-  //     x: number[],
-  //     y: number[],
-  //     z: number[]
-  //   }
-  // }
 
   export let dataRep: {
     name: string;
@@ -97,6 +95,7 @@
     chart.update();
   }
 
+  // const datasets: ChartData<'line', {key: string, value: number} []> = {
   const data = {
     labels: labels,
     //[
@@ -126,14 +125,14 @@
             ],
           ],
           backgroundColor: forceColor || getColor(index),
-          type: 'bar',
+          type: 'bar' as ChartType,
         };
       }),
     ],
   };
 
-  const config = {
-    data,
+  const config: ChartConfiguration<keyof ChartTypeRegistry, number[][], string> = {
+    data: data,
     options: {
       aspectRatio: 1.5,
       elements: {
@@ -159,18 +158,19 @@
     },
   };
 
+  // TODO: Reimplement sensitivity
   // (sensitivity =>
-  $: {
-    if (sensitivity !== undefined) {
-      //   return;
-      // }
-      config.data.labels = [
-        'x ' + sensitivity.x + '%',
-        'y ' + sensitivity.y + '%',
-        'z ' + sensitivity.z + '%',
-      ];
-    }
-  }
+  // $: {
+  //   if (sensitivity !== undefined) {
+  //     //   return;
+  //     // }
+  //     config.data.labels = [
+  //       'x ' + sensitivity.x + '%',
+  //       'y ' + sensitivity.y + '%',
+  //       'z ' + sensitivity.z + '%',
+  //     ];
+  //   }
+  // }
   // )(sensitivity);
 
   $: onNewLiveValues($currentData);

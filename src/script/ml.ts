@@ -208,7 +208,7 @@ function makeInputs(sample: { x: number[]; y: number[]; z: number[] }): number[]
   return dataRep;
 }
 
-// Set the global state. Telling components, that the program is prediction
+// Set the global state. Telling components, that the program is predicting
 function setIsPredicting(isPredicting: boolean): void {
   state.update(s => {
     s.isPredicting = isPredicting;

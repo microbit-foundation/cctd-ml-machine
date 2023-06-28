@@ -13,8 +13,7 @@ describe('Translation tests', () => {
   test('Translations are the same', () => {
     const danishTranslationKeys = Object.getOwnPropertyNames(translations.da);
     for (let i = 0; i < danishTranslationKeys.length; i++) {
-      const danishKey = danishTranslationKeys[i];
-      // @ts-ignore
+      const danishKey = danishTranslationKeys[i] as keyof typeof translations.en;
       expect(
         translations.en[danishKey],
         'Something not the same -> ' + danishKey,

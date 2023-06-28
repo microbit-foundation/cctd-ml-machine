@@ -19,6 +19,10 @@ export const Axes = {
 
 export type AxesType = (typeof Axes)[keyof typeof Axes];
 
+export function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
 interface FilterOutput {
   computeOutput(data: number[]): number;
 }

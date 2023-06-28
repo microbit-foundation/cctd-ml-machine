@@ -14,6 +14,9 @@
   import TrainingButton from './TrainingButton.svelte';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import { Paths, navigate } from '../../script/navigation/Navigation';
+  import ControlBar from '../../components/control-bar/ControlBar.svelte';
+  import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
+  import StandardButton from '../../components/StandardButton.svelte';
 
   const sufficientData = hasSufficientData();
 
@@ -47,11 +50,18 @@
   </div>
 </StandardDialog>
 <div class="flex flex-col h-full">
-  <button on:click={() => {
-    navigate(Paths.FILTERS)
-  }}>
-    Filters-Temp-routing-button
-  </button>
+  <ControlBar>
+    <ExpandableControlBarMenu>
+      <StandardButton
+        small
+        outlined
+        onClick={() => {
+          navigate(Paths.FILTERS);
+        }}>
+        Filtre
+      </StandardButton>
+    </ExpandableControlBarMenu>
+  </ControlBar>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
     {#if !$state.isInputConnected}
       <PleaseConnectFirst />

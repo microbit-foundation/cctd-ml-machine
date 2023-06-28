@@ -1,6 +1,6 @@
 <script lang="ts">
   import Information from '../../components/information/Information.svelte';
-  import { FilterType, determineFilter } from '../../script/datafunctions';
+  import { FilterType, Filters, determineFilter } from '../../script/datafunctions';
   import { gestures, settings } from '../../script/stores/mlStore';
   import BoxGraph from './BoxGraph.svelte';
 
@@ -39,6 +39,11 @@
     });
     return filteredData;
   };
+
+  // TODO: Formalize how/if live data is presented for different filters
+  const compareWithLive = (
+    [Filters.MAX, Filters.MIN, Filters.MEAN] as FilterType[]
+  ).includes(filter);
 
   $: isActive = $settings.includedFilters.has(filter);
 
@@ -94,8 +99,8 @@
           : 'fas fa-plus-circle text-lime-600 hover:(transform scale-150)'}" />
     </div>
   </div>
-  <div class="w-full h-min">
-    <BoxGraph dataRep={createFilteredData()} sensitivity={undefined} />
+  <div class="w-full h-min px-5 pb-4">
+    <BoxGraph dataRep={createFilteredData()} sensitivity={undefined} {compareWithLive} />
   </div>
   <div
     class="

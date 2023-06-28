@@ -1,16 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { Vector3 } from '../../components/3d-inspector/View3DUtility';
-  import {
-    Chart,
-    ChartConfiguration,
-    ChartData,
-    ChartType,
-    ChartTypeRegistry,
-    registerables,
-  } from 'chart.js';
+  import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
   import { state } from '../../script/stores/uiStore';
   import { currentData } from '../../script/stores/mlStore';
+  import { clamp } from '../../script/datafunctions';
 
   export let dataRep: {
     name: string;
@@ -21,10 +15,9 @@
     };
   }[];
 
+  export let compareWithLive = false;
+
   $: showLive = $state.isInputConnected;
-  $: {
-    console.log($state.isInputConnected);
-  }
 
   // export let liveValues = { x: 0, y: 0, z: 0 };
   export let sensitivity: Vector3 | undefined = undefined;
@@ -60,16 +53,20 @@
   const labels: axis[] = ['x', 'y', 'z'];
 
   function produceMaxMin(): MaxMin {
-    let min = 3.40282347e38; // largest positive number in float32
-    let max = -3.40282347e38; // largest negative number in float32
+    let min = Infinity;
+    let max = -Infinity;
 
     dataRep.forEach(data => {
       labels.forEach(label => {
         const newMax = Math.max(...data.points[label]);
-        if (max < newMax) max = newMax;
+        if (max < newMax) {
+          max = newMax;
+        }
 
         const newMin = Math.min(...data.points[label]);
-        if (newMin < min) min = newMin;
+        if (newMin < min) {
+          min = newMin;
+        }
       });
     });
 
@@ -78,60 +75,76 @@
 
   const maxmin = produceMaxMin();
 
-  function onNewLiveValues(values: { x: number; y: number; z: number }) {
+  let axisScale = {
+    max: maxmin.max + 0.1 * maxmin.diff,
+    min: maxmin.min - 0.1 * maxmin.diff,
+  };
+
+  function onNewLiveValues(
+    values: { x: number; y: number; z: number },
+    isConnected: boolean,
+  ) {
     if (!isMounted) {
       return;
     }
-    if (!showLive) {
+    if (!showLive || !isConnected) {
       data.datasets[0].hidden = true;
       chart.update();
       return;
     }
-    const d = data.datasets[0].data;
-    d[0] = values.x;
-    d[1] = values.y;
-    d[2] = values.z;
+    // const d = data.datasets[0].data;
+    data.datasets[0].data[0] = clamp(values.x, axisScale.min, axisScale.max);
+    data.datasets[0].data[1] = clamp(values.y, axisScale.min, axisScale.max);
+    data.datasets[0].data[2] = clamp(values.z, axisScale.min, axisScale.max);
     data.datasets[0].hidden = false;
+    // const max = Math.max(values.x, values.y, values.z);
+    // axisScale.max = Math.max(maxmin.max + 0.1 * maxmin.diff, max);
+    // const min = Math.min(values.x, values.y, values.z);
+    // axisScale.min = Math.min(maxmin.min - 0.1 * maxmin.diff, min);
     chart.update();
   }
 
-  // const datasets: ChartData<'line', {key: string, value: number} []> = {
-  const data = {
+  const data: ChartData = {
     labels: labels,
-    //[
-    datasets: [
-      {
+    datasets: [],
+  };
+
+  const populateData = () => {
+    if (compareWithLive) {
+      data.datasets.push({
         label: 'Live Data',
         backgroundColor: '#000000',
         data: [$currentData.x, $currentData.y, $currentData.z],
         type: 'line',
         hidden: !showLive,
-      },
-      ...dataRep.map((data, index) => {
-        return {
-          label: data.name,
-          data: [
-            [
-              Math.min(...data.points.x) - maxmin.diff / 40,
-              Math.max(...data.points.x) + maxmin.diff / 40,
-            ],
-            [
-              Math.min(...data.points.y) - maxmin.diff / 40,
-              Math.max(...data.points.y) + maxmin.diff / 40,
-            ],
-            [
-              Math.min(...data.points.z) - maxmin.diff / 40,
-              Math.max(...data.points.z) + maxmin.diff / 40,
-            ],
+      });
+    }
+    dataRep.forEach((dataPoint, idx) => {
+      data.datasets.push({
+        label: dataPoint.name,
+        data: [
+          [
+            Math.min(...dataPoint.points.x) - maxmin.diff / 40,
+            Math.max(...dataPoint.points.x) + maxmin.diff / 40,
           ],
-          backgroundColor: forceColor || getColor(index),
-          type: 'bar' as ChartType,
-        };
-      }),
-    ],
+          [
+            Math.min(...dataPoint.points.y) - maxmin.diff / 40,
+            Math.max(...dataPoint.points.y) + maxmin.diff / 40,
+          ],
+          [
+            Math.min(...dataPoint.points.z) - maxmin.diff / 40,
+            Math.max(...dataPoint.points.z) + maxmin.diff / 40,
+          ],
+        ],
+        backgroundColor: forceColor ?? getColor(idx),
+        type: 'bar',
+      });
+    });
   };
+  populateData();
 
-  const config: ChartConfiguration<keyof ChartTypeRegistry, number[][], string> = {
+  const config: ChartConfiguration = {
+    type: 'line',
     data: data,
     options: {
       aspectRatio: 1.5,
@@ -140,11 +153,14 @@
           borderWidth: 0,
         },
         point: {
-          radius: 50,
+          radius: 25,
           pointStyle: 'line',
           borderWidth: 1,
           borderColor: '#000000',
         },
+      },
+      scales: {
+        y: axisScale,
       },
       responsive: true,
       plugins: {
@@ -173,9 +189,19 @@
   // }
   // )(sensitivity);
 
-  $: onNewLiveValues($currentData);
+  $: {
+    if (compareWithLive) {
+      onNewLiveValues($currentData, $state.isInputConnected);
+    }
+  }
+  // $: {
+  //   console.log('HERE', $state.isInputConnected);
+  //   data.datasets[0].hidden = !$state.isInputConnected;
+  //   console.log(data.datasets[0].hidden);
+  //   chart.update();
+  // }
 
-  let chart: Chart<keyof ChartTypeRegistry, number[][], string>;
+  let chart: Chart;
   let canvas: HTMLCanvasElement;
   onMount(() => {
     Chart.register(...registerables);

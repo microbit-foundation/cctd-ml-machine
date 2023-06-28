@@ -44,15 +44,13 @@
     isMounted = true;
   });
 
-  type MaxMin = {
+  const labels: AxesType[] = Object.values(Axes);
+
+  function produceMaxMin(): {
     min: number;
     max: number;
     diff: number;
-  };
-  // type axis = 'x' | 'y' | 'z';
-  const labels: AxesType[] = Object.values(Axes);
-
-  function produceMaxMin(): MaxMin {
+  } {
     let min = Infinity;
     let max = -Infinity;
 

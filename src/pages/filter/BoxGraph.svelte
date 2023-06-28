@@ -1,10 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Vector3 } from '../../components/3d-inspector/View3DUtility';
   import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
   import { state } from '../../script/stores/uiStore';
   import { currentData } from '../../script/stores/mlStore';
-  import { clamp } from '../../script/datafunctions';
+  import { Axes, AxesType, clamp } from '../../script/datafunctions';
 
   export let dataRep: {
     name: string;
@@ -20,9 +19,10 @@
   $: showLive = $state.isInputConnected;
 
   // TODO: Handle sensitivity and extraconfig
-  export let sensitivity: Vector3 | undefined = undefined;
-  export let extraConfig = {};
-  export let forceColor: string | undefined = undefined;
+  // export let sensitivity: Vector3 | undefined = undefined;
+  // export let extraConfig = {};
+  // Keeping this as a comment in case it is needed reimplementation of later features
+  // export let forcedColor: string | undefined = undefined;
 
   function getColor(index: number): string {
     const colors = [
@@ -49,8 +49,8 @@
     max: number;
     diff: number;
   };
-  type axis = 'x' | 'y' | 'z';
-  const labels: axis[] = ['x', 'y', 'z'];
+  // type axis = 'x' | 'y' | 'z';
+  const labels: AxesType[] = Object.values(Axes);
 
   function produceMaxMin(): MaxMin {
     let min = Infinity;
@@ -118,6 +118,7 @@
     dataRep.forEach((dataPoint, idx) => {
       data.datasets.push({
         label: dataPoint.name,
+        // TODO: Handle scaling/normalization of data in a better way than simply dividing by 40
         data: [
           [
             Math.min(...dataPoint.points.x) - maxmin.diff / 40,
@@ -132,7 +133,8 @@
             Math.max(...dataPoint.points.z) + maxmin.diff / 40,
           ],
         ],
-        backgroundColor: forceColor ?? getColor(idx),
+        // backgroundColor: forcedColor ?? getColor(idx), // TODO: Remove or reimplement
+        backgroundColor: getColor(idx),
         type: 'bar',
       });
     });

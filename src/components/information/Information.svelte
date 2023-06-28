@@ -57,7 +57,7 @@
 
   {#if isOpen}
     <div
-      class="fixed z-20 rounded-md p-3 cursor-default"
+      class="fixed z-10 rounded-md p-3 cursor-default"
       style="top: {boxTop}px; left: {boxLeft}px; width: {width}px; background-color:{colors.backgroundColor}"
       on:click|stopPropagation>
       {#if titleText}

@@ -6,21 +6,15 @@
   export let smoothing = false;
   export let width: number;
   export let height: number;
-  export let freeze = false
+  export let freeze = false;
 
-  let liveDataPoint: Vector3 = {x: 0, y: 0, z: 0}
+  let liveDataPoint: Vector3 = { x: 0, y: 0, z: 0 };
 
   $: {
-    if (!freeze){
-      liveDataPoint = $currentData 
+    if (!freeze) {
+      liveDataPoint = $currentData;
     }
   }
-
 </script>
 
-<View3D
-  {smoothing}
-  {width}
-  {height}
-  dataPoint={liveDataPoint}
-/>
+<View3D {smoothing} {width} {height} dataPoint={liveDataPoint} />

@@ -97,10 +97,10 @@
     // TODO: Clean this
     if (isConnected) {
       unsubscribeFromData = currentData.subscribe(data => {
-          const t = new Date().getTime();
-          lineX.append(t, data.x, false);
-          lineY.append(t, data.y, false);
-          lineZ.append(t, data.z, false);
+        const t = new Date().getTime();
+        lineX.append(t, data.x, false);
+        lineY.append(t, data.y, false);
+        lineZ.append(t, data.z, false);
       });
 
       // Else if we're currently subscribed to data. Unsubscribe.
@@ -110,8 +110,6 @@
       unsubscribeFromData = undefined;
     }
   }
-
-
 </script>
 
 <main>

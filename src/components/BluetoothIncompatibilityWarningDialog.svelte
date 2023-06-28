@@ -6,10 +6,10 @@
 </script>
 
 <StandardDialog
-  isOpen="{$isBluetoothWarningDialogOpen}"
-  onClose="{() => {
+  isOpen={$isBluetoothWarningDialogOpen}
+  onClose={() => {
     $isBluetoothWarningDialogOpen = false;
-  }}">
+  }}>
   <div>
     <h1 class="font-bold text-red-500 text-xl min-w-140">
       {$t('popup.compatibility.bluetooth.header')}
@@ -17,12 +17,12 @@
     <hr />
     <div class="pt-3">
       <p>{$t('popup.compatibility.bluetooth.explain')}</p>
-      <div class="h-2"></div>
+      <div class="h-2" />
       <p>{$t('popup.compatibility.bluetooth.advice')}</p>
     </div>
-    <div class="h-4"></div>
+    <div class="h-4" />
     <hr />
-    <div class="h-4"></div>
+    <div class="h-4" />
     <div class="pl-2 pt-2 w-full">
       <table class="m-auto">
         <thead>

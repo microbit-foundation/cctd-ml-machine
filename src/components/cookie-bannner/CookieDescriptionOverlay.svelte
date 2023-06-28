@@ -84,7 +84,7 @@
         <ul>
           {#each cookieDeleteManuals as manual}
             <li>
-              <a class="text-blue-400" href="{manual.link}" target="_blank"
+              <a class="text-blue-400" href={manual.link} target="_blank"
                 >{manual.browser}</a>
             </li>
           {/each}

@@ -23,9 +23,9 @@ export function checkCompatibility(): CompatibilityStatus {
   const browserName = browser.getBrowser().name ?? 'unknown';
   const osName = browser.getOS().name ?? 'unknown';
 
-  const canvas = document.createElement("canvas")
+  const canvas = document.createElement('canvas');
   // TODO: Handle webgl1 vs webgl2 in relation to threejs
-  const webGL = canvas.getContext("webgl") instanceof WebGLRenderingContext
+  const webGL = canvas.getContext('webgl') instanceof WebGLRenderingContext;
 
   const browserVersion = browser.getBrowserVersion();
   if (!browserVersion) {
@@ -53,4 +53,3 @@ export function checkCompatibility(): CompatibilityStatus {
     webGL: webGL,
   };
 }
-

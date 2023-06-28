@@ -7,16 +7,15 @@
   import Environment from '../script/Environment.js';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
-    let path = $currentPath
-    if (menuProps.navigationPath === path){
-      return true
+    let path = $currentPath;
+    if (menuProps.navigationPath === path) {
+      return true;
     }
     if (menuProps.additionalExpandPaths === undefined) {
-      return false
+      return false;
     }
-    return menuProps.additionalExpandPaths.includes(path)
-  }
-
+    return menuProps.additionalExpandPaths.includes(path);
+  };
 </script>
 
 <div
@@ -47,7 +46,7 @@
       {#each get(Menus.getMenuStore()) as menu, id}
         <MenuButton
           onClickFunction={() => {
-            navigate(menu.navigationPath)
+            navigate(menu.navigationPath);
           }}
           title={menu.title}
           helpTitle={menu.infoBubbleTitle}

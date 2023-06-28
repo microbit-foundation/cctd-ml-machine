@@ -47,7 +47,6 @@
     CookieManager.unsetReconnectFlag();
   }
 
-
   document.title = Environment.pageTitle;
 </script>
 

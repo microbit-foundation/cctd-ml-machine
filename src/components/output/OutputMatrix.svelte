@@ -97,15 +97,14 @@
   {#each matrix as button, i}
     <div
       class="{button ? 'bg-[#FF0000]' : 'bg-gray-300'} rounded-[2px] transition ease"
-      class:turnedOn="{button}"
-      class:turnedOff="{!button}"
-      on:mousedown="{() => {
+      class:turnedOn={button}
+      class:turnedOff={!button}
+      on:mousedown={() => {
         elementClick(i);
-      }}"
-      on:mouseenter="{e => {
+      }}
+      on:mouseenter={e => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         elementHover(i, e);
-      }}">
-    </div>
+      }} />
   {/each}
 </main>

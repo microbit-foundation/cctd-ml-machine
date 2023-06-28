@@ -1,6 +1,13 @@
 <script lang="ts">
   import { get } from 'svelte/store';
-  import { alertUser, buttonPressed, isReady, state, microbitInteraction, MicrobitInteractions} from '../script/stores/uiStore';
+  import {
+    alertUser,
+    buttonPressed,
+    isReady,
+    state,
+    microbitInteraction,
+    MicrobitInteractions,
+  } from '../script/stores/uiStore';
   import {
     addRecording,
     chosenGesture,
@@ -225,10 +232,7 @@
       <GestureTilePart small>
         <div class="flex p-2 h-30">
           {#each gesture.recordings as recording (String(gesture.ID) + String(recording.ID))}
-            <Recording 
-              {recording} 
-              onDelete={deleteRecording} 
-            />
+            <Recording {recording} onDelete={deleteRecording} />
           {/each}
         </div>
       </GestureTilePart>

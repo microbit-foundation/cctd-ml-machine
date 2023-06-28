@@ -10,7 +10,8 @@
     "dev": "vite",
     "start": "vite dist --host",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "test": "jest"
+    "test": "jest",
+    "prettier": "prettier --write src/."
   },
   "jest": {
     "testMatch": [

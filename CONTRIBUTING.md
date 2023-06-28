@@ -21,6 +21,8 @@ Thank you for considering contributing to the project!
 
 ## Code of Conduct
 
+Please see Micro:bit Educational Foundation's [code of conduct](https://microbit.org/safeguarding/) which outlines our expectations for all those that participate in the community and details on how to report any concerns and what would happen should breaches occur.
+
 ### Our Pledge
 
 In the interest of fostering an open and welcoming environment, we as
@@ -58,7 +60,7 @@ Examples of unacceptable behavior by participants include:
 ### Our Responsibilities
 
 Maintainers of ML-Machine have the responsibility of upholding code quality and interpreting the code of conduct and are
-expected to make appropriate and fair decisions in response to behaviour and changes.
+expected to make appropriate and fair decisions in response to behavior and changes.
 
 Maintainers have the right to remove, edit or reject any changes such as commits, code wiki edits and issues which are
 not aligned with our pledge, standards or code of conduct, or to ban temporarily or permanently any contributor for

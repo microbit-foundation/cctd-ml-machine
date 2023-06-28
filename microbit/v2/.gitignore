@@ -17,3 +17,5 @@ buildcache.json
 
 build_and_move.sh
 build_clear_and_move.sh
+
+samples/

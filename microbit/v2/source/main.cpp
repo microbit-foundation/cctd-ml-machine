@@ -91,7 +91,11 @@ int main()
     printSmiley(GLAD_SMILEY);
 
     uBit.sleep(400);
-    printPairPatternAnimated();
-
+    if (!connected) {
+        printPairPatternAnimated();
+    }
+    if (connected) {
+        printSmiley(GLAD_SMILEY);
+    }
     release_fiber();
 }

@@ -1,3 +1,6 @@
+import { t } from '../i18n';
+import { get } from 'svelte/store';
+
 export const Filters = {
   MAX: 'max',
   MEAN: 'mean',
@@ -23,31 +26,50 @@ export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
-interface FilterOutput {
+interface FilterStrategy {
   computeOutput(data: number[]): number;
+  getText(): { name: string; description: string };
 }
 
-class MeanFilter implements FilterOutput {
+class MeanFilter implements FilterStrategy {
   computeOutput(data: number[]): number {
     return data.reduce((a, b) => a + b) / data.length;
   }
+  getText() {
+    return {
+      name: get(t)('content.filters.mean.title'),
+      description: get(t)('content.filters.mean.description'),
+    };
+  }
 }
 
-class SDFilter implements FilterOutput {
+class SDFilter implements FilterStrategy {
   computeOutput(data: number[]): number {
     const mean = data.reduce((a, b) => a + b) / data.length;
     return Math.sqrt(data.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / data.length);
   }
+  getText() {
+    return {
+      name: get(t)('content.filters.std.title'),
+      description: get(t)('content.filters.std.description'),
+    };
+  }
 }
 
-class RootMeanSquareFilter implements FilterOutput {
+class RootMeanSquareFilter implements FilterStrategy {
   computeOutput(data: number[]): number {
     const res = Math.sqrt(data.reduce((a, b) => a + Math.pow(b, 2), 0) / data.length);
     return res;
   }
+  getText() {
+    return {
+      name: get(t)('content.filters.rms.title'),
+      description: get(t)('content.filters.rms.description'),
+    };
+  }
 }
 
-class ZeroCrossingRateFilter implements FilterOutput {
+class ZeroCrossingRateFilter implements FilterStrategy {
   computeOutput(data: number[]): number {
     let count = 0;
     for (let i = 1; i < data.length; i++) {
@@ -57,27 +79,51 @@ class ZeroCrossingRateFilter implements FilterOutput {
     }
     return count / (data.length - 1);
   }
+  getText() {
+    return {
+      name: get(t)('content.filters.zcr.title'),
+      description: get(t)('content.filters.zcr.description'),
+    };
+  }
 }
 
-class TotalAccFilter implements FilterOutput {
+class TotalAccFilter implements FilterStrategy {
   computeOutput(data: number[]): number {
     return data.reduce((a, b) => a + Math.abs(b));
   }
+  getText() {
+    return {
+      name: get(t)('content.filters.acc.title'),
+      description: get(t)('content.filters.acc.description'),
+    };
+  }
 }
 
-class MaxFilter implements FilterOutput {
+class MaxFilter implements FilterStrategy {
   computeOutput(data: number[]): number {
     return Math.max(...data);
   }
-}
-
-class MinFilter implements FilterOutput {
-  computeOutput(data: number[]): number {
-    return Math.min(...data);
+  getText() {
+    return {
+      name: get(t)('content.filters.max.title'),
+      description: get(t)('content.filters.max.description'),
+    };
   }
 }
 
-class PeaksFilter implements FilterOutput {
+class MinFilter implements FilterStrategy {
+  computeOutput(data: number[]): number {
+    return Math.min(...data);
+  }
+  getText() {
+    return {
+      name: get(t)('content.filters.min.title'),
+      description: get(t)('content.filters.min.description'),
+    };
+  }
+}
+
+class PeaksFilter implements FilterStrategy {
   computeOutput(data: number[]): number {
     const lag = 5;
     const threshold = 3.5;
@@ -126,6 +172,12 @@ class PeaksFilter implements FilterOutput {
     }
     return peaksCounter;
   }
+  getText() {
+    return {
+      name: get(t)('content.filters.peaks.title'),
+      description: get(t)('content.filters.peaks.description'),
+    };
+  }
 }
 
 function mean(a: number[]): number {
@@ -140,7 +192,7 @@ function stddev(arr: number[]): number {
   return Math.sqrt(arr.reduce(r, 0.0) / arr.length);
 }
 
-export function determineFilter(filter: FilterType): FilterOutput {
+export function determineFilter(filter: FilterType): FilterStrategy {
   switch (filter) {
     case Filters.MAX:
       return new MaxFilter();

@@ -15,7 +15,7 @@
   const colors = getInfoBoxColors(isLightTheme);
 
   let isOpen = false;
-  let lockedOpen = false;
+  let isLockedOpen = false;
 
   let w: number;
   let h: number;
@@ -35,10 +35,12 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="cursor-pointer w-auto flex"
   on:mouseenter={() => onMouseEnter()}
   on:mouseleave={() => (isOpen = false)}
+  on:click={() => (isLockedOpen = !isLockedOpen)}
   bind:clientWidth={w}
   bind:clientHeight={h}
   bind:this={domNode}>
@@ -57,9 +59,9 @@
     class:hovering={isOpen}
     style="color: {colors.iconColor}" />
 
-  {#if isOpen || lockedOpen}
+  {#if isOpen || isLockedOpen}
     <div
-      class="fixed z-10 rounded-md p-3 cursor-default"
+      class="fixed z-20 rounded-md p-3 cursor-default"
       style="top: {boxTop}px; left: {boxLeft}px; width: {width}px; background-color:{colors.backgroundColor}"
       on:click|stopPropagation>
       {#if titleText}

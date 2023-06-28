@@ -58,7 +58,7 @@
         onClick={() => {
           navigate(Paths.FILTERS);
         }}>
-        Filtre
+        {$t('content.trainer.controlbar.filters')}
       </StandardButton>
     </ExpandableControlBarMenu>
   </ControlBar>

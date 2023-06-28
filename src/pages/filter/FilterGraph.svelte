@@ -15,12 +15,14 @@
     };
   };
 
+  const filterStrategy = determineFilter(filter);
+  const filterText = filterStrategy.getText();
+
   // Goes through each recording and filter, uses the filter function on
   // said recording, and constructs a data object to be used
   // by the BoxGraph component
   const createFilteredData = () => {
-    const filterObject = determineFilter(filter);
-    let filterFunction = (data: number[]) => filterObject.computeOutput(data);
+    let filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
     let filteredData: FilteredData[] = $gestures.map(gesture => {
       let data = {
         name: gesture.name,
@@ -66,7 +68,6 @@
       h-min
       hover:bg-sky-100
       duration-200
-      transform
       cursor-pointer
       overflow-hidden
       rounded-lg
@@ -77,13 +78,16 @@
     console.warn('Open filter details not implemented');
   }}>
   <div class="filter flex justify-between">
-    <div class="flex flex-row">
-      <h2 class="m-2 ml-10 line-through" class:line-through={false}>
-        {filter.toString()}
+    <div class="flex flex-row relative">
+      <div class="absolute">
         <Information
-          bodyText={'Some Body Text'}
-          titleText={'Some Tilte Text'}
+          bodyText={filterText.description}
+          titleText={filterText.name}
           isLightTheme={false} />
+      </div>
+      <h2 class="mb-2 mr-1 mt-3 ml-8 line-through" class:line-through={false}>
+        {filterText.name}
+        <!-- {$t} -->
       </h2>
     </div>
 

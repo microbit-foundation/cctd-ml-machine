@@ -15,7 +15,6 @@
   const colors = getInfoBoxColors(isLightTheme);
 
   let isOpen = false;
-  let isLockedOpen = false;
 
   let w: number;
   let h: number;
@@ -30,8 +29,6 @@
     boxTop = h + 5 + boxOffset.y + domRect.y; // hardcoded values to provide a 'nice' starting point
     boxLeft = w - 20 + boxOffset.x + domRect.x;
     isOpen = true;
-    console.log(domRect, boxTop, boxLeft);
-    console.log(domNode);
   }
 </script>
 
@@ -40,7 +37,6 @@
   class="cursor-pointer w-auto flex"
   on:mouseenter={() => onMouseEnter()}
   on:mouseleave={() => (isOpen = false)}
-  on:click={() => (isLockedOpen = !isLockedOpen)}
   bind:clientWidth={w}
   bind:clientHeight={h}
   bind:this={domNode}>
@@ -59,7 +55,7 @@
     class:hovering={isOpen}
     style="color: {colors.iconColor}" />
 
-  {#if isOpen || isLockedOpen}
+  {#if isOpen}
     <div
       class="fixed z-20 rounded-md p-3 cursor-default"
       style="top: {boxTop}px; left: {boxLeft}px; width: {width}px; background-color:{colors.backgroundColor}"

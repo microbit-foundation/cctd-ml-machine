@@ -19,7 +19,7 @@
 
   $: showLive = $state.isInputConnected;
 
-  // export let liveValues = { x: 0, y: 0, z: 0 };
+  // TODO: Handle sensitivity and extraconfig
   export let sensitivity: Vector3 | undefined = undefined;
   export let extraConfig = {};
   export let forceColor: string | undefined = undefined;
@@ -92,15 +92,11 @@
       chart.update();
       return;
     }
-    // const d = data.datasets[0].data;
+    // TODO: Reconsider how to best update graph if values goes outside axes scales
     data.datasets[0].data[0] = clamp(values.x, axisScale.min, axisScale.max);
     data.datasets[0].data[1] = clamp(values.y, axisScale.min, axisScale.max);
     data.datasets[0].data[2] = clamp(values.z, axisScale.min, axisScale.max);
     data.datasets[0].hidden = false;
-    // const max = Math.max(values.x, values.y, values.z);
-    // axisScale.max = Math.max(maxmin.max + 0.1 * maxmin.diff, max);
-    // const min = Math.min(values.x, values.y, values.z);
-    // axisScale.min = Math.min(maxmin.min - 0.1 * maxmin.diff, min);
     chart.update();
   }
 
@@ -194,12 +190,6 @@
       onNewLiveValues($currentData, $state.isInputConnected);
     }
   }
-  // $: {
-  //   console.log('HERE', $state.isInputConnected);
-  //   data.datasets[0].hidden = !$state.isInputConnected;
-  //   console.log(data.datasets[0].hidden);
-  //   chart.update();
-  // }
 
   let chart: Chart;
   let canvas: HTMLCanvasElement;

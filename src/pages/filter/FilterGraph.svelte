@@ -17,12 +17,12 @@
 
   const filterStrategy = determineFilter(filter);
   const filterText = filterStrategy.getText();
+  const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
 
   // Goes through each recording and filter, uses the filter function on
   // said recording, and constructs a data object to be used
   // by the BoxGraph component
   const createFilteredData = () => {
-    let filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
     let filteredData: FilteredData[] = $gestures.map(gesture => {
       let data = {
         name: gesture.name,
@@ -42,7 +42,7 @@
     return filteredData;
   };
 
-  // TODO: Formalize how/if live data is presented for different filters
+  // TODO: Formalize how/if live data is presented for different filters (in filter strategy?)
   const compareWithLive = (
     [Filters.MAX, Filters.MIN, Filters.MEAN] as FilterType[]
   ).includes(filter);
@@ -87,7 +87,6 @@
       </div>
       <h2 class="mb-2 mr-1 mt-3 ml-8 line-through" class:line-through={false}>
         {filterText.name}
-        <!-- {$t} -->
       </h2>
     </div>
 

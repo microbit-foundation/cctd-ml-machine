@@ -1,20 +1,21 @@
-import { writable, Writable, get } from 'svelte/store';
+import { writable, Writable, get, derived } from 'svelte/store';
 
 export const Paths = {
   HOME: '/',
   DATA: 'data',
   TRAINING: 'training',
   MODEL: 'model',
-  FILTERS: 'filters',
+  FILTERS: 'training/filters',
 } as const;
 
 export type PathType = (typeof Paths)[keyof typeof Paths];
 
-export const currentPath: Writable<PathType> = writable(Paths.HOME);
+export const currentPathPrivate: Writable<PathType> = writable(Paths.HOME);
+export const currentPath = derived(currentPathPrivate, path => path);
 
 export function navigate(path: PathType) {
   if (path === get(currentPath)) {
     return;
   }
-  currentPath.set(path);
+  currentPathPrivate.set(path);
 }

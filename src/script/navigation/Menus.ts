@@ -4,7 +4,6 @@ import GestureMenu from '../../menus/DataMenu.svelte';
 import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
 import { Paths, PathType } from '../../router/paths';
-// import { Paths } from './Navigation';
 
 export type MenuProperties = {
   title: string;

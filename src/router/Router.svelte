@@ -6,7 +6,7 @@
   import FilterPage from '../pages/filter/FilterPage.svelte';
   import TrainingPage from '../pages/training/TrainingPage.svelte';
   import { currentPageComponent } from '../views/currentComponentStore';
-  import { currentPath, Paths, PathType } from './paths';
+  import { currentPath, navigate, Paths, PathType } from './paths';
 
   function getRoutedComponent(path: PathType) {
     switch (path) {
@@ -67,7 +67,7 @@
     let path: PathType = Paths.HOME;
     if (Object.values(Paths).includes(urlPath as PathType)) {
       path = urlPath as PathType;
-      currentPath.set(path);
+      navigate(path);
     } else {
       history.replaceState({}, '', Paths.HOME);
     }
@@ -80,7 +80,7 @@
     const state: unknown = event.state;
     const path = pathFromPopstate(state);
     if (path !== undefined) {
-      currentPath.set(path);
+      navigate(path);
     }
   };
 

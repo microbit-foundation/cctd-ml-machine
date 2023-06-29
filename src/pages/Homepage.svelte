@@ -49,7 +49,9 @@
       </div>
     </div>
     <div class="flex-grow flex items-end">
-      <div class="pb-2 pl-10"><p>{$t('content.index.acknowledgement')}</p></div>
+      <div class="pb-2 pl-10">
+        <p>{$t('content.index.acknowledgement')}</p>
+      </div>
     </div>
   </div>
 </main>

@@ -3,16 +3,17 @@ import { writable } from 'svelte/store';
 import GestureMenu from '../../menus/DataMenu.svelte';
 import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
-import { Paths } from './Navigation';
+import { Paths, PathType } from '../../router/paths';
+// import { Paths } from './Navigation';
 
 export type MenuProperties = {
   title: string;
   infoBubbleTitle: string;
   infoBubbleContent: string;
-  navigationPath: Paths;
+  navigationPath: PathType;
   collapsedButtonContent: typeof SvelteComponent | undefined;
   expandedButtonContent: typeof SvelteComponent;
-  additionalExpandPaths?: Paths[];
+  additionalExpandPaths?: PathType[];
 };
 
 /**

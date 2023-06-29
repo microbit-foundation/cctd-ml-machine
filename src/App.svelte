@@ -87,7 +87,6 @@
           <BottomBarMenuView />
         </div>
       </div>
-      <!-- </div> -->
     </main>
   {/if}
 </Router>

@@ -32,7 +32,7 @@
     currentPageComponent.set(getRoutedComponent(path));
     let shouldPushState = true;
 
-    const historyState = pathFromPopstate(history.state);
+    const historyState = pathFromBrowserHistoryState(history.state);
 
     if (historyState !== undefined && historyState === path) {
       shouldPushState = false;
@@ -43,7 +43,7 @@
     }
   };
 
-  const pathFromPopstate = (state: unknown): PathType | undefined => {
+  const pathFromBrowserHistoryState = (state: unknown): PathType | undefined => {
     if (typeof state !== 'object' || state == null) {
       return undefined;
     }
@@ -78,7 +78,7 @@
 
   const onPopstateEvent = (event: PopStateEvent) => {
     const state: unknown = event.state;
-    const path = pathFromPopstate(state);
+    const path = pathFromBrowserHistoryState(state);
     if (path !== undefined) {
       navigate(path);
     }

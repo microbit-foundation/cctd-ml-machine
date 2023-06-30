@@ -47,10 +47,13 @@
 
 <script lang="ts">
   import { fly } from 'svelte/transition';
-  import { FilterType } from '../../script/datafunctions';
+  import { FilterType, determineFilter } from '../../script/datafunctions';
 
   export let filter: FilterType | undefined;
   export let onClose: () => void;
+
+  $: filterStrategy = filter === undefined ? undefined : determineFilter(filter);
+  $: filterName = filterStrategy?.getText().name ?? '';
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -67,11 +70,9 @@
     <div class="bg-white -m-16 w-1000 h-1000 absolute" style="z-index:-2;" />
     <!-- </div> -->
     <!-- TITLE of block -->
-    {#if 'title' != undefined}
-      <p class="text-lg mb-2 font-semibold">
-        {'title'}
-      </p>
-    {/if}
+    <p class="text-lg mb-2 font-semibold">
+      {filterName}
+    </p>
 
     <!-- CLOSE BUTTON -->
     <div class="absolute right-4 top-4">

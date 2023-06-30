@@ -103,7 +103,7 @@
     </div>
   </div>
   <div class="w-full h-min px-5 pb-4">
-    <BoxGraph dataRep={createFilteredData()} {compareWithLive} />
+    <BoxGraph dataRepresentation={createFilteredData()} {compareWithLive} />
   </div>
   <div
     class="

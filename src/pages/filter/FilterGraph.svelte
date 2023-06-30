@@ -5,6 +5,7 @@
   import BoxGraph from './BoxGraph.svelte';
 
   export let filter: FilterType;
+  export let openInspector: (filter: FilterType) => void;
 
   type FilteredData = {
     name: string;
@@ -75,7 +76,8 @@
       relative
       {isActive ? 'shadow-lg' : ''}"
   on:click={() => {
-    console.warn('Open filter details not implemented');
+    openInspector(filter);
+    // console.warn('Open filter details not implemented');
   }}>
   <div class="filter flex justify-between">
     <div class="flex flex-row relative">

@@ -37,9 +37,13 @@
     if (historyState !== undefined && historyState === path) {
       shouldPushState = false;
     }
-
+    console.log(
+      `path: ${path}, historyState: ${historyState}, domain ${window.location.host}, origin: ${window.location.origin}`,
+    );
     if (shouldPushState) {
-      history.pushState({ path: path }, '', path);
+      const url = window.location.origin + (path.startsWith('/') ? '' : '/') + path;
+      console.log(url);
+      history.pushState({ path: path }, '', url);
     }
   };
 

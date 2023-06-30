@@ -1,6 +1,6 @@
 import { Writable, writable, derived } from 'svelte/store'
 import { SvelteComponent } from 'svelte'
-import FilterPage from '../../pages/FilterPage.svelte'
+import FilterPage from '../../pages/filter/FilterPage.svelte'
 import Homepage from '../../pages/Homepage.svelte'
 import DataPage from '../../pages/DataPage.svelte'
 import TrainingPage from '../../pages/training/TrainingPage.svelte'

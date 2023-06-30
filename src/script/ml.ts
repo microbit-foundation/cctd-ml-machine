@@ -10,7 +10,7 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import { Filters, Axes, determineFilter } from './datafunctions';
+import { Filters, FilterType, Axes, determineFilter, AxesType } from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
@@ -21,7 +21,7 @@ t.subscribe(t => (text = t));
 
 // Whenever model is trained, the settings at the time is saved in this variable
 // Such that prediction continues on with the same settings as during training
-let modelSettings: { axes: Axes[]; filters: Filters[] };
+let modelSettings: { axes: AxesType[]; filters: Set<FilterType> };
 
 // Hacky "timer" to pad the training time if needed
 let trainingTimerPromise: Promise<boolean>;
@@ -37,7 +37,7 @@ function createModel(): LayersModel {
   const gestureData = get(gestures);
   const numberOfClasses: number = gestureData.length;
   const inputShape = [
-    get(settings).includedFilters.length * get(settings).includedAxes.length,
+    get(settings).includedFilters.size * get(settings).includedAxes.length,
   ];
 
   const input = tf.input({ shape: inputShape });
@@ -126,7 +126,7 @@ export function trainModel() {
 
 export function isParametersLegal(): boolean {
   const s = get(settings);
-  return s.includedAxes.length > 0 && s.includedFilters.length > 0;
+  return s.includedAxes.length > 0 && s.includedFilters.size > 0;
 }
 
 // Assess whether
@@ -193,7 +193,7 @@ function makeInputs(sample: { x: number[]; y: number[]; z: number[] }): number[]
     throw new Error('Model settings not found');
   }
 
-  // We use modelSettings to determine which filters to use. In this way the classify funciton
+  // We use modelSettings to determine which filters to use. In this way the classify function
   // will be called with the same filters and axes untill the next training
   modelSettings.filters.forEach(filter => {
     const filterOutput = determineFilter(filter);
@@ -208,7 +208,7 @@ function makeInputs(sample: { x: number[]; y: number[]; z: number[] }): number[]
   return dataRep;
 }
 
-// Set the global state. Telling components, that the program is prediction
+// Set the global state. Telling components, that the program is predicting
 function setIsPredicting(isPredicting: boolean): void {
   state.update(s => {
     s.isPredicting = isPredicting;

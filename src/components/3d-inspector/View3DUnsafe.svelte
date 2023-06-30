@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte";
-  import * as THREE from "three";
-  import Smoother from "../../script/utils/Smoother";
-  import Live3DUtility, { type Vector3 } from "./View3DUtility";
+  import { onDestroy, onMount } from 'svelte';
+  import * as THREE from 'three';
+  import Smoother from '../../script/utils/Smoother';
+  import Live3DUtility, { type Vector3 } from './View3DUtility';
 
   // TODO: The file has a lot of hardcoded (somewhat arbitrary) number values. Go through them and check if a refactor is in order
 
@@ -17,7 +17,7 @@
   /**
    * VARIABLES DEFINED IN FUNCTIONS OR FROM ELEMENTS
    */
-  let microbitModel: THREE.Scene; // TODO: We have undefined checks for these, but their types do not indicate they could ever be undefined 
+  let microbitModel: THREE.Scene; // TODO: We have undefined checks for these, but their types do not indicate they could ever be undefined
   let canvas: HTMLCanvasElement; // TODO: We have undefined checks for these, but their types do not indicate they could ever be undefined
   let renderer: THREE.WebGLRenderer;
   let updater: NodeJS.Timer | undefined;
@@ -35,10 +35,7 @@
   let cameraCurrentDistance = -100;
   let lastIncrease = 0;
 
-  let camera: THREE.PerspectiveCamera = utility.instantiateCameraSetup(
-    width,
-    height
-  );
+  let camera: THREE.PerspectiveCamera = utility.instantiateCameraSetup(width, height);
 
   /**
    * Add elements in 3D environment
@@ -51,8 +48,8 @@
    * Setup reactive functionality
    */
   $: {
-    lastDataPoint = dataPoint
-    updateCameraTarget(dataPoint)
+    lastDataPoint = dataPoint;
+    updateCameraTarget(dataPoint);
   }
   $: updateCanvasSize(height, width);
 
@@ -64,14 +61,13 @@
     updateFrame();
   }
 
-  // TODO: Consider refactoring this to use cam location params. 
-  //       If the camera location is changed to control where the model is in the canvas, the 
+  // TODO: Consider refactoring this to use cam location params.
+  //       If the camera location is changed to control where the model is in the canvas, the
   //       values in this function needs changing to match
   function updateCameraTarget(data: Vector3) {
-    // TODO: Setting distances to -100 and using that to check seems like a bad hack. Fix   
+    // TODO: Setting distances to -100 and using that to check seems like a bad hack. Fix
     let setCurrentDistance =
       cameraTargetDistance === -100 || cameraCurrentDistance === -100;
-
 
     // TODO: Remove local functions (probably not too bad with functions this simple, but still)
 
@@ -87,7 +83,7 @@
 
     const mapToCameraDistanceZ = (val: number): number => {
       if (val < 0) {
-        return val * -.7;
+        return val * -0.7;
       }
       return val * 1.5;
     };
@@ -97,7 +93,7 @@
     cameraTargetDistance = Math.max(
       mapToCameraDistance(data.x),
       mapToCameraDistance(data.y),
-      mapToCameraDistanceZ(data.z)
+      mapToCameraDistanceZ(data.z),
     );
     if (setCurrentDistance) {
       cameraCurrentDistance = cameraTargetDistance;
@@ -126,13 +122,13 @@
   // Camera distance and position is updated and lastly three.JS renders a new frame
   function updateFrame() {
     if (microbitModel === undefined) {
-      // TODO: If microbit model can ever be undefined, it has the wrong type 
+      // TODO: If microbit model can ever be undefined, it has the wrong type
       return;
-    } 
+    }
     if (canvas === undefined) {
-      // TODO: If canvas can ever be undefined, it has the wrong type 
+      // TODO: If canvas can ever be undefined, it has the wrong type
       return;
-    } 
+    }
 
     updateBarSizes({
       x: xSmoother.process(lastDataPoint.x),
@@ -153,15 +149,11 @@
    */
   function updateCameraDistanceVariable(): void {
     // TODO: What does the -0.07 and / 6 mean in this? Clean up code
-    const diff = Math.max(
-      -0.07,
-      (cameraTargetDistance - cameraCurrentDistance) / 6
-    );
+    const diff = Math.max(-0.07, (cameraTargetDistance - cameraCurrentDistance) / 6);
 
     if (diff < 0) {
       lastIncrease++;
-    }
-    else {
+    } else {
       cameraCurrentDistance += diff;
       lastIncrease = 0;
     }
@@ -189,7 +181,7 @@
     if (updater !== undefined) {
       clearInterval(updater);
     }
-    canvas.remove()
+    canvas.remove();
   });
 
   onMount(() => {
@@ -209,6 +201,6 @@
   }
 </script>
 
-<div class="justify-center align-middle flex">    
-    <canvas class="scene" id="3dmodel" bind:this={canvas} {width} {height} />
+<div class="justify-center align-middle flex">
+  <canvas class="scene" id="3dmodel" bind:this={canvas} {width} {height} />
 </div>

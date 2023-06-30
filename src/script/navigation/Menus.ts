@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 import GestureMenu from '../../menus/DataMenu.svelte';
 import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
-import { Paths } from './Navigation'
+import { Paths } from './Navigation';
 
 export type MenuProperties = {
   title: string;
@@ -12,14 +12,13 @@ export type MenuProperties = {
   navigationPath: Paths;
   collapsedButtonContent: typeof SvelteComponent | undefined;
   expandedButtonContent: typeof SvelteComponent;
-  additionalExpandPaths?: Paths[]
+  additionalExpandPaths?: Paths[];
 };
 
 /**
  * Wrapper for the menu logic, use navigation if possible, this is for fine-grained control of menus.
  */
 class Menus {
-
   private static menuStore = writable<MenuProperties[]>([
     {
       title: 'menu.data.helpHeading',
@@ -36,7 +35,7 @@ class Menus {
       collapsedButtonContent: undefined,
       expandedButtonContent: NewTrainerMenu,
       navigationPath: Paths.TRAINING,
-      additionalExpandPaths: [Paths.FILTERS]
+      additionalExpandPaths: [Paths.FILTERS],
     },
     {
       title: 'menu.model.helpHeading',
@@ -51,7 +50,6 @@ class Menus {
   public static getMenuStore() {
     return this.menuStore;
   }
-
 }
 
 export default Menus;

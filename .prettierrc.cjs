@@ -6,7 +6,7 @@ module.exports = {
   semi: true,
   svelteSortOrder: 'options-styles-scripts-markup',
   svelteStrictMode: false,
-  svelteBracketNewLine: false,
+  bracketSameLine: true,
   svelteAllowShorthand: true,
   svelteIndentScriptAndStyle: true,
   trailingComma: 'all',

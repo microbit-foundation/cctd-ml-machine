@@ -54,7 +54,7 @@
       const f = filePicker.files[0];
       loadDatasetFromFile(f);
       filePicker.value = ''; // To trick element to trigger onChange if same file selected
-    }
+    };
     return () => {
       filePicker.remove();
     };
@@ -128,8 +128,7 @@
       {#each $gestures as gesture (gesture.ID)}
         <Gesture
           bind:gesture
-          onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} 
-        />
+          onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
       {/each}
       <NewGestureButton />
     </div>

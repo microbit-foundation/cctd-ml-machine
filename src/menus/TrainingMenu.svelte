@@ -11,8 +11,8 @@
       <ImageSkeleton
         alt="Model Icon"
         src="imgs/model.svg"
-        height="{100}"
-        width="{100}"
+        height={100}
+        width={100}
         loadingColorPrimary="#68BDBF"
         loadingColorSecondary="#3C81F6"
         spin />

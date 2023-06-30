@@ -5,7 +5,7 @@
   import { currentData } from '../../script/stores/mlStore';
   import { Axes, AxesType, clamp } from '../../script/datafunctions';
 
-  export let dataRep: {
+  export let dataRepresentation: {
     name: string;
     points: {
       x: number[];
@@ -54,7 +54,7 @@
     let min = Infinity;
     let max = -Infinity;
 
-    dataRep.forEach(data => {
+    dataRepresentation.forEach(data => {
       labels.forEach(label => {
         const newMax = Math.max(...data.points[label]);
         if (max < newMax) {
@@ -71,11 +71,11 @@
     return { max, min, diff: Math.abs(max - min) };
   }
 
-  const maxmin = produceMaxMin();
+  const maxMin = produceMaxMin();
 
   let axisScale = {
-    max: maxmin.max + 0.1 * maxmin.diff,
-    min: maxmin.min - 0.1 * maxmin.diff,
+    max: maxMin.max + 0.1 * maxMin.diff,
+    min: maxMin.min - 0.1 * maxMin.diff,
   };
 
   function onNewLiveValues(
@@ -113,22 +113,22 @@
         hidden: !showLive,
       });
     }
-    dataRep.forEach((dataPoint, idx) => {
+    dataRepresentation.forEach((dataPoint, idx) => {
       data.datasets.push({
         label: dataPoint.name,
         // TODO: Handle scaling/normalization of data in a better way than simply dividing by 40
         data: [
           [
-            Math.min(...dataPoint.points.x) - maxmin.diff / 40,
-            Math.max(...dataPoint.points.x) + maxmin.diff / 40,
+            Math.min(...dataPoint.points.x) - maxMin.diff / 40,
+            Math.max(...dataPoint.points.x) + maxMin.diff / 40,
           ],
           [
-            Math.min(...dataPoint.points.y) - maxmin.diff / 40,
-            Math.max(...dataPoint.points.y) + maxmin.diff / 40,
+            Math.min(...dataPoint.points.y) - maxMin.diff / 40,
+            Math.max(...dataPoint.points.y) + maxMin.diff / 40,
           ],
           [
-            Math.min(...dataPoint.points.z) - maxmin.diff / 40,
-            Math.max(...dataPoint.points.z) + maxmin.diff / 40,
+            Math.min(...dataPoint.points.z) - maxMin.diff / 40,
+            Math.max(...dataPoint.points.z) + maxMin.diff / 40,
           ],
         ],
         // backgroundColor: forcedColor ?? getColor(idx), // TODO: Remove or reimplement

@@ -5,20 +5,23 @@
   import { t } from '../../i18n.js';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs.js';
   export let onPinSelect: (pin: MBSpecs.UsableIOPin) => void;
-  export let onTurnOnTimeSelect: ({
-    turnOnState: PinTurnOnState,
-    turnOnTime: number,
+  export let onTurnOnTimeSelect: (turnOnArgs: {
+    turnOnState: PinTurnOnState;
+    turnOnTime: number;
   }) => void;
 
   export let turnOnTime: number;
   export let turnOnState: PinTurnOnState;
-  export let selectedPin: string;
+  export let selectedPin: MBSpecs.UsableIOPin;
 
   let selectedTurnOnState = turnOnState;
   let turnOnTimeInSeconds = turnOnTime / 1000;
 
-  const onPinSelected = (pin: MBSpecs.UsableIOPin) => {
-    onPinSelect(pin);
+  const onPinSelected = (pin: MBSpecs.IOPin) => {
+    if (!includes(StaticConfiguration.supportedPins, pin)) {
+      return;
+    }
+    onPinSelect(pin as MBSpecs.UsableIOPin);
   };
 
   const onTurnOnStateSelect = () => {
@@ -29,12 +32,19 @@
   };
 
   const largePins: MBSpecs.IOPin[] = [0, 1, 2, '3V', 'GND'];
+
+  // Hacky way to check if a value is included in an array since typescript
+  // has made a very poor decision on how array.includes() is typed
+  function includes<T>(array: T[], value: unknown): boolean {
+    return array.includes(value as T);
+  }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <GestureTilePart>
   <div class="flex flex-row">
-    {#each MBSpecs.IO_PIN_LAYOUT as val, index}
-      {#if StaticConfiguration.supportedPins.includes(val)}
+    {#each MBSpecs.IO_PIN_LAYOUT as val}
+      {#if includes(StaticConfiguration.supportedPins, val)}
         <!-- These are pins we support, make them selectable and yellow -->
         {#if largePins.includes(val)}
           <!-- Large pins -->

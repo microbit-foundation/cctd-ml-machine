@@ -57,8 +57,8 @@
       triggerFunc();
     });
 
-  $: triggerOutputPin(requiredConfidenceLevel, currentConfidenceLevel, triggered);
-  $: if (shouldTrigger(requiredConfidenceLevel, currentConfidenceLevel, triggered)) {
+  $: triggerOutputPin(triggered);
+  $: if (shouldTrigger(triggered)) {
     triggerComponents();
     playSound();
   }
@@ -69,7 +69,7 @@
     onUserInteraction();
   }
 
-  function triggerOutputPin(requiredLevel, currentLevel, oldTriggered) {
+  function triggerOutputPin(oldTriggered: boolean) {
     if (!Microbits.isOutputReady()) {
       return;
     }
@@ -122,14 +122,10 @@
 
   const refreshAfterChange = () => {
     Microbits.resetIOPins();
-    triggerOutputPin(requiredConfidenceLevel, currentConfidenceLevel, false);
+    triggerOutputPin(false);
   };
 
-  const shouldTrigger = (
-    requiredConfidence: number,
-    confidence: number,
-    oldTriggered: boolean,
-  ) => {
+  const shouldTrigger = (oldTriggered: boolean) => {
     triggered = isConfidenceOverThreshold as boolean;
     if (!triggered) return false;
     if (!$settings.automaticClassification) return true;

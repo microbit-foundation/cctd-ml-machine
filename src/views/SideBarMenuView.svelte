@@ -5,6 +5,7 @@
   import { get } from 'svelte/store';
   import Environment from '../script/Environment.js';
   import { Paths, currentPath, navigate } from '../router/paths';
+  import { state } from '../script/stores/uiStore';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;
@@ -15,6 +16,10 @@
       return false;
     }
     return menuProps.additionalExpandPaths.includes(path);
+  };
+
+  const onLoad = () => {
+    $state.isLoading = false;
   };
 </script>
 
@@ -60,6 +65,7 @@
         {#if id !== get(Menus.getMenuStore()).length - 1}
           <div class="text-center ml-auto mr-auto mb-1 mt-1">
             <img
+              on:load={onLoad}
               class="m-auto"
               src="/imgs/down_arrow.svg"
               alt="down arrow icon"

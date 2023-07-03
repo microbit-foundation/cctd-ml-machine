@@ -17,19 +17,12 @@
   import SelectLanguageControlBarDropdown from '../components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
   import { t } from '../i18n';
   import { state } from '../script/stores/uiStore';
-  import { fade } from 'svelte/transition';
-  import LoadingSpinner from '../components/LoadingSpinner.svelte';
 
   // Just add the content titles you wish to put on front page, in the order you wish them to be there
   const contentTiles = [DoItYourselfMachineLearningTile, IntroVideoTile];
 </script>
 
 <main class="h-full flex flex-col">
-  {#if $state.isLoading}
-    <div class="h-full w-full bg-primary flex absolute z-10" transition:fade>
-      <LoadingSpinner />
-    </div>
-  {/if}
   <div class:hidden={$state.isLoading}>
     <div>
       <ControlBar>

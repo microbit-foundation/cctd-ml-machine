@@ -49,13 +49,29 @@
   import { fly } from 'svelte/transition';
   import { FilterType, determineFilter } from '../../script/datafunctions';
   import FilterGraph from './FilterGraph.svelte';
-  import BoxGraph from './BoxGraph.svelte';
+  import { gestures } from '../../script/stores/mlStore';
+  import FilterInspectionGesture from './FilterInspectionGesture.svelte';
 
   export let filter: FilterType | undefined;
   export let onClose: () => void;
 
+  function getColor(index: number): string {
+    const colors = [
+      '#f9808e',
+      '#80f98e',
+      '#808ef9',
+      '#80dfff',
+      '#df80ff',
+      '#ffdf80',
+      '#ff3333',
+      '#33ff33',
+      '#3333ff',
+    ];
+    return colors[index % colors.length];
+  }
+
   $: filterStrategy = filter === undefined ? undefined : determineFilter(filter);
-  $: filterName = filterStrategy?.getText().name ?? '';
+  $: filterName = filterStrategy?.getText()?.name ?? '';
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -93,7 +109,7 @@
       }}>
       <div class="box">
         {#if filter !== undefined}
-          <BoxGraph {filter} legendPosition="right" aspectRatio={undefined} />
+          <FilterGraph {filter} legendPosition="right" aspectRatio={undefined} />
           <!-- <BoxGraph /> -->
         {/if}
         <div class="relative">
@@ -105,17 +121,11 @@
       <div
         class="overflow-y-auto h-full bg-gray-100 relative inset-shadow p-7 rounded-md">
         <!-- Display all gestures -->
-        <!-- {#each $gestures as gesture, i}
-      <div class="flex">
-        <Gesture
-          bind:name={gesture.name}
-          bind:recordings={gesture.recordings}
-          filteredRecordings={filterValues[i]}
-          {i}
-          liveData={normalizedLiveData}
-        />
-      </div>
-    {/each} -->
+        {#each $gestures as gesture, i}
+          <div class="flex">
+            <FilterInspectionGesture {gesture} {filter} color={getColor(i)} />
+          </div>
+        {/each}
       </div>
     </div>
     <!-- MODAL CONTENT -->

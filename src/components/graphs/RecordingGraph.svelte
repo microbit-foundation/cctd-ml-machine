@@ -145,6 +145,14 @@
             },
           },
         },
+        plugins: {
+          legend: {
+            display: false,
+          },
+          title: {
+            display: false,
+          },
+        },
       },
       plugins: [
         {

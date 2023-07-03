@@ -1,5 +1,5 @@
 <script lang="ts">
-  import FilterGraph from './FilterGraph.svelte';
+  import FilterToggler from './FilterToggler.svelte';
   import { FilterType, Filters } from '../../script/datafunctions';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import BaseDialog from '../../components/dialogs/BaseDialog.svelte';
@@ -29,7 +29,7 @@
   <ControlBar />
   <div class="p-5 grid grid-cols-2">
     {#each Object.values(Filters) as filter}
-      <FilterGraph {filter} openInspector={openFilterInspector} />
+      <FilterToggler {filter} openInspector={openFilterInspector} />
     {/each}
   </div>
 </div>

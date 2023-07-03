@@ -243,7 +243,7 @@
             <ImageSkeleton
               height={95}
               width={140}
-              src="imgs/microbit_record_guide.svg"
+              src="/imgs/microbit_record_guide.svg"
               alt="microbit recording guide" />
           </div>
           <p class=" text-center absolute w-60px right-23px top-30px">

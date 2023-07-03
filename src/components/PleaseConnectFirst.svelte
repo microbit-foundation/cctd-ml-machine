@@ -19,7 +19,7 @@
   <div class="text-center ml-auto mr-auto mb-2 mt-10">
     <img
       class="m-auto arrow-filter-color"
-      src="imgs/down_arrow.svg"
+      src="/imgs/down_arrow.svg"
       alt="down arrow icon"
       width="100px" />
   </div>

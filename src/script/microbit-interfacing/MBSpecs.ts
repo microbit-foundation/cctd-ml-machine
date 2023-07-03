@@ -149,6 +149,9 @@ namespace MBSpecs {
     24,
   ];
 
+  // TODO: Consider changing this to be defined from above array
+  // i.e. type IOPin = typeof IO_PIN_LAYOUT[number]
+  // Gives slightly messier lsp support, but enforces 1-1 relationship
   export type IOPin =
     | 3
     | 0

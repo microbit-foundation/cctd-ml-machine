@@ -1,52 +1,53 @@
 <script lang="ts">
   import Information from '../../components/information/Information.svelte';
-  import { FilterType, Filters, determineFilter } from '../../script/datafunctions';
-  import { gestures, settings } from '../../script/stores/mlStore';
+  import TypingUtils from '../../script/TypingUtils';
+  import { FilterType, determineFilter } from '../../script/datafunctions';
+  import { settings } from '../../script/stores/mlStore';
   import BoxGraph from './BoxGraph.svelte';
 
   export let filter: FilterType;
-  export let openInspector: (filter: FilterType) => void;
+  export let openInspector: (filter: FilterType) => void = TypingUtils.emptyFunction;
 
-  type FilteredData = {
-    name: string;
-    points: {
-      x: number[];
-      y: number[];
-      z: number[];
-    };
-  };
+  // type FilteredData = {
+  //   name: string;
+  //   points: {
+  //     x: number[];
+  //     y: number[];
+  //     z: number[];
+  //   };
+  // };
 
   const filterStrategy = determineFilter(filter);
   const filterText = filterStrategy.getText();
-  const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
+  // const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
 
   // Goes through each recording and filter, uses the filter function on
   // said recording, and constructs a data object to be used
   // by the BoxGraph component
-  const createFilteredData = () => {
-    let filteredData: FilteredData[] = $gestures.map(gesture => {
-      let data = {
-        name: gesture.name,
-        points: {
-          x: [] as number[],
-          y: [] as number[],
-          z: [] as number[],
-        },
-      };
-      gesture.recordings.forEach(recording => {
-        data.points.x.push(filterFunction(recording.data.x));
-        data.points.y.push(filterFunction(recording.data.y));
-        data.points.z.push(filterFunction(recording.data.z));
-      });
-      return data;
-    });
-    return filteredData;
-  };
+  // const createFilteredData = () => {
+  //   let filteredData: FilteredData[] = $gestures.map(gesture => {
+  //     let data = {
+  //       name: gesture.name,
+  //       points: {
+  //         x: [] as number[],
+  //         y: [] as number[],
+  //         z: [] as number[],
+  //       },
+  //     };
+  //     gesture.recordings.forEach(recording => {
+  //       data.points.x.push(filterFunction(recording.data.x));
+  //       data.points.y.push(filterFunction(recording.data.y));
+  //       data.points.z.push(filterFunction(recording.data.z));
+  //     });
+  //     return data;
+  //   });
+  //   return filteredData;
+  // };
 
-  // TODO: Formalize how/if live data is presented for different filters (in filter strategy?)
-  const compareWithLive = (
-    [Filters.MAX, Filters.MIN, Filters.MEAN] as FilterType[]
-  ).includes(filter);
+  // TODO: Formalize how live data is presented for different filters (in filter strategy?)
+  // const compareWithLive = (
+  //   [Filters.MAX, Filters.MIN, Filters.MEAN] as FilterType[]
+  // ).includes(filter);
 
   $: isActive = $settings.includedFilters.has(filter);
 
@@ -77,7 +78,6 @@
       {isActive ? 'shadow-lg' : ''}"
   on:click={() => {
     openInspector(filter);
-    // console.warn('Open filter details not implemented');
   }}>
   <div class="filter flex justify-between">
     <div class="flex flex-row relative">
@@ -105,7 +105,7 @@
     </div>
   </div>
   <div class="w-full h-min px-5 pb-4">
-    <BoxGraph dataRepresentation={createFilteredData()} {compareWithLive} />
+    <BoxGraph {filter} aspectRatio={1.5} />
   </div>
   <div
     class="

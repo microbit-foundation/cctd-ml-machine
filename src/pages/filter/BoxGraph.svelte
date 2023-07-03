@@ -2,21 +2,69 @@
   import { onMount } from 'svelte';
   import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
   import { state } from '../../script/stores/uiStore';
-  import { currentData } from '../../script/stores/mlStore';
-  import { Axes, AxesType, clamp } from '../../script/datafunctions';
+  import { currentData, gestures } from '../../script/stores/mlStore';
+  import {
+    Axes,
+    AxesType,
+    FilterType,
+    Filters,
+    clamp,
+    determineFilter,
+  } from '../../script/datafunctions';
 
-  export let dataRepresentation: {
+  // export let dataRepresentation: {
+  //   name: string;
+  //   points: {
+  //     x: number[];
+  //     y: number[];
+  //     z: number[];
+  //   };
+  // }[];
+  export let filter: FilterType;
+  export let legendPosition: 'top' | 'right' = 'top';
+  export let aspectRatio: number | undefined = undefined;
+
+  // export let compareWithLive = false;
+
+  $: showLive = $state.isInputConnected;
+
+  type FilteredData = {
     name: string;
     points: {
       x: number[];
       y: number[];
       z: number[];
     };
-  }[];
+  };
 
-  export let compareWithLive = false;
+  const filterStrategy = determineFilter(filter);
+  const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
 
-  $: showLive = $state.isInputConnected;
+  const createFilteredData = () => {
+    let filteredData: FilteredData[] = $gestures.map(gesture => {
+      let data = {
+        name: gesture.name,
+        points: {
+          x: [] as number[],
+          y: [] as number[],
+          z: [] as number[],
+        },
+      };
+      gesture.recordings.forEach(recording => {
+        data.points.x.push(filterFunction(recording.data.x));
+        data.points.y.push(filterFunction(recording.data.y));
+        data.points.z.push(filterFunction(recording.data.z));
+      });
+      return data;
+    });
+    return filteredData;
+  };
+
+  const dataRepresentation = createFilteredData();
+
+  const compareWithLive = (
+    [Filters.MAX, Filters.MIN, Filters.MEAN] as FilterType[]
+  ).includes(filter);
 
   // TODO: Handle sensitivity and extraconfig
   // export let sensitivity: Vector3 | undefined = undefined;
@@ -139,11 +187,13 @@
   };
   populateData();
 
+  console.log('aspectRatio', aspectRatio);
+
   const config: ChartConfiguration = {
     type: 'line',
     data: data,
     options: {
-      aspectRatio: 1.5,
+      aspectRatio: aspectRatio,
       elements: {
         line: {
           borderWidth: 0,
@@ -161,7 +211,7 @@
       responsive: true,
       plugins: {
         legend: {
-          position: 'top',
+          position: legendPosition,
         },
         title: {
           display: false,

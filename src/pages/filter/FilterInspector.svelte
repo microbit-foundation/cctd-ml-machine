@@ -37,7 +37,7 @@
     z-index: 10;
     bottom: 0;
     right: 0;
-    width: 40rem;
+    width: 30rem;
     height: 15rem;
     border-radius: 1rem 0 0 0;
     padding: 1rem;
@@ -48,6 +48,8 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
   import { FilterType, determineFilter } from '../../script/datafunctions';
+  import FilterGraph from './FilterGraph.svelte';
+  import BoxGraph from './BoxGraph.svelte';
 
   export let filter: FilterType | undefined;
   export let onClose: () => void;
@@ -90,6 +92,10 @@
         console.log('HERE42');
       }}>
       <div class="box">
+        {#if filter !== undefined}
+          <BoxGraph {filter} legendPosition="right" aspectRatio={undefined} />
+          <!-- <BoxGraph /> -->
+        {/if}
         <div class="relative">
           <div class="box-helper1" />
           <div class="box-helper2" />
@@ -109,8 +115,7 @@
           liveData={normalizedLiveData}
         />
       </div>
-    {/each}
-    <FilterLiveGraph filterCode={filterType} /> -->
+    {/each} -->
       </div>
     </div>
     <!-- MODAL CONTENT -->

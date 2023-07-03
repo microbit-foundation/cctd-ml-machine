@@ -41,6 +41,8 @@
   let selectedPin: MBSpecs.UsableIOPin = gesture.output.outputPin
     ? gesture.output.outputPin.pin
     : StaticConfiguration.defaultOutputPin;
+
+  let pinIOEnabled = true; // TODO: put in static config
   let turnOnTime = gesture.output.outputPin
     ? gesture.output.outputPin.turnOnTime
     : StaticConfiguration.defaultPinToggleTime;
@@ -59,6 +61,7 @@
 
   $: triggerOutputPin(triggered);
   $: if (shouldTrigger(triggered)) {
+    console.log("HELLO WORLD")
     triggerComponents();
     playSound();
   }
@@ -71,6 +74,9 @@
 
   function triggerOutputPin(oldTriggered: boolean) {
     if (!Microbits.isOutputReady()) {
+      return;
+    }
+    if (!pinIOEnabled) {
       return;
     }
     if (oldTriggered) {
@@ -105,6 +111,10 @@
   }
 
   const onPinSelect = (selected: MBSpecs.UsableIOPin) => {
+    if (selected === selectedPin) {
+      // Pin IO was toggled!
+      pinIOEnabled = !pinIOEnabled;
+    }
     selectedPin = selected;
     refreshAfterChange();
     updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
@@ -228,7 +238,7 @@
   </div>
   <div class="ml-4">
     <PinSelector
-      {selectedPin}
+      selectedPin={pinIOEnabled ? selectedPin : undefined}
       {turnOnState}
       {turnOnTime}
       {onPinSelect}

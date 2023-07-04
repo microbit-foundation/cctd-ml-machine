@@ -32,7 +32,7 @@ class StaticConfiguration {
     duration: 1800,
     numSamples: 80,
     minSamples: 80,
-    automaticClassification: false,
+    automaticClassification: true,
     updatesPrSecond: 4,
     numEpochs: 80,
     learningRate: 0.5,

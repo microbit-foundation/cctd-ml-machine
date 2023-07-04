@@ -38,7 +38,6 @@
     return;
   };
   let wasTriggered = false;
-  let isPinOnDebug = false;
   let triggerFunctions: (() => void)[] = [];
   let selectedSound: SoundData | undefined = gesture.output.sound;
   let selectedPin: MBSpecs.UsableIOPin = gesture.output.outputPin
@@ -101,18 +100,15 @@
     const isOnTimer = turnOnState === PinTurnOnState.X_TIME;
     if (on) {
       Microbits.sendToOutputPin([{ pin: selectedPin, on: true }]);
-      isPinOnDebug = true;
-
       // If pin is on timer, set timeout to turn off again
       if (isOnTimer) {
         setTimeout(() => {
           Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
-          isPinOnDebug = false;
         }, turnOnTime);
       }
     } else if (!isOnTimer) {
+      // else if on === false and the pin is not on a timer, turn it off
       Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
-      isPinOnDebug = false;
     }
   }
 
@@ -266,8 +262,5 @@
       {turnOnTime}
       {onPinSelect}
       {onTurnOnTimeSelect} />
-  </div>
-  <div>
-    {isPinOnDebug ? 'PIN ON' : 'PIN OFF'}
   </div>
 </main>

@@ -58,7 +58,7 @@
             class:h-9={selectedPin === currentPin}
             class:hover:bg-yellow-200={selectedPin !== currentPin}
             class:bg-opacity-80={selectedPin !== currentPin}>
-            <p class="text-center text-xs">{currentPin}</p>
+            <p class="text-center text-xs select-none">{currentPin}</p>
           </div>
         {:else}
           <!-- Small pins -->
@@ -74,7 +74,7 @@
         {#if largePins.includes(currentPin)}
           <!-- Large pins -->
           <div class="bg-amber-200 opacity-40 h-8 w-7 rounded-bl-xl ml-1px rounded-br-xl">
-            <p class="text-center text-xs">{currentPin}</p>
+            <p class="text-center text-xs select-none">{currentPin}</p>
           </div>
         {:else}
           <!-- Small pins -->
@@ -85,7 +85,10 @@
     {/each}
   </div>
 
-  <div class="flex flex-col justify-center items-center">
+  <div
+    id="test"
+    class:hidden={selectedPin === undefined}
+    class="flex flex-col justify-center items-center">
     <div class="flex flex-row w-full mt-2 justify-around">
       <div class="flex flex-col">
         <input

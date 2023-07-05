@@ -85,12 +85,8 @@
     if (!pinIOEnabled) {
       return;
     }
-
-    if (action === 'turnOn') {
-      setOutputPin(true);
-    } else if (action === 'turnOff') {
-      setOutputPin(false);
-    }
+    const shouldTurnPinOn = action === 'turnOn';
+    setOutputPin(shouldTurnPinOn);
   };
 
   $: {

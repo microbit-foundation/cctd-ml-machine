@@ -145,7 +145,6 @@
 
   const onPinSelect = (selected: MBSpecs.UsableIOPin) => {
     if (selected === selectedPin) {
-      // Pin IO was toggled!
       pinIOEnabled = !pinIOEnabled;
     }
     selectedPin = selected;
@@ -193,7 +192,7 @@
       <input
         class="h-25 rotate-90 accent-primary"
         type="range"
-        orient={'vertical'}
+        orient="vertical"
         name=""
         min="10"
         max="90"

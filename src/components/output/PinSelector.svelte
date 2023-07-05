@@ -40,7 +40,6 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 <GestureTilePart>
   <div class="flex flex-row">
     {#each MBSpecs.IO_PIN_LAYOUT as val}

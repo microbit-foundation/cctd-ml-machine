@@ -1,3 +1,11 @@
+<!-- 
+  Skeleton loader takes a size and image, and will 'reserve' the given size on the page for the image, 
+  and will fill it will a generic 'loading' animation until the image loads, at which point will be replaced 
+
+  If you are unsure how much space should be allocated before-hand I recommend using dev-tools to inspect the image on the page,
+  then take it's dimension and use it as parameters. 
+  This doesn't account for smaller or larger screens, but is a good enough heuristic.
+-->
 <script lang="ts">
   import Skeleton from 'svelte-skeleton/Skeleton.svelte';
 

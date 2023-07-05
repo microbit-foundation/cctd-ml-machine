@@ -44,7 +44,7 @@
     ? gesture.output.outputPin.pin
     : StaticConfiguration.defaultOutputPin;
 
-  let pinIOEnabled = true; // TODO: put in static config
+  let pinIOEnabled = StaticConfiguration.pinIOEnabledByDefault;
   let turnOnTime = gesture.output.outputPin
     ? gesture.output.outputPin.turnOnTime
     : StaticConfiguration.defaultPinToggleTime;
@@ -61,6 +61,9 @@
     requiredConfidence: number,
   ): TriggerAction => {
     let isConfident = requiredConfidence <= confidence * 100;
+    if (!pinIOEnabled) {
+      return 'none';
+    }
     if ((!lastWasTriggered || !$settings.automaticClassification) && isConfident) {
       return 'turnOn';
     }

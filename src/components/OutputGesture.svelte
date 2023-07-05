@@ -61,9 +61,6 @@
     requiredConfidence: number,
   ): TriggerAction => {
     let isConfident = requiredConfidence <= confidence * 100;
-    if (!pinIOEnabled) {
-      return 'none';
-    }
     if ((!lastWasTriggered || !$settings.automaticClassification) && isConfident) {
       return 'turnOn';
     }
@@ -78,13 +75,21 @@
       return;
     }
     if (action === 'turnOn') {
-      setOutputPin(true);
       triggerComponents();
       playSound();
       wasTriggered = true;
     } else {
-      setOutputPin(false);
       wasTriggered = false;
+    }
+
+    if (!pinIOEnabled) {
+      return;
+    }
+
+    if (action === 'turnOn') {
+      setOutputPin(true);
+    } else if (action === 'turnOff') {
+      setOutputPin(false);
     }
   };
 

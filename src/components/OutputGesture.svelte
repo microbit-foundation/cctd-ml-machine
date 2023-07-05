@@ -30,12 +30,14 @@
   import { PinTurnOnState } from './output/PinSelectorUtil';
   import MBSpecs from '../script/microbit-interfacing/MBSpecs';
 
+  type TriggerAction = 'turnOn' | 'turnOff' | 'none';
+
   // Variables for component
   export let gesture: GestureData;
   export let onUserInteraction: () => void = () => {
     return;
   };
-  let triggered = false;
+  let wasTriggered = false;
   let triggerFunctions: (() => void)[] = [];
   let selectedSound: SoundData | undefined = gesture.output.sound;
   let selectedPin: MBSpecs.UsableIOPin = gesture.output.outputPin
@@ -50,49 +52,72 @@
     ? gesture.output.outputPin.pinState
     : StaticConfiguration.defaultPinTurnOnState;
 
-  let requiredConfidenceLevel = StaticConfiguration.defaultRequiredConfidence;
-  $: currentConfidenceLevel = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
-  $: isConfidenceOverThreshold = requiredConfidenceLevel <= currentConfidenceLevel * 100;
+  let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
+  $: currentConfidence = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
 
-  const triggerComponents = () =>
-    triggerFunctions.forEach(triggerFunc => {
-      triggerFunc();
-    });
+  const getTriggerAction = (
+    lastWasTriggered: boolean,
+    confidence: number,
+    requiredConfidence: number,
+  ): TriggerAction => {
+    let isConfident = requiredConfidence <= confidence * 100;
+    if ((!lastWasTriggered || !$settings.automaticClassification) && isConfident) {
+      return 'turnOn';
+    }
+    if (lastWasTriggered && !isConfident) {
+      return 'turnOff';
+    }
+    return 'none';
+  };
 
-  $: triggerOutputPin(triggered);
-  $: if (shouldTrigger(triggered)) {
-    console.log("HELLO WORLD")
-    triggerComponents();
-    playSound();
+  const handleTriggering = (action: TriggerAction) => {
+    if (action === 'none') {
+      return;
+    }
+    if (action === 'turnOn') {
+      setOutputPin(true);
+      triggerComponents();
+      playSound();
+      wasTriggered = true;
+    } else {
+      setOutputPin(false);
+      wasTriggered = false;
+    }
+  };
+
+  $: {
+    let triggerAction = getTriggerAction(
+      wasTriggered,
+      currentConfidence,
+      requiredConfidence,
+    );
+    handleTriggering(triggerAction);
+  }
+
+  function setOutputPin(on: boolean) {
+    if (!Microbits.isOutputReady()) {
+      return;
+    }
+
+    const isOnTimer = turnOnState === PinTurnOnState.X_TIME;
+    if (on) {
+      Microbits.sendToOutputPin([{ pin: selectedPin, on: true }]);
+      // If pin is on timer, set timeout to turn off again
+      if (isOnTimer) {
+        setTimeout(() => {
+          Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
+        }, turnOnTime);
+      }
+    } else if (!isOnTimer) {
+      // else if on === false and the pin is not on a timer, turn it off
+      Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
+    }
   }
 
   function onSoundSelected(sound: SoundData | undefined): void {
     selectedSound = sound;
     updateGestureSoundOutput(gesture.ID, sound);
     onUserInteraction();
-  }
-
-  function triggerOutputPin(oldTriggered: boolean) {
-    if (!Microbits.isOutputReady()) {
-      return;
-    }
-    if (!pinIOEnabled) {
-      return;
-    }
-    if (oldTriggered) {
-      if (!isConfidenceOverThreshold && turnOnState === PinTurnOnState.ALL_TIME) {
-        // Was triggered but is not anymore.
-        Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
-      }
-    } else if (isConfidenceOverThreshold) {
-      // Was not triggered, but is now.
-      Microbits.sendToOutputPin([{ pin: selectedPin, on: true }]);
-      if (turnOnState === PinTurnOnState.X_TIME) {
-        setTimeout(() => {
-          Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
-        }, turnOnTime);
-      }
-    }
   }
 
   function playSound() {
@@ -120,6 +145,11 @@
     updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
   };
 
+  const triggerComponents = () =>
+    triggerFunctions.forEach(triggerFunc => {
+      triggerFunc();
+    });
+
   const onTurnOnTimeSelect = (state: {
     turnOnState: PinTurnOnState;
     turnOnTime: number;
@@ -128,18 +158,14 @@
     turnOnTime = state.turnOnTime;
     refreshAfterChange();
     updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
+    if (wasTriggered) {
+      setOutputPin(true);
+    }
   };
 
   const refreshAfterChange = () => {
     Microbits.resetIOPins();
-    triggerOutputPin(false);
-  };
-
-  const shouldTrigger = (oldTriggered: boolean) => {
-    triggered = isConfidenceOverThreshold as boolean;
-    if (!triggered) return false;
-    if (!$settings.automaticClassification) return true;
-    return !oldTriggered;
+    setOutputPin(false);
   };
 
   let hasLoadedMicrobitImage = false;
@@ -164,20 +190,19 @@
         min="10"
         max="90"
         id=""
-        bind:value={requiredConfidenceLevel} />
+        bind:value={requiredConfidence} />
 
       <!-- METER -->
       <div class="w-4 h-25 relative">
         <div
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
           <div
-            class="absolute w-5 {triggered ? 'bg-primary' : 'bg-info'} z-index: -10"
-            style="height: {100 * currentConfidenceLevel}px; margin-top: {100 -
-              100 * currentConfidenceLevel}px;" />
+            class="absolute w-5 {wasTriggered ? 'bg-primary' : 'bg-info'} z-index: -10"
+            style="height: {100 * currentConfidence}px; margin-top: {100 -
+              100 * currentConfidence}px;" />
           <div
             class="absolute w-5 bg-primary"
-            style="height: 1px; margin-top: {6.5 -
-              0.068 * requiredConfidenceLevel}rem;" />
+            style="height: 1px; margin-top: {6.5 - 0.068 * requiredConfidence}rem;" />
           <div class="absolute">
             {#each [75, 50, 25] as line}
               <div class="w-5 bg-gray-300 mt-6" style="height: 1px;">
@@ -203,13 +228,13 @@
   <div class="text-center w-15">
     <img
       class="m-auto"
-      class:hidden={triggered}
+      class:hidden={wasTriggered}
       src={'imgs/right_arrow.svg'}
       alt="right arrow icon"
       width="30px" />
     <img
       class="m-auto"
-      class:hidden={!triggered || !$state.isInputReady}
+      class:hidden={!wasTriggered || !$state.isInputReady}
       src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />

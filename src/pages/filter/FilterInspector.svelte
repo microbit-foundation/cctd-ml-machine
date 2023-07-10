@@ -75,18 +75,13 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-
 <div
   transition:fly
   class="absolute bg-blend-darken w-screen h-screen z-1000 bg-black/50 flex justify-center items-center"
   on:click={() => console.log('CLose stuff')}>
   <div on:click|stopPropagation class="w-full h-full overflow-hidden relative p-6">
-    <!-- <div
-      class="absolute w-screen h-screen bg-gray-400 bg-opacity-50 -m-6 rounded-lg"
-    > -->
     <div class="fade" />
     <div class="bg-white -m-16 w-1000 h-1000 absolute" style="z-index:-2;" />
-    <!-- </div> -->
     <!-- TITLE of block -->
     <p class="text-lg mb-2 font-semibold">
       {filterName}
@@ -110,13 +105,11 @@
       <div class="box">
         {#if filter !== undefined}
           <FilterGraph {filter} legendPosition="right" aspectRatio={undefined} />
-          <!-- <BoxGraph /> -->
         {/if}
         <div class="relative">
           <div class="box-helper1" />
           <div class="box-helper2" />
         </div>
-        <!-- <FilterLive filterCode={filterType} {liveData} /> -->
       </div>
       <div
         class="overflow-y-auto h-full bg-gray-100 relative inset-shadow p-7 rounded-md">
@@ -128,7 +121,5 @@
         {/each}
       </div>
     </div>
-    <!-- MODAL CONTENT -->
-    <!-- <svelte:component this={component} {...props} /> -->
   </div>
 </div>

@@ -8,46 +8,8 @@
   export let filter: FilterType;
   export let openInspector: (filter: FilterType) => void = TypingUtils.emptyFunction;
 
-  // type FilteredData = {
-  //   name: string;
-  //   points: {
-  //     x: number[];
-  //     y: number[];
-  //     z: number[];
-  //   };
-  // };
-
   const filterStrategy = determineFilter(filter);
   const filterText = filterStrategy.getText();
-  // const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
-
-  // Goes through each recording and filter, uses the filter function on
-  // said recording, and constructs a data object to be used
-  // by the BoxGraph component
-  // const createFilteredData = () => {
-  //   let filteredData: FilteredData[] = $gestures.map(gesture => {
-  //     let data = {
-  //       name: gesture.name,
-  //       points: {
-  //         x: [] as number[],
-  //         y: [] as number[],
-  //         z: [] as number[],
-  //       },
-  //     };
-  //     gesture.recordings.forEach(recording => {
-  //       data.points.x.push(filterFunction(recording.data.x));
-  //       data.points.y.push(filterFunction(recording.data.y));
-  //       data.points.z.push(filterFunction(recording.data.z));
-  //     });
-  //     return data;
-  //   });
-  //   return filteredData;
-  // };
-
-  // TODO: Formalize how live data is presented for different filters (in filter strategy?)
-  // const compareWithLive = (
-  //   [Filters.MAX, Filters.MIN, Filters.MEAN] as FilterType[]
-  // ).includes(filter);
 
   $: isActive = $settings.includedFilters.has(filter);
 

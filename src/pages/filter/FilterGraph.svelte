@@ -12,14 +12,6 @@
     determineFilter,
   } from '../../script/datafunctions';
 
-  // export let dataRepresentation: {
-  //   name: string;
-  //   points: {
-  //     x: number[];
-  //     y: number[];
-  //     z: number[];
-  //   };
-  // }[];
   export let filter: FilterType;
   export let gesture: GestureData | undefined = undefined;
   export let legendPosition: 'top' | 'right' = 'top';
@@ -27,8 +19,6 @@
   export let displayLegend = true;
   export let displayYTicks = true;
   export let forcedColor: string | undefined = undefined;
-
-  // export let compareWithLive = false;
 
   $: showLive = $state.isInputConnected;
 
@@ -184,7 +174,6 @@
             Math.max(...dataPoint.points.z) + maxMin.diff / 40,
           ],
         ],
-        // backgroundColor: forcedColor ?? getColor(idx), // TODO: Remove or reimplement
         backgroundColor: forcedColor ?? getColor(idx),
         type: 'bar',
       });

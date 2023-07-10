@@ -97,7 +97,7 @@
   </p>
   <div class="flex relative m-5 bg-white h-35 w-3/4 rounded overflow-x-auto">
     {#each gesture.recordings as recording}
-      <div class="h-32 min-w-45 pr-3 pt-2 flex">
+      <div class="h-30 min-w-45 pr-3 pt-2 flex">
         <RecordingGraph data={recording.data} />
         <!-- <div class="h-25 w-4 grid grid-cols-3 gap-1 ml-1 mr-2 items-end">
           {#each ['x', 'y', 'z'] as group, color}

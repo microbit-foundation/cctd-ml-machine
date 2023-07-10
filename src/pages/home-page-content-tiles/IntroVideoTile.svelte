@@ -6,7 +6,6 @@
 <p class="text-lg mb-2 font-semibold">
   {$t('content.index.videoHeading')}
 </p>
-<!-- svelte-ignore a11y-media-has-caption -->
 <div class="flex items-center justify-center">
   <!-- We have selected the video's loading progress as the loading criterion -->
   <video

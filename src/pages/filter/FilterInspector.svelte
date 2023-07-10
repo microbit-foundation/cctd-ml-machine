@@ -78,8 +78,9 @@
 <div
   transition:fly
   class="absolute bg-blend-darken w-screen h-screen z-1000 bg-black/50 flex justify-center items-center"
-  on:click={() => console.log('CLose stuff')}>
+  >
   <div on:click|stopPropagation class="w-full h-full overflow-hidden relative p-6">
+    <!-- TODO: Fix hardcoded color -->
     <div class="fade" />
     <div class="bg-white -m-16 w-1000 h-1000 absolute" style="z-index:-2;" />
     <!-- TITLE of block -->
@@ -99,9 +100,7 @@
     </div>
     <div
       style="height: calc(100vh - 5rem); width: calc(100vw - 3rem);"
-      on:click={() => {
-        console.log('HERE42');
-      }}>
+      >
       <div class="box">
         {#if filter !== undefined}
           <FilterGraph {filter} legendPosition="right" aspectRatio={undefined} />

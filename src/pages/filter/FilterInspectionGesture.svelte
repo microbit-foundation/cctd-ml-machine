@@ -8,7 +8,6 @@
   export let gesture: GestureData;
   export let filter: FilterType | undefined;
   export let color: string;
-
 </script>
 
 <div class="w-full min-w-200 mr-5 flex items-center relative">

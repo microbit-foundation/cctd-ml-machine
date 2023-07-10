@@ -77,8 +77,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   transition:fly
-  class="absolute bg-blend-darken w-screen h-screen z-1000 bg-black/50 flex justify-center items-center"
-  >
+  class="absolute bg-blend-darken w-screen h-screen z-1000 bg-black/50 flex justify-center items-center">
   <div on:click|stopPropagation class="w-full h-full overflow-hidden relative p-6">
     <!-- TODO: Fix hardcoded color -->
     <div class="fade" />
@@ -98,9 +97,7 @@
           style="transform: rotate(45deg);" />
       </button>
     </div>
-    <div
-      style="height: calc(100vh - 5rem); width: calc(100vw - 3rem);"
-      >
+    <div style="height: calc(100vh - 5rem); width: calc(100vw - 3rem);">
       <div class="box">
         {#if filter !== undefined}
           <FilterGraph {filter} legendPosition="right" aspectRatio={undefined} />

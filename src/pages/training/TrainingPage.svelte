@@ -13,10 +13,10 @@
   import { slide } from 'svelte/transition';
   import TrainingButton from './TrainingButton.svelte';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
-  import { Paths, navigate } from '../../script/navigation/Navigation';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import StandardButton from '../../components/StandardButton.svelte';
+  import { Paths, navigate } from '../../router/paths';
 
   const sufficientData = hasSufficientData();
 

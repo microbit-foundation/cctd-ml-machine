@@ -1,10 +1,11 @@
 <!-- Left-hand side menu -->
 <script lang="ts">
   import Menus, { MenuProperties } from '../script/navigation/Menus';
-  import { Paths, currentPath, navigate } from '../script/navigation/Navigation';
   import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
   import Environment from '../script/Environment.js';
+  import { Paths, currentPath, navigate } from '../router/paths';
+  import { state } from '../script/stores/uiStore';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;
@@ -15,6 +16,10 @@
       return false;
     }
     return menuProps.additionalExpandPaths.includes(path);
+  };
+
+  const onLoad = () => {
+    $state.isLoading = false;
   };
 </script>
 
@@ -39,7 +44,7 @@
   <!-- Menu -->
   <div class="p-5 pl-5 pr-5">
     <div class="absolute bottom-15 -left-2">
-      <img alt="decoration arrows" src="imgs/partial_red_arrows.svg" width="225px" />
+      <img alt="decoration arrows" src="/imgs/partial_red_arrows.svg" width="225px" />
     </div>
 
     <div class="relative">
@@ -60,8 +65,9 @@
         {#if id !== get(Menus.getMenuStore()).length - 1}
           <div class="text-center ml-auto mr-auto mb-1 mt-1">
             <img
+              on:load={onLoad}
               class="m-auto"
-              src="imgs/down_arrow.svg"
+              src="/imgs/down_arrow.svg"
               alt="down arrow icon"
               width="30px" />
           </div>

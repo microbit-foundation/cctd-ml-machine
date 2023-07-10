@@ -21,7 +21,7 @@
         <ImageSkeleton
           alt="microbit guide"
           height={114}
-          src="imgs/microbit_guide.svg"
+          src="/imgs/microbit_guide.svg"
           width={200} />
       </div>
     </div>

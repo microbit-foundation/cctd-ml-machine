@@ -36,7 +36,7 @@
         >{$t('footer.disconnectButton')}</StandardButton>
     {:else}
       <StandardButton onClick={TypingUtils.emptyFunction} color="disabled">
-        <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
+        <img alt="loading" src="/imgs/loadingspinner.gif" style="height:24px" />
       </StandardButton>
     {/if}
   </div>

@@ -37,6 +37,7 @@
   import CookieManager from './script/CookieManager';
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Environment from './script/Environment';
+  import Router from './router/Router.svelte';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -50,40 +51,42 @@
   document.title = Environment.pageTitle;
 </script>
 
-{#if !checkCompatibility().platformAllowed}
-  <!-- Denies mobile users access to the platform -->
-  <IncompatiblePlatformView />
-{:else}
-  {#if $state.isLoading}
-    <main class="h-screen w-screen bg-primary flex absolute z-10" transition:fade>
-      <LoadingSpinner />
+<Router>
+  {#if !checkCompatibility().platformAllowed}
+    <!-- Denies mobile users access to the platform -->
+    <IncompatiblePlatformView />
+  {:else}
+    {#if $state.isLoading}
+      <main class="h-screen w-screen bg-primary flex absolute z-10" transition:fade>
+        <LoadingSpinner />
+      </main>
+    {/if}
+    <!-- Here we use the hidden class, to allow for it to load in. -->
+    <!-- <main class="h-screen w-screen m-0 relative flex" class:hidden={$state.isLoading}> -->
+    <main class="h-screen w-screen m-0 relative flex">
+      <!-- OVERLAY ITEMS -->
+      <CookieBanner />
+      <OverlayView />
+      <BluetoothIncompatibilityWarningDialog />
+
+      <!-- SIDE BAR -->
+      <div class="h-full flex min-w-75 max-w-75">
+        <SideBarMenuView />
+      </div>
+
+      <div
+        class="h-full w-full overflow-y-hidden overflow-x-auto
+    flex flex-col bg-backgrounddark shadow-2xl">
+        <!-- CONTENT -->
+        <div class="relative z-1 flex-1 overflow-y-auto flex-row">
+          <PageContentView />
+        </div>
+
+        <!-- BOTTOM BAR -->
+        <div class="h-160px w-full">
+          <BottomBarMenuView />
+        </div>
+      </div>
     </main>
   {/if}
-  <!-- Here we use the hidden class, to allow for it to load in. -->
-  <main class="h-screen w-screen m-0 relative flex" class:hidden={$state.isLoading}>
-    <!-- OVERLAY ITEMS -->
-    <CookieBanner />
-    <OverlayView />
-    <BluetoothIncompatibilityWarningDialog />
-
-    <!-- SIDE BAR -->
-    <div class="h-full flex min-w-75 max-w-75">
-      <SideBarMenuView />
-    </div>
-
-    <div
-      class="h-full w-full overflow-y-hidden overflow-x-auto
-     			flex flex-col bg-backgrounddark shadow-2xl">
-      <!-- CONTENT -->
-      <div class="relative z-1 flex-1 overflow-y-auto flex-row">
-        <PageContentView />
-      </div>
-
-      <!-- BOTTOM BAR -->
-      <div class="h-160px w-full">
-        <BottomBarMenuView />
-      </div>
-    </div>
-    <!-- </div> -->
-  </main>
-{/if}
+</Router>

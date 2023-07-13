@@ -43,6 +43,8 @@
   let selectedPin: MBSpecs.UsableIOPin = gesture.output.outputPin
     ? gesture.output.outputPin.pin
     : StaticConfiguration.defaultOutputPin;
+
+  let pinIOEnabled = StaticConfiguration.pinIOEnabledByDefault;
   let turnOnTime = gesture.output.outputPin
     ? gesture.output.outputPin.turnOnTime
     : StaticConfiguration.defaultPinToggleTime;
@@ -73,14 +75,18 @@
       return;
     }
     if (action === 'turnOn') {
-      setOutputPin(true);
       triggerComponents();
       playSound();
       wasTriggered = true;
     } else {
-      setOutputPin(false);
       wasTriggered = false;
     }
+
+    if (!pinIOEnabled) {
+      return;
+    }
+    const shouldTurnPinOn = action === 'turnOn';
+    setOutputPin(shouldTurnPinOn);
   };
 
   $: {
@@ -134,6 +140,9 @@
   }
 
   const onPinSelect = (selected: MBSpecs.UsableIOPin) => {
+    if (selected === selectedPin) {
+      pinIOEnabled = !pinIOEnabled;
+    }
     selectedPin = selected;
     refreshAfterChange();
     updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
@@ -257,7 +266,7 @@
   </div>
   <div class="ml-4">
     <PinSelector
-      {selectedPin}
+      selectedPin={pinIOEnabled ? selectedPin : undefined}
       {turnOnState}
       {turnOnTime}
       {onPinSelect}

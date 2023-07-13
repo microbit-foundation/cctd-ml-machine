@@ -18,6 +18,7 @@ class StaticConfiguration {
   // In milliseconds, after turning on, how long should an output be on for?
   public static readonly defaultPinToggleTime = 1500;
   public static readonly defaultPinTurnOnState: PinTurnOnState = PinTurnOnState.X_TIME;
+  public static readonly pinIOEnabledByDefault: boolean = true;
 
   // What name should a downloaded hex file have?
   public static readonly downloadedHexFilename = 'firmware.hex';

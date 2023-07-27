@@ -38,6 +38,9 @@
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Environment from './script/Environment';
   import Router from './router/Router.svelte';
+  import MicrobitBluetooth from './script/microbit-interfacing/MicrobitBluetooth';
+  import Microbits from './script/microbit-interfacing/Microbits';
+  import MBSpecs from './script/microbit-interfacing/MBSpecs';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -78,6 +81,45 @@
         class="h-full w-full overflow-y-hidden overflow-x-auto
     flex flex-col bg-backgrounddark shadow-2xl">
         <!-- CONTENT -->
+        <button
+          on:click={() => {
+            MicrobitBluetooth.requestDevice('vivaz', () => {
+              console.log('FAILED');
+            }).then(device => {
+              MicrobitBluetooth.createMicrobitBluetooth(
+                device,
+                mbbt => {
+                  mbbt.getUARTService().then(uartService => {
+                    uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_TX).then(txChar => {
+                      txChar.startNotifications();
+                        txChar.addEventListener("characteristicvaluechanged", (val) => {
+                          console.log(val);
+                        })
+                      })
+                    uartService
+                      .getCharacteristic(MBSpecs.Characteristics.UART_DATA_RX)
+                      .then(rxChar => {
+                        const value = 's_connected';
+                        const view = new DataView(new ArrayBuffer(1 + value.length));
+
+                        for (let i = 0; i < value.length; i++) {
+                          view.setUint8(i, value.charCodeAt(i));
+                        }
+                        view.setUint8(value.length, '#'.charCodeAt(0));
+                        setTimeout(() => {
+                          rxChar.writeValue(view)
+                        }, 2000);
+                      });
+                      
+                  });
+                },
+                () => {},
+                () => {},
+                () => {},
+                () => {},
+              );
+            });
+          }}>Hello</button>
         <div class="relative z-1 flex-1 overflow-y-auto flex-row">
           <PageContentView />
         </div>

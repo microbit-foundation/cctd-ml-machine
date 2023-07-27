@@ -25,6 +25,7 @@ export default {
 		"content.index.oldVersion": "Du kan finde den gamle version her:",
 		"content.index.contactButton": "Kontakt os",
 		"content.index.contactBody": "Hvis du finder fejl og mangler på denne platform, skal du være velkommen til at skrive til os. Hvis du har andre efterspørgsler, ideer eller generel interesse, skal du være velkommen til at kontakte os. Skaberne af denne platform kan kontaktes på:",
+		"content.index.contactBodyGithub": "Du kan også besøge vores Github side:",
 		"content.index.contactMail": "keb@cs.au.dk",
 		"content.index.acknowledgement": "Udviklet af Center for Computational Thinking og Design, Aarhus Universitet",
 		// DATA PAGE:
@@ -269,6 +270,7 @@ export default {
 		"content.index.oldVersion": "You can finde the old version here:",
 		"content.index.contactButton": "Contact us",
 		"content.index.contactBody": "If you find errors and omissions on this platform, please feel free to write us. If you have any other requests, ideas or general interests, please feel free to contact us. The creators of this platform can be contacted at:",
+		"content.index.contactBodyGithub": "You can also visit our Github page:",
 		"content.index.contactMail": "keb@cs.au.dk",
 		"content.index.acknowledgement": "Developed by Center for Computational Thinking and Design, Aarhus University",
 		// DATA PAGE:

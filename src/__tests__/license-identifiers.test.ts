@@ -1,19 +1,18 @@
 /**
  * @jest-environment jsdom
  */
-/**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- *
- * SPDX-License-Identifier: MIT
- */
 
-import translations from '../translations';
-import * as fs from 'fs';
+import fs from 'fs';
+import 'jest-expect-message';
 import * as path from 'path';
 
-import 'jest-expect-message';
+// Place files you wish to ignore by name in here
+const ignoredFiles: string[] = [];
 
-const ignoredFiles = ['translations.ts', 'smoothie.js', '__tests__'];
+const licenseIdentifierStringContributors =
+  'Center for Computational Thinking and Design at Aarhus University and contributors';
+
+const licenseIdentifierStringSPDX = 'SPDX-License-Identifier:';
 
 const readFile = (fileLocation: string, expect: string) => {
   const fileContent = fs.readFileSync(fileLocation);
@@ -55,31 +54,38 @@ const flattenDirectory = (directory: string): string[] => {
   return files;
 };
 
-const filesIncludesExpression = (files: string[], expect: string): boolean => {
+const filesMissingIdentifier = (files: string[], expects: string[]): string[] => {
+  const filesWithMissingIdentifier: string[] = [];
+
   for (let i = 0; i < files.length; i++) {
-    if (readFile('./' + files[i], expect)) {
-      return true;
+    for (const expect of expects) {
+      if (!readFile('./' + files[i], expect)) {
+        if (!filesWithMissingIdentifier.includes(files[i])) {
+            filesWithMissingIdentifier.push(files[i]);
+        }
+      }
     }
   }
-  return false;
+  return filesWithMissingIdentifier;
 };
 
-test(
-  'All translations should be used',
-  () => {
-    const translationKeys = Object.getOwnPropertyNames(translations.en);
-    const flatten = flattenDirectory('./src/');
-    for (let i = 0; i < translationKeys.length; i++) {
-      const translationKey = translationKeys[i];
+describe('License identifier tests', () => {
+  test(
+    'All files should contain license identifier',
+    () => {
+      const flatten = flattenDirectory('./src/');
+      const faultyFiles = filesMissingIdentifier(flatten, [
+        licenseIdentifierStringContributors,
+        licenseIdentifierStringSPDX,
+      ]);
       expect(
-        filesIncludesExpression(flatten, translationKey),
-        "unused translation --> '" +
-          translationKey +
-          "' \n confirm with command .. \n grep -rnw ./src -e '" +
-          translationKey +
-          "'",
-      ).toEqual(true);
-    }
-  },
-  60000 * 10,
-);
+        faultyFiles.length,
+        'Some files do not contain identifier! ' +
+          faultyFiles
+            .map(val => `\n \u001b[35m${val} \u001b[0mis missing license identifier`)
+            .join(),
+      ).toEqual(0);
+    },
+    60000 * 10,
+  );
+});

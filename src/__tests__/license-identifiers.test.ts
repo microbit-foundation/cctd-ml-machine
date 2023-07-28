@@ -73,7 +73,7 @@ describe('License identifier tests', () => {
         faultyFiles.length,
         'Some files do not contain identifier! ' +
           faultyFiles
-            .map(val => `\n \u001b[35m${val} \u001b[0mis missing identifier`)
+            .map(val => `\n \u001b[35m${val} \u001b[0mis missing license identifier`)
             .join(),
       ).toEqual(0);
     },

@@ -61,7 +61,7 @@ const filesIncludesExpression = (files: string[], expect: string): boolean => {
 
 test(
   'All translations should be used',
-  async () => {
+  () => {
     const translationKeys = Object.getOwnPropertyNames(translations.en);
     const flatten = flattenDirectory('./src/');
     for (let i = 0; i < translationKeys.length; i++) {

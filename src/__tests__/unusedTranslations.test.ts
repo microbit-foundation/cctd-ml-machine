@@ -7,7 +7,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-
 import translations from '../translations';
 import * as fs from 'fs';
 import * as path from 'path';

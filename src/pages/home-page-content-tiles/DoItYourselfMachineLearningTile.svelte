@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { t } from '../../i18n';
   import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
@@ -36,6 +42,7 @@
 <br />
 <p>
   {$t('content.index.oldVersion')}
-  <a class="text-link hover:underline" href="https://www.v0.ml-machine.org/"
-    >v0.ml-machine.org</a>
+  <a class="text-link hover:underline" href="https://www.v0.ml-machine.org/">
+    v0.ml-machine.org
+  </a>
 </p>

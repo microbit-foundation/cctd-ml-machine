@@ -1,3 +1,9 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import { type Writable } from 'svelte/store';
 import { persistantWritable } from './storeUtil';
 // Todo: Rename file to a more appropriate name

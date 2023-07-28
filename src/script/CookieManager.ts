@@ -1,3 +1,9 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import Cookies from 'js-cookie';
 
 export type ComplianceChoices = {
@@ -11,6 +17,7 @@ export type ComplianceChoices = {
 class CookieManager {
   private static reconnectCookieName = 'reconnect_flag';
   private static complianceCookieName = 'cookie_consent';
+  private static featureFlagsCookieName = 'fflags';
   private static complianceCookieChangeEvent = new Event('complianceCookieChange');
 
   public static isReconnectFlagSet(): boolean {
@@ -44,6 +51,14 @@ class CookieManager {
       expires: 365,
     });
     document.dispatchEvent(this.complianceCookieChangeEvent);
+  }
+
+  public static hasFeatureFlag(flag: string): boolean {
+    const flags = Cookies.get('fflags');
+    if (!flags) {
+      return false;
+    }
+    return flags.toLowerCase().includes(flag.toLowerCase());
   }
 }
 

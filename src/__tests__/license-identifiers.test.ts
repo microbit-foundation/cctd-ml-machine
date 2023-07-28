@@ -55,12 +55,14 @@ const flattenDirectory = (directory: string): string[] => {
 };
 
 const filesMissingIdentifier = (files: string[], expects: string[]): string[] => {
-  const filesWithMissingIdentifier = [];
+  const filesWithMissingIdentifier: string[] = [];
 
   for (let i = 0; i < files.length; i++) {
     for (const expect of expects) {
       if (!readFile('./' + files[i], expect)) {
-        filesWithMissingIdentifier.push(files[i]);
+        if (!filesWithMissingIdentifier.includes(files[i])) {
+            filesWithMissingIdentifier.push(files[i]);
+        }
       }
     }
   }

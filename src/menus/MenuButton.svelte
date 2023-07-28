@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <style>
   div {
     transition: max-height 0.3s ease;

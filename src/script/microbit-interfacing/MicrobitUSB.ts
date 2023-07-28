@@ -1,3 +1,9 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import { CortexM, DAPLink, WebUSB } from 'dapjs';
 import MBSpecs from './MBSpecs';
 

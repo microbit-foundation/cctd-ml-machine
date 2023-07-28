@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import View3D from './View3D.svelte';
   import { Vector3 } from './View3DUtility';

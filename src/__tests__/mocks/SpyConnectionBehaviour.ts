@@ -1,3 +1,9 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import type ConnectionBehaviour from '../../script/connection-behaviours/ConnectionBehaviour';
 import MicrobitBluetooth from '../../script/microbit-interfacing/MicrobitBluetooth';
 import MBSpecs from '../../script/microbit-interfacing/MBSpecs';

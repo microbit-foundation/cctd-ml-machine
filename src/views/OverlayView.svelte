@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <!-- Use as a container for items that are supposed to be at the top of the DOM. -->
 <script lang="ts">
   import { fade } from 'svelte/transition';

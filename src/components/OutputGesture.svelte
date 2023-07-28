@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <style>
   input[type='range'][orient='vertical'] {
     writing-mode: bt-lr; /* IE */

@@ -26,9 +26,8 @@
     </p>
     <p class="w-60">
       {$t('content.index.contactBodyGithub')}
-      <a
-        class="text-link hover:underline"
-        href="https://github.com/microbit-foundation/cctd-ml-machine">cctd-ml-mahine</a>
+       <a class="text-link hover:underline"
+         href="https://github.com/microbit-foundation/cctd-ml-machine" >cctd-ml-mahine</a>
     </p>
   </StandardDialog>
   <StandardButton

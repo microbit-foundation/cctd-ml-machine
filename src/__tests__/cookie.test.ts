@@ -2,6 +2,12 @@
  * @jest-environment jsdom
  */
 
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import CookieManager from '../script/CookieManager';
 import Cookies from 'js-cookie';
 

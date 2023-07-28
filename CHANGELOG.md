@@ -15,7 +15,7 @@ This version was created to improve stability and transitioning the micro:bit fi
 - Many styling changes to support the upcoming DR-release
 
 ### Fixed
-- Flashing error handling. Now gives appropraite feedback
+- Flashing error handling. Now gives appropriate feedback
 - Alignment issues
 - Issues only present on chromebook
 - Fixed a null pointer exception that was thrown when resizing the overlay on the output page.

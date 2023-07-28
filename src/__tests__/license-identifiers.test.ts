@@ -72,7 +72,7 @@ describe('License identifier tests', () => {
     'All files should contain license identifier',
     () => {
       const flatten = flattenDirectory('./src/');
-      const faultyFilesContributors = filesMissingIdentifier(flatten, [
+      const faultyFiles = filesMissingIdentifier(flatten, [
         licenseIdentifierStringContributors,
         licenseIdentifierStringSPDX,
       ]);

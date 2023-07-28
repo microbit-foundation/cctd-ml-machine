@@ -1,4 +1,10 @@
 /**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/**
  * Static configuration values. These values are not expected to change, while the application is running.
  */
 import { PinTurnOnState } from './components/output/PinSelectorUtil';

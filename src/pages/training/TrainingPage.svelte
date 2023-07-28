@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <style>
   .arrow-filter-color {
     filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%)

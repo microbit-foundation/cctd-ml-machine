@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <style>
   .fade {
     background: linear-gradient(-150deg, rgb(167, 204, 248), rgb(120, 255, 237));

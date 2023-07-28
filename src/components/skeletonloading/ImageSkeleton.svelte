@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <!-- 
   Skeleton loader takes a size and image, and will 'reserve' the given size on the page for the image, 
   and will fill it will a generic 'loading' animation until the image loads, at which point will be replaced 

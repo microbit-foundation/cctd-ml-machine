@@ -9,6 +9,11 @@ import * as path from 'path';
 // Place files you wish to ignore by name in here
 const ignoredFiles: string[] = [];
 
+const licenseIdentifierStringContributors =
+  'Center for Computational Thinking and Design at Aarhus University and contributors';
+
+const licenseIdentifierStringSPDX = 'SPDX-License-Identifier:';
+
 const readFile = (fileLocation: string, expect: string) => {
   const fileContent = fs.readFileSync(fileLocation);
   return fileContent.toString().toLowerCase().includes(expect.toLowerCase());
@@ -49,26 +54,28 @@ const flattenDirectory = (directory: string): string[] => {
   return files;
 };
 
-const filesMissingIdentifier = (files: string[], expect: string): string[] => {
+const filesMissingIdentifier = (files: string[], expects: string[]): string[] => {
   const filesWithMissingIdentifier = [];
 
   for (let i = 0; i < files.length; i++) {
-    if (!readFile('./' + files[i], expect)) {
-      filesWithMissingIdentifier.push(files[i]);
+    for (const expect of expects) {
+      if (!readFile('./' + files[i], expect)) {
+        filesWithMissingIdentifier.push(files[i]);
+      }
     }
   }
   return filesWithMissingIdentifier;
 };
-
-const licenseIdentifierString =
-  '(c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors';
 
 describe('License identifier tests', () => {
   test(
     'All files should contain license identifier',
     () => {
       const flatten = flattenDirectory('./src/');
-      const faultyFiles = filesMissingIdentifier(flatten, licenseIdentifierString);
+      const faultyFilesContributors = filesMissingIdentifier(flatten, [
+        licenseIdentifierStringContributors,
+        licenseIdentifierStringSPDX,
+      ]);
       expect(
         faultyFiles.length,
         'Some files do not contain identifier! ' +

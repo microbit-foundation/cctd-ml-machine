@@ -43,7 +43,10 @@
     </div>
     <div class="flex-grow flex items-end">
       <div class="pb-2 pl-10">
-        <p>{$t('content.index.acknowledgement')} - <a class="text-link hover:underline" href="https://cctd.au.dk/">cctd.au.dk</a></p> 
+        <p>
+          {$t('content.index.acknowledgement')} -
+          <a class="text-link hover:underline" href="https://cctd.au.dk/">cctd.au.dk</a>
+        </p>
       </div>
     </div>
   </div>

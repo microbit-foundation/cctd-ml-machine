@@ -17,10 +17,12 @@
         class="text-red-500 hover:underline">
         {$t('content.index.contactMail')}
       </a>
-      <p class="w-60">
-       {$t('content.index.contactBodyGithub')}
-        <a class="text-link hover:underline"
-          href="https://github.com/microbit-foundation/cctd-ml-machine" >cctd-ml-mahine</a>
+    </p>
+    <p class="w-60">
+      {$t('content.index.contactBodyGithub')}
+      <a
+        class="text-link hover:underline"
+        href="https://github.com/microbit-foundation/cctd-ml-machine">cctd-ml-mahine</a>
     </p>
   </StandardDialog>
   <StandardButton

@@ -650,6 +650,11 @@ class Microbits {
     return this.inputName;
   }
 
+  /**
+   * 
+   * @param type The type of UART message, i.e 'g' for gesture and 's' for sound
+   * @param value 
+   */
   public static sendToOutputUart(type: "s" | "g", value: string) {
     if (!this.assignedOutputMicrobit) {
       throw new Error('No output microbit has been set');
@@ -661,12 +666,10 @@ class Microbits {
 
     const view = new DataView(new ArrayBuffer(3 + value.length));
 
-    view.setUint8(0, type.charCodeAt(0));
-    view.setUint8(1, "_".charCodeAt(0));
-    for (let i = 0; i < value.length; i++) {
-      view.setUint8(i + 2, value.charCodeAt(i));
+    const fullMessage = `${type}_${value}#`
+    for (let i = 0; i < fullMessage.length; i++) {
+      view.setUint8(i, value.charCodeAt(i));
     }
-    view.setUint8(2 + value.length, '#'.charCodeAt(0));
 
     this.addToServiceActionQueue(this.outputUart, view);
   }

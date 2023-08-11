@@ -651,9 +651,9 @@ class Microbits {
   }
 
   /**
-   * 
+   * Sends a message through UART
    * @param type The type of UART message, i.e 'g' for gesture and 's' for sound
-   * @param value 
+   * @param value The message
    */
   public static sendToOutputUart(type: "s" | "g", value: string) {
     if (!this.assignedOutputMicrobit) {

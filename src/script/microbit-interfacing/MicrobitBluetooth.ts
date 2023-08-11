@@ -5,8 +5,7 @@
  */
 
 import MBSpecs from './MBSpecs';
-import TypingUtils from '../TypingUtils';
-
+ 
 /**
  * UART data target. For fixing type compatibility issues.
  */
@@ -179,6 +178,14 @@ export class MicrobitBluetooth {
         onDataReceived(receivedString);
       },
     );
+  }
+
+  /**
+   * Sends a message to the microbit, through UART service.
+   * @param message The message to send
+   */
+  public async sendUartMessage(message: string): Promise<void> {
+    await MBSpecs.Utility.sendUartMessage(message, "#", this);
   }
 
   /**

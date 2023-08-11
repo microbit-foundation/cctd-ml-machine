@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import MicrobitBluetooth from "./MicrobitBluetooth";
+
 /* eslint-disable @typescript-eslint/no-namespace */
 /**
  * References to the Bluetooth Profile UUIDs.
@@ -210,6 +212,28 @@ namespace MBSpecs {
       ['v', 'o', 'v', 'o', 'v'],
       ['z', 'u', 'z', 'u', 'z'],
     ];
+
+    /**
+     * Sends a given message to the specified microbit, ending in the specified delimiter
+     * @param message The message you want to send
+     * @param delimiter Delimiter character
+     * @param microbit Microbit recipient
+     */
+    public static async sendUartMessage(message: string, delimiter: string, microbit: MicrobitBluetooth) {
+      if (delimiter.length > 1) {
+        throw new Error("Can only send UART messages with single-character delimiters");
+      }
+
+      const uartService = await microbit.getUARTService();
+      const rxChar = await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_RX);
+
+      const view = new DataView(new ArrayBuffer(1 + message.length));
+      for (let i = 0; i < message.length; i++) {
+        view.setUint8(i, message.charCodeAt(i));
+      }
+      view.setUint8(message.length, delimiter.charCodeAt(0));
+      rxChar.writeValue(view);
+    }
 
     /**
      * Fetches the model number of the micro:bit.

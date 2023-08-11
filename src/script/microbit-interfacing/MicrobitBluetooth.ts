@@ -181,14 +181,6 @@ export class MicrobitBluetooth {
   }
 
   /**
-   * Sends a message to the microbit, through UART service.
-   * @param message The message to send
-   */
-  public async sendUartMessage(message: string): Promise<void> {
-    await MBSpecs.Utility.sendUartMessage(message, "#", this);
-  }
-
-  /**
    * @param {MBSpecs.Button} buttonToListenFor
    *      The button to listen to.
    * @param {(MBSpecs.ButtonState, MBSpecs.Button) => void} onButtonChanged

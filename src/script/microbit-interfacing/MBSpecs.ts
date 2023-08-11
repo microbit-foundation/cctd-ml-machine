@@ -214,28 +214,6 @@ namespace MBSpecs {
     ];
 
     /**
-     * Sends a given message to the specified microbit, ending in the specified delimiter
-     * @param message The message you want to send
-     * @param delimiter Delimiter character
-     * @param microbit Microbit recipient
-     */
-    public static async sendUartMessage(message: string, delimiter: string, microbit: MicrobitBluetooth) {
-      if (delimiter.length > 1) {
-        throw new Error("Can only send UART messages with single-character delimiters");
-      }
-
-      const uartService = await microbit.getUARTService();
-      const rxChar = await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_RX);
-
-      const view = new DataView(new ArrayBuffer(1 + message.length));
-      for (let i = 0; i < message.length; i++) {
-        view.setUint8(i, message.charCodeAt(i));
-      }
-      view.setUint8(message.length, delimiter.charCodeAt(0));
-      rxChar.writeValue(view);
-    }
-
-    /**
      * Fetches the model number of the micro:bit.
      * @param {BluetoothRemoteGATTServer} gattServer The GATT server to read from.
      * @return {Promise<number>} The model number of the micro:bit. 1 for the original, 2 for the new.

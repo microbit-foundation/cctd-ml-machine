@@ -27,9 +27,9 @@ export const isBluetoothWarningDialogOpen = writable<boolean>(
 // Store current state to prevent error prone actions
 export const state = writable<{
   isRequestingDevice:
-    | DeviceRequestStates.NONE
-    | DeviceRequestStates.OUTPUT
-    | DeviceRequestStates.INPUT; // fix for a bug caused by too low rollup version. Must be 3x or higher.
+  | DeviceRequestStates.NONE
+  | DeviceRequestStates.OUTPUT
+  | DeviceRequestStates.INPUT; // fix for a bug caused by too low rollup version. Must be 3x or higher.
   isFlashingDevice: boolean;
   isTesting: boolean;
   isRecording: boolean;
@@ -45,6 +45,8 @@ export const state = writable<{
   isOutputAssigned: boolean;
   isOutputReady: boolean;
   isLoading: boolean;
+  isOutputMakecodeHex: boolean;
+  isInputMakecodeHex: boolean;
 }>({
   isRequestingDevice: DeviceRequestStates.NONE,
   isFlashingDevice: false,
@@ -62,6 +64,8 @@ export const state = writable<{
   isOutputAssigned: false,
   isOutputReady: false,
   isLoading: true,
+  isOutputMakecodeHex: false,
+  isInputMakecodeHex: false,
 });
 
 // Message store to propagate allow all components to inform users.

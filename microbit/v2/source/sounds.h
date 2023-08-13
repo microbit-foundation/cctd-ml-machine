@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 #include "utilities.h"
 #ifndef SOUNDS_H_INCLUDED
 #define SOUNDS_H_INCLUDED

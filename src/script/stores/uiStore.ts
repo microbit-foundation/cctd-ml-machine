@@ -45,7 +45,7 @@ export const state = writable<{
   isOutputAssigned: boolean;
   isOutputReady: boolean;
   isLoading: boolean;
-  isMakecodeHex: boolean;
+  isOutputMakecodeHex: boolean;
 }>({
   isRequestingDevice: DeviceRequestStates.NONE,
   isFlashingDevice: false,
@@ -63,7 +63,7 @@ export const state = writable<{
   isOutputAssigned: false,
   isOutputReady: false,
   isLoading: true,
-  isMakecodeHex: false,
+  isOutputMakecodeHex: false,
 });
 
 // Message store to propagate allow all components to inform users.

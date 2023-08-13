@@ -5,7 +5,7 @@
  */
 
 import MBSpecs from './MBSpecs';
- 
+
 /**
  * UART data target. For fixing type compatibility issues.
  */

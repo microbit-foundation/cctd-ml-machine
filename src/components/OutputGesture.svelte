@@ -132,7 +132,6 @@
 
   function playSound() {
     if (selectedSound === undefined) {
-
       return;
     }
     if (!Microbits.isOutputAssigned()) {
@@ -143,7 +142,7 @@
       const sound = new Audio(selectedSound.path);
       void sound.play();
     } else {
-      void Microbits.sendToOutputUart('s', selectedSound.id);
+      void Microbits.sendUARTSoundMessageToOutput(selectedSound.id);
     }
   }
 

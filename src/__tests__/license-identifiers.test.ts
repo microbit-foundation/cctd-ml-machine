@@ -61,7 +61,7 @@ const filesMissingIdentifier = (files: string[], expects: string[]): string[] =>
     for (const expect of expects) {
       if (!readFile('./' + files[i], expect)) {
         if (!filesWithMissingIdentifier.includes(files[i])) {
-            filesWithMissingIdentifier.push(files[i]);
+          filesWithMissingIdentifier.push(files[i]);
         }
       }
     }

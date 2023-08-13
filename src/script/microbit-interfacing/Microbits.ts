@@ -22,6 +22,8 @@ type QueueElement = {
   view: DataView;
 };
 
+type UARTMessageType = "g" | "s"
+
 /**
  * Entry point for microbit interfaces / Facade pattern
  */
@@ -660,7 +662,7 @@ class Microbits {
    * @param type The type of UART message, i.e 'g' for gesture and 's' for sound
    * @param value The message
    */
-  public static sendToOutputUart(type: "s" | "g", value: string) {
+  private static sendToOutputUart(type: UARTMessageType, value: string) {
     if (!this.assignedOutputMicrobit) {
       throw new Error('No output microbit has been set');
     }
@@ -669,15 +671,27 @@ class Microbits {
       throw new Error('Cannot send to uart. Have not subscribed to UART service yet!');
     }
 
-    const fullMessage = `${type}_${value}#`
-    const view = new DataView(new ArrayBuffer(fullMessage.length));
-    for (let i = 0; i < fullMessage.length; i++) {
-      view.setUint8(i, fullMessage.charCodeAt(i));
-    }
+    const view = MBSpecs.Utility.messageToDataview(`${type}_${value}`);
 
     this.addToServiceActionQueue(this.outputUart, view);
   }
-  
+
+  /**
+   * Sends a sound type message, using UART
+   * @param value The sound ID
+   */
+  public static sendUARTSoundMessageToOutput(value: string) {
+    this.sendToOutputUart('s', value);
+  }
+
+  /**
+   * Sends a gesture type message, using UART
+   * @param value The gesture name
+   */
+  public static sendUARTGestureMessageToOutput(value: string) {
+    this.sendToOutputUart('g', value);
+  }
+
   /**
    * Attempts to create a connection to a USB-connected microbit
    * @returns Whether a microbit was successfully connected

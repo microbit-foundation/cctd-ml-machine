@@ -63,8 +63,11 @@ void onDelim(MicroBitEvent)
 {
     int beat = 200;
     ManagedString r = uart->readUntil("#");
-    ManagedString soundNo = r.substring(1,1);
-    playSound(getSound(soundNo), beat);
+    ManagedString prefix = r.substring(0,2);
+    if (prefix == "s_") { // Will be request to play sound
+        ManagedString soundNo = r.substring(2,1);
+        playSound(getSound(soundNo), beat);
+    }
 }
 
 int main()

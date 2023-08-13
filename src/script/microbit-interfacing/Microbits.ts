@@ -158,6 +158,11 @@ class Microbits {
    * @return Returns true if the connection was successful, else false.
    */
   public static async assignInput(name: string): Promise<boolean> {
+    // This function is long, and ought to be split up to make it easier to understand, but this is the short explanation
+    // The goal is to save a MicrobitBluetooth instance to the field this.assignedInputMicrobit.
+    // To do this we create a bluetooth connection, `MicrobitBluetooth.createMicrobitBluetooth`
+    // This function needs a lot of callbacks to handle behaviours for connection, reconnection, disconnection, etc.
+    //    These callbacks are what makes this function so long, as they are dependent on the state of the application
     if (name.length !== 5) {
       throw new Error('Could not connect, the name specified must be of length 5!');
     }
@@ -664,16 +669,19 @@ class Microbits {
       throw new Error('Cannot send to uart. Have not subscribed to UART service yet!');
     }
 
-    const view = new DataView(new ArrayBuffer(3 + value.length));
-
     const fullMessage = `${type}_${value}#`
+    const view = new DataView(new ArrayBuffer(fullMessage.length));
     for (let i = 0; i < fullMessage.length; i++) {
-      view.setUint8(i, value.charCodeAt(i));
+      view.setUint8(i, fullMessage.charCodeAt(i));
     }
 
     this.addToServiceActionQueue(this.outputUart, view);
   }
-
+  
+  /**
+   * Attempts to create a connection to a USB-connected microbit
+   * @returns Whether a microbit was successfully connected
+   */
   public static async linkMicrobit() {
     try {
       this.linkedMicrobit = await MicrobitUSB.requestConnection();
@@ -798,6 +806,7 @@ class Microbits {
         'Could not process the service queue, an element in the queue was not provided with a service to execute on.',
       );
     }
+
     service
       .writeValue(view)
       .then(() => {

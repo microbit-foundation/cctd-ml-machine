@@ -1,6 +1,11 @@
 /**
  * @jest-environment jsdom
  */
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 
 import fs from 'fs';
 import 'jest-expect-message';
@@ -8,6 +13,7 @@ import * as path from 'path';
 
 // Place files you wish to ignore by name in here
 const ignoredFiles: string[] = [];
+const directoriesToScan = ['./src/', './microbit/v2/source/', './microbit/v1/source/']
 
 const licenseIdentifierStringContributors =
   'Center for Computational Thinking and Design at Aarhus University and contributors';
@@ -61,7 +67,7 @@ const filesMissingIdentifier = (files: string[], expects: string[]): string[] =>
     for (const expect of expects) {
       if (!readFile('./' + files[i], expect)) {
         if (!filesWithMissingIdentifier.includes(files[i])) {
-            filesWithMissingIdentifier.push(files[i]);
+          filesWithMissingIdentifier.push(files[i]);
         }
       }
     }
@@ -73,7 +79,13 @@ describe('License identifier tests', () => {
   test(
     'All files should contain license identifier',
     () => {
-      const flatten = flattenDirectory('./src/');
+
+      const flatten = directoriesToScan.reduce(
+        (acc: any, current) => {
+          return acc.concat(flattenDirectory(current))
+        }, []
+      );
+
       const faultyFiles = filesMissingIdentifier(flatten, [
         licenseIdentifierStringContributors,
         licenseIdentifierStringSPDX,
@@ -81,9 +93,9 @@ describe('License identifier tests', () => {
       expect(
         faultyFiles.length,
         'Some files do not contain identifier! ' +
-          faultyFiles
-            .map(val => `\n \u001b[35m${val} \u001b[0mis missing license identifier`)
-            .join(),
+        faultyFiles
+          .map(val => `\n \u001b[35m${val} \u001b[0mis missing license identifier`)
+          .join(),
       ).toEqual(0);
     },
     60000 * 10,

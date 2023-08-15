@@ -22,6 +22,8 @@ type QueueElement = {
   view: DataView;
 };
 
+type UARTMessageType = "g" | "s"
+
 /**
  * Entry point for microbit interfaces / Facade pattern
  */
@@ -158,6 +160,11 @@ class Microbits {
    * @return Returns true if the connection was successful, else false.
    */
   public static async assignInput(name: string): Promise<boolean> {
+    // This function is long, and ought to be split up to make it easier to understand, but this is the short explanation
+    // The goal is to save a MicrobitBluetooth instance to the field this.assignedInputMicrobit.
+    // To do this we create a bluetooth connection, `MicrobitBluetooth.createMicrobitBluetooth`
+    // This function needs a lot of callbacks to handle behaviours for connection, reconnection, disconnection, etc.
+    //    These callbacks are what makes this function so long, as they are dependent on the state of the application
     if (name.length !== 5) {
       throw new Error('Could not connect, the name specified must be of length 5!');
     }
@@ -650,7 +657,12 @@ class Microbits {
     return this.inputName;
   }
 
-  public static sendToOutputUart(type: string, value: string) {
+  /**
+   * Sends a message through UART
+   * @param type The type of UART message, i.e 'g' for gesture and 's' for sound
+   * @param value The message
+   */
+  private static sendToOutputUart(type: UARTMessageType, value: string) {
     if (!this.assignedOutputMicrobit) {
       throw new Error('No output microbit has been set');
     }
@@ -659,17 +671,31 @@ class Microbits {
       throw new Error('Cannot send to uart. Have not subscribed to UART service yet!');
     }
 
-    const view = new DataView(new ArrayBuffer(2 + value.length));
-
-    view.setUint8(0, type.charCodeAt(0));
-    for (let i = 0; i < value.length; i++) {
-      view.setUint8(i + 1, value.charCodeAt(i));
-    }
-    view.setUint8(1 + value.length, '#'.charCodeAt(0));
+    const view = MBSpecs.Utility.messageToDataview(`${type}_${value}`);
 
     this.addToServiceActionQueue(this.outputUart, view);
   }
 
+  /**
+   * Sends a sound type message, using UART
+   * @param value The sound ID
+   */
+  public static sendUARTSoundMessageToOutput(value: string) {
+    this.sendToOutputUart('s', value);
+  }
+
+  /**
+   * Sends a gesture type message, using UART
+   * @param value The gesture name
+   */
+  public static sendUARTGestureMessageToOutput(value: string) {
+    this.sendToOutputUart('g', value);
+  }
+
+  /**
+   * Attempts to create a connection to a USB-connected microbit
+   * @returns Whether a microbit was successfully connected
+   */
   public static async linkMicrobit() {
     try {
       this.linkedMicrobit = await MicrobitUSB.requestConnection();
@@ -794,6 +820,7 @@ class Microbits {
         'Could not process the service queue, an element in the queue was not provided with a service to execute on.',
       );
     }
+
     service
       .writeValue(view)
       .then(() => {

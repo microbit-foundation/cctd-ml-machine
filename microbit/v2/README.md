@@ -11,10 +11,12 @@ That repository is a good starting place if one wishes to learn more about devel
 You need some open source pre-requisites to build this repo. You can either install these tools yourself, or use the docker image provided below.
 
 - [GNU Arm Embedded Toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
-- [Github desktop](https://desktop.github.com/)
+- [Git](https://git-scm.com/)
 - [CMake](https://cmake.org/download/)
 - [Python 3](https://www.python.org/downloads/)
 - For OS X you may need command line tools for xcode. Install using `xcode-select --install`
+- For linux you may need the package
+    - `arm-none-eabi-newlib` - Found to be the case in Arch Linux.
 
 **OR**
 
@@ -22,7 +24,7 @@ One can use docker instead of downloading these dependencies (read about this he
 
 # Building without docker
 - Clone this repository
-- In the folder `/microbit/v2` type `execute python3 build.py` or `python build.py` depending on python version
+- In the folder `/microbit/v2` type `python3 build.py` or `python build.py` depending on python version
 - The hex file will be built `MICROBIT.HEX` and placed in the `/microbit/v2` folder.
 - If at some point any config changes are made outside any .cpp files run `python3 build.py -c`. The `-c` flag will clear the build files. If this is not done the changes to config will not take effect.
 
@@ -177,8 +179,12 @@ void onDelim(MicroBitEvent)
 {
     int beat = 200;
     ManagedString r = uart->readUntil("#");
-    ManagedString soundNo = r.substring(1,1);
-    playSound(getSound(soundNo), beat);
+    ManagedString prefix = r.substring(0,2);
+
+    if (prefix == "s_") {
+        ManagedString soundNo = r.substring(2,1);
+        playSound(getSound(soundNo), beat);
+    }
 }
 ```
 `onDelim` is the event called by the micro:bit event system when a *delimiting character* was received. Right now the UART service is used to determine what sound should be played. It will read from the buffer until the delimiting character, in this case '#', and since sound indeces from ML-Machine.org are sent as s1, s2 etc, it will substring the last character giving s1->1 s2->2, which will be used to figure out what sound to play.

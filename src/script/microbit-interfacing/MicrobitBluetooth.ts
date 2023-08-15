@@ -5,7 +5,6 @@
  */
 
 import MBSpecs from './MBSpecs';
-import TypingUtils from '../TypingUtils';
 
 /**
  * UART data target. For fixing type compatibility issues.

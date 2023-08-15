@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import MicrobitBluetooth from './MicrobitBluetooth';
+
 /* eslint-disable @typescript-eslint/no-namespace */
 /**
  * References to the Bluetooth Profile UUIDs.
@@ -265,6 +267,18 @@ namespace MBSpecs {
         name = Utility.CODEBOOK_USB[i][h] + name;
       }
       return name;
+    }
+
+    public static messageToDataview(message: string, delimiter: string = "#"): DataView {
+      if (delimiter.length != 1) {
+        throw new Error('The delimiter must be 1 character long');
+      }
+      const fullMessage = `${message}${delimiter}`;
+      const view = new DataView(new ArrayBuffer(fullMessage.length));
+      for (let i = 0; i < fullMessage.length; i++) {
+        view.setUint8(i, fullMessage.charCodeAt(i));
+      }
+      return view;
     }
 
     /**

@@ -38,6 +38,10 @@ class InputBehaviour extends LoggingDecorator {
     });
   }
 
+  onGestureRecognized(id: number, gestureName: string): void {
+    super.onGestureRecognized(id, gestureName);
+  }
+
   onReady() {
     super.onReady();
     clearTimeout(this.reconnectTimeout);

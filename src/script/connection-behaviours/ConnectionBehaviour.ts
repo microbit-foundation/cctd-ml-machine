@@ -43,6 +43,12 @@ interface ConnectionBehaviour {
   onReady(): void;
 
   /**
+   * What should happen when a gesture is recognized?
+   * @param gestureName The name of the gesture, which was recognized
+   */
+  onGestureRecognized(id: number, gestureName: string): void;
+
+  /**
    * What should happen when the micro:bit loses connection via Bluetooth
    */
   onDisconnected(): void;

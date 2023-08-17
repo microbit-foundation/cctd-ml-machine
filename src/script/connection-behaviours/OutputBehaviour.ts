@@ -31,12 +31,16 @@ class OutputBehaviour extends LoggingDecorator {
     });
   }
 
+  onGestureRecognized(id: number, gestureName: string): void {
+    super.onGestureRecognized(id, gestureName);
+  }
+
   onReady() {
     super.onReady();
     // Reset any output pins currently active.
-    const pinResetArguments: { pin: number; on: boolean }[] = [];
+    const pinResetArguments: { pin: MBSpecs.UsableIOPin; on: boolean }[] = [];
     StaticConfiguration.supportedPins.forEach(pin => {
-      const argument = { pin: parseInt(pin), on: false };
+      const argument = { pin: pin, on: false };
       pinResetArguments.push(argument);
     });
     Microbits.sendToOutputPin(pinResetArguments);

@@ -35,6 +35,7 @@
   import Information from './information/Information.svelte';
   import { PinTurnOnState } from './output/PinSelectorUtil';
   import MBSpecs from '../script/microbit-interfacing/MBSpecs';
+  import ConnectionBehaviours from '../script/connection-behaviours/ConnectionBehaviours';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -84,6 +85,10 @@
       triggerComponents();
       playSound();
       wasTriggered = true;
+      ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
+        gesture.ID,
+        gesture.name,
+      );
     } else {
       wasTriggered = false;
     }

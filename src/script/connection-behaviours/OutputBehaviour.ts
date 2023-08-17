@@ -35,6 +35,10 @@ class OutputBehaviour extends LoggingDecorator {
     super.onGestureRecognized(id, gestureName);
   }
 
+  onUartMessageReceived(message: string): void {
+    super.onUartMessageReceived(message);
+  }
+
   onReady() {
     super.onReady();
     // Reset any output pins currently active.
@@ -54,6 +58,7 @@ class OutputBehaviour extends LoggingDecorator {
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
     super.onAssigned(microbitBluetooth, name);
+    microbitBluetooth.listenToUART(this.onUartMessageReceived)
     state.update(s => {
       s.isOutputAssigned = true;
       return s;

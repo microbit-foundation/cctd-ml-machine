@@ -49,6 +49,11 @@ interface ConnectionBehaviour {
   onGestureRecognized(id: number, gestureName: string): void;
 
   /**
+   * What should happen when a message is received
+   */
+  onUartMessageReceived(message: string): void;
+
+  /**
    * What should happen when the micro:bit loses connection via Bluetooth
    */
   onDisconnected(): void;

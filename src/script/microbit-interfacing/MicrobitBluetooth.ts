@@ -332,7 +332,7 @@ export class MicrobitBluetooth {
             optionalServices: [
               MBSpecs.Services.UART_SERVICE,
               MBSpecs.Services.ACCEL_SERVICE,
-              MBSpecs.Services.DEVICE_INFO_SERVICE,
+              // MBSpecs.Services.DEVICE_INFO_SERVICE,
               MBSpecs.Services.LED_SERVICE,
               MBSpecs.Services.IO_SERVICE,
               MBSpecs.Services.BUTTON_SERVICE,

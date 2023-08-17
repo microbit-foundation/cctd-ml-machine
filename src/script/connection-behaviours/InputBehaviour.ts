@@ -42,6 +42,10 @@ class InputBehaviour extends LoggingDecorator {
     super.onGestureRecognized(id, gestureName);
   }
 
+  onUartMessageReceived(message: string): void {
+    super.onUartMessageReceived(message);
+  }
+
   onReady() {
     super.onReady();
     clearTimeout(this.reconnectTimeout);
@@ -53,6 +57,7 @@ class InputBehaviour extends LoggingDecorator {
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
     super.onAssigned(microbitBluetooth, name);
+    microbitBluetooth.listenToUART(this.onUartMessageReceived)
     state.update(s => {
       s.isInputAssigned = true;
       return s;

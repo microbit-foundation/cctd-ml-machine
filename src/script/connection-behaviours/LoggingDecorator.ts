@@ -25,7 +25,11 @@ abstract class LoggingDecorator implements ConnectionBehaviour {
   }
 
   onGestureRecognized(id: number, gestureName: string): void {
-    this.enableLogging && console.log(`Gesture '${gestureName}' with id ${id} was recognized`)
+    this.enableLogging && console.log(`Gesture '${gestureName}' with id ${id} was recognized`);
+  }
+
+  onUartMessageReceived(message: string): void {
+    this.enableLogging && console.log(`Message '${message}' was received`);
   }
 
   onReady(): void {

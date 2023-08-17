@@ -12,6 +12,7 @@ import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
  * Use this for checking the micro:bit behaviour.
  */
 class SpyConnectionBehaviour implements ConnectionBehaviour {
+
   private hasConnected = false;
   private hasDisconnected = false;
   private wasExpelled = false;
@@ -21,6 +22,10 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
   private connectedName: string | undefined = undefined;
   private connectedMicrobit: MicrobitBluetooth | undefined = undefined;
 
+  onGestureRecognized(id: number, gestureName: string): void {
+    throw new Error('Method not implemented.');
+  }
+
   onConnected(name: string): void {
     this.hasConnected = true;
   }
@@ -28,7 +33,7 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
     this.hasDisconnected = true;
   }
 
-  accelerometerChange(x: number, y: number, z: number): void {}
+  accelerometerChange(x: number, y: number, z: number): void { }
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string): void {
     this.hasConnected = true;
@@ -50,7 +55,7 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
     }
   }
 
-  buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {}
+  buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void { }
 
   isAssigned(): boolean {
     return false;
@@ -80,7 +85,7 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
     return this.connectedName;
   }
 
-  onReady(): void {}
+  onReady(): void { }
 
   onBluetoothConnectionError(error?: unknown): void {
     this.hasFailedConnection = true;

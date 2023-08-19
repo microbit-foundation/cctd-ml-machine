@@ -677,11 +677,29 @@ class Microbits {
   }
 
   /**
+   * @deprecated For older versions of hex files. Will be removed in the future
+   */
+  private static sendLegacySoundMessage(value: string) {
+    if (!this.assignedOutputMicrobit) {
+      throw new Error('No output microbit has been set');
+    }
+
+    if (!this.outputUart) {
+      throw new Error('Cannot send to uart. Have not subscribed to UART service yet!');
+    }
+
+    const view = MBSpecs.Utility.messageToDataview(`s${value}`);
+
+    this.addToServiceActionQueue(this.outputUart, view);
+  }
+
+  /**
    * Sends a sound type message, using UART
    * @param value The sound ID
    */
   public static sendUARTSoundMessageToOutput(value: string) {
     this.sendToOutputUart('s', value);
+    this.sendLegacySoundMessage(value);
   }
 
   /**

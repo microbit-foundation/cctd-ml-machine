@@ -33,6 +33,9 @@ class OutputBehaviour extends LoggingDecorator {
 
   onGestureRecognized(id: number, gestureName: string): void {
     super.onGestureRecognized(id, gestureName);
+    if (Microbits.isOutputReady()) {
+      Microbits.sendUARTGestureMessageToOutput(gestureName);
+    }
   }
 
   onUartMessageReceived(message: string): void {

@@ -613,6 +613,7 @@ class Microbits {
     this.assignedOutputMicrobit = this.getInput();
     this.outputName = this.inputName;
     this.outputVersion = this.inputVersion;
+
     ConnectionBehaviours.getOutputBehaviour().onAssigned(
       this.getOutput(),
       this.outputName,

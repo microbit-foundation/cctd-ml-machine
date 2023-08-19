@@ -37,10 +37,28 @@ class OutputBehaviour extends LoggingDecorator {
 
   onUartMessageReceived(message: string): void {
     super.onUartMessageReceived(message);
+    if (message === "id_mkcd") {
+      this.announceIsMakecode();
+    }
+  }
+
+  private announceIsMakecode() {
+    state.update(s => {
+      s.isOutputMakecodeHex = true;
+      return s;
+    })
   }
 
   onReady() {
     super.onReady();
+
+    if (Microbits.isInputOutputTheSame()) {
+      state.update(s => {
+        s.isOutputMakecodeHex = s.isInputMakecodeHex;
+        return s;
+      })
+    }
+
     // Reset any output pins currently active.
     const pinResetArguments: { pin: MBSpecs.UsableIOPin; on: boolean }[] = [];
     StaticConfiguration.supportedPins.forEach(pin => {
@@ -58,7 +76,7 @@ class OutputBehaviour extends LoggingDecorator {
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
     super.onAssigned(microbitBluetooth, name);
-    microbitBluetooth.listenToUART(this.onUartMessageReceived)
+    microbitBluetooth.listenToUART((data) => this.onUartMessageReceived(data))
     state.update(s => {
       s.isOutputAssigned = true;
       return s;
@@ -121,6 +139,7 @@ class OutputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isOutputConnected = false;
       s.isOutputReady = false;
+      s.isOutputMakecodeHex = false;
       return s;
     });
   }

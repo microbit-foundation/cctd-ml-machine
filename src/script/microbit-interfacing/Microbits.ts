@@ -613,6 +613,7 @@ class Microbits {
     this.assignedOutputMicrobit = this.getInput();
     this.outputName = this.inputName;
     this.outputVersion = this.inputVersion;
+
     ConnectionBehaviours.getOutputBehaviour().onAssigned(
       this.getOutput(),
       this.outputName,
@@ -707,6 +708,9 @@ class Microbits {
    * @param value The gesture name
    */
   public static sendUARTGestureMessageToOutput(value: string) {
+    if (!this.isOutputReady()) {
+      throw new Error("No output microbit is ready to receive UART gesture messages")
+    }
     this.sendToOutputUart('g', value);
   }
 

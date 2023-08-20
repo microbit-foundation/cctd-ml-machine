@@ -38,6 +38,24 @@ class InputBehaviour extends LoggingDecorator {
     });
   }
 
+  onGestureRecognized(id: number, gestureName: string): void {
+    super.onGestureRecognized(id, gestureName);
+  }
+
+  onUartMessageReceived(message: string): void {
+    super.onUartMessageReceived(message);
+    if (message === "id_mkcd") {
+      this.announceIsMakecode();
+    }
+  }
+
+  private announceIsMakecode() {
+    state.update(s => {
+      s.isInputMakecodeHex = true;
+      return s;
+    })
+  }
+
   onReady() {
     super.onReady();
     clearTimeout(this.reconnectTimeout);
@@ -49,6 +67,7 @@ class InputBehaviour extends LoggingDecorator {
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
     super.onAssigned(microbitBluetooth, name);
+    microbitBluetooth.listenToUART((data) => this.onUartMessageReceived(data))
     state.update(s => {
       s.isInputAssigned = true;
       return s;
@@ -84,6 +103,7 @@ class InputBehaviour extends LoggingDecorator {
       s.offerReconnect = false;
       s.isInputReady = false;
       s.reconnectState = DeviceRequestStates.NONE;
+      s.isInputMakecodeHex = false;
       return s;
     });
   }

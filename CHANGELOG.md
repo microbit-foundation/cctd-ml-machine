@@ -3,6 +3,59 @@
 Notable changes to the project will be archieved here
 
 
+## [1.8.1](https://gitlab.au.dk/au-cs-ceed/ml-microbit-browser/-/releases/v1.8.1) - 11/01 - 2023
+Fixes some problems after reaching feature parity between DR and master release branches
+
+### Changed
+- Removes ID field from menu properties
+- Moved management of menus out of svelte components
+
+### Fixed
+- Fixed type errors and warnings for graph components
+- Cookie banner can now select language
+- Fixed a bug with predictions causing NaN confidence
+
+## [1.8.0](https://gitlab.au.dk/au-cs-ceed/ml-microbit-browser/-/releases/v1.8.0) - 22/12 - 2022
+Jest has been introduced! And with it comes the promise of stability.  In addition, some graphical and translation issues has been addressed.
+
+### Added
+- Jest has been introduced (see `src/__tests__/` for examples on how they work)
+- Tests for finding unused translations
+- Tests for inconsistencies in the translations, such as having to include both an english and danish translation of a phrase.
+- Both english and danish translations must be of equal length
+
+### Fixed
+- Thanks to jest we have found several issues with the translation, which has been addressed, including removing unused/redundant translations
+- The highlights on the pattern matrix now disappears when moving outside the drawing area.
+
+## [1.7.0](https://gitlab.au.dk/au-cs-ceed/ml-microbit-browser/-/releases/v1.2.0) - 1/12 - 2022
+Jest has been introduced! And with it comes the promise of stability.  In addition, some graphical and translation issues has been addressed.
+
+### Added
+- Jest has been introduced (see `src/__tests__/` for examples on how they work)
+- Tests for finding unused translations
+- Tests for inconsistencies in the translations, such as having to include both an english and danish translation of a phrase.
+- Both english and danish translations must be of equal length
+
+### Fixed
+- Thanks to jest we have found several issues with the translation, which has been addressed, including removing unused/redundant translations
+- The highlights on the pattern matrix now disappears when moving outside the drawing area.
+
+## [1.6.0](https://gitlab.au.dk/au-cs-ceed/ml-microbit-browser/-/releases/v1.1.0) - 22/11 - 2022
+Introduces a new pairing pattern system
+### Added
+- Pairing pattern now automatically fills out squares beneath the targeted square. In addition it outlines any squares below the one that is currently being hovered over.
+- The ConnectionBehaviour callback promptOpen is now fired when the connection prompt opens.
+
+### Fixed
+- The information icon is now fixed in place on recorded gestures. Before it would move when scrolling the page
+- Spinning icon no longer escapes the menu box after a model has been trained.
+- Information icons no longer have higher z-index priority over the control-bar
+- Failed connectivity errors that would occur when the micro:bit was successfully connected but loses connection before adding the listener to the services such as accelerometer are now caught and display a 'connection failed' message.
+- Added some missing translations for prompts when deleting tests/gestsures
+- Reduced the overflow issue that would cause the left hand side menu to overflow when testcenter was open on chromebooks. It is still an issue, but now the home button is accessible.
+- Swapped the outline on the bottom input graph for a border, since it caused some graphical issues due to it being placed outside the container.
+
 ## [1.5.0](https://gitlab.au.dk/au-cs-ceed/ml-microbit-browser/-/releases/v1.0.1) - 17/11 - 2022
 Welcome Jon, who has joined the project.
 

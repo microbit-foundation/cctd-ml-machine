@@ -16,7 +16,7 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import { Filters, FilterType, Axes, determineFilter, AxesType } from './datafunctions';
+import { FilterType, Axes, determineFilter, AxesType } from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';

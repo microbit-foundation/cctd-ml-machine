@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
   import { state } from '../../script/stores/uiStore';
   import { GestureData, currentData, gestures } from '../../script/stores/mlStore';
@@ -13,10 +13,10 @@
     Axes,
     AxesType,
     FilterType,
-    Filters,
     clamp,
     determineFilter,
   } from '../../script/datafunctions';
+  import { getPrevData } from '../../script/stores/mlStore';
 
   export let filter: FilterType;
   export let gesture: GestureData | undefined = undefined;
@@ -61,11 +61,40 @@
     return filteredData;
   };
 
+  let liveData: [number, number, number] = [0, 0, 0];
+
+  const createLiveData = () => {
+    if (!showLive) {
+      data.datasets[0].hidden = true;
+      chart.update();
+      return;
+    }
+    const prevData = getPrevData();
+    liveData = [
+      filterStrategy.computeOutput(prevData.x),
+      filterStrategy.computeOutput(prevData.y),
+      filterStrategy.computeOutput(prevData.z)
+    ];
+      // TODO: Reconsider how to best update graph if values goes outside axes scales
+    data.datasets[0].data[0] = clamp(liveData[0], axisScale.min, axisScale.max);
+    data.datasets[0].data[1] = clamp(liveData[1], axisScale.min, axisScale.max);
+    data.datasets[0].data[2] = clamp(liveData[2], axisScale.min, axisScale.max);
+    data.datasets[0].hidden = false;
+    chart.update();
+  }
+
+  onInterval(createLiveData, 100);
+
+function onInterval(callback: () => void, milliseconds: number) {
+	const interval = setInterval(callback, milliseconds);
+	onDestroy(() => {
+		clearInterval(interval);
+	});
+}
+
   const dataRepresentation = createFilteredData();
 
-  const compareWithLive = (
-    [Filters.MAX, Filters.MIN, Filters.MEAN] as FilterType[]
-  ).includes(filter);
+
 
   // TODO: Handle sensitivity and extraconfig
   // export let sensitivity: Vector3 | undefined = undefined;
@@ -87,11 +116,6 @@
     ];
     return colors[index % colors.length];
   }
-
-  let isMounted = false;
-  onMount(() => {
-    isMounted = true;
-  });
 
   const labels: AxesType[] = Object.values(Axes);
 
@@ -127,41 +151,20 @@
     min: maxMin.min - 0.1 * maxMin.diff,
   };
 
-  function onNewLiveValues(
-    values: { x: number; y: number; z: number },
-    isConnected: boolean,
-  ) {
-    if (!isMounted) {
-      return;
-    }
-    if (!showLive || !isConnected) {
-      data.datasets[0].hidden = true;
-      chart.update();
-      return;
-    }
-    // TODO: Reconsider how to best update graph if values goes outside axes scales
-    data.datasets[0].data[0] = clamp(values.x, axisScale.min, axisScale.max);
-    data.datasets[0].data[1] = clamp(values.y, axisScale.min, axisScale.max);
-    data.datasets[0].data[2] = clamp(values.z, axisScale.min, axisScale.max);
-    data.datasets[0].hidden = false;
-    chart.update();
-  }
-
   const data: ChartData = {
     labels: labels,
     datasets: [],
   };
 
   const populateData = () => {
-    if (compareWithLive) {
-      data.datasets.push({
-        label: 'Live Data',
-        backgroundColor: '#000000',
-        data: [$currentData.x, $currentData.y, $currentData.z],
-        type: 'line',
-        hidden: !showLive,
-      });
-    }
+    data.datasets.push({
+      label: 'Live Data',
+      backgroundColor: '#000000',
+      data: liveData,
+      type: 'line',
+      hidden: !showLive,
+    });
+
     dataRepresentation.forEach((dataPoint, idx) => {
       data.datasets.push({
         label: dataPoint.name,
@@ -193,15 +196,6 @@
     options: {
       aspectRatio: aspectRatio,
       elements: {
-        line: {
-          borderWidth: 0,
-        },
-        point: {
-          radius: 25,
-          pointStyle: 'line',
-          borderWidth: 1,
-          borderColor: '#000000',
-        },
       },
       scales: {
         y: {
@@ -240,12 +234,6 @@
   // }
   // )(sensitivity);
 
-  $: {
-    if (compareWithLive) {
-      onNewLiveValues($currentData, $state.isInputConnected);
-    }
-  }
-
   let chart: Chart;
   let canvas: HTMLCanvasElement;
   onMount(() => {
@@ -255,6 +243,8 @@
       // TODO: Remember extraConfig
     }
   });
+
+
 </script>
 
 <canvas bind:this={canvas} id="myChart" />

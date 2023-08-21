@@ -20,6 +20,10 @@ abstract class LoggingDecorator implements ConnectionBehaviour {
   private logTimer = new Date().getTime();
   private logInterval = 1000;
 
+  onIdentifiedAsMakecode(): void {
+    this.enableLogging && console.log('Microbit identified as makecode HEX');
+  }
+
   onBluetoothConnectionError(error?: unknown): void {
     this.enableLogging && console.log('An error occured while connecting.', error);
   }

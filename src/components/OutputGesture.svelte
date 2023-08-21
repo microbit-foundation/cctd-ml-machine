@@ -36,6 +36,7 @@
   import { PinTurnOnState } from './output/PinSelectorUtil';
   import MBSpecs from '../script/microbit-interfacing/MBSpecs';
   import ConnectionBehaviours from '../script/connection-behaviours/ConnectionBehaviours';
+  import CookieManager from '../script/CookieManager';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -77,18 +78,32 @@
     return 'none';
   };
 
+  const wasTurnedOn = () => {
+    // TODO: Will be removed in the future - see https://github.com/microbit-foundation/cctd-ml-machine/issues/305 @amh
+    if (CookieManager.hasFeatureFlag('mkcd')) {
+      if (Microbits.isOutputMakecode()) {
+        ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
+          gesture.ID,
+          gesture.name,
+        );
+        return;
+      }
+    }
+    triggerComponents();
+    playSound();
+    wasTriggered = true;
+    ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
+      gesture.ID,
+      gesture.name,
+    );
+  };
+
   const handleTriggering = (action: TriggerAction) => {
     if (action === 'none') {
       return;
     }
     if (action === 'turnOn') {
-      triggerComponents();
-      playSound();
-      wasTriggered = true;
-      ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
-        gesture.ID,
-        gesture.name,
-      );
+      wasTurnedOn();
     } else {
       wasTriggered = false;
     }

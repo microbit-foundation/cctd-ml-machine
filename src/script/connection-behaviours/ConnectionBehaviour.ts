@@ -21,6 +21,8 @@ interface ConnectionBehaviour {
    */
   onCancelledBluetoothRequest(): void;
 
+  onIdentifiedAsMakecode(): void;
+
   /**
    * What should happen when the micro:bit is assigned
    * @param {MicrobitBluetooth} microbit

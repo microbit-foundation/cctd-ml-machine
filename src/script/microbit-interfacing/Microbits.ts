@@ -11,7 +11,7 @@ import ConnectionBehaviours from '../connection-behaviours/ConnectionBehaviours'
 import { get, writable } from 'svelte/store';
 import MBSpecs from './MBSpecs';
 import MicrobitBluetooth from './MicrobitBluetooth';
-import { outputting } from '../stores/uiStore';
+import { outputting, state } from '../stores/uiStore';
 import MicrobitUSB from './MicrobitUSB';
 import type ConnectionBehaviour from '../connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
@@ -47,6 +47,9 @@ class Microbits {
 
   private static isInputReconnecting = false;
   private static isOutputReconnecting = false;
+
+  private static outputMakecode = false;
+  private static inputMakecode = false;
 
   /**
    * Maps pin to the number of times, it has been asked to turn on.
@@ -259,6 +262,7 @@ class Microbits {
       );
 
       connectionBehaviour.onAssigned(this.getInput(), name);
+      this.getInput().listenToUART((data) => this.inputUartHandler(data))
       this.inputName = name;
       this.inputVersion = this.getInput().getVersion();
       return true;
@@ -372,6 +376,7 @@ class Microbits {
         onOutputReconnectFailed,
       );
       connectionBehaviour.onAssigned(this.getOutput(), name);
+      this.getOutput().listenToUART((data) => this.outputUartHandler(data))
       this.outputName = name;
       this.outputVersion = this.getOutput().getVersion();
       return true;
@@ -379,6 +384,24 @@ class Microbits {
       this.onFailedConnection(connectionBehaviour)(e as Error);
     }
     return false;
+  }
+
+  private static inputUartHandler(data: string) {
+    const connectionBehaviour = ConnectionBehaviours.getInputBehaviour();
+    if (data === "id_mkcd") {
+      this.inputMakecode = true;
+      connectionBehaviour.onIdentifiedAsMakecode();
+    }
+    connectionBehaviour.onUartMessageReceived(data)
+  }
+
+  private static outputUartHandler(data: string) {
+    const connectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
+    if (data === "id_mkcd") {
+      this.outputMakecode = true;
+      connectionBehaviour.onIdentifiedAsMakecode();
+    }
+    connectionBehaviour.onUartMessageReceived(data)
   }
 
   private static onFailedConnection(behaviour: ConnectionBehaviour) {
@@ -727,6 +750,10 @@ class Microbits {
     }
   }
 
+  /**
+   * Gets the microbit connected through USB.
+   * @returns The USB-Connected microbit
+   */
   public static getLinked(): MicrobitUSB {
     if (!this.isMicrobitLinked() || !this.linkedMicrobit) {
       throw new Error('No microbit has been linked!');
@@ -735,11 +762,30 @@ class Microbits {
     return this.linkedMicrobit;
   }
 
+  /**
+   * Attempt to disconnect a USB-connected microbit
+   */
   public static async unlinkMicrobit() {
     if (!this.isMicrobitLinked()) {
       throw new Error('Cannot disconnect USB. No USB microbit could be found');
     }
     await this.getLinked().disconnect();
+  }
+
+  /**
+   * Whether the output microbit is a makecode hex.
+   * @returns True if the output microbit is from Makecode.
+   */
+  public static isOutputMakecode() {
+    return this.outputMakecode;
+  }
+
+  /**
+   * Whether the input microbit is a makecode hex,
+   * @returns True if the input microbit is from Makecode.
+   */
+  public static isInputMakecode() {
+    return this.inputMakecode;
   }
 
   /**

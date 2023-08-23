@@ -12,7 +12,6 @@
   import FilterGraph from './FilterGraph.svelte';
 
   export let filter: FilterType;
-  export let openInspector: (filter: FilterType) => void = TypingUtils.emptyFunction;
 
   const filterStrategy = determineFilter(filter);
   const filterText = filterStrategy.getText();
@@ -36,17 +35,13 @@
   class="
       bg-white
       h-min
-      hover:bg-sky-100
       duration-200
-      cursor-pointer
       overflow-hidden
       rounded-lg
       m-2
       relative
       {isActive ? 'shadow-lg' : ''}"
-  on:click={() => {
-    openInspector(filter);
-  }}>
+  >
   <div class="filter flex justify-between">
     <div class="flex flex-row relative">
       <div class="absolute">

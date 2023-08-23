@@ -6,8 +6,8 @@
 
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import {Chart, LinearScale, CategoryScale, ChartConfiguration, ChartData, registerables } from 'chart.js';
-  import { BoxPlotController, BoxAndWiskers, ViolinController, Violin} from '@sgratzl/chartjs-chart-boxplot';
+  import {Chart, LinearScale, CategoryScale, ChartConfiguration, ChartData, LineElement, PointElement, LineController, Legend} from 'chart.js';
+  import {ViolinController, Violin} from '@sgratzl/chartjs-chart-boxplot';
   import { state } from '../../script/stores/uiStore';
   import { GestureData, gestures } from '../../script/stores/mlStore';
   import {
@@ -230,7 +230,7 @@ function onInterval(callback: () => void, milliseconds: number) {
   let chart: Chart;
   let canvas: HTMLCanvasElement;
   onMount(() => {
-    Chart.register(...registerables, BoxPlotController, BoxAndWiskers, ViolinController, Violin);
+    Chart.register(ViolinController, Violin, LinearScale, CategoryScale, LineElement, PointElement, LineController, Legend);
     if (canvas.getContext('2d') != null) {
       chart = new Chart(canvas.getContext('2d') ?? new HTMLCanvasElement(), config);
       // TODO: Remember extraConfig

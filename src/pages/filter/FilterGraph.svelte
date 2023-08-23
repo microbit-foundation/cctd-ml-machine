@@ -8,7 +8,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
   import { state } from '../../script/stores/uiStore';
-  import { GestureData, currentData, gestures } from '../../script/stores/mlStore';
+  import { GestureData, gestures } from '../../script/stores/mlStore';
   import {
     Axes,
     AxesType,
@@ -70,6 +70,8 @@
       return;
     }
     const prevData = getPrevData();
+    // Return if insufficient amount of previous data is available
+    if( prevData === undefined ) return;
     liveData = [
       filterStrategy.computeOutput(prevData.x),
       filterStrategy.computeOutput(prevData.y),

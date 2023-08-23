@@ -59,7 +59,6 @@
       });
       return data;
     });
-    console.log("filtered data", filteredData);
     return filteredData;
   };
 
@@ -204,6 +203,7 @@ function onInterval(callback: () => void, milliseconds: number) {
         legend: {
           position: legendPosition,
           display: displayLegend,
+          onClick: () => {},
         },
         title: {
           display: false,

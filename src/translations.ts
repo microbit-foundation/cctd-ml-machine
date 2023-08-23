@@ -72,11 +72,11 @@ export default {
 		"content.filters.acc.title" : "Samlet acceleration",
 		"content.filters.acc.description" : "Summen af acceleration for hele bevægelsen, udregnet med absolutte værdier, således at minus tæller som plus. God til at forstå mængden af bevægelse.",
 		"content.filters.mean.title" : "Gennemsnit",
-		"content.filters.mean.description": "Gennemsnit af acceleration for de forskellige axer",
-		"content.filters.zcr.title" : "Zcr <Updater>",
-		"content.filters.zcr.description": "<Mangler Beskrivelse>",
-		"content.filters.rms.title" : "Rms <Updater>",
-		"content.filters.rms.description": "<Mangler Beskrivelse>",
+		"content.filters.mean.description": "Gennemsnit af acceleration for de forskellige axer.",
+		"content.filters.zcr.title" : "Zero crossing rate",
+		"content.filters.zcr.description": "Hvor ofte inputer (accelerationen) går fra positiv til negativ eller omvend.t",
+		"content.filters.rms.title" : "Effektiv værdi ",
+		"content.filters.rms.description": "Root mean square.",
 
 		// MODEL PAGE:
 		"content.model.trainModelFirstHeading": "Træn modellen først!",
@@ -318,10 +318,10 @@ export default {
 		"content.filters.acc.description" : "The sum of acceleration for the whole gesture, calculated in absolute values, so that minus counts as plus. Good for understanding the amount of movement.",
 		"content.filters.mean.title" : "Mean",
 		"content.filters.mean.description": "Mean value of accelerations at different axes",
-		"content.filters.zcr.title" : "Zero Crossing Rate <Update>",
-		"content.filters.zcr.description": "<Missing Description>",
-		"content.filters.rms.title" : "Root Mean Square <Update>",
-		"content.filters.rms.description": "<Missing Description>",
+		"content.filters.zcr.title" : "Zero crossing rate",
+		"content.filters.zcr.description": "The rate at which the input (acceleration) transitions from positive to zero to negative or negative to zero to positive.",
+		"content.filters.rms.title" : "Root mean square",
+		"content.filters.rms.description": "",
 
 		// MODEL PAGE:
 		"content.model.trainModelFirstHeading": "Train the model first!",

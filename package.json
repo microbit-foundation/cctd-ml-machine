@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.0.0",
-    "@sgratzl/chartjs-chart-boxplot": "^4.1.2",
+    "@sgratzl/chartjs-chart-boxplot": "^4.2.4",
     "@tensorflow/tfjs": "^4.4.0",
     "@types/w3c-web-usb": "^1.0.6",
     "bowser": "^2.11.0",

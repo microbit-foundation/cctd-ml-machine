@@ -6,7 +6,8 @@
 
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
+  import {Chart, LinearScale, CategoryScale, ChartConfiguration, ChartData, registerables } from 'chart.js';
+  import { BoxPlotController, BoxAndWiskers, ViolinController, Violin} from '@sgratzl/chartjs-chart-boxplot';
   import { state } from '../../script/stores/uiStore';
   import { GestureData, gestures } from '../../script/stores/mlStore';
   import {
@@ -106,17 +107,7 @@ function onInterval(callback: () => void, milliseconds: number) {
   // export let forcedColor: string | undefined = undefined;
 
   function getColor(index: number): string {
-    const colors = [
-      '#f9808e',
-      '#80f98e',
-      '#808ef9',
-      '#80dfff',
-      '#df80ff',
-      '#ffdf80',
-      '#ff3333',
-      '#33ff33',
-      '#3333ff',
-    ];
+    const colors = ['#bd425d', '#cc6e5b', '#d7905a', '#e1ad5c', '#e9c563', '#f0d86d', '#f6e67d', '#fbf090', '#fff5a8'];
     return colors[index % colors.length];
   }
 
@@ -162,7 +153,6 @@ function onInterval(callback: () => void, milliseconds: number) {
   const populateData = () => {
     data.datasets.push({
       label: 'Live Data',
-      backgroundColor: '#000000',
       data: liveData,
       type: 'line',
       hidden: !showLive,
@@ -170,35 +160,35 @@ function onInterval(callback: () => void, milliseconds: number) {
 
     dataRepresentation.forEach((dataPoint, idx) => {
       data.datasets.push({
+        itemRadius: 5,
+        itemBackgroundColor: getColor(idx) + "4D", // 4D is 30% opacity
         label: dataPoint.name,
         // TODO: Handle scaling/normalization of data in a better way than simply dividing by 40
         data: [
-          [
-            Math.min(...dataPoint.points.x) - maxMin.diff / 40,
-            Math.max(...dataPoint.points.x) + maxMin.diff / 40,
-          ],
-          [
-            Math.min(...dataPoint.points.y) - maxMin.diff / 40,
-            Math.max(...dataPoint.points.y) + maxMin.diff / 40,
-          ],
-          [
-            Math.min(...dataPoint.points.z) - maxMin.diff / 40,
-            Math.max(...dataPoint.points.z) + maxMin.diff / 40,
-          ],
+          dataPoint.points.x,
+          dataPoint.points.y,
+          dataPoint.points.z,
         ],
         backgroundColor: forcedColor ?? getColor(idx),
-        type: 'bar',
       });
     });
   };
   populateData();
 
   const config: ChartConfiguration = {
-    type: 'line',
+    type: 'violin',
     data: data,
     options: {
       aspectRatio: aspectRatio,
       elements: {
+        line: {
+          borderWidth: 3,
+        },
+        point: {
+          radius: 5,
+          pointStyle: 'point',
+          backgroundColor: '#000000',
+        }
       },
       scales: {
         y: {
@@ -240,7 +230,7 @@ function onInterval(callback: () => void, milliseconds: number) {
   let chart: Chart;
   let canvas: HTMLCanvasElement;
   onMount(() => {
-    Chart.register(...registerables);
+    Chart.register(...registerables, BoxPlotController, BoxAndWiskers, ViolinController, Violin);
     if (canvas.getContext('2d') != null) {
       chart = new Chart(canvas.getContext('2d') ?? new HTMLCanvasElement(), config);
       // TODO: Remember extraConfig

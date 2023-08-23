@@ -58,6 +58,7 @@
       });
       return data;
     });
+    console.log("filtered data", filteredData);
     return filteredData;
   };
 
@@ -73,9 +74,9 @@
     // Return if insufficient amount of previous data is available
     if( prevData === undefined ) return;
     liveData = [
-      filterStrategy.computeOutput(prevData.x),
-      filterStrategy.computeOutput(prevData.y),
-      filterStrategy.computeOutput(prevData.z)
+      filterFunction(prevData.x),
+      filterFunction(prevData.y),
+      filterFunction(prevData.z)
     ];
       // TODO: Reconsider how to best update graph if values goes outside axes scales
     data.datasets[0].data[0] = clamp(liveData[0], axisScale.min, axisScale.max);

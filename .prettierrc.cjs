@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 module.exports = {
   arrowParens: 'avoid',
   singleQuote: true,
@@ -6,7 +11,7 @@ module.exports = {
   semi: true,
   svelteSortOrder: 'options-styles-scripts-markup',
   svelteStrictMode: false,
-  svelteBracketNewLine: false,
+  bracketSameLine: true,
   svelteAllowShorthand: true,
   svelteIndentScriptAndStyle: true,
   trailingComma: 'all',

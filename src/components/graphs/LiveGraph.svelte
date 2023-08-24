@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { state } from '../../script/stores/uiStore';
   import { currentData, settings } from '../../script/stores/mlStore';
@@ -97,10 +103,10 @@
     // TODO: Clean this
     if (isConnected) {
       unsubscribeFromData = currentData.subscribe(data => {
-          const t = new Date().getTime();
-          lineX.append(t, data.x, false);
-          lineY.append(t, data.y, false);
-          lineZ.append(t, data.z, false);
+        const t = new Date().getTime();
+        lineX.append(t, data.x, false);
+        lineY.append(t, data.y, false);
+        lineZ.append(t, data.z, false);
       });
 
       // Else if we're currently subscribed to data. Unsubscribe.
@@ -110,8 +116,6 @@
       unsubscribeFromData = undefined;
     }
   }
-
-
 </script>
 
 <main>

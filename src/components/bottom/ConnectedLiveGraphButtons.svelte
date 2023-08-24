@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { t } from '../../i18n';
   import TypingUtils from '../../script/TypingUtils';
@@ -36,7 +42,7 @@
         >{$t('footer.disconnectButton')}</StandardButton>
     {:else}
       <StandardButton onClick={TypingUtils.emptyFunction} color="disabled">
-        <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
+        <img alt="loading" src="/imgs/loadingspinner.gif" style="height:24px" />
       </StandardButton>
     {/if}
   </div>

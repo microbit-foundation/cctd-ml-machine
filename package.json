@@ -10,7 +10,8 @@
     "dev": "vite",
     "start": "vite dist --host",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "test": "jest"
+    "test": "jest",
+    "prettier": "prettier --write src/."
   },
   "jest": {
     "testMatch": [
@@ -51,7 +52,8 @@
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "babel-jest": "^29.5.0",
-    "eslint": "^8.39.0",
+    "eslint": "^8.43.0",
+    "eslint-plugin-svelte": "^2.32.1",
     "eslint-plugin-svelte3": "^4.0.0",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
@@ -72,7 +74,7 @@
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.0.0",
-    "@sgratzl/chartjs-chart-boxplot": "^4.1.2",
+    "@sgratzl/chartjs-chart-boxplot": "^4.2.4",
     "@tensorflow/tfjs": "^4.4.0",
     "@types/w3c-web-usb": "^1.0.6",
     "bowser": "^2.11.0",

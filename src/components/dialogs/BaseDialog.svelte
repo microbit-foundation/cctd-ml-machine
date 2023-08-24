@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { fly } from 'svelte/transition';
 
@@ -18,16 +24,16 @@
   <div
     transition:fly
     class="
-      z-10000 
-      fixed 
-      top-0 
-      left-0 
-      bg-black/50 
-      bg-blend-darken 
-      h-screen 
-      w-screen 
-      flex 
-      justify-center 
+      z-10000
+      fixed
+      top-0
+      left-0
+      bg-black/50
+      bg-blend-darken
+      h-screen
+      w-screen
+      flex
+      justify-center
       items-center
     "
     on:click={onClose}>

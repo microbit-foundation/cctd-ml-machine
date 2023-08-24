@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { slide } from 'svelte/transition';
   import { t } from '../../i18n';
@@ -84,7 +90,7 @@
         <ul>
           {#each cookieDeleteManuals as manual}
             <li>
-              <a class="text-blue-400" href="{manual.link}" target="_blank"
+              <a class="text-blue-400" href={manual.link} target="_blank"
                 >{manual.browser}</a>
             </li>
           {/each}

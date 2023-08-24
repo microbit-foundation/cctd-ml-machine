@@ -1,134 +1,218 @@
-import MBSpecs from "../../script/microbit-interfacing/MBSpecs";
-import { MockBluetoothCharacteristicProperties } from "./mock-bluetooth";
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
+import { MockBluetoothCharacteristicProperties } from './mock-bluetooth';
 
 class MockBluetoothAccelerometerService implements BluetoothRemoteGATTService {
-	readonly device: BluetoothDevice;
-	readonly isPrimary: boolean = false;
-	readonly uuid: string = "";
-	private characteristic;
+  readonly device: BluetoothDevice;
+  readonly isPrimary: boolean = false;
+  readonly uuid: string = '';
+  private characteristic;
 
-	constructor(device: any) {
-		this.device = device;
-		this.characteristic = new MockBluetoothAccelerometerCharacteristic(this);
-	}
+  constructor(device: any) {
+    this.device = device;
+    this.characteristic = new MockBluetoothAccelerometerCharacteristic(this);
+  }
 
-	oncharacteristicvaluechanged(ev: Event): any {
-	}
+  oncharacteristicvaluechanged(ev: Event): any {}
 
-	onserviceadded(ev: Event): any {
-	}
+  onserviceadded(ev: Event): any {}
 
-	onservicechanged(ev: Event): any {
-	}
+  onservicechanged(ev: Event): any {}
 
-	onserviceremoved(ev: Event): any {
-	}
+  onserviceremoved(ev: Event): any {}
 
-	addEventListener(type: "serviceadded", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-	addEventListener(type: "servicechanged", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-	addEventListener(type: "serviceremoved", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-	addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-	addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
-	addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
-	addEventListener(type: "serviceadded" | "servicechanged" | "serviceremoved" | string, listener: ((this: this, ev: Event) => any) | EventListenerOrEventListenerObject | null, useCapture?: boolean | AddEventListenerOptions): void {
-	}
+  addEventListener(
+    type: 'serviceadded',
+    listener: (this: this, ev: Event) => any,
+    useCapture?: boolean,
+  ): void;
+  addEventListener(
+    type: 'servicechanged',
+    listener: (this: this, ev: Event) => any,
+    useCapture?: boolean,
+  ): void;
+  addEventListener(
+    type: 'serviceremoved',
+    listener: (this: this, ev: Event) => any,
+    useCapture?: boolean,
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    useCapture?: boolean,
+  ): void;
+  addEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+  addEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+  addEventListener(
+    type: 'serviceadded' | 'servicechanged' | 'serviceremoved' | string,
+    listener:
+      | ((this: this, ev: Event) => any)
+      | EventListenerOrEventListenerObject
+      | null,
+    useCapture?: boolean | AddEventListenerOptions,
+  ): void {}
 
-	dispatchEvent(event: Event): boolean;
-	dispatchEvent(event: Event): boolean;
-	dispatchEvent(event: Event): boolean {
-		return false;
-	}
+  dispatchEvent(event: Event): boolean;
+  dispatchEvent(event: Event): boolean;
+  dispatchEvent(event: Event): boolean {
+    return false;
+  }
 
-	getCharacteristic(characteristic: BluetoothCharacteristicUUID): Promise<BluetoothRemoteGATTCharacteristic> {
-		if (characteristic === MBSpecs.Characteristics.ACCEL_DATA) {
-			return Promise.resolve(this.characteristic);
-		}
-		return Promise.resolve(this.characteristic); // always returns characteristic
-	}
+  getCharacteristic(
+    characteristic: BluetoothCharacteristicUUID,
+  ): Promise<BluetoothRemoteGATTCharacteristic> {
+    if (characteristic === MBSpecs.Characteristics.ACCEL_DATA) {
+      return Promise.resolve(this.characteristic);
+    }
+    return Promise.resolve(this.characteristic); // always returns characteristic
+  }
 
-	getCharacteristics(characteristic?: BluetoothCharacteristicUUID): Promise<BluetoothRemoteGATTCharacteristic[]> {
-		return Promise.resolve([]);
-	}
+  getCharacteristics(
+    characteristic?: BluetoothCharacteristicUUID,
+  ): Promise<BluetoothRemoteGATTCharacteristic[]> {
+    return Promise.resolve([]);
+  }
 
-	getIncludedService(service: BluetoothServiceUUID): Promise<BluetoothRemoteGATTService> {
-		return Promise.resolve(this);
-	}
+  getIncludedService(service: BluetoothServiceUUID): Promise<BluetoothRemoteGATTService> {
+    return Promise.resolve(this);
+  }
 
-	getIncludedServices(service?: BluetoothServiceUUID): Promise<BluetoothRemoteGATTService[]> {
-		return Promise.resolve([]);
-	}
+  getIncludedServices(
+    service?: BluetoothServiceUUID,
+  ): Promise<BluetoothRemoteGATTService[]> {
+    return Promise.resolve([]);
+  }
 
-	removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
-	removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
-	removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void {
-	}
-
+  removeEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: EventListenerOptions | boolean,
+  ): void;
+  removeEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: EventListenerOptions | boolean,
+  ): void;
+  removeEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: EventListenerOptions | boolean,
+  ): void {}
 }
 
+export class MockBluetoothAccelerometerCharacteristic
+  implements BluetoothRemoteGATTCharacteristic
+{
+  readonly properties: BluetoothCharacteristicProperties =
+    new MockBluetoothCharacteristicProperties();
+  readonly service: BluetoothRemoteGATTService;
+  readonly uuid: string = '';
 
-export class MockBluetoothAccelerometerCharacteristic implements BluetoothRemoteGATTCharacteristic {
+  constructor(service: BluetoothRemoteGATTService) {
+    this.service = service;
+  }
 
-	readonly properties: BluetoothCharacteristicProperties = new MockBluetoothCharacteristicProperties();
-	readonly service: BluetoothRemoteGATTService;
-	readonly uuid: string = "";
+  oncharacteristicvaluechanged(ev: Event): any {}
 
-	constructor(service: BluetoothRemoteGATTService) {
-		this.service = service;
-	}
+  addEventListener(
+    type: 'characteristicvaluechanged',
+    listener: (this: this, ev: Event) => any,
+    useCapture?: boolean,
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    useCapture?: boolean,
+  ): void;
+  addEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+  addEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+  addEventListener(
+    type: 'characteristicvaluechanged' | string,
+    listener:
+      | ((this: this, ev: Event) => any)
+      | EventListenerOrEventListenerObject
+      | null,
+    useCapture?: boolean | AddEventListenerOptions,
+  ): void {}
 
-	oncharacteristicvaluechanged(ev: Event): any {
-	}
+  dispatchEvent(event: Event): boolean;
+  dispatchEvent(event: Event): boolean;
+  dispatchEvent(event: Event): boolean {
+    return false;
+  }
 
-	addEventListener(type: "characteristicvaluechanged", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-	addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-	addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
-	addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
-	addEventListener(type: "characteristicvaluechanged" | string, listener: ((this: this, ev: Event) => any) | EventListenerOrEventListenerObject | null, useCapture?: boolean | AddEventListenerOptions): void {
-	}
+  getDescriptor(
+    descriptor: BluetoothDescriptorUUID,
+  ): Promise<BluetoothRemoteGATTDescriptor> {
+    return Promise.resolve(undefined as unknown as BluetoothRemoteGATTDescriptor);
+  }
 
-	dispatchEvent(event: Event): boolean;
-	dispatchEvent(event: Event): boolean;
-	dispatchEvent(event: Event): boolean {
-		return false;
-	}
+  getDescriptors(
+    descriptor?: BluetoothDescriptorUUID,
+  ): Promise<BluetoothRemoteGATTDescriptor[]> {
+    return Promise.resolve([]);
+  }
 
-	getDescriptor(descriptor: BluetoothDescriptorUUID): Promise<BluetoothRemoteGATTDescriptor> {
-		return Promise.resolve(undefined as unknown as BluetoothRemoteGATTDescriptor);
-	}
+  readValue(): Promise<DataView> {
+    return Promise.resolve(undefined as unknown as DataView);
+  }
 
-	getDescriptors(descriptor?: BluetoothDescriptorUUID): Promise<BluetoothRemoteGATTDescriptor[]> {
-		return Promise.resolve([]);
-	}
+  removeEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: EventListenerOptions | boolean,
+  ): void;
+  removeEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: EventListenerOptions | boolean,
+  ): void;
+  removeEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: EventListenerOptions | boolean,
+  ): void {}
 
-	readValue(): Promise<DataView> {
-		return Promise.resolve(undefined as unknown as DataView);
-	}
+  startNotifications(): Promise<BluetoothRemoteGATTCharacteristic> {
+    return Promise.resolve(undefined as unknown as BluetoothRemoteGATTCharacteristic);
+  }
 
-	removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
-	removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
-	removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void {
-	}
+  stopNotifications(): Promise<BluetoothRemoteGATTCharacteristic> {
+    return Promise.resolve(undefined as unknown as BluetoothRemoteGATTCharacteristic);
+  }
 
-	startNotifications(): Promise<BluetoothRemoteGATTCharacteristic> {
-		return Promise.resolve(undefined as unknown as BluetoothRemoteGATTCharacteristic);
-	}
+  writeValue(value: BufferSource): Promise<void> {
+    return Promise.resolve(undefined);
+  }
 
-	stopNotifications(): Promise<BluetoothRemoteGATTCharacteristic> {
-		return Promise.resolve(undefined as unknown as BluetoothRemoteGATTCharacteristic);
-	}
+  writeValueWithResponse(value: BufferSource): Promise<void> {
+    return Promise.resolve(undefined);
+  }
 
-	writeValue(value: BufferSource): Promise<void> {
-		return Promise.resolve(undefined);
-	}
-
-	writeValueWithResponse(value: BufferSource): Promise<void> {
-		return Promise.resolve(undefined);
-	}
-
-	writeValueWithoutResponse(value: BufferSource): Promise<void> {
-		return Promise.resolve(undefined);
-	}
-
+  writeValueWithoutResponse(value: BufferSource): Promise<void> {
+    return Promise.resolve(undefined);
+  }
 }
 
 export default MockBluetoothAccelerometerService;

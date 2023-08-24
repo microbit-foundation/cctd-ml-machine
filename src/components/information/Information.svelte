@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { getInfoBoxColors } from './InformationComponentUtility';
 
@@ -5,7 +11,7 @@
   export let boxOffset: { x: number; y: number } = { x: 0, y: 0 };
   export let width = 300;
   export let isLightTheme = true;
-  // TODO: This makes the component a weird combination of a general component which can handle all kinds of 
+  // TODO: This makes the component a weird combination of a general component which can handle all kinds of
   //       children, and a component specialised for text. In my opinion (Jon) this should be split up into one general
   //       and one for text (which uses the general one)
   export let iconText: string | undefined = undefined;

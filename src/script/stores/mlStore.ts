@@ -1,8 +1,14 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
-import { Axes, Filters } from '../datafunctions';
+import { AxesType, FilterType } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import StaticConfiguration from '../../StaticConfiguration';
@@ -95,30 +101,12 @@ type MlSettings = {
   updatesPrSecond: number; // Times algorithm predicts data pr second
   numEpochs: number; // Number of epochs for ML
   learningRate: number;
-  includedAxes: Axes[];
-  includedFilters: Filters[];
+  includedAxes: AxesType[];
+  includedFilters: Set<FilterType>;
 };
 
-const initialSettings: MlSettings = {
-  duration: 1800,
-  numSamples: 80,
-  minSamples: 80,
-  automaticClassification: true,
-  updatesPrSecond: 4,
-  numEpochs: 80,
-  learningRate: 0.5,
-  includedAxes: [Axes.X, Axes.Y, Axes.Z],
-  includedFilters: [
-    Filters.MAX,
-    Filters.MEAN,
-    Filters.MIN,
-    Filters.STD,
-    Filters.PEAKS,
-    Filters.ACC,
-    Filters.ZCR,
-    Filters.RMS,
-  ],
-};
+// Store with ML-Algorithm settings
+export const settings = writable<MlSettings>(StaticConfiguration.initialMLSettings);
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);
 
@@ -144,9 +132,6 @@ livedata.subscribe(data => {
     z: data.smoothedAccelZ,
   });
 });
-
-// Store with ML-Algorithm settings
-export const settings = writable<MlSettings>(initialSettings);
 
 // Store for current gestures
 export const chosenGesture = writable<GestureData | null>(null);
@@ -306,10 +291,16 @@ export const trainingState = writable({
   epochs: 0,
 });
 
+
+
 // TODO: Only used at one location (ml.ts). Move to ml.ts?
-export function getPrevData(): { x: number[]; y: number[]; z: number[] } {
+export function getPrevData(): { x: number[]; y: number[]; z: number[]} | undefined  {
   const data: LiveData[] = get(prevData);
   const dataLength: number = data.length;
+  // Returns undefined if there has not being collected minSamples data yet
+  if (Object.values(data).length !== data.length) {
+    return undefined;
+  }
   const x: number[] = new Array<number>(dataLength);
   const y: number[] = new Array<number>(dataLength);
   const z: number[] = new Array<number>(dataLength);

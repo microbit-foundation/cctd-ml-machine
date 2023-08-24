@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { t } from '../../../i18n';
 
@@ -16,8 +22,9 @@
     <div class="flex justify-center mb-2">
       <div class="flex-1 mr-2">
         <div class="w-full h-2 bg-gray-200 rounded">
-          <div class="h-2 bg-secondary rounded" style="width: {transferProgress * 100}%;">
-          </div>
+          <div
+            class="h-2 bg-secondary rounded"
+            style="width: {transferProgress * 100}%;" />
         </div>
         <p class="text-left mt-1">
           {transferProgressLabel}

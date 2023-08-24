@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import MBSpecs from '../../../script/microbit-interfacing/MBSpecs';
   import PatternMatrix from '../../PatternMatrix.svelte';
@@ -81,7 +87,7 @@
     <!-- Show spinner while connecting -->
     <div class="w-650px flex flex-col justify-center items-center">
       <p>{$t('popup.connectMB.bluetooth.connecting')}</p>
-      <img alt="loading" src="imgs/loadingspinner.gif" width="100px" />
+      <img alt="loading" src="/imgs/loadingspinner.gif" width="100px" />
     </div>
   {:else}
     <div class="grid grid-cols-3 mb-5 w-650px">

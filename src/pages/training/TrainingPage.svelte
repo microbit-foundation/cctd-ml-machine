@@ -1,9 +1,8 @@
-<style>
-  .arrow-filter-color {
-    filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%)
-      contrast(100%);
-  }
-</style>
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
@@ -12,8 +11,12 @@
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
   import TrainingButton from './TrainingButton.svelte';
-  import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
+  import ControlBar from '../../components/control-bar/ControlBar.svelte';
+  import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
+  import StandardButton from '../../components/StandardButton.svelte';
+  import { Paths, navigate } from '../../router/paths';
+  import CookieManager from '../../script/CookieManager';
 
   const sufficientData = hasSufficientData();
 
@@ -47,6 +50,20 @@
   </div>
 </StandardDialog>
 <div class="flex flex-col h-full">
+  {#if CookieManager.hasFeatureFlag('filters')}
+    <ControlBar>
+      <ExpandableControlBarMenu>
+        <StandardButton
+          small
+          outlined
+          onClick={() => {
+            navigate(Paths.FILTERS);
+          }}>
+          {$t('content.trainer.controlbar.filters')}
+        </StandardButton>
+      </ExpandableControlBarMenu>
+    </ControlBar>
+  {/if}
   <div class="flex flex-col flex-grow justify-center items-center text-center">
     {#if !$state.isInputConnected}
       <PleaseConnectFirst />

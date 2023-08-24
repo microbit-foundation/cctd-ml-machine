@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <style>
   .arrow-filter-color {
     filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%)
@@ -147,7 +153,7 @@
             <div class="text-center ml-0 mb-2 mt-8">
               <img
                 class="m-auto arrow-filter-color"
-                src="imgs/down_arrow.svg"
+                src="/imgs/down_arrow.svg"
                 alt="down arrow icon"
                 width="80px" />
             </div>

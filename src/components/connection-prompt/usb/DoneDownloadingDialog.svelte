@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import StandardButton from '../../StandardButton.svelte';
   import { t } from '../../../i18n';
@@ -23,7 +29,7 @@
       {$t('connectMB.usb.done.body4')}
     </p>
 
-    <StandardButton onClick="{onConnectBluetoothClick}"
+    <StandardButton onClick={onConnectBluetoothClick}
       >{$t('popup.connectMB.main.bluetooth.subtitle')}</StandardButton>
   </div>
 </main>

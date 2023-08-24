@@ -1,3 +1,9 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import type ConnectionBehaviour from './ConnectionBehaviour';
@@ -7,6 +13,7 @@ import Environment from '../Environment';
  * Used for logging / Decorator pattern
  */
 abstract class LoggingDecorator implements ConnectionBehaviour {
+
   private enableLogging: boolean = Environment.isInDevelopment && true;
 
   // For preventing spam of accelerometer data
@@ -15,6 +22,14 @@ abstract class LoggingDecorator implements ConnectionBehaviour {
 
   onBluetoothConnectionError(error?: unknown): void {
     this.enableLogging && console.log('An error occured while connecting.', error);
+  }
+
+  onGestureRecognized(id: number, gestureName: string): void {
+    this.enableLogging && console.log(`Gesture '${gestureName}' with id ${id} was recognized`);
+  }
+
+  onUartMessageReceived(message: string): void {
+    this.enableLogging && console.log(`Message '${message}' was received`);
   }
 
   onReady(): void {

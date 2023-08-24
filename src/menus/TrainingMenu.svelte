@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { slide } from 'svelte/transition';
   import { state } from '../script/stores/uiStore';
@@ -11,8 +17,8 @@
       <ImageSkeleton
         alt="Model Icon"
         src="imgs/model.svg"
-        height="{100}"
-        width="{100}"
+        height={100}
+        width={100}
         loadingColorPrimary="#68BDBF"
         loadingColorSecondary="#3C81F6"
         spin />

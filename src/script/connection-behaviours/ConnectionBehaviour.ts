@@ -1,3 +1,9 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 
@@ -35,6 +41,17 @@ interface ConnectionBehaviour {
    * (Has subscribed to all services)
    */
   onReady(): void;
+
+  /**
+   * What should happen when a gesture is recognized?
+   * @param gestureName The name of the gesture, which was recognized
+   */
+  onGestureRecognized(id: number, gestureName: string): void;
+
+  /**
+   * What should happen when a message is received
+   */
+  onUartMessageReceived(message: string): void;
 
   /**
    * What should happen when the micro:bit loses connection via Bluetooth

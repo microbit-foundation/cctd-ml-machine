@@ -1,3 +1,9 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 export default {
 	"da": { // APPROXIMATE SORTING ORDER: First alphabetically, then order of appearance from top to bottom of page
 		// ALERTS:
@@ -25,6 +31,7 @@ export default {
 		"content.index.oldVersion": "Du kan finde den gamle version her:",
 		"content.index.contactButton": "Kontakt os",
 		"content.index.contactBody": "Hvis du finder fejl og mangler på denne platform, skal du være velkommen til at skrive til os. Hvis du har andre efterspørgsler, ideer eller generel interesse, skal du være velkommen til at kontakte os. Skaberne af denne platform kan kontaktes på:",
+		"content.index.contactBodyGithub": "Du kan også besøge vores Github side:",
 		"content.index.contactMail": "keb@cs.au.dk",
 		"content.index.acknowledgement": "Udviklet af Center for Computational Thinking og Design, Aarhus Universitet",
 		// DATA PAGE:
@@ -52,6 +59,24 @@ export default {
 		"content.trainer.failure.header": "Træning mislykkedes",
 		"content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
 		"content.trainer.failure.todo": "Gå tilbage til datasiden og ændr i din data.",
+		"content.trainer.controlbar.filters": "Filtre",
+
+		"content.filters.max.title" : "Maksværdier",
+		"content.filters.max.description" : "Det højeste punkt blandt alle datapunkter i en bevægelse.",
+		"content.filters.min.title" : "Minimumsværdier",
+		"content.filters.min.description" : "Det laveste punkt blandt alle datapunkter i en bevægelse.",
+		"content.filters.std.title" : "Standardafvigelse",
+		"content.filters.std.description" : "Den gennemsnitlige afvigelse fra 0 blandt alle datapunkter i en bevægelse.",
+		"content.filters.peaks.title" : "Antal ekstremer",
+		"content.filters.peaks.description" : "Antallet af ekstremer blandt alle datapunkter i en bevægelse.",
+		"content.filters.acc.title" : "Samlet acceleration",
+		"content.filters.acc.description" : "Summen af acceleration for hele bevægelsen, udregnet med absolutte værdier, således at minus tæller som plus. God til at forstå mængden af bevægelse.",
+		"content.filters.mean.title" : "Gennemsnit",
+		"content.filters.mean.description": "Gennemsnit af acceleration for de forskellige axer.",
+		"content.filters.zcr.title" : "Zero crossing rate",
+		"content.filters.zcr.description": "Hvor ofte inputer (accelerationen) går fra positiv til negativ eller omvend.t",
+		"content.filters.rms.title" : "Effektiv værdi ",
+		"content.filters.rms.description": "Root mean square.",
 
 		// MODEL PAGE:
 		"content.model.trainModelFirstHeading": "Træn modellen først!",
@@ -251,6 +276,7 @@ export default {
 		"content.index.oldVersion": "You can finde the old version here:",
 		"content.index.contactButton": "Contact us",
 		"content.index.contactBody": "If you find errors and omissions on this platform, please feel free to write us. If you have any other requests, ideas or general interests, please feel free to contact us. The creators of this platform can be contacted at:",
+		"content.index.contactBodyGithub": "You can also visit our Github page:",
 		"content.index.contactMail": "keb@cs.au.dk",
 		"content.index.acknowledgement": "Developed by Center for Computational Thinking and Design, Aarhus University",
 		// DATA PAGE:
@@ -278,6 +304,25 @@ export default {
 		"content.trainer.failure.header": "Training Failed",
 		"content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
 		"content.trainer.failure.todo": "Return to the data page and change your data.",
+		"content.trainer.controlbar.filters": "Filters",
+
+		"content.filters.max.title" : "Max values",
+		"content.filters.max.description" : "The tallest point among all datapoints in a gesture.",
+		"content.filters.min.title" : "Minimum values",
+		"content.filters.min.description" : "The lowest point among all datapoints in a gesture.",
+		"content.filters.std.title" : "Standard deviation",
+		"content.filters.std.description" : "The average deviation from 0 among all datapoints in a gesture.",
+		"content.filters.peaks.title" : "Number of extremes",
+		"content.filters.peaks.description" : "The number of extremes among all datapoints in a gesture.",
+		"content.filters.acc.title" : "Total acceleration",
+		"content.filters.acc.description" : "The sum of acceleration for the whole gesture, calculated in absolute values, so that minus counts as plus. Good for understanding the amount of movement.",
+		"content.filters.mean.title" : "Mean",
+		"content.filters.mean.description": "Mean value of accelerations at different axes",
+		"content.filters.zcr.title" : "Zero crossing rate",
+		"content.filters.zcr.description": "The rate at which the input (acceleration) transitions from positive to zero to negative or negative to zero to positive.",
+		"content.filters.rms.title" : "Root mean square",
+		"content.filters.rms.description": "",
+
 		// MODEL PAGE:
 		"content.model.trainModelFirstHeading": "Train the model first!",
 		"content.model.trainModelFirstBody": "Go to the 'Trainer' page",

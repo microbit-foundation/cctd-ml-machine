@@ -1,6 +1,19 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { get } from 'svelte/store';
-  import { alertUser, buttonPressed, isReady, state, microbitInteraction, MicrobitInteractions} from '../script/stores/uiStore';
+  import {
+    alertUser,
+    buttonPressed,
+    isReady,
+    state,
+    microbitInteraction,
+    MicrobitInteractions,
+  } from '../script/stores/uiStore';
   import {
     addRecording,
     chosenGesture,
@@ -225,10 +238,7 @@
       <GestureTilePart small>
         <div class="flex p-2 h-30">
           {#each gesture.recordings as recording (String(gesture.ID) + String(recording.ID))}
-            <Recording 
-              {recording} 
-              onDelete={deleteRecording} 
-            />
+            <Recording {recording} onDelete={deleteRecording} />
           {/each}
         </div>
       </GestureTilePart>
@@ -239,7 +249,7 @@
             <ImageSkeleton
               height={95}
               width={140}
-              src="imgs/microbit_record_guide.svg"
+              src="/imgs/microbit_record_guide.svg"
               alt="microbit recording guide" />
           </div>
           <p class=" text-center absolute w-60px right-23px top-30px">

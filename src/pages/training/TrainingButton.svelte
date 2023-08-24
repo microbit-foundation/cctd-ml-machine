@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
   import StandardButton from '../../components/StandardButton.svelte';
@@ -11,5 +17,5 @@
 </script>
 
 {#if sufficientData && $state.isInputConnected && !$state.isTraining}
-  <StandardButton onClick="{trainModel}">{$t(trainButtonLabel)}</StandardButton>
+  <StandardButton onClick={trainModel}>{$t(trainButtonLabel)}</StandardButton>
 {/if}

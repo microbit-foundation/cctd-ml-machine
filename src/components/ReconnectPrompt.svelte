@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { horizontalSlide } from '../script/transitions';
   import StandardButton from '../components/StandardButton.svelte';
@@ -56,15 +62,15 @@
     <div class="absolute right-2 top-2 svelte-1rnkjvh">
       <button
         class="hover:bg-gray-100 rounded outline-transparent w-8 svelte-1rnkjvh"
-        on:click="{() => ($state.offerReconnect = false)}">
+        on:click={() => ($state.offerReconnect = false)}>
         <i
           class="fas fa-plus text-lg text-gray-600 hover:text-gray-800 duration-75 svelte-1rnkjvh"
-          style="transform: rotate(45deg);"></i>
+          style="transform: rotate(45deg);" />
       </button>
     </div>
     <p>{reconnectText}</p>
     <div class="flex justify-center">
-      <StandardButton onClick="{() => reconnect($state.reconnectState)}"
+      <StandardButton onClick={() => reconnect($state.reconnectState)}
         >{reconnectButtonText}</StandardButton>
     </div>
   </div>

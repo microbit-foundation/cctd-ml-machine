@@ -1,152 +1,197 @@
-import MBSpecs from "../../script/microbit-interfacing/MBSpecs";
-import MockInfoService, { MockBluetoothModelNumberCharacteristic } from "./mock-bluetooth-info-service";
-import MockBluetoothAccelerometerService from "./mock-bluetooth-accelerometer-service";
-import MockBluetoothGattservice from "./mock-bluetooth-gattservice";
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
+import MockInfoService, {
+  MockBluetoothModelNumberCharacteristic,
+} from './mock-bluetooth-info-service';
+import MockBluetoothAccelerometerService from './mock-bluetooth-accelerometer-service';
+import MockBluetoothGattservice from './mock-bluetooth-gattservice';
 
 class MockBTDevice implements BluetoothDevice {
-	readonly id: string = "";
-	readonly watchingAdvertisements: boolean = false;
-	public gatt: BluetoothRemoteGATTServer;
-	public willFailConnection: boolean = false;
-	private microbitVersion: number = 0;
-	private listeners: DeviceListener[] = [];
+  readonly id: string = '';
+  readonly watchingAdvertisements: boolean = false;
+  public gatt: BluetoothRemoteGATTServer;
+  public willFailConnection: boolean = false;
+  private microbitVersion: number = 0;
+  private listeners: DeviceListener[] = [];
 
-	constructor() {
-		this.gatt = new MockGattServer(this, this);
-	}
+  constructor() {
+    this.gatt = new MockGattServer(this, this);
+  }
 
-	public withMicrobitVersion(versionNumber: 1 | 2) {
-		this.microbitVersion = versionNumber;
-		return this;
-	}
+  public withMicrobitVersion(versionNumber: 1 | 2) {
+    this.microbitVersion = versionNumber;
+    return this;
+  }
 
-	public withFailingConnection() {
-		this.willFailConnection = true;
-		return this;
-	}
+  public withFailingConnection() {
+    this.willFailConnection = true;
+    return this;
+  }
 
-	public build() {
-		let gatt = new MockGattServer(this, this);
-		if (!this.microbitVersion) {
-			this.microbitVersion = 1;
-		}
-		let deviceInfoService = new MockInfoService(this);
-		const modelNumberCharacteristic = new MockBluetoothModelNumberCharacteristic(this.microbitVersion, deviceInfoService);
-		deviceInfoService = deviceInfoService.withModelNumber(modelNumberCharacteristic);
-		gatt = gatt.withDeviceInfo(deviceInfoService);
-		this.gatt = gatt;
-		return this;
-	}
+  public build() {
+    let gatt = new MockGattServer(this, this);
+    if (!this.microbitVersion) {
+      this.microbitVersion = 1;
+    }
+    let deviceInfoService = new MockInfoService(this);
+    const modelNumberCharacteristic = new MockBluetoothModelNumberCharacteristic(
+      this.microbitVersion,
+      deviceInfoService,
+    );
+    deviceInfoService = deviceInfoService.withModelNumber(modelNumberCharacteristic);
+    gatt = gatt.withDeviceInfo(deviceInfoService);
+    this.gatt = gatt;
+    return this;
+  }
 
-	onadvertisementreceived(ev: BluetoothAdvertisingEvent): any {
-	}
+  onadvertisementreceived(ev: BluetoothAdvertisingEvent): any {}
 
-	oncharacteristicvaluechanged(ev: Event): any {
-	}
+  oncharacteristicvaluechanged(ev: Event): any {}
 
-	ongattserverdisconnected(ev: Event): any {
-	}
+  ongattserverdisconnected(ev: Event): any {}
 
-	onserviceadded(ev: Event): any {
-	}
+  onserviceadded(ev: Event): any {}
 
-	onservicechanged(ev: Event): any {
-	}
+  onservicechanged(ev: Event): any {}
 
-	onserviceremoved(ev: Event): any {
-	}
+  onserviceremoved(ev: Event): any {}
 
-	addEventListener(type: "gattserverdisconnected", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-	addEventListener(type: "advertisementreceived", listener: (this: this, ev: BluetoothAdvertisingEvent) => any, useCapture?: boolean): void;
-	addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-	addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
-	addEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: AddEventListenerOptions | boolean): void;
-	addEventListener(type: "gattserverdisconnected" | "advertisementreceived" | string, listener: ((this: this, ev: Event) => any) | ((this: this, ev: BluetoothAdvertisingEvent) => any) | EventListenerOrEventListenerObject | null, useCapture?: boolean | AddEventListenerOptions): void {
-		this.listeners.push({ eventType: type, listener: listener });
-	}
+  addEventListener(
+    type: 'gattserverdisconnected',
+    listener: (this: this, ev: Event) => any,
+    useCapture?: boolean,
+  ): void;
+  addEventListener(
+    type: 'advertisementreceived',
+    listener: (this: this, ev: BluetoothAdvertisingEvent) => any,
+    useCapture?: boolean,
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    useCapture?: boolean,
+  ): void;
+  addEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+  addEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+  addEventListener(
+    type: 'gattserverdisconnected' | 'advertisementreceived' | string,
+    listener:
+      | ((this: this, ev: Event) => any)
+      | ((this: this, ev: BluetoothAdvertisingEvent) => any)
+      | EventListenerOrEventListenerObject
+      | null,
+    useCapture?: boolean | AddEventListenerOptions,
+  ): void {
+    this.listeners.push({ eventType: type, listener: listener });
+  }
 
-	dispatchEvent(event: Event): boolean;
-	dispatchEvent(event: Event): boolean;
-	dispatchEvent(event: Event): boolean {
-		this.listeners.forEach(value => {
-			if (event.type == value.eventType) {
-				if (value.listener) {
-					value.listener(value);
-				}
-			}
-		});
-		return false;
-	}
+  dispatchEvent(event: Event): boolean;
+  dispatchEvent(event: Event): boolean;
+  dispatchEvent(event: Event): boolean {
+    this.listeners.forEach(value => {
+      if (event.type == value.eventType) {
+        if (value.listener) {
+          value.listener(value);
+        }
+      }
+    });
+    return false;
+  }
 
-	forget(): Promise<void> {
-		return Promise.resolve(undefined);
-	}
+  forget(): Promise<void> {
+    return Promise.resolve(undefined);
+  }
 
-	removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
-	removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
-	removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void {
-	}
+  removeEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: EventListenerOptions | boolean,
+  ): void;
+  removeEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: EventListenerOptions | boolean,
+  ): void;
+  removeEventListener(
+    type: string,
+    callback: EventListenerOrEventListenerObject | null,
+    options?: EventListenerOptions | boolean,
+  ): void {}
 
-	watchAdvertisements(options?: WatchAdvertisementsOptions): Promise<void> {
-		return Promise.resolve(undefined);
-	}
+  watchAdvertisements(options?: WatchAdvertisementsOptions): Promise<void> {
+    return Promise.resolve(undefined);
+  }
 }
 
 class MockGattServer implements BluetoothRemoteGATTServer {
-	connected: boolean;
-	readonly device: BluetoothDevice;
-	mockDevice: MockBTDevice;
-	deviceInfoService: BluetoothRemoteGATTService;
-	accelerometerService: BluetoothRemoteGATTService;
+  connected: boolean;
+  readonly device: BluetoothDevice;
+  mockDevice: MockBTDevice;
+  deviceInfoService: BluetoothRemoteGATTService;
+  accelerometerService: BluetoothRemoteGATTService;
 
-	constructor(device: BluetoothDevice, mock: MockBTDevice) {
-		this.connected = false;
-		this.device = device;
-		this.mockDevice = mock;
-		this.deviceInfoService = new MockInfoService(device);
-		this.accelerometerService = new MockBluetoothAccelerometerService(device);
-	}
+  constructor(device: BluetoothDevice, mock: MockBTDevice) {
+    this.connected = false;
+    this.device = device;
+    this.mockDevice = mock;
+    this.deviceInfoService = new MockInfoService(device);
+    this.accelerometerService = new MockBluetoothAccelerometerService(device);
+  }
 
-	withDeviceInfo(deviceInfoService: BluetoothRemoteGATTService) {
-		this.deviceInfoService = deviceInfoService;
-		return this;
-	}
+  withDeviceInfo(deviceInfoService: BluetoothRemoteGATTService) {
+    this.deviceInfoService = deviceInfoService;
+    return this;
+  }
 
-	connect(): Promise<BluetoothRemoteGATTServer> {
-		if (this.mockDevice.willFailConnection) {
-			return Promise.reject(undefined);
-		}
-		this.connected = true;
-		return Promise.resolve(this);
-	}
+  connect(): Promise<BluetoothRemoteGATTServer> {
+    if (this.mockDevice.willFailConnection) {
+      return Promise.reject(undefined);
+    }
+    this.connected = true;
+    return Promise.resolve(this);
+  }
 
-	disconnect(): void {
-		this.device.dispatchEvent(new Event("gattserverdisconnected"));
-		this.connected = false;
-	}
+  disconnect(): void {
+    this.device.dispatchEvent(new Event('gattserverdisconnected'));
+    this.connected = false;
+  }
 
-	getPrimaryService(service: BluetoothServiceUUID): Promise<BluetoothRemoteGATTService> {
-		if (service === MBSpecs.Services.DEVICE_INFO_SERVICE) {
-			return Promise.resolve(this.deviceInfoService);
-		}
-		if (service === MBSpecs.Services.ACCEL_SERVICE) {
-			return Promise.resolve(this.accelerometerService);
-		}
-		if (service === MBSpecs.Services.BUTTON_SERVICE) {
-			return Promise.resolve(new MockBluetoothGattservice(this.device));
-		}
-		return Promise.reject(undefined);
-	}
+  getPrimaryService(service: BluetoothServiceUUID): Promise<BluetoothRemoteGATTService> {
+    if (service === MBSpecs.Services.DEVICE_INFO_SERVICE) {
+      return Promise.resolve(this.deviceInfoService);
+    }
+    if (service === MBSpecs.Services.ACCEL_SERVICE) {
+      return Promise.resolve(this.accelerometerService);
+    }
+    if (service === MBSpecs.Services.BUTTON_SERVICE) {
+      return Promise.resolve(new MockBluetoothGattservice(this.device));
+    }
+    return Promise.reject(undefined);
+  }
 
-	getPrimaryServices(service?: BluetoothServiceUUID): Promise<BluetoothRemoteGATTService[]> {
-		return Promise.resolve([]);
-	}
-
+  getPrimaryServices(
+    service?: BluetoothServiceUUID,
+  ): Promise<BluetoothRemoteGATTService[]> {
+    return Promise.resolve([]);
+  }
 }
 
 type DeviceListener = {
-	eventType: "gattserverdisconnected" | "advertisementreceived" | string,
-	listener: any,
-}
+  eventType: 'gattserverdisconnected' | 'advertisementreceived' | string;
+  listener: any;
+};
 
 export default MockBTDevice;

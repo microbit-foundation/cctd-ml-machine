@@ -1,3 +1,9 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
 import { state } from '../stores/uiStore';
 import { t } from '../../i18n';
@@ -25,12 +31,41 @@ class OutputBehaviour extends LoggingDecorator {
     });
   }
 
+  onGestureRecognized(id: number, gestureName: string): void {
+    super.onGestureRecognized(id, gestureName);
+    if (Microbits.isOutputReady()) {
+      Microbits.sendUARTGestureMessageToOutput(gestureName);
+    }
+  }
+
+  onUartMessageReceived(message: string): void {
+    super.onUartMessageReceived(message);
+    if (message === "id_mkcd") {
+      this.announceIsMakecode();
+    }
+  }
+
+  private announceIsMakecode() {
+    state.update(s => {
+      s.isOutputMakecodeHex = true;
+      return s;
+    })
+  }
+
   onReady() {
     super.onReady();
+
+    if (Microbits.isInputOutputTheSame()) {
+      state.update(s => {
+        s.isOutputMakecodeHex = s.isInputMakecodeHex;
+        return s;
+      })
+    }
+
     // Reset any output pins currently active.
-    const pinResetArguments: { pin: number; on: boolean }[] = [];
+    const pinResetArguments: { pin: MBSpecs.UsableIOPin; on: boolean }[] = [];
     StaticConfiguration.supportedPins.forEach(pin => {
-      const argument = { pin: parseInt(pin), on: false };
+      const argument = { pin: pin, on: false };
       pinResetArguments.push(argument);
     });
     Microbits.sendToOutputPin(pinResetArguments);
@@ -44,6 +79,7 @@ class OutputBehaviour extends LoggingDecorator {
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
     super.onAssigned(microbitBluetooth, name);
+    microbitBluetooth.listenToUART((data) => this.onUartMessageReceived(data))
     state.update(s => {
       s.isOutputAssigned = true;
       return s;
@@ -106,6 +142,7 @@ class OutputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isOutputConnected = false;
       s.isOutputReady = false;
+      s.isOutputMakecodeHex = false;
       return s;
     });
   }

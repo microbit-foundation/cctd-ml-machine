@@ -1,88 +1,98 @@
-import type ConnectionBehaviour from "../../script/connection-behaviours/ConnectionBehaviour";
-import MicrobitBluetooth from "../../script/microbit-interfacing/MicrobitBluetooth";
-import MBSpecs from "../../script/microbit-interfacing/MBSpecs";
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+import type ConnectionBehaviour from '../../script/connection-behaviours/ConnectionBehaviour';
+import MicrobitBluetooth from '../../script/microbit-interfacing/MicrobitBluetooth';
+import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
 
 /**
  * Use this for checking the micro:bit behaviour.
  */
 class SpyConnectionBehaviour implements ConnectionBehaviour {
+  onUartMessageReceived(message: string): void {
+    throw new Error('Method not implemented.');
+  }
 
-	private hasConnected = false;
-	private hasDisconnected = false;
-	private wasExpelled = false;
-	private wasManualExpel = false;
-	private wasBothExpelled = false;
-	private hasFailedConnection = false;
-	private connectedName: string | undefined = undefined;
-	private connectedMicrobit: MicrobitBluetooth | undefined = undefined;
+  private hasConnected = false;
+  private hasDisconnected = false;
+  private wasExpelled = false;
+  private wasManualExpel = false;
+  private wasBothExpelled = false;
+  private hasFailedConnection = false;
+  private connectedName: string | undefined = undefined;
+  private connectedMicrobit: MicrobitBluetooth | undefined = undefined;
 
-	onConnected(name: string): void {
-		this.hasConnected = true;
-	}
-	onDisconnected(): void {
-		this.hasDisconnected = true;
-	}
+  onGestureRecognized(id: number, gestureName: string): void {
+    throw new Error('Method not implemented.');
+  }
 
-	accelerometerChange(x: number, y: number, z: number): void {
-	}
+  onConnected(name: string): void {
+    this.hasConnected = true;
+  }
+  onDisconnected(): void {
+    this.hasDisconnected = true;
+  }
 
-	onAssigned(microbitBluetooth: MicrobitBluetooth, name: string): void {
-		this.hasConnected = true;
-		this.connectedName = name;
-		this.connectedMicrobit = microbitBluetooth;
-	}
+  accelerometerChange(x: number, y: number, z: number): void { }
 
-	onCancelledBluetoothRequest(): void {
-		this.hasFailedConnection = true;
-	}
+  onAssigned(microbitBluetooth: MicrobitBluetooth, name: string): void {
+    this.hasConnected = true;
+    this.connectedName = name;
+    this.connectedMicrobit = microbitBluetooth;
+  }
 
-	onExpelled(manual?: boolean, bothExpelled?: boolean): void {
-		this.wasExpelled = true;
-		if (manual) {
-			this.wasManualExpel = manual;
-		}
-		if (bothExpelled) {
-			this.wasBothExpelled = bothExpelled;
-		}
-	}
+  onCancelledBluetoothRequest(): void {
+    this.hasFailedConnection = true;
+  }
 
-	buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {
-	}
+  onExpelled(manual?: boolean, bothExpelled?: boolean): void {
+    this.wasExpelled = true;
+    if (manual) {
+      this.wasManualExpel = manual;
+    }
+    if (bothExpelled) {
+      this.wasBothExpelled = bothExpelled;
+    }
+  }
 
-	isAssigned(): boolean {
-		return false;
-	}
+  buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void { }
 
-	wasBothDisconnected(): boolean {
-		return this.wasBothExpelled;
-	}
+  isAssigned(): boolean {
+    return false;
+  }
 
-	wasManuallyDisconnected(): boolean {
-		return this.wasManualExpel;
-	}
+  wasBothDisconnected(): boolean {
+    return this.wasBothExpelled;
+  }
 
-	hasConnectFired() {
-		return this.hasConnected;
-	}
+  wasManuallyDisconnected(): boolean {
+    return this.wasManualExpel;
+  }
 
-	wasDisconnected() {
-		return this.hasDisconnected;
-	}
+  hasConnectFired() {
+    return this.hasConnected;
+  }
 
-	didFailConnection() {
-		return this.hasFailedConnection;
-	}
+  wasDisconnected() {
+    return this.hasDisconnected;
+  }
 
-	getConnectedName() {
-		return this.connectedName;
-	}
+  didFailConnection() {
+    return this.hasFailedConnection;
+  }
 
-	onReady(): void {
-	}
+  getConnectedName() {
+    return this.connectedName;
+  }
 
-	onBluetoothConnectionError(error?: unknown): void {
-		this.hasFailedConnection = true;
-	}
+  onReady(): void { }
+
+  onBluetoothConnectionError(error?: unknown): void {
+    this.hasFailedConnection = true;
+  }
 }
 
 export default SpyConnectionBehaviour;

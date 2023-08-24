@@ -1,31 +1,30 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import { SvelteComponent } from 'svelte';
-import { get, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 import GestureMenu from '../../menus/DataMenu.svelte';
 import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
-import { Pages } from './Pages';
+import { Paths, PathType } from '../../router/paths';
 
 export type MenuProperties = {
   title: string;
   infoBubbleTitle: string;
   infoBubbleContent: string;
-  navigationPage: Pages;
+  navigationPath: PathType;
   collapsedButtonContent: typeof SvelteComponent | undefined;
   expandedButtonContent: typeof SvelteComponent;
+  additionalExpandPaths?: PathType[];
 };
-
-export enum MenuID {
-  DATA = 0,
-  TRAINING = 1,
-  MODEL = 2,
-}
 
 /**
  * Wrapper for the menu logic, use navigation if possible, this is for fine-grained control of menus.
  */
 class Menus {
-  private static currentlyOpen = writable(-1);
-
   private static menuStore = writable<MenuProperties[]>([
     {
       title: 'menu.data.helpHeading',
@@ -33,7 +32,7 @@ class Menus {
       infoBubbleContent: 'menu.data.helpBody',
       collapsedButtonContent: undefined,
       expandedButtonContent: GestureMenu,
-      navigationPage: Pages.DATAPAGE,
+      navigationPath: Paths.DATA,
     },
     {
       title: 'menu.trainer.helpHeading',
@@ -41,7 +40,8 @@ class Menus {
       infoBubbleContent: 'menu.trainer.helpBody',
       collapsedButtonContent: undefined,
       expandedButtonContent: NewTrainerMenu,
-      navigationPage: Pages.TRAININGPAGE,
+      navigationPath: Paths.TRAINING,
+      additionalExpandPaths: [Paths.FILTERS],
     },
     {
       title: 'menu.model.helpHeading',
@@ -49,38 +49,12 @@ class Menus {
       infoBubbleContent: 'menu.model.helpBody',
       collapsedButtonContent: undefined,
       expandedButtonContent: NewModelMenu,
-      navigationPage: Pages.MODELPAGE,
+      navigationPath: Paths.MODEL,
     },
   ]);
 
-  public static getOpenMenu() {
-    if (get(this.currentlyOpen) == -1) {
-      throw new Error('No menu have been opened');
-    }
-    return get(this.menuStore)[get(this.currentlyOpen)];
-  }
-
-  public static getOpenMenuId() {
-    return this.currentlyOpen;
-  }
-
-  public static openMenu(id: MenuID) {
-    this.currentlyOpen.set(id);
-  }
-
-  public static closeMenus() {
-    this.currentlyOpen.set(-1);
-  }
-
   public static getMenuStore() {
     return this.menuStore;
-  }
-
-  public static addMenu(menu: MenuProperties) {
-    this.menuStore.update(u => {
-      u.push(menu);
-      return u;
-    });
   }
 }
 

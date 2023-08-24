@@ -1,5 +1,10 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import MBSpecs from './MBSpecs';
-import TypingUtils from '../TypingUtils';
 
 /**
  * UART data target. For fixing type compatibility issues.
@@ -15,6 +20,7 @@ export class MicrobitBluetooth {
   private readonly device: BluetoothDevice;
 
   private dcListener: OmitThisParameter<(event: Event) => void>;
+  private uartListeners: ((data: string) => void)[];
 
   /**
    * Constructs a bluetooth connection object. Should not be called directly.
@@ -40,6 +46,7 @@ export class MicrobitBluetooth {
     private onReconnectFailed: () => void,
   ) {
     this.dcListener = this.disconnectListener.bind(this);
+    this.uartListeners = [];
     this.device = gattServer.device;
     this.device.addEventListener('gattserverdisconnected', this.dcListener);
   }
@@ -148,31 +155,43 @@ export class MicrobitBluetooth {
     }
   }
 
+  private uartIncomingMessageHandler(data: string): void {
+    this.uartListeners.forEach((listener) => {
+      listener(data);
+    })
+  }
+
   /**
-   * Listen to the UART data transmission characteristic
+   * Listen to the UART data transmission characteristic.
+   * 
+   * Note: The limit for UART messages are 20 bytes. If messages larger than 20 bytes are
+   * received, they will trigger the given 'onDataReceived' multiple times  
+   * 
    * @param {(string) => void} onDataReceived Callback to be called when data is received.
    */
   public async listenToUART(onDataReceived: (data: string) => void): Promise<void> {
-    const uartService: BluetoothRemoteGATTService = await this.getUARTService();
-    const uartTXCharacteristic: BluetoothRemoteGATTCharacteristic =
-      await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_TX);
+    this.uartListeners.push(onDataReceived);
+    if (this.uartListeners.length == 1) {
+      const uartService: BluetoothRemoteGATTService = await this.getUARTService();
+      const uartTXCharacteristic: BluetoothRemoteGATTCharacteristic =
+        await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_TX);
 
-    await uartTXCharacteristic.startNotifications();
+      await uartTXCharacteristic.startNotifications();
 
-    uartTXCharacteristic.addEventListener(
-      'characteristicvaluechanged',
-      (event: Event) => {
-        // Convert the data to a string.
-        const receivedData: number[] = [];
-        const target: CharacteristicDataTarget = event.target as CharacteristicDataTarget;
-        for (let i = 0; i < target.value.byteLength; i += 1) {
-          receivedData[i] = target.value.getUint8(i);
-        }
-        const receivedString = String.fromCharCode.apply(null, receivedData);
-
-        onDataReceived(receivedString);
-      },
-    );
+      uartTXCharacteristic.addEventListener(
+        'characteristicvaluechanged',
+        (event: Event) => {
+          // Convert the data to a string.
+          const receivedData: number[] = [];
+          const target: CharacteristicDataTarget = event.target as CharacteristicDataTarget;
+          for (let i = 0; i < target.value.byteLength; i += 1) {
+            receivedData[i] = target.value.getUint8(i);
+          }
+          const receivedString = String.fromCharCode.apply(null, receivedData);
+          this.uartIncomingMessageHandler(receivedString);
+        },
+      );
+    }
   }
 
   /**

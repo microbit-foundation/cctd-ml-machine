@@ -1,5 +1,14 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import { get, writable } from 'svelte/store';
-import { type CompatibilityStatus, checkCompatibility} from '../compatibility/CompatibilityChecker';
+import {
+  type CompatibilityStatus,
+  checkCompatibility,
+} from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
 import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
@@ -9,9 +18,7 @@ import { DeviceRequestStates } from './connectDialogStore';
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
-export const compatibility = writable<CompatibilityStatus>(
-  checkCompatibility(),
-);
+export const compatibility = writable<CompatibilityStatus>(checkCompatibility());
 
 export const isBluetoothWarningDialogOpen = writable<boolean>(
   get(compatibility) ? !get(compatibility).bluetooth : false,
@@ -20,9 +27,9 @@ export const isBluetoothWarningDialogOpen = writable<boolean>(
 // Store current state to prevent error prone actions
 export const state = writable<{
   isRequestingDevice:
-    | DeviceRequestStates.NONE
-    | DeviceRequestStates.OUTPUT
-    | DeviceRequestStates.INPUT; // fix for a bug caused by too low rollup version. Must be 3x or higher.
+  | DeviceRequestStates.NONE
+  | DeviceRequestStates.OUTPUT
+  | DeviceRequestStates.INPUT; // fix for a bug caused by too low rollup version. Must be 3x or higher.
   isFlashingDevice: boolean;
   isTesting: boolean;
   isRecording: boolean;
@@ -38,6 +45,8 @@ export const state = writable<{
   isOutputAssigned: boolean;
   isOutputReady: boolean;
   isLoading: boolean;
+  isOutputMakecodeHex: boolean;
+  isInputMakecodeHex: boolean;
 }>({
   isRequestingDevice: DeviceRequestStates.NONE,
   isFlashingDevice: false,
@@ -55,6 +64,8 @@ export const state = writable<{
   isOutputAssigned: false,
   isOutputReady: false,
   isLoading: true,
+  isOutputMakecodeHex: false,
+  isInputMakecodeHex: false,
 });
 
 // Message store to propagate allow all components to inform users.
@@ -113,8 +124,14 @@ export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
   buttonB: 0,
 });
 
-export enum MicrobitInteractions {A, B, AB}
+export enum MicrobitInteractions {
+  A,
+  B,
+  AB,
+}
 
 const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;
 
-export const microbitInteraction = writable<MicrobitInteractions>(initialMicrobitInteraction);
+export const microbitInteraction = writable<MicrobitInteractions>(
+  initialMicrobitInteraction,
+);

@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { t } from '../../i18n';
   import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
@@ -20,7 +26,7 @@
       <ImageSkeleton
         alt="microbit recording guide"
         height={134}
-        src="imgs/microbit_record_guide.svg"
+        src="/imgs/microbit_record_guide.svg"
         width={200} />
     </div>
     <p class=" text-center absolute w-60px right-10px top-35px">

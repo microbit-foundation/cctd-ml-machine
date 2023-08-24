@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <style>
   .normal {
     padding: 12px 40px;
@@ -29,9 +35,9 @@
   import windi from './../../windi.config.js';
 
   type variants = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight' | 'disabled';
-  
+
   export let color: variants = 'secondary';
-  export let onClick: (e: Event) => void = TypingUtils.emptyFunction
+  export let onClick: (e: Event) => void = TypingUtils.emptyFunction;
   export let disabled = false;
   export let small = false;
   export let outlined = false;
@@ -47,7 +53,6 @@
     infolight: windi.theme.extend.colors.infolight,
     disabled: windi.theme.extend.colors.disabled,
   };
-
 </script>
 
 <div class="grid grid-cols-1 content-center place-items-center">
@@ -65,8 +70,7 @@
     class:fillOnHover={fillOnHover && !disabled}
     class:cursor-pointer={!disabled}
     class:cursor-default={disabled}
-    on:click={onClick}
-  >
+    on:click={onClick}>
     <slot />
   </button>
 </div>

@@ -12,7 +12,6 @@
 </style>
 
 <script lang="ts">
-  import OutputGesture from '../../components/output/OutputGesture.svelte';
   import { buttonPressed, areActionsAllowed, state } from '../../script/stores/uiStore';
   import { gestures, settings } from '../../script/stores/mlStore';
   import { get } from 'svelte/store';
@@ -24,6 +23,7 @@
   import Information from '../../components/information/Information.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import TrainModelFirstTitle from '../../components/TrainModelFirstTitle.svelte';
+  import OutputGesture from '../../components/output/OutputGesture.svelte';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -133,7 +133,7 @@
       <div class="pl-1">
         <!-- Display all gestures and their output capabilities -->
         {#each $gestures as gesture}
-          <OutputGesture {gesture} {onUserInteraction} />
+          <OutputGesture variant="stack" {gesture} {onUserInteraction} />
         {/each}
       </div>
       {#if !$state.isOutputConnected && !hasClosedPopup && hasInteracted}

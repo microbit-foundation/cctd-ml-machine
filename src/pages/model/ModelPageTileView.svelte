@@ -14,7 +14,7 @@
   import { onMount } from 'svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { gestures } from '../../script/stores/mlStore';
-  import OutputGestureTile from '../../components/output/OutputGestureTile.svelte';
+  import OutputGesture from '../../components/output/OutputGesture.svelte';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -90,7 +90,7 @@
     </div>
     <div>
       {#each $gestures as gesture}
-        <OutputGestureTile {gesture} {onUserInteraction} />
+        <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
       {/each}
     </div>
   {:else}

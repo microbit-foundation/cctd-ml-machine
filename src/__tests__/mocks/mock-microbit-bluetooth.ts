@@ -49,17 +49,17 @@ class MockBTDevice implements BluetoothDevice {
     return this;
   }
 
-  onadvertisementreceived(ev: BluetoothAdvertisingEvent): any {}
+  onadvertisementreceived(ev: BluetoothAdvertisingEvent): any { }
 
-  oncharacteristicvaluechanged(ev: Event): any {}
+  oncharacteristicvaluechanged(ev: Event): any { }
 
-  ongattserverdisconnected(ev: Event): any {}
+  ongattserverdisconnected(ev: Event): any { }
 
-  onserviceadded(ev: Event): any {}
+  onserviceadded(ev: Event): any { }
 
-  onservicechanged(ev: Event): any {}
+  onservicechanged(ev: Event): any { }
 
-  onserviceremoved(ev: Event): any {}
+  onserviceremoved(ev: Event): any { }
 
   addEventListener(
     type: 'gattserverdisconnected',
@@ -129,7 +129,7 @@ class MockBTDevice implements BluetoothDevice {
     type: string,
     callback: EventListenerOrEventListenerObject | null,
     options?: EventListenerOptions | boolean,
-  ): void {}
+  ): void { }
 
   watchAdvertisements(options?: WatchAdvertisementsOptions): Promise<void> {
     return Promise.resolve(undefined);
@@ -179,6 +179,10 @@ class MockGattServer implements BluetoothRemoteGATTServer {
     if (service === MBSpecs.Services.BUTTON_SERVICE) {
       return Promise.resolve(new MockBluetoothGattservice(this.device));
     }
+    if (service === MBSpecs.Services.UART_SERVICE) {
+      return Promise.resolve(new MockBluetoothGattservice(this.device));
+    }
+    console.warn("The primary service, you tried to fetch were unknown. Was this on purpose?")
     return Promise.reject(undefined);
   }
 

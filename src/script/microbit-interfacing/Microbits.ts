@@ -176,6 +176,7 @@ class Microbits {
     const onInitialInputConnect = (microbit: MicrobitBluetooth) => {
       this.assignedInputMicrobit = microbit;
       this.inputName = name;
+
       connectionBehaviour.onConnected(name);
       Microbits.listenToInputServices()
         .then(() => {

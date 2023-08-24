@@ -26,10 +26,7 @@ export const isBluetoothWarningDialogOpen = writable<boolean>(
 
 // Store current state to prevent error prone actions
 export const state = writable<{
-  isRequestingDevice:
-  | DeviceRequestStates.NONE
-  | DeviceRequestStates.OUTPUT
-  | DeviceRequestStates.INPUT; // fix for a bug caused by too low rollup version. Must be 3x or higher.
+  isRequestingDevice: DeviceRequestStates;
   isFlashingDevice: boolean;
   isTesting: boolean;
   isRecording: boolean;

@@ -50,7 +50,8 @@
   </div>
 </StandardDialog>
 <div class="flex flex-col h-full">
-  {#if CookieManager.hasFeatureFlag('filters')}
+  <!-- Should be introduced again before pushed to production branch -->
+  <!--{#if CookieManager.hasFeatureFlag('filters')} -->
     <ControlBar>
       <ExpandableControlBarMenu>
         <StandardButton
@@ -63,7 +64,7 @@
         </StandardButton>
       </ExpandableControlBarMenu>
     </ControlBar>
-  {/if}
+  <!-- {/if} -->
   <div class="flex flex-col flex-grow justify-center items-center text-center">
     {#if !$state.isInputConnected}
       <PleaseConnectFirst />

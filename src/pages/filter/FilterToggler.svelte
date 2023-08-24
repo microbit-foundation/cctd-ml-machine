@@ -19,6 +19,7 @@
   $: isActive = $settings.includedFilters.has(filter);
 
   const toggleFilter = () => {
+    // Should be introduced again before pushed to production branch 
     // settings.update(s => {
     //   if (s.includedFilters.has(filter)) {
     //     s.includedFilters.delete(filter);

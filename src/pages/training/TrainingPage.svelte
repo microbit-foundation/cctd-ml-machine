@@ -50,6 +50,7 @@
   </div>
 </StandardDialog>
 <div class="flex flex-col h-full">
+  <!-- Should be introduced again before pushed to production branch -->
   <!--{#if CookieManager.hasFeatureFlag('filters')} -->
     <ControlBar>
       <ExpandableControlBarMenu>

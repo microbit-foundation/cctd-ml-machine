@@ -637,14 +637,20 @@ class Microbits {
     this.outputName = this.inputName;
     this.outputVersion = this.inputVersion;
 
+    this.outputMakecode = this.inputMakecode;
+
     ConnectionBehaviours.getOutputBehaviour().onAssigned(
       this.getOutput(),
       this.outputName,
     );
     ConnectionBehaviours.getOutputBehaviour().onConnected(this.outputName);
+
     this.listenToOutputServices()
       .then(() => {
         ConnectionBehaviours.getOutputBehaviour().onReady();
+        if (this.outputMakecode) {
+          ConnectionBehaviours.getOutputBehaviour().onIdentifiedAsMakecode();
+        }
       })
       .catch(e => {
         console.log(e);

@@ -9,7 +9,7 @@
   import {
     alertUser,
     buttonPressed,
-    isReady,
+    areActionsAllowed,
     state,
     microbitInteraction,
     MicrobitInteractions,
@@ -48,7 +48,7 @@
   }
 
   function removeClicked(): void {
-    if (!isReady(false)) {
+    if (!areActionsAllowed(false)) {
       return;
     }
 
@@ -65,7 +65,7 @@
   // method for recording data point for that specific gesture
   function recordClicked(e?: Event): void {
     e?.stopPropagation();
-    if (!isReady()) {
+    if (!areActionsAllowed()) {
       return;
     }
 
@@ -98,7 +98,7 @@
 
   // Delete recording from recordings array
   function deleteRecording(recording: RecordingData) {
-    if (!isReady(false)) {
+    if (!areActionsAllowed(false)) {
       return;
     }
     $state.isPredicting = false;

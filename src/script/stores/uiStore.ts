@@ -86,7 +86,7 @@ export function alertUser(text: string): void {
 }
 
 // Assess whether an action is allowed. Alert user if not
-export function isReady(actionAllowed = true, alertIfNotReady = true): boolean {
+export function areActionsAllowed(actionAllowed = true, alertIfNotReady = true): boolean {
   const status = assessStateStatus(actionAllowed);
 
   if (!status.isReady && alertIfNotReady) {

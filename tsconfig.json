@@ -3,10 +3,12 @@
  *
  * SPDX-License-Identifier: MIT
  */
-
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
-  "include": ["src/**/*", "src/node_modules/**/*"],
+  "include": [
+    "src/**/*",
+    "src/node_modules/**/*"
+  ],
   "exclude": [
     "node_modules/*",
     "__sapper__/*",
@@ -16,7 +18,11 @@
     "src/setup_tests.ts"
   ],
   "compilerOptions": {
-    "lib": ["DOM", "ES6", "WebWorker"],
+    "lib": [
+      "DOM",
+      "ES6",
+      "WebWorker"
+    ],
     "resolveJsonModule": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
@@ -24,6 +30,7 @@
     "strict": true,
     "verbatimModuleSyntax": false,
     "ignoreDeprecations": "5.0",
+    "noFallthroughCasesInSwitch": false,
     "types": [
       "jest",
       "svelte"

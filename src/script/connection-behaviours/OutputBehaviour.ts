@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
+import MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
 import { state } from '../stores/uiStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
@@ -40,9 +40,9 @@ class OutputBehaviour extends LoggingDecorator {
 
   onIdentifiedAsMakecode(): void {
     state.update(s => {
-      s.isOutputMakecodeHex = s.isInputMakecodeHex;
+      s.isOutputMakecodeHex = true;
       return s;
-    })
+    });
     super.onIdentifiedAsMakecode();
   }
 
@@ -62,6 +62,10 @@ class OutputBehaviour extends LoggingDecorator {
     Microbits.sendToOutputPin(pinResetArguments);
 
     state.update(s => {
+      if (Microbits.isInputOutputTheSame()) {
+        s.isOutputMakecodeHex = Microbits.isOutputMakecode();
+      }
+
       s.isOutputReady = true;
       return s;
     });

@@ -12,17 +12,18 @@
 </style>
 
 <script lang="ts">
-  import OutputGesture from '../components/OutputGesture.svelte';
-  import { buttonPressed, isReady, state } from '../script/stores/uiStore';
-  import { gestures, settings } from '../script/stores/mlStore';
+  import OutputGesture from '../../components/output/OutputGesture.svelte';
+  import { buttonPressed, areActionsAllowed, state } from '../../script/stores/uiStore';
+  import { gestures, settings } from '../../script/stores/mlStore';
   import { get } from 'svelte/store';
   import { onMount } from 'svelte';
-  import { classify } from '../script/ml';
-  import { t } from '../i18n';
+  import { classify } from '../../script/ml';
+  import { t } from '../../i18n';
   import { fade } from 'svelte/transition';
-  import ControlBar from '../components/control-bar/ControlBar.svelte';
-  import Information from '../components/information/Information.svelte';
-  import Microbits from '../script/microbit-interfacing/Microbits';
+  import ControlBar from '../../components/control-bar/ControlBar.svelte';
+  import Information from '../../components/information/Information.svelte';
+  import Microbits from '../../script/microbit-interfacing/Microbits';
+  import TrainModelFirstTitle from '../../components/TrainModelFirstTitle.svelte';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -41,7 +42,7 @@
    */
   // method for recording gesture for that specific gesture
   function classifyClicked() {
-    if (!isReady()) return;
+    if (!areActionsAllowed()) return;
 
     $state.isRecording = true;
     // lastRecording = undefined;
@@ -173,12 +174,6 @@
       {/if}
     </div>
   {:else}
-    <div class="flex flex-col flex-grow justify-center">
-      <p class="text-primarytext text-center text-3xl bold">
-        {$t('content.model.trainModelFirstHeading')}
-        <br />
-        {$t('content.model.trainModelFirstBody')}
-      </p>
-    </div>
+    <TrainModelFirstTitle />
   {/if}
 </main>

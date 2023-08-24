@@ -15,7 +15,7 @@
 
 <script lang="ts">
   // IMPORT AND DEFAULTS
-  import OutputMatrix from './output/OutputMatrix.svelte';
+  import OutputMatrix from './OutputMatrix.svelte';
   import {
     settings,
     gestureConfidences,
@@ -23,20 +23,20 @@
     type GestureData,
     type SoundData,
     updateGesturePinOutput,
-  } from '../script/stores/mlStore';
-  import { t } from '../i18n';
-  import OutputSoundSelector from './output/OutputSoundSelector.svelte';
-  import Microbits from '../script/microbit-interfacing/Microbits';
-  import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
-  import GestureTilePart from './GestureTilePart.svelte';
-  import PinSelector from './output/PinSelector.svelte';
-  import { state } from '../script/stores/uiStore';
-  import StaticConfiguration from '../StaticConfiguration';
-  import Information from './information/Information.svelte';
-  import { PinTurnOnState } from './output/PinSelectorUtil';
-  import MBSpecs from '../script/microbit-interfacing/MBSpecs';
-  import ConnectionBehaviours from '../script/connection-behaviours/ConnectionBehaviours';
-  import CookieManager from '../script/CookieManager';
+  } from '../../script/stores/mlStore';
+  import { t } from '../../i18n';
+  import OutputSoundSelector from './OutputSoundSelector.svelte';
+  import Microbits from '../../script/microbit-interfacing/Microbits';
+  import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
+  import GestureTilePart from '../GestureTilePart.svelte';
+  import PinSelector from './PinSelector.svelte';
+  import { state } from '../../script/stores/uiStore';
+  import StaticConfiguration from '../../StaticConfiguration';
+  import Information from '../information/Information.svelte';
+  import { PinTurnOnState } from './PinSelectorUtil';
+  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
+  import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
+  import CookieManager from '../../script/CookieManager';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -79,23 +79,9 @@
   };
 
   const wasTurnedOn = () => {
-    // TODO: Will be removed in the future - see https://github.com/microbit-foundation/cctd-ml-machine/issues/305 @amh
-    if (CookieManager.hasFeatureFlag('mkcd')) {
-      if (Microbits.isOutputMakecode()) {
-        ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
-          gesture.ID,
-          gesture.name,
-        );
-        return;
-      }
-    }
     triggerComponents();
     playSound();
     wasTriggered = true;
-    ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
-      gesture.ID,
-      gesture.name,
-    );
   };
 
   const handleTriggering = (action: TriggerAction) => {

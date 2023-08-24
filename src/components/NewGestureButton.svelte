@@ -11,14 +11,14 @@
 </style>
 
 <script lang="ts">
-  import { isReady } from '../script/stores/uiStore';
+  import { areActionsAllowed } from '../script/stores/uiStore';
   import { addGesture } from '../script/stores/mlStore';
   import { t } from '../i18n';
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
 
   function onClick() {
-    if (!isReady(false)) {
+    if (!areActionsAllowed(false)) {
       return;
     }
     addGesture(defaultNewName);

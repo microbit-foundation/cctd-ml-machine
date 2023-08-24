@@ -16,7 +16,7 @@ import {
   TrainingStatus,
   trainingStatus,
 } from './stores/mlStore';
-import { Filters, FilterType, Axes, determineFilter, AxesType } from './datafunctions';
+import { FilterType, Axes, determineFilter, AxesType } from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
@@ -274,6 +274,7 @@ export function classify() {
 
   // Get formatted version of previous data
   const data = getPrevData();
+  if (data === undefined) throw new Error('Unsufficient amount of data to make prediction');
   const input: number[] = makeInputs(data);
   const inputTensor = tf.tensor([input]);
   const prediction: Tensor = get(model).predict(inputTensor) as Tensor;

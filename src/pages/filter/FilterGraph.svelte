@@ -5,18 +5,19 @@
  -->
 
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
+  import { onMount, onDestroy } from 'svelte';
+  import {Chart, LinearScale, CategoryScale, ChartConfiguration, ChartData, LineElement, PointElement, LineController, Legend} from 'chart.js';
+  import {ViolinController, Violin} from '@sgratzl/chartjs-chart-boxplot';
   import { state } from '../../script/stores/uiStore';
-  import { GestureData, currentData, gestures } from '../../script/stores/mlStore';
+  import { GestureData, gestures } from '../../script/stores/mlStore';
   import {
     Axes,
     AxesType,
     FilterType,
-    Filters,
     clamp,
     determineFilter,
   } from '../../script/datafunctions';
+  import { getPrevData } from '../../script/stores/mlStore';
 
   export let filter: FilterType;
   export let gesture: GestureData | undefined = undefined;
@@ -61,11 +62,42 @@
     return filteredData;
   };
 
+  let liveData: [number, number, number] = [0, 0, 0];
+
+  const createLiveData = () => {
+    if (!showLive) {
+      data.datasets[0].hidden = true;
+      chart.update();
+      return;
+    }
+    const prevData = getPrevData();
+    // Return if insufficient amount of previous data is available
+    if( prevData === undefined ) return;
+    liveData = [
+      filterFunction(prevData.x),
+      filterFunction(prevData.y),
+      filterFunction(prevData.z)
+    ];
+      // TODO: Reconsider how to best update graph if values goes outside axes scales
+    data.datasets[0].data[0] = clamp(liveData[0], axisScale.min, axisScale.max);
+    data.datasets[0].data[1] = clamp(liveData[1], axisScale.min, axisScale.max);
+    data.datasets[0].data[2] = clamp(liveData[2], axisScale.min, axisScale.max);
+    data.datasets[0].hidden = false;
+    chart.update();
+  }
+
+  onInterval(createLiveData, 100);
+
+function onInterval(callback: () => void, milliseconds: number) {
+	const interval = setInterval(callback, milliseconds);
+	onDestroy(() => {
+		clearInterval(interval);
+	});
+}
+
   const dataRepresentation = createFilteredData();
 
-  const compareWithLive = (
-    [Filters.MAX, Filters.MIN, Filters.MEAN] as FilterType[]
-  ).includes(filter);
+
 
   // TODO: Handle sensitivity and extraconfig
   // export let sensitivity: Vector3 | undefined = undefined;
@@ -74,24 +106,9 @@
   // export let forcedColor: string | undefined = undefined;
 
   function getColor(index: number): string {
-    const colors = [
-      '#f9808e',
-      '#80f98e',
-      '#808ef9',
-      '#80dfff',
-      '#df80ff',
-      '#ffdf80',
-      '#ff3333',
-      '#33ff33',
-      '#3333ff',
-    ];
+    const colors = ['#bd425d', '#cc6e5b', '#d7905a', '#e1ad5c', '#e9c563', '#f0d86d', '#f6e67d', '#fbf090', '#fff5a8'];
     return colors[index % colors.length];
   }
-
-  let isMounted = false;
-  onMount(() => {
-    isMounted = true;
-  });
 
   const labels: AxesType[] = Object.values(Axes);
 
@@ -127,81 +144,50 @@
     min: maxMin.min - 0.1 * maxMin.diff,
   };
 
-  function onNewLiveValues(
-    values: { x: number; y: number; z: number },
-    isConnected: boolean,
-  ) {
-    if (!isMounted) {
-      return;
-    }
-    if (!showLive || !isConnected) {
-      data.datasets[0].hidden = true;
-      chart.update();
-      return;
-    }
-    // TODO: Reconsider how to best update graph if values goes outside axes scales
-    data.datasets[0].data[0] = clamp(values.x, axisScale.min, axisScale.max);
-    data.datasets[0].data[1] = clamp(values.y, axisScale.min, axisScale.max);
-    data.datasets[0].data[2] = clamp(values.z, axisScale.min, axisScale.max);
-    data.datasets[0].hidden = false;
-    chart.update();
-  }
-
   const data: ChartData = {
     labels: labels,
     datasets: [],
   };
 
   const populateData = () => {
-    if (compareWithLive) {
-      data.datasets.push({
-        label: 'Live Data',
-        backgroundColor: '#000000',
-        data: [$currentData.x, $currentData.y, $currentData.z],
-        type: 'line',
-        hidden: !showLive,
-      });
-    }
+    data.datasets.push({
+      label: 'Live Data',
+      data: liveData,
+      type: 'line',
+      hidden: !showLive,
+    });
+
     dataRepresentation.forEach((dataPoint, idx) => {
       data.datasets.push({
+        itemRadius: 5,
+        itemBackgroundColor: getColor(idx) + "4D", // 4D is 30% opacity
         label: dataPoint.name,
         // TODO: Handle scaling/normalization of data in a better way than simply dividing by 40
         data: [
-          [
-            Math.min(...dataPoint.points.x) - maxMin.diff / 40,
-            Math.max(...dataPoint.points.x) + maxMin.diff / 40,
-          ],
-          [
-            Math.min(...dataPoint.points.y) - maxMin.diff / 40,
-            Math.max(...dataPoint.points.y) + maxMin.diff / 40,
-          ],
-          [
-            Math.min(...dataPoint.points.z) - maxMin.diff / 40,
-            Math.max(...dataPoint.points.z) + maxMin.diff / 40,
-          ],
+          dataPoint.points.x,
+          dataPoint.points.y,
+          dataPoint.points.z,
         ],
         backgroundColor: forcedColor ?? getColor(idx),
-        type: 'bar',
       });
     });
   };
   populateData();
 
   const config: ChartConfiguration = {
-    type: 'line',
+    type: 'violin',
     data: data,
     options: {
       aspectRatio: aspectRatio,
       elements: {
         line: {
-          borderWidth: 0,
+          borderWidth: 3,
         },
         point: {
-          radius: 25,
-          pointStyle: 'line',
-          borderWidth: 1,
-          borderColor: '#000000',
-        },
+          radius: 5,
+          pointStyle: 'point',
+          backgroundColor: '#000000',
+        }
       },
       scales: {
         y: {
@@ -217,6 +203,7 @@
         legend: {
           position: legendPosition,
           display: displayLegend,
+          onClick: () => {},
         },
         title: {
           display: false,
@@ -240,21 +227,17 @@
   // }
   // )(sensitivity);
 
-  $: {
-    if (compareWithLive) {
-      onNewLiveValues($currentData, $state.isInputConnected);
-    }
-  }
-
   let chart: Chart;
   let canvas: HTMLCanvasElement;
   onMount(() => {
-    Chart.register(...registerables);
+    Chart.register(ViolinController, Violin, LinearScale, CategoryScale, LineElement, PointElement, LineController, Legend);
     if (canvas.getContext('2d') != null) {
       chart = new Chart(canvas.getContext('2d') ?? new HTMLCanvasElement(), config);
       // TODO: Remember extraConfig
     }
   });
+
+
 </script>
 
 <canvas bind:this={canvas} id="myChart" />

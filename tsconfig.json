@@ -30,7 +30,7 @@
     "strict": true,
     "verbatimModuleSyntax": false,
     "ignoreDeprecations": "5.0",
-    "noFallthroughCasesInSwitch": false,
+    "noFallthroughCasesInSwitch": true,
     "types": [
       "jest",
       "svelte"

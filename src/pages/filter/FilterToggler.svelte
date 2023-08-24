@@ -19,14 +19,14 @@
   $: isActive = $settings.includedFilters.has(filter);
 
   const toggleFilter = () => {
-    settings.update(s => {
-      if (s.includedFilters.has(filter)) {
-        s.includedFilters.delete(filter);
-      } else {
-        s.includedFilters.add(filter);
-      }
-      return s;
-    });
+    // settings.update(s => {
+    //   if (s.includedFilters.has(filter)) {
+    //     s.includedFilters.delete(filter);
+    //   } else {
+    //     s.includedFilters.add(filter);
+    //   }
+    //   return s;
+    // });
   };
 </script>
 

@@ -97,16 +97,8 @@ function onInterval(callback: () => void, milliseconds: number) {
 
   const dataRepresentation = createFilteredData();
 
-
-
-  // TODO: Handle sensitivity and extraconfig
-  // export let sensitivity: Vector3 | undefined = undefined;
-  // export let extraConfig = {};
-  // Keeping this as a comment in case it is needed reimplementation of later features
-  // export let forcedColor: string | undefined = undefined;
-
   function getColor(index: number): string {
-    const colors = ['#bd425d', '#cc6e5b', '#d7905a', '#e1ad5c', '#e9c563', '#f0d86d', '#f6e67d', '#fbf090', '#fff5a8'];
+    const colors = ['#007bff', '#93003a', '#9a94ea', '#ce3664', '#f2778d', '#d0b2db', '#ffbcb8', '#ffffe0', '#f3d5d5'];
     return colors[index % colors.length];
   }
 
@@ -159,16 +151,15 @@ function onInterval(callback: () => void, milliseconds: number) {
 
     dataRepresentation.forEach((dataPoint, idx) => {
       data.datasets.push({
-        itemRadius: 5,
-        itemBackgroundColor: getColor(idx) + "4D", // 4D is 30% opacity
+        itemRadius: 3,
+        itemBackgroundColor: getColor(idx) + "ff",
         label: dataPoint.name,
-        // TODO: Handle scaling/normalization of data in a better way than simply dividing by 40
         data: [
           dataPoint.points.x,
           dataPoint.points.y,
           dataPoint.points.z,
         ],
-        backgroundColor: forcedColor ?? getColor(idx),
+        backgroundColor: forcedColor ?? getColor(idx) + "4D", // 4D is 30% opacity
       });
     });
   };
@@ -184,7 +175,7 @@ function onInterval(callback: () => void, milliseconds: number) {
           borderWidth: 3,
         },
         point: {
-          radius: 5,
+          radius: 3,
           pointStyle: 'point',
           backgroundColor: '#000000',
         }
@@ -199,6 +190,7 @@ function onInterval(callback: () => void, milliseconds: number) {
         },
       },
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           position: legendPosition,
@@ -233,7 +225,6 @@ function onInterval(callback: () => void, milliseconds: number) {
     Chart.register(ViolinController, Violin, LinearScale, CategoryScale, LineElement, PointElement, LineController, Legend);
     if (canvas.getContext('2d') != null) {
       chart = new Chart(canvas.getContext('2d') ?? new HTMLCanvasElement(), config);
-      // TODO: Remember extraConfig
     }
   });
 

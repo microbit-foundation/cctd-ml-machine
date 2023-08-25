@@ -12,6 +12,9 @@ import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
  * Use this for checking the micro:bit behaviour.
  */
 class SpyConnectionBehaviour implements ConnectionBehaviour {
+  onIdentifiedAsMakecode(): void {
+    throw new Error('Method not implemented.');
+  }
   onUartMessageReceived(message: string): void {
     throw new Error('Method not implemented.');
   }

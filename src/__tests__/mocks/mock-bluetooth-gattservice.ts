@@ -15,13 +15,13 @@ class MockBluetoothGattservice implements BluetoothRemoteGATTService {
     this.device = device;
   }
 
-  oncharacteristicvaluechanged(ev: Event): any {}
+  oncharacteristicvaluechanged(ev: Event): any { }
 
-  onserviceadded(ev: Event): any {}
+  onserviceadded(ev: Event): any { }
 
-  onservicechanged(ev: Event): any {}
+  onservicechanged(ev: Event): any { }
 
-  onserviceremoved(ev: Event): any {}
+  onserviceremoved(ev: Event): any { }
 
   addEventListener(
     type: 'serviceadded',
@@ -60,7 +60,7 @@ class MockBluetoothGattservice implements BluetoothRemoteGATTService {
       | EventListenerOrEventListenerObject
       | null,
     useCapture?: boolean | AddEventListenerOptions,
-  ): void {}
+  ): void { }
 
   dispatchEvent(event: Event): boolean;
   dispatchEvent(event: Event): boolean;
@@ -104,7 +104,7 @@ class MockBluetoothGattservice implements BluetoothRemoteGATTService {
     type: string,
     callback: EventListenerOrEventListenerObject | null,
     options?: EventListenerOptions | boolean,
-  ): void {}
+  ): void { }
 }
 
 export default MockBluetoothGattservice;

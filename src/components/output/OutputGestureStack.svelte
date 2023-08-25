@@ -15,7 +15,7 @@
 
 <script lang="ts">
   // IMPORT AND DEFAULTS
-  import OutputMatrix from './output/OutputMatrix.svelte';
+  import OutputMatrix from './OutputMatrix.svelte';
   import {
     settings,
     gestureConfidences,
@@ -23,19 +23,18 @@
     type GestureData,
     type SoundData,
     updateGesturePinOutput,
-  } from '../script/stores/mlStore';
-  import { t } from '../i18n';
-  import OutputSoundSelector from './output/OutputSoundSelector.svelte';
-  import Microbits from '../script/microbit-interfacing/Microbits';
-  import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
-  import GestureTilePart from './GestureTilePart.svelte';
-  import PinSelector from './output/PinSelector.svelte';
-  import { state } from '../script/stores/uiStore';
-  import StaticConfiguration from '../StaticConfiguration';
-  import Information from './information/Information.svelte';
-  import { PinTurnOnState } from './output/PinSelectorUtil';
-  import MBSpecs from '../script/microbit-interfacing/MBSpecs';
-  import ConnectionBehaviours from '../script/connection-behaviours/ConnectionBehaviours';
+  } from '../../script/stores/mlStore';
+  import { t } from '../../i18n';
+  import OutputSoundSelector from './OutputSoundSelector.svelte';
+  import Microbits from '../../script/microbit-interfacing/Microbits';
+  import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
+  import GestureTilePart from '../GestureTilePart.svelte';
+  import PinSelector from './PinSelector.svelte';
+  import { state } from '../../script/stores/uiStore';
+  import StaticConfiguration from '../../StaticConfiguration';
+  import Information from '../information/Information.svelte';
+  import { PinTurnOnState } from './PinSelectorUtil';
+  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -77,18 +76,18 @@
     return 'none';
   };
 
+  const wasTurnedOn = () => {
+    triggerComponents();
+    playSound();
+    wasTriggered = true;
+  };
+
   const handleTriggering = (action: TriggerAction) => {
     if (action === 'none') {
       return;
     }
     if (action === 'turnOn') {
-      triggerComponents();
-      playSound();
-      wasTriggered = true;
-      ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
-        gesture.ID,
-        gesture.name,
-      );
+      wasTurnedOn();
     } else {
       wasTriggered = false;
     }

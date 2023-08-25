@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
+import MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
 import { state } from '../stores/uiStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
@@ -38,29 +38,20 @@ class OutputBehaviour extends LoggingDecorator {
     }
   }
 
-  onUartMessageReceived(message: string): void {
-    super.onUartMessageReceived(message);
-    if (message === "id_mkcd") {
-      this.announceIsMakecode();
-    }
-  }
-
-  private announceIsMakecode() {
+  onIdentifiedAsMakecode(): void {
     state.update(s => {
       s.isOutputMakecodeHex = true;
       return s;
-    })
+    });
+    super.onIdentifiedAsMakecode();
+  }
+
+  onUartMessageReceived(message: string): void {
+    super.onUartMessageReceived(message);
   }
 
   onReady() {
     super.onReady();
-
-    if (Microbits.isInputOutputTheSame()) {
-      state.update(s => {
-        s.isOutputMakecodeHex = s.isInputMakecodeHex;
-        return s;
-      })
-    }
 
     // Reset any output pins currently active.
     const pinResetArguments: { pin: MBSpecs.UsableIOPin; on: boolean }[] = [];
@@ -71,6 +62,10 @@ class OutputBehaviour extends LoggingDecorator {
     Microbits.sendToOutputPin(pinResetArguments);
 
     state.update(s => {
+      if (Microbits.isInputOutputTheSame()) {
+        s.isOutputMakecodeHex = Microbits.isOutputMakecode();
+      }
+
       s.isOutputReady = true;
       return s;
     });
@@ -79,7 +74,6 @@ class OutputBehaviour extends LoggingDecorator {
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
     super.onAssigned(microbitBluetooth, name);
-    microbitBluetooth.listenToUART((data) => this.onUartMessageReceived(data))
     state.update(s => {
       s.isOutputAssigned = true;
       return s;

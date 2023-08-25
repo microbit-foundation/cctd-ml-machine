@@ -69,7 +69,7 @@
     </div>
   </div>
   <div class="w-full h-min px-5 pb-4">
-    <FilterGraph {filter} aspectRatio={1.5} />
+    <FilterGraph {filter} aspectRatio={1} />
   </div>
   <div
     class="

@@ -41,10 +41,8 @@
   }
   const wasTurnedOff = () => {
     // Some action here
-    console.log('was turned off' + gesture.name);
   };
   const wasTurnedOn = () => {
-    console.log('was turned on' + gesture.name);
     // TODO: Will be removed in the future - see https://github.com/microbit-foundation/cctd-ml-machine/issues/305 @amh
     if (CookieManager.hasFeatureFlag('mkcd')) {
       if (Microbits.isOutputMakecode()) {

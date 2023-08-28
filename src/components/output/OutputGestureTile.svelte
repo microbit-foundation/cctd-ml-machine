@@ -15,80 +15,23 @@
 
 <script lang="ts">
   // IMPORT AND DEFAULTS
-  import OutputMatrix from './OutputMatrix.svelte';
-  import {
-    settings,
-    gestureConfidences,
-    type GestureData,
-  } from '../../script/stores/mlStore';
+  import { type GestureData } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
-  import Microbits from '../../script/microbit-interfacing/Microbits';
   import GestureTilePart from '../GestureTilePart.svelte';
-  import { state } from '../../script/stores/uiStore';
-  import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
-  import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
-  import CookieManager from '../../script/CookieManager';
-
-  type TriggerAction = 'turnOn' | 'turnOff' | 'none';
+  import { Writable } from 'svelte/store';
 
   // Variables for component
+  export let confidence: Writable<number>;
+  export let requiredConfidence: Writable<number>;
   export let gesture: GestureData;
 
-  let wasTriggered = false;
-
-  let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
-  $: currentConfidence = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
-
-  const getTriggerAction = (
-    lastWasTriggered: boolean,
-    confidence: number,
-    requiredConfidence: number,
-  ): TriggerAction => {
-    let isConfident = requiredConfidence <= confidence * 100;
-    if ((!lastWasTriggered || !$settings.automaticClassification) && isConfident) {
-      return 'turnOn';
-    }
-    if (lastWasTriggered && !isConfident) {
-      return 'turnOff';
-    }
-    return 'none';
-  };
-
-  const wasTurnedOn = () => {
-    // TODO: Will be removed in the future - see https://github.com/microbit-foundation/cctd-ml-machine/issues/305 @amh
-    if (CookieManager.hasFeatureFlag('mkcd')) {
-      if (Microbits.isOutputMakecode()) {
-        ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
-          gesture.ID,
-          gesture.name,
-        );
-        return;
-      }
-    }
-    wasTriggered = true;
-  };
-
-  const handleTriggering = (action: TriggerAction) => {
-    if (action === 'none') {
-      return;
-    }
-    if (action === 'turnOn') {
-      wasTurnedOn();
-    } else {
-      wasTriggered = false;
-    }
-  };
-
+  let sliderValue = $requiredConfidence * 100;
   $: {
-    let triggerAction = getTriggerAction(
-      wasTriggered,
-      currentConfidence,
-      requiredConfidence,
-    );
-    handleTriggering(triggerAction);
+    $requiredConfidence = sliderValue / 100;
   }
-  console.log(wasTriggered);
+
+  $: active = $confidence > $requiredConfidence;
 </script>
 
 <main class="pl-3 mb-4 items-center flex flex-row">
@@ -110,21 +53,22 @@
         min="10"
         max="90"
         id=""
-        bind:value={requiredConfidence} />
+        bind:value={sliderValue} />
 
       <!-- METER -->
       <div class="w-4 h-25 relative">
         <div
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
           <div
-            class="absolute w-5 {currentConfidence < requiredConfidence
-              ? 'bg-primary'
-              : 'bg-info'} z-index: -10"
-            style="height: {100 * currentConfidence}px; margin-top: {100 -
-              100 * currentConfidence}px;" />
+            class="absolute w-5
+            {active ? 'bg-primary' : 'bg-info'}
+              z-index: -10"
+            style="height: {100 * $confidence}px; margin-top: {100 -
+              100 * $confidence}px;" />
           <div
             class="absolute w-5 bg-primary"
-            style="height: 1px; margin-top: {6.5 - 0.068 * requiredConfidence}rem;" />
+            style="height: 1px; margin-top: {6.5 -
+              0.068 * $requiredConfidence * 100}rem;" />
           <div class="absolute">
             {#each [75, 50, 25] as line}
               <div class="w-5 bg-gray-300 mt-6" style="height: 1px;">

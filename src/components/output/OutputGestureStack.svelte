@@ -18,7 +18,6 @@
   import OutputMatrix from './OutputMatrix.svelte';
   import {
     settings,
-    gestureConfidences,
     updateGestureSoundOutput,
     type GestureData,
     type SoundData,
@@ -35,6 +34,7 @@
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
+  import Gestures from '../../script/Gestures';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -58,15 +58,17 @@
     ? gesture.output.outputPin.pinState
     : StaticConfiguration.defaultPinTurnOnState;
 
+  const confidence = Gestures.getConfidence(gesture.ID);
+
   let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
-  $: currentConfidence = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
+  $: currentConfidence = $state.isInputReady ? $confidence : 0;
 
   const getTriggerAction = (
     lastWasTriggered: boolean,
     confidence: number,
     requiredConfidence: number,
   ): TriggerAction => {
-    let isConfident = requiredConfidence <= confidence * 100;
+    let isConfident = requiredConfidence <= confidence;
     if ((!lastWasTriggered || !$settings.automaticClassification) && isConfident) {
       return 'turnOn';
     }
@@ -182,6 +184,13 @@
     setOutputPin(false);
   };
 
+  let sliderValue = requiredConfidence * 100;
+  $: {
+    Gestures.getRequiredConfidence(gesture.ID).update(val => {
+      return sliderValue / 100;
+    });
+  }
+
   let hasLoadedMicrobitImage = false;
 </script>
 
@@ -204,7 +213,7 @@
         min="10"
         max="90"
         id=""
-        bind:value={requiredConfidence} />
+        bind:value={sliderValue} />
 
       <!-- METER -->
       <div class="w-4 h-25 relative">
@@ -216,7 +225,7 @@
               100 * currentConfidence}px;" />
           <div
             class="absolute w-5 bg-primary"
-            style="height: 1px; margin-top: {6.5 - 0.068 * requiredConfidence}rem;" />
+            style="height: 1px; margin-top: {6.5 - 0.068 * sliderValue}rem;" />
           <div class="absolute">
             {#each [75, 50, 25] as line}
               <div class="w-5 bg-gray-300 mt-6" style="height: 1px;">

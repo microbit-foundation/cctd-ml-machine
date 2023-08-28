@@ -21,6 +21,7 @@ import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
+import Gestures from './Gestures';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -292,6 +293,10 @@ function tfHandlePrediction(result: Float32Array) {
   const gestureData = get(gestures);
 
   gestureData.forEach(({ ID }, index) => {
+    Gestures.getConfidence(ID).update(val => {
+      val = result[index];
+      return val;
+    })
     gestureConfidences.update(confidenceMap => {
       confidenceMap[ID] = result[index];
       return confidenceMap;

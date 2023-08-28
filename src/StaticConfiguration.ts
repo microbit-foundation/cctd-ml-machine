@@ -33,7 +33,7 @@ class StaticConfiguration {
   public static readonly gestureNameMaxLength = 25;
 
   // Default required confidence level
-  public static readonly defaultRequiredConfidence = 80;
+  public static readonly defaultRequiredConfidence = 0.8;
 
   public static initialMLSettings = {
     duration: 1800,

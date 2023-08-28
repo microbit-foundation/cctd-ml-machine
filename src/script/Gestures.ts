@@ -1,4 +1,10 @@
-import { Writable, get, writable } from "svelte/store";
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+import { Writable, writable } from "svelte/store";
 import StaticConfiguration from "../StaticConfiguration";
 
 class Gestures {

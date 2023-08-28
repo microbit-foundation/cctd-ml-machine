@@ -14,7 +14,7 @@ import Environment from '../Environment';
  */
 abstract class LoggingDecorator implements ConnectionBehaviour {
 
-  private enableLogging: boolean = Environment.isInDevelopment && false;
+  private enableLogging: boolean = Environment.isInDevelopment && true;
 
   // For preventing spam of accelerometer data
   private logTimer = new Date().getTime();

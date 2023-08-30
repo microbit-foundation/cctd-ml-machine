@@ -5,7 +5,7 @@
  */
 
 import MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { state } from '../stores/uiStore';
+import { ModelView, state } from '../stores/uiStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
@@ -40,7 +40,7 @@ class OutputBehaviour extends LoggingDecorator {
 
   onIdentifiedAsMakecode(): void {
     state.update(s => {
-      s.isOutputMakecodeHex = true;
+      s.modelView = ModelView.TILE;
       return s;
     });
     super.onIdentifiedAsMakecode();
@@ -63,7 +63,7 @@ class OutputBehaviour extends LoggingDecorator {
 
     state.update(s => {
       if (Microbits.isInputOutputTheSame()) {
-        s.isOutputMakecodeHex = Microbits.isOutputMakecode();
+        s.modelView = Microbits.isOutputMakecode() ? ModelView.TILE : ModelView.STACK;
       }
 
       s.isOutputReady = true;
@@ -136,7 +136,7 @@ class OutputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isOutputConnected = false;
       s.isOutputReady = false;
-      s.isOutputMakecodeHex = false;
+      s.modelView = ModelView.STACK;
       return s;
     });
   }

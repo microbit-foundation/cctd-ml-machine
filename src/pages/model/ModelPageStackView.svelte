@@ -19,7 +19,6 @@
   import { classify } from '../../script/ml';
   import { t } from '../../i18n';
   import { fade } from 'svelte/transition';
-  import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import Information from '../../components/information/Information.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import TrainModelFirstTitle from '../../components/TrainModelFirstTitle.svelte';
@@ -96,10 +95,7 @@
 <main class="h-full flex flex-col">
   {#if $state.isPredicting}
     <div>
-      <ControlBar />
-    </div>
-    <div>
-      <div class="relative flex h-8 mt-4">
+      <div class="relative flex h-8">
         <div class="absolute left-5 flex">
           <Information
             isLightTheme={false}
@@ -141,7 +137,7 @@
           transition:fade
           class="grid grid-cols-5 absolute bottom-5 w-full min-w-729px">
           <div
-            class=" flex relative col-start-2 rounded-lg col-end-5 h-35"
+            class="flex relative col-start-2 rounded-lg col-end-5 h-35"
             style="background-color:rgba(231, 229, 228, 0.85)">
             <div class="m-4 mr-2 w-3/4">
               <p class="text-2xl font-bold">

@@ -26,7 +26,7 @@
   }
 
   $: {
-    let isConfident = $requiredConfidence <= currentConfidence * 100;
+    let isConfident = $requiredConfidence <= currentConfidence;
     if (isConfident) {
       if (!wasTriggered) {
         wasTurnedOn();
@@ -44,14 +44,12 @@
   };
   const wasTurnedOn = () => {
     // TODO: Will be removed in the future - see https://github.com/microbit-foundation/cctd-ml-machine/issues/305 @amh
-    if (CookieManager.hasFeatureFlag('mkcd')) {
-      if (Microbits.isOutputMakecode()) {
-        ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
-          gesture.ID,
-          gesture.name,
-        );
-        return;
-      }
+    if (Microbits.isOutputMakecode()) {
+      ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
+        gesture.ID,
+        gesture.name,
+      );
+      return;
     }
   };
 

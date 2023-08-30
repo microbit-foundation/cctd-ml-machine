@@ -194,7 +194,7 @@
   let hasLoadedMicrobitImage = false;
 </script>
 
-<main class="pl-3 mb-4 items-center flex flex-row">
+<main class="mb-4 items-center flex flex-row">
   <!-- NAMES AND CONFIDENCE METER -->
   <GestureTilePart>
     <div class="items-center flex p-2">

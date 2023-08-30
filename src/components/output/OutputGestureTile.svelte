@@ -34,17 +34,17 @@
   $: active = $confidence > $requiredConfidence;
 </script>
 
-<main class="pl-3 mb-4 items-center flex flex-row">
-  <!-- NAMES AND CONFIDENCE METER -->
-  <GestureTilePart>
-    <div class="items-center flex p-2">
-      <div
-        class="w-36 text-center font-semibold rounded-xl
+<GestureTilePart>
+  <div class="items-center h-full my-auto justify-between flex p-2">
+    <div
+      class="w-36 text-center font-semibold rounded-xl
                     px-1 py-1 border border-gray-300
                     border-dashed mr-2 break-words">
-        <h3>{gesture.name}</h3>
-      </div>
-      <div class="h-31" />
+      <h3>{gesture.name}</h3>
+    </div>
+
+    <!-- METER -->
+    <div class="flex">
       <input
         class="h-25 rotate-90 accent-primary"
         type="range"
@@ -54,8 +54,6 @@
         max="90"
         id=""
         bind:value={sliderValue} />
-
-      <!-- METER -->
       <div class="w-4 h-25 relative">
         <div
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
@@ -88,5 +86,5 @@
           isLightTheme={false} />
       </div>
     </div>
-  </GestureTilePart>
-</main>
+  </div>
+</GestureTilePart>

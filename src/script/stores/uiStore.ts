@@ -24,6 +24,11 @@ export const isBluetoothWarningDialogOpen = writable<boolean>(
   get(compatibility) ? !get(compatibility).bluetooth : false,
 );
 
+export enum ModelView {
+  TILE,
+  STACK
+}
+
 // Store current state to prevent error prone actions
 export const state = writable<{
   isRequestingDevice: DeviceRequestStates;
@@ -42,7 +47,7 @@ export const state = writable<{
   isOutputAssigned: boolean;
   isOutputReady: boolean;
   isLoading: boolean;
-  isOutputMakecodeHex: boolean;
+  modelView: ModelView;
   isInputMakecodeHex: boolean;
 }>({
   isRequestingDevice: DeviceRequestStates.NONE,
@@ -61,7 +66,7 @@ export const state = writable<{
   isOutputAssigned: false,
   isOutputReady: false,
   isLoading: true,
-  isOutputMakecodeHex: false,
+  modelView: ModelView.STACK,
   isInputMakecodeHex: false,
 });
 

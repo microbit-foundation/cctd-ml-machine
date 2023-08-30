@@ -1,24 +1,22 @@
-<!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
-  SPDX-License-Identifier: MIT
- -->
-
 <script lang="ts">
   import { get } from 'svelte/store';
   import TrainModelFirstTitle from '../../components/TrainModelFirstTitle.svelte';
+  import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import { areActionsAllowed, buttonPressed, state } from '../../script/stores/uiStore';
   import { settings } from '../../script/stores/mlStore';
   import { classify } from '../../script/ml';
   import { onMount } from 'svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
-  import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
+  import { gestures } from '../../script/stores/mlStore';
+  import OutputGesture from '../../components/output/OutputGesture.svelte';
+  import MediaQuery from '../../components/MediaQuery.svelte';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
   // let lastRecording;
 
   // Bool flags to know whether output microbit popup should be show
+  let hasClosedPopup = false;
   let hasInteracted = false;
 
   function onUserInteraction(): void {
@@ -80,24 +78,30 @@
   $: triggerButtonsClicked($buttonPressed);
 </script>
 
-<main class="h-full flex flex-col">
-  {#if !$state.isPredicting}
-    <TrainModelFirstTitle />
-  {:else}
-    <ModelPageTileViewTiles />
-    <div
-      class="flex flex-row mt-12 mx-30 bg-backgroundlight border-secondary border-1 p-4 rounded justify-center shadow-xl">
-      <div class="flex flex-col">
-        <p class="text-md font-bold text-primary text-center">MakeCode</p>
-        <p class="text-sm">
-          You can create a hex file on <a
-            target="_blank"
-            href="https://makecode.microbit.org/#pub:04730-01245-34848-93416"
-            class="text-secondary">
-            MakeCode
-          </a>
-        </p>
-      </div>
+<MediaQuery query="(max-width: 1000px)" let:matches>
+  {#if matches}
+    <div class="grid grid-cols-3 gap-4">
+      {#each $gestures as gesture}
+        <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
+      {/each}
     </div>
   {/if}
-</main>
+</MediaQuery>
+<MediaQuery query="(min-width: 1000px) and (max-width: 1367px)" let:matches>
+  {#if matches}
+    <div class="grid grid-cols-4 gap-4">
+      {#each $gestures as gesture}
+        <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
+      {/each}
+    </div>
+  {/if}
+</MediaQuery>
+<MediaQuery query="(min-width: 1367px)" let:matches>
+  {#if matches}
+    <div class="grid grid-cols-5 gap-4">
+      {#each $gestures as gesture}
+        <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
+      {/each}
+    </div>
+  {/if}
+</MediaQuery>

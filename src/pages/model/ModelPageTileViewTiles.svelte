@@ -1,7 +1,11 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
 <script lang="ts">
   import { get } from 'svelte/store';
-  import TrainModelFirstTitle from '../../components/TrainModelFirstTitle.svelte';
-  import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import { areActionsAllowed, buttonPressed, state } from '../../script/stores/uiStore';
   import { settings } from '../../script/stores/mlStore';
   import { classify } from '../../script/ml';
@@ -16,7 +20,6 @@
   // let lastRecording;
 
   // Bool flags to know whether output microbit popup should be show
-  let hasClosedPopup = false;
   let hasInteracted = false;
 
   function onUserInteraction(): void {

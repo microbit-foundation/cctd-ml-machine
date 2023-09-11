@@ -12,11 +12,6 @@
   import ModelPageStackView from './ModelPageStackView.svelte';
   import ModelPageTileView from './ModelPageTileView.svelte';
 
-  const switchView = () => {
-    $state.modelView =
-      $state.modelView == ModelView.STACK ? ModelView.TILE : ModelView.STACK;
-  };
-
   const openMakeCodeInNewTab = () => {
     window.open(
       'https://makecode.microbit.org/#pub:04730-01245-34848-93416',

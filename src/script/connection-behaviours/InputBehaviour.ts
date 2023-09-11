@@ -5,7 +5,7 @@
  */
 
 import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { buttonPressed, state } from '../stores/uiStore';
+import { ModelView, buttonPressed, state } from '../stores/uiStore';
 import { livedata } from '../stores/mlStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
@@ -40,6 +40,10 @@ class InputBehaviour extends LoggingDecorator {
 
   onIdentifiedAsMakecode(): void {
     super.onIdentifiedAsMakecode();
+    state.update(s => {
+      s.modelView = ModelView.TILE;
+      return s;
+    })
   }
 
   onGestureRecognized(id: number, gestureName: string): void {
@@ -96,7 +100,6 @@ class InputBehaviour extends LoggingDecorator {
       s.offerReconnect = false;
       s.isInputReady = false;
       s.reconnectState = DeviceRequestStates.NONE;
-      s.isInputMakecodeHex = false;
       return s;
     });
   }

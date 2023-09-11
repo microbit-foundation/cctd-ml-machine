@@ -13,7 +13,7 @@ import MBSpecs from './script/microbit-interfacing/MBSpecs';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
-  public static readonly reconnectTimeoutDuration: number = 5000;
+  public static readonly reconnectTimeoutDuration: number = 7500;
 
   // After how long should we consider the connection lost if ping was not able to conclude?
   public static readonly connectionLostTimeoutDuration: number = 3000;

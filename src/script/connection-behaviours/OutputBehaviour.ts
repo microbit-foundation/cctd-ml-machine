@@ -63,7 +63,7 @@ class OutputBehaviour extends LoggingDecorator {
 
     state.update(s => {
       if (Microbits.isInputOutputTheSame()) {
-        s.modelView = Microbits.isOutputMakecode() ? ModelView.TILE : ModelView.STACK;
+        s.modelView = Microbits.isOutputMakecode() ? ModelView.TILE : s.modelView;
       }
 
       s.isOutputReady = true;
@@ -136,7 +136,6 @@ class OutputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isOutputConnected = false;
       s.isOutputReady = false;
-      s.modelView = ModelView.STACK;
       return s;
     });
   }

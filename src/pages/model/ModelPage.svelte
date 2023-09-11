@@ -28,8 +28,9 @@
 <div>
   <ControlBar>
     <ExpandableControlBarMenu>
-      <StandardButton small outlined onClick={openMakeCodeInNewTab}
-        >MakeCode</StandardButton>
+      <StandardButton small outlined onClick={openMakeCodeInNewTab}>
+        MakeCode HEX
+      </StandardButton>
     </ExpandableControlBarMenu>
   </ControlBar>
 </div>

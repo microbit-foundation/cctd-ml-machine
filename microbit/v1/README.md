@@ -43,9 +43,13 @@ We can then select the build target with (optional, but does produce a warning i
 
 **Note!** When changing the target using the command above, you must have acquired the build target from lancaster, otherwise you have to copy the `./.yotta.json` file above in order to download it.
 
+### 503 Server Error: Service Unavailable for url:
+
+To fix this simply copy the target from above, and run the docker build command. Do NOT run `yotta target ...` again! This will undo the target and the error will occur again.
+
 ### Configuring the Micro:bit
 
-In the root of the project the file `./config.json` we have the configurations for the MicroBit, allowing us to enable Bluetooth. In the `./source/examples` folder we find example configs. These must be placed at the root of the project to be included at build time.
+In the root of the project the file `./config.json` we have the configurations for the MicroBit, allowing us to enable Bluetooth. See the [samples project](https://github.com/lancaster-university/microbit-samples) for examples.
 
 ## Building the project
 

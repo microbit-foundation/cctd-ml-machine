@@ -43,7 +43,8 @@ void sendString(ManagedString s)
 void onConnected(MicroBitEvent)
 {
     connected = 1; // Set the connected flag
-
+    uBit.sleep(2000);
+    uart->send(ManagedString("id_prop"));
 
     const uint8_t smiley[] {
                           0, 0, 0, 0, 0,

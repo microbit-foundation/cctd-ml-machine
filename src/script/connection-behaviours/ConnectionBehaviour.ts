@@ -23,6 +23,8 @@ interface ConnectionBehaviour {
 
   onIdentifiedAsMakecode(): void;
 
+  onIdentifiedAsProprietary(): void;
+
   /**
    * What should happen when the micro:bit is assigned
    * @param {MicrobitBluetooth} microbit

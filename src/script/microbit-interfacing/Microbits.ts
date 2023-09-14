@@ -11,7 +11,7 @@ import ConnectionBehaviours from '../connection-behaviours/ConnectionBehaviours'
 import { get, writable } from 'svelte/store';
 import MBSpecs from './MBSpecs';
 import MicrobitBluetooth from './MicrobitBluetooth';
-import { outputting, state } from '../stores/uiStore';
+import { outputting } from '../stores/uiStore';
 import MicrobitUSB from './MicrobitUSB';
 import type ConnectionBehaviour from '../connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
@@ -263,7 +263,6 @@ class Microbits {
       );
 
       connectionBehaviour.onAssigned(this.getInput(), name);
-      this.getInput().listenToUART((data) => this.inputUartHandler(data))
       this.inputName = name;
       this.inputVersion = this.getInput().getVersion();
       return true;
@@ -303,6 +302,7 @@ class Microbits {
       'B',
       connectionBehaviour.buttonChange.bind(connectionBehaviour),
     );
+    await this.getInput().listenToUART((data) => this.inputUartHandler(data))
   }
 
   /**
@@ -377,7 +377,6 @@ class Microbits {
         onOutputReconnectFailed,
       );
       connectionBehaviour.onAssigned(this.getOutput(), name);
-      this.getOutput().listenToUART((data) => this.outputUartHandler(data))
       this.outputName = name;
       this.outputVersion = this.getOutput().getVersion();
       return true;
@@ -393,6 +392,10 @@ class Microbits {
       this.inputMakecode = true;
       connectionBehaviour.onIdentifiedAsMakecode();
     }
+    if (data === "id_prop") {
+      this.inputMakecode = false;
+      connectionBehaviour.onIdentifiedAsProprietary()
+    }
     connectionBehaviour.onUartMessageReceived(data)
   }
 
@@ -401,6 +404,10 @@ class Microbits {
     if (data === "id_mkcd") {
       this.outputMakecode = true;
       connectionBehaviour.onIdentifiedAsMakecode();
+    }
+    if (data === "id_prop") {
+      this.outputMakecode = false;
+      connectionBehaviour.onIdentifiedAsProprietary()
     }
     connectionBehaviour.onUartMessageReceived(data)
   }
@@ -449,6 +456,7 @@ class Microbits {
     this.outputUart = await uartService.getCharacteristic(
       MBSpecs.Characteristics.UART_DATA_RX,
     );
+    await this.getOutput().listenToUART((data) => this.outputUartHandler(data))
   }
 
   /**

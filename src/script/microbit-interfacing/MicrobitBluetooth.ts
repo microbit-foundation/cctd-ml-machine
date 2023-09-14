@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import TypingUtils from '../TypingUtils';
 import MBSpecs from './MBSpecs';
 
 /**
@@ -20,7 +21,7 @@ export class MicrobitBluetooth {
   private readonly device: BluetoothDevice;
 
   private dcListener: OmitThisParameter<(event: Event) => void>;
-  private uartListeners: ((data: string) => void)[];
+  private uartListener: (data: string) => void;
 
   /**
    * Constructs a bluetooth connection object. Should not be called directly.
@@ -46,7 +47,7 @@ export class MicrobitBluetooth {
     private onReconnectFailed: () => void,
   ) {
     this.dcListener = this.disconnectListener.bind(this);
-    this.uartListeners = [];
+    this.uartListener = TypingUtils.emptyFunction;
     this.device = gattServer.device;
     this.device.addEventListener('gattserverdisconnected', this.dcListener);
   }
@@ -156,9 +157,7 @@ export class MicrobitBluetooth {
   }
 
   private uartIncomingMessageHandler(data: string): void {
-    this.uartListeners.forEach((listener) => {
-      listener(data);
-    })
+    this.uartListener(data);
   }
 
   /**
@@ -170,28 +169,26 @@ export class MicrobitBluetooth {
    * @param {(string) => void} onDataReceived Callback to be called when data is received.
    */
   public async listenToUART(onDataReceived: (data: string) => void): Promise<void> {
-    this.uartListeners.push(onDataReceived);
-    if (this.uartListeners.length == 1) {
-      const uartService: BluetoothRemoteGATTService = await this.getUARTService();
-      const uartTXCharacteristic: BluetoothRemoteGATTCharacteristic =
-        await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_TX);
+    this.uartListener = onDataReceived;
+    const uartService: BluetoothRemoteGATTService = await this.getUARTService();
+    const uartTXCharacteristic: BluetoothRemoteGATTCharacteristic =
+      await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_TX);
 
-      await uartTXCharacteristic.startNotifications();
+    await uartTXCharacteristic.startNotifications();
 
-      uartTXCharacteristic.addEventListener(
-        'characteristicvaluechanged',
-        (event: Event) => {
-          // Convert the data to a string.
-          const receivedData: number[] = [];
-          const target: CharacteristicDataTarget = event.target as CharacteristicDataTarget;
-          for (let i = 0; i < target.value.byteLength; i += 1) {
-            receivedData[i] = target.value.getUint8(i);
-          }
-          const receivedString = String.fromCharCode.apply(null, receivedData);
-          this.uartIncomingMessageHandler(receivedString);
-        },
-      );
-    }
+    uartTXCharacteristic.addEventListener(
+      'characteristicvaluechanged',
+      (event: Event) => {
+        // Convert the data to a string.
+        const receivedData: number[] = [];
+        const target: CharacteristicDataTarget = event.target as CharacteristicDataTarget;
+        for (let i = 0; i < target.value.byteLength; i += 1) {
+          receivedData[i] = target.value.getUint8(i);
+        }
+        const receivedString = String.fromCharCode.apply(null, receivedData);
+        this.uartIncomingMessageHandler(receivedString);
+      },
+    );
   }
 
   /**

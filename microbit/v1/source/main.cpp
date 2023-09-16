@@ -47,7 +47,7 @@ void onConnected(MicroBitEvent)
 {
     connected = 1; // Set the connected flag
     uBit.sleep(2000);
-    uart->send(ManagedString("id_prop"));
+    uart->send(ManagedString("id_prop")); // MUST be sent before vi_ message
     uart->send(ManagedString("vi_") + ManagedString(buildNumber));
 
     const uint8_t smiley[] {

@@ -35,7 +35,19 @@ class StaticConfiguration {
   // Default required confidence level
   public static readonly defaultRequiredConfidence = 0.8;
 
-  public static initialMLSettings = {
+  // Duration before assuming the microbit is outdated? (in milliseconds)
+  public static readonly versionIdentificationTimeoutDuration = 4000;
+
+  public static readonly isMicrobitOutdated = (origin: "proprietary" | "makecode", version: number) => {
+    // Current versions, remember to update these, whenever changes to firmware are made!
+    const versionNumbers = {
+      proprietary: 1, // Our own hex
+      makecode: 1     // The makecode extension hex
+    }
+    return versionNumbers[origin] !== version;
+  }
+
+  public static readonly initialMLSettings = {
     duration: 1800,
     numSamples: 80,
     minSamples: 80,

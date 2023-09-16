@@ -51,6 +51,9 @@ class Microbits {
   private static outputMakecode = false;
   private static inputMakecode = false;
 
+  private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined = undefined;
+  private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined = undefined;
+
   /**
    * Maps pin to the number of times, it has been asked to turn on.
    * This is done to avoid race conditions, where one gesture tells a pin to turn off, while another tells it to turn on.
@@ -302,7 +305,28 @@ class Microbits {
       'B',
       connectionBehaviour.buttonChange.bind(connectionBehaviour),
     );
-    await this.getInput().listenToUART((data) => this.inputUartHandler(data))
+    await this.getInput().listenToUART((data) => this.inputUartHandler(data));
+    this.inputVersionIdentificationTimeout = setTimeout(() => {
+        connectionBehaviour.onIdentifiedAsOutdated();
+    }, StaticConfiguration.versionIdentificationTimeoutDuration);
+  }
+
+  private static async listenToOutputServices(): Promise<void> {
+    const connectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
+
+    if (!this.isOutputConnected()) {
+      throw new Error('Could not listen to services, no microbit connected!');
+    }
+    this.outputIO = await this.getIOOf(this.getOutput());
+    this.outputMatrix = await this.getMatrixOf(this.getOutput());
+    const uartService = await this.getOutput().getUARTService();
+    this.outputUart = await uartService.getCharacteristic(
+      MBSpecs.Characteristics.UART_DATA_RX,
+    );
+    this.outputVersionIdentificationTimeout = setTimeout(() => {
+        connectionBehaviour.onIdentifiedAsOutdated();
+    }, StaticConfiguration.versionIdentificationTimeoutDuration);
+    await this.getOutput().listenToUART((data) => this.outputUartHandler(data))
   }
 
   /**
@@ -398,7 +422,15 @@ class Microbits {
     }
     if (data.includes("vi_")) {
       const version = parseInt(data.substring(3));
+      clearTimeout(this.inputVersionIdentificationTimeout);
       connectionBehaviour.onVersionIdentified(version);
+      const isOutdated = StaticConfiguration.isMicrobitOutdated(
+        this.isInputMakecode() ? "makecode" : "proprietary",
+        version
+      )
+      if (isOutdated) {
+        connectionBehaviour.onIdentifiedAsOutdated();
+      }
     }
     connectionBehaviour.onUartMessageReceived(data)
   }
@@ -414,8 +446,16 @@ class Microbits {
       connectionBehaviour.onIdentifiedAsProprietary()
     }
     if (data.includes("vi_")) {
+      clearTimeout(this.outputVersionIdentificationTimeout);
       const version = parseInt(data.substring(3));
       connectionBehaviour.onVersionIdentified(version);
+      const isOutdated = StaticConfiguration.isMicrobitOutdated(
+        this.isOutputMakecode() ? "makecode" : "proprietary",
+        version
+      )
+      if (isOutdated) {
+        connectionBehaviour.onIdentifiedAsOutdated();
+      }
     }
     connectionBehaviour.onUartMessageReceived(data)
   }
@@ -452,19 +492,6 @@ class Microbits {
     const uartService = await microbit.getUARTService();
     await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_RX);
     microbit.disconnect();
-  }
-
-  private static async listenToOutputServices(): Promise<void> {
-    if (!this.isOutputConnected()) {
-      throw new Error('Could not listen to services, no microbit connected!');
-    }
-    this.outputIO = await this.getIOOf(this.getOutput());
-    this.outputMatrix = await this.getMatrixOf(this.getOutput());
-    const uartService = await this.getOutput().getUARTService();
-    this.outputUart = await uartService.getCharacteristic(
-      MBSpecs.Characteristics.UART_DATA_RX,
-    );
-    await this.getOutput().listenToUART((data) => this.outputUartHandler(data))
   }
 
   /**

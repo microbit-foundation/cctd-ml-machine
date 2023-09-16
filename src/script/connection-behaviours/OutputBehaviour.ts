@@ -31,6 +31,14 @@ class OutputBehaviour extends LoggingDecorator {
     });
   }
 
+  onIdentifiedAsOutdated(): void {
+    super.onIdentifiedAsOutdated();
+    state.update(s => {
+      s.isOutputOutdated = true;
+      return s;
+    })
+  }
+
   onVersionIdentified(versionNumber: number): void {
     super.onVersionIdentified(versionNumber);
   }
@@ -149,6 +157,7 @@ class OutputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isOutputConnected = false;
       s.isOutputReady = false;
+      s.isOutputOutdated = false;
       return s;
     });
   }

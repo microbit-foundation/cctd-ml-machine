@@ -38,6 +38,14 @@ class InputBehaviour extends LoggingDecorator {
     });
   }
 
+  onIdentifiedAsOutdated(): void {
+    super.onIdentifiedAsOutdated();
+    state.update(s => {
+      s.isInputOutdated = true;
+      return s;
+    })
+  }
+
   onVersionIdentified(versionNumber: number): void {
     super.onVersionIdentified(versionNumber);
   }
@@ -108,6 +116,7 @@ class InputBehaviour extends LoggingDecorator {
       s.offerReconnect = false;
       s.isInputReady = false;
       s.reconnectState = DeviceRequestStates.NONE;
+      s.isInputOutdated = false;
       return s;
     });
   }

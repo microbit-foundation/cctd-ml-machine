@@ -23,6 +23,8 @@ interface ConnectionBehaviour {
 
   onIdentifiedAsMakecode(): void;
 
+  onIdentifiedAsOutdated(): void;
+
   onIdentifiedAsProprietary(): void;
 
   onVersionIdentified(versionNumber: number): void;

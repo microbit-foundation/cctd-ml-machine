@@ -20,6 +20,10 @@ abstract class LoggingDecorator implements ConnectionBehaviour {
   private logTimer = new Date().getTime();
   private logInterval = 1000;
 
+  onIdentifiedAsOutdated(): void {
+    this.enableLogging && console.log(`Microbit identified as an outdated device!`);
+  }
+
   onVersionIdentified(versionNumber: number): void {
     this.enableLogging && console.log(`Microbit identified as version number ${versionNumber}`);
   }

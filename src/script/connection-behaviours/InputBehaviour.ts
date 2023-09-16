@@ -38,6 +38,10 @@ class InputBehaviour extends LoggingDecorator {
     });
   }
 
+  onVersionIdentified(versionNumber: number): void {
+    super.onVersionIdentified(versionNumber);
+  }
+
   onIdentifiedAsMakecode(): void {
     super.onIdentifiedAsMakecode();
     state.update(s => {

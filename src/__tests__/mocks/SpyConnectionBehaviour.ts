@@ -12,6 +12,9 @@ import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
  * Use this for checking the micro:bit behaviour.
  */
 class SpyConnectionBehaviour implements ConnectionBehaviour {
+  onVersionIdentified(versionNumber: number): void {
+    throw new Error('Method not implemented.');
+  }
   onIdentifiedAsProprietary(): void {
     throw new Error('Method not implemented.');
   }

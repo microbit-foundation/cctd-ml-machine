@@ -396,6 +396,10 @@ class Microbits {
       this.inputMakecode = false;
       connectionBehaviour.onIdentifiedAsProprietary()
     }
+    if (data.includes("vi_")) {
+      const version = parseInt(data.substring(3));
+      connectionBehaviour.onVersionIdentified(version);
+    }
     connectionBehaviour.onUartMessageReceived(data)
   }
 
@@ -408,6 +412,10 @@ class Microbits {
     if (data === "id_prop") {
       this.outputMakecode = false;
       connectionBehaviour.onIdentifiedAsProprietary()
+    }
+    if (data.includes("vi_")) {
+      const version = parseInt(data.substring(3));
+      connectionBehaviour.onVersionIdentified(version);
     }
     connectionBehaviour.onUartMessageReceived(data)
   }

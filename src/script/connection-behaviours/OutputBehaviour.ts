@@ -31,6 +31,10 @@ class OutputBehaviour extends LoggingDecorator {
     });
   }
 
+  onVersionIdentified(versionNumber: number): void {
+    super.onVersionIdentified(versionNumber);
+  }
+
   onGestureRecognized(id: number, gestureName: string): void {
     super.onGestureRecognized(id, gestureName);
     if (Microbits.isOutputReady()) {

@@ -25,6 +25,7 @@ interface ConnectionBehaviour {
 
   onIdentifiedAsProprietary(): void;
 
+  onVersionIdentified(versionNumber: number): void;
   /**
    * What should happen when the micro:bit is assigned
    * @param {MicrobitBluetooth} microbit

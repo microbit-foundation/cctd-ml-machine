@@ -12,7 +12,7 @@ import 'jest-expect-message';
 import * as path from 'path';
 
 // Place files you wish to ignore by name in here
-const ignoredFiles: string[] = [];
+const ignoredFiles: string[] = [".DS_Store"];
 const directoriesToScan = ['./src/', './microbit/v2/source/', './microbit/v1/source/']
 
 const licenseIdentifierStringContributors =

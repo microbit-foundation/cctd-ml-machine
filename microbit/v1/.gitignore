@@ -17,3 +17,5 @@ cr.sh
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+buildAndFlash.sh

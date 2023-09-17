@@ -46,6 +46,10 @@ class InputBehaviour extends LoggingDecorator {
     })
   }
 
+  onIdentifiedAsProprietary(): void {
+    super.onIdentifiedAsProprietary();
+  }
+
   onGestureRecognized(id: number, gestureName: string): void {
     super.onGestureRecognized(id, gestureName);
   }

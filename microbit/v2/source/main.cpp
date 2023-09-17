@@ -45,6 +45,10 @@ void sendString(ManagedString s)
 void onConnected(MicroBitEvent)
 {
     connected = 1; // Set the connected flag
+
+    uBit.sleep(2000);
+    uart->send(ManagedString("id_prop"));
+
     printSmiley(GLAD_SMILEY);
 }
 

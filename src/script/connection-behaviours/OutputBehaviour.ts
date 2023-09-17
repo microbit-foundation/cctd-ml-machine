@@ -39,11 +39,20 @@ class OutputBehaviour extends LoggingDecorator {
   }
 
   onIdentifiedAsMakecode(): void {
+    super.onIdentifiedAsMakecode();
     state.update(s => {
       s.modelView = ModelView.TILE;
       return s;
     });
-    super.onIdentifiedAsMakecode();
+  }
+
+
+  onIdentifiedAsProprietary(): void {
+    super.onIdentifiedAsProprietary();
+    state.update(s => {
+      s.modelView = ModelView.STACK;
+      return s;
+    });
   }
 
   onUartMessageReceived(message: string): void {

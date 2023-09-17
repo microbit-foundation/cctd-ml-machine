@@ -13,6 +13,9 @@ import Environment from '../Environment';
  * Used for logging / Decorator pattern
  */
 abstract class LoggingDecorator implements ConnectionBehaviour {
+  onIdentifiedAsProprietary(): void {
+    this.enableLogging && console.log('Microbit identified as proprietary HEX');
+  }
 
   private enableLogging: boolean = Environment.isInDevelopment && true;
 

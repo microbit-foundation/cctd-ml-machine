@@ -49,6 +49,8 @@ export const state = writable<{
   isLoading: boolean;
   modelView: ModelView;
   isInputMakecodeHex: boolean;
+  isInputOutdated: boolean;
+  isOutputOutdated: boolean;
 }>({
   isRequestingDevice: DeviceRequestStates.NONE,
   isFlashingDevice: false,
@@ -68,6 +70,8 @@ export const state = writable<{
   isLoading: true,
   modelView: ModelView.STACK,
   isInputMakecodeHex: false,
+  isInputOutdated: false,
+  isOutputOutdated: false,
 });
 
 // Message store to propagate allow all components to inform users.

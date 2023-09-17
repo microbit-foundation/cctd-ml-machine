@@ -247,8 +247,13 @@ export default {
 		// CONNECTION LOST DIALOG
 
 		"dialog.connection.lost.header": "Forbindelse offline",
-		"dialog.connection.lost.body": "Vi kan ikke oprette forbindelse til internettet, nogle funktioner virker muligvis ikke som forventet."
+		"dialog.connection.lost.body": "Vi kan ikke oprette forbindelse til internettet, nogle funktioner virker muligvis ikke som forventet.",
 
+		// OUTDATED MICROBIT WARNING
+
+		"popup.outdatedmicrobit.header": "Din micro:bit mangler en opdatering.",
+		"popup.outdatedmicrobit.text": "Vi anbefaler stærkt at opdatere nu, nogle funktioner virker muligvis ikke som forventet.",
+		"popup.outdatedmicrobit.button": "Jeg forstår",
 	},
 	"en": {
 		// ALERTS:
@@ -491,7 +496,13 @@ export default {
 		// CONNECTION LOST DIALOG
 
 		"dialog.connection.lost.header": "Connection offline",
-		"dialog.connection.lost.body": "Your internet connection is offline, some features may not work properly"
+		"dialog.connection.lost.body": "Your internet connection is offline, some features may not work properly",
+
+		// OUTDATED MICROBIT WARNING
+
+		"popup.outdatedmicrobit.header": "Your micro:bit firmware is outdated.",
+		"popup.outdatedmicrobit.text": "We strongly recommend that you update it now, as some features may not work as expected.",
+		"popup.outdatedmicrobit.button": "I understand",
 	}
 };
   

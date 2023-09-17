@@ -20,6 +20,9 @@ MicroBitButtonService *btn;
 MicroBitImage pairPtn;
 int connected = 0;
 
+// For now manually increment this by one for each build. Used by app to determine the capabilities of the microbit
+int buildNumber = 1; 
+
 const uint8_t CODEBOOK[MICROBIT_NAME_LENGTH][MICROBIT_NAME_CODE_LETTERS] =
     {
         {'z', 'v', 'g', 'p', 't'},
@@ -44,7 +47,8 @@ void onConnected(MicroBitEvent)
 {
     connected = 1; // Set the connected flag
     uBit.sleep(2000);
-    uart->send(ManagedString("id_prop"));
+    uart->send(ManagedString("id_prop")); // MUST be sent before vi_ message
+    uart->send(ManagedString("vi_") + ManagedString(buildNumber));
 
     const uint8_t smiley[] {
                           0, 0, 0, 0, 0,

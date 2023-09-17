@@ -48,7 +48,6 @@ export const state = writable<{
   isOutputReady: boolean;
   isLoading: boolean;
   modelView: ModelView;
-  isInputMakecodeHex: boolean;
   isInputOutdated: boolean;
   isOutputOutdated: boolean;
 }>({
@@ -69,7 +68,6 @@ export const state = writable<{
   isOutputReady: false,
   isLoading: true,
   modelView: ModelView.STACK,
-  isInputMakecodeHex: false,
   isInputOutdated: false,
   isOutputOutdated: false,
 });

@@ -10,6 +10,7 @@
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
 import { Axes, Filters, FilterType } from './script/datafunctions';
 import MBSpecs from './script/microbit-interfacing/MBSpecs';
+import { HexOrigin } from './script/microbit-interfacing/Microbits';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
@@ -38,13 +39,14 @@ class StaticConfiguration {
   // Duration before assuming the microbit is outdated? (in milliseconds)
   public static readonly versionIdentificationTimeoutDuration = 4000;
 
-  public static readonly isMicrobitOutdated = (origin: "proprietary" | "makecode", version: number) => {
+  public static readonly isMicrobitOutdated = (origin: HexOrigin, version: number) => {
     // Current versions, remember to update these, whenever changes to firmware are made!
-    const versionNumbers = {
-      proprietary: 1, // Our own hex
-      makecode: 1     // The makecode extension hex
-    }
-    return versionNumbers[origin] !== version;
+    if (origin === HexOrigin.UNKNOWN) return true;
+
+    const versionNumbers = new Map();
+    versionNumbers.set(HexOrigin.MAKECODE, 1);
+    versionNumbers.set(HexOrigin.PROPRIETARY, 1);
+    return versionNumbers.get(origin) !== version;
   }
 
   public static readonly initialMLSettings = {

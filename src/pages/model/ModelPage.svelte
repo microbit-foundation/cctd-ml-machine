@@ -14,7 +14,7 @@
 
   const openMakeCodeInNewTab = () => {
     window.open(
-      'https://makecode.microbit.org/#pub:04730-01245-34848-93416',
+      'https://makecode.microbit.org/#pub:54705-16835-80762-83855',
       '_blank', // <- This is what makes it open in a new window.
     );
   };

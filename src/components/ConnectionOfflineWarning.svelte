@@ -37,7 +37,7 @@
   };
 
   let connectionTimer: NodeJS.Timeout = setTimeout(TypingUtils.emptyFunction);
-  let connectionOk = true;
+  let connectionsFailed = 0;
 
   let img = new Image();
 
@@ -46,7 +46,7 @@
     img.remove();
     img = new Image();
     img.onload = () => {
-      connectionOk = true;
+      connectionsFailed = 0;
       isOpen = true;
       clearTimeout(connectionTimer);
       setTimeout(() => {
@@ -55,7 +55,7 @@
       return;
     };
     img.onerror = ev => {
-      connectionOk = false;
+      connectionsFailed++;
       clearTimeout(connectionTimer);
       setTimeout(() => {
         checkConnection();
@@ -66,7 +66,7 @@
     img.src = pingDestination;
 
     connectionTimer = setTimeout(() => {
-      connectionOk = false;
+      connectionsFailed++;
       checkConnection();
     }, StaticConfiguration.connectionLostTimeoutDuration);
   };
@@ -79,7 +79,7 @@
   let isOpen = true;
 </script>
 
-{#if !connectionOk}
+{#if connectionsFailed > 5}
   <StandardDialog {isOpen} onClose={() => (isOpen = false)}>
     <div class="w-100">
       <p class="text-warning font-bold text-center text-lg">

@@ -16,11 +16,18 @@ import MicrobitUSB from './MicrobitUSB';
 import type ConnectionBehaviour from '../connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
 import StaticConfiguration from '../../StaticConfiguration';
+import { settings } from '../stores/mlStore';
 
 type QueueElement = {
   service: BluetoothRemoteGATTCharacteristic;
   view: DataView;
 };
+
+export enum HexOrigin {
+  UNKNOWN,
+  MAKECODE,
+  PROPRIETARY
+}
 
 type UARTMessageType = "g" | "s"
 
@@ -48,8 +55,11 @@ class Microbits {
   private static isInputReconnecting = false;
   private static isOutputReconnecting = false;
 
-  private static outputMakecode = false;
-  private static inputMakecode = false;
+  private static outputOrigin = HexOrigin.UNKNOWN;
+  private static inputOrigin = HexOrigin.UNKNOWN;
+
+  private static inputBuildVersion: number | undefined = undefined;
+  private static outputBuildVersion: number | undefined = undefined;
 
   private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined = undefined;
   private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined = undefined;
@@ -191,6 +201,7 @@ class Microbits {
     };
 
     const onInputDisconnect = (manual?: boolean) => {
+      this.inputBuildVersion = undefined;
       if (this.isInputOutputTheSame()) {
         ConnectionBehaviours.getOutputBehaviour().onDisconnected();
       }
@@ -225,13 +236,16 @@ class Microbits {
       connectionBehaviour.onConnected(name);
       Microbits.listenToInputServices()
         .then(() => {
+          clearTimeout(this.inputVersionIdentificationTimeout);
           if (this.isInputOutputTheSame()) {
             this.assignedOutputMicrobit = microbit;
             this.inputName = name;
             Microbits.listenToOutputServices()
               .then(() => {
+                  clearTimeout(this.outputVersionIdentificationTimeout);
                 connectionBehaviour.onReady();
                 ConnectionBehaviours.getOutputBehaviour().onReady();
+                
               })
               .catch(reason => {
                 console.log(reason);
@@ -353,6 +367,7 @@ class Microbits {
     };
 
     const onOutputDisconnect = (manual?: boolean) => {
+      this.outputBuildVersion = undefined;
       if (manual) {
         if (this.isOutputAssigned()) {
           ConnectionBehaviours.getOutputBehaviour().onExpelled(manual);
@@ -413,19 +428,23 @@ class Microbits {
   private static inputUartHandler(data: string) {
     const connectionBehaviour = ConnectionBehaviours.getInputBehaviour();
     if (data === "id_mkcd") {
-      this.inputMakecode = true;
+      this.inputOrigin = HexOrigin.MAKECODE;
       connectionBehaviour.onIdentifiedAsMakecode();
     }
     if (data === "id_prop") {
-      this.inputMakecode = false;
+      this.inputOrigin = HexOrigin.PROPRIETARY;
       connectionBehaviour.onIdentifiedAsProprietary()
     }
     if (data.includes("vi_")) {
       const version = parseInt(data.substring(3));
+      this.inputBuildVersion = version;
+      if (this.isInputOutputTheSame()) {
+        clearTimeout(this.outputVersionIdentificationTimeout);
+      }
       clearTimeout(this.inputVersionIdentificationTimeout);
       connectionBehaviour.onVersionIdentified(version);
       const isOutdated = StaticConfiguration.isMicrobitOutdated(
-        this.isInputMakecode() ? "makecode" : "proprietary",
+        this.inputOrigin,
         version
       )
       if (isOutdated) {
@@ -438,19 +457,20 @@ class Microbits {
   private static outputUartHandler(data: string) {
     const connectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
     if (data === "id_mkcd") {
-      this.outputMakecode = true;
+      this.outputOrigin = HexOrigin.MAKECODE;
       connectionBehaviour.onIdentifiedAsMakecode();
     }
     if (data === "id_prop") {
-      this.outputMakecode = false;
+      this.outputOrigin = HexOrigin.PROPRIETARY;
       connectionBehaviour.onIdentifiedAsProprietary()
     }
     if (data.includes("vi_")) {
       clearTimeout(this.outputVersionIdentificationTimeout);
       const version = parseInt(data.substring(3));
+      this.outputBuildVersion = version;
       connectionBehaviour.onVersionIdentified(version);
       const isOutdated = StaticConfiguration.isMicrobitOutdated(
-        this.isOutputMakecode() ? "makecode" : "proprietary",
+        this.outputOrigin,
         version
       )
       if (isOutdated) {
@@ -680,8 +700,8 @@ class Microbits {
     this.assignedOutputMicrobit = this.getInput();
     this.outputName = this.inputName;
     this.outputVersion = this.inputVersion;
-
-    this.outputMakecode = this.inputMakecode;
+    this.outputOrigin = this.inputOrigin;
+    this.outputBuildVersion = this.inputBuildVersion;
 
     ConnectionBehaviours.getOutputBehaviour().onAssigned(
       this.getOutput(),
@@ -692,9 +712,21 @@ class Microbits {
     this.listenToOutputServices()
       .then(() => {
         ConnectionBehaviours.getOutputBehaviour().onReady();
-        if (this.outputMakecode) {
+        if (this.inputOrigin === HexOrigin.MAKECODE) {
           ConnectionBehaviours.getOutputBehaviour().onIdentifiedAsMakecode();
         }
+        if (this.inputOrigin === HexOrigin.PROPRIETARY) {
+          ConnectionBehaviours.getOutputBehaviour().onIdentifiedAsProprietary();
+        }
+        if (this.outputBuildVersion) {
+          ConnectionBehaviours.getOutputBehaviour().onVersionIdentified(this.outputBuildVersion);
+          if (StaticConfiguration.isMicrobitOutdated(this.outputOrigin, this.outputBuildVersion)) {
+            ConnectionBehaviours.getOutputBehaviour().onIdentifiedAsOutdated();
+          } else {
+            clearTimeout(this.outputVersionIdentificationTimeout);
+          }
+        }
+        
       })
       .catch(e => {
         console.log(e);
@@ -827,7 +859,7 @@ class Microbits {
    * @returns True if the output microbit is from Makecode.
    */
   public static isOutputMakecode() {
-    return this.outputMakecode;
+    return this.outputOrigin === HexOrigin.MAKECODE;
   }
 
   /**
@@ -835,7 +867,7 @@ class Microbits {
    * @returns True if the input microbit is from Makecode.
    */
   public static isInputMakecode() {
-    return this.inputMakecode;
+    return this.inputOrigin === HexOrigin.MAKECODE;
   }
 
   /**

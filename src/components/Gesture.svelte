@@ -145,7 +145,7 @@
 
   function onTitleKeypress(event: KeyboardEvent) {
     // Check backspace, delete and enter before alerting user, because we don't want to pop a warning when
-    // the user is at 25 characters, but is pressing enter.
+    // the user is at 18 characters, but is pressing enter.
     if (event.code === 'Backspace' || event.code === 'Delete') {
       return true;
     }
@@ -156,9 +156,15 @@
       }
       return true;
     }
+    
+    const selectedText = window.getSelection()?.toString();
+    if (selectedText && selectedText.length > 0) {
+      return true;
+    }
+
     if (gesture.name.length >= StaticConfiguration.gestureNameMaxLength) {
       event.preventDefault();
-      alertUser($t('alert.data.classNameLengthAlert'));
+      alertUser($t('alert.data.classNameLengthAlert', {"maxLen":StaticConfiguration.gestureNameMaxLength}));
       return false;
     }
   }

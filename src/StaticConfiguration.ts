@@ -30,7 +30,7 @@ class StaticConfiguration {
   public static readonly downloadedHexFilename = 'firmware.hex';
 
   // How long may gesture names be?
-  public static readonly gestureNameMaxLength = 25;
+  public static readonly gestureNameMaxLength = 18;
 
   // Default required confidence level
   public static readonly defaultRequiredConfidence = 0.8;

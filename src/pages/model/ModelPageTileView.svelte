@@ -92,7 +92,7 @@
         <p class="text-sm">
           You can create a hex file on <a
             target="_blank"
-            href="https://makecode.microbit.org/#pub:04730-01245-34848-93416"
+            href="https://makecode.microbit.org/S83658-20131-63602-68476"
             class="text-secondary">
             MakeCode
           </a>

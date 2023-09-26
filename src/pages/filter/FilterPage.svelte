@@ -18,6 +18,9 @@
     currentFilter = filter;
     isFilterInspectorDialogOpen = true;
   };
+
+  const filter: FilterType = Object.values(Filters)[4];
+  console.log("Filters", Object.values(Filters));
 </script>
 
 <div>
@@ -34,8 +37,8 @@
   </BaseDialog>
   <ControlBar />
   <div class="p-5 grid grid-cols-2">
-    {#each Object.values(Filters) as filter}
+    <!-- {#each Object.values(Filters) as filter} -->
       <FilterToggler {filter} openInspector={openFilterInspector} />
-    {/each}
+   <!-- {/each} -->
   </div>
 </div>

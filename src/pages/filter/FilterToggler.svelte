@@ -10,6 +10,7 @@
   import { FilterType, determineFilter } from '../../script/datafunctions';
   import { settings } from '../../script/stores/mlStore';
   import FilterGraph from './FilterGraph.svelte';
+  import D3Plot from './D3Plot.svelte';
 
   export let filter: FilterType;
 
@@ -69,7 +70,7 @@
     </div>
   </div>
   <div class="w-full h-min px-5 pb-4">
-    <FilterGraph {filter} aspectRatio={1} />
+    <D3Plot {filter} aspectRatio={1} />
   </div>
   <div
     class="

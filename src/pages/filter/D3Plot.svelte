@@ -18,6 +18,7 @@
     import { GestureData, gestures } from '../../script/stores/mlStore';
     import { state } from "../../script/stores/uiStore";
     import { getPrevData } from '../../script/stores/mlStore';
+    import { append } from "svelte/internal";
 
     export let filter: FilterType;
     export let gesture: GestureData | undefined = undefined;
@@ -33,8 +34,8 @@
       const liveData = getPrevData();
       if (liveData === undefined) return undefined;
       const filteredData: RecordingRepresentation = {
-        gestureClass: "live",
         ID: 0,
+        gestureClass: "live",
         x: filterFunction(liveData.x),
         y: filterFunction(liveData.y),
         z: filterFunction(liveData.z),
@@ -45,7 +46,6 @@
     let plot: any = undefined;
 
     let notMountedYet = true;
-    $: drawParallelPlot(createDataRepresentation(), plot);
 
     type RecordingRepresentation = {
       ID: number;
@@ -59,12 +59,11 @@
 
     const filterStrategy = determineFilter(filter);
     const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
-    const classes: string[] = [];
     let color = undefined;
 
     const createDataRepresentation = () => {
+      const classes: string[] = [];
       const data: GestureData[] = get(gestures);
-      console.log("data", data);
       const recordings: RecordingRepresentation[] = [];
       data.map((gestureClassObject) => {
          const gestureClass: string = gestureClassObject.name;
@@ -85,11 +84,9 @@
         classes.push("live");
       }
       color = d3.scaleOrdinal().domain(classes).range(d3.schemeSet2);
-      return recordings;
+      return {recordings, classes};
     }
-    console.log("dataRep", createDataRepresentation());
 
-    console.log("classes", classes);
 
 
     // Draw chart
@@ -99,10 +96,6 @@
     width = 700 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
 
-    const opacity = d3.scaleOrdinal().domain(classes).range([0.5, 0.5, 0.5, 0.5]);
-
-    const strokeWidth = d3.scaleOrdinal().domain(classes).range([4, 4, 4]);
-
 
     function onInterval(callback: () => void, milliseconds: number) {
       const interval = setInterval(callback, milliseconds);
@@ -111,7 +104,10 @@
       });
     }
 
-    onInterval(() => drawParallelPlot(createDataRepresentation(), plot), 100);
+    onInterval(() => {
+      const {recordings, classes} = createDataRepresentation();
+      drawParallelPlot(recordings, classes, plot);
+    }, 100);
 
     onMount(() => {
       notMountedYet = false;
@@ -125,15 +121,18 @@
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     });
 
-    function drawParallelPlot(data: RecordingRepresentation[], plot: any) {
+    let plotDrawn = false;
+
+    function drawParallelPlot(data: RecordingRepresentation[], classes: String[], plot: any) {
       if (notMountedYet) return;
+
+      const opacity = d3.scaleOrdinal().domain(classes).range([0.5, 0.5, 0.5, 0.5]);
+
+      const strokeWidth = d3.scaleOrdinal().domain(classes).range([4, 4, 4]);
       // Delete existing plot
-      if (plot) plot.selectAll("*").remove();
-        console.log("d3", d3);
-      // Extract the list of dimensions we want to keep in the plot.
       const dimensions: axis[] = ["x", "y", "z"];
 
-      // For each dimension, I build a linear scale. I store all in a y object
+            // For each dimension, I build a linear scale. I store all in a y object
 
   
       let y: any = {};
@@ -150,10 +149,41 @@
           .range([height, 0]);
       }
 
-      console.log("y", y);
-
       // Build the X scale -> it find the best position for each Y axis
       const x = d3.scalePoint().range([0, width]).padding(1).domain(dimensions);
+
+      if (plotDrawn) {
+        
+        //plot.selectAll("*").remove();
+
+        plot
+          .select(".live").remove()
+        
+        plot
+          .selectAll()
+          .data([data.pop()])
+          .enter()
+          .append("path")
+          .attr("class", function (gesture: RecordingRepresentation) {
+            return "line " + gesture.gestureClass;
+          }) // 2 class for each line: 'line' and the group name
+          .attr("d", path)
+          .style("fill", "none")
+          .style("stroke", function (gesture: RecordingRepresentation) {
+            return color(gesture.gestureClass);
+          })
+          .style("opacity", function (gesture: RecordingRepresentation) {
+            return opacity(gesture.gestureClass);
+          })
+          .style("stroke-width", function (gesture: RecordingRepresentation) {
+            return strokeWidth(gesture.gestureClass);
+          })
+        return;
+      } else {
+        plotDrawn = true;
+      }
+      // Extract the list of dimensions we want to keep in the plot.
+      console.log("Is this called?");
 
        // Highlight the specie that is hovered
       const highlight = function(event: any, gesture: RecordingRepresentation){
@@ -209,8 +239,8 @@
         .style("stroke-width", function (gesture: RecordingRepresentation) {
           return strokeWidth(gesture.gestureClass);
         })
-        //.on("mouseover", highlight)
-        //.on("mouseleave", doNotHighlight);
+        .on("mouseover", highlight)
+        .on("mouseleave", doNotHighlight);
 
       // Draw the axis:
       plot

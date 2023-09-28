@@ -30,11 +30,13 @@
 
     $: showLive = $state.isInputConnected;
 
+    const uniqueLiveDataID = 983095438740;
+
     const createLiveData = () => {
       const liveData = getPrevData();
       if (liveData === undefined) return undefined;
       const filteredData: RecordingRepresentation = {
-        ID: 0,
+        ID: uniqueLiveDataID,
         gestureClass: "live",
         x: filterFunction(liveData.x),
         y: filterFunction(liveData.y),
@@ -46,6 +48,8 @@
     let plot: any = undefined;
 
     let notMountedYet = true;
+
+    let publicClassList: string[] = [];
 
     type RecordingRepresentation = {
       ID: number;
@@ -84,17 +88,16 @@
         classes.push("live");
       }
       color = d3.scaleOrdinal().domain(classes).range(d3.schemeSet2);
+      publicClassList = classes;
       return {recordings, classes};
     }
-
-
 
     // Draw chart
 
       // set the dimensions and margins of the graph
-  const margin = { top: 30, right: 10, bottom: 10, left: 0 },
-    width = 700 - margin.left - margin.right,
-    height = 200 - margin.top - margin.bottom;
+  const margin = { top: 30, right: 10, bottom: 10, left: 0 }
+  const width = 400 - margin.left - margin.right;
+  const height = 300 - margin.top - margin.bottom;
 
 
     function onInterval(callback: () => void, milliseconds: number) {
@@ -120,6 +123,31 @@
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     });
+
+    // Highlight the specie that is hovered
+    const highlight = function(event: any, gesture: RecordingRepresentation){
+      console.log("highlight");
+      const gestureName = gesture.gestureClass
+
+      // first every group turns grey
+      d3.selectAll(".line")
+        .transition().duration(200)
+        .style("stroke", "lightgrey")
+        .style("opacity", "0.2")
+      // Second the hovered specie takes its color
+      d3.selectAll("." + gestureName)
+        .transition().duration(200)
+        .style("stroke", color(gestureName))
+        .style("opacity", "1")
+    }
+
+    // Unhighlight
+    const doNotHighlight = function(event: any, gesture: RecordingRepresentation){
+      d3.selectAll(".line")
+        .transition().duration(200).delay(1000)
+        .style("stroke", function(gesture: RecordingRepresentation){ return( color(gesture.gestureClass))} )
+        .style("opacity", "1")
+    }
 
     let plotDrawn = false;
 
@@ -150,16 +178,23 @@
       }
 
       // Build the X scale -> it find the best position for each Y axis
-      const x = d3.scalePoint().range([0, width]).padding(1).domain(dimensions);
+      const x = d3.scalePoint().range([0, width]).padding(0.1).domain(dimensions);
 
       if (plotDrawn) {
-        
-        //plot.selectAll("*").remove();
+        const livePath = plot.select(".live");
 
-        plot
-          .select(".live").remove()
-        
-        plot
+        if (!showLive) {
+          if (!livePath.empty()) {
+            plot
+              .select(".live").remove()
+          }
+          return;
+        }     
+
+        // Animate
+        if (livePath.empty()) {
+          // Insert live data path
+          plot
           .selectAll()
           .data([data.pop()])
           .enter()
@@ -178,38 +213,16 @@
           .style("stroke-width", function (gesture: RecordingRepresentation) {
             return strokeWidth(gesture.gestureClass);
           })
+        } else {
+          // Update live path
+          const newLivePathLine = () => path(data.pop());
+          plot.select(".live").transition().duration(50).attr("d", newLivePathLine);
+        }   
         return;
       } else {
         plotDrawn = true;
       }
       // Extract the list of dimensions we want to keep in the plot.
-      console.log("Is this called?");
-
-       // Highlight the specie that is hovered
-      const highlight = function(event: any, gesture: RecordingRepresentation){
-
-        const gestureName = gesture.gestureClass
-
-        // first every group turns grey
-        d3.selectAll(".line")
-          .transition().duration(200)
-          .style("stroke", "lightgrey")
-          .style("opacity", "0.2")
-        // Second the hovered specie takes its color
-        d3.selectAll("." + gestureName)
-          .transition().duration(200)
-          .style("stroke", color(gestureName))
-          .style("opacity", "1")
-      }
-
-      // Unhighlight
-      const doNotHighlight = function(event: any, gesture: RecordingRepresentation){
-        d3.selectAll(".line")
-          .transition().duration(200).delay(1000)
-          .style("stroke", function(gesture: RecordingRepresentation){ return( color(gesture.gestureClass))} )
-          .style("opacity", "1")
-      }
-
       // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
       function path(gesture: RecordingRepresentation) {
         return d3.line()(
@@ -269,5 +282,18 @@
         .style("fill", "black");
     }
  </script>
-
-<div id={"parallel-plot-" + filter} class="relative -left-35" />
+<div class="flex">
+<div class="flex flex-col justify-evenly mr-4">
+  {#each publicClassList as c}
+    <div
+    class="py-1 px-4 rounded-md btn transition ease border select-none focusElement"
+    style="background-color: {color(c)};"
+    on:mouseenter={() => highlight(null, { gestureClass: c })}
+    on:mouseleave={null, doNotHighlight}
+  >
+    {c}
+  </div>
+  {/each}
+</div>
+<div id={"parallel-plot-" + filter} class="relative" />
+</div>

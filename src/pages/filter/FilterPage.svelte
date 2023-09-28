@@ -35,10 +35,11 @@
         isFilterInspectorDialogOpen = false;
       }} />
   </BaseDialog>
-  <ControlBar />
+  <ControlBar>
+  </ControlBar>
   <div class="p-5 grid grid-cols-2">
-    <!-- {#each Object.values(Filters) as filter} -->
+   {#each Object.values(Filters) as filter}
       <FilterToggler {filter} openInspector={openFilterInspector} />
-   <!-- {/each} -->
+   {/each}
   </div>
 </div>

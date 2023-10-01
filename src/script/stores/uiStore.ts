@@ -12,6 +12,7 @@ import {
 import { t } from '../../i18n';
 import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
+import CookieManager from '../CookieManager';
 
 // TODO: Rename? Split up further?
 
@@ -139,3 +140,13 @@ const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB
 export const microbitInteraction = writable<MicrobitInteractions>(
   initialMicrobitInteraction,
 );
+
+/**
+ * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
+ * Refresh the page is the only known solution
+ */
+export const onCatastrophicError = () => {
+  // Set flag to offer reconnect when page reloads
+  CookieManager.setReconnectFlag();
+  location.reload();
+}

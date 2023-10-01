@@ -5,7 +5,7 @@
  */
 
 import MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { ModelView, state } from '../stores/uiStore';
+import { ModelView, onCatastrophicError, state } from '../stores/uiStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
@@ -145,7 +145,7 @@ class OutputBehaviour extends LoggingDecorator {
 
     // Reset connection reconnectTimeoutTime
     clearTimeout(this.reconnectTimeout);
-    const onTimeout = () => this.onCatastrophicError();
+    const onTimeout = () => onCatastrophicError();
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, StaticConfiguration.reconnectTimeoutDuration);
@@ -160,17 +160,6 @@ class OutputBehaviour extends LoggingDecorator {
       s.isOutputOutdated = false;
       return s;
     });
-  }
-
-  /**
-   * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
-   * Refresh the page is the only known solution
-   * @private
-   */
-  private onCatastrophicError() {
-    // Set flag to offer reconnect when page reloads
-    CookieManager.setReconnectFlag();
-    location.reload();
   }
 }
 

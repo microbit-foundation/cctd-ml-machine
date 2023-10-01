@@ -15,6 +15,7 @@ import { HexOrigin } from './script/microbit-interfacing/Microbits';
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
   public static readonly reconnectTimeoutDuration: number = 7500;
+  public static readonly connectTimeoutDuration: number = 17000; // initial connection
 
   // After how long should we consider the connection lost if ping was not able to conclude?
   public static readonly connectionLostTimeoutDuration: number = 3000;

@@ -177,17 +177,6 @@ class InputBehaviour extends LoggingDecorator {
       });
     }
   }
-
-  /**
-   * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
-   * Refresh the page is the only known solution
-   * @private
-   */
-  private onCatastrophicError() {
-    // Set flag to offer reconnect when page reloads
-    CookieManager.setReconnectFlag();
-    location.reload();
-  }
 }
 
 export default InputBehaviour;

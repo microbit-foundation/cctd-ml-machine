@@ -9,7 +9,14 @@
   import StandardButton from './StandardButton.svelte';
   import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
+    import Microbits from '../script/microbit-interfacing/Microbits';
   let hasBeenIgnored = false;
+  export let targetRole: "INPUT" | "OUTPUT"
+
+  const updateNowHasBeenClicked = () => {
+    let microbitVersion = targetRole === "INPUT" ? Microbits.getInputVersion() : Microbits.getOutputVersion();
+    let microbitOrigin = targetRole === "INPUT" ? Microbits.getInputOrigin() : Microbits.getOutputOrigin();
+  }
 </script>
 
 {#if !hasBeenIgnored}
@@ -28,7 +35,8 @@
     <p class="text-warning font-bold">{$t("popup.outdatedmicrobit.header")}</p>
     <p>{$t("popup.outdatedmicrobit.text")}</p>
     <div class="flex mt-5 justify-center">
-      <StandardButton onClick={() => hasBeenIgnored=true}>{$t("popup.outdatedmicrobit.button")}</StandardButton>
+      <StandardButton onClick={() => hasBeenIgnored=true}>{$t("popup.outdatedmicrobit.button.later")}</StandardButton>
+      <StandardButton onClick={updateNowHasBeenClicked}>{$t("popup.outdatedmicrobit.button.update")}</StandardButton>
     </div>
   </div>
 </div>

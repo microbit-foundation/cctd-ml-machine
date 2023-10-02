@@ -890,6 +890,14 @@ class Microbits {
     return await this.getLinked().getFriendlyName();
   }
 
+  public static getInputOrigin(): HexOrigin {
+    return this.inputOrigin;
+  }
+
+  public static getOutputOrigin(): HexOrigin {
+    return this.outputOrigin;
+  }
+
   /**
    * Disconnects the GATT server, if available. Otherwise, it will be flagged for disconnect when it connects.
    * @private

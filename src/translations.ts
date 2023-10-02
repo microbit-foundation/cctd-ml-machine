@@ -253,7 +253,8 @@ export default {
 
 		"popup.outdatedmicrobit.header": "Din micro:bit mangler en opdatering.",
 		"popup.outdatedmicrobit.text": "Vi anbefaler stærkt at opdatere nu, nogle funktioner virker muligvis ikke som forventet.",
-		"popup.outdatedmicrobit.button": "Jeg forstår",
+		"popup.outdatedmicrobit.button.later": "Senere",
+		"popup.outdatedmicrobit.button.update": "Opdatér nu",
 	},
 	"en": {
 		// ALERTS:
@@ -502,7 +503,8 @@ export default {
 
 		"popup.outdatedmicrobit.header": "Your micro:bit firmware is outdated.",
 		"popup.outdatedmicrobit.text": "We strongly recommend that you update it now, as some features may not work as expected.",
-		"popup.outdatedmicrobit.button": "I understand",
+		"popup.outdatedmicrobit.button.later": "Later",
+		"popup.outdatedmicrobit.button.update": "Update now",
 	}
 };
   

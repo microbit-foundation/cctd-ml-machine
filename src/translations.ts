@@ -404,7 +404,7 @@ export default {
 		"popup.connectMB.bluetooth.step3": "Select your micro:bit and press 'Connect'.",
 		"popup.connectMB.bluetooth.connect": "Connect",
 		"popup.connectMB.bluetooth.connecting": "Connecting...",
-		"popup.connectMB.bluetooth.invalidPattern": "The input pattern you drew is invalid",
+		"popup.connectMB.bluetooth.invalidPattern": "The pattern you drew is invalid",
 
 		"popup.disconnectedWarning.input": "Your input micro:bit lost connection, do want to try again?",
 		"popup.disconnectedWarning.output": "Your output micro:bit lost connection, do want to try again?",

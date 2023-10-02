@@ -14,6 +14,7 @@
   import {
     btPatternInput,
     btPatternOutput,
+    isInputPatternValid,
   } from '../../../script/stores/connectionStore';
   import type { Writable } from 'svelte/store';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
@@ -27,12 +28,18 @@
 
   let isConnecting = false;
 
+  let attemptedToPairWithInvalidPattern = false;
+
   let patternMatrixState: Writable<boolean[]> =
     deviceState === DeviceRequestStates.INPUT ? btPatternInput : btPatternOutput;
 
   let timeoutProgress = 0;
 
   const connectButtonClicked = () => {
+    if (!isInputPatternValid()) {
+      attemptedToPairWithInvalidPattern = true;
+      return;
+    }
     timeoutProgress = 0;
     if (isConnecting) {
       // Safeguard to prevent trying to connect multiple times at once
@@ -79,6 +86,7 @@
 
   function updateMatrix(matrix: boolean[]): void {
     $patternMatrixState = matrix;
+    attemptedToPairWithInvalidPattern = false;
   }
 
   onMount(() => {
@@ -101,6 +109,9 @@
 
   {#if $state.requestDeviceWasCancelled && !isConnecting}
     <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
+  {/if}
+  {#if attemptedToPairWithInvalidPattern}
+    <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.invalidPattern')}</p>
   {/if}
   {#if isConnecting}
     <!-- Show spinner while connecting -->

@@ -156,7 +156,7 @@
       }
       return true;
     }
-    
+
     const selectedText = window.getSelection()?.toString();
     if (selectedText && selectedText.length > 0) {
       return true;
@@ -164,7 +164,11 @@
 
     if (gesture.name.length >= StaticConfiguration.gestureNameMaxLength) {
       event.preventDefault();
-      alertUser($t('alert.data.classNameLengthAlert', {"maxLen":StaticConfiguration.gestureNameMaxLength}));
+      alertUser(
+        $t('alert.data.classNameLengthAlert', {
+          maxLen: StaticConfiguration.gestureNameMaxLength,
+        }),
+      );
       return false;
     }
   }

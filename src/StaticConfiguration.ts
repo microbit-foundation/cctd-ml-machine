@@ -48,7 +48,7 @@ class StaticConfiguration {
     versionNumbers.set(HexOrigin.MAKECODE, 1);
     versionNumbers.set(HexOrigin.PROPRIETARY, 1);
     return versionNumbers.get(origin) !== version;
-  }
+  };
 
   public static readonly initialMLSettings = {
     duration: 1800,

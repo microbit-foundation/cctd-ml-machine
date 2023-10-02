@@ -43,7 +43,7 @@ class InputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isInputOutdated = true;
       return s;
-    })
+    });
   }
 
   onVersionIdentified(versionNumber: number): void {
@@ -55,7 +55,7 @@ class InputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.modelView = ModelView.TILE;
       return s;
-    })
+    });
   }
 
   onIdentifiedAsProprietary(): void {

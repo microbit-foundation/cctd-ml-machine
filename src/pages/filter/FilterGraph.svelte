@@ -6,8 +6,18 @@
 
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import {Chart, LinearScale, CategoryScale, ChartConfiguration, ChartData, LineElement, PointElement, LineController, Legend} from 'chart.js';
-  import {ViolinController, Violin} from '@sgratzl/chartjs-chart-boxplot';
+  import {
+    Chart,
+    LinearScale,
+    CategoryScale,
+    ChartConfiguration,
+    ChartData,
+    LineElement,
+    PointElement,
+    LineController,
+    Legend,
+  } from 'chart.js';
+  import { ViolinController, Violin } from '@sgratzl/chartjs-chart-boxplot';
   import { state } from '../../script/stores/uiStore';
   import { GestureData, gestures } from '../../script/stores/mlStore';
   import {
@@ -72,33 +82,43 @@
     }
     const prevData = getPrevData();
     // Return if insufficient amount of previous data is available
-    if( prevData === undefined ) return;
+    if (prevData === undefined) return;
     liveData = [
       filterFunction(prevData.x),
       filterFunction(prevData.y),
-      filterFunction(prevData.z)
+      filterFunction(prevData.z),
     ];
-      // TODO: Reconsider how to best update graph if values goes outside axes scales
+    // TODO: Reconsider how to best update graph if values goes outside axes scales
     data.datasets[0].data[0] = clamp(liveData[0], axisScale.min, axisScale.max);
     data.datasets[0].data[1] = clamp(liveData[1], axisScale.min, axisScale.max);
     data.datasets[0].data[2] = clamp(liveData[2], axisScale.min, axisScale.max);
     data.datasets[0].hidden = false;
     chart.update();
-  }
+  };
 
   onInterval(createLiveData, 100);
 
-function onInterval(callback: () => void, milliseconds: number) {
-	const interval = setInterval(callback, milliseconds);
-	onDestroy(() => {
-		clearInterval(interval);
-	});
-}
+  function onInterval(callback: () => void, milliseconds: number) {
+    const interval = setInterval(callback, milliseconds);
+    onDestroy(() => {
+      clearInterval(interval);
+    });
+  }
 
   const dataRepresentation = createFilteredData();
 
   function getColor(index: number): string {
-    const colors = ['#007bff', '#93003a', '#9a94ea', '#ce3664', '#f2778d', '#d0b2db', '#ffbcb8', '#ffffe0', '#f3d5d5'];
+    const colors = [
+      '#007bff',
+      '#93003a',
+      '#9a94ea',
+      '#ce3664',
+      '#f2778d',
+      '#d0b2db',
+      '#ffbcb8',
+      '#ffffe0',
+      '#f3d5d5',
+    ];
     return colors[index % colors.length];
   }
 
@@ -152,14 +172,10 @@ function onInterval(callback: () => void, milliseconds: number) {
     dataRepresentation.forEach((dataPoint, idx) => {
       data.datasets.push({
         itemRadius: 3,
-        itemBackgroundColor: getColor(idx) + "ff",
+        itemBackgroundColor: getColor(idx) + 'ff',
         label: dataPoint.name,
-        data: [
-          dataPoint.points.x,
-          dataPoint.points.y,
-          dataPoint.points.z,
-        ],
-        backgroundColor: forcedColor ?? getColor(idx) + "4D", // 4D is 30% opacity
+        data: [dataPoint.points.x, dataPoint.points.y, dataPoint.points.z],
+        backgroundColor: forcedColor ?? getColor(idx) + '4D', // 4D is 30% opacity
       });
     });
   };
@@ -178,7 +194,7 @@ function onInterval(callback: () => void, milliseconds: number) {
           radius: 3,
           pointStyle: 'point',
           backgroundColor: '#000000',
-        }
+        },
       },
       scales: {
         y: {
@@ -222,13 +238,20 @@ function onInterval(callback: () => void, milliseconds: number) {
   let chart: Chart;
   let canvas: HTMLCanvasElement;
   onMount(() => {
-    Chart.register(ViolinController, Violin, LinearScale, CategoryScale, LineElement, PointElement, LineController, Legend);
+    Chart.register(
+      ViolinController,
+      Violin,
+      LinearScale,
+      CategoryScale,
+      LineElement,
+      PointElement,
+      LineController,
+      Legend,
+    );
     if (canvas.getContext('2d') != null) {
       chart = new Chart(canvas.getContext('2d') ?? new HTMLCanvasElement(), config);
     }
   });
-
-
 </script>
 
 <canvas bind:this={canvas} id="myChart" />

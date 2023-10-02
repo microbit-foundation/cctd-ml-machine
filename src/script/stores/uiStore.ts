@@ -13,6 +13,7 @@ import { t } from '../../i18n';
 import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
+import { isInputPatternValid } from './connectionStore';
 
 // TODO: Rename? Split up further?
 
@@ -27,7 +28,7 @@ export const isBluetoothWarningDialogOpen = writable<boolean>(
 
 export enum ModelView {
   TILE,
-  STACK
+  STACK,
 }
 
 // Store current state to prevent error prone actions
@@ -147,6 +148,8 @@ export const microbitInteraction = writable<MicrobitInteractions>(
  */
 export const onCatastrophicError = () => {
   // Set flag to offer reconnect when page reloads
-  CookieManager.setReconnectFlag();
+  if (isInputPatternValid()) {
+    CookieManager.setReconnectFlag();
+  }
   location.reload();
-}
+};

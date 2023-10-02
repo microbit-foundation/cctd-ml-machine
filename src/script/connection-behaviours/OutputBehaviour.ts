@@ -36,7 +36,7 @@ class OutputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isOutputOutdated = true;
       return s;
-    })
+    });
   }
 
   onVersionIdentified(versionNumber: number): void {
@@ -57,7 +57,6 @@ class OutputBehaviour extends LoggingDecorator {
       return s;
     });
   }
-
 
   onIdentifiedAsProprietary(): void {
     super.onIdentifiedAsProprietary();

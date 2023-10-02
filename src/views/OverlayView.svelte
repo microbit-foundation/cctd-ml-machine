@@ -10,7 +10,7 @@
   import { message, state } from '../script/stores/uiStore';
   import ReconnectPrompt from '../components/ReconnectPrompt.svelte';
   import ConnectionOfflineWarning from '../components/ConnectionOfflineWarning.svelte';
-    import OutdatedMicrobitWarning from '../components/OutdatedMicrobitWarning.svelte';
+  import OutdatedMicrobitWarning from '../components/OutdatedMicrobitWarning.svelte';
 
   // Helps show error messages on top of page
   let latestMessage = '';

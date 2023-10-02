@@ -18,8 +18,8 @@
   import type { Writable } from 'svelte/store';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import { DeviceRequestStates } from '../../../script/stores/connectDialogStore';
-    import Environment from '../../../script/Environment';
-    import StaticConfiguration from '../../../StaticConfiguration';
+  import Environment from '../../../script/Environment';
+  import StaticConfiguration from '../../../StaticConfiguration';
 
   // callbacks
   export let deviceState: DeviceRequestStates;
@@ -54,14 +54,14 @@
     }, interval);
     const connectTimeout = setTimeout(() => {
       clearInterval(timeoutInterval);
-      Environment.isInDevelopment && console.log("Connection timed out");
+      Environment.isInDevelopment && console.log('Connection timed out');
       onCatastrophicError();
     }, StaticConfiguration.connectTimeoutDuration);
 
     void connectionResult().then(didSucceed => {
       clearTimeout(connectTimeout);
       clearInterval(timeoutInterval);
-      Environment.isInDevelopment && console.log("Connection result ", didSucceed);
+      Environment.isInDevelopment && console.log('Connection result ', didSucceed);
       if (didSucceed) {
         onBluetoothConnected();
       } else {
@@ -108,7 +108,9 @@
       <p>{$t('popup.connectMB.bluetooth.connecting')}</p>
       <img alt="loading" src="/imgs/loadingspinner.gif" width="100px" />
       <div class="bg-primary rounded w-full h-5">
-        <div style="width: {`${timeoutProgress * 100}%`};" class="bg-secondary rounded h-full"></div>
+        <div
+          style="width: {`${timeoutProgress * 100}%`};"
+          class="bg-secondary rounded h-full" />
       </div>
     </div>
   {:else}

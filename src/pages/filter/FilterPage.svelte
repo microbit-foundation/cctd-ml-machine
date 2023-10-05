@@ -8,8 +8,6 @@
   import FilterToggler from './FilterToggler.svelte';
   import { FilterType, Filters } from '../../script/datafunctions';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
-  import BaseDialog from '../../components/dialogs/BaseDialog.svelte';
-  import FilterInspector from './FilterInspector.svelte';
 
   let isFilterInspectorDialogOpen = false;
   let currentFilter: FilterType | undefined = undefined;

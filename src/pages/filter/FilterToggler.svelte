@@ -6,10 +6,8 @@
 
 <script lang="ts">
   import Information from '../../components/information/Information.svelte';
-  import TypingUtils from '../../script/TypingUtils';
   import { FilterType, determineFilter } from '../../script/datafunctions';
   import { settings } from '../../script/stores/mlStore';
-  import FilterGraph from './FilterGraph.svelte';
   import D3Plot from './D3Plot.svelte';
 
   export let filter: FilterType;

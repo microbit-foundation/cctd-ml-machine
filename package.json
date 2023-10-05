@@ -75,12 +75,10 @@
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.0.0",
-    "@sgratzl/chartjs-chart-boxplot": "^4.2.4",
     "@tensorflow/tfjs": "^4.4.0",
     "@types/w3c-web-usb": "^1.0.6",
     "bowser": "^2.11.0",
     "chart.js": "^4.2.1",
-    "chartjs-chart-pcp": "^4.1.1",
     "d3": "^7.8.5",
     "dapjs": "^2.3.0",
     "js-cookie": "^3.0.4",

@@ -27,10 +27,13 @@
     export let displayLegend = true;
     export let displayYTicks = true;
     export let forcedColor: string | undefined = undefined;
+    export let fullScreen: boolean = false;
 
     $: showLive = $state.isInputConnected;
 
     const uniqueLiveDataID = 983095438740;
+
+    const plotSize = fullScreen ? 800 : 400;
 
     const createLiveData = () => {
       const liveData = getPrevData();
@@ -96,8 +99,8 @@
 
       // set the dimensions and margins of the graph
   const margin = { top: 30, right: 10, bottom: 10, left: 0 }
-  const width = 400 - margin.left - margin.right;
-  const height = 300 - margin.top - margin.bottom;
+  const width = plotSize - margin.left - margin.right;
+  const height = plotSize * 0.75 - margin.top - margin.bottom;
 
 
     function onInterval(callback: () => void, milliseconds: number) {
@@ -126,7 +129,6 @@
 
     // Highlight the specie that is hovered
     const highlight = function(event: any, gesture: RecordingRepresentation){
-      console.log("highlight");
       const gestureName = gesture.gestureClass
 
       // first every group turns grey
@@ -275,25 +277,30 @@
         // Add axis title
         .append("text")
         .style("text-anchor", "middle")
+        .style("font-size", "20px")
+        .style("fill", function (axis: axis) {
+          if (axis === "x") return "#f9808e";
+          if (axis === "y") return "#80f98e";
+          return "#808ef9";
+        })
         .attr("y", -9)
         .text(function (axis: axis) {
           return axis;
-        })
-        .style("fill", "black");
+        });
     }
  </script>
 <div class="flex">
-<div class="flex flex-col justify-evenly mr-4">
-  {#each publicClassList as c}
-    <div
-    class="py-1 px-4 rounded-md btn transition ease border select-none focusElement"
-    style="background-color: {color(c)};"
-    on:mouseenter={() => highlight(null, { gestureClass: c })}
-    on:mouseleave={null, doNotHighlight}
-  >
-    {c}
+  <div class="flex flex-col justify-evenly mr-4">
+    {#each publicClassList as c}
+      <div
+        class="py-1 px-4 rounded-md btn transition ease border select-none focusElement"
+        style="background-color: {color(c)};"
+        on:mouseenter={() => highlight(null, { gestureClass: c })}
+        on:mouseleave={null, doNotHighlight}
+        >
+        {c}
+      </div>
+    {/each}
   </div>
-  {/each}
-</div>
-<div id={"parallel-plot-" + filter} class="relative" />
+  <div id={"parallel-plot-" + filter} class="relative" />
 </div>

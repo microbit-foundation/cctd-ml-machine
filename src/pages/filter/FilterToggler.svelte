@@ -13,7 +13,10 @@
   import D3Plot from './D3Plot.svelte';
 
   export let filter: FilterType;
+  export let openFilterInspector: (filter: FilterType, fullScreen: boolean) => void;
+  export let fullScreen = false;
 
+  const width = () => fullScreen ? "1100px" : "550px";
   const filterStrategy = determineFilter(filter);
   const filterText = filterStrategy.getText();
 
@@ -42,6 +45,7 @@
       rounded-lg
       m-2
       relative
+      {"w-" + width()}
       {isActive ? 'shadow-lg' : ''}"
   >
   <div class="filter flex justify-between">
@@ -56,21 +60,38 @@
         {filterText.name}
       </h2>
     </div>
+    <!-- Buttons -->
+    <div class="flex">
+      <!-- maxumize button -->
 
-    <!-- Disabling button -->
-    <div
-      class="mr-2 mt-2 cursor-pointer"
-      on:click|stopPropagation={() => {
-        toggleFilter();
-      }}>
-      <i
-        class="fa-lg transition ease {isActive
-          ? 'far fa-times-circle text-red-500 hover:(transform scale-150)'
-          : 'fas fa-plus-circle text-lime-600 hover:(transform scale-150)'}" />
+      <div 
+        class="mr-2 mt-2 cursor-pointer"
+        on:click|stopPropagation={() => {
+          console.log("filter", filter);
+          openFilterInspector(filter, !fullScreen)
+        }}>
+        <i
+        class="fa-lg transition ease {fullScreen
+          ? 'fas fa-solid fa-compress hover:(transform scale-150)'
+          : 'fas fa-solid fa-expand hover:(transform scale-150)'}" />
+      </div>
+
+
+      <!-- Disabling button -->
+      <div
+        class="mr-2 mt-2 cursor-pointer"
+        on:click|stopPropagation={() => {
+          toggleFilter();
+        }}>
+        <i
+          class="fa-lg transition ease {isActive
+            ? 'far fa-times-circle text-red-500 hover:(transform scale-150)'
+            : 'fas fa-plus-circle text-lime-600 hover:(transform scale-150)'}" />
+      </div>
     </div>
   </div>
   <div class="w-full h-min px-5 pb-4">
-    <D3Plot {filter} aspectRatio={1} />
+    <D3Plot {filter} {fullScreen} />
   </div>
   <div
     class="

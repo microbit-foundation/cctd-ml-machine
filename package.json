@@ -66,6 +66,7 @@
     "svelte-jester": "^2.3.2",
     "svelte-preprocess": "^5.0.3",
     "svelte-windicss-preprocess": "^4.2.2",
+    "@types/w3c-web-usb": "^1.0.6",
     "ts-jest": "^29.1.0",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
@@ -76,7 +77,6 @@
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.0.0",
     "@tensorflow/tfjs": "^4.4.0",
-    "@types/w3c-web-usb": "^1.0.6",
     "bowser": "^2.11.0",
     "chart.js": "^4.2.1",
     "d3": "^7.8.5",

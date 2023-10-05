@@ -67,7 +67,6 @@
       <div 
         class="mr-2 mt-2 cursor-pointer"
         on:click|stopPropagation={() => {
-          console.log("filter", filter);
           openFilterInspector(filter, !fullScreen)
         }}>
         <i

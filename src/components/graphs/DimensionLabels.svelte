@@ -29,7 +29,6 @@
     ];
   
     function updateDimensionLabels(axes: number[]) {
-      console.log("updating");
       for (let i = 0; i < 3; i++) {
         labels[i].arrowHeight = (2.1 - axes[labels[i].id]) * 2.32;
       }

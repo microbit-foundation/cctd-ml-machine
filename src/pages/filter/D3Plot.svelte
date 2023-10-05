@@ -9,24 +9,15 @@
     import { get } from 'svelte/store';
     import * as d3 from "d3";    
     import {
-        Axes,
-        AxesType,
         FilterType,
-        clamp,
         determineFilter,
     } from '../../script/datafunctions';
     import { GestureData, gestures } from '../../script/stores/mlStore';
     import { state } from "../../script/stores/uiStore";
     import { getPrevData } from '../../script/stores/mlStore';
-    import { append } from "svelte/internal";
+
 
     export let filter: FilterType;
-    export let gesture: GestureData | undefined = undefined;
-    export let legendPosition: 'top' | 'right' = 'top';
-    export let aspectRatio: number | undefined = undefined;
-    export let displayLegend = true;
-    export let displayYTicks = true;
-    export let forcedColor: string | undefined = undefined;
     export let fullScreen: boolean = false;
 
     $: showLive = $state.isInputConnected;
@@ -66,10 +57,10 @@
 
     const filterStrategy = determineFilter(filter);
     const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
-    let color = undefined;
+    let color: d3.ScaleOrdinal<string, unknown> | undefined = undefined;
 
     const createDataRepresentation = () => {
-      const classes: string[] = [];
+      const classes: string[] & Iterable<string> = [];
       const data: GestureData[] = get(gestures);
       const recordings: RecordingRepresentation[] = [];
       data.map((gestureClassObject) => {
@@ -90,7 +81,7 @@
         recordings.push(liveDataRep);
         classes.push("live");
       }
-      color = d3.scaleOrdinal().domain(classes).range(d3.schemeSet2);
+      color = d3.scaleOrdinal().domain(classes).range(d3.schemeSet3);
       publicClassList = classes;
       return {recordings, classes};
     }
@@ -128,7 +119,7 @@
     });
 
     // Highlight the specie that is hovered
-    const highlight = function(event: any, gesture: RecordingRepresentation){
+    const highlight = function(event: any, gesture: RecordingRepresentation | {gestureClass: string}){
       const gestureName = gesture.gestureClass
 
       // first every group turns grey
@@ -144,7 +135,7 @@
     }
 
     // Unhighlight
-    const doNotHighlight = function(event: any, gesture: RecordingRepresentation){
+    const doNotHighlight = function(){
       d3.selectAll(".line")
         .transition().duration(200).delay(1000)
         .style("stroke", function(gesture: RecordingRepresentation){ return( color(gesture.gestureClass))} )
@@ -156,15 +147,13 @@
     function drawParallelPlot(data: RecordingRepresentation[], classes: String[], plot: any) {
       if (notMountedYet) return;
 
-      const opacity = d3.scaleOrdinal().domain(classes).range([0.5, 0.5, 0.5, 0.5]);
+      const opacity = d3.scaleOrdinal().domain(classes as Iterable<string>).range([0.5, 0.5, 0.5, 0.5]);
 
-      const strokeWidth = d3.scaleOrdinal().domain(classes).range([4, 4, 4]);
+      const strokeWidth = d3.scaleOrdinal().domain(classes as Iterable<string>).range([4, 4, 4]);
       // Delete existing plot
       const dimensions: axis[] = ["x", "y", "z"];
-
-            // For each dimension, I build a linear scale. I store all in a y object
-
-  
+    
+      // For each dimension, I build a linear scale. I store all in a y object
       let y: any = {};
       for (let i in dimensions) {
         let axis: axis = dimensions[i];
@@ -172,15 +161,15 @@
           .scaleLinear()
           .domain(
             d3.extent(data, function (gesture: RecordingRepresentation) {
-              const value: number = gesture[axis];
-              return value;
+               const value: number = gesture[axis];
+               return value;
             })
           )
           .range([height, 0]);
       }
 
       // Build the X scale -> it find the best position for each Y axis
-      const x = d3.scalePoint().range([0, width]).padding(0.1).domain(dimensions);
+      const x = d3.scalePoint().range([15, width]).padding(0.1).domain(dimensions);
 
       if (plotDrawn) {
         const livePath = plot.select(".live");
@@ -193,12 +182,11 @@
           return;
         }     
 
-        // Animate
         if (livePath.empty()) {
           // Insert live data path
           plot
           .selectAll()
-          .data([data.pop()])
+          .data([data.pop() as RecordingRepresentation])
           .enter()
           .append("path")
           .attr("class", function (gesture: RecordingRepresentation) {
@@ -217,7 +205,8 @@
           })
         } else {
           // Update live path
-          const newLivePathLine = () => path(data.pop());
+          const newLivePathLine = () => path(data.pop() as RecordingRepresentation);
+          // Animate
           plot.select(".live").transition().duration(50).attr("d", newLivePathLine);
         }   
         return;
@@ -229,7 +218,7 @@
       function path(gesture: RecordingRepresentation) {
         return d3.line()(
           dimensions.map(function (axis: axis) {
-            return [x(axis), y[axis](gesture[axis])];
+            return [x(axis) as number, y[axis](gesture[axis])];
           })
         );
       }
@@ -271,8 +260,7 @@
         })
         // And I build the axis with the call function
         .each(function (axis: axis) {
-          const t: string = this;
-          d3.select(t).call(d3.axisLeft().ticks(4).scale(y[axis]));
+          d3.select(this).call(d3.axisLeft(d3.scaleLinear()).ticks(4).scale(y[axis]));
         })
         // Add axis title
         .append("text")
@@ -288,6 +276,7 @@
           return axis;
         });
     }
+
  </script>
 <div class="flex">
   <div class="flex flex-col justify-evenly mr-4">
@@ -295,8 +284,8 @@
       <div
         class="py-1 px-4 rounded-md btn transition ease border select-none focusElement"
         style="background-color: {color(c)};"
-        on:mouseenter={() => highlight(null, { gestureClass: c })}
-        on:mouseleave={null, doNotHighlight}
+        on:mouseenter={() => highlight(null, {gestureClass: c})}
+        on:mouseleave={doNotHighlight}
         >
         {c}
       </div>

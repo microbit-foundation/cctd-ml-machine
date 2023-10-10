@@ -41,7 +41,8 @@ class StaticConfiguration {
   public static readonly versionIdentificationTimeoutDuration = 4000;
 
   // Link to the MakeCode firmware template
-  public static readonly makecodeFirmwareUrl = "https://makecode.microbit.org/#pub:54705-16835-80762-83855";
+  public static readonly makecodeFirmwareUrl =
+    'https://makecode.microbit.org/#pub:54705-16835-80762-83855';
 
   public static readonly isMicrobitOutdated = (origin: HexOrigin, version: number) => {
     // Current versions, remember to update these, whenever changes to firmware are made!

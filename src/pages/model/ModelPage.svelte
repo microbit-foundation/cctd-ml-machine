@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-    import StaticConfiguration from '../../StaticConfiguration';
+  import StaticConfiguration from '../../StaticConfiguration';
   import StandardButton from '../../components/StandardButton.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';

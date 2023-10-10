@@ -62,7 +62,9 @@ describe('Microbit facade tests', () => {
   beforeEach(() => {
     try {
       Microbits.expelInputAndOutput();
-    } catch (_e) { /* empty */ }
+    } catch (_e) {
+      /* empty */
+    }
   });
 
   test('Should give correct hex file', () => {

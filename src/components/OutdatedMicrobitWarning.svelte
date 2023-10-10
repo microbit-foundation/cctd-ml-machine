@@ -10,16 +10,20 @@
   import { t } from '../i18n';
   import Microbits, { HexOrigin } from '../script/microbit-interfacing/Microbits';
   import { ConnectDialogStates, DeviceRequestStates, connectionDialogState } from '../script/stores/connectDialogStore';
+    import StaticConfiguration from '../StaticConfiguration';
   let hasBeenClosed = false;
   export let targetRole: "INPUT" | "OUTPUT"
+  let showMakeCodeUpdateMessage = targetRole === "INPUT" ? Microbits.isInputMakecode() : Microbits.isOutputMakecode();
 
   const updateNowHasBeenClicked = () => {
     let microbitOrigin = targetRole === "INPUT" ? Microbits.getInputOrigin() : Microbits.getOutputOrigin();
+    expelMicrobit();
     if (microbitOrigin === HexOrigin.PROPRIETARY) {
-      expelMicrobit();
       openConnectionPrompt();
-      hasBeenClosed = true;
+    } else if (microbitOrigin === HexOrigin.MAKECODE) {
+      window.open(StaticConfiguration.makecodeFirmwareUrl, "_blank");
     }
+    hasBeenClosed = true;
   }
 
   const expelMicrobit = () => {
@@ -53,6 +57,15 @@
           style="transform: rotate(45deg);" />
       </button>
     </div>
+    {#if showMakeCodeUpdateMessage}
+    <p>The ML-Machine extension for makecode was outdated.</p>
+    <p>Open the newest makecode template to use the updated extension.</p>
+    <div class="flex mt-5 justify-center">
+      <StandardButton onClick={() => hasBeenClosed=true}>{$t("popup.outdatedmicrobit.button.later")}</StandardButton>
+      <div class="w-3"/>
+      <StandardButton onClick={updateNowHasBeenClicked}>{$t("popup.outdatedmicrobit.button.update.mkcd")}</StandardButton>
+    </div>
+    {:else}
     <p class="text-warning font-bold">{$t("popup.outdatedmicrobit.header")}</p>
     <p>{$t("popup.outdatedmicrobit.text")}</p>
     <div class="flex mt-5 justify-center">
@@ -60,6 +73,7 @@
       <div class="w-3"/>
       <StandardButton onClick={updateNowHasBeenClicked}>{$t("popup.outdatedmicrobit.button.update")}</StandardButton>
     </div>
+    {/if}
   </div>
 </div>
 {/if}

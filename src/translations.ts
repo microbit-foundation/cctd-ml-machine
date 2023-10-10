@@ -256,6 +256,7 @@ export default {
 		"popup.outdatedmicrobit.text": "Vi anbefaler stærkt at opdatere nu, nogle funktioner virker muligvis ikke som forventet.",
 		"popup.outdatedmicrobit.button.later": "Senere",
 		"popup.outdatedmicrobit.button.update": "Opdatér nu",
+		"popup.outdatedmicrobit.button.update.mkcd": "Åben MakeCode",
 	},
 	"en": {
 		// ALERTS:
@@ -507,6 +508,7 @@ export default {
 		"popup.outdatedmicrobit.text": "We strongly recommend that you update it now, as some features may not work as expected.",
 		"popup.outdatedmicrobit.button.later": "Later",
 		"popup.outdatedmicrobit.button.update": "Update now",
+		"popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode",
 	}
 };
   

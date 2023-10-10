@@ -13,6 +13,15 @@
   let hasBeenClosed = false;
   export let targetRole: "INPUT" | "OUTPUT"
 
+  const updateNowHasBeenClicked = () => {
+    let microbitOrigin = targetRole === "INPUT" ? Microbits.getInputOrigin() : Microbits.getOutputOrigin();
+    if (microbitOrigin === HexOrigin.PROPRIETARY) {
+      expelMicrobit();
+      openConnectionPrompt();
+      hasBeenClosed = true;
+    }
+  }
+
   const expelMicrobit = () => {
     if (Microbits.isInputOutputTheSame()) {
       Microbits.expelInputAndOutput();
@@ -28,16 +37,6 @@
   const openConnectionPrompt = () => {
     $connectionDialogState.connectionState = ConnectDialogStates.USB_START;
     $connectionDialogState.deviceState = targetRole === "INPUT" ? DeviceRequestStates.INPUT : DeviceRequestStates.OUTPUT;
-  }
-
-  const updateNowHasBeenClicked = () => {
-    let microbitVersion = targetRole === "INPUT" ? Microbits.getInputVersion() : Microbits.getOutputVersion();
-    let microbitOrigin = targetRole === "INPUT" ? Microbits.getInputOrigin() : Microbits.getOutputOrigin();
-    if (microbitOrigin === HexOrigin.PROPRIETARY) {
-      expelMicrobit();
-      openConnectionPrompt();
-      hasBeenClosed = true;
-    }
   }
 </script>
 

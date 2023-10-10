@@ -36,6 +36,7 @@
     <p>{$t("popup.outdatedmicrobit.text")}</p>
     <div class="flex mt-5 justify-center">
       <StandardButton onClick={() => hasBeenIgnored=true}>{$t("popup.outdatedmicrobit.button.later")}</StandardButton>
+      <div class="w-3"/>
       <StandardButton onClick={updateNowHasBeenClicked}>{$t("popup.outdatedmicrobit.button.update")}</StandardButton>
     </div>
   </div>

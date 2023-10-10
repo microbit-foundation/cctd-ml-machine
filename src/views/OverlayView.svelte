@@ -53,7 +53,7 @@
   {#if $state.offerReconnect && isInputPatternValid()}
     <ReconnectPrompt />
   {/if}
-  {#if $state.isInputOutdated || $state.isOutputOutdated || true}
+  {#if $state.isInputOutdated || $state.isOutputOutdated}
     <OutdatedMicrobitWarning targetRole={$state.isInputOutdated ? "INPUT" : "OUTPUT"} />
   {/if}
   <ConnectionOfflineWarning />

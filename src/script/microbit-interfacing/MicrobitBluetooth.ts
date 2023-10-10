@@ -162,10 +162,10 @@ export class MicrobitBluetooth {
 
   /**
    * Listen to the UART data transmission characteristic.
-   * 
+   *
    * Note: The limit for UART messages are 20 bytes. If messages larger than 20 bytes are
-   * received, they will trigger the given 'onDataReceived' multiple times  
-   * 
+   * received, they will trigger the given 'onDataReceived' multiple times
+   *
    * @param {(string) => void} onDataReceived Callback to be called when data is received.
    */
   public async listenToUART(onDataReceived: (data: string) => void): Promise<void> {

@@ -40,9 +40,11 @@ export function checkCompatibility(): CompatibilityStatus {
   const majorVersion = browser.getBrowserVersion().split('.')[0];
   const minorVersion = browser.getBrowserVersion().split('.')[1];
   const semVer: SemVer = new SemVerImpl(majorVersion, minorVersion);
-  const isBluetoothSupported = navigator.bluetooth && BTComp.isVersionSupported(browserName, semVer, osName);
+  const isBluetoothSupported =
+    navigator.bluetooth && BTComp.isVersionSupported(browserName, semVer, osName);
 
-  const isUsbSupported = navigator.usb && USBComp.isVersionSupported(browserName, semVer, osName);
+  const isUsbSupported =
+    navigator.usb && USBComp.isVersionSupported(browserName, semVer, osName);
   let platformType = browser.getPlatform().type;
 
   // If platform won't report what it is, just assume desktop (ChromeOS doesnt report it)

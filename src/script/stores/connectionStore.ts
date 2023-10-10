@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { type Writable } from 'svelte/store';
+import { get, type Writable } from 'svelte/store';
 import { persistantWritable } from './storeUtil';
+import MBSpecs from '../microbit-interfacing/MBSpecs';
 // Todo: Rename file to a more appropriate name
 // Pattern for connecting to input microbit
 export const btPatternInput: Writable<boolean[]> = persistantWritable<boolean[]>(
@@ -18,3 +19,8 @@ export const btPatternOutput: Writable<boolean[]> = persistantWritable<boolean[]
   'btPatternOutput',
   Array<boolean>(25).fill(false),
 );
+
+export const isInputPatternValid = () => {
+  const pattern = get(btPatternInput);
+  return MBSpecs.Utility.isPairingPattermValid(pattern);
+};

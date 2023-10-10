@@ -48,7 +48,7 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
     this.hasDisconnected = true;
   }
 
-  accelerometerChange(x: number, y: number, z: number): void { }
+  accelerometerChange(x: number, y: number, z: number): void {/* Empty */}
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string): void {
     this.hasConnected = true;
@@ -70,7 +70,7 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
     }
   }
 
-  buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void { }
+  buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {/* Empty */}
 
   isAssigned(): boolean {
     return false;
@@ -100,7 +100,7 @@ class SpyConnectionBehaviour implements ConnectionBehaviour {
     return this.connectedName;
   }
 
-  onReady(): void { }
+  onReady(): void {/* Empty */}
 
   onBluetoothConnectionError(error?: unknown): void {
     this.hasFailedConnection = true;

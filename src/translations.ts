@@ -152,6 +152,7 @@ export default {
 		"popup.connectMB.bluetooth.step3": "Vælg din BBC micro:bit og tryk 'tilslut'.",
 		"popup.connectMB.bluetooth.connect": "Tilslut",
 		"popup.connectMB.bluetooth.connecting": "Tilslutter...",
+		"popup.connectMB.bluetooth.invalidPattern": "Mønstret du har tegnet er ikke gyldig",
 
 		"popup.disconnectedWarning.input": "Din input-micro:bit mistede forbindelsen, vil du prøve igen?",
 		"popup.disconnectedWarning.output": "Din output-micro:bit mistede forbindelsen, vil du prøve igen?",
@@ -404,6 +405,7 @@ export default {
 		"popup.connectMB.bluetooth.step3": "Select your micro:bit and press 'Connect'.",
 		"popup.connectMB.bluetooth.connect": "Connect",
 		"popup.connectMB.bluetooth.connecting": "Connecting...",
+		"popup.connectMB.bluetooth.invalidPattern": "The pattern you drew is invalid",
 
 		"popup.disconnectedWarning.input": "Your input micro:bit lost connection, do want to try again?",
 		"popup.disconnectedWarning.output": "Your output micro:bit lost connection, do want to try again?",

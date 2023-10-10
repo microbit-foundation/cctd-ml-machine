@@ -57,16 +57,16 @@
           style="transform: rotate(45deg);" />
       </button>
     </div>
+    <p class="text-warning font-bold">{$t("popup.outdatedmicrobit.header")}</p>
     {#if showMakeCodeUpdateMessage}
-    <p>The ML-Machine extension for makecode was outdated.</p>
-    <p>Open the newest makecode template to use the updated extension.</p>
+    <p>{$t("popup.outdatedmicrobit.text")}</p>
+    <p>{$t("popup.outdatedmicrobit.text.mkcd")}</p>
     <div class="flex mt-5 justify-center">
       <StandardButton onClick={() => hasBeenClosed=true}>{$t("popup.outdatedmicrobit.button.later")}</StandardButton>
       <div class="w-3"/>
       <StandardButton onClick={updateNowHasBeenClicked}>{$t("popup.outdatedmicrobit.button.update.mkcd")}</StandardButton>
     </div>
     {:else}
-    <p class="text-warning font-bold">{$t("popup.outdatedmicrobit.header")}</p>
     <p>{$t("popup.outdatedmicrobit.text")}</p>
     <div class="flex mt-5 justify-center">
       <StandardButton onClick={() => hasBeenClosed=true}>{$t("popup.outdatedmicrobit.button.later")}</StandardButton>

@@ -43,7 +43,7 @@ class InputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isInputOutdated = true;
       return s;
-    })
+    });
   }
 
   onVersionIdentified(versionNumber: number): void {
@@ -55,7 +55,7 @@ class InputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.modelView = ModelView.TILE;
       return s;
-    })
+    });
   }
 
   onIdentifiedAsProprietary(): void {
@@ -176,17 +176,6 @@ class InputBehaviour extends LoggingDecorator {
         return obj;
       });
     }
-  }
-
-  /**
-   * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
-   * Refresh the page is the only known solution
-   * @private
-   */
-  private onCatastrophicError() {
-    // Set flag to offer reconnect when page reloads
-    CookieManager.setReconnectFlag();
-    location.reload();
   }
 }
 

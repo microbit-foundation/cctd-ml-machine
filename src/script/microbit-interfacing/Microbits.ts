@@ -26,10 +26,10 @@ type QueueElement = {
 export enum HexOrigin {
   UNKNOWN,
   MAKECODE,
-  PROPRIETARY
+  PROPRIETARY,
 }
 
-type UARTMessageType = "g" | "s"
+type UARTMessageType = 'g' | 's';
 
 /**
  * Entry point for microbit interfaces / Facade pattern
@@ -61,8 +61,10 @@ class Microbits {
   private static inputBuildVersion: number | undefined = undefined;
   private static outputBuildVersion: number | undefined = undefined;
 
-  private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined = undefined;
-  private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined = undefined;
+  private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined =
+    undefined;
+  private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined =
+    undefined;
 
   /**
    * Maps pin to the number of times, it has been asked to turn on.
@@ -242,10 +244,9 @@ class Microbits {
             this.inputName = name;
             Microbits.listenToOutputServices()
               .then(() => {
-                  clearTimeout(this.outputVersionIdentificationTimeout);
+                clearTimeout(this.outputVersionIdentificationTimeout);
                 connectionBehaviour.onReady();
                 ConnectionBehaviours.getOutputBehaviour().onReady();
-                
               })
               .catch(reason => {
                 console.log(reason);
@@ -319,9 +320,9 @@ class Microbits {
       'B',
       connectionBehaviour.buttonChange.bind(connectionBehaviour),
     );
-    await this.getInput().listenToUART((data) => this.inputUartHandler(data));
+    await this.getInput().listenToUART(data => this.inputUartHandler(data));
     this.inputVersionIdentificationTimeout = setTimeout(() => {
-        connectionBehaviour.onIdentifiedAsOutdated();
+      connectionBehaviour.onIdentifiedAsOutdated();
     }, StaticConfiguration.versionIdentificationTimeoutDuration);
   }
 
@@ -338,9 +339,9 @@ class Microbits {
       MBSpecs.Characteristics.UART_DATA_RX,
     );
     this.outputVersionIdentificationTimeout = setTimeout(() => {
-        connectionBehaviour.onIdentifiedAsOutdated();
+      connectionBehaviour.onIdentifiedAsOutdated();
     }, StaticConfiguration.versionIdentificationTimeoutDuration);
-    await this.getOutput().listenToUART((data) => this.outputUartHandler(data))
+    await this.getOutput().listenToUART(data => this.outputUartHandler(data));
   }
 
   /**
@@ -427,15 +428,15 @@ class Microbits {
 
   private static inputUartHandler(data: string) {
     const connectionBehaviour = ConnectionBehaviours.getInputBehaviour();
-    if (data === "id_mkcd") {
+    if (data === 'id_mkcd') {
       this.inputOrigin = HexOrigin.MAKECODE;
       connectionBehaviour.onIdentifiedAsMakecode();
     }
-    if (data === "id_prop") {
+    if (data === 'id_prop') {
       this.inputOrigin = HexOrigin.PROPRIETARY;
-      connectionBehaviour.onIdentifiedAsProprietary()
+      connectionBehaviour.onIdentifiedAsProprietary();
     }
-    if (data.includes("vi_")) {
+    if (data.includes('vi_')) {
       const version = parseInt(data.substring(3));
       this.inputBuildVersion = version;
       if (this.isInputOutputTheSame()) {
@@ -445,39 +446,39 @@ class Microbits {
       connectionBehaviour.onVersionIdentified(version);
       const isOutdated = StaticConfiguration.isMicrobitOutdated(
         this.inputOrigin,
-        version
-      )
+        version,
+      );
       if (isOutdated) {
         connectionBehaviour.onIdentifiedAsOutdated();
       }
     }
-    connectionBehaviour.onUartMessageReceived(data)
+    connectionBehaviour.onUartMessageReceived(data);
   }
 
   private static outputUartHandler(data: string) {
     const connectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
-    if (data === "id_mkcd") {
+    if (data === 'id_mkcd') {
       this.outputOrigin = HexOrigin.MAKECODE;
       connectionBehaviour.onIdentifiedAsMakecode();
     }
-    if (data === "id_prop") {
+    if (data === 'id_prop') {
       this.outputOrigin = HexOrigin.PROPRIETARY;
-      connectionBehaviour.onIdentifiedAsProprietary()
+      connectionBehaviour.onIdentifiedAsProprietary();
     }
-    if (data.includes("vi_")) {
+    if (data.includes('vi_')) {
       clearTimeout(this.outputVersionIdentificationTimeout);
       const version = parseInt(data.substring(3));
       this.outputBuildVersion = version;
       connectionBehaviour.onVersionIdentified(version);
       const isOutdated = StaticConfiguration.isMicrobitOutdated(
         this.outputOrigin,
-        version
-      )
+        version,
+      );
       if (isOutdated) {
         connectionBehaviour.onIdentifiedAsOutdated();
       }
     }
-    connectionBehaviour.onUartMessageReceived(data)
+    connectionBehaviour.onUartMessageReceived(data);
   }
 
   private static onFailedConnection(behaviour: ConnectionBehaviour) {
@@ -719,14 +720,20 @@ class Microbits {
           ConnectionBehaviours.getOutputBehaviour().onIdentifiedAsProprietary();
         }
         if (this.outputBuildVersion) {
-          ConnectionBehaviours.getOutputBehaviour().onVersionIdentified(this.outputBuildVersion);
-          if (StaticConfiguration.isMicrobitOutdated(this.outputOrigin, this.outputBuildVersion)) {
+          ConnectionBehaviours.getOutputBehaviour().onVersionIdentified(
+            this.outputBuildVersion,
+          );
+          if (
+            StaticConfiguration.isMicrobitOutdated(
+              this.outputOrigin,
+              this.outputBuildVersion,
+            )
+          ) {
             ConnectionBehaviours.getOutputBehaviour().onIdentifiedAsOutdated();
           } else {
             clearTimeout(this.outputVersionIdentificationTimeout);
           }
         }
-        
       })
       .catch(e => {
         console.log(e);
@@ -814,7 +821,7 @@ class Microbits {
    */
   public static sendUARTGestureMessageToOutput(value: string) {
     if (!this.isOutputReady()) {
-      throw new Error("No output microbit is ready to receive UART gesture messages")
+      throw new Error('No output microbit is ready to receive UART gesture messages');
     }
     this.sendToOutputUart('g', value);
   }

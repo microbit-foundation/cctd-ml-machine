@@ -53,11 +53,37 @@
       z: number;
     }
 
-    type axis = "x" | "y" | "z";
+    type Axis = "x" | "y" | "z";
 
     const filterStrategy = determineFilter(filter);
     const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
-    let color: d3.ScaleOrdinal<string, unknown> | undefined = undefined;
+    let color: d3.ScaleOrdinal<string, string> | undefined = undefined;
+
+    const getColorForClass = (gestureName: string) => {
+      if (color === undefined) {
+          throw new Error("Cannot get color for gesture, color function not defined");
+      }
+      return color(gestureName);
+    }
+
+    const getStrokeColor = (gesture: unknown) => {
+          const name = (gesture as RecordingRepresentation).gestureClass;
+          if (!name) {
+          throw new Error("The given gesture did not contain a gestureClass")
+        }
+          return getColorForClass(name);
+        };
+
+      const getExtent = (axis: Axis, data: RecordingRepresentation[]) => {
+        const extent = d3.extent(data, function (gesture: unknown) {
+          const value: number = (gesture as RecordingRepresentation)[axis];
+          return value;
+        });
+        if (extent[0] === undefined) {
+          throw new Error('Unable to find extent of data!');
+        }
+        return extent;
+    };
 
     const createDataRepresentation = () => {
       const classes: string[] & Iterable<string> = [];
@@ -81,7 +107,7 @@
         recordings.push(liveDataRep);
         classes.push("live");
       }
-      color = d3.scaleOrdinal().domain(classes).range(d3.schemeSet3);
+      color = d3.scaleOrdinal<string>().domain(classes).range(d3.schemeSet3);
       publicClassList = classes;
       return {recordings, classes};
     }
@@ -130,7 +156,13 @@
       // Second the hovered specie takes its color
       d3.selectAll("." + gestureName)
         .transition().duration(200)
-        .style("stroke", color(gestureName))
+        .style("stroke", (gesture: unknown) => {
+          const name = (gesture as RecordingRepresentation).gestureClass;
+          if (!name) {
+          throw new Error("The given gesture did not contain a gestureClass")
+        }
+          return getColorForClass(name);
+        })
         .style("opacity", "1")
     }
 
@@ -138,7 +170,7 @@
     const doNotHighlight = function(){
       d3.selectAll(".line")
         .transition().duration(200).delay(1000)
-        .style("stroke", function(gesture: RecordingRepresentation){ return( color(gesture.gestureClass))} )
+        .style("stroke", getStrokeColor)
         .style("opacity", "1")
     }
 
@@ -151,20 +183,15 @@
 
       const strokeWidth = d3.scaleOrdinal().domain(classes as Iterable<string>).range([4, 4, 4]);
       // Delete existing plot
-      const dimensions: axis[] = ["x", "y", "z"];
+      const dimensions: Axis[] = ["x", "y", "z"];
     
       // For each dimension, I build a linear scale. I store all in a y object
       let y: any = {};
       for (let i in dimensions) {
-        let axis: axis = dimensions[i];
+        let axis: Axis = dimensions[i];
         y[axis] = d3
           .scaleLinear()
-          .domain(
-            d3.extent(data, function (gesture: RecordingRepresentation) {
-               const value: number = gesture[axis];
-               return value;
-            })
-          )
+          .domain(getExtent(axis, data))
           .range([height, 0]);
       }
 
@@ -195,7 +222,7 @@
           .attr("d", path)
           .style("fill", "none")
           .style("stroke", function (gesture: RecordingRepresentation) {
-            return color(gesture.gestureClass);
+            return getColorForClass(gesture.gestureClass);
           })
           .style("opacity", function (gesture: RecordingRepresentation) {
             return opacity(gesture.gestureClass);
@@ -217,7 +244,7 @@
       // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
       function path(gesture: RecordingRepresentation) {
         return d3.line()(
-          dimensions.map(function (axis: axis) {
+          dimensions.map(function (axis: Axis) {
             return [x(axis) as number, y[axis](gesture[axis])];
           })
         );
@@ -235,7 +262,7 @@
         .attr("d", path)
         .style("fill", "none")
         .style("stroke", function (gesture: RecordingRepresentation) {
-          return color(gesture.gestureClass);
+          return getColorForClass(gesture.gestureClass);
         })
         .style("opacity", function (gesture: RecordingRepresentation) {
           return opacity(gesture.gestureClass);
@@ -255,24 +282,24 @@
         .append("g")
         .attr("class", "axis")
         // I translate this element to its right position on the x axis
-        .attr("transform", function (axis: axis) {
+        .attr("transform", function (axis: Axis) {
           return "translate(" + x(axis) + ")";
         })
         // And I build the axis with the call function
-        .each(function (axis: axis) {
+        .each(function (this: SVGGraphicsElement, axis: Axis) {
           d3.select(this).call(d3.axisLeft(d3.scaleLinear()).ticks(4).scale(y[axis]));
         })
         // Add axis title
         .append("text")
         .style("text-anchor", "middle")
         .style("font-size", "20px")
-        .style("fill", function (axis: axis) {
+        .style("fill", function (axis: Axis) {
           if (axis === "x") return "#f9808e";
           if (axis === "y") return "#80f98e";
           return "#808ef9";
         })
         .attr("y", -9)
-        .text(function (axis: axis) {
+        .text(function (axis: Axis) {
           return axis;
         });
     }
@@ -283,7 +310,7 @@
     {#each publicClassList as c}
       <div
         class="py-1 px-4 rounded-md btn transition ease border select-none focusElement"
-        style="background-color: {color(c)};"
+        style="background-color: {getColorForClass(c)};"
         on:mouseenter={() => highlight(null, {gestureClass: c})}
         on:mouseleave={doNotHighlight}
         >

@@ -507,7 +507,7 @@ export default {
 
 		"popup.outdatedmicrobit.header": "Your micro:bit firmware is outdated.",
 		"popup.outdatedmicrobit.text": "We strongly recommend that you update it now, as some features may not work as expected.",
-		"popup.outdatedmicrobit.text.mkcd": "Open the newest makecode template to use the updated extension.",
+		"popup.outdatedmicrobit.text.mkcd": "Open the newest MakeCode template to use the updated extension.",
 		"popup.outdatedmicrobit.button.later": "Later",
 		"popup.outdatedmicrobit.button.update": "Update now",
 		"popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode",

@@ -5,7 +5,7 @@
  */
 
 import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { ModelView, buttonPressed, state } from '../stores/uiStore';
+import { ModelView, buttonPressed, onCatastrophicError, state } from '../stores/uiStore';
 import { livedata } from '../stores/mlStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
@@ -134,7 +134,7 @@ class InputBehaviour extends LoggingDecorator {
     // Works like this: If the MB manages to connect, wait `reconnectTimeoutDuration` milliseconds
     // if MB does not call onReady before that expires, refresh the page
     clearTimeout(this.reconnectTimeout);
-    const onTimeout = () => this.onCatastrophicError();
+    const onTimeout = () => onCatastrophicError();
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, StaticConfiguration.reconnectTimeoutDuration);

@@ -49,17 +49,29 @@ class MockBTDevice implements BluetoothDevice {
     return this;
   }
 
-  onadvertisementreceived(ev: BluetoothAdvertisingEvent): any {/* Empty */}
+  onadvertisementreceived(ev: BluetoothAdvertisingEvent): any {
+    /* Empty */
+  }
 
-  oncharacteristicvaluechanged(ev: Event): any {/* Empty */}
+  oncharacteristicvaluechanged(ev: Event): any {
+    /* Empty */
+  }
 
-  ongattserverdisconnected(ev: Event): any {/* Empty */}
+  ongattserverdisconnected(ev: Event): any {
+    /* Empty */
+  }
 
-  onserviceadded(ev: Event): any {/* Empty */}
+  onserviceadded(ev: Event): any {
+    /* Empty */
+  }
 
-  onservicechanged(ev: Event): any {/* Empty */}
+  onservicechanged(ev: Event): any {
+    /* Empty */
+  }
 
-  onserviceremoved(ev: Event): any {/* Empty */}
+  onserviceremoved(ev: Event): any {
+    /* Empty */
+  }
 
   addEventListener(
     type: 'gattserverdisconnected',
@@ -129,7 +141,9 @@ class MockBTDevice implements BluetoothDevice {
     type: string,
     callback: EventListenerOrEventListenerObject | null,
     options?: EventListenerOptions | boolean,
-  ): void {/* Empty */}
+  ): void {
+    /* Empty */
+  }
 
   watchAdvertisements(options?: WatchAdvertisementsOptions): Promise<void> {
     return Promise.resolve(undefined);

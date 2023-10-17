@@ -8,6 +8,7 @@ import { derived } from 'svelte/store';
 import translations from './translations';
 import { persistantWritable } from './script/stores/storeUtil';
 
+const defaultLang = 'en';
 const initialLang = determineInitialLang();
 // export let locale: string;
 export const locale = persistantWritable('lang', initialLang);
@@ -45,9 +46,13 @@ export const t = derived(
       translate($locale, key, vars),
 );
 
+function getSupportedLang(language: string): string {
+  return (language === 'da' || language ==='en') ? language : defaultLang;
+}
+
 function determineInitialLang() {
   const urlParams = new URLSearchParams(window.location.search);
+  console.log('window location:', window.location.search);
   const urlLang = urlParams.get('lang');
-  if (urlLang === 'da' || urlLang === 'en') return urlLang;
-  return 'da';
+  return getSupportedLang(urlLang || '');
 }

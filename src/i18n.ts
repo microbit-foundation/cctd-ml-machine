@@ -12,7 +12,7 @@ import browserLang from 'browser-lang';
 export const locales: string[] = Object.keys(translations);
 const defaultLocale: keyof typeof translations = 'en';
 const initialLocale = browserLang({
-  languages: [...locales],
+  languages: locales,
   fallback: defaultLocale,
 });
 

@@ -7,13 +7,16 @@
 import { derived } from 'svelte/store';
 import translations from './translations';
 import { persistantWritable } from './script/stores/storeUtil';
-
-const defaultLang = 'en';
-const initialLang = determineInitialLang();
-// export let locale: string;
-export const locale = persistantWritable('lang', initialLang);
+import browserLang from 'browser-lang';
 
 export const locales: string[] = Object.keys(translations);
+const defaultLocale: keyof typeof translations = 'en';
+const initialLocale = browserLang({
+  languages: [...locales],
+  fallback: defaultLocale,
+});
+
+export const locale = persistantWritable('lang', initialLocale);
 
 function translate(locale: string, key: string, vars: object): string {
   // Let's throw some errors if we're trying to use keys/locales that don't exist.
@@ -45,14 +48,3 @@ export const t = derived(
     (key: string, vars = {}) =>
       translate($locale, key, vars),
 );
-
-function getSupportedLang(language: string): string {
-  return (language === 'da' || language ==='en') ? language : defaultLang;
-}
-
-function determineInitialLang() {
-  const urlParams = new URLSearchParams(window.location.search);
-  console.log('window location:', window.location.search);
-  const urlLang = urlParams.get('lang');
-  return getSupportedLang(urlLang || '');
-}

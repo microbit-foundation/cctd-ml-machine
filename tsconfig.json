@@ -18,6 +18,7 @@
     "src/setup_tests.ts"
   ],
   "compilerOptions": {
+    "module": "commonjs",
     "lib": [
       "DOM",
       "ES6",

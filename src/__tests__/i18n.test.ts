@@ -6,19 +6,46 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { get } from "svelte/store";
-import { t } from "../i18n";
+import { get } from 'svelte/store';
 
-describe('Initialization tests', () =>{
-    beforeEach( () => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        global.window = Object.create(window);
-    });
+describe('Initialization tests', () => {
+  let windowSpy: jest.SpyInstance;
 
-    test('Default language is set to english', () => {
-        const getText = get(t);
-        const translatedText = getText("alert.isRecording");
+  beforeEach(() => {
+    windowSpy = jest.spyOn(window, 'window', 'get');
+  });
 
-        expect(translatedText).toBe("You are currently recording!");
-    });
+  afterEach(() => {
+    windowSpy.mockRestore();
+    localStorage.clear();
+    jest.resetModules();
+  });
+
+  test('Language is set to danish when it is the preferred browser option', async () => {
+    windowSpy.mockImplementation(() => ({
+      navigator: {
+        languages: ['da', 'en'],
+      },
+    }));
+    const i18n = await import('../i18n');
+    const getText = get(i18n.t);
+
+    const translatedText = getText('alert.isRecording');
+
+    expect(translatedText).toBe('Du er i gang med at optage!');
+  });
+
+  test('Language falls back to english when an unsupported language is selected', async () => {
+    windowSpy.mockImplementation(() => ({
+      navigator: {
+        languages: ['es'],
+      },
+    }));
+    const i18n = await import('../i18n');
+    const getText = get(i18n.t);
+
+    const translatedText = getText('alert.isRecording');
+
+    expect(translatedText).toBe('You are currently recording!');
+  });
 });

@@ -49,9 +49,6 @@
 
   <!-- Menu -->
   <div class="p-5 pl-5 pr-5">
-    <div class="absolute bottom-15 -left-2">
-      <img alt="decoration arrows" src="/imgs/partial_red_arrows.svg" width="225px" />
-    </div>
 
     <div class="relative">
       {#each get(Menus.getMenuStore()) as menu, id}

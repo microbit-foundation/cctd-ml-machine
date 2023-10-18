@@ -38,7 +38,7 @@ describe('Initialization tests', () => {
   test('Language falls back to english when an unsupported language is selected', async () => {
     windowSpy.mockImplementation(() => ({
       navigator: {
-        languages: ['es'],
+        languages: ['random-language'],
       },
     }));
     const i18n = await import('../i18n');

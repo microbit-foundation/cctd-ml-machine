@@ -44,6 +44,7 @@
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Environment from './script/Environment';
   import Router from './router/Router.svelte';
+  import IntroductionVideo from './components/IntroductionVideo.svelte';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -74,6 +75,7 @@
       <CookieBanner />
       <OverlayView />
       <BluetoothIncompatibilityWarningDialog />
+      <IntroductionVideo />
 
       <!-- SIDE BAR -->
       <div class="h-full flex min-w-75 max-w-75">

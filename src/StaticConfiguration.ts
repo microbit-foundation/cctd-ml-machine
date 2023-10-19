@@ -15,6 +15,7 @@ import { HexOrigin } from './script/microbit-interfacing/Microbits';
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
   public static readonly reconnectTimeoutDuration: number = 7500;
+  public static readonly connectTimeoutDuration: number = 17000; // initial connection
 
   // After how long should we consider the connection lost if ping was not able to conclude?
   public static readonly connectionLostTimeoutDuration: number = 3000;
@@ -39,6 +40,10 @@ class StaticConfiguration {
   // Duration before assuming the microbit is outdated? (in milliseconds)
   public static readonly versionIdentificationTimeoutDuration = 4000;
 
+  // Link to the MakeCode firmware template
+  public static readonly makecodeFirmwareUrl =
+    'https://makecode.microbit.org/#pub:54705-16835-80762-83855';
+
   public static readonly isMicrobitOutdated = (origin: HexOrigin, version: number) => {
     // Current versions, remember to update these, whenever changes to firmware are made!
     if (origin === HexOrigin.UNKNOWN) return true;
@@ -47,7 +52,7 @@ class StaticConfiguration {
     versionNumbers.set(HexOrigin.MAKECODE, 1);
     versionNumbers.set(HexOrigin.PROPRIETARY, 1);
     return versionNumbers.get(origin) !== version;
-  }
+  };
 
   public static readonly initialMLSettings = {
     duration: 1800,

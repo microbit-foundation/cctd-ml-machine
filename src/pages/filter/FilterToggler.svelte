@@ -21,7 +21,7 @@
   $: isActive = $settings.includedFilters.has(filter);
 
   const toggleFilter = () => {
-    // Should be introduced again before pushed to production branch 
+    // Should be introduced again before pushed to production branch
     // settings.update(s => {
     //   if (s.includedFilters.has(filter)) {
     //     s.includedFilters.delete(filter);
@@ -44,8 +44,8 @@
       m-2
       relative
       {"w-" + width()}
-      {isActive ? 'shadow-lg' : ''}"
-  >
+      {isActive ? 'shadow-lg' : ''}">
+
   <div class="filter flex justify-between">
     <div class="flex flex-row relative">
       <div class="absolute">

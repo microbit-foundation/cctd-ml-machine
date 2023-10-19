@@ -5,7 +5,7 @@
  */
 
 import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { ModelView, buttonPressed, state } from '../stores/uiStore';
+import { ModelView, buttonPressed, onCatastrophicError, state } from '../stores/uiStore';
 import { livedata } from '../stores/mlStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
@@ -43,7 +43,7 @@ class InputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isInputOutdated = true;
       return s;
-    })
+    });
   }
 
   onVersionIdentified(versionNumber: number): void {
@@ -55,7 +55,7 @@ class InputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.modelView = ModelView.TILE;
       return s;
-    })
+    });
   }
 
   onIdentifiedAsProprietary(): void {
@@ -134,7 +134,7 @@ class InputBehaviour extends LoggingDecorator {
     // Works like this: If the MB manages to connect, wait `reconnectTimeoutDuration` milliseconds
     // if MB does not call onReady before that expires, refresh the page
     clearTimeout(this.reconnectTimeout);
-    const onTimeout = () => this.onCatastrophicError();
+    const onTimeout = () => onCatastrophicError();
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, StaticConfiguration.reconnectTimeoutDuration);
@@ -176,17 +176,6 @@ class InputBehaviour extends LoggingDecorator {
         return obj;
       });
     }
-  }
-
-  /**
-   * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
-   * Refresh the page is the only known solution
-   * @private
-   */
-  private onCatastrophicError() {
-    // Set flag to offer reconnect when page reloads
-    CookieManager.setReconnectFlag();
-    location.reload();
   }
 }
 

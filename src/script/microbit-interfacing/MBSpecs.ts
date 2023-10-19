@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { isatty } from 'tty';
 import MicrobitBluetooth from './MicrobitBluetooth';
 
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -269,7 +270,7 @@ namespace MBSpecs {
       return name;
     }
 
-    public static messageToDataview(message: string, delimiter: string = "#"): DataView {
+    public static messageToDataview(message: string, delimiter = '#'): DataView {
       if (delimiter.length != 1) {
         throw new Error('The delimiter must be 1 character long');
       }
@@ -304,6 +305,21 @@ namespace MBSpecs {
       }
 
       return code.join('');
+    }
+
+    public static isPairingPattermValid(pattern: boolean[]): boolean {
+      for (let col = 0; col < USBSpecs.MICROBIT_NAME_LENGTH; col++) {
+        let isAnyHighlighted = false;
+        for (let row = 0; row < USBSpecs.MICROBIT_NAME_LENGTH; row++) {
+          if (pattern[row * USBSpecs.MICROBIT_NAME_LENGTH + col]) {
+            isAnyHighlighted = true;
+          }
+        }
+        if (!isAnyHighlighted) {
+          return false;
+        }
+      }
+      return true;
     }
 
     /**

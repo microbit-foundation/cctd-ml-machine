@@ -275,7 +275,8 @@ export function classify() {
 
   // Get formatted version of previous data
   const data = getPrevData();
-  if (data === undefined) throw new Error('Unsufficient amount of data to make prediction');
+  if (data === undefined)
+    throw new Error('Unsufficient amount of data to make prediction');
   const input: number[] = makeInputs(data);
   const inputTensor = tf.tensor([input]);
   const prediction: Tensor = get(model).predict(inputTensor) as Tensor;
@@ -297,7 +298,7 @@ function tfHandlePrediction(result: Float32Array) {
     Gestures.getConfidence(ID).update(val => {
       val = result[index];
       return val;
-    })
+    });
     gestureConfidences.update(confidenceMap => {
       confidenceMap[ID] = result[index];
       return confidenceMap;

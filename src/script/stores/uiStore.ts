@@ -12,6 +12,8 @@ import {
 import { t } from '../../i18n';
 import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
+import CookieManager from '../CookieManager';
+import { isInputPatternValid } from './connectionStore';
 
 // TODO: Rename? Split up further?
 
@@ -26,7 +28,7 @@ export const isBluetoothWarningDialogOpen = writable<boolean>(
 
 export enum ModelView {
   TILE,
-  STACK
+  STACK,
 }
 
 // Store current state to prevent error prone actions
@@ -139,3 +141,15 @@ const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB
 export const microbitInteraction = writable<MicrobitInteractions>(
   initialMicrobitInteraction,
 );
+
+/**
+ * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
+ * Refresh the page is the only known solution
+ */
+export const onCatastrophicError = () => {
+  // Set flag to offer reconnect when page reloads
+  if (isInputPatternValid()) {
+    CookieManager.setReconnectFlag();
+  }
+  location.reload();
+};

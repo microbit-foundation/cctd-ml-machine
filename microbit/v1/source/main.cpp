@@ -46,7 +46,7 @@ void sendString(ManagedString s)
 void onConnected(MicroBitEvent)
 {
     connected = 1; // Set the connected flag
-    uBit.sleep(2000);
+    uBit.sleep(3000);
     uart->send(ManagedString("id_prop")); // MUST be sent before vi_ message
     uart->send(ManagedString("vi_") + ManagedString(buildNumber));
 

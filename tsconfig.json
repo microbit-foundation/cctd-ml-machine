@@ -18,6 +18,7 @@
     "src/setup_tests.ts"
   ],
   "compilerOptions": {
+    "module": "ES6",
     "lib": [
       "DOM",
       "ES6",

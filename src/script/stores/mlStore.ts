@@ -291,10 +291,8 @@ export const trainingState = writable({
   epochs: 0,
 });
 
-
-
 // TODO: Only used at one location (ml.ts). Move to ml.ts?
-export function getPrevData(): { x: number[]; y: number[]; z: number[]} | undefined  {
+export function getPrevData(): { x: number[]; y: number[]; z: number[] } | undefined {
   const data: LiveData[] = get(prevData);
   const dataLength: number = data.length;
   // Returns undefined if there has not being collected minSamples data yet

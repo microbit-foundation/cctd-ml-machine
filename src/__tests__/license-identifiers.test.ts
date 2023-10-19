@@ -12,8 +12,8 @@ import 'jest-expect-message';
 import * as path from 'path';
 
 // Place files you wish to ignore by name in here
-const ignoredFiles: string[] = [".DS_Store"];
-const directoriesToScan = ['./src/', './microbit/v2/source/', './microbit/v1/source/']
+const ignoredFiles: string[] = ['.DS_Store'];
+const directoriesToScan = ['./src/', './microbit/v2/source/', './microbit/v1/source/'];
 
 const licenseIdentifierStringContributors =
   'Center for Computational Thinking and Design at Aarhus University and contributors';
@@ -79,12 +79,9 @@ describe('License identifier tests', () => {
   test(
     'All files should contain license identifier',
     () => {
-
-      const flatten = directoriesToScan.reduce(
-        (acc: any, current) => {
-          return acc.concat(flattenDirectory(current))
-        }, []
-      );
+      const flatten = directoriesToScan.reduce((acc: any, current) => {
+        return acc.concat(flattenDirectory(current));
+      }, []);
 
       const faultyFiles = filesMissingIdentifier(flatten, [
         licenseIdentifierStringContributors,
@@ -93,9 +90,9 @@ describe('License identifier tests', () => {
       expect(
         faultyFiles.length,
         'Some files do not contain identifier! ' +
-        faultyFiles
-          .map(val => `\n \u001b[35m${val} \u001b[0mis missing license identifier`)
-          .join(),
+          faultyFiles
+            .map(val => `\n \u001b[35m${val} \u001b[0mis missing license identifier`)
+            .join(),
       ).toEqual(0);
     },
     60000 * 10,

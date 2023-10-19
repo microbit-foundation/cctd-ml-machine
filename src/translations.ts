@@ -152,6 +152,7 @@ export default {
 		"popup.connectMB.bluetooth.step3": "Vælg din BBC micro:bit og tryk 'tilslut'.",
 		"popup.connectMB.bluetooth.connect": "Tilslut",
 		"popup.connectMB.bluetooth.connecting": "Tilslutter...",
+		"popup.connectMB.bluetooth.invalidPattern": "Mønstret du har tegnet er ikke gyldig",
 
 		"popup.disconnectedWarning.input": "Din input-micro:bit mistede forbindelsen, vil du prøve igen?",
 		"popup.disconnectedWarning.output": "Din output-micro:bit mistede forbindelsen, vil du prøve igen?",
@@ -253,7 +254,10 @@ export default {
 
 		"popup.outdatedmicrobit.header": "Din micro:bit mangler en opdatering.",
 		"popup.outdatedmicrobit.text": "Vi anbefaler stærkt at opdatere nu, nogle funktioner virker muligvis ikke som forventet.",
-		"popup.outdatedmicrobit.button": "Jeg forstår",
+		"popup.outdatedmicrobit.text.mkcd": "Åben den nyeste MakeCode skabelon for at bruge den opdaterede MakeCode extension.",
+		"popup.outdatedmicrobit.button.later": "Senere",
+		"popup.outdatedmicrobit.button.update": "Opdatér nu",
+		"popup.outdatedmicrobit.button.update.mkcd": "Åben MakeCode",
 	},
 	"en": {
 		// ALERTS:
@@ -403,6 +407,7 @@ export default {
 		"popup.connectMB.bluetooth.step3": "Select your micro:bit and press 'Connect'.",
 		"popup.connectMB.bluetooth.connect": "Connect",
 		"popup.connectMB.bluetooth.connecting": "Connecting...",
+		"popup.connectMB.bluetooth.invalidPattern": "The pattern you drew is invalid",
 
 		"popup.disconnectedWarning.input": "Your input micro:bit lost connection, do want to try again?",
 		"popup.disconnectedWarning.output": "Your output micro:bit lost connection, do want to try again?",
@@ -502,7 +507,10 @@ export default {
 
 		"popup.outdatedmicrobit.header": "Your micro:bit firmware is outdated.",
 		"popup.outdatedmicrobit.text": "We strongly recommend that you update it now, as some features may not work as expected.",
-		"popup.outdatedmicrobit.button": "I understand",
+		"popup.outdatedmicrobit.text.mkcd": "Open the newest MakeCode template to use the updated extension.",
+		"popup.outdatedmicrobit.button.later": "Later",
+		"popup.outdatedmicrobit.button.update": "Update now",
+		"popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode",
 	}
 };
   

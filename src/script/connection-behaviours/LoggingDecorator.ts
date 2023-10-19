@@ -13,7 +13,6 @@ import Environment from '../Environment';
  * Used for logging / Decorator pattern
  */
 abstract class LoggingDecorator implements ConnectionBehaviour {
-
   private enableLogging: boolean = Environment.isInDevelopment && true;
 
   // For preventing spam of accelerometer data
@@ -25,7 +24,8 @@ abstract class LoggingDecorator implements ConnectionBehaviour {
   }
 
   onVersionIdentified(versionNumber: number): void {
-    this.enableLogging && console.log(`Microbit identified as version number ${versionNumber}`);
+    this.enableLogging &&
+      console.log(`Microbit identified as version number ${versionNumber}`);
   }
 
   onIdentifiedAsProprietary(): void {
@@ -41,7 +41,8 @@ abstract class LoggingDecorator implements ConnectionBehaviour {
   }
 
   onGestureRecognized(id: number, gestureName: string): void {
-    this.enableLogging && console.log(`Gesture '${gestureName}' with id ${id} was recognized`);
+    this.enableLogging &&
+      console.log(`Gesture '${gestureName}' with id ${id} was recognized`);
   }
 
   onUartMessageReceived(message: string): void {

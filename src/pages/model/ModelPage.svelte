@@ -5,6 +5,7 @@
  -->
 
 <script lang="ts">
+  import StaticConfiguration from '../../StaticConfiguration';
   import StandardButton from '../../components/StandardButton.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
@@ -14,8 +15,8 @@
 
   const openMakeCodeInNewTab = () => {
     window.open(
-      'https://makecode.microbit.org/#pub:54705-16835-80762-83855',
-      '_blank', // <- This is what makes it open in a new window.
+      StaticConfiguration.makecodeFirmwareUrl,
+      '_blank', // <- This is what makes it open in a new tab.
     );
   };
 </script>

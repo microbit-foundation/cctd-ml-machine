@@ -40,10 +40,8 @@
     }
   }
   const wasTurnedOff = () => {
-    // Some action here
   };
   const wasTurnedOn = () => {
-    // TODO: Will be removed in the future - see https://github.com/microbit-foundation/cctd-ml-machine/issues/305 @amh
     if (Microbits.isOutputMakecode()) {
       ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
         gesture.ID,

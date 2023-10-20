@@ -17,7 +17,6 @@
 <script lang="ts">
   import FrontPageContentTile from '../components/FrontPageContentTile.svelte';
   import DoItYourselfMachineLearningTile from './home-page-content-tiles/DoItYourselfMachineLearningTile.svelte';
-  import IntroVideoTile from './home-page-content-tiles/IntroVideoTile.svelte';
   import ControlBar from '../components/control-bar/ControlBar.svelte';
   import ContactUsControlBarButton from '../components/control-bar/control-bar-items/ContactUsControlBarButton.svelte';
   import SelectLanguageControlBarDropdown from '../components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
@@ -25,7 +24,7 @@
   import { state } from '../script/stores/uiStore';
 
   // Just add the content titles you wish to put on front page, in the order you wish them to be there
-  const contentTiles = [DoItYourselfMachineLearningTile, IntroVideoTile];
+  const contentTiles = [DoItYourselfMachineLearningTile];
 </script>
 
 <main class="h-full flex flex-col">

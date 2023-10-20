@@ -18,7 +18,7 @@
 <StandardDialog {isOpen} onClose={() => (isOpen = false)}>
   <div class="w-150">
     <p class="text-2xl mb-2 font-semibold">
-      {$t('content.index.videoHeading')}
+      {$t('content.introductionVideo.heading')}
     </p>
     <div class="flex items-center justify-center">
       <!-- We have selected the video's loading progress as the loading criterion -->
@@ -33,11 +33,10 @@
           type="video/mp4" />
       </video>
     </div>
-    <!-- MARISA: note -> change text for button to 'get started' -->
-    <p class="pt-5">TEMPORARY TEXT</p>
+    <p class="pt-5">{$t('content.introductionVideo.description')}</p>
     <div class="ml-110">
       <StandardButton onClick={() => isOpen = false}
-        >TEMPORARY TEXT</StandardButton>
+        >{$t('content.introductionVideo.button')}</StandardButton>
     </div>
   </div>
 </StandardDialog>

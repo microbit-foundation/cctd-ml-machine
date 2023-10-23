@@ -11,8 +11,8 @@
   import StandardButton from './StandardButton.svelte'
 
   let isOpen = true;
-  $: modalVisibility = isOpen;
-  console.log("MODAL VISIBILITY: ", modalVisibility);
+
+  export let videoURL: string;
 </script>
 
 <StandardDialog {isOpen} onClose={() => (isOpen = false)}>
@@ -29,14 +29,12 @@
         width="550"
         poster="imgs/data-trainer-thumpnail.png">
         <source
-          src="https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4"
+          src= {videoURL}
           type="video/mp4" />
       </video>
     </div>
     <p class="pt-5">{$t('content.introductionVideo.description')}</p>
-    <div class="ml-110">
-      <StandardButton onClick={() => isOpen = false}
+      <StandardButton position="right" onClick={() => isOpen = false}
         >{$t('content.introductionVideo.button')}</StandardButton>
-    </div>
   </div>
 </StandardDialog>

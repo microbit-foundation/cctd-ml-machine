@@ -44,7 +44,7 @@
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Environment from './script/Environment';
   import Router from './router/Router.svelte';
-  import IntroductionVideo from './components/IntroductionVideo.svelte';
+  import VideoDialog from './components/VideoDialog.svelte';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -75,7 +75,7 @@
       <CookieBanner />
       <OverlayView />
       <BluetoothIncompatibilityWarningDialog />
-      <IntroductionVideo />
+      <VideoDialog videoURL="https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4"/>
 
       <!-- SIDE BAR -->
       <div class="h-full flex min-w-75 max-w-75">

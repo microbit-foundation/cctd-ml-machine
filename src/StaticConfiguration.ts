@@ -8,7 +8,6 @@
  * Static configuration values. These values are not expected to change, while the application is running.
  */
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
-import { Axes, Filters, FilterType } from './script/datafunctions';
 import MBSpecs from './script/microbit-interfacing/MBSpecs';
 import { HexOrigin } from './script/microbit-interfacing/Microbits';
 
@@ -54,25 +53,5 @@ class StaticConfiguration {
     return versionNumbers.get(origin) !== version;
   };
 
-  public static readonly initialMLSettings = {
-    duration: 1800,
-    numSamples: 80,
-    minSamples: 80,
-    automaticClassification: true,
-    updatesPrSecond: 4,
-    numEpochs: 80,
-    learningRate: 0.5,
-    includedAxes: [Axes.X, Axes.Y, Axes.Z],
-    includedFilters: new Set<FilterType>([
-      Filters.MAX,
-      Filters.MEAN,
-      Filters.MIN,
-      Filters.STD,
-      Filters.PEAKS,
-      Filters.ACC,
-      Filters.ZCR,
-      Filters.RMS,
-    ]),
-  };
 }
 export default StaticConfiguration;

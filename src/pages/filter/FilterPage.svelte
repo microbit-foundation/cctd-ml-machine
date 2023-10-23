@@ -21,17 +21,6 @@
 </script>
 
 <div>
-  <!-- <BaseDialog
-    isOpen={isFilterInspectorDialogOpen}
-    onClose={() => {
-      isFilterInspectorDialogOpen = false;
-    }}> 
-    <FilterInspector
-      filter={currentFilter}
-      onClose={() => {
-        isFilterInspectorDialogOpen = false;
-      }} />
-  </BaseDialog> -->
   <ControlBar>
   </ControlBar>
   {#if isFilterInspectorDialogOpen && currentFilter !== undefined}

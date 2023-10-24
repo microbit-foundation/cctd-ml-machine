@@ -6,18 +6,31 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
+  import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
 </script>
 
-<p class="text-lg mb-2 font-semibold">News!</p>
+<p class="text-lg mb-2 font-semibold">{$t('content.index.newzHeading')}</p>
 
 <p>
-    Makecode integration
+  {$t('content.index.newzBodyMakecode')}
+</p>
+<div class="flex justify-center">
+  <ImageSkeleton
+    alt="microbit guide"
+    height={200}
+    src="/imgs/Makecode_integration.png"
+    width={200} />
+</div>
+
+<p class="mt-4">
+  <a class="text-link hover:underline" href="/training/filters"
+    >{$t('content.index.newzBodyViz')}</a>
 </p>
 
-<p>
-    New filter representation
-</p>
-
-<p>
-    Link to some learning material?
-</p>
+<div class="flex justify-center">
+  <ImageSkeleton
+    alt="microbit guide"
+    height={200}
+    src="/imgs/data_rep_viz.png"
+    width={250} />
+</div>

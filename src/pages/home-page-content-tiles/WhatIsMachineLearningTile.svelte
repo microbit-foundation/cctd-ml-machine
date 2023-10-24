@@ -6,35 +6,44 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
+  import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
+
+  const MLStepsContent: {image: string, text: string}[] = [
+    {
+      image: '/imgs/model_green.svg',
+      text: 'content.index.MLExplainer1'
+    },
+    {
+      image: '/imgs/data_representation.svg',
+      text: 'content.index.MLExplainer2'
+    },
+    {
+      image: '/imgs/ML_train.svg',
+      text: 'content.index.MLExplainer3'
+    },
+    {
+      image: '/imgs/ML_predict.svg',
+      text: 'content.index.MLExplainer4'
+    }
+  ]
 </script>
 
-<p class="text-lg mb-2 font-semibold">How does it work?</p>
+<p class="text-lg mb-2 font-semibold">{$t('content.index.MLHeading')}</p>
 <p>
-    ml-machine.org/ trains neural networks to recognize patterns in the accelerometer
-    data.
+  {$t('content.index.MLSubheading')}
 </p>
-<ol class="list-decimal list-inside">
-  <li class="mt-4">
-    Your curated data examples of different gestures or movements (e.g., circle, shake,
-    jumping, running) are analyzed by a machine learning algorithm in order to find
-    patterns in the data that can be used to predict/guess if future data samples come
-    from the micro:bit being moved in circles, shook, taped to the leg of the person
-    jumping, etc.
-  </li>
-  <li class="mt-4">
-    The machine learning algorithm makes a data representation of the data examples by
-    calculating specific properties of each example, such as standard deviation, cumulated
-    acceleration, and maximum value.
-  </li>
-  <li class="mt-4">
-    In this data representation, the data examples are shown to a neural network trainer.
-    The algorithm shows calculated properties for each example to the neural networks that
-    “learn” from these examples by finding patterns between the examples.
-  </li>
-  <li class="mt-4">
-    This training process results in a trained neural network (we also call it a machine
-    learning model) that can guess/predict how the micro:bit is moved when the same
-    properties (standard deviation, cumulated acceleration, maximum value, etc.) are
-    calculated from the live accelerometer data.
-  </li>
+<ol class="list-none list-inside">
+    {#each MLStepsContent as step}
+      <li class="mt-4 flex item-start gap-2">
+        <ImageSkeleton
+          alt="microbit guide"
+          height={70}
+          src={step.image}
+          width={70} />
+
+        <p>
+          {$t(step.text)}
+        </p>
+      </li>
+    {/each}
 </ol>

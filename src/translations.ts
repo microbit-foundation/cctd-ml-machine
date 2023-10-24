@@ -24,7 +24,7 @@ export default {
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
 		// Introduction Video Modal
-		"content.introductionVideo.heading": NEEDS_TRANSLATION,
+		"content.introductionVideo.heading": "Introvideo",
 		"content.introductionVideo.description": NEEDS_TRANSLATION,
 		"content.introductionVideo.button": NEEDS_TRANSLATION,
 		// HOME PAGE:

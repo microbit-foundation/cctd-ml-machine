@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-export default {
+type TranslationMap = { [localeCode: string]: { [translationId: string]: string } }
+
+export const translations: TranslationMap = {
 	"da": { // APPROXIMATE SORTING ORDER: First alphabetically, then order of appearance from top to bottom of page
 		// ALERTS:
-		//In gesture.svelte 
+		//In gesture.svelte
 		"alert.data.classNameLengthAlert": "Navne må kun bestå af {{maxLen}} tegn",
 		"alert.recording.disconnectedDuringRecording":"micro:bit frakoblede under optagelse",
 
@@ -89,7 +91,7 @@ export default {
 		"content.model.output.soundOptionLoser": "Taber",
 		"content.model.output.soundOptionMistake": "Fejl",
 		"content.model.output.soundOptionHugeMistake": "Kæmpe fejl",
-		
+
 		"content.model.output.pin.option.allTime": "Altid tændt",
 		"content.model.output.pin.option.xTime": "Tænd på tid",
 		"content.model.output.pin.seconds": "Sekunder",
@@ -358,7 +360,7 @@ export default {
 		"content.model.output.sound.iconTitle": "Sound",
 		"content.model.output.sound.descriptionTitle": "Playback of sound",
 		"content.model.output.sound.descriptionBody": "Here you can choose which sound you output micro:bit plays when the model makes a prediction. Be aware that the sound plays from your computer if you have a micro:bit version 1.",
-		
+
 		"content.model.output.pin.iconTitle": "Pin",
 		"content.model.output.pin.descriptionTitle": "Pin outputs",
 		"content.model.output.pin.descriptionBody": "Here you can select which pin will turn on when a gesture is predicted. Each pins are numbered according to micro:bit's official pin output diagram.",
@@ -513,4 +515,3 @@ export default {
 		"popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode",
 	}
 };
-  

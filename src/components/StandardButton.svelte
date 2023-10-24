@@ -44,6 +44,7 @@
   export let fillOnHover = false;
   export let bold = true;
   export let shadows = true;
+  export let position: "center" | "right" = "center";
 
   const bgColors: { [key in variants]: string } = {
     primary: windi.theme.extend.colors.primary,
@@ -53,9 +54,16 @@
     infolight: windi.theme.extend.colors.infolight,
     disabled: windi.theme.extend.colors.disabled,
   };
+
+  function getPosition(): string {
+    if (position === "right") {
+      return "content-end place-items-end";
+    }
+    return "content-center place-items-center"
+  }
 </script>
 
-<div class="grid grid-cols-1 content-center place-items-center">
+<div class="grid grid-cols-1 { getPosition() }">
   <button
     {disabled}
     style="--color: {bgColors[disabled ? 'disabled' : color]}

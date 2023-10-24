@@ -55,15 +55,15 @@
     disabled: windi.theme.extend.colors.disabled,
   };
 
-  function getPosition(position="center"): string {
+  function getPosition(): string {
     if (position === "right") {
-      return "grid grid-cols-1 content-end place-items-end";
+      return "content-end place-items-end";
     }
-    return "grid grid-cols-1 content-center place-items-center"
+    return "content-center place-items-center"
   }
 </script>
 
-<div class="{ getPosition(position) }">
+<div class="grid grid-cols-1 { getPosition() }">
   <button
     {disabled}
     style="--color: {bgColors[disabled ? 'disabled' : color]}

@@ -8,7 +8,7 @@ import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import { state } from './uiStore';
-import { AxesType, FilterType } from '../datafunctions';
+import { AxesType, FilterType, Axes, Filters } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import StaticConfiguration from '../../StaticConfiguration';
@@ -105,8 +105,29 @@ type MlSettings = {
   includedFilters: Set<FilterType>;
 };
 
+const initialMLSettings: MlSettings = {
+  duration: 1800,
+  numSamples: 80,
+  minSamples: 80,
+  automaticClassification: true,
+  updatesPrSecond: 4,
+  numEpochs: 80,
+  learningRate: 0.5,
+  includedAxes: [Axes.X, Axes.Y, Axes.Z],
+  includedFilters: new Set<FilterType>([
+    Filters.MAX,
+    Filters.MEAN,
+    Filters.MIN,
+    Filters.STD,
+    Filters.PEAKS,
+    Filters.ACC,
+    Filters.ZCR,
+    Filters.RMS,
+  ]),
+};
+
 // Store with ML-Algorithm settings
-export const settings = writable<MlSettings>(StaticConfiguration.initialMLSettings);
+export const settings = persistantWritable<MlSettings>('MLSettings', initialMLSettings);
 
 export const gestures = persistantWritable<GestureData[]>('gestureData', []);
 

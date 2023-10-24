@@ -47,7 +47,8 @@
 
     type RecordingRepresentation = {
       ID: number;
-      gestureClass: string;
+      gestureClassName: string;
+      gestureClassID: number;
       x: number;
       y: number;
       z: number;
@@ -86,11 +87,14 @@
     };
 
     const createDataRepresentation = () => {
-      const classes: string[] & Iterable<string> = [];
+      const classes: {name: string, id: number}[] & Iterable<{name: string, id: number}> = [];
       const data: GestureData[] = get(gestures);
+      console.log(data);
       const recordings: RecordingRepresentation[] = [];
       data.map((gestureClassObject) => {
-         const gestureClass: string = gestureClassObject.name;
+         const gestureClassName: string = gestureClassObject.name;
+         const gestureClassID: number = gestureClassObject.ID;
+         const gestureClass = {name: gestureClassName, id: gestureClassID};
          if (!classes.includes(gestureClass)) {
            classes.push(gestureClass);
          };
@@ -99,7 +103,7 @@
           const x =  filterFunction(recording.data.x);
           const y = filterFunction(recording.data.y);
           const z = filterFunction(recording.data.z);        
-          recordings.push({ID, gestureClass, x, y, z});
+          recordings.push({ID, gestureClassName, gestureClassID, x, y, z});
        });
       });
       const liveDataRep = createLiveData();

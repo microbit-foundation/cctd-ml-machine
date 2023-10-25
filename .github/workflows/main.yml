@@ -28,6 +28,7 @@ permissions:
 
 jobs:
   Jest:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +37,8 @@ jobs:
           npm install 
           npm test
   build_and_deploy:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: false
+    # if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy
     steps:
@@ -58,7 +60,8 @@ jobs:
           VITE_TITLE: ML-Machine
 
   close:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: false
+    # if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close
     steps:

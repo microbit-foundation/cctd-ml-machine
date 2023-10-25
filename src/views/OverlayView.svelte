@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 
- <style>
+<style>
   .textAnimation {
     animation: 3s textAni ease;
   }

@@ -43,7 +43,8 @@
     <div class="p-10 pb-2 pt-2 mt-3">
       <div class="grid-container grid-cols-2 min-w-800px">
         {#each contentTiles as contentTile}
-          <FrontPageContentTile><svelte:component this={contentTile}/></FrontPageContentTile>
+          <FrontPageContentTile
+            ><svelte:component this={contentTile} /></FrontPageContentTile>
         {/each}
       </div>
     </div>

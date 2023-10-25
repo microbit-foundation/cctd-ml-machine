@@ -61,6 +61,9 @@ export default {
 		"content.trainer.failure.todo": "Gå tilbage til datasiden og ændr i din data.",
 		"content.trainer.controlbar.filters": "Filtre",
 
+		// FILTER PAGE
+		"content.filters.NoDataHeader": "Der er ikke noget data",
+		"content.filters.NoDataBody": "Gå til Data-siden for at indsamle data.",
 		"content.filters.max.title" : "Maksværdier",
 		"content.filters.max.description" : "Det højeste punkt blandt alle datapunkter i en bevægelse.",
 		"content.filters.min.title" : "Minimumsværdier",
@@ -315,6 +318,9 @@ export default {
 		"content.trainer.failure.todo": "Return to the data page and change your data.",
 		"content.trainer.controlbar.filters": "Filters",
 
+		// FILTER PAGE
+		"content.filters.NoDataHeader": "No available data",
+		"content.filters.NoDataBody": "Go to the Data page to collect data samples.",
 		"content.filters.max.title" : "Max values",
 		"content.filters.max.description" : "The tallest point among all datapoints in a gesture.",
 		"content.filters.min.title" : "Minimum values",

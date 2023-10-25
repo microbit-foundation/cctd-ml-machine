@@ -8,7 +8,7 @@
   import StandardDialog from './dialogs/StandardDialog.svelte';
   import { t } from '../i18n';
   import { state } from '../script/stores/uiStore';
-  import StandardButton from './StandardButton.svelte'
+  import StandardButton from './StandardButton.svelte';
 
   let isOpen = true;
 
@@ -28,13 +28,11 @@
         controls
         width="550"
         poster="imgs/data-trainer-thumpnail.png">
-        <source
-          src= {videoURL}
-          type="video/mp4" />
+        <source src={videoURL} type="video/mp4" />
       </video>
     </div>
     <p class="pt-5">{$t('content.introductionVideo.description')}</p>
-      <StandardButton position="right" onClick={() => isOpen = false}
-        >{$t('content.introductionVideo.button')}</StandardButton>
+    <StandardButton position="right" onClick={() => (isOpen = false)}
+      >{$t('content.introductionVideo.button')}</StandardButton>
   </div>
 </StandardDialog>

@@ -54,7 +54,8 @@
       <CookieBanner />
       <OverlayView />
       <BluetoothIncompatibilityWarningDialog />
-      <VideoDialog videoURL="https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4"/>
+      <VideoDialog
+        videoURL="https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4" />
 
       <!-- SIDE BAR -->
       <div class="h-full flex min-w-75 max-w-75">

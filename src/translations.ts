@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+const NEEDS_TRANSLATION = "PLACEHOLDER TEXT";
+
 type TranslationMap = { [localeCode: string]: { [translationId: string]: string } }
 
 export const translations: TranslationMap = {
@@ -23,12 +25,15 @@ export const translations: TranslationMap = {
 		"alert.twoGestures": "Du skal have mindst to klasser",
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
+		// Introduction Video Modal
+		"content.introductionVideo.heading": "Introvideo",
+		"content.introductionVideo.description": NEEDS_TRANSLATION,
+		"content.introductionVideo.button": NEEDS_TRANSLATION,
 		// HOME PAGE:
 		"content.index.heading": "Gør-det-selv machine learning",
 		"content.index.howBody": "Velkommen til 'ultra:bit datatræneren'. Eksperimentér og leg med machine learning og byg dine første machine learning-modeller – kom i gang her!",
 		"content.index.ledDescription": "25 LED lys",
 		"content.index.recordButtonDescription": "\"Optag\"-knap",
-		"content.index.videoHeading": "Introvideo",
 		"content.index.setupBody2": "Hjemmesiden benytter bluetooth, accelerometer, LED'er, knapper og lyd fra BBC micro:bit'en. For at hjemmesiden kan tilgå disse, skal der overføres et program til BBC micro:bit'en. Det downloades første gang, du tilslutter BBC micro:bit'en med USB. Efterfølgende kan du blot tilslutte med bluetooth uden at bruge USB-kablet.",
 		"content.index.oldVersion": "Du kan finde den gamle version her:",
 		"content.index.contactButton": "Kontakt os",
@@ -277,12 +282,15 @@ export const translations: TranslationMap = {
 		"alert.twoGestures": "You need at least two classes",
 		"alert.oneDataRepresentation": "You need at least one data representation",
 		"alert.recordingsPerGesture": "You need at least three examples per class",
+		// Introduction Video modal
+		"content.introductionVideo.heading": "Intro Video",
+		"content.introductionVideo.description": "Watch our short guide to the key features.",
+		"content.introductionVideo.button": "Get started",
 		// HOME PAGE:
 		"content.index.heading": "Do It Yourself Machine Learning",
 		"content.index.howBody": "Welcome to the ultra:bit data trainer. Experiment and play with machine larning and build your first machine learning models - start here!",
 		"content.index.ledDescription": "25 LED lights",
 		"content.index.recordButtonDescription": "\"Record\"-button",
-		"content.index.videoHeading": "Intro Video",
 		"content.index.setupBody2": "The website utilizes the bluetooth, accelerometer, LEDs, buttons, and sounds from the Micro:bit. Subsequetnly, you can connect the micro:bit to your computer via bluetooth without using the USB cable.",
 		"content.index.oldVersion": "You can finde the old version here:",
 		"content.index.contactButton": "Contact us",

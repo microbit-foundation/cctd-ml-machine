@@ -5,7 +5,7 @@
  */
 
 import { derived } from 'svelte/store';
-import translations from './translations';
+import { translations } from './translations';
 import { persistantWritable } from './script/stores/storeUtil';
 import browserLang from 'browser-lang';
 
@@ -18,15 +18,14 @@ const initialLocale = browserLang({
 
 export const locale = persistantWritable('lang', initialLocale);
 
-function translate(locale: string, key: string, vars: object): string {
+function translate(locale: string, key: string, vars: {[key: string]: string}): string {
   // Let's throw some errors if we're trying to use keys/locales that don't exist.
   // We could improve this by using Typescript and/or fallback values.
   // if (!key) throw new Error("no key provided to $t()");
   // if (!locale) throw new Error(`no translation for key "${key}"`);
 
   // Grab the translation from the translations object.
-  // @ts-ignore
-  let text: string | undefined = translations[locale][key];
+  let text: string = translations[locale][key];
   if (text == null) {
     console.warn(`no translation found for ${locale}.${key}`);
     return key; // Use the key as fallback
@@ -35,7 +34,6 @@ function translate(locale: string, key: string, vars: object): string {
   // Replace any passed in variables in the translation string.
   Object.keys(vars).map(k => {
     const regex = new RegExp(`{{${k}}}`, 'g');
-    // @ts-ignore
     text = text.replace(regex, vars[k]);
   });
 

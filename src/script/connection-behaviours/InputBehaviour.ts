@@ -11,7 +11,6 @@ import { t } from '../../i18n';
 import { get } from 'svelte/store';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import LoggingDecorator from './LoggingDecorator';
-import CookieManager from '../CookieManager';
 import TypingUtils from '../TypingUtils';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
 import StaticConfiguration from '../../StaticConfiguration';

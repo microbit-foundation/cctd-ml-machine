@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -13,11 +13,6 @@
 
   let isFilterInspectorDialogOpen = false;
   let currentFilter: FilterType | undefined = undefined;
-
-  const openFilterInspector = (filter: FilterType) => {
-    currentFilter = filter;
-    isFilterInspectorDialogOpen = true;
-  };
 </script>
 
 <div>
@@ -35,7 +30,7 @@
   <ControlBar />
   <div class="p-5 grid grid-cols-2">
     {#each Object.values(Filters) as filter}
-      <FilterToggler {filter} openInspector={openFilterInspector} />
+      <FilterToggler {filter} />
     {/each}
   </div>
 </div>

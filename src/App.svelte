@@ -1,29 +1,8 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
-
-<style global windi:preflights:global windi:safelist:global>
-  .textAnimation {
-    animation: 3s textAni ease;
-  }
-
-  @keyframes textAni {
-    0% {
-      opacity: 0;
-    }
-    3% {
-      opacity: 1;
-    }
-    97% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-</style>
 
 <script lang="ts">
   import ConnectionBehaviours from './script/connection-behaviours/ConnectionBehaviours';
@@ -75,7 +54,8 @@
       <CookieBanner />
       <OverlayView />
       <BluetoothIncompatibilityWarningDialog />
-      <VideoDialog videoURL="https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4"/>
+      <VideoDialog
+        videoURL="https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4" />
 
       <!-- SIDE BAR -->
       <div class="h-full flex min-w-75 max-w-75">

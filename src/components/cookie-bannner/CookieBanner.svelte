@@ -42,20 +42,13 @@
   });
 </script>
 
-<StandardDialog isOpen={isCookieDialogOpen} onClose={() => (isCookieDialogOpen = false)}>
+<StandardDialog hasCloseButton={false} isOpen={isCookieDialogOpen} onClose={() => (isCookieDialogOpen = false)}>
   <StandardDialog
     isOpen={isDescriptionDialogOpen}
     onClose={() => (isDescriptionDialogOpen = false)}>
     <CookieDescriptionOverlay />
   </StandardDialog>
   <div out:fly class="w-200">
-    <select
-        class="absolute max-w bg-white right-5 top-5 text-primarytext mr-5 pl-2 pr-2"
-        bind:value={$locale}>
-        {#each locales as l}
-          <option value={l}>{l}</option>
-        {/each}
-      </select>
     <div class="ml-auto mr-auto mt-5">
       <p class="text-left p-b-10 font-bold text-warning text-3xl -ml-5 mr-auto">
         {$t('cookies.banner.title')}

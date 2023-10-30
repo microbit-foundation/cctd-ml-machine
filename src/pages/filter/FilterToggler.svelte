@@ -7,7 +7,7 @@
 <script lang="ts">
   import Information from '../../components/information/Information.svelte';
   import { FilterType, determineFilter } from '../../script/datafunctions';
-  import { settings } from '../../script/stores/mlStore';
+  import { settings, trainingStatus, TrainingStatus } from '../../script/stores/mlStore';
   import D3Plot from './D3Plot.svelte';
 
   export let filter: FilterType;
@@ -21,6 +21,8 @@
   $: isActive = $settings.includedFilters.has(filter);
 
   const toggleFilter = () => {
+    console.log("toggleFilter");
+    trainingStatus.update(()=> TrainingStatus.Untrained)
     settings.update(s => {
       if (s.includedFilters.has(filter)) {
         s.includedFilters.delete(filter);

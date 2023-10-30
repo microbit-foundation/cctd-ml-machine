@@ -127,7 +127,7 @@ export function trainModel() {
     trainingStatus.update(() => TrainingStatus.Failure);
     console.error('tensorflow training process failed:', err);
   });
-
+  trainingStatus.set(TrainingStatus.Success);
   model.set(nn);
 }
 
@@ -257,8 +257,11 @@ function setupPredictionInterval(): void {
 export function classify() {
   // Get currentState to check whether the prediction has been interrupted by other processes
   const currentState = get(state);
+  const currentTrainingStatus = get(trainingStatus);
+  console.log("trainingStatus", TrainingStatus[currentTrainingStatus]);
   const hasBeenInterrupted =
-    !currentState.isPredicting || currentState.isRecording || currentState.isTraining;
+    !currentState.isPredicting || currentState.isRecording || currentState.isTraining || currentTrainingStatus !== TrainingStatus.Success;
+  console.log("hasBeenInterrupted", hasBeenInterrupted);
 
   if (hasBeenInterrupted) {
     if (predictionInterval !== undefined) {

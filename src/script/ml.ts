@@ -124,7 +124,7 @@ export function trainModel() {
     validationSplit: 0.1,
     callbacks: { onTrainEnd }, // onEpochEnd <-- use this to make loading animation
   }).catch(err => {
-    trainingStatus.update(() => TrainingStatus.Failure);
+    trainingStatus.set(TrainingStatus.Failure);
     console.error('tensorflow training process failed:', err);
   });
   trainingStatus.set(TrainingStatus.Success);
@@ -258,10 +258,8 @@ export function classify() {
   // Get currentState to check whether the prediction has been interrupted by other processes
   const currentState = get(state);
   const currentTrainingStatus = get(trainingStatus);
-  console.log("trainingStatus", TrainingStatus[currentTrainingStatus]);
   const hasBeenInterrupted =
     !currentState.isPredicting || currentState.isRecording || currentState.isTraining || currentTrainingStatus !== TrainingStatus.Success;
-  console.log("hasBeenInterrupted", hasBeenInterrupted);
 
   if (hasBeenInterrupted) {
     if (predictionInterval !== undefined) {

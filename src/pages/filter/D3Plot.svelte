@@ -214,11 +214,11 @@
     const x = d3.scalePoint().range([15, width]).padding(0.1).domain(dimensions);
 
     if (plotDrawn) {
-      const livePath = plot.select('.live');
+      const livePath = plot.select('.s'+uniqueLiveDataID);
 
       if (!showLive) {
         if (!livePath.empty()) {
-          plot.select('.live').remove();
+         livePath.remove();
         }
         return;
       }
@@ -248,7 +248,7 @@
         // Update live path
         const newLivePathLine = () => path(data.pop() as RecordingRepresentation);
         // Animate
-        plot.select('.live').transition().duration(50).attr('d', newLivePathLine);
+        livePath.transition().duration(50).attr('d', newLivePathLine);
       }
       return;
     } else {

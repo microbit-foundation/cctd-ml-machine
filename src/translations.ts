@@ -4,14 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-const NEEDS_TRANSLATION = "PLACEHOLDER TEXT";
-
-type TranslationMap = { [localeCode: string]: { [translationId: string]: string } }
-
-export const translations: TranslationMap = {
+const TRANSLATION_NEEDED = "TRANSLATION NEEDED"
+export default {
 	"da": { // APPROXIMATE SORTING ORDER: First alphabetically, then order of appearance from top to bottom of page
 		// ALERTS:
-		//In gesture.svelte
+		//In gesture.svelte 
 		"alert.data.classNameLengthAlert": "Navne må kun bestå af {{maxLen}} tegn",
 		"alert.recording.disconnectedDuringRecording":"micro:bit frakoblede under optagelse",
 
@@ -27,8 +24,8 @@ export const translations: TranslationMap = {
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
 		// Introduction Video Modal
 		"content.introductionVideo.heading": "Introvideo",
-		"content.introductionVideo.description": NEEDS_TRANSLATION,
-		"content.introductionVideo.button": NEEDS_TRANSLATION,
+		"content.introductionVideo.description": TRANSLATION_NEEDED,
+		"content.introductionVideo.button": TRANSLATION_NEEDED,
 		// HOME PAGE:
 		"content.index.heading": "Gør-det-selv machine learning",
 		"content.index.howBody": "Velkommen til 'ultra:bit datatræneren'. Eksperimentér og leg med machine learning og byg dine første machine learning-modeller – kom i gang her!",
@@ -96,7 +93,7 @@ export const translations: TranslationMap = {
 		"content.model.output.soundOptionLoser": "Taber",
 		"content.model.output.soundOptionMistake": "Fejl",
 		"content.model.output.soundOptionHugeMistake": "Kæmpe fejl",
-
+		
 		"content.model.output.pin.option.allTime": "Altid tændt",
 		"content.model.output.pin.option.xTime": "Tænd på tid",
 		"content.model.output.pin.seconds": "Sekunder",
@@ -167,11 +164,15 @@ export const translations: TranslationMap = {
 		"popup.disconnectedWarning.reconnectButton.output": "Tilslut output igen",
 
 		// NEW CONNECTION PROMPTS - TODO: Rename, merge with above and clean up
-
+		"connectMB.main.header": TRANSLATION_NEEDED,
+		"connectMB.main.clarification1": TRANSLATION_NEEDED,
+		"connectMB.main.clarification2": TRANSLATION_NEEDED,
+		"connect.main.header": TRANSLATION_NEEDED,
 		"connectMB.main.usbHeader": "DOWNLOAD PROGRAM TIL BBC MICRO:BIT",
 		"connectMB.main.btHeader": "TILSLUT DIN BBC MICRO:BIT VIA BLUETOOTH",
 		"connectMB.main.usbBody": "Hvis du ikke tidligere har downloadet programmet",
 		"connectMB.main.btBody": "Hvis du allerede har downloadet programmet",
+		"connectMB.main.nextButton": TRANSLATION_NEEDED,
 		"connectMB.main.connectButton": "Tilslut",
 		"connectMB.main.installButton": "Download",
 
@@ -368,7 +369,7 @@ export const translations: TranslationMap = {
 		"content.model.output.sound.iconTitle": "Sound",
 		"content.model.output.sound.descriptionTitle": "Playback of sound",
 		"content.model.output.sound.descriptionBody": "Here you can choose which sound you output micro:bit plays when the model makes a prediction. Be aware that the sound plays from your computer if you have a micro:bit version 1.",
-
+		
 		"content.model.output.pin.iconTitle": "Pin",
 		"content.model.output.pin.descriptionTitle": "Pin outputs",
 		"content.model.output.pin.descriptionBody": "Here you can select which pin will turn on when a gesture is predicted. Each pins are numbered according to micro:bit's official pin output diagram.",
@@ -425,11 +426,15 @@ export const translations: TranslationMap = {
 		"popup.disconnectedWarning.reconnectButton.output": "Reconnect output",
 
 		// NEW CONNECTION PROMPTS - TODO: Rename, merge with above and clean up
-
+		
+		"connectMB.main.header": "Connect a micro:bit",
+		"connectMB.main.clarification1": "First you have to connect the micro:bit you will perform the actions with.",
+		"connectMB.main.clarification2": "Select which method you would like to use:",
 		"connectMB.main.usbHeader": "DOWNLOAD PROGRAM TO MICRO:BIT",
 		"connectMB.main.btHeader": "CONNECT YOUR MICRO:BIT USING BLUETOOTH",
 		"connectMB.main.usbBody": "If you have not previously downloaded the program",
-		"connectMB.main.btBody": "If you have already downloaded the program",
+		"connectMB.main.btBody": "if you have already downloaded the program",
+		"connectMB.main.nextButton": "Next",
 		"connectMB.main.connectButton": "Connect",
 		"connectMB.main.installButton": "Download",
 
@@ -523,3 +528,4 @@ export const translations: TranslationMap = {
 		"popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode",
 	}
 };
+  

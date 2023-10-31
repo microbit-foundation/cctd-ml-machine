@@ -11,6 +11,8 @@
   export let fillColumns: number = 1;
 </script>
 
-<div class="border-gray-200 border border-solid bg-white rounded-lg p-6 shadow-xl {"col-span-" + fillColumns}">
+<div
+  class="border-gray-200 border border-solid bg-white rounded-lg p-6 shadow-xl {'col-span-' +
+    fillColumns}">
   <svelte:component this={contentComponent} />
 </div>

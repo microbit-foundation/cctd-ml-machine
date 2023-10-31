@@ -131,9 +131,9 @@
         </div>
       {/if}
       <!-- Display all gestures -->
-      {#each $gestures as gesture (gesture.ID)}
+      {#each $gestures as gesture}
         <Gesture
-          bind:gesture
+          gesture={gestures.getGesture(gesture.ID)}
           onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
       {/each}
       <NewGestureButton />

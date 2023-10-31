@@ -52,6 +52,5 @@ class StaticConfiguration {
     versionNumbers.set(HexOrigin.PROPRIETARY, 1);
     return versionNumbers.get(origin) !== version;
   };
-
 }
 export default StaticConfiguration;

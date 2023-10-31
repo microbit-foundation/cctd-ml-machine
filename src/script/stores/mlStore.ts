@@ -12,6 +12,9 @@ import { AxesType, FilterType, Axes, Filters } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import StaticConfiguration from '../../StaticConfiguration';
+import { PersistantGestureData } from './Gestures';
+import Stores from './Stores';
+import Gesture from './Gesture';
 
 export type RecordingData = {
   ID: number;
@@ -31,8 +34,10 @@ export function loadDatasetFromFile(file: File) {
     const contents = e.target.result;
     if (typeof contents === 'string') {
       // TODO: fix the following really unsafe parsing and casting
-      const gestureData: GestureData[] = JSON.parse(contents) as GestureData[];
-      gestures.set(gestureData);
+      const gestureData: PersistantGestureData[] = JSON.parse(
+        contents,
+      ) as PersistantGestureData[];
+      gestures.importFrom(gestureData);
     }
   };
   reader.readAsText(file as Blob);
@@ -54,8 +59,9 @@ export function downloadDataset() {
   document.body.removeChild(element);
 }
 
+// Delete this function!
 export function clearGestures() {
-  gestures.set([]);
+  gestures.clearGestures();
 }
 
 export type GestureData = {
@@ -129,7 +135,7 @@ const initialMLSettings: MlSettings = {
 // Store with ML-Algorithm settings
 export const settings = persistantWritable<MlSettings>('MLSettings', initialMLSettings);
 
-export const gestures = persistantWritable<GestureData[]>('gestureData', []);
+export const gestures = Stores.gestures; //persistantWritable<GestureData[]>('gestureData', []);
 
 export const livedata = writable<LiveData>({
   accelX: 0,
@@ -155,7 +161,7 @@ livedata.subscribe(data => {
 });
 
 // Store for current gestures
-export const chosenGesture = writable<GestureData | null>(null);
+export const chosenGesture = writable<Gesture | null>(null);
 
 function updateToUntrainedState() {
   state.update(s => {
@@ -165,84 +171,36 @@ function updateToUntrainedState() {
   trainingStatus.set(TrainingStatus.Untrained);
 }
 
+// Delete this, maybe? updateToUntrainedState
 export function addGesture(name: string): void {
   updateToUntrainedState();
-  gestures.update(gestures => {
-    return [
-      ...gestures,
-      {
-        name,
-        ID: Date.now(),
-        recordings: [],
-        output: {
-          outputPin: {
-            pin: StaticConfiguration.defaultOutputPin,
-            pinState: StaticConfiguration.defaultPinTurnOnState,
-            turnOnTime: StaticConfiguration.defaultPinToggleTime,
-          },
-        },
-      },
-    ];
-  });
+  gestures.createGesture(name);
 }
 
+// Delete this, maybe? updateToUntrainedState
 export function removeGesture(gesture: GestureData) {
   updateToUntrainedState();
-  gestures.update(gestures => {
-    const index = gestures.indexOf(gesture);
-    if (index > -1) {
-      gestures.splice(index, 1);
-    }
-    return gestures;
-  });
+  gestures.removeGesture(gesture.ID);
 }
 
+// Delete this, maybe? updateToUntrainedState
 export function addRecording(gestureID: number, recording: RecordingData) {
   updateToUntrainedState();
-
-  gestures.update(gestures => {
-    for (const gesture of gestures) {
-      if (gesture.ID === gestureID) {
-        gesture.recordings = [...gesture.recordings, recording];
-        break;
-      }
-    }
-    return gestures;
-  });
+  gestures.getGesture(gestureID).addRecording(recording);
 }
 
-// Following function is inefficient. Consider other data structure for
-// "gestures"
+// Delete this, maybe? updateToUntrainedState
 export function removeRecording(gestureID: number, recordingID: number) {
   updateToUntrainedState();
-  gestures.update(gestures => {
-    for (const gesture of gestures) {
-      if (gesture.ID === gestureID) {
-        for (let i = 0; i < gesture.recordings.length; i++) {
-          if (gesture.recordings[i].ID === recordingID) {
-            gesture.recordings.splice(i, 1);
-            return gestures;
-          }
-        }
-      }
-    }
-    return gestures;
-  });
+  gestures.getGesture(gestureID).removeRecording(recordingID);
 }
 
+// Delete this, maybe? updateToUntrainedState
 export function updateGestureSoundOutput(
   gestureID: number,
   sound: SoundData | undefined,
 ) {
-  gestures.update(gestures => {
-    for (const gesture of gestures) {
-      if (gesture.ID === gestureID) {
-        gesture.output.sound = sound;
-        break;
-      }
-    }
-    return gestures;
-  });
+  gestures.getGesture(gestureID).setSoundOutput(sound);
 }
 
 export function updateGesturePinOutput(
@@ -251,31 +209,11 @@ export function updateGesturePinOutput(
   state: PinTurnOnState,
   time: number,
 ) {
-  gestures.update(gestures => {
-    for (const gesture of gestures) {
-      if (gesture.ID === gestureID) {
-        gesture.output.outputPin = {
-          pin: pin,
-          pinState: state,
-          turnOnTime: time,
-        };
-        break;
-      }
-    }
-    return gestures;
-  });
+  gestures.getGesture(gestureID).setIOPinOutput(pin, state, time);
 }
 
 export function updateGestureLEDOutput(gestureID: number, matrix: boolean[]) {
-  gestures.update(gestures => {
-    for (const gesture of gestures) {
-      if (gesture.ID === gestureID) {
-        gesture.output.matrix = matrix;
-        break;
-      }
-    }
-    return gestures;
-  });
+  gestures.getGesture(gestureID).setLEDOutput(matrix);
 }
 
 export const gestureConfidences = writable<{ [id: string]: number }>({});

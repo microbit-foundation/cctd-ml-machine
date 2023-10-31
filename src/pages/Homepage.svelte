@@ -26,9 +26,13 @@
   import { t } from '../i18n';
   import { state } from '../script/stores/uiStore';
 
-  type ContentTile = {tile: ComponentType, spanColumns: number};
+  type ContentTile = { tile: ComponentType; spanColumns: number };
   // Just add the content titles you wish to put on front page, in the order you wish them to be there
-  const contentTiles: ContentTile[] = [{tile: DoItYourselfMachineLearningTile, spanColumns: 1}, {tile: NewFeaturesTile, spanColumns: 1}, {tile: WhatIsMachineLearningTile, spanColumns: 2}];
+  const contentTiles: ContentTile[] = [
+    { tile: DoItYourselfMachineLearningTile, spanColumns: 1 },
+    { tile: NewFeaturesTile, spanColumns: 1 },
+    { tile: WhatIsMachineLearningTile, spanColumns: 2 },
+  ];
 </script>
 
 <main class="h-full flex flex-col">
@@ -45,7 +49,7 @@
     </div>
     <div class="p-10 pb-2 pt-2 mt-3">
       <div class="grid-container grid-cols-2 min-w-800px">
-        {#each contentTiles as {tile, spanColumns}}
+        {#each contentTiles as { tile, spanColumns }}
           <FrontPageContentTile contentComponent={tile} fillColumns={spanColumns} />
         {/each}
       </div>

@@ -14,7 +14,7 @@
   export let openFilterInspector: (filter: FilterType, fullScreen: boolean) => void;
   export let fullScreen = false;
 
-  const width = () => fullScreen ? "1100px" : "550px";
+  const width = () => (fullScreen ? '1100px' : '550px');
   const filterStrategy = determineFilter(filter);
   const filterText = filterStrategy.getText();
 
@@ -42,9 +42,8 @@
       rounded-lg
       m-2
       relative
-      {"w-" + width()}
+      {'w-' + width()}
       {isActive ? 'shadow-lg' : ''}">
-
   <div class="filter flex justify-between">
     <div class="flex flex-row relative">
       <div class="absolute">
@@ -61,17 +60,16 @@
     <div class="flex">
       <!-- maxumize button -->
 
-      <div 
+      <div
         class="mr-2 mt-2 cursor-pointer"
         on:click|stopPropagation={() => {
-          openFilterInspector(filter, !fullScreen)
+          openFilterInspector(filter, !fullScreen);
         }}>
         <i
-        class="fa-lg transition ease {fullScreen
-          ? 'fas fa-solid fa-compress hover:(transform scale-150)'
-          : 'fas fa-solid fa-expand hover:(transform scale-150)'}" />
+          class="fa-lg transition ease {fullScreen
+            ? 'fas fa-solid fa-compress hover:(transform scale-150)'
+            : 'fas fa-solid fa-expand hover:(transform scale-150)'}" />
       </div>
-
 
       <!-- Disabling button -->
       <div

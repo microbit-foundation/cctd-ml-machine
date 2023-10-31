@@ -4,11 +4,13 @@ import {
   Unsubscriber,
   Writable,
   derived,
+  get,
   writable,
 } from 'svelte/store';
 import { GestureData, GestureOutput, RecordingData } from './mlStore';
 import Gesture from './Gesture';
 import GestureRepository from '../gestures/GestureRepository';
+import { t } from '../../i18n';
 
 export type PersistantGestureData = {
   name: string;
@@ -64,6 +66,10 @@ class Gestures implements Readable<GestureData[]> {
     return this.repository.getGesture(gestureID);
   }
 
+  public getGestures(): Gesture[] {
+    return get(Gestures.subscribableGestures);
+  }
+
   public createGesture(name = ''): Gesture {
     const newId = Date.now();
     return this.addGestureFromPersistedData({
@@ -81,6 +87,10 @@ class Gestures implements Readable<GestureData[]> {
   public importFrom(gestureData: PersistantGestureData[]) {
     this.clearGestures();
     gestureData.forEach(data => this.addGestureFromPersistedData(data));
+  }
+
+  public getNumberOfGestures(): number {
+    return get(Gestures.subscribableGestures).length;
   }
 
   private addGestureFromPersistedData(gestureData: PersistantGestureData): Gesture {

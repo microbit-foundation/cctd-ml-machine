@@ -1,10 +1,6 @@
 <script lang="ts">
-  import Stores from './script/stores/Stores';
   import Gesture from './script/stores/Gesture';
-  import Gestures from './script/stores/Gestures';
 
-  const gestures: Gestures = Stores.gestures;
-  const ss = gestures
   let i = 0;
   setInterval(() => {
     i++;
@@ -12,7 +8,7 @@
 </script>
 <!--
 <div>
-  {#each $ss as $gest}
+  {#each $gestures as $gest}
     <p>{$gest.name}</p>
   {/each}
 </div>

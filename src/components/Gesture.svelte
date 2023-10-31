@@ -17,10 +17,8 @@
   import {
     addRecording,
     chosenGesture,
-    type GestureData,
     livedata,
     type RecordingData,
-    removeGesture,
     removeRecording,
     settings,
   } from '../script/stores/mlStore';
@@ -31,7 +29,7 @@
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
     import Gesture from '../script/stores/Gesture';
-    import Stores from '../script/stores/Stores';
+    import { gestures } from '../script/stores/Stores';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -62,7 +60,7 @@
     $state.isPredicting = false;
 
     setTimeout(() => {
-      Stores.gestures.removeGesture(gesture.getId());
+      gestures.removeGesture(gesture.getId());
     }, 450);
   }
 

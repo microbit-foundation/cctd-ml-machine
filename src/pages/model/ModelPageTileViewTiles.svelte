@@ -11,9 +11,9 @@
   import { classify } from '../../script/ml';
   import { onMount } from 'svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
-  import { gestures } from '../../script/stores/mlStore';
   import OutputGesture from '../../components/output/OutputGesture.svelte';
   import MediaQuery from '../../components/MediaQuery.svelte';
+    import { gestures } from '../../script/stores/Stores';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;

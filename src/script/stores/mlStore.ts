@@ -13,8 +13,8 @@ import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import StaticConfiguration from '../../StaticConfiguration';
 import { PersistantGestureData } from './Gestures';
-import Stores from './Stores';
 import Gesture from './Gesture';
+import { gestures } from './Stores';
 
 export type RecordingData = {
   ID: number;
@@ -134,8 +134,6 @@ const initialMLSettings: MlSettings = {
 
 // Store with ML-Algorithm settings
 export const settings = persistantWritable<MlSettings>('MLSettings', initialMLSettings);
-
-export const gestures = Stores.gestures; //persistantWritable<GestureData[]>('gestureData', []);
 
 export const livedata = writable<LiveData>({
   accelX: 0,

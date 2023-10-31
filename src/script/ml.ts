@@ -9,7 +9,6 @@ import {
   bestPrediction,
   gestureConfidences,
   type GestureData,
-  gestures,
   getPrevData,
   model,
   settings,
@@ -22,6 +21,7 @@ import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
 import Gestures from './Gestures';
+import { gestures } from './stores/Stores';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));

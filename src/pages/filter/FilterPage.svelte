@@ -8,8 +8,8 @@
   import FilterToggler from './FilterToggler.svelte';
   import { FilterType, Filters } from '../../script/datafunctions';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
-  import { gestures } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
+    import { gestures } from '../../script/stores/Stores';
 
   let isFilterInspectorDialogOpen = false;
   let currentFilter: FilterType | undefined = undefined;

@@ -9,9 +9,10 @@
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
   import { FilterType, determineFilter } from '../../script/datafunctions';
-  import { GestureData, gestures } from '../../script/stores/mlStore';
+  import { GestureData } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
   import { getPrevData } from '../../script/stores/mlStore';
+    import { gestures } from '../../script/stores/Stores';
 
   export let filter: FilterType;
   export let fullScreen: boolean = false;

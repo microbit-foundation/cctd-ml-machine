@@ -1,7 +1,15 @@
 import { PersistantGestureData } from '../stores/Gestures';
 import Gesture from '../stores/Gesture';
 import ControlledStorage from '../ControlledStorage';
-import { Readable, Subscriber, Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
+import {
+  Readable,
+  Subscriber,
+  Unsubscriber,
+  Writable,
+  derived,
+  get,
+  writable,
+} from 'svelte/store';
 
 class GestureRepository implements Readable<Gesture[]> {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
@@ -21,8 +29,11 @@ class GestureRepository implements Readable<Gesture[]> {
     return gestures[gestureIndex];
   }
 
-  public subscribe(run: Subscriber<Gesture[]>, invalidate?: ((value?: Gesture[] | undefined) => void) | undefined): Unsubscriber {
-    return GestureRepository.gestureStore.subscribe(run, invalidate)
+  public subscribe(
+    run: Subscriber<Gesture[]>,
+    invalidate?: ((value?: Gesture[] | undefined) => void) | undefined,
+  ): Unsubscriber {
+    return GestureRepository.gestureStore.subscribe(run, invalidate);
   }
 
   public clearGestures(): void {
@@ -47,21 +58,23 @@ class GestureRepository implements Readable<Gesture[]> {
     this.saveCurrentGestures();
   }
 
-  private buildPersistedGestureStore(gestureData: PersistantGestureData): Writable<PersistantGestureData> {
+  private buildPersistedGestureStore(
+    gestureData: PersistantGestureData,
+  ): Writable<PersistantGestureData> {
     const store = writable(gestureData);
 
     return {
       subscribe: store.subscribe,
       set: val => {
         store.set(val);
-        GestureRepository.gestureStore.update((val) => val);
+        GestureRepository.gestureStore.update(val => val);
         this.saveCurrentGestures();
       },
       update: updater => {
         store.update(updater);
-        GestureRepository.gestureStore.update((val) => val);
+        GestureRepository.gestureStore.update(val => val);
         this.saveCurrentGestures();
-      }
+      },
     };
   }
 

@@ -6,6 +6,7 @@
     i++;
   }, 1000);
 </script>
+
 <!--
 <div>
   {#each $gestures as $gest}

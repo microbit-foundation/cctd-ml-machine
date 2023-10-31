@@ -12,7 +12,7 @@
   import { GestureData } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
   import { getPrevData } from '../../script/stores/mlStore';
-    import { gestures } from '../../script/stores/Stores';
+  import { gestures } from '../../script/stores/Stores';
 
   export let filter: FilterType;
   export let fullScreen: boolean = false;

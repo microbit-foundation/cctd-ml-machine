@@ -23,7 +23,7 @@
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
-    import { gestures } from '../script/stores/Stores';
+  import { gestures } from '../script/stores/Stores';
 
   let isConnectionDialogOpen = false;
 

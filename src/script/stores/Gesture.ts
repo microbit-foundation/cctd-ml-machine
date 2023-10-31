@@ -1,11 +1,4 @@
-import {
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
-  derived,
-  get,
-} from 'svelte/store';
+import { Readable, Subscriber, Unsubscriber, Writable, derived, get } from 'svelte/store';
 import { GestureData, GestureOutput, RecordingData, SoundData } from './mlStore';
 import { PersistantGestureData } from './Gestures';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
@@ -15,10 +8,8 @@ import BindableValue from './BindableValue';
 class Gesture implements Readable<GestureData> {
   private store: Readable<GestureData>;
 
-  constructor(
-    private persistedData: Writable<PersistantGestureData>,
-  ) {
-  this.store = this.deriveStore();
+  constructor(private persistedData: Writable<PersistantGestureData>) {
+    this.store = this.deriveStore();
   }
 
   public subscribe(
@@ -42,7 +33,7 @@ class Gesture implements Readable<GestureData> {
 
   public setName(newName: string): void {
     this.persistedData.update(val => {
-      val.name = newName
+      val.name = newName;
       return val;
     });
   }
@@ -94,7 +85,10 @@ class Gesture implements Readable<GestureData> {
 
   public bindName(): BindableValue<string> {
     const setter = (val: string) => this.setName(val);
-    const bindable = new BindableValue(setter, derived(this.store, s => s.name))
+    const bindable = new BindableValue(
+      setter,
+      derived(this.store, s => s.name),
+    );
     return bindable;
   }
 
@@ -102,10 +96,10 @@ class Gesture implements Readable<GestureData> {
     return derived([this.persistedData], stores => {
       const result = Object.assign({}, stores[0]);
       Object.assign(result, {
-        confidence: 0
-      })
+        confidence: 0,
+      });
       return result;
-    })
+    });
   }
 }
 

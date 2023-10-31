@@ -9,7 +9,7 @@
   import { FilterType, Filters } from '../../script/datafunctions';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import { t } from '../../i18n';
-    import { gestures } from '../../script/stores/Stores';
+  import { gestures } from '../../script/stores/Stores';
 
   let isFilterInspectorDialogOpen = false;
   let currentFilter: FilterType | undefined = undefined;

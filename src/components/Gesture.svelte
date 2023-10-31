@@ -28,8 +28,8 @@
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
-    import Gesture from '../script/stores/Gesture';
-    import { gestures } from '../script/stores/Stores';
+  import Gesture from '../script/stores/Gesture';
+  import { gestures } from '../script/stores/Stores';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -54,7 +54,9 @@
       return;
     }
 
-    if (!window.confirm($t('alert.deleteGestureConfirm') + '"' + gesture.getName() + '"?')) {
+    if (
+      !window.confirm($t('alert.deleteGestureConfirm') + '"' + gesture.getName() + '"?')
+    ) {
       return;
     }
     $state.isPredicting = false;
@@ -201,7 +203,7 @@
             contenteditable
             bind:innerText={$nameBind}
             on:click={titleClicked}
-            on:keypress={onTitleKeypress}/>
+            on:keypress={onTitleKeypress} />
         </div>
         <button class="pl-3 col-start-5 place-self-start justify-self-end outline-none">
           <i

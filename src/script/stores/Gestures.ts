@@ -73,10 +73,10 @@ class Gestures implements Readable<GestureData[]> {
   public createGesture(name = ''): Gesture {
     const newId = Date.now();
     return this.addGestureFromPersistedData({
-      ID: newId, 
+      ID: newId,
       recordings: [],
-      output: {}, //TODO: ADD DEFAULT VALUES HERE 
-      name: name, 
+      output: {}, //TODO: ADD DEFAULT VALUES HERE
+      name: name,
     });
   }
 

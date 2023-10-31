@@ -23,7 +23,7 @@
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import TrainModelFirstTitle from '../../components/TrainModelFirstTitle.svelte';
   import OutputGesture from '../../components/output/OutputGesture.svelte';
-    import { gestures } from '../../script/stores/Stores';
+  import { gestures } from '../../script/stores/Stores';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;

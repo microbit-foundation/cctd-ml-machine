@@ -44,7 +44,6 @@
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Environment from './script/Environment';
   import Router from './router/Router.svelte';
-  import Test from './Test.svelte';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -59,7 +58,6 @@
 </script>
 
 <Router>
-  <Test />
   {#if !checkCompatibility().platformAllowed}
     <!-- Denies mobile users access to the platform -->
     <IncompatiblePlatformView />

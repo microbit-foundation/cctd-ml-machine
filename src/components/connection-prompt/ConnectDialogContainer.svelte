@@ -6,8 +6,11 @@
 
 <script lang="ts">
   import StandardDialog from '../dialogs/StandardDialog.svelte';
-  import BluetoothConnectDialog from './bluetooth/BluetoothConnectDialog.svelte';
   import StartDialog from './StartDialog.svelte';
+  import ConnectCableDialog from './bluetooth/ConnectCableDialog.svelte';
+  import SelectMicrobitDialog from './bluetooth/SelectMicrobitDialog.svelte';
+  import ConnectBatteryDialog from './bluetooth/ConnectBatteryDialog.svelte'
+  import BluetoothConnectDialog from './bluetooth/BluetoothConnectDialog.svelte';
   import DoneDownloadingDialog from './usb/DoneDownloadingDialog.svelte';
   import DownloadingDialog from './usb/DownloadingDialog.svelte';
   import FindUsbDialog from './usb/FindUsbDialog.svelte';
@@ -47,7 +50,7 @@
         })
           .then(() => {
             // Finished flashing successfully
-            $connectionDialogState.connectionState = ConnectDialogStates.USB_DONE;
+            $connectionDialogState.connectionState = ConnectDialogStates.CONNECT_BATTERY;
           })
           .catch(() => {
             // Error during flashing process
@@ -76,38 +79,66 @@
     isOpen={$connectionDialogState.connectionState !== ConnectDialogStates.NONE}
     onClose={() => ($connectionDialogState.connectionState = ConnectDialogStates.NONE)}>
     {#if $connectionDialogState.connectionState === ConnectDialogStates.START}
-      <StartDialog
+    START
+    <StartDialog
         onStartBluetoothClick={() =>
-          ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}
+          ($connectionDialogState.connectionState = ConnectDialogStates.CONNECT_CABLE)}
         onStartUsbClick={() =>
           ($connectionDialogState.connectionState = ConnectDialogStates.USB_START)} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.START_OUTPUT}
-      <ConnectSameDialog
+    START OUTPUT
+    <ConnectSameDialog
         onConnectSameClick={connectSame}
         onConnectDifferentClick={() =>
           ($connectionDialogState.connectionState = ConnectDialogStates.START)} />
+    {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECT_CABLE}
+    CONNECT CABLE  
+    <ConnectCableDialog
+        onBackClick={() =>
+          ($connectionDialogState.connectionState = ConnectDialogStates.START)}
+        onNextClick={() =>
+          ($connectionDialogState.connectionState = ConnectDialogStates.CONNECT_TUTORIAL)} />
+    {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECT_TUTORIAL}
+    CONNECT TUTORIAL
+    <SelectMicrobitDialog 
+        onBackClick={() =>
+          ($connectionDialogState.connectionState = ConnectDialogStates.CONNECT_CABLE)}
+        onUsbLinkError={() =>
+          ($connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL)}
+        onFoundUsb={onFoundUsbDevice} />
+    {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECT_BATTERY}
+    CONNECT BATTERY
+    <ConnectBatteryDialog 
+    onNextClick={() =>
+      ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}/>
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.BLUETOOTH}
-      <BluetoothConnectDialog
+    BLUETOOTH
+    <BluetoothConnectDialog
         onBluetoothConnected={() => {
           $connectionDialogState.connectionState = ConnectDialogStates.NONE;
         }}
         deviceState={$connectionDialogState.deviceState} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_START}
+    USB START
       <FindUsbDialog
         onUsbLinkError={() => {
           $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
         }}
         onFoundUsb={onFoundUsbDevice} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.BAD_FIRMWARE}
-      <BrokenFirmwareDetected />
+    BAD FIRMWARE
+    <BrokenFirmwareDetected />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DOWNLOADING}
-      <DownloadingDialog transferProgress={flashProgress} />
+    USB DOWNLOADING
+    <DownloadingDialog transferProgress={flashProgress} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_DONE}
-      <DoneDownloadingDialog
+    USB DONE
+    <DoneDownloadingDialog
         onConnectBluetoothClick={() =>
           ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.MANUAL_TUTORIAL}
-      <ManualInstallTutorial
+    MANUAL TUTORIAL
+    <ManualInstallTutorial
         onConnectBluetoothClick={() =>
           ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)} />
     {/if}

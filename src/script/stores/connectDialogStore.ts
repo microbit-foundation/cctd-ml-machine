@@ -14,14 +14,19 @@ export enum DeviceRequestStates {
 }
 export enum ConnectDialogStates {
   NONE, // No connection in progress -> Dialog box closed
-  START, // Initial box with choice between usb installation and bluetooth connection
+  START, // Initial box with choice between radio and bluetooth connection
   START_OUTPUT, // Initial box if input microbit is already connected. Choice between same and other microbit for output
-  BLUETOOTH, // Main bluetooth connect prompt, with pattern drawing
-  USB_START, // Initial usb installation prompt
+  BAD_FIRMWARE, // We detected an issue with the firmware of the micro:bit trying to transfer program.
+  CONNECT_CABLE, // Instructions how to connect micro:bit via usb
+  CONNECT_TUTORIAL, // Instructions how to select micro:bit on popup
   USB_DOWNLOADING, // Downloading usb program status bar prompt
+  CONNECT_BATTERY, // Instructions to connect micro:bit to battery
+  BLUETOOTH, // Bluetooth connect prompt, with pattern drawing
+  BLUETOOTH_CONNECTING, // Downloading BlueTooth prompt
+  USB_START, // Initial usb installation prompt
+
   USB_DONE, // Installation done prompt
   MANUAL_TUTORIAL, // Prompt with tutorial gif for manual installation (and downloading of program)
-  BAD_FIRMWARE, // We detected an issue with the firmware of the micro:bit trying to transfer program.
 }
 
 export const connectionDialogState = writable<{

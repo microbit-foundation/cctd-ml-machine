@@ -20,8 +20,7 @@
         height={100}
         width={100}
         loadingColorPrimary="#68BDBF"
-        loadingColorSecondary="#3C81F6"
-        />
+        loadingColorSecondary="#3C81F6" />
       <p class="text-white mt-3 mb-4">
         {$t('menu.trainer.TrainingFinished')}
       </p>

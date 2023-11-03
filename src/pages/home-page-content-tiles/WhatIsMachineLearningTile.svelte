@@ -8,24 +8,24 @@
   import { t } from '../../i18n';
   import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
 
-  const MLStepsContent: {image: string, text: string}[] = [
+  const MLStepsContent: { image: string; text: string }[] = [
     {
       image: '/imgs/model_green.svg',
-      text: 'content.index.MLExplainer1'
+      text: 'content.index.MLExplainer1',
     },
     {
       image: '/imgs/data_representation.svg',
-      text: 'content.index.MLExplainer2'
+      text: 'content.index.MLExplainer2',
     },
     {
       image: '/imgs/ML_train.svg',
-      text: 'content.index.MLExplainer3'
+      text: 'content.index.MLExplainer3',
     },
     {
       image: '/imgs/ML_predict.svg',
-      text: 'content.index.MLExplainer4'
-    }
-  ]
+      text: 'content.index.MLExplainer4',
+    },
+  ];
 </script>
 
 <p class="text-lg mb-2 font-semibold">{$t('content.index.MLHeading')}</p>
@@ -33,17 +33,13 @@
   {$t('content.index.MLSubheading')}
 </p>
 <ol class="list-none list-inside">
-    {#each MLStepsContent as step}
-      <li class="mt-4 flex item-start gap-2">
-        <ImageSkeleton
-          alt="microbit guide"
-          height={70}
-          src={step.image}
-          width={70} />
+  {#each MLStepsContent as step}
+    <li class="mt-4 flex item-start gap-2">
+      <ImageSkeleton alt="microbit guide" height={70} src={step.image} width={70} />
 
-        <p>
-          {$t(step.text)}
-        </p>
-      </li>
-    {/each}
+      <p>
+        {$t(step.text)}
+      </p>
+    </li>
+  {/each}
 </ol>

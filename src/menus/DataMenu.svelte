@@ -6,8 +6,8 @@
 
 <script lang="ts">
   import { slide } from 'svelte/transition';
-  import { gestures } from '../script/stores/mlStore';
   import { t } from '../i18n';
+  import { gestures } from '../script/stores/Stores';
 
   // Count of amount of recordings
   $: numberOfRecodings = $gestures.reduce(

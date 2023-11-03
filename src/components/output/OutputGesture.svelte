@@ -39,8 +39,7 @@
       wasTriggered = false;
     }
   }
-  const wasTurnedOff = () => {
-  };
+  const wasTurnedOff = () => {};
   const wasTurnedOn = () => {
     if (Microbits.isOutputMakecode()) {
       ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(

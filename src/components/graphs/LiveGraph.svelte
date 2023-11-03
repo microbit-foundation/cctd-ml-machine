@@ -121,5 +121,5 @@
 
 <main class="flex">
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
-  <DimensionLabels/>
+  <DimensionLabels />
 </main>

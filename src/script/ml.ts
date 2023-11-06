@@ -22,6 +22,7 @@ import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
 import Gestures from './Gestures';
 import { gestures } from './stores/Stores';
+import Repositories from './Repositories';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -296,6 +297,40 @@ function tfHandlePrediction(result: Float32Array) {
   const gestureData = get(gestures);
 
   gestureData.forEach(({ ID }, index) => {
+    Repositories.getInstance().getModelRepository().setGestureConfidence(ID, result[index])
+
+    gestureConfidences.update(confidenceMap => {
+      confidenceMap[ID] = result[index];
+      return confidenceMap;
+    });
+
+    if (result[index] > bestConfidence) {
+      bestConfidence = result[index];
+      bestGestureID = ID;
+    }
+  });
+
+  for (const gesture of get(gestures)) {
+    if (gesture.ID === bestGestureID) {
+      bestPrediction.set({ 
+        ...gesture, 
+        confidence: {
+          currentConfidence: bestConfidence, 
+          requiredConfidence: gesture.confidence.requiredConfidence, 
+          isConfident: gesture.confidence.isConfident
+        }
+      });
+    }
+  }
+}
+/*
+function tfHandlePrediction(result: Float32Array) {
+  let bestConfidence = 0;
+  let bestGestureID: number | undefined = undefined;
+
+  const gestureData = get(gestures);
+
+  gestureData.forEach(({ ID }, index) => {
     Gestures.getConfidence(ID).update(val => {
       val = result[index];
       return val;
@@ -317,3 +352,4 @@ function tfHandlePrediction(result: Float32Array) {
     }
   }
 }
+  */

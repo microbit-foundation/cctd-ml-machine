@@ -19,7 +19,6 @@
   import {
     settings,
     updateGestureSoundOutput,
-    type GestureData,
     type SoundData,
     updateGesturePinOutput,
   } from '../../script/stores/mlStore';
@@ -35,33 +34,31 @@
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   import Gestures from '../../script/Gestures';
+    import Gesture from '../../script/stores/Gesture';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component
-  export let gesture: GestureData;
+  export let gesture: Gesture;
   export let onUserInteraction: () => void = () => {
     return;
   };
   let wasTriggered = false;
   let triggerFunctions: (() => void)[] = [];
-  let selectedSound: SoundData | undefined = gesture.output.sound;
-  let selectedPin: MBSpecs.UsableIOPin = gesture.output.outputPin
-    ? gesture.output.outputPin.pin
+  let selectedSound: SoundData | undefined = $gesture.output.sound;
+  let selectedPin: MBSpecs.UsableIOPin = $gesture.output.outputPin
+    ? $gesture.output.outputPin.pin
     : StaticConfiguration.defaultOutputPin;
 
   let pinIOEnabled = StaticConfiguration.pinIOEnabledByDefault;
-  let turnOnTime = gesture.output.outputPin
-    ? gesture.output.outputPin.turnOnTime
+  let turnOnTime = $gesture.output.outputPin
+    ? $gesture.output.outputPin.turnOnTime
     : StaticConfiguration.defaultPinToggleTime;
-  let turnOnState = gesture.output.outputPin
-    ? gesture.output.outputPin.pinState
+  let turnOnState = $gesture.output.outputPin
+    ? $gesture.output.outputPin.pinState
     : StaticConfiguration.defaultPinTurnOnState;
 
-  const confidence = Gestures.getConfidence(gesture.ID);
-
   let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
-  $: currentConfidence = $state.isInputReady ? $confidence : 0;
 
   const getTriggerAction = (
     lastWasTriggered: boolean,
@@ -104,8 +101,8 @@
   $: {
     let triggerAction = getTriggerAction(
       wasTriggered,
-      currentConfidence,
-      requiredConfidence,
+      $gesture.confidence.currentConfidence,
+      $gesture.confidence.requiredConfidence,
     );
     handleTriggering(triggerAction);
   }
@@ -132,7 +129,7 @@
 
   function onSoundSelected(sound: SoundData | undefined): void {
     selectedSound = sound;
-    updateGestureSoundOutput(gesture.ID, sound);
+    updateGestureSoundOutput($gesture.ID, sound);
     onUserInteraction();
   }
 
@@ -158,7 +155,7 @@
     }
     selectedPin = selected;
     refreshAfterChange();
-    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
+    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
   };
 
   const triggerComponents = () =>
@@ -173,7 +170,7 @@
     turnOnState = state.turnOnState;
     turnOnTime = state.turnOnTime;
     refreshAfterChange();
-    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
+    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
     if (wasTriggered) {
       setOutputPin(true);
     }
@@ -186,9 +183,7 @@
 
   let sliderValue = requiredConfidence * 100;
   $: {
-    Gestures.getRequiredConfidence(gesture.ID).update(val => {
-      return sliderValue / 100;
-    });
+    gesture.getConfidence().setRequiredConfidence(sliderValue / 100);
   }
 
   let hasLoadedMicrobitImage = false;
@@ -202,7 +197,7 @@
         class="w-36 text-center font-semibold rounded-xl
                     px-1 py-1 border border-gray-300
                     border-dashed mr-2 break-words">
-        <h3>{gesture.name}</h3>
+        <h3>{$gesture.name}</h3>
       </div>
       <div class="h-31" />
       <input
@@ -221,8 +216,8 @@
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
           <div
             class="absolute w-5 {wasTriggered ? 'bg-primary' : 'bg-info'} z-index: -10"
-            style="height: {100 * currentConfidence}px; margin-top: {100 -
-              100 * currentConfidence}px;" />
+            style="height: {100 * $gesture.confidence.currentConfidence}px; margin-top: {100 -
+              100 * $gesture.confidence.currentConfidence}px;" />
           <div
             class="absolute w-5 bg-primary"
             style="height: 1px; margin-top: {6.5 - 0.068 * sliderValue}rem;" />
@@ -279,7 +274,7 @@
         class="bg-black p-0 m-0 absolute top-9 left-12.7"
         class:hidden={!hasLoadedMicrobitImage}
         on:click={onUserInteraction}>
-        <OutputMatrix bind:trigger={triggerFunctions[0]} {gesture} />
+        <OutputMatrix bind:trigger={triggerFunctions[0]} gesture={$gesture} />
       </div>
     </div>
     <OutputSoundSelector onSoundSelection={onSoundSelected} {selectedSound} />

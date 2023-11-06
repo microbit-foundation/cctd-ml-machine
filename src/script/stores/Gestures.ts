@@ -44,9 +44,8 @@ class Gestures implements Readable<GestureData[]> {
   private static subscribableGestures: Writable<Gesture[]>;
   private repository: GestureRepository;
 
-  constructor() {
-    this.repository = new GestureRepository();
-
+  constructor(repository: GestureRepository) {
+    this.repository = repository;
     Gestures.subscribableGestures = writable();
 
     this.repository.subscribe(storeArray => {
@@ -108,6 +107,11 @@ class Gestures implements Readable<GestureData[]> {
       name: gesture.getName(),
       recordings: gesture.getRecordings(),
       output: gesture.getOutput(),
+      confidence: {
+        currentConfidence: gesture.getConfidence().getCurrentConfidence(),
+        requiredConfidence: gesture.getConfidence().getRequiredConfidence(),
+        isConfident: gesture.getConfidence().isConfident(),
+      }
     };
   }
 }

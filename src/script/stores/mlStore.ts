@@ -69,7 +69,11 @@ export type GestureData = {
   ID: number;
   recordings: RecordingData[];
   output: GestureOutput;
-  confidence?: number;
+  confidence: {
+    currentConfidence: number,
+    requiredConfidence: number,
+    isConfident: boolean
+  }
 };
 
 export type GestureOutput = {

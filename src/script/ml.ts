@@ -328,33 +328,3 @@ function tfHandlePrediction(result: Float32Array) {
     }
   }
 }
-/*
-function tfHandlePrediction(result: Float32Array) {
-  let bestConfidence = 0;
-  let bestGestureID: number | undefined = undefined;
-
-  const gestureData = get(gestures);
-
-  gestureData.forEach(({ ID }, index) => {
-    Gestures.getConfidence(ID).update(val => {
-      val = result[index];
-      return val;
-    });
-    gestureConfidences.update(confidenceMap => {
-      confidenceMap[ID] = result[index];
-      return confidenceMap;
-    });
-
-    if (result[index] > bestConfidence) {
-      bestConfidence = result[index];
-      bestGestureID = ID;
-    }
-  });
-
-  for (const gesture of get(gestures)) {
-    if (gesture.ID === bestGestureID) {
-      bestPrediction.set({ ...gesture, confidence: bestConfidence });
-    }
-  }
-}
-  */

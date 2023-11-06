@@ -5,7 +5,6 @@
  -->
 <script lang="ts">
   import CookieManager from '../../script/CookieManager';
-  import Gestures from '../../script/Gestures';
   import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import Gesture from '../../script/stores/Gesture';

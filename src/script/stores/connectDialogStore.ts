@@ -24,7 +24,6 @@ export enum ConnectDialogStates {
   BLUETOOTH, // Bluetooth connect prompt, with pattern drawing
   BLUETOOTH_CONNECTING, // Downloading BlueTooth prompt
   USB_START, // Initial usb installation prompt
-
   USB_DONE, // Installation done prompt
   MANUAL_TUTORIAL, // Prompt with tutorial gif for manual installation (and downloading of program)
 }

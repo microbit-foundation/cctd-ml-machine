@@ -5,7 +5,10 @@
  */
 
 const TRANSLATION_NEEDED = "TRANSLATION NEEDED"
-export default {
+
+type TranslationMap = { [localeCode: string]: { [translationId: string]: string } }
+
+export const translations: TranslationMap = {
 	"da": { // APPROXIMATE SORTING ORDER: First alphabetically, then order of appearance from top to bottom of page
 		// ALERTS:
 		//In gesture.svelte 
@@ -167,7 +170,6 @@ export default {
 		"connectMB.main.header": TRANSLATION_NEEDED,
 		"connectMB.main.clarification1": TRANSLATION_NEEDED,
 		"connectMB.main.clarification2": TRANSLATION_NEEDED,
-		"connect.main.header": TRANSLATION_NEEDED,
 		"connectMB.main.usbHeader": "DOWNLOAD PROGRAM TIL BBC MICRO:BIT",
 		"connectMB.main.btHeader": "TILSLUT DIN BBC MICRO:BIT VIA BLUETOOTH",
 		"connectMB.main.usbBody": "Hvis du ikke tidligere har downloadet programmet",

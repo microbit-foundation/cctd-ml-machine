@@ -5,7 +5,7 @@
  */
 
 import { derived } from 'svelte/store';
-import translations from './translations';
+import { translations } from './translations';
 import { persistantWritable } from './script/stores/storeUtil';
 import browserLang from 'browser-lang';
 

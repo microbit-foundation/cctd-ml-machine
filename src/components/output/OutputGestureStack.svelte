@@ -187,6 +187,8 @@
   }
 
   let hasLoadedMicrobitImage = false;
+
+  $: meterHeightPct = 100 * $gesture.confidence.currentConfidence;
 </script>
 
 <main class="mb-4 items-center flex flex-row">
@@ -216,9 +218,7 @@
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
           <div
             class="absolute w-5 {wasTriggered ? 'bg-primary' : 'bg-info'} z-index: -10"
-            style="height: {100 *
-              $gesture.confidence.currentConfidence}px; margin-top: {100 -
-              100 * $gesture.confidence.currentConfidence}px;" />
+            style="height: {meterHeightPct}px; margin-top: {100 - meterHeightPct}px;" />
           <div
             class="absolute w-5 bg-primary"
             style="height: 1px; margin-top: {6.5 - 0.068 * sliderValue}rem;" />

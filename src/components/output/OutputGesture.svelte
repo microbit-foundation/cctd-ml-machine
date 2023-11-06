@@ -9,22 +9,11 @@
   import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import Gesture from '../../script/stores/Gesture';
-  import { GestureData } from '../../script/stores/mlStore';
-  import { state } from '../../script/stores/uiStore';
   import OutputGestureStack from './OutputGestureStack.svelte';
   import OutputGestureTile from './OutputGestureTile.svelte';
 
   export let gesture: Gesture;
   let wasTriggered = false;
-
-  const confidence = $gesture.confidence.currentConfidence;
-  const requiredConfidence = $gesture.confidence.requiredConfidence;
-
-  $: currentConfidence = $state.isInputReady ? confidence : 0;
-
-  $: {
-    console.log(requiredConfidence);
-  }
 
   $: {
     let isConfident = $gesture.confidence.isConfident;

@@ -10,15 +10,15 @@
   import Microbits from '../../../script/microbit-interfacing/Microbits';
 
   export let onBackClick: () => void;
-  export let onFoundUsb: () => void;
-  export let onUsbLinkError: () => void;
+  export let onFound: () => void;
+  export let onLinkError: () => void;
 
   function onNextClick() {
   Microbits.linkMicrobit()
-    .then(() => onFoundUsb())
+    .then(() => onFound())
     .catch((e: Error) => {
       console.log(e);
-      onUsbLinkError();
+      onLinkError();
     });
   }
 </script>

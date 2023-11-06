@@ -111,7 +111,7 @@ class Gestures implements Readable<GestureData[]> {
         currentConfidence: gesture.getConfidence().getCurrentConfidence(),
         requiredConfidence: gesture.getConfidence().getRequiredConfidence(),
         isConfident: gesture.getConfidence().isConfident(),
-      }
+      },
     };
   }
 }

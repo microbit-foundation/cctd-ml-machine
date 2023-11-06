@@ -21,7 +21,7 @@
   $: isActive = $settings.includedFilters.has(filter);
 
   const toggleFilter = () => {
-    trainingStatus.set(TrainingStatus.Untrained)
+    trainingStatus.set(TrainingStatus.Untrained);
     settings.update(s => {
       if (s.includedFilters.has(filter)) {
         s.includedFilters.delete(filter);

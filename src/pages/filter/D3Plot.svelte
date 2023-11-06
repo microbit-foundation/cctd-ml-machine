@@ -215,11 +215,11 @@
     const x = d3.scalePoint().range([15, width]).padding(0.1).domain(dimensions);
 
     if (plotDrawn) {
-      const livePath = plot.select('.s'+uniqueLiveDataID);
+      const livePath = plot.select('.s' + uniqueLiveDataID);
 
       if (!showLive) {
         if (!livePath.empty()) {
-         livePath.remove();
+          livePath.remove();
         }
         return;
       }

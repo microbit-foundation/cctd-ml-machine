@@ -34,7 +34,7 @@
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   import Gestures from '../../script/Gestures';
-    import Gesture from '../../script/stores/Gesture';
+  import Gesture from '../../script/stores/Gesture';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -216,7 +216,8 @@
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
           <div
             class="absolute w-5 {wasTriggered ? 'bg-primary' : 'bg-info'} z-index: -10"
-            style="height: {100 * $gesture.confidence.currentConfidence}px; margin-top: {100 -
+            style="height: {100 *
+              $gesture.confidence.currentConfidence}px; margin-top: {100 -
               100 * $gesture.confidence.currentConfidence}px;" />
           <div
             class="absolute w-5 bg-primary"

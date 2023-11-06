@@ -20,7 +20,7 @@
   import GestureTilePart from '../GestureTilePart.svelte';
   import Information from '../information/Information.svelte';
   import { Writable } from 'svelte/store';
-    import Gesture from '../../script/stores/Gesture';
+  import Gesture from '../../script/stores/Gesture';
 
   // Variables for component
   export let gesture: Gesture;
@@ -30,7 +30,8 @@
     gesture.getConfidence().setRequiredConfidence(sliderValue / 100);
   }
 
-  $: active = $gesture.confidence.currentConfidence > $gesture.confidence.requiredConfidence;
+  $: active =
+    $gesture.confidence.currentConfidence > $gesture.confidence.requiredConfidence;
 </script>
 
 <GestureTilePart>
@@ -60,7 +61,8 @@
             class="absolute w-5
             {active ? 'bg-primary' : 'bg-info'}
               z-index: -10"
-            style="height: {100 * $gesture.confidence.currentConfidence}px; margin-top: {100 -
+            style="height: {100 *
+              $gesture.confidence.currentConfidence}px; margin-top: {100 -
               100 * $gesture.confidence.currentConfidence}px;" />
           <div
             class="absolute w-5 bg-primary"

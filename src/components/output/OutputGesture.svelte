@@ -8,7 +8,7 @@
   import Gestures from '../../script/Gestures';
   import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
   import Microbits from '../../script/microbit-interfacing/Microbits';
-    import Gesture from '../../script/stores/Gesture';
+  import Gesture from '../../script/stores/Gesture';
   import { GestureData } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
   import OutputGestureStack from './OutputGestureStack.svelte';
@@ -62,5 +62,5 @@
 {/if}
 
 {#if variant === 'tile'}
-  <OutputGestureTile gesture={gesture} />
+  <OutputGestureTile {gesture} />
 {/if}

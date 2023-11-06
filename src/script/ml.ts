@@ -260,7 +260,10 @@ export function classify() {
   const currentState = get(state);
   const currentTrainingStatus = get(trainingStatus);
   const hasBeenInterrupted =
-    !currentState.isPredicting || currentState.isRecording || currentState.isTraining || currentTrainingStatus !== TrainingStatus.Success;
+    !currentState.isPredicting ||
+    currentState.isRecording ||
+    currentState.isTraining ||
+    currentTrainingStatus !== TrainingStatus.Success;
 
   if (hasBeenInterrupted) {
     if (predictionInterval !== undefined) {
@@ -297,7 +300,9 @@ function tfHandlePrediction(result: Float32Array) {
   const gestureData = get(gestures);
 
   gestureData.forEach(({ ID }, index) => {
-    Repositories.getInstance().getModelRepository().setGestureConfidence(ID, result[index])
+    Repositories.getInstance()
+      .getModelRepository()
+      .setGestureConfidence(ID, result[index]);
 
     gestureConfidences.update(confidenceMap => {
       confidenceMap[ID] = result[index];
@@ -312,13 +317,13 @@ function tfHandlePrediction(result: Float32Array) {
 
   for (const gesture of get(gestures)) {
     if (gesture.ID === bestGestureID) {
-      bestPrediction.set({ 
-        ...gesture, 
+      bestPrediction.set({
+        ...gesture,
         confidence: {
-          currentConfidence: bestConfidence, 
-          requiredConfidence: gesture.confidence.requiredConfidence, 
-          isConfident: gesture.confidence.isConfident
-        }
+          currentConfidence: bestConfidence,
+          requiredConfidence: gesture.confidence.requiredConfidence,
+          isConfident: gesture.confidence.isConfident,
+        },
       });
     }
   }

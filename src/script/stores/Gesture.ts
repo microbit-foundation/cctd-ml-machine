@@ -15,7 +15,10 @@ class Gesture implements Readable<GestureData> {
   private store: Readable<GestureData>;
   private gestureConfidence: GestureConfidence;
 
-  constructor(private persistedData: Writable<PersistantGestureData>, confidence: GestureConfidence) {
+  constructor(
+    private persistedData: Writable<PersistantGestureData>,
+    confidence: GestureConfidence,
+  ) {
     this.gestureConfidence = confidence;
     this.store = this.deriveStore();
   }
@@ -116,9 +119,9 @@ class Gesture implements Readable<GestureData> {
         confidence: {
           currentConfidence: confidenceData.confidence,
           requiredConfidence: confidenceData.requiredConfidence,
-          isConfident: confidenceData.isConfident
-        }
-      }
+          isConfident: confidenceData.isConfident,
+        },
+      };
 
       return derivedData;
     });

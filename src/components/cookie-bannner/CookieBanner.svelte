@@ -1,13 +1,13 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import { fly } from 'svelte/transition';
   import CookieManager from '../../script/CookieManager';
-  import { t, locale, locales } from '../../i18n';
+  import { t } from '../../i18n';
   import StandardDialog from '../dialogs/StandardDialog.svelte';
   import { onMount } from 'svelte';
   import StandardButton from '../StandardButton.svelte';

@@ -14,14 +14,15 @@
   </script>
   
   <main>
-    <div class="w-150 leading-10 pb-5">
-      <p class="font-bold text-2xl text-left">
-        CONNECT CABLE TEMP
+    <div class="w-200 leading-10">
+      <p class="font-bold text-2xl text-left pb-5">
+        {$t("popup.connectMB.connectCable.heading")}
       </p>
-      <img src="imgs/connect-cable.gif" alt="GIF of connecting micro:bit" class="p-20"/>
+      <p class="leading-normal">{$t('popup.connectMB.connectCable.subtitle')}</p>
+      <img src="imgs/connect-cable.gif" alt="GIF of connecting micro:bit" class="px-55 py-5"/>
     </div>
-    <div class="justify-end flex">
-    <StandardButton onClick={onBackClick}>BACK TEMP</StandardButton>
-    <StandardButton onClick={onNextClick}>NEXT TEMP</StandardButton>
+    <div class="justify-end flex gap-x-5">
+    <StandardButton outlined={true} onClick={onBackClick}>{$t('popup.connectMB.backButton')}</StandardButton>
+    <StandardButton onClick={onNextClick}>{$t('popup.connectMB.nextButton')}</StandardButton>
     </div>
   </main>

@@ -30,8 +30,8 @@
       </p>
       <img src="public/imgs/select-microbit.png" alt="Instructions on how to choose microbit from web popup" class="p-20"/>
     </div>
-    <div class="justify-end flex flex-space-10">
-    <StandardButton onClick={onBackClick}>BACK TEMP</StandardButton>
+    <div class="justify-end flex flex-space-10 gap-x-5">
+    <StandardButton position="right" onClick={onBackClick}>BACK TEMP</StandardButton>
     <StandardButton onClick={onNextClick}>NEXT TEMP</StandardButton>
     </div>
   </main>

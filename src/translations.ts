@@ -408,7 +408,23 @@ export const translations: TranslationMap = {
 		"menu.model.noModel": "No model",
 		"menu.model.connectOutputButton": "Connect output micro:bit",
 		"menu.model.disconnect": "Disconnect output micro:bit",
-		//CONNECT MICROBIT POP UP:
+
+		// CONNECT MICROBIT:
+
+		"popup.connectMB.nextButton": "Next",
+		"popup.connectMB.backButton": "Back",
+		// RADIO CONNECTION START
+		"popup.connectMB.radioStart": "I only have one micro:bit",
+		// BLUETOOTH CONNECTION START
+		"popup.connectMB.bluetoothStart": "I have two micro:bits",
+		// CONNECT CABLE TO MICROBIT
+		"popup.connectMB.connectCable.heading": "Connect cable",
+		"popup.connectMB.connectCable.subtitle": "Connect a micro:bit to this computer with a USB cable so that the <brand name> program can be downloaded to it.",
+		// SELECT MICROBIT FROM WEB POPUP
+		// DOWNLOADING PROGRAM TO MICROBIT
+		// CONNECT BATTERY
+		// BLUETOOTH CONNECTION
+		// CONNECTING BLUETOOTH
 
 		"popup.connectMB.main.bluetooth.subtitle": "Connect using Bluetooth",
 

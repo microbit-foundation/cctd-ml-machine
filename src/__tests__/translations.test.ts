@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import translations from '../translations';
+import { translations } from '../translations';
 
 describe('Translation tests', () => {
   test('Should be same number of translations', () => {
@@ -23,7 +23,7 @@ describe('Translation tests', () => {
       const danishKey = danishTranslationKeys[i];
       expect(
         translations.en[danishKey],
-        'Something not the same -> ' + danishKey,
+        `Something not the same -> ${danishKey}`,
       ).toBeDefined();
     }
   });
@@ -35,7 +35,7 @@ describe('Translation tests', () => {
     for (let i = 0; i < englishTranslationKeys.length; i++) {
       const danishKey = danishTranslationKeys[i];
       const englishKey = englishTranslationKeys[i];
-      expect(danishKey, 'Not the same order found for -> ' + danishKey).toEqual(
+      expect(danishKey, `Not the same order found for -> ${danishKey}`).toEqual(
         englishKey,
       );
     }

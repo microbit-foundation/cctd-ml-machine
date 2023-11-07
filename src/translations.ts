@@ -4,10 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 
-export default {
+const NEEDS_TRANSLATION = "PLACEHOLDER TEXT";
+
+type TranslationMap = { [localeCode: string]: { [translationId: string]: string } }
+
+export const translations: TranslationMap = {
 	"da": { // APPROXIMATE SORTING ORDER: First alphabetically, then order of appearance from top to bottom of page
 		// ALERTS:
-		//In gesture.svelte 
+		//In gesture.svelte
 		"alert.data.classNameLengthAlert": "Navne må kun bestå af {{maxLen}} tegn",
 		"alert.recording.disconnectedDuringRecording":"micro:bit frakoblede under optagelse",
 
@@ -21,12 +25,15 @@ export default {
 		"alert.twoGestures": "Du skal have mindst to klasser",
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
+		// Introduction Video Modal
+		"content.introductionVideo.heading": "Introvideo",
+		"content.introductionVideo.description": NEEDS_TRANSLATION,
+		"content.introductionVideo.button": NEEDS_TRANSLATION,
 		// HOME PAGE:
 		"content.index.heading": "Gør-det-selv machine learning",
 		"content.index.howBody": "Velkommen til 'ultra:bit datatræneren'. Eksperimentér og leg med machine learning og byg dine første machine learning-modeller – kom i gang her!",
 		"content.index.ledDescription": "25 LED lys",
 		"content.index.recordButtonDescription": "\"Optag\"-knap",
-		"content.index.videoHeading": "Introvideo",
 		"content.index.setupBody2": "Hjemmesiden benytter bluetooth, accelerometer, LED'er, knapper og lyd fra BBC micro:bit'en. For at hjemmesiden kan tilgå disse, skal der overføres et program til BBC micro:bit'en. Det downloades første gang, du tilslutter BBC micro:bit'en med USB. Efterfølgende kan du blot tilslutte med bluetooth uden at bruge USB-kablet.",
 		"content.index.oldVersion": "Du kan finde den gamle version her:",
 		"content.index.contactButton": "Kontakt os",
@@ -89,7 +96,7 @@ export default {
 		"content.model.output.soundOptionLoser": "Taber",
 		"content.model.output.soundOptionMistake": "Fejl",
 		"content.model.output.soundOptionHugeMistake": "Kæmpe fejl",
-		
+
 		"content.model.output.pin.option.allTime": "Altid tændt",
 		"content.model.output.pin.option.xTime": "Tænd på tid",
 		"content.model.output.pin.seconds": "Sekunder",
@@ -275,12 +282,15 @@ export default {
 		"alert.twoGestures": "You need at least two classes",
 		"alert.oneDataRepresentation": "You need at least one data representation",
 		"alert.recordingsPerGesture": "You need at least three examples per class",
+		// Introduction Video modal
+		"content.introductionVideo.heading": "Intro Video",
+		"content.introductionVideo.description": "Watch our short guide to the key features.",
+		"content.introductionVideo.button": "Get started",
 		// HOME PAGE:
 		"content.index.heading": "Do It Yourself Machine Learning",
 		"content.index.howBody": "Welcome to the ultra:bit data trainer. Experiment and play with machine larning and build your first machine learning models - start here!",
 		"content.index.ledDescription": "25 LED lights",
 		"content.index.recordButtonDescription": "\"Record\"-button",
-		"content.index.videoHeading": "Intro Video",
 		"content.index.setupBody2": "The website utilizes the bluetooth, accelerometer, LEDs, buttons, and sounds from the Micro:bit. Subsequetnly, you can connect the micro:bit to your computer via bluetooth without using the USB cable.",
 		"content.index.oldVersion": "You can finde the old version here:",
 		"content.index.contactButton": "Contact us",
@@ -358,7 +368,7 @@ export default {
 		"content.model.output.sound.iconTitle": "Sound",
 		"content.model.output.sound.descriptionTitle": "Playback of sound",
 		"content.model.output.sound.descriptionBody": "Here you can choose which sound you output micro:bit plays when the model makes a prediction. Be aware that the sound plays from your computer if you have a micro:bit version 1.",
-		
+
 		"content.model.output.pin.iconTitle": "Pin",
 		"content.model.output.pin.descriptionTitle": "Pin outputs",
 		"content.model.output.pin.descriptionBody": "Here you can select which pin will turn on when a gesture is predicted. Each pins are numbered according to micro:bit's official pin output diagram.",
@@ -513,4 +523,3 @@ export default {
 		"popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode",
 	}
 };
-  

@@ -49,7 +49,6 @@
 
   <!-- Menu -->
   <div class="p-5 pl-5 pr-5">
-
     <div class="relative">
       {#each get(Menus.getMenuStore()) as menu, id}
         <MenuButton

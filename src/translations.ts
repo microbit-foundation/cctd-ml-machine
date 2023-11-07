@@ -425,6 +425,8 @@ export const translations: TranslationMap = {
 		"popup.connectMB.webPopup.instruction1": "Choose your micro:bit",
 		"popup.connectMB.webPopup.instruction2": "Select 'Connect'",
 		// DOWNLOADING PROGRAM TO MICROBIT
+		"popup.connectMB.usbDownloading.header": "Downloading program to micro:bit",
+		"popup.connectMB.usbDownloading.subtitle": "Please wait. Downloading program to micro:bit.",
 		// CONNECT BATTERY
 		// BLUETOOTH CONNECTION
 		// CONNECTING BLUETOOTH
@@ -460,8 +462,6 @@ export const translations: TranslationMap = {
 		"connectMB.main.installButton": "Download",
 
 		"connectMB.output.header": "A micro:bit is already connected",
-
-		"connectMB.usb.header": "DOWNLOAD PROGRAM TO MICRO:BIT",
 		"connectMB.usb.body1": "Connect your micro:bit using a USB-cable and click 'Next'",
 		"connectMB.usb.body2": "Click 'Find USB unit' and select 'BBC micro:bit CMSIS-DAP' or 'DAPLink CMSIS-DAP' from the popup that appears",
 		"connectMB.usb.button1": "Next",

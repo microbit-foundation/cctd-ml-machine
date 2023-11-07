@@ -1,13 +1,13 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
 <style>
-  input[type='range'][orient='vertical'] {
-    writing-mode: bt-lr; /* IE */
-    -webkit-appearance: slider-vertical; /* WebKit */
+  input[type='range'] {
+    writing-mode: bt-lr;
+    appearance: slider-vertical;
     width: 20px;
     background: #13bba4;
   }
@@ -208,7 +208,6 @@
       <input
         class="h-25 rotate-90 accent-primary"
         type="range"
-        orient="vertical"
         name=""
         min="10"
         max="90"

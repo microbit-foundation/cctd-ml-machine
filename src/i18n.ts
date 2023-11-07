@@ -18,7 +18,7 @@ const initialLocale = browserLang({
 
 export const locale = persistantWritable('lang', initialLocale);
 
-function translate(locale: string, key: string, vars: {[key: string]: string}): string {
+function translate(locale: string, key: string, vars: { [key: string]: string }): string {
   // Let's throw some errors if we're trying to use keys/locales that don't exist.
   // We could improve this by using Typescript and/or fallback values.
   // if (!key) throw new Error("no key provided to $t()");

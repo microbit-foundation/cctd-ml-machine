@@ -11,7 +11,7 @@
   import StandardDialog from '../dialogs/StandardDialog.svelte';
   import { onMount } from 'svelte';
   import StandardButton from '../StandardButton.svelte';
-    import CookieDescriptionOverlay from './CookieDescriptionOverlay.svelte';
+  import CookieDescriptionOverlay from './CookieDescriptionOverlay.svelte';
 
   let isCookieDialogOpen = true;
   let isDescriptionDialogOpen = false;
@@ -42,7 +42,10 @@
   });
 </script>
 
-<StandardDialog hasCloseButton={false} isOpen={isCookieDialogOpen} onClose={() => (isCookieDialogOpen = false)}>
+<StandardDialog
+  hasCloseButton={false}
+  isOpen={isCookieDialogOpen}
+  onClose={() => (isCookieDialogOpen = false)}>
   <StandardDialog
     isOpen={isDescriptionDialogOpen}
     onClose={() => (isDescriptionDialogOpen = false)}>

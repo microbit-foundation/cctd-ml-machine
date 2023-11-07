@@ -22,6 +22,7 @@ import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
 import Gestures from './Gestures';
 import { gestures } from './stores/Stores';
+import Repositories from './Repositories';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -259,7 +260,10 @@ export function classify() {
   const currentState = get(state);
   const currentTrainingStatus = get(trainingStatus);
   const hasBeenInterrupted =
-    !currentState.isPredicting || currentState.isRecording || currentState.isTraining || currentTrainingStatus !== TrainingStatus.Success;
+    !currentState.isPredicting ||
+    currentState.isRecording ||
+    currentState.isTraining ||
+    currentTrainingStatus !== TrainingStatus.Success;
 
   if (hasBeenInterrupted) {
     if (predictionInterval !== undefined) {
@@ -296,10 +300,10 @@ function tfHandlePrediction(result: Float32Array) {
   const gestureData = get(gestures);
 
   gestureData.forEach(({ ID }, index) => {
-    Gestures.getConfidence(ID).update(val => {
-      val = result[index];
-      return val;
-    });
+    Repositories.getInstance()
+      .getModelRepository()
+      .setGestureConfidence(ID, result[index]);
+
     gestureConfidences.update(confidenceMap => {
       confidenceMap[ID] = result[index];
       return confidenceMap;
@@ -313,7 +317,14 @@ function tfHandlePrediction(result: Float32Array) {
 
   for (const gesture of get(gestures)) {
     if (gesture.ID === bestGestureID) {
-      bestPrediction.set({ ...gesture, confidence: bestConfidence });
+      bestPrediction.set({
+        ...gesture,
+        confidence: {
+          currentConfidence: bestConfidence,
+          requiredConfidence: gesture.confidence.requiredConfidence,
+          isConfident: gesture.confidence.isConfident,
+        },
+      });
     }
   }
 }

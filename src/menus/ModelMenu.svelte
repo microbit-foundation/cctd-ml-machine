@@ -5,12 +5,13 @@
  -->
 
 <script lang="ts">
-  import { slide } from 'svelte/transition';
   import { state } from '../script/stores/uiStore';
   import { bestPrediction } from '../script/stores/mlStore';
   import { t } from '../i18n';
 
-  $: confidence = $state.isInputReady ? $bestPrediction?.confidence ?? 0 : 0;
+  $: confidence = $state.isInputReady
+    ? $bestPrediction?.confidence.currentConfidence ?? 0
+    : 0;
   confidence = isNaN(confidence) ? 0 : confidence;
 
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';

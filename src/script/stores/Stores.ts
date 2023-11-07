@@ -3,6 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import Repositories from '../Repositories';
 import Gestures from './Gestures';
 
-export const gestures: Gestures = new Gestures();
+const repositories = new Repositories();
+
+export const gestures: Gestures = new Gestures(repositories.getGestureRepository());

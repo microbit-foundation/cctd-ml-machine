@@ -9,11 +9,17 @@ import { PersistantGestureData } from './Gestures';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import BindableValue from './BindableValue';
+import GestureConfidence from './GestureConfidence';
 
 class Gesture implements Readable<GestureData> {
   private store: Readable<GestureData>;
+  private gestureConfidence: GestureConfidence;
 
-  constructor(private persistedData: Writable<PersistantGestureData>) {
+  constructor(
+    private persistedData: Writable<PersistantGestureData>,
+    confidence: GestureConfidence,
+  ) {
+    this.gestureConfidence = confidence;
     this.store = this.deriveStore();
   }
 
@@ -97,13 +103,27 @@ class Gesture implements Readable<GestureData> {
     return bindable;
   }
 
-  private deriveStore() {
-    return derived([this.persistedData], stores => {
-      const result = Object.assign({}, stores[0]);
-      Object.assign(result, {
-        confidence: 0,
-      });
-      return result;
+  public getConfidence(): GestureConfidence {
+    return this.gestureConfidence;
+  }
+
+  private deriveStore(): Readable<GestureData> {
+    return derived([this.persistedData, this.gestureConfidence], stores => {
+      const peristantData = stores[0];
+      const confidenceData = stores[1];
+      const derivedData: GestureData = {
+        ID: peristantData.ID,
+        name: peristantData.name,
+        recordings: peristantData.recordings,
+        output: peristantData.output,
+        confidence: {
+          currentConfidence: confidenceData.confidence,
+          requiredConfidence: confidenceData.requiredConfidence,
+          isConfident: confidenceData.isConfident,
+        },
+      };
+
+      return derivedData;
     });
   }
 }

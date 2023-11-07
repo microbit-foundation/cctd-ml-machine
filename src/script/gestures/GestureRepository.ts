@@ -15,12 +15,13 @@ import {
   get,
   writable,
 } from 'svelte/store';
+import ModelRepository from '../stores/ModelRepository';
 
 class GestureRepository implements Readable<Gesture[]> {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private static gestureStore: Writable<Gesture[]>;
 
-  constructor() {
+  constructor(private modelRepository: ModelRepository) {
     GestureRepository.gestureStore = writable([]);
     GestureRepository.gestureStore.set(this.getPersistedGestures());
   }
@@ -105,7 +106,8 @@ class GestureRepository implements Readable<Gesture[]> {
 
   private buildGesture(persistedData: PersistantGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
-    return new Gesture(store);
+
+    return new Gesture(store, this.modelRepository.getGestureConfidence(get(store).ID));
   }
 
   private getPersistedData(): PersistantGestureData[] {

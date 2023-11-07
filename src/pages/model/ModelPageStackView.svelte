@@ -129,7 +129,7 @@
 
       <div class="pl-1">
         <!-- Display all gestures and their output capabilities -->
-        {#each $gestures as gesture}
+        {#each gestures.getGestures() as gesture}
           <OutputGesture variant="stack" {gesture} {onUserInteraction} />
         {/each}
       </div>

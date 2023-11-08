@@ -102,7 +102,7 @@
 </script>
 
 <main>
-  <h1 class="mb-5 font-bold">
+  <h1 class="mb-5 font-bold w-150">
     {$t('popup.connectMB.bluetooth.heading')}
   </h1>
   {#if $state.requestDeviceWasCancelled && !isConnecting}

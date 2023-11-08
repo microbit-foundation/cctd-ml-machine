@@ -184,6 +184,7 @@
 
   let plotDrawn = false;
 
+  // --------- DRAW PLOT ---------------
   function drawParallelPlot(
     data: RecordingRepresentation[],
     classes: string[],
@@ -223,7 +224,7 @@
         return;
       }
 
-      if (livePath.empty()) {
+      if (livePath.empty() && data.at(-1).gestureClassID === uniqueLiveDataID) {
         // Insert live data path
         console.log('Inserting live path');
         plot
@@ -240,7 +241,7 @@
             return getColorForClass(gesture.gestureClassID.toString());
           })
           .style('opacity', function (gesture: RecordingRepresentation) {
-            return opacity(gesture.gestureClassID.toString());
+            return 0.8;
           })
           .style('stroke-width', function (gesture: RecordingRepresentation) {
             return strokeWidth(gesture.gestureClassID.toString());
@@ -254,8 +255,6 @@
         livePath.transition().duration(50).attr('d', newLivePathLine);
       }
       return;
-    } else {
-      plotDrawn = true;
     }
     // Extract the list of dimensions we want to keep in the plot.
     // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
@@ -267,9 +266,9 @@
       );
     }
 
-    // Draw the lines
+    // Draw the linesa
     plot
-      .selectAll() // black magic
+      .selectAll()
       .data(data)
       .enter()
       .append('path')
@@ -282,7 +281,7 @@
         return getColorForClass(gesture.gestureClassID.toString());
       })
       .style('opacity', function (gesture: RecordingRepresentation) {
-        return opacity(gesture.gestureClassID.toString());
+        return 0.8;
       })
       .style('stroke-width', function (gesture: RecordingRepresentation) {
         return strokeWidth(gesture.gestureClassID.toString());
@@ -319,6 +318,7 @@
       .text(function (axis: Axis) {
         return axis;
       });
+    plotDrawn = true;
   }
 </script>
 

@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -39,15 +39,14 @@
 
 <div
   bind:clientWidth={componentWidth}
-  class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
+  class="h-full w-full bg-white"
   class:bg-gray-300={$state.isInputAssigned && !$state.isInputReady}>
   <ConnectDialogContainer bind:this={connectDialogReference} />
 
   {#if !$state.isInputAssigned}
     <!-- No input microbit assigned -->
     <div class="h-full w-full flex justify-center bg-white">
-      <StandardButton onClick={connectButtonClicked}
-        >{$t('footer.connectButtonNotConnected')}</StandardButton>
+      <StandardButton onClick={connectButtonClicked}>{$t('footer.connectButtonNotConnected')}</StandardButton>
     </div>
   {:else}
     <!-- Input microbit is assigned -->

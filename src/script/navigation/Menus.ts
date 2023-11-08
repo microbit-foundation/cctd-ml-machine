@@ -7,7 +7,7 @@
 import { SvelteComponent } from 'svelte';
 import { writable } from 'svelte/store';
 import GestureMenu from '../../menus/DataMenu.svelte';
-import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
+// import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
 import { Paths, PathType } from '../../router/paths';
 
@@ -21,9 +21,6 @@ export type MenuProperties = {
   additionalExpandPaths?: PathType[];
 };
 
-/**
- * Wrapper for the menu logic, use navigation if possible, this is for fine-grained control of menus.
- */
 class Menus {
   private static menuStore = writable<MenuProperties[]>([
     {
@@ -34,15 +31,15 @@ class Menus {
       expandedButtonContent: GestureMenu,
       navigationPath: Paths.DATA,
     },
-    {
-      title: 'menu.trainer.helpHeading',
-      infoBubbleTitle: 'menu.trainer.helpHeading',
-      infoBubbleContent: 'menu.trainer.helpBody',
-      collapsedButtonContent: undefined,
-      expandedButtonContent: NewTrainerMenu,
-      navigationPath: Paths.TRAINING,
-      additionalExpandPaths: [Paths.FILTERS],
-    },
+    // {
+    //   title: 'menu.trainer.helpHeading',
+    //   infoBubbleTitle: 'menu.trainer.helpHeading',
+    //   infoBubbleContent: 'menu.trainer.helpBody',
+    //   collapsedButtonContent: undefined,
+    //   expandedButtonContent: NewTrainerMenu,
+    //   navigationPath: Paths.TRAINING,
+    //   additionalExpandPaths: [Paths.FILTERS],
+    // },
     {
       title: 'menu.model.helpHeading',
       infoBubbleTitle: 'menu.model.helpHeading',

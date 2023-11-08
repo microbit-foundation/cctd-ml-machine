@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -10,7 +10,6 @@
   import Homepage from '../pages/Homepage.svelte';
   import ModelPage from '../pages/model/ModelPage.svelte';
   import FilterPage from '../pages/filter/FilterPage.svelte';
-  import TrainingPage from '../pages/training/TrainingPage.svelte';
   import { currentPageComponent } from '../views/currentComponentStore';
   import { currentPath, navigate, Paths, PathType } from './paths';
 
@@ -20,8 +19,6 @@
         return Homepage;
       case Paths.DATA:
         return DataPage;
-      case Paths.TRAINING:
-        return TrainingPage;
       case Paths.MODEL:
         return ModelPage;
       case Paths.FILTERS:

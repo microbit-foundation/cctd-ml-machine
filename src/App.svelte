@@ -9,7 +9,7 @@
   import InputBehaviour from './script/connection-behaviours/InputBehaviour';
   import OutputBehaviour from './script/connection-behaviours/OutputBehaviour';
   import OverlayView from './views/OverlayView.svelte';
-  import SideBarMenuView from './views/SideBarMenuView.svelte';
+  import TabView from './views/TabView.svelte';
   import PageContentView from './views/PageContentView.svelte';
   import BottomBarMenuView from './views/BottomBarMenuView.svelte';
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
@@ -24,6 +24,8 @@
   import Environment from './script/Environment';
   import Router from './router/Router.svelte';
   import VideoDialog from './components/VideoDialog.svelte';
+  import ControlBar from './components/control-bar/ControlBar.svelte';
+  import SelectLanguageControlBarDropdown from './components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -35,6 +37,8 @@
   }
 
   document.title = Environment.pageTitle;
+
+  const introVideoUrl = 'https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4';
 </script>
 
 <Router>
@@ -47,30 +51,28 @@
         <LoadingSpinner />
       </main>
     {/if}
-    <!-- Here we use the hidden class, to allow for it to load in. -->
-    <!-- <main class="h-screen w-screen m-0 relative flex" class:hidden={$state.isLoading}> -->
+
     <main class="h-screen w-screen m-0 relative flex">
       <!-- OVERLAY ITEMS -->
       <CookieBanner />
       <OverlayView />
       <BluetoothIncompatibilityWarningDialog />
-      <VideoDialog
-        videoURL="https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4" />
+      <VideoDialog videoURL={introVideoUrl} />
 
-      <!-- SIDE BAR -->
-      <div class="h-full flex min-w-75 max-w-75">
-        <SideBarMenuView />
-      </div>
+      <div class="h-full w-full overflow-y-hidden overflow-x-auto flex flex-col bg-backgrounddark">
+        <ControlBar>
+          <h1 class="text-2xl whitespace-nowrap">machine learning tool</h1>
+          <div class="flex flex-row basis-full justify-end">
+            <SelectLanguageControlBarDropdown />
+          </div>
+        </ControlBar>
 
-      <div
-        class="h-full w-full overflow-y-hidden overflow-x-auto
-    flex flex-col bg-backgrounddark shadow-2xl">
-        <!-- CONTENT -->
+        <TabView />
+
         <div class="relative z-1 flex-1 overflow-y-auto flex-row">
           <PageContentView />
         </div>
 
-        <!-- BOTTOM BAR -->
         <div class="h-160px w-full">
           <BottomBarMenuView />
         </div>

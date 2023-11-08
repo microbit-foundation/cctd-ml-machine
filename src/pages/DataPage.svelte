@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -67,7 +67,6 @@
   });
 </script>
 
-<!-- Main pane -->
 <main class="h-full inline-block min-w-full">
   <div>
     <DataPageControlBar

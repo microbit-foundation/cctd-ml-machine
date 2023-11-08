@@ -30,17 +30,11 @@ export const translations: TranslationMap = {
 		"content.introductionVideo.description": NEEDS_TRANSLATION,
 		"content.introductionVideo.button": NEEDS_TRANSLATION,
 		// HOME PAGE:
-		"content.index.heading": "Gør-det-selv machine learning",
-		"content.index.howBody": "Velkommen til 'ultra:bit datatræneren'. Eksperimentér og leg med machine learning og byg dine første machine learning-modeller – kom i gang her!",
-		"content.index.ledDescription": "25 LED lys",
 		"content.index.recordButtonDescription": "\"Optag\"-knap",
-		"content.index.setupBody2": "Hjemmesiden benytter bluetooth, accelerometer, LED'er, knapper og lyd fra BBC micro:bit'en. For at hjemmesiden kan tilgå disse, skal der overføres et program til BBC micro:bit'en. Det downloades første gang, du tilslutter BBC micro:bit'en med USB. Efterfølgende kan du blot tilslutte med bluetooth uden at bruge USB-kablet.",
-		"content.index.oldVersion": "Du kan finde den gamle version her:",
 		"content.index.contactButton": "Kontakt os",
 		"content.index.contactBody": "Hvis du finder fejl og mangler på denne platform, skal du være velkommen til at skrive til os. Hvis du har andre efterspørgsler, ideer eller generel interesse, skal du være velkommen til at kontakte os. Skaberne af denne platform kan kontaktes på:",
 		"content.index.contactBodyGithub": "Du kan også besøge vores Github side:",
 		"content.index.contactMail": "keb@cs.au.dk",
-		"content.index.acknowledgement": "Udviklet af Center for Computational Thinking og Design, Aarhus Universitet",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Klik for at ændre navnet",
 		"content.data.record": "Optag",
@@ -119,13 +113,13 @@ export const translations: TranslationMap = {
 		"content.model.output.popup.header": "Tilslut output-micro:bit",
 		"content.model.output.popup.body": "Hvis du ikke har tilsluttet en output-micro:bit, kan du ikke se resultatet af de ændringer du laver på denne side. Tilslut nedenfor.",
 		// FOOTER:
-		"footer.connectButtonNotConnected": "Tilslut din BBC micro:bit",
+		"footer.connectButtonNotConnected": NEEDS_TRANSLATION,
 		"footer.disconnectButton": "Frakobl",
 		"footer.helpHeader": "Live graf",
 		"footer.helpContent": "Når du har forbundet en micro:bit kan du live se Accelerometer-data for alle tre akser på denne graf. Prøv at bevæge din forbundende micro:bit og se, hvordan den data der produceres af bevægelserne ser ud for computeren!",
 		"footer.reconnecting":"Genopretter forbindelsen. Vent venligst",
 		//DATA MENU:
-		"menu.data.helpHeading": "Data",
+		"menu.data.helpHeading": NEEDS_TRANSLATION,
 		"menu.data.helpBody": "For at træne en model til at genkende forskellige bevægelser, skal vi have gode eksempler på 'god opførsel', som vi kan vise træneren. Her kan i oprette klasser (en type bevægelse) og optage eksempler til hver klasse. Der skal være mindst 2 klasser med hver 3 eksempler før træneren kan træne en model.",
 		"menu.data.examples": "eksempler",
 		// TRAINER MENU:
@@ -142,7 +136,7 @@ export const translations: TranslationMap = {
 		"menu.trainer.TrainingFinished.body": "Gå til Model-siden for at undersøge hvor godt din model virker",
 		"menu.trainer.isTrainingModelButton": "Træner model...",
 		// MODEL MENU:
-		"menu.model.helpHeading": "Model",
+		"menu.model.helpHeading": NEEDS_TRANSLATION,
 		"menu.model.helpBody": "Modellen kan bruges i et interaktivt system. Her bruger vi den trænede model til at forudsige bevægelser. Du kan tilslutte endnu en micro:bit og få den til at reagere på de bevægelser du laver.",
 		"menu.model.noModel": "Ingen model",
 		"menu.model.connectOutputButton": "Tilslut output-micro:bit",
@@ -287,17 +281,11 @@ export const translations: TranslationMap = {
 		"content.introductionVideo.description": "Watch our short guide to the key features.",
 		"content.introductionVideo.button": "Get started",
 		// HOME PAGE:
-		"content.index.heading": "Do It Yourself Machine Learning",
-		"content.index.howBody": "Welcome to the ultra:bit data trainer. Experiment and play with machine larning and build your first machine learning models - start here!",
-		"content.index.ledDescription": "25 LED lights",
 		"content.index.recordButtonDescription": "\"Record\"-button",
-		"content.index.setupBody2": "The website utilizes the bluetooth, accelerometer, LEDs, buttons, and sounds from the Micro:bit. Subsequetnly, you can connect the micro:bit to your computer via bluetooth without using the USB cable.",
-		"content.index.oldVersion": "You can finde the old version here:",
 		"content.index.contactButton": "Contact us",
 		"content.index.contactBody": "If you find errors and omissions on this platform, please feel free to write us. If you have any other requests, ideas or general interests, please feel free to contact us. The creators of this platform can be contacted at:",
 		"content.index.contactBodyGithub": "You can also visit our Github page:",
 		"content.index.contactMail": "keb@cs.au.dk",
-		"content.index.acknowledgement": "Developed by Center for Computational Thinking and Design, Aarhus University",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Press here to change name",
 		"content.data.record": "Record",
@@ -377,7 +365,7 @@ export const translations: TranslationMap = {
 		"content.model.output.popup.body": "If you have not connected an output micro:bit, you cannot see the results of the changed made on this page. Use the connect button below",
 
 		// FOOTER:
-		"footer.connectButtonNotConnected": "Connect your micro:bit",
+		"footer.connectButtonNotConnected": "Start",
 		"footer.disconnectButton": "Disconnect",
 		"footer.helpHeader": "Live graph",
 		"footer.helpContent": "Once you have connected a micro:bit you can watch the accelerometer data for all three axes on this graph in real time. Try moving your connected micro:bit to see what the data looks like to your computer!",

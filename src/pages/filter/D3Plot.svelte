@@ -12,7 +12,6 @@
   import { GestureData, gestures } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
   import { getPrevData } from '../../script/stores/mlStore';
-    import { Path } from 'three';
 
   export let filter: FilterType;
   export let fullScreen: boolean = false;
@@ -41,7 +40,7 @@
 
   let notMountedYet = true;
 
-  let publicClassList: { name: string; id: number }[] = [];
+  let classList: { name: string; id: number }[] = [];
 
   type RecordingRepresentation = {
     ID: number;
@@ -84,6 +83,7 @@
     return extent;
   };
 
+  // Function that both returns data rep and have A LOT of side effects <-- should be fixed
   const createDataRepresentation = () => {
     const classes: { name: string; id: number }[] = [];
     const data: GestureData[] = get(gestures);
@@ -103,18 +103,14 @@
         recordings.push({ ID, gestureClassName, gestureClassID, x, y, z });
       });
     });
-    const liveDataRep = createLiveData();
-    if (liveDataRep !== undefined && showLive) {
-      recordings.push(liveDataRep);
-      classes.push({ name: 'live', id: uniqueLiveDataID });
-    }
     const classesIDs = classes.map(c => c.id.toString());
     color = d3.scaleOrdinal<string>().domain(classesIDs).range(d3.schemeSet3);
-    publicClassList = classes;
-    return { recordings, classes };
+    classList = classes;
+    return recordings;
   };
 
-  // Draw chart
+  const recordings = createDataRepresentation();
+
 
   // set the dimensions and margins of the graph
   const margin = { top: 30, right: 10, bottom: 10, left: 0 };
@@ -129,9 +125,7 @@
   }
 
   onInterval(() => {
-    const { recordings, classes } = createDataRepresentation();
-    const classesIDs = classes.map(c => c.id.toString());
-    drawParallelPlot(recordings, classesIDs, plot);
+    drawParallelPlot(recordings, plot);
   }, 100);
 
   onMount(() => {
@@ -213,11 +207,41 @@
       .on('mouseleave', doNotHighlight);
   }
 
+  function drawAxes(plot: any, x: d3.ScalePoint<string>, y: any){
+    plot
+      .selectAll()
+      // For each dimension of the dataset I add a 'g' element:
+      .data(dimensions)
+      .enter()
+      .append('g')
+      .attr('class', 'axis')
+      // I translate this element to its right position on the x axis
+      .attr('transform', function (axis: Axis) {
+        return 'translate(' + x(axis) + ')';
+      })
+      // And I build the axis with the call function
+      .each(function (this: SVGGraphicsElement, axis: Axis) {
+        d3.select(this).call(d3.axisLeft(d3.scaleLinear()).ticks(4).scale(y[axis]));
+      })
+      // Add axis title
+      .append('text')
+      .style('text-anchor', 'middle')
+      .style('font-size', '20px')
+      .style('fill', function (axis: Axis) {
+        if (axis === 'x') return '#f9808e';
+        if (axis === 'y') return '#80f98e';
+        return '#808ef9';
+      })
+      .attr('y', -9)
+      .text(function (axis: Axis) {
+        return axis;
+      });
+  }
+
 
   // --------- DRAW PLOT ---------------
   function drawParallelPlot(
     data: RecordingRepresentation[],
-    classes: string[],
     plot: any,
   ) {
     if (notMountedYet) return;
@@ -248,62 +272,66 @@
 
       if (!showLive) {
         if (!livePath.empty()) {
-         livePath.remove();
+          classList = classList.filter(c => c.id !== uniqueLiveDataID);
+          livePath.remove();
         }
         return;
       }
 
-      if (livePath.empty() && (data.at(-1) as RecordingRepresentation).gestureClassID === uniqueLiveDataID) {
+      const liveDataRep: RecordingRepresentation | undefined = createLiveData();
+
+      if (livePath.empty() && liveDataRep !== undefined) {
+        classList = [...classList, { name: 'live', id: uniqueLiveDataID }];
+      
         // Insert live data path
-        drawLines([data.pop() as RecordingRepresentation], plot, path);
+        drawLines([liveDataRep], plot, path);
       } else {
         // Update live path
-        const newLivePathLine = () => path(data.pop() as RecordingRepresentation);
+        const newLivePathLine = () => path(liveDataRep as RecordingRepresentation);
         // Animate
         livePath.transition().duration(50).attr('d', newLivePathLine);
       }
       return;
     }
 
-    // Draw the axis:
-    plot
-      .selectAll()
-      // For each dimension of the dataset I add a 'g' element:
-      .data(dimensions)
-      .enter()
-      .append('g')
-      .attr('class', 'axis')
-      // I translate this element to its right position on the x axis
-      .attr('transform', function (axis: Axis) {
-        return 'translate(' + x(axis) + ')';
-      })
-      // And I build the axis with the call function
-      .each(function (this: SVGGraphicsElement, axis: Axis) {
-        d3.select(this).call(d3.axisLeft(d3.scaleLinear()).ticks(4).scale(y[axis]));
-      })
-      // Add axis title
-      .append('text')
-      .style('text-anchor', 'middle')
-      .style('font-size', '20px')
-      .style('fill', function (axis: Axis) {
-        if (axis === 'x') return '#f9808e';
-        if (axis === 'y') return '#80f98e';
-        return '#808ef9';
-      })
-      .attr('y', -9)
-      .text(function (axis: Axis) {
-        return axis;
-      });
+    drawAxes(plot, x, y);
 
     drawLines(data, plot, path);
       
     plotDrawn = true;
   }
+
+  function updateLiveData(path: PathDrawer) {
+    const livePath = plot.select('.s'+uniqueLiveDataID);
+
+      if (!showLive) {
+        if (!livePath.empty()) {
+          classList = classList.filter(c => c.id !== uniqueLiveDataID);
+          livePath.remove();
+        }
+        return;
+      }
+
+      const liveDataRep: RecordingRepresentation | undefined = createLiveData();
+
+      if (livePath.empty() && liveDataRep !== undefined) {
+        classList = [...classList, { name: 'live', id: uniqueLiveDataID }];
+      
+        // Insert live data path
+        drawLines([liveDataRep], plot, path);
+      } else {
+        // Update live path
+        const newLivePathLine = () => path(liveDataRep as RecordingRepresentation);
+        // Animate
+        livePath.transition().duration(50).attr('d', newLivePathLine);
+      }
+  }
+
 </script>
 
 <div class="flex">
   <div class="flex flex-col justify-evenly mr-4">
-    {#each publicClassList as c}
+    {#each classList as c}
       <div
         class="py-1 px-4 rounded-md btn transition ease border select-none focusElement"
         style="background-color: {getColorForClass(c.id.toString())};"

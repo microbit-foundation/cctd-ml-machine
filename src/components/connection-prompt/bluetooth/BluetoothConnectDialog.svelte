@@ -11,7 +11,6 @@
   import {
     btPatternInput,
     btPatternOutput,
-    isInputPatternValid,
   } from '../../../script/stores/connectionStore';
   import type { Writable } from 'svelte/store';
   import StandardButton from '../../StandardButton.svelte';
@@ -30,21 +29,15 @@
   }
 </script>
 
-<main>
-  <h1 class="mb-5 font-bold">
-    {$t('popup.connectMB.bluetooth.heading')}
+<main class="w-180">
+  <h1 class="mb-5 font-bold text-2xl justify-center">
+    {$t('popup.connectMB.pattern.heading')}
   </h1>
-  <div class="grid grid-cols-3 mb-5 w-650px">
-    <div class="col-span-2 pt-5">
-      <p>1. {$t('popup.connectMB.bluetooth.step0')}</p>
-      <p>2. {$t('popup.connectMB.bluetooth.step1')}</p>
-      <p>3. {$t('popup.connectMB.bluetooth.step2')}</p>
-      <p>4. {$t('popup.connectMB.bluetooth.step3')}</p>
-    </div>
-    <div>
+  <p>{$t('popup.connectMB.pattern.subtitle')}</p>
+    <div class="flex justify-center pt-20 pb-10">
       <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
     </div>
+  <div class="justify-end flex pt-10">
+    <StandardButton onClick={connectButtonClicked}>{$t('popup.connectMB.bluetooth.connect')}</StandardButton>
   </div>
-  <StandardButton onClick={connectButtonClicked}
-    >{$t('popup.connectMB.bluetooth.connect')}</StandardButton>
 </main>

@@ -431,6 +431,8 @@ export const translations: TranslationMap = {
 		"popup.connectMB.connectBattery.heading": "Connect battery pack",
 		"popup.connectMB.connectBattery.subtitle": "Disconnect the micro:bit from the computer and connect the battery pack.",
 		// BLUETOOTH CONNECTION
+		"popup.connectMB.pattern.heading": "Copy pattern",
+		"popup.connectMB.pattern.subtitle": "Copy the pattern displayed on the micro:bit",
 		// CONNECTING BLUETOOTH
 
 		"popup.connectMB.main.bluetooth.subtitle": "Connect using Bluetooth",

@@ -12,6 +12,7 @@
   import { GestureData, gestures } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
   import { getPrevData } from '../../script/stores/mlStore';
+    import { Path } from 'three';
 
   export let filter: FilterType;
   export let fullScreen: boolean = false;
@@ -183,90 +184,12 @@
   };
 
   let plotDrawn = false;
+  
+  const dimensions: Axis[] = ['x', 'y', 'z'];
 
-  // --------- DRAW PLOT ---------------
-  function drawParallelPlot(
-    data: RecordingRepresentation[],
-    classes: string[],
-    plot: any,
-  ) {
-    if (notMountedYet) return;
+  type PathDrawer = (gesture: RecordingRepresentation) => string | null;
 
-    const opacity = d3
-      .scaleOrdinal()
-      .domain(classes as Iterable<string>)
-      .range([0.5, 0.5, 0.5, 0.5]);
-
-    const strokeWidth = d3
-      .scaleOrdinal()
-      .domain(classes as Iterable<string>)
-      .range([4, 4, 4]);
-    // Delete existing plot
-    const dimensions: Axis[] = ['x', 'y', 'z'];
-
-    // For each dimension, I build a linear scale. I store all in a y object
-    let y: any = {};
-    for (let i in dimensions) {
-      let axis: Axis = dimensions[i];
-      y[axis] = d3.scaleLinear().domain(getExtent(axis, data)).range([height, 0]);
-    }
-
-    // Build the X scale -> it find the best position for each Y axis
-    const x = d3.scalePoint().range([15, width]).padding(0.1).domain(dimensions);
-
-    if (plotDrawn) {
-      const livePath = plot.select('.s'+uniqueLiveDataID);
-
-      if (!showLive) {
-        if (!livePath.empty()) {
-         livePath.remove();
-        }
-        return;
-      }
-
-      if (livePath.empty() && (data.at(-1) as RecordingRepresentation).gestureClassID === uniqueLiveDataID) {
-        // Insert live data path
-        console.log('Inserting live path');
-        plot
-          .selectAll()
-          .data([data.pop() as RecordingRepresentation])
-          .enter()
-          .append('path')
-          .attr('class', function (gesture: RecordingRepresentation) {
-            return 'line ' + 's' + gesture.gestureClassID;
-          }) // 2 class for each line: 'line' and the group name
-          .attr('d', path)
-          .style('fill', 'none')
-          .style('stroke', function (gesture: RecordingRepresentation) {
-            return getColorForClass(gesture.gestureClassID.toString());
-          })
-          .style('opacity', function (gesture: RecordingRepresentation) {
-            return 0.8;
-          })
-          .style('stroke-width', function (gesture: RecordingRepresentation) {
-            return strokeWidth(gesture.gestureClassID.toString());
-          })
-          .on('mouseover', highlight)
-          .on('mouseleave', doNotHighlight);
-      } else {
-        // Update live path
-        const newLivePathLine = () => path(data.pop() as RecordingRepresentation);
-        // Animate
-        livePath.transition().duration(50).attr('d', newLivePathLine);
-      }
-      return;
-    }
-    // Extract the list of dimensions we want to keep in the plot.
-    // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-    function path(gesture: RecordingRepresentation) {
-      return d3.line()(
-        dimensions.map(function (axis: Axis) {
-          return [x(axis) as number, y[axis](gesture[axis])];
-        }),
-      );
-    }
-
-    // Draw the linesa
+  function drawLines(data: RecordingRepresentation[], plot: any, path: PathDrawer) {
     plot
       .selectAll()
       .data(data)
@@ -284,10 +207,63 @@
         return 0.8;
       })
       .style('stroke-width', function (gesture: RecordingRepresentation) {
-        return strokeWidth(gesture.gestureClassID.toString());
+        return 4;
       })
       .on('mouseover', highlight)
       .on('mouseleave', doNotHighlight);
+  }
+
+
+  // --------- DRAW PLOT ---------------
+  function drawParallelPlot(
+    data: RecordingRepresentation[],
+    classes: string[],
+    plot: any,
+  ) {
+    if (notMountedYet) return;
+    
+
+    // For each dimension, I build a linear scale. I store all in a y object
+    let y: any = {};
+    for (let i in dimensions) {
+      let axis: Axis = dimensions[i];
+      y[axis] = d3.scaleLinear().domain(getExtent(axis, data)).range([height, 0]);
+    }
+
+    // Build the X scale -> it find the best position for each Y axis
+    const x = d3.scalePoint().range([15, width]).padding(0.1).domain(dimensions);
+
+    // Extract the list of dimensions we want to keep in the plot.
+    // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+    function path(gesture: RecordingRepresentation) {
+      return d3.line()(
+        dimensions.map(function (axis: Axis) {
+          return [x(axis) as number, y[axis](gesture[axis])];
+        }),
+      );
+    }
+
+    if (plotDrawn) {
+      const livePath = plot.select('.s'+uniqueLiveDataID);
+
+      if (!showLive) {
+        if (!livePath.empty()) {
+         livePath.remove();
+        }
+        return;
+      }
+
+      if (livePath.empty() && (data.at(-1) as RecordingRepresentation).gestureClassID === uniqueLiveDataID) {
+        // Insert live data path
+        drawLines([data.pop() as RecordingRepresentation], plot, path);
+      } else {
+        // Update live path
+        const newLivePathLine = () => path(data.pop() as RecordingRepresentation);
+        // Animate
+        livePath.transition().duration(50).attr('d', newLivePathLine);
+      }
+      return;
+    }
 
     // Draw the axis:
     plot
@@ -318,6 +294,9 @@
       .text(function (axis: Axis) {
         return axis;
       });
+
+    drawLines(data, plot, path);
+      
     plotDrawn = true;
   }
 </script>

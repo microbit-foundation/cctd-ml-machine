@@ -428,6 +428,8 @@ export const translations: TranslationMap = {
 		"popup.connectMB.usbDownloading.header": "Downloading program to micro:bit",
 		"popup.connectMB.usbDownloading.subtitle": "Please wait. Downloading program to micro:bit.",
 		// CONNECT BATTERY
+		"popup.connectMB.connectBattery.heading": "Connect battery pack",
+		"popup.connectMB.connectBattery.subtitle": "Disconnect the micro:bit from the computer and connect the battery pack.",
 		// BLUETOOTH CONNECTION
 		// CONNECTING BLUETOOTH
 

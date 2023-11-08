@@ -224,7 +224,7 @@
         return;
       }
 
-      if (livePath.empty() && data.at(-1).gestureClassID === uniqueLiveDataID) {
+      if (livePath.empty() && (data.at(-1) as RecordingRepresentation).gestureClassID === uniqueLiveDataID) {
         // Insert live data path
         console.log('Inserting live path');
         plot

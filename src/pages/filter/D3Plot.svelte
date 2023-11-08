@@ -225,6 +225,7 @@
 
       if (livePath.empty()) {
         // Insert live data path
+        console.log('Inserting live path');
         plot
           .selectAll()
           .data([data.pop() as RecordingRepresentation])
@@ -243,7 +244,9 @@
           })
           .style('stroke-width', function (gesture: RecordingRepresentation) {
             return strokeWidth(gesture.gestureClassID.toString());
-          });
+          })
+          .on('mouseover', highlight)
+          .on('mouseleave', doNotHighlight);
       } else {
         // Update live path
         const newLivePathLine = () => path(data.pop() as RecordingRepresentation);

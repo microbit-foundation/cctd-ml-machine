@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -16,7 +16,6 @@
   import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import StandardButton from '../../components/StandardButton.svelte';
   import { Paths, navigate } from '../../router/paths';
-  import CookieManager from '../../script/CookieManager';
 
   const sufficientData = hasSufficientData();
 

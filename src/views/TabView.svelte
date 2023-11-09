@@ -9,9 +9,8 @@
   import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
   import { currentPath, navigate } from '../router/paths';
-  import { state } from '../script/stores/uiStore';
 
-  $: shouldBeExpanded = (menuProps: MenuProperties) => {
+  $: isSelected = (menuProps: MenuProperties) => {
     let path = $currentPath;
     if (menuProps.navigationPath === path) {
       return true;
@@ -20,10 +19,6 @@
       return false;
     }
     return menuProps.additionalExpandPaths.includes(path);
-  };
-
-  const onLoad = () => {
-    $state.isLoading = false;
   };
 </script>
 
@@ -37,7 +32,7 @@
         title={menu.title}
         helpTitle={menu.infoBubbleTitle}
         helpDescription={menu.infoBubbleContent}
-        isExpanded={shouldBeExpanded(menu)}>
+        isSelected={isSelected(menu)}>
       </MenuButton>
     {/each}
   </div>

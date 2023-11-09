@@ -31,10 +31,6 @@ export const translations: TranslationMap = {
 		"content.introductionVideo.button": NEEDS_TRANSLATION,
 		// HOME PAGE:
 		"content.index.recordButtonDescription": "\"Optag\"-knap",
-		"content.index.contactButton": "Kontakt os",
-		"content.index.contactBody": "Hvis du finder fejl og mangler på denne platform, skal du være velkommen til at skrive til os. Hvis du har andre efterspørgsler, ideer eller generel interesse, skal du være velkommen til at kontakte os. Skaberne af denne platform kan kontaktes på:",
-		"content.index.contactBodyGithub": "Du kan også besøge vores Github side:",
-		"content.index.contactMail": "keb@cs.au.dk",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Klik for at ændre navnet",
 		"content.data.record": "Optag",
@@ -282,10 +278,6 @@ export const translations: TranslationMap = {
 		"content.introductionVideo.button": "Get started",
 		// HOME PAGE:
 		"content.index.recordButtonDescription": "\"Record\"-button",
-		"content.index.contactButton": "Contact us",
-		"content.index.contactBody": "If you find errors and omissions on this platform, please feel free to write us. If you have any other requests, ideas or general interests, please feel free to contact us. The creators of this platform can be contacted at:",
-		"content.index.contactBodyGithub": "You can also visit our Github page:",
-		"content.index.contactMail": "keb@cs.au.dk",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Press here to change name",
 		"content.data.record": "Record",

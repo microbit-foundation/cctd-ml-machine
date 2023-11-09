@@ -53,7 +53,6 @@
     {/if}
 
     <main class="h-screen w-screen m-0 relative flex">
-      <!-- OVERLAY ITEMS -->
       <CookieBanner />
       <OverlayView />
       <BluetoothIncompatibilityWarningDialog />
@@ -61,7 +60,8 @@
 
       <div class="h-full w-full overflow-y-hidden overflow-x-auto flex flex-col bg-backgrounddark">
         <ControlBar>
-          <h1 class="text-2xl whitespace-nowrap">machine learning tool</h1>
+          <img class="mr-8" src="/imgs/microbit-logo.svg" alt="Micro:bit logo" width="150px" />
+          <h1 class="text-xl font-thin whitespace-nowrap">machine learning tool</h1>
           <div class="flex flex-row basis-full justify-end">
             <SelectLanguageControlBarDropdown />
           </div>

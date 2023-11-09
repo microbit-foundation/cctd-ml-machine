@@ -14,7 +14,7 @@
   export let onUploadGestures: () => void;
 </script>
 
-<div class="flex justify-end">
+<div class="flex justify-end px-10">
   <button
     class="mx-3"
     on:click={onDownloadGestures}

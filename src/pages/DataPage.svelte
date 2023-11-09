@@ -24,6 +24,7 @@
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
+  import TrainingButton from './training/TrainingButton.svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -81,7 +82,7 @@
       <PleaseConnectFirst />
     </div>
   {:else}
-    <div class="mt-4 ml-3">
+    <div class="mt-4 mx-10">
       <StandardDialog
         isOpen={isConnectionDialogOpen}
         onClose={() => (isConnectionDialogOpen = false)}>
@@ -136,6 +137,9 @@
           onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
       {/each}
       <NewGestureButton />
+
+      <TrainingButton />
     </div>
+
   {/if}
 </main>

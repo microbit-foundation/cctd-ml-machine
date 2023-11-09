@@ -25,14 +25,10 @@
   export let helpTitle: string;
   export let helpDescription: string;
   export let onClickFunction: () => void;
-  export let isExpanded: boolean;
+  export let isSelected: boolean;
 </script>
 
-<div
-  class="menu-button"
-  class:selected={isExpanded}
-  on:click={onClickFunction}
->
+<div class="menu-button" class:selected={isSelected} on:click={onClickFunction}>
   <div class="h-full relative">
     <p class="text-lg font-medium text-center">
       {$t(title)}

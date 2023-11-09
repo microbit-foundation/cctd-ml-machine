@@ -36,14 +36,15 @@
   <div class:hidden={$state.isLoading}>
     <ConnectDialogContainer bind:this={connectDialogReference} />
 
-    <div class="flex items-center justify-center m-10">
+    <div class="flex flex-col items-center justify-center m-10">
       <video
         on:canplaythrough={() => ($state.isLoading = false)}
-        class="w-200"
+        class="w-200 mb-5"
         controls
         width="550">
         <source src={introVideoUrl} type="video/mp4" />
       </video>
+      <p>This tool is designed for use with activity 5 in the next gen Playground survey</p>
     </div>
 
     <StandardButton onClick={connectButtonClicked}

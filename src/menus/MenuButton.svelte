@@ -13,7 +13,7 @@
   }
 
   .selected {
-    border-bottom: 4px solid #00A000;
+    border-bottom: 4px solid #00a000;
   }
 </style>
 

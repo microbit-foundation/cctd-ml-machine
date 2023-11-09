@@ -38,7 +38,8 @@
 
   document.title = Environment.pageTitle;
 
-  const introVideoUrl = 'https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4';
+  const introVideoUrl =
+    'https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4';
 </script>
 
 <Router>
@@ -58,9 +59,14 @@
       <BluetoothIncompatibilityWarningDialog />
       <VideoDialog videoURL={introVideoUrl} />
 
-      <div class="h-full w-full overflow-y-hidden overflow-x-auto flex flex-col bg-backgrounddark">
+      <div
+        class="h-full w-full overflow-y-hidden overflow-x-auto flex flex-col bg-backgrounddark">
         <ControlBar>
-          <img class="mr-8" src="/imgs/microbit-logo.svg" alt="Micro:bit logo" width="150px" />
+          <img
+            class="mr-8"
+            src="/imgs/microbit-logo.svg"
+            alt="Micro:bit logo"
+            width="150px" />
           <h1 class="text-xl font-thin whitespace-nowrap">machine learning tool</h1>
           <div class="flex flex-row basis-full justify-end">
             <SelectLanguageControlBarDropdown />

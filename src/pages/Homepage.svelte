@@ -33,7 +33,8 @@
   <div class:hidden={$state.isLoading}>
     <ConnectDialogContainer bind:this={connectDialogReference} />
 
-    <StandardButton onClick={connectButtonClicked}>{$t('footer.connectButtonNotConnected')}</StandardButton>
+    <StandardButton onClick={connectButtonClicked}
+      >{$t('footer.connectButtonNotConnected')}</StandardButton>
 
     <div class="grid-container grid-cols-3 min-w-800px p-10 pb-2 pt-2 mt-3">
       <FrontPageContentTile>Input data</FrontPageContentTile>

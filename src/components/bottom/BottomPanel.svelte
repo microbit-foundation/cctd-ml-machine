@@ -37,7 +37,6 @@
   bind:clientWidth={componentWidth}
   class="h-full w-full"
   class:bg-gray-300={$state.isInputAssigned && !$state.isInputReady}>
-
   {#if !$state.isInputAssigned}
     <!-- No input microbit assigned -->
   {:else}

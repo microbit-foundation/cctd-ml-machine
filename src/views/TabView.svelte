@@ -32,8 +32,7 @@
         title={menu.title}
         helpTitle={menu.infoBubbleTitle}
         helpDescription={menu.infoBubbleContent}
-        isSelected={isSelected(menu)}>
-      </MenuButton>
+        isSelected={isSelected(menu)} />
     {/each}
   </div>
 </div>

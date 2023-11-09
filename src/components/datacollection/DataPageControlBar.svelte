@@ -15,22 +15,13 @@
 </script>
 
 <div class="flex justify-end px-10">
-  <button
-    class="mx-3"
-    on:click={onDownloadGestures}
-    color={'primary'}>
+  <button class="mx-3" on:click={onDownloadGestures} color={'primary'}>
     {$t('content.data.controlbar.button.downloadData')}
   </button>
-  <button
-    class="mx-3"
-    on:click={onUploadGestures}
-    color="primary">
+  <button class="mx-3" on:click={onUploadGestures} color="primary">
     {$t('content.data.controlbar.button.uploadData')}
   </button>
-  <button
-    class="mx-3"
-    on:click={onClearGestures}
-    color={'primary'}>
+  <button class="mx-3" on:click={onClearGestures} color={'primary'}>
     {$t('content.data.controlbar.button.clearData')}
   </button>
 </div>

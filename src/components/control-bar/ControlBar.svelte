@@ -6,7 +6,7 @@
 
 <style>
   div {
-    background-color: #00A000;
+    background-color: #00a000;
     color: white;
   }
 </style>

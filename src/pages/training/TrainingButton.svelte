@@ -16,7 +16,8 @@
     ? 'menu.trainer.trainModelButton'
     : 'menu.trainer.trainNewModelButton';
 
-  const trainingButtonDisabled = !sufficientData || !$state.isInputConnected || $state.isTraining;
+  const trainingButtonDisabled =
+    !sufficientData || !$state.isInputConnected || $state.isTraining;
   let trainingDialogOpen = false;
 
   const closeTrainingDialog = () => {
@@ -26,12 +27,18 @@
   const startTraining = () => {
     closeTrainingDialog();
     trainModel();
-  }
+  };
 </script>
 
-<StandardButton onClick={() => {trainingDialogOpen = true}} disabled={trainingButtonDisabled}>{$t(trainButtonLabel)}</StandardButton>
+<StandardButton
+  onClick={() => {
+    trainingDialogOpen = true;
+  }}
+  disabled={trainingButtonDisabled}>{$t(trainButtonLabel)}</StandardButton>
 
-<StandardDialog isOpen={trainingDialogOpen && !$state.isTraining} onClose={closeTrainingDialog}>
+<StandardDialog
+  isOpen={trainingDialogOpen && !$state.isTraining}
+  onClose={closeTrainingDialog}>
   <div class="w-150">
     <h1 class="text-xl font-bold mb-4">Train the model</h1>
     <p>Do you want to train the model with the data you have added so you can test it?</p>
@@ -46,7 +53,8 @@
   <div class="w-150">
     <p>Training the model</p>
     <div class="ml-auto mr-auto flex center-items justify-center">
-      <i class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
+      <i
+        class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
     </div>
   </div>
 </StandardDialog>

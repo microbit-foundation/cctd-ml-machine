@@ -140,6 +140,5 @@
 
       <TrainingButton />
     </div>
-
   {/if}
 </main>

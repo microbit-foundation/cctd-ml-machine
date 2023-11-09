@@ -52,9 +52,15 @@
 
     <h1 class="ml-10 mt-10 text-2xl">{$t('content.index.toolProcessCards.main.title')}</h1>
     <div class="grid-container grid-cols-3 min-w-800px p-10 pb-2 pt-2 mt-3">
-      <FrontPageContentTile>{$t('content.index.toolProcessCards.data.title')}</FrontPageContentTile>
-      <FrontPageContentTile>{$t('content.index.toolProcessCards.train.title')}</FrontPageContentTile>
-      <FrontPageContentTile>{$t('content.index.toolProcessCards.model.title')}</FrontPageContentTile>
+      <FrontPageContentTile>
+        <h2 class="text-center text-xl">{$t('content.index.toolProcessCards.data.title')}</h2>
+      </FrontPageContentTile>
+      <FrontPageContentTile>
+        <h2 class="text-center text-xl">{$t('content.index.toolProcessCards.train.title')}</h2>
+      </FrontPageContentTile>
+      <FrontPageContentTile>
+        <h2 class="text-center text-xl">{$t('content.index.toolProcessCards.model.title')}</h2>
+      </FrontPageContentTile>
     </div>
   </div>
 </main>

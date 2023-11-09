@@ -25,6 +25,7 @@
   import ControlBar from './components/control-bar/ControlBar.svelte';
   import SelectLanguageControlBarDropdown from './components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
   import BottomPanel from './components/bottom/BottomPanel.svelte';
+  import { t } from './i18n';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -62,7 +63,7 @@
             src="/imgs/microbit-logo.svg"
             alt="Micro:bit logo"
             width="150px" />
-          <h1 class="text-xl font-thin whitespace-nowrap">machine learning tool</h1>
+          <h1 class="text-xl font-thin whitespace-nowrap">{$t('content.index.title')}</h1>
           <div class="flex flex-row basis-full justify-end">
             <SelectLanguageControlBarDropdown />
           </div>

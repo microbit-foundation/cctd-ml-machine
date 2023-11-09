@@ -44,17 +44,17 @@
         width="550">
         <source src={introVideoUrl} type="video/mp4" />
       </video>
-      <p>This tool is designed for use with activity 5 in the next gen Playground survey</p>
+      <p>{$t('content.index.toolInfo')}</p>
     </div>
 
     <StandardButton onClick={connectButtonClicked}
       >{$t('footer.connectButtonNotConnected')}</StandardButton>
 
-    <h1 class="ml-10 mt-10 text-2xl">How to create a model</h1>
+    <h1 class="ml-10 mt-10 text-2xl">{$t('content.index.toolProcessCards.main.title')}</h1>
     <div class="grid-container grid-cols-3 min-w-800px p-10 pb-2 pt-2 mt-3">
-      <FrontPageContentTile>Input data</FrontPageContentTile>
-      <FrontPageContentTile>Train model</FrontPageContentTile>
-      <FrontPageContentTile>Test model</FrontPageContentTile>
+      <FrontPageContentTile>{$t('content.index.toolProcessCards.data.title')}</FrontPageContentTile>
+      <FrontPageContentTile>{$t('content.index.toolProcessCards.train.title')}</FrontPageContentTile>
+      <FrontPageContentTile>{$t('content.index.toolProcessCards.model.title')}</FrontPageContentTile>
     </div>
   </div>
 </main>

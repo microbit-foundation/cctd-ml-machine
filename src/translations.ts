@@ -21,16 +21,26 @@ export const translations: TranslationMap = {
 		"alert.isTraining": "Du er i gang med at træne en model!",
 		"alert.isNotConnected": "Din Micro:bit skal være tilsluttet!",
 		"alert.deleteGestureConfirm": "Er du sikker på at du vil slette klassen ",
+
 		//In ml.ts
 		"alert.twoGestures": "Du skal have mindst to klasser",
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
+
 		// Introduction Video Modal
 		"content.introductionVideo.heading": "Introvideo",
 		"content.introductionVideo.description": NEEDS_TRANSLATION,
 		"content.introductionVideo.button": NEEDS_TRANSLATION,
+
 		// HOME PAGE:
+		"content.index.title": NEEDS_TRANSLATION,
+		"content.index.toolInfo": NEEDS_TRANSLATION,
+		"content.index.toolProcessCards.main.title": NEEDS_TRANSLATION,
+		"content.index.toolProcessCards.data.title": NEEDS_TRANSLATION,
+		"content.index.toolProcessCards.train.title": NEEDS_TRANSLATION,
+		"content.index.toolProcessCards.model.title": NEEDS_TRANSLATION,
 		"content.index.recordButtonDescription": "\"Optag\"-knap",
+
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Klik for at ændre navnet",
 		"content.data.record": "Optag",
@@ -51,6 +61,8 @@ export const translations: TranslationMap = {
 		"content.data.controlbar.button.downloadData": "Download dataset",
 		"content.data.controlbar.button.uploadData": "Upload dataset",
 
+		"content.data.trainDialog.title": NEEDS_TRANSLATION,
+		"content.data.trainDialog.text": NEEDS_TRANSLATION,
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Træning mislykkedes",
@@ -108,19 +120,20 @@ export const translations: TranslationMap = {
 
 		"content.model.output.popup.header": "Tilslut output-micro:bit",
 		"content.model.output.popup.body": "Hvis du ikke har tilsluttet en output-micro:bit, kan du ikke se resultatet af de ændringer du laver på denne side. Tilslut nedenfor.",
+
 		// FOOTER:
 		"footer.connectButtonNotConnected": NEEDS_TRANSLATION,
 		"footer.disconnectButton": "Frakobl",
 		"footer.helpHeader": "Live graf",
 		"footer.helpContent": "Når du har forbundet en micro:bit kan du live se Accelerometer-data for alle tre akser på denne graf. Prøv at bevæge din forbundende micro:bit og se, hvordan den data der produceres af bevægelserne ser ud for computeren!",
 		"footer.reconnecting":"Genopretter forbindelsen. Vent venligst",
+
 		//DATA MENU:
 		"menu.data.helpHeading": NEEDS_TRANSLATION,
 		"menu.data.helpBody": "For at træne en model til at genkende forskellige bevægelser, skal vi have gode eksempler på 'god opførsel', som vi kan vise træneren. Her kan i oprette klasser (en type bevægelse) og optage eksempler til hver klasse. Der skal være mindst 2 klasser med hver 3 eksempler før træneren kan træne en model.",
 		"menu.data.examples": "eksempler",
+
 		// TRAINER MENU:
-		"menu.trainer.helpHeading": "Træner",
-		"menu.trainer.helpBody": "Træneren kigger på eksemplerne i klasserne og forsøger at 'lære', hvordan de forskellige klasser kan genkendes ved at finde mønstre i dataet. Her kan i træne en model, der kan genkende forskellige bevægelser.", //Derudover kan i indstille træneren, vælge hvordan træneren skal forstå dataet og oprette test-sæt.",
 		"menu.trainer.notConnected1": "Du har ikke tilkoblet en BBC micro:bit.",
 		"menu.trainer.notConnected2": "Gør dette vha. knappen nedenfor",
 		"menu.trainer.notEnoughDataHeader1": "Ikke nok data!\nGå til Data-siden",
@@ -131,14 +144,15 @@ export const translations: TranslationMap = {
 		"menu.trainer.TrainingFinished": "Træning færdig",
 		"menu.trainer.TrainingFinished.body": "Gå til Model-siden for at undersøge hvor godt din model virker",
 		"menu.trainer.isTrainingModelButton": "Træner model...",
+
 		// MODEL MENU:
 		"menu.model.helpHeading": NEEDS_TRANSLATION,
 		"menu.model.helpBody": "Modellen kan bruges i et interaktivt system. Her bruger vi den trænede model til at forudsige bevægelser. Du kan tilslutte endnu en micro:bit og få den til at reagere på de bevægelser du laver.",
 		"menu.model.noModel": "Ingen model",
 		"menu.model.connectOutputButton": "Tilslut output-micro:bit",
 		"menu.model.disconnect": "Frakobl output-micro:bit",
-		//CONNECT MICROBIT POP UP:
 
+		//CONNECT MICROBIT POP UP:
 		"popup.connectMB.main.bluetooth.subtitle": "Tilslut med Bluetooth",
 
 		"popup.connectMB.bluetooth.heading": "Tilslut med Bluetooth",
@@ -157,7 +171,6 @@ export const translations: TranslationMap = {
 		"popup.disconnectedWarning.reconnectButton.output": "Tilslut output igen",
 
 		// NEW CONNECTION PROMPTS - TODO: Rename, merge with above and clean up
-
 		"connectMB.main.usbHeader": "DOWNLOAD PROGRAM TIL BBC MICRO:BIT",
 		"connectMB.main.btHeader": "TILSLUT DIN BBC MICRO:BIT VIA BLUETOOTH",
 		"connectMB.main.usbBody": "Hvis du ikke tidligere har downloadet programmet",
@@ -198,7 +211,6 @@ export const translations: TranslationMap = {
 
 
 		// COOKIE BANNER
-
 		"cookies.banner.title": "Cookie politik",
 		"cookies.banner.subtitle": "Forbrug og analyse",
 		"cookies.banner.text.pleaseHelp": "Hjælp os med at forbedre siden! Tillad cookies for at hjælpe os.",
@@ -243,12 +255,10 @@ export const translations: TranslationMap = {
 		"compatibility.webgl.notSupported": "WebGL er ikke tilgængelig. Aktiver WebGL for at se 3D data.",
 
 		// CONNECTION LOST DIALOG
-
 		"dialog.connection.lost.header": "Forbindelse offline",
 		"dialog.connection.lost.body": "Vi kan ikke oprette forbindelse til internettet, nogle funktioner virker muligvis ikke som forventet.",
 
 		// OUTDATED MICROBIT WARNING
-
 		"popup.outdatedmicrobit.header": "Din micro:bit mangler en opdatering.",
 		"popup.outdatedmicrobit.text": "Vi anbefaler stærkt at opdatere nu, nogle funktioner virker muligvis ikke som forventet.",
 		"popup.outdatedmicrobit.text.mkcd": "Åben den nyeste MakeCode skabelon for at bruge den opdaterede MakeCode extension.",
@@ -268,16 +278,26 @@ export const translations: TranslationMap = {
 		"alert.isTraining": "You are currently training a model!",
 		"alert.isNotConnected": "Your Micro:bit should be connected!",
 		"alert.deleteGestureConfirm": "Are you sure you want to delete the class ",
+
 		//In ml.ts
 		"alert.twoGestures": "You need at least two classes",
 		"alert.oneDataRepresentation": "You need at least one data representation",
 		"alert.recordingsPerGesture": "You need at least three examples per class",
+
 		// Introduction Video modal
 		"content.introductionVideo.heading": "Intro Video",
 		"content.introductionVideo.description": "Watch our short guide to the key features.",
 		"content.introductionVideo.button": "Get started",
+
 		// HOME PAGE:
+		"content.index.title": "machine learning tool",
+		"content.index.toolInfo": "This tool is designed for use with activity 5 in the next gen Playground survey",
+		"content.index.toolProcessCards.main.title": "How to create a model",
+		"content.index.toolProcessCards.data.title": "Data",
+		"content.index.toolProcessCards.train.title": "Train",
+		"content.index.toolProcessCards.model.title": "Model",
 		"content.index.recordButtonDescription": "\"Record\"-button",
+
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Press here to change name",
 		"content.data.record": "Record",
@@ -298,6 +318,9 @@ export const translations: TranslationMap = {
 		"content.data.controlbar.button.clearData.confirm": "Are you sure you wish to delete all gesture examples?\nThis cannot be undone.",
 		"content.data.controlbar.button.downloadData": "Download dataset",
 		"content.data.controlbar.button.uploadData": "Upload dataset",
+
+		"content.data.trainDialog.title": "Train the model",
+		"content.data.trainDialog.text": "Do you want to train the model with the data you have added so you can test it?",
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Training Failed",
@@ -362,13 +385,13 @@ export const translations: TranslationMap = {
 		"footer.helpHeader": "Live graph",
 		"footer.helpContent": "Once you have connected a micro:bit you can watch the accelerometer data for all three axes on this graph in real time. Try moving your connected micro:bit to see what the data looks like to your computer!",
 		"footer.reconnecting":"Reconnecting. Please wait",
+
 		//DATA MENU:
 		"menu.data.helpHeading": "Data",
 		"menu.data.helpBody": "In order to train a model to recognize different movements, we need good examples of 'good behavior' that we can show the Trainer. Here you can create classes (types of gestures) and record examples for each class. There must be at least 2 classes with 3 examples each before the trainer can train a model.",
 		"menu.data.examples": "examples",
+
 		// TRAINER MENU:
-		"menu.trainer.helpHeading": "Trainer",
-		"menu.trainer.helpBody": "The Trainer looks at the examples in each of the classes and tries to 'learn' how the different classes can be recognized by searching for patterns in the data. Here you can train a model to recognize different gestures.", // In addition, you can configure the trainer, choose how the trainer should interpret the data and create test sets.",
 		"menu.trainer.notConnected1": "You have not connected a micro:bit.",
 		"menu.trainer.notConnected2": " Please do so via the button below",
 		"menu.trainer.notEnoughDataHeader1": "Not Enough Data\nGo to Data page",
@@ -379,14 +402,15 @@ export const translations: TranslationMap = {
 		"menu.trainer.TrainingFinished": "Training done",
 		"menu.trainer.TrainingFinished.body": "Go to the Model-page to examine how well your model works",
 		"menu.trainer.isTrainingModelButton": "Training model",
+
 		// MODEL MENU:
 		"menu.model.helpHeading": "Model",
 		"menu.model.helpBody": "The model can be used in an interactive system. Here we use the trained model to predict gestures. You can connect another micro:bit and make it respond to the predicted gestures.",
 		"menu.model.noModel": "No model",
 		"menu.model.connectOutputButton": "Connect output micro:bit",
 		"menu.model.disconnect": "Disconnect output micro:bit",
-		//CONNECT MICROBIT POP UP:
 
+		//CONNECT MICROBIT POP UP:
 		"popup.connectMB.main.bluetooth.subtitle": "Connect using Bluetooth",
 
 		"popup.connectMB.bluetooth.heading": "Connect using Bluetooth",
@@ -405,7 +429,6 @@ export const translations: TranslationMap = {
 		"popup.disconnectedWarning.reconnectButton.output": "Reconnect output",
 
 		// NEW CONNECTION PROMPTS - TODO: Rename, merge with above and clean up
-
 		"connectMB.main.usbHeader": "DOWNLOAD PROGRAM TO MICRO:BIT",
 		"connectMB.main.btHeader": "CONNECT YOUR MICRO:BIT USING BLUETOOTH",
 		"connectMB.main.usbBody": "If you have not previously downloaded the program",
@@ -443,8 +466,8 @@ export const translations: TranslationMap = {
 		"connectMB.outputMB.different": "Connect another micro:bit",
 		"connectMB.outputMB.sameButton": "Same",
 		"connectMB.outputMB.otherButton": "Other",
-		// COOKIE BANNER
 
+		// COOKIE BANNER
 		"cookies.banner.title": "Cookie policy",
 		"cookies.banner.subtitle": "Performance & analytics",
 		"cookies.banner.text.pleaseHelp": "Please help us make it better by keeping the cookies enabled.",
@@ -489,12 +512,10 @@ export const translations: TranslationMap = {
 		"compatibility.webgl.notSupported": "WebGL not available. Enable WebGL to see 3D data view.",
 
 		// CONNECTION LOST DIALOG
-
 		"dialog.connection.lost.header": "Connection offline",
 		"dialog.connection.lost.body": "Your internet connection is offline, some features may not work properly",
 
 		// OUTDATED MICROBIT WARNING
-
 		"popup.outdatedmicrobit.header": "Your micro:bit firmware is outdated.",
 		"popup.outdatedmicrobit.text": "We strongly recommend that you update it now, as some features may not work as expected.",
 		"popup.outdatedmicrobit.text.mkcd": "Open the newest MakeCode template to use the updated extension.",

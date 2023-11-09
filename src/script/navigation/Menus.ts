@@ -7,7 +7,6 @@
 import { SvelteComponent } from 'svelte';
 import { writable } from 'svelte/store';
 import GestureMenu from '../../menus/DataMenu.svelte';
-// import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
 import { Paths, PathType } from '../../router/paths';
 
@@ -31,15 +30,6 @@ class Menus {
       expandedButtonContent: GestureMenu,
       navigationPath: Paths.DATA,
     },
-    // {
-    //   title: 'menu.trainer.helpHeading',
-    //   infoBubbleTitle: 'menu.trainer.helpHeading',
-    //   infoBubbleContent: 'menu.trainer.helpBody',
-    //   collapsedButtonContent: undefined,
-    //   expandedButtonContent: NewTrainerMenu,
-    //   navigationPath: Paths.TRAINING,
-    //   additionalExpandPaths: [Paths.FILTERS],
-    // },
     {
       title: 'menu.model.helpHeading',
       infoBubbleTitle: 'menu.model.helpHeading',

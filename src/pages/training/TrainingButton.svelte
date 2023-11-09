@@ -40,18 +40,19 @@
   isOpen={trainingDialogOpen && !$state.isTraining}
   onClose={closeTrainingDialog}>
   <div class="w-150">
-    <h1 class="text-xl font-bold mb-4">Train the model</h1>
-    <p>Do you want to train the model with the data you have added so you can test it?</p>
+    <h1 class="text-xl font-bold mb-4">{$t('content.data.trainDialog.title')}</h1>
+    <p>{$t('content.data.trainDialog.text')}</p>
     <div class="flex justify-end">
+      <!-- TODO: translation for "Back" button -->
       <StandardButton onClick={closeTrainingDialog}>Back</StandardButton>
-      <StandardButton onClick={startTraining}>Train the model</StandardButton>
+      <StandardButton onClick={startTraining}>{$t('content.data.trainDialog.title')}</StandardButton>
     </div>
   </div>
 </StandardDialog>
 
 <StandardDialog isOpen={$state.isTraining} onClose={closeTrainingDialog}>
   <div class="w-150">
-    <p>Training the model</p>
+    <p>{$t('menu.trainer.isTrainingModelButton')}}</p>
     <div class="ml-auto mr-auto flex center-items justify-center">
       <i
         class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />

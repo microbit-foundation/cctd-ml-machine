@@ -414,9 +414,18 @@ export const translations: TranslationMap = {
 		"popup.connectMB.nextButton": "Next",
 		"popup.connectMB.backButton": "Back",
 		// RADIO CONNECTION START
-		"popup.connectMB.radioStart": "I only have one micro:bit",
+		"popup.connectMB.radioStart.heading": "What you will need to get started:",
+		"popup.connectMB.radioStart.requirements1": "2 x micro:bits",
+		"popup.connectMB.radioStart.requirements2": "1 x USB cable, battery pack & micro:bit holder",
+		"popup.connectMB.radioStart.requirements3": "1 x computer",
+		"popup.connectMB.radioStart.switchBluetooth": "I only have one micro:bit",
 		// BLUETOOTH CONNECTION START
-		"popup.connectMB.bluetoothStart": "I have two micro:bits",
+		"popup.connectMB.bluetoothStart.heading": "If you only have one micro:bit",
+		"popup.conectMB.bluetoothStart.subtitle": "You will need to have web Bluetooth enabled on your computer and in your web browser.",
+		"popup.connectMB.bluetoothStart.requirements1": "1 x micro:bits",
+		"popup.connectMB.bluetoothStart.requirements2": "1 x USB cable, battery pack & micro:bit holder",
+		"popup.connectMB.bluetoothStart.requirements3": "1 x computer",
+		"popup.connectMB.bluetoothStart.switchRadio": "I have two micro:bits",
 		// CONNECT CABLE TO MICROBIT
 		"popup.connectMB.connectCable.heading": "Connect cable",
 		"popup.connectMB.connectCable.subtitle": "Connect a micro:bit to this computer with a USB cable so that the <brand name> program can be downloaded to it.",

@@ -14,7 +14,8 @@ export enum DeviceRequestStates {
 }
 export enum ConnectDialogStates {
   NONE, // No connection in progress -> Dialog box closed
-  START, // Initial box with choice between radio and bluetooth connection
+  START_RADIO, // Initial box. Main prompt is to connect via radio however includes choice to connect via bluetooth
+  START_BLUETOOTH, // Initial box to begin the bluetooth connection flow
   START_OUTPUT, // Initial box if input microbit is already connected. Choice between same and other microbit for output
   BAD_FIRMWARE, // We detected an issue with the firmware of the micro:bit trying to transfer program.
   CONNECT_CABLE, // Instructions how to connect micro:bit via usb
@@ -40,7 +41,7 @@ export const startConnectionProcess = (): void => {
   connectionDialogState.update(s => {
     s.connectionState = get(state).isInputConnected
       ? ConnectDialogStates.START_OUTPUT
-      : ConnectDialogStates.START;
+      : ConnectDialogStates.START_RADIO;
     s.deviceState = get(state).isInputConnected
       ? DeviceRequestStates.OUTPUT
       : DeviceRequestStates.INPUT;

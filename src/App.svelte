@@ -11,7 +11,6 @@
   import OverlayView from './views/OverlayView.svelte';
   import TabView from './views/TabView.svelte';
   import PageContentView from './views/PageContentView.svelte';
-  import BottomBarMenuView from './views/BottomBarMenuView.svelte';
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
   import { fade } from 'svelte/transition';
   import { state } from './script/stores/uiStore';
@@ -23,9 +22,9 @@
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Environment from './script/Environment';
   import Router from './router/Router.svelte';
-  import VideoDialog from './components/VideoDialog.svelte';
   import ControlBar from './components/control-bar/ControlBar.svelte';
   import SelectLanguageControlBarDropdown from './components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
+  import BottomPanel from './components/bottom/BottomPanel.svelte';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -75,9 +74,11 @@
           <PageContentView />
         </div>
 
+        {#if $state.isInputConnected}
         <div class="h-160px w-full">
-          <BottomBarMenuView />
+          <BottomPanel />
         </div>
+        {/if}
       </div>
     </main>
   {/if}

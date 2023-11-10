@@ -19,10 +19,11 @@ export enum ConnectDialogStates {
   START_OUTPUT, // Initial box if input microbit is already connected. Choice between same and other microbit for output
   BAD_FIRMWARE, // We detected an issue with the firmware of the micro:bit trying to transfer program.
   CONNECT_CABLE, // Instructions how to connect micro:bit via usb
-  CONNECT_TUTORIAL, // Instructions how to select micro:bit on popup
+  CONNECT_TUTORIAL_USB, // Instructions how to select micro:bit on popup when connected by usb
   USB_DOWNLOADING, // Downloading usb program status bar prompt
   CONNECT_BATTERY, // Instructions to connect micro:bit to battery
   BLUETOOTH, // Bluetooth connect prompt, with pattern drawing
+  CONNECT_TUTORIAL_BLUETOOTH, // Instructions on how to connect micro:bit when connecting to bluetooth
   BLUETOOTH_CONNECTING, // Downloading BlueTooth prompt
   USB_START, // Initial usb installation prompt
   USB_DONE, // Installation done prompt

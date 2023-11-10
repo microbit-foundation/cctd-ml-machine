@@ -28,7 +28,7 @@
       <p class="font-bold text-2xl text-left">
          {$t('connectMB.webPopup')}
       </p>
-      <img src="public/imgs/select-microbit.png" alt="Instructions on how to choose microbit from web popup" class="left-0 pt-5"/>
+      <img src="" alt="Instructions on how to choose microbit from web popup via bluetooth" class="left-0 pt-5"/>
       <p class="absolute left-3/4 transform -translate-x-1/2 top-1/2 -translate-y-28">{$t('connectMB.webPopup.instruction1')}</p>
       <p class="absolute left-3/4 transform -translate-x-1/2 -translate-y-13">{$t('connectMB.webPopup.instruction2')}</p>
     </div>

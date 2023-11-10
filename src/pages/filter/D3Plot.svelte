@@ -8,7 +8,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
-  import { FilterType, determineFilter } from '../../script/datafunctions';
+  import { FilterType, determineFilter, getFilterLimits } from '../../script/datafunctions';
   import { GestureData, gestures } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
   import { getPrevData } from '../../script/stores/mlStore';
@@ -21,6 +21,8 @@
   const uniqueLiveDataID = 983095438740;
 
   const plotSize = fullScreen ? 800 : 400;
+
+  const {min, max} = getFilterLimits(filter);
 
   const createLiveData = () => {
     const liveData = getPrevData();
@@ -84,7 +86,7 @@
   };
 
   // Function that both returns data rep and have A LOT of side effects <-- should be fixed
-  const createDataRepresentation = () => {
+  function createDataRepresentation() {
     const classes: { name: string; id: number }[] = [];
     const data: GestureData[] = get(gestures);
     const recordings: RecordingRepresentation[] = [];
@@ -143,7 +145,7 @@
   });
 
   // Highlight the specie that is hovered
-  const highlight = function (
+  function highlight(
     event: any,
     gesture: RecordingRepresentation | { gestureClassID: number },
   ) {
@@ -170,7 +172,7 @@
   };
 
   // Unhighlight
-  const doNotHighlight = function () {
+  function doNotHighlight() {
     d3.selectAll('.line')
       .transition()
       .duration(200)
@@ -244,11 +246,11 @@
     return d3.scalePoint().range([15, width]).padding(0.1).domain(d);
   };
 
-  function createYScalar(d: Axis[], data: RecordingRepresentation[]) {
+  function createYScalar(d: Axis[]) {
     let y: any = {};
     for (let i in d) {
       let axis: Axis = d[i];
-      y[axis] = d3.scaleLinear().domain(getExtent(axis, recordings)).range([height, 0]);
+      y[axis] = d3.scaleLinear().domain([min, max]).range([height, 0]);
     }
     return y;
   };
@@ -272,7 +274,7 @@
     if (notMountedYet) return;
 
     // For each dimension, I build a linear scale. I store all in a y object
-    const yScalar = createYScalar(dimensions, data);
+    const yScalar = createYScalar(dimensions);
 
     // Build the X scale -> it find the best position for each Y axis
     const xScalar = createXScalar(dimensions);
@@ -303,7 +305,7 @@
 
       if(liveDataRep === undefined) return;
       // For each dimension, I build a linear scale. I store all in a y object
-      const yScalar = createYScalar(dimensions, [...data, liveDataRep]);
+      const yScalar = createYScalar(dimensions);
 
       // Build the X scale -> it find the best position for each Y axis
       const xScalar = createXScalar(dimensions);

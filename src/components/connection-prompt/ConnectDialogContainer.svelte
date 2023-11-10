@@ -139,7 +139,7 @@
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.BLUETOOTH}
     BLUETOOTH
     <BluetoothConnectDialog
-        connectButtonClicked={() => {
+      nextButtonClicked={() => {
           $connectionDialogState.connectionState = ConnectDialogStates.CONNECT_TUTORIAL;
         }}
         deviceState={$connectionDialogState.deviceState} />

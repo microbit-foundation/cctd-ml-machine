@@ -14,12 +14,12 @@
   <main>
     <div class="w-180 leading-10 pb-5">
       <p class="font-bold text-2xl text-left pb-3">
-        {$t('popup.connectMB.connectBattery.heading')}
+        {$t('connectMB.connectBattery.heading')}
       </p>
-      <p>{$t('popup.connectMB.connectBattery.subtitle')}</p>
+      <p>{$t('connectMB.connectBattery.subtitle')}</p>
       <img src="public/imgs/stylised-microbit-connected.svg" alt="Battery connection diagram" class="px-40 pt-5"/>
     </div>
     <div class="justify-end flex pt-10">
-    <StandardButton onClick={onNextClick}>{$t('popup.connectMB.nextButton')}</StandardButton>
+    <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
     </div>
   </main>

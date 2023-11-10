@@ -17,7 +17,7 @@
 
   // callbacks
   export let deviceState: DeviceRequestStates;
-  export let connectButtonClicked: () => void;
+  export let nextButtonClicked: () => void;
 
   let patternMatrixState: Writable<boolean[]> =
     deviceState === DeviceRequestStates.INPUT ? btPatternInput : btPatternOutput;
@@ -31,13 +31,13 @@
 
 <main class="w-180">
   <h1 class="mb-5 font-bold text-2xl justify-center">
-    {$t('popup.connectMB.pattern.heading')}
+    {$t('connectMB.pattern.heading')}
   </h1>
-  <p>{$t('popup.connectMB.pattern.subtitle')}</p>
+  <p>{$t('connectMB.pattern.subtitle')}</p>
     <div class="flex justify-center pt-20 pb-10">
       <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
     </div>
   <div class="justify-end flex pt-10">
-    <StandardButton onClick={connectButtonClicked}>{$t('popup.connectMB.bluetooth.connect')}</StandardButton>
+    <StandardButton onClick={nextButtonClicked}>{$t('connectMB.nextButton')}</StandardButton>
   </div>
 </main>

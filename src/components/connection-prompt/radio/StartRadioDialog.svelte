@@ -14,25 +14,25 @@
 
   <main>
     <div class="w-200">
-      <p class="font-bold pb-10 text-2xl text-left">{$t('popup.connectMB.radioStart.heading')}</p>
+      <p class="font-bold pb-10 text-2xl text-left">{$t('connectMB.radioStart.heading')}</p>
       <div class="inline-grid grid-cols-3 gap-20 py-20 px-10">
         <div>
             <img src="" alt="PLACEHOLDER" />
-            <p class="pt-10 text-center font-bold">{$t('popup.connectMB.radioStart.requirements1')}</p>
+            <p class="pt-10 text-center font-bold">{$t('connectMB.radioStart.requirements1')}</p>
         </div>
         <div>
             <img src="" alt="PLACEHOLDER" />
-            <p class="pt-10 text-center font-bold">{$t('popup.connectMB.radioStart.requirements2')}</p>
+            <p class="pt-10 text-center font-bold">{$t('connectMB.radioStart.requirements2')}</p>
         </div>
         <div>
             <img src="" alt="PLACEHOLDER" />
-            <p class="pt-10 text-center font-bold">{$t('popup.connectMB.radioStart.requirements3')}</p>
+            <p class="pt-10 text-center font-bold">{$t('connectMB.radioStart.requirements3')}</p>
         </div>
     </div>
   </div>
     <div class="flex items-center w-full">
-        <div on:click={onStartBluetoothClick} class="w-min-70">{$t('popup.connectMB.radioStart.switchBluetooth')}</div>
-        <StandardButton extraClasses="basis-full" position="right" onClick={onNextClick}>{$t('connectMB.main.nextButton')}</StandardButton>
+        <div on:click={onStartBluetoothClick} class="w-min-70">{$t('connectMB.radioStart.switchBluetooth')}</div>
+        <StandardButton extraClasses="basis-full" position="right" onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
     </div>
   </main>
   

@@ -103,18 +103,18 @@
 
 <main>
   <h1 class="mb-5 font-bold w-150">
-    {$t('popup.connectMB.bluetooth.heading')}
+    {$t('connectMB.bluetooth.heading')}
   </h1>
   {#if $state.requestDeviceWasCancelled && !isConnecting}
-    <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
+    <p class="text-warning mb-1">{$t('connectMB.bluetooth.cancelledConnection')}</p>
   {/if}
   {#if attemptedToPairWithInvalidPattern}
-    <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.invalidPattern')}</p>
+    <p class="text-warning mb-1">{$t('connectMB.bluetooth.invalidPattern')}</p>
   {/if}
   {#if isConnecting}
     <!-- Show spinner while connecting -->
     <div class="w-650px flex flex-col justify-center items-center">
-      <p>{$t('popup.connectMB.bluetooth.connecting')}</p>
+      <p>{$t('connectMB.bluetooth.connecting')}</p>
       <img alt="loading" src="/imgs/loadingspinner.gif" width="100px" />
       <div class="bg-primary rounded w-full h-5">
         <div

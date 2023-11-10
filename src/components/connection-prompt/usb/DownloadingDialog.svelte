@@ -14,10 +14,10 @@
 <main>
   <div class="w-600px text-left">
     <h1 class="font-bold mb-5 text-2xl">
-      {$t('popup.connectMB.usbDownloading.header')}
+      {$t('connectMB.usbDownloading.header')}
     </h1>
     <p class="mb-2">
-      {$t('popup.connectMB.usbDownloading.subtitle')}
+      {$t('connectMB.usbDownloading.subtitle')}
     </p>
     <div class="flex justify-center mb-2">
       <div class="flex-1 mr-2">

@@ -16,13 +16,13 @@
   <main>
     <div class="w-200 leading-10">
       <p class="font-bold text-2xl text-left pb-5">
-        {$t("popup.connectMB.connectCable.heading")}
+        {$t("connectMB.connectCable.heading")}
       </p>
-      <p class="leading-normal">{$t('popup.connectMB.connectCable.subtitle')}</p>
+      <p class="leading-normal">{$t('connectMB.connectCable.subtitle')}</p>
       <img src="imgs/connect-cable.gif" alt="GIF of connecting micro:bit" class="px-55 py-5"/>
     </div>
     <div class="justify-end flex gap-x-5">
-    <StandardButton outlined={true} onClick={onBackClick}>{$t('popup.connectMB.backButton')}</StandardButton>
-    <StandardButton onClick={onNextClick}>{$t('popup.connectMB.nextButton')}</StandardButton>
+    <StandardButton outlined={true} onClick={onBackClick}>{$t('connectMB.backButton')}</StandardButton>
+    <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
     </div>
   </main>

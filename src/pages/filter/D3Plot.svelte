@@ -125,7 +125,7 @@
   }
 
   onInterval(() => {
-    drawParallelPlot(recordings, plot);
+    UpdateLiveDataLine(recordings, plot);
   }, 100);
 
   onMount(() => {
@@ -138,6 +138,8 @@
       .attr('height', height + margin.top + margin.bottom)
       .append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    
+    drawParallelPlot(recordings, plot);
   });
 
   // Highlight the specie that is hovered
@@ -238,71 +240,56 @@
       });
   }
 
+  function createXScalar(d: Axis[]) {
+    return d3.scalePoint().range([15, width]).padding(0.1).domain(d);
+  };
 
-  // --------- DRAW PLOT ---------------
-  function drawParallelPlot(
-    data: RecordingRepresentation[],
-    plot: any,
-  ) {
-    if (notMountedYet) return;
-    
-
-    // For each dimension, I build a linear scale. I store all in a y object
+  function createYScalar(d: Axis[], data: RecordingRepresentation[]) {
     let y: any = {};
-    for (let i in dimensions) {
-      let axis: Axis = dimensions[i];
-      y[axis] = d3.scaleLinear().domain(getExtent(axis, data)).range([height, 0]);
+    for (let i in d) {
+      let axis: Axis = d[i];
+      y[axis] = d3.scaleLinear().domain(getExtent(axis, recordings)).range([height, 0]);
     }
+    return y;
+  };
 
-    // Build the X scale -> it find the best position for each Y axis
-    const x = d3.scalePoint().range([15, width]).padding(0.1).domain(dimensions);
-
-    // Extract the list of dimensions we want to keep in the plot.
+  // Extract the list of dimensions we want to keep in the plot.
     // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-    function path(gesture: RecordingRepresentation) {
-      return d3.line()(
-        dimensions.map(function (axis: Axis) {
+    function getPathFunc(x: d3.ScalePoint<string>, y: any, d: Axis[]) {
+      return (gesture: RecordingRepresentation) => d3.line()(
+        d.map(function (axis: Axis) {
           return [x(axis) as number, y[axis](gesture[axis])];
         }),
       );
     }
 
-    if (plotDrawn) {
-      const livePath = plot.select('.s'+uniqueLiveDataID);
 
-      if (!showLive) {
-        if (!livePath.empty()) {
-          classList = classList.filter(c => c.id !== uniqueLiveDataID);
-          livePath.remove();
-        }
-        return;
-      }
+  // --------- DRAW PLOT ---------------
+  function drawParallelPlot(
+    data: RecordingRepresentation[],
+    p: any,
+  ) {
+    if (notMountedYet) return;
 
-      const liveDataRep: RecordingRepresentation | undefined = createLiveData();
+    // For each dimension, I build a linear scale. I store all in a y object
+    const yScalar = createYScalar(dimensions, data);
 
-      if (livePath.empty() && liveDataRep !== undefined) {
-        classList = [...classList, { name: 'live', id: uniqueLiveDataID }];
-      
-        // Insert live data path
-        drawLines([liveDataRep], plot, path);
-      } else {
-        // Update live path
-        const newLivePathLine = () => path(liveDataRep as RecordingRepresentation);
-        // Animate
-        livePath.transition().duration(50).attr('d', newLivePathLine);
-      }
-      return;
-    }
+    // Build the X scale -> it find the best position for each Y axis
+    const xScalar = createXScalar(dimensions);
 
-    drawAxes(plot, x, y);
+    const path = getPathFunc(xScalar, yScalar, dimensions);
 
-    drawLines(data, plot, path);
+    drawAxes(p, xScalar, yScalar);
+
+    drawLines(data, p, path);
       
     plotDrawn = true;
   }
 
-  function updateLiveData(path: PathDrawer) {
-    const livePath = plot.select('.s'+uniqueLiveDataID);
+  function UpdateLiveDataLine(data: RecordingRepresentation[], p: any) {
+    if(plotDrawn === false) return;
+
+    const livePath = p.select('.s'+uniqueLiveDataID);
 
       if (!showLive) {
         if (!livePath.empty()) {
@@ -314,11 +301,22 @@
 
       const liveDataRep: RecordingRepresentation | undefined = createLiveData();
 
-      if (livePath.empty() && liveDataRep !== undefined) {
+      if(liveDataRep === undefined) return;
+      // For each dimension, I build a linear scale. I store all in a y object
+      const yScalar = createYScalar(dimensions, [...data, liveDataRep]);
+
+      // Build the X scale -> it find the best position for each Y axis
+      const xScalar = createXScalar(dimensions);
+
+      const path = getPathFunc(xScalar, yScalar, dimensions);
+
+
+      if (livePath.empty()) {
+        // Add 'live' to legend
         classList = [...classList, { name: 'live', id: uniqueLiveDataID }];
       
         // Insert live data path
-        drawLines([liveDataRep], plot, path);
+        drawLines([liveDataRep], p, path);
       } else {
         // Update live path
         const newLivePathLine = () => path(liveDataRep as RecordingRepresentation);

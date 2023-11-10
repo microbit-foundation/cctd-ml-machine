@@ -74,17 +74,6 @@
     return getColorForClass(gestureID.toString());
   };
 
-  const getExtent = (axis: Axis, data: RecordingRepresentation[]) => {
-    const extent = d3.extent(data, function (gesture: unknown) {
-      const value: number = (gesture as RecordingRepresentation)[axis];
-      return value;
-    });
-    if (extent[0] === undefined) {
-      throw new Error('Unable to find extent of data!');
-    }
-    return extent;
-  };
-
   // Function that both returns data rep and have A LOT of side effects <-- should be fixed
   function createDataRepresentation() {
     const classes: { name: string; id: number }[] = [];
@@ -242,9 +231,8 @@
       });
   }
 
-  function createXScalar(d: Axis[]) {
-    return d3.scalePoint().range([15, width]).padding(0.1).domain(d);
-  };
+  const xScalar: d3.ScalePoint<string> = d3.scalePoint().range([15, width]).padding(0.1).domain(dimensions);
+
 
   function createYScalar(d: Axis[]) {
     let y: any = {};
@@ -254,6 +242,8 @@
     }
     return y;
   };
+
+  const yScalar: any = createYScalar(dimensions);
 
   // Extract the list of dimensions we want to keep in the plot.
     // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
@@ -265,6 +255,8 @@
       );
     }
 
+    const path = getPathFunc(xScalar, yScalar, dimensions);
+
 
   // --------- DRAW PLOT ---------------
   function drawParallelPlot(
@@ -272,14 +264,6 @@
     p: any,
   ) {
     if (notMountedYet) return;
-
-    // For each dimension, I build a linear scale. I store all in a y object
-    const yScalar = createYScalar(dimensions);
-
-    // Build the X scale -> it find the best position for each Y axis
-    const xScalar = createXScalar(dimensions);
-
-    const path = getPathFunc(xScalar, yScalar, dimensions);
 
     drawAxes(p, xScalar, yScalar);
 
@@ -304,13 +288,6 @@
       const liveDataRep: RecordingRepresentation | undefined = createLiveData();
 
       if(liveDataRep === undefined) return;
-      // For each dimension, I build a linear scale. I store all in a y object
-      const yScalar = createYScalar(dimensions);
-
-      // Build the X scale -> it find the best position for each Y axis
-      const xScalar = createXScalar(dimensions);
-
-      const path = getPathFunc(xScalar, yScalar, dimensions);
 
 
       if (livePath.empty()) {

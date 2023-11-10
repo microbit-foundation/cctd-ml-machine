@@ -109,7 +109,7 @@
     CONNECT CABLE  
     <ConnectCableDialog
         onBackClick={() =>
-          ($connectionDialogState.connectionState = ConnectDialogStates.START_RADIO)}
+          ($connectionDialogState.connectionState = ConnectDialogStates.START_BLUETOOTH)}
         onNextClick={() =>
           ($connectionDialogState.connectionState = ConnectDialogStates.CONNECT_TUTORIAL)} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECT_TUTORIAL}

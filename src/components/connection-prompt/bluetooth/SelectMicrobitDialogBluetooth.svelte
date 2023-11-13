@@ -7,22 +7,11 @@
 <script lang="ts">
   import StandardButton from '../../StandardButton.svelte';
   import { t } from '../../../i18n';
-  import Microbits from '../../../script/microbit-interfacing/Microbits';
 
   export let onBackClick: () => void;
-  export let onFound: () => void;
-  export let onLinkError: () => void;
-
-  function onNextClick() {
-  Microbits.linkMicrobit()
-    .then(() => onFound())
-    .catch((e: Error) => {
-      console.log(e);
-      onLinkError();
-    });
-  }
+  export let onNextClick: () => void;
 </script>
-  
+
   <main>
     <div class="w-180 leading-10 pb-5">
       <p class="font-bold text-2xl text-left">

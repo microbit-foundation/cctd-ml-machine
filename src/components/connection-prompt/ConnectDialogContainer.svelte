@@ -137,9 +137,7 @@
     <SelectMicrobitDialogBluetooth
       onBackClick={() =>
         ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}
-      onLinkError={() =>
-        ($connectionDialogState.connectionState = ConnectDialogStates.NONE)}
-      onFound={onFoundBluetoothDevice} />
+      onNextClick={onFoundBluetoothDevice} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.BLUETOOTH_CONNECTING}
       <BluetoothConnectingDialog
           onBluetoothConnected={() => {

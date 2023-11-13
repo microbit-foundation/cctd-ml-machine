@@ -125,14 +125,19 @@
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECT_BATTERY}
     CONNECT BATTERY
     <ConnectBatteryDialog 
-    onNextClick={() =>
-      ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}/>
+      onBackClick={() =>
+        ($connectionDialogState.connectionState = ConnectDialogStates.CONNECT_TUTORIAL_USB)}
+      onNextClick={() =>
+        ($connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH)}/>
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.BLUETOOTH}
     BLUETOOTH
     <BluetoothConnectDialog
-      nextButtonClicked={() => {
-          $connectionDialogState.connectionState = ConnectDialogStates.CONNECT_TUTORIAL_BLUETOOTH;
+      onBackClick={() => {
+          $connectionDialogState.connectionState = ConnectDialogStates.CONNECT_BATTERY;
         }}
+      onNextClick={() => {
+        $connectionDialogState.connectionState = ConnectDialogStates.CONNECT_TUTORIAL_BLUETOOTH;
+      }}
         deviceState={$connectionDialogState.deviceState} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECT_TUTORIAL_BLUETOOTH}
     CONNECT TUTORIAL BLUETOOTH

@@ -17,7 +17,8 @@
 
   // callbacks
   export let deviceState: DeviceRequestStates;
-  export let nextButtonClicked: () => void;
+  export let onBackClick: () => void;
+  export let onNextClick: () => void;
 
   let patternMatrixState: Writable<boolean[]> =
     deviceState === DeviceRequestStates.INPUT ? btPatternInput : btPatternOutput;
@@ -37,7 +38,8 @@
     <div class="flex justify-center pt-20 pb-10">
       <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
     </div>
-  <div class="justify-end flex pt-10">
-    <StandardButton onClick={nextButtonClicked}>{$t('connectMB.nextButton')}</StandardButton>
+  <div class="justify-end gap-x-5 flex pt-10">
+    <StandardButton outlined={true} onClick={onBackClick}>{$t('connectMB.backButton')}</StandardButton>
+    <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
   </div>
 </main>

@@ -108,6 +108,8 @@
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECT_CABLE}
     CONNECT CABLE  
     <ConnectCableDialog
+        onSkipClick={() =>
+          ($connectionDialogState.connectionState = ConnectDialogStates.CONNECT_BATTERY)}
         onBackClick={() =>
           ($connectionDialogState.connectionState = ConnectDialogStates.START_BLUETOOTH)}
         onNextClick={() =>

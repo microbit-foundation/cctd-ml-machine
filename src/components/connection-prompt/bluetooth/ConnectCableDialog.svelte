@@ -11,6 +11,7 @@
   
     export let onNextClick: () => void;
     export let onBackClick: () => void;
+    export let onSkipClick: () => void;
   </script>
   
   <main>
@@ -21,8 +22,11 @@
       <p class="leading-normal">{$t('connectMB.connectCable.subtitle')}</p>
       <img src="imgs/connect-cable.gif" alt="GIF of connecting micro:bit" class="px-55 py-5"/>
     </div>
-    <div class="justify-end flex gap-x-5">
-    <StandardButton outlined={true} onClick={onBackClick}>{$t('connectMB.backButton')}</StandardButton>
-    <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
+    <div class="flex">
+      <p class="self-center w-full hover:cursor-pointer" on:click={onSkipClick}>Skip: program already downloaded?</p>
+      <div class="flex w-full justify-end gap-x-5">
+        <StandardButton outlined={true} onClick={onBackClick}>{$t('connectMB.backButton')}</StandardButton>
+        <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
+      </div>
     </div>
   </main>

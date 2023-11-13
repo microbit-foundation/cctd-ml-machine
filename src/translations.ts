@@ -166,6 +166,9 @@ export const translations: TranslationMap = {
 		"connectMB.bluetoothStart.requirements3": TRANSLATION_NEEDED,
 		"connectMB.bluetoothStart.switchRadio": TRANSLATION_NEEDED,
 		// CONNECT CABLE TO MICROBIT
+		"connectMB.connectCableMB1.heading": TRANSLATION_NEEDED,
+		"connectMB.connectCableMB1.subtitle": TRANSLATION_NEEDED,
+
 		"connectMB.connectCable.heading": TRANSLATION_NEEDED,
 		"connectMB.connectCable.subtitle": TRANSLATION_NEEDED,
 		// SELECT MICROBIT FROM WEB POPUP
@@ -444,6 +447,9 @@ export const translations: TranslationMap = {
 		"connectMB.bluetoothStart.requirements3": "1 x computer",
 		"connectMB.bluetoothStart.switchRadio": "I have two micro:bits",
 		// CONNECT CABLE TO MICROBIT
+		"connectMB.connectCableMB1.heading": "Connect cable to micro:bit 1",
+		"connectMB.connectCableMB1.subtitle": "Connect the first micro:bit to this computer with a USB cable so that the <brand name> program can be downloaded to it.",
+
 		"connectMB.connectCable.heading": "Connect cable",
 		"connectMB.connectCable.subtitle": "Connect a micro:bit to this computer with a USB cable so that the <brand name> program can be downloaded to it.",
 		// SELECT MICROBIT FROM WEB POPUP

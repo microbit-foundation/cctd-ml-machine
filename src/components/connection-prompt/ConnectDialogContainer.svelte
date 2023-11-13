@@ -7,6 +7,8 @@
 <script lang="ts">
   import StandardDialog from '../dialogs/StandardDialog.svelte';
   import StartRadioDialog from './radio/StartRadioDialog.svelte';
+  import ConnectCableDialogMB1 from './radio/ConnectCableDialogMB1.svelte';
+
   import StartBluetoothDialog from './bluetooth/StartBluetoothDialog.svelte';
   import ConnectCableDialog from './bluetooth/ConnectCableDialog.svelte';
   import SelectMicrobitDialogUsb from './usb/SelectMicrobitDialogUsb.svelte';
@@ -27,7 +29,7 @@
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
   import BluetoothConnectingDialog from './bluetooth/BluetoothConnectingDialog.svelte';
-    import SelectMicrobitDialogBluetooth from './bluetooth/SelectMicrobitDialogBluetooth.svelte';
+  import SelectMicrobitDialogBluetooth from './bluetooth/SelectMicrobitDialogBluetooth.svelte';
 
   let flashProgress = 0;
 
@@ -91,7 +93,15 @@
         onStartBluetoothClick={() =>
           ($connectionDialogState.connectionState = ConnectDialogStates.START_BLUETOOTH)}
         onNextClick={() =>
-          ($connectionDialogState.connectionState = ConnectDialogStates.USB_START)} />
+          ($connectionDialogState.connectionState = ConnectDialogStates.CONNECT_CABLE_MB1)} />
+    {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECT_CABLE_MB1}
+    <ConnectCableDialogMB1
+      onSkipClick={() =>
+        ($connectionDialogState.connectionState = ConnectDialogStates.CONNECT_BATTERY_MB1)}
+      onBackClick={() =>
+        ($connectionDialogState.connectionState = ConnectDialogStates.START_RADIO)}
+      onNextClick={() =>
+      ($connectionDialogState.connectionState = ConnectDialogStates.CONNECT_TUTORIAL_USB)} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.START_BLUETOOTH}
     START BLUETOOTH
     <StartBluetoothDialog

@@ -18,13 +18,127 @@
 
   $: showLive = $state.isInputConnected;
 
+  type RecordingRepresentation = {
+    ID: number;
+    gestureClassName: string;
+    gestureClassID: number;
+    x: number;
+    y: number;
+    z: number;
+  };
+  type Axis = 'x' | 'y' | 'z';
+  type PathDrawer = (gesture: RecordingRepresentation) => string | null;
+  
+  // Data
   const uniqueLiveDataID = 983095438740;
+  const filterStrategy = determineFilter(filter);
+  const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
+  let color: d3.ScaleOrdinal<string, string> | undefined = undefined;
+  let classList: { name: string; id: number }[] = [];
+  const recordings = createDataRepresentation(); // side effect: updates classList and color
 
+  // Plot
   const plotSize = fullScreen ? 800 : 400;
+  const margin = { top: 30, right: 10, bottom: 10, left: 0 };
+  const width = plotSize - margin.left - margin.right;
+  const height = plotSize * 0.75 - margin.top - margin.bottom;
+  let plot: any = undefined;
+  let plotDrawn = false;
 
+  // Scalars to built graph and insert data in graph
+  const dimensions: Axis[] = ['x', 'y', 'z'];
   const {min, max} = getFilterLimits(filter);
+  const xScalar: d3.ScalePoint<string> = d3.scalePoint().range([15, width]).padding(0.1).domain(dimensions);
+  const yScalar: any = createYScalar(dimensions, min, max);
+  const path = getPathFunc(xScalar, yScalar, dimensions);
 
-  const createLiveData = () => {
+  onMount(() => {
+    // append the svg object for plot
+    plot = d3
+      .select('#parallel-plot-' + filter)
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    
+    drawParallelPlot(recordings, plot);
+  });
+
+  onInterval(() => {
+    UpdateLiveDataPath(plot);
+  }, 100);
+
+  // --------- DRAW PLOT ---------------
+  function drawParallelPlot(
+    data: RecordingRepresentation[],
+    p: any,
+  ) {
+
+    drawAxes(p, xScalar, yScalar);
+
+    drawLines(data, p, path);
+      
+    plotDrawn = true;
+  }
+
+  function UpdateLiveDataPath(p: any) {
+    if(plotDrawn === false) return;
+
+    const livePath = p.select('.s'+uniqueLiveDataID);
+
+      if (!showLive) {
+        if (!livePath.empty()) {
+          classList = classList.filter(c => c.id !== uniqueLiveDataID);
+          livePath.remove();
+        }
+        return;
+      }
+
+      const liveDataRep: RecordingRepresentation | undefined = createLiveData();
+
+      if(liveDataRep === undefined) return;
+
+
+      if (livePath.empty()) {
+        // Add 'live' to legend
+        classList = [...classList, { name: 'live', id: uniqueLiveDataID }];
+      
+        // Insert live data path
+        drawLines([liveDataRep], p, path);
+      } else {
+        // Update live path
+        const newLivePathLine = () => path(liveDataRep as RecordingRepresentation);
+        // Animate
+        livePath.transition().duration(50).attr('d', newLivePathLine);
+      }
+  }
+
+  // --------- HELPER FUNCTIONS ---------------
+
+  function onInterval(callback: () => void, milliseconds: number) {
+    const interval = setInterval(callback, milliseconds);
+    onDestroy(() => {
+      clearInterval(interval);
+    });
+  }
+
+  function getColorForClass(gestureID: string) {
+    if (color === undefined) {
+      throw new Error('Cannot get color for gesture, color function not defined');
+    }
+    return color(gestureID);
+  };
+
+  function getStrokeColor(gesture: unknown) {
+    const gestureID = (gesture as RecordingRepresentation).gestureClassID;
+    if (!gestureID) {
+      throw new Error('The given gesture did not contain a gestureClass');
+    }
+    return getColorForClass(gestureID.toString());
+  };
+
+  function createLiveData() {
     const liveData = getPrevData();
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {
@@ -38,43 +152,7 @@
     return filteredData;
   };
 
-  let plot: any = undefined;
-
-  let notMountedYet = true;
-
-  let classList: { name: string; id: number }[] = [];
-
-  type RecordingRepresentation = {
-    ID: number;
-    gestureClassName: string;
-    gestureClassID: number;
-    x: number;
-    y: number;
-    z: number;
-  };
-
-  type Axis = 'x' | 'y' | 'z';
-
-  const filterStrategy = determineFilter(filter);
-  const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
-  let color: d3.ScaleOrdinal<string, string> | undefined = undefined;
-
-  const getColorForClass = (gestureID: string) => {
-    if (color === undefined) {
-      throw new Error('Cannot get color for gesture, color function not defined');
-    }
-    return color(gestureID);
-  };
-
-  const getStrokeColor = (gesture: unknown) => {
-    const gestureID = (gesture as RecordingRepresentation).gestureClassID;
-    if (!gestureID) {
-      throw new Error('The given gesture did not contain a gestureClass');
-    }
-    return getColorForClass(gestureID.toString());
-  };
-
-  // Function that both returns data rep and have A LOT of side effects <-- should be fixed
+  // Side effect: updates classList and color
   function createDataRepresentation() {
     const classes: { name: string; id: number }[] = [];
     const data: GestureData[] = get(gestures);
@@ -94,48 +172,14 @@
         recordings.push({ ID, gestureClassName, gestureClassID, x, y, z });
       });
     });
-    const classesIDs = classes.map(c => c.id.toString());
+    const classesIDs = [...classes.map(c => c.id.toString()), uniqueLiveDataID.toString()];
     color = d3.scaleOrdinal<string>().domain(classesIDs).range(d3.schemeSet3);
     classList = classes;
     return recordings;
   };
 
-  const recordings = createDataRepresentation();
-
-
-  // set the dimensions and margins of the graph
-  const margin = { top: 30, right: 10, bottom: 10, left: 0 };
-  const width = plotSize - margin.left - margin.right;
-  const height = plotSize * 0.75 - margin.top - margin.bottom;
-
-  function onInterval(callback: () => void, milliseconds: number) {
-    const interval = setInterval(callback, milliseconds);
-    onDestroy(() => {
-      clearInterval(interval);
-    });
-  }
-
-  onInterval(() => {
-    UpdateLiveDataLine(recordings, plot);
-  }, 100);
-
-  onMount(() => {
-    notMountedYet = false;
-    // append the svg object for plot
-    plot = d3
-      .select('#parallel-plot-' + filter)
-      .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-    
-    drawParallelPlot(recordings, plot);
-  });
-
-  // Highlight the specie that is hovered
   function highlight(
-    event: any,
+    _: any,
     gesture: RecordingRepresentation | { gestureClassID: number },
   ) {
     const gestureID = 's' + gesture.gestureClassID;
@@ -160,7 +204,6 @@
       .style('opacity', '1');
   };
 
-  // Unhighlight
   function doNotHighlight() {
     d3.selectAll('.line')
       .transition()
@@ -169,12 +212,6 @@
       .style('stroke', getStrokeColor)
       .style('opacity', '1');
   };
-
-  let plotDrawn = false;
-  
-  const dimensions: Axis[] = ['x', 'y', 'z'];
-
-  type PathDrawer = (gesture: RecordingRepresentation) => string | null;
 
   function drawLines(data: RecordingRepresentation[], plot: any, path: PathDrawer) {
     plot
@@ -231,77 +268,24 @@
       });
   }
 
-  const xScalar: d3.ScalePoint<string> = d3.scalePoint().range([15, width]).padding(0.1).domain(dimensions);
 
-
-  function createYScalar(d: Axis[]) {
+  function createYScalar(d: Axis[], minimum: number, maximum: number) {
     let y: any = {};
     for (let i in d) {
       let axis: Axis = d[i];
-      y[axis] = d3.scaleLinear().domain([min, max]).range([height, 0]);
+      y[axis] = d3.scaleLinear().domain([minimum, maximum]).range([height, 0]);
     }
     return y;
   };
 
-  const yScalar: any = createYScalar(dimensions);
 
-  // Extract the list of dimensions we want to keep in the plot.
-    // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-    function getPathFunc(x: d3.ScalePoint<string>, y: any, d: Axis[]) {
-      return (gesture: RecordingRepresentation) => d3.line()(
-        d.map(function (axis: Axis) {
-          return [x(axis) as number, y[axis](gesture[axis])];
-        }),
-      );
-    }
-
-    const path = getPathFunc(xScalar, yScalar, dimensions);
-
-
-  // --------- DRAW PLOT ---------------
-  function drawParallelPlot(
-    data: RecordingRepresentation[],
-    p: any,
-  ) {
-    if (notMountedYet) return;
-
-    drawAxes(p, xScalar, yScalar);
-
-    drawLines(data, p, path);
-      
-    plotDrawn = true;
-  }
-
-  function UpdateLiveDataLine(data: RecordingRepresentation[], p: any) {
-    if(plotDrawn === false) return;
-
-    const livePath = p.select('.s'+uniqueLiveDataID);
-
-      if (!showLive) {
-        if (!livePath.empty()) {
-          classList = classList.filter(c => c.id !== uniqueLiveDataID);
-          livePath.remove();
-        }
-        return;
-      }
-
-      const liveDataRep: RecordingRepresentation | undefined = createLiveData();
-
-      if(liveDataRep === undefined) return;
-
-
-      if (livePath.empty()) {
-        // Add 'live' to legend
-        classList = [...classList, { name: 'live', id: uniqueLiveDataID }];
-      
-        // Insert live data path
-        drawLines([liveDataRep], p, path);
-      } else {
-        // Update live path
-        const newLivePathLine = () => path(liveDataRep as RecordingRepresentation);
-        // Animate
-        livePath.transition().duration(50).attr('d', newLivePathLine);
-      }
+  // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+  function getPathFunc(x: d3.ScalePoint<string>, y: any, d: Axis[]) {
+    return (gesture: RecordingRepresentation) => d3.line()(
+      d.map(function (axis: Axis) {
+        return [x(axis) as number, y[axis](gesture[axis])];
+      }),
+    );
   }
 
 </script>

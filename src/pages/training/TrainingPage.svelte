@@ -16,7 +16,9 @@
   import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import StandardButton from '../../components/StandardButton.svelte';
   import { Paths, navigate } from '../../router/paths';
-  import CookieManager from '../../script/CookieManager';
+ 
+  import ScaleContainer from '../../components/model-visualisation/ScaleContainer.svelte';
+  import Model from '../../components/model-visualisation/Model.svelte';
 
   const sufficientData = hasSufficientData();
 
@@ -99,5 +101,8 @@
         </div>
       </div>
     {/if}
+    <ScaleContainer ratio={1.27} contentWidth={740} offsetWidth={450}>
+      <Model/>
+    </ScaleContainer>
   </div>
 </div>

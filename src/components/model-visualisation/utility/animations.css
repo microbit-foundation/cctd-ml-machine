@@ -1,0 +1,201 @@
+.input-node-bubble-animation {
+  animation-name: node-bubble-animation;
+  animation-duration: 400ms;
+}
+
+.output-node-bubble-animation {
+  animation-name: node-bubble-animation;
+  animation-duration: 400ms;
+}
+
+@keyframes node-bubble-animation {
+    from, to {
+      transform: scale(1);
+    }
+
+    36% {
+      transform: scale(0.9, 1.2) translateX(-3px);
+    }
+
+    73% {
+      transform: scale(1.3, 0.8) translateX(0px);
+    }
+  }
+
+  @keyframes jello {
+    from, 98.75%, to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  16% {
+    -webkit-transform: scale(1.25);
+    transform: scale(1.25);
+  }
+  28.75% {
+    -webkit-transform: skewX(-12.5deg) skewY(-12.5deg) scale(1);
+    transform: skewX(-12.5deg) skewY(-12.5deg) scale(1);
+  }
+  37.5% {
+    -webkit-transform: skewX(6.25deg) skewY(6.25deg);
+    transform: skewX(6.25deg) skewY(6.25deg);
+  }
+  46.25% {
+    -webkit-transform: skewX(-3.125deg) skewY(-3.125deg);
+    transform: skewX(-3.125deg) skewY(-3.125deg);
+  }
+  55% {
+    -webkit-transform: skewX(1.5625deg) skewY(1.5625deg);
+    transform: skewX(1.5625deg) skewY(1.5625deg);
+  }
+  63.75% {
+    -webkit-transform: skewX(-0.78125deg) skewY(-0.78125deg);
+    transform: skewX(-0.78125deg) skewY(-0.78125deg);
+  }
+  72.5% {
+    -webkit-transform: skewX(0.390625deg) skewY(0.390625deg);
+    transform: skewX(0.390625deg) skewY(0.390625deg);
+  }
+  81.25% {
+    -webkit-transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
+    transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
+  }
+}
+
+.animate-model-chewing {
+  animation-name: jello;
+  animation-duration: 1000ms;
+}
+
+.animate-winner-flag {
+  animation-name: winner-flag;
+  animation-duration: 1500ms;
+  animation-timing-function: ease-in-out;
+  transform-origin: 1px 26px;
+}
+
+  @keyframes winner-flag {
+    from {
+      transform: rotate(180deg) scale(0.6);
+      opacity: 0;
+    }
+
+    to {
+      transform: rotate(90deg) scale(0.6);
+      opacity: 0;
+    }
+
+    20%, 90% {
+      transform: rotate(-30deg) scale(1);
+      opacity: 1;
+    }
+
+    37.5% {
+      transform: rotate(30deg)
+    }
+
+    55% {
+      transform: rotate(-30deg);
+    }
+
+    72.5% {
+      transform: rotate(30deg);
+    }
+}
+
+.animate-right-flag {
+  animation-name: right-flag;
+  animation-duration: 1500ms;
+  transform-origin: 1px 26px;
+}
+
+.animate-left-flag {
+  animation-name: left-flag;
+  animation-duration: 1500ms;
+  transform-origin: 1px 26px;
+}
+
+  @keyframes right-flag {
+    from, to {
+      transform: translate(2px, -28px) rotate(30deg) scale(0.2);
+      opacity: 0;
+    }
+
+    7%, 93% {
+      transform: translate(2px, -28px) rotate(-30deg) scale(1.2);
+    }
+
+    10%, 90% {
+      transform: translate(2px, -28px) rotate(-30deg) scale(1);
+      opacity: 1;
+    }
+
+    34% {
+      transform: translate(2px, -28px) rotate(30deg);
+    }
+
+    58% {
+      transform: translate(2px, -28px) rotate(-30deg);
+    }
+
+    82% {
+      transform: translate(2px, -28px) rotate(15deg);
+    }
+}
+
+
+@keyframes left-flag {
+    from, to {
+      transform: translate(-2px, -28px) rotate(-30deg) scale(-0.2, 0.2);
+      opacity: 0;
+    }
+
+    7%, 93% {
+      transform: translate(-2px, -28px) rotate(30deg) scale(-1.2, 1.2);
+    }
+
+    10%, 90% {
+      transform: translate(-2px, -28px) rotate(30deg) scale(-1, 1);
+      opacity: 1;
+    }
+
+    34% {
+      transform: translate(-2px, -28px) rotate(-30deg) scale(-1, 1);
+    }
+
+    58% {
+      transform: translate(-2px, -28px) rotate(30deg) scale(-1, 1);
+    }
+
+    82% {
+      transform: translate(-2px, -28px) rotate(-15deg) scale(-1, 1);
+    }
+}
+
+.animate-bounce-in-out {
+  animation: bounce-in-out 1500ms;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes bounce-in-out {
+  from, to {
+    opacity: 0;
+    transform: scale(0.3, 0.3);
+  }
+  10% {
+    transform: scale(1.1, 1.1);
+  }
+  20% {
+    transform: scale(0.9, 0.9);
+  }
+  25% {
+    transform: scale(1.03, 1.03);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1.03, 1.03);
+  }
+  80% {
+    transform: scale(0.97, 0.97);
+    opacity: 1;
+  }
+}

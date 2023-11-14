@@ -20,7 +20,6 @@ import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
-import Gestures from './Gestures';
 import { gestures } from './stores/Stores';
 import Repositories from './Repositories';
 
@@ -64,6 +63,96 @@ function createModel(): LayersModel {
 
   return model;
 }
+
+// GET WEIGHTS
+export type ModelLayer = {
+  weights: number[];
+  biases: number[];
+}
+
+export type LabelConfidencePair = {
+  label: string;
+  confidence: number;
+}
+
+export type PredictionResults = LabelConfidencePair[];
+
+/**
+ * Get an array of layers within the current model.
+ * Each layer consists of two flat arrays of respectively weights and biases
+ * @returns Layers of model
+ */
+ export function getWeights(): Promise<ModelLayer[]> {
+  const neuralNetwork: LayersModel = get(model);
+  return new Promise<ModelLayer[]>((resolve, reject) => {
+    if (neuralNetwork === undefined) {
+      reject("No model is present");
+      return;
+    }
+
+    const extractedLayers : ModelLayer[] = [];
+    const modelLayers = neuralNetwork.neuralNetwork.model.layers;
+
+    for (let i = 0; i < modelLayers.length; i++) {
+      const modelWeightLayers = modelLayers[i].getWeights();
+      const modelWeights = modelWeightLayers[0].dataSync();
+      const modelBiases = modelWeightLayers[1].dataSync();
+
+      const extractedLayer : ModelLayer = {
+        weights: modelWeights.map(Math.abs),
+        biases: modelBiases.map(Math.abs)
+      };
+      extractedLayers.push(extractedLayer);
+    }
+
+    console.log("Extracted layers: ", extractedLayers );
+
+    resolve(extractedLayers);
+  });
+}
+
+/**
+ * Compare function for sorting results from prediction
+ * @param a confidencePair
+ * @param b confidencePair
+ * @returns (-1 means a is first), (1 means b is first), 0 means they're equal
+ */
+export function compareLabelAlphabetically(a: LabelConfidencePair, b: LabelConfidencePair) : number {
+  if (a.label < b.label) {
+    return -1;
+  }
+  if (a.label > b.label) {
+    return 1;
+  }
+  return 0;
+}
+
+// Classify data synchronously
+export function classifySync() : PredictionResults {
+  const currentState = get(state);
+  const classifyingUnavailable = !currentState.isInputConnected || !currentState.isPredicting || currentState.isRecording || currentState.isTraining;
+  if (classifyingUnavailable) return [];
+
+  // Pass parameters to classify
+  const results : PredictionResults = get(model).classifySync(getInputs());
+  results.sort(compareLabelAlphabetically)
+  classifyEvent.invoke(results);
+  return results;
+}
+
+export function getIndexOfGreatestPrediction(predictions: PredictionResults) : number {
+    let max = 0;
+    let indexOfMax = 0;
+    for (let i = 0; i < predictions.length; i++) {
+      const confidence = predictions[i].confidence;
+      if (max > confidence) continue;
+      max = confidence;
+      indexOfMax = i;
+    }
+    return indexOfMax;
+}
+
+// GET WEIGHTS END
 
 export function trainModel() {
   state.update(obj => {
@@ -116,6 +205,7 @@ export function trainModel() {
     // Promise resolves after 2.5 sec, making training take at least 2.5 sec from users perspective
     // See "finishedTraining" function to see how this works
   });
+
 
   const onTrainEnd = () => finishedTraining();
 

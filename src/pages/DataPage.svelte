@@ -10,7 +10,6 @@
   import {
     clearGestures,
     downloadDataset,
-    gestures,
     loadDatasetFromFile,
   } from '../script/stores/mlStore';
   import { t } from '../i18n';
@@ -24,6 +23,7 @@
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
+  import { gestures } from '../script/stores/Stores';
 
   let isConnectionDialogOpen = false;
 
@@ -131,9 +131,9 @@
         </div>
       {/if}
       <!-- Display all gestures -->
-      {#each $gestures as gesture (gesture.ID)}
+      {#each $gestures as gesture}
         <Gesture
-          bind:gesture
+          gesture={gestures.getGesture(gesture.ID)}
           onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
       {/each}
       <NewGestureButton />

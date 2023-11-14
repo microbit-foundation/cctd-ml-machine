@@ -10,10 +10,10 @@ import {
   checkCompatibility,
 } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
-import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
+import { gestures } from './Stores';
 
 // TODO: Rename? Split up further?
 
@@ -116,13 +116,13 @@ function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: strin
 }
 
 export const hasSufficientData = (): boolean => {
-  if (!get(gestures)) {
+  if (!gestures) {
     return false;
   }
-  if (get(gestures).length < 2) {
+  if (gestures.getNumberOfGestures() < 2) {
     return false;
   }
-  return !get(gestures).some(gesture => gesture.recordings.length < 3);
+  return !gestures.getGestures().some(gesture => gesture.getRecordings().length < 3);
 };
 
 export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({

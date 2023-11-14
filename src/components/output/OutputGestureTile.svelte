@@ -20,18 +20,18 @@
   import GestureTilePart from '../GestureTilePart.svelte';
   import Information from '../information/Information.svelte';
   import { Writable } from 'svelte/store';
+  import Gesture from '../../script/stores/Gesture';
 
   // Variables for component
-  export let confidence: Writable<number>;
-  export let requiredConfidence: Writable<number>;
-  export let gesture: GestureData;
+  export let gesture: Gesture;
 
-  let sliderValue = $requiredConfidence * 100;
+  let sliderValue = $gesture.confidence.requiredConfidence * 100;
   $: {
-    $requiredConfidence = sliderValue / 100;
+    gesture.getConfidence().setRequiredConfidence(sliderValue / 100);
   }
 
-  $: active = $confidence > $requiredConfidence;
+  $: active =
+    $gesture.confidence.currentConfidence > $gesture.confidence.requiredConfidence;
 </script>
 
 <GestureTilePart>
@@ -40,7 +40,7 @@
       class="w-36 text-center font-semibold rounded-xl
                     px-1 py-1 border border-gray-300
                     border-dashed mr-2 break-words">
-      <h3>{gesture.name}</h3>
+      <h3>{$gesture.name}</h3>
     </div>
 
     <!-- METER -->
@@ -61,12 +61,13 @@
             class="absolute w-5
             {active ? 'bg-primary' : 'bg-info'}
               z-index: -10"
-            style="height: {100 * $confidence}px; margin-top: {100 -
-              100 * $confidence}px;" />
+            style="height: {100 *
+              $gesture.confidence.currentConfidence}px; margin-top: {100 -
+              100 * $gesture.confidence.currentConfidence}px;" />
           <div
             class="absolute w-5 bg-primary"
             style="height: 1px; margin-top: {6.5 -
-              0.068 * $requiredConfidence * 100}rem;" />
+              0.068 * $gesture.confidence.requiredConfidence * 100}rem;" />
           <div class="absolute">
             {#each [75, 50, 25] as line}
               <div class="w-5 bg-gray-300 mt-6" style="height: 1px;">

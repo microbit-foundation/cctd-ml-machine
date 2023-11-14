@@ -30,7 +30,7 @@ export function persistantWritable<T>(key: string, initValue: T): Writable<T> {
         return setWithFilters;
       }
       return value;
-    }
+    };
     storedObject = storedJson != null ? JSON.parse(storedJson, parseSets) : null;
   } catch (error) {
     console.warn(error);
@@ -43,10 +43,18 @@ export function persistantWritable<T>(key: string, initValue: T): Writable<T> {
     : initValue;
   const store: Writable<T> = writable(initValue);
   store.subscribe(val =>
-    localStorage.setItem(key, JSON.stringify({ version: persistVersion, value: val }, (key: string | number, value: unknown) => {
-      if (value instanceof Set && key === 'includedFilters') return [...value] as unknown[];
-      return value;
-    })));
+    localStorage.setItem(
+      key,
+      JSON.stringify(
+        { version: persistVersion, value: val },
+        (key: string | number, value: unknown) => {
+          if (value instanceof Set && key === 'includedFilters')
+            return [...value] as unknown[];
+          return value;
+        },
+      ),
+    ),
+  );
 
   return store;
 }

@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import { TrainingStatus, trainingStatus } from '../../script/stores/mlStore';
+  import { TrainingStatus, gestures, trainingStatus } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
@@ -17,13 +17,13 @@
 
   $: onDisconnect($state.isInputConnected);
 
+  $: sufficientData = hasSufficientData($gestures);
+
   function onDisconnect(isConnected: boolean) {
     if (!isConnected) {
       navigate(Paths.HOME);
     }
   }
-
-  const sufficientData = hasSufficientData();
 
   let isFailedTrainingDialogOpen = false;
 

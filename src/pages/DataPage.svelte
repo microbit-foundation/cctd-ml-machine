@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import Gesture from '../components/Gesture.svelte';
-  import { state } from '../script/stores/uiStore';
+  import { hasSufficientData, state } from '../script/stores/uiStore';
   import {
     clearGestures,
     downloadDataset,
@@ -147,6 +147,7 @@
           bind:gesture
           onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
       {/each}
+
       <NewGestureButton />
 
       <TrainingButton />

@@ -68,7 +68,6 @@ export const translations: TranslationMap = {
 		"content.trainer.failure.header": "Træning mislykkedes",
 		"content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
 		"content.trainer.failure.todo": "Gå tilbage til datasiden og ændr i din data.",
-		"content.trainer.controlbar.filters": "Filtre",
 
 		"content.filters.max.title" : "Maksværdier",
 		"content.filters.max.description" : "Det højeste punkt blandt alle datapunkter i en bevægelse.",
@@ -328,7 +327,6 @@ export const translations: TranslationMap = {
 		"content.trainer.failure.header": "Training Failed",
 		"content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
 		"content.trainer.failure.todo": "Return to the data page and change your data.",
-		"content.trainer.controlbar.filters": "Filters",
 
 		"content.filters.max.title" : "Max values",
 		"content.filters.max.description" : "The tallest point among all datapoints in a gesture.",

@@ -162,7 +162,9 @@ export function getModelNodeFrom(modelInformation: ModelInformation) : Illustrat
    * @returns an array of sums for each row of the original matrix
    */
   function sumWeights(weights: number[], weightsPerParameter: number): number[] {
-    const amountOfParameters = weights.length / weightsPerParameter;
+    console.log("weights", Object.keys(weights).length);
+    const amountOfParameters = Object.keys(weights).length / weightsPerParameter;
+    console.log("amountOfParameters", amountOfParameters);
     const parameterSums : number[] = Array(amountOfParameters);
     // Extract values from thirdLayer
     for(let i = 0; i < amountOfParameters; i++){

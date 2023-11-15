@@ -48,10 +48,11 @@ function getPrecision(loss: number): number {
 }
 
 function getAmountOfParameters(): number {
-  return get(settings).includedParameters.reduce(
-    (sum, val) => sum + (val ? 3 : 0),
-    0
-  );
+  // return get(settings).includedFilters.reduce(
+  //   (sum, val) => sum + (val ? 3 : 0),
+  //   0
+  // );
+  return 8*3;
 }
 
 function getAmountOfRecordings(): number {

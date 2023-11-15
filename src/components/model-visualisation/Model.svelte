@@ -23,7 +23,9 @@
   $: onStateUpdate($state);
 
   function onStateUpdate(state: any) {
-    if (state.isTraining || !state.isConnected || !state.isPredicting) return;
+    console.log("model animation state update");
+    console.log(state, state.isTraining, !state.isInputConnected, !state.isPredicting)
+    if (state.isTraining || !state.isInputConnected|| !state.isPredicting) return;
 
     updateIllustrationValues();
   }

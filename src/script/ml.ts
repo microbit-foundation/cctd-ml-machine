@@ -22,6 +22,7 @@ import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
 import { gestures } from './stores/Stores';
 import Repositories from './Repositories';
+import Event from "./Event";
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -91,23 +92,182 @@ export type PredictionResults = LabelConfidencePair[];
     }
 
     const extractedLayers : ModelLayer[] = [];
-    const modelLayers = neuralNetwork.neuralNetwork.model.layers;
+    console.log("Model layers: ", neuralNetwork);
+    resolve([
+      {
+          "weights": {
+              "0": 0.22975851595401764,
+              "1": 0.006445590872317553,
+              "2": 0.3651563823223114,
+              "3": 0.15232855081558228,
+              "4": 0.256447434425354,
+              "5": 0.16391021013259888,
+              "6": 0.0012586814118549228,
+              "7": 0.2568777799606323,
+              "8": 0.661003589630127,
+              "9": 0.32864779233932495,
+              "10": 0.1868351697921753,
+              "11": 0.09628582000732422,
+              "12": 0.4638656675815582,
+              "13": 0.10542968660593033,
+              "14": 0.13951319456100464,
+              "15": 0.043497178703546524,
+              "16": 0.5447653532028198,
+              "17": 0.18145360052585602,
+              "18": 0.35326874256134033,
+              "19": 0.4246135652065277,
+              "20": 0.21941885352134705,
+              "21": 0.06613405793905258,
+              "22": 0.15227526426315308,
+              "23": 0.18965251743793488,
+              "24": 0.5864914655685425,
+              "25": 0.6089742183685303,
+              "26": 0.21753616631031036,
+              "27": 0.19422811269760132,
+              "28": 0.28684717416763306,
+              "29": 0.1884368360042572,
+              "30": 0.18458625674247742,
+              "31": 0.02081356756389141,
+              "32": 0.2882952094078064,
+              "33": 0.03261197358369827,
+              "34": 0.8379471898078918,
+              "35": 0.37246835231781006,
+              "36": 0.025962237268686295,
+              "37": 0.2031194418668747,
+              "38": 0.05229736492037773,
+              "39": 0.19423121213912964,
+              "40": 0.39530202746391296,
+              "41": 0.6619464755058289,
+              "42": 0.30651387572288513,
+              "43": 0.2829100489616394,
+              "44": 0.07977516204118729,
+              "45": 0.17614758014678955,
+              "46": 0.1032099723815918,
+              "47": 0.49961167573928833,
+              "48": 0.2072754204273224,
+              "49": 0.13193371891975403,
+              "50": 0.3951583802700043,
+              "51": 0.4398827850818634,
+              "52": 0.03153643757104874,
+              "53": 0.3379824161529541,
+              "54": 0.09364543855190277,
+              "55": 0.37654349207878113,
+              "56": 0.6366833448410034,
+              "57": 0.5644657611846924,
+              "58": 0.13486501574516296,
+              "59": 0.11356453597545624,
+              "60": 0.5461100935935974,
+              "61": 0.29706504940986633,
+              "62": 0.01285259798169136,
+              "63": 0.7686774134635925,
+              "64": 0.1153133288025856,
+              "65": 0.31371885538101196,
+              "66": 0.2412048876285553,
+              "67": 0.2031463235616684,
+              "68": 0.06176621839404106,
+              "69": 0.18344374001026154,
+              "70": 0.3783668577671051,
+              "71": 0.2914965748786926,
+              "72": 0.05589932203292847,
+              "73": 0.562262237071991,
+              "74": 0.3901219069957733,
+              "75": 0.08633102476596832,
+              "76": 0.12797896564006805,
+              "77": 0.1552605926990509,
+              "78": 0.2523828148841858,
+              "79": 0.11892596632242203,
+              "80": 0.14284881949424744,
+              "81": 0.4516315758228302,
+              "82": 0.11559627205133438,
+              "83": 0.017779456451535225,
+              "84": 0.13742069900035858,
+              "85": 0.18653765320777893,
+              "86": 0.7201366424560547,
+              "87": 1.0469825267791748,
+              "88": 0.39436689019203186,
+              "89": 0.3110939860343933,
+              "90": 0.20331108570098877,
+              "91": 0.09105582535266876,
+              "92": 0.6225259304046631,
+              "93": 0.3662862777709961,
+              "94": 0.24124673008918762,
+              "95": 0.010165385901927948
+          },
+          "biases": {
+              "0": 0,
+              "1": 0,
+              "2": 0.11272893100976944,
+              "3": 0.1139492616057396,
+              "4": 0.01928190514445305,
+              "5": 0.18754713237285614,
+              "6": 0.31069624423980713,
+              "7": 0.43518856167793274,
+              "8": 0.14972706139087677,
+              "9": 0.1413734257221222,
+              "10": 0.02907503955066204,
+              "11": 0,
+              "12": 0.14413250982761383,
+              "13": 0,
+              "14": 0,
+              "15": 0.10365673899650574
+          }
+      },
+      {
+          "weights": {
+              "0": 0.0642457827925682,
+              "1": 0.10625755786895752,
+              "2": 0.2637644410133362,
+              "3": 0.11878874897956848,
+              "4": 0.4763989746570587,
+              "5": 0.7926439642906189,
+              "6": 0.4274751842021942,
+              "7": 0.4763071835041046,
+              "8": 0.36912789940834045,
+              "9": 0.04928659275174141,
+              "10": 0.14920277893543243,
+              "11": 0.135368213057518,
+              "12": 0.6258533000946045,
+              "13": 0.36930662393569946,
+              "14": 0.5447409749031067,
+              "15": 0.8076516389846802,
+              "16": 0.47769778966903687,
+              "17": 0.7187826633453369,
+              "18": 0.44273942708969116,
+              "19": 1.0828588008880615,
+              "20": 0.42193591594696045,
+              "21": 0.07196920365095139,
+              "22": 0.3618513345718384,
+              "23": 0.5839062929153442,
+              "24": 0.22663575410842896,
+              "25": 0.235091894865036,
+              "26": 0.6365035176277161,
+              "27": 0.19433802366256714,
+              "28": 0.4274584949016571,
+              "29": 0.10867241024971008,
+              "30": 0.6487986445426941,
+              "31": 0.3368111550807953
+          },
+          "biases": {
+              "0": 0.9695621132850647,
+              "1": 0.9695621132850647
+          }
+      }
+  ]);
+    // const modelLayers = neuralNetwork.neuralNetwork.model.layers;
 
-    for (let i = 0; i < modelLayers.length; i++) {
-      const modelWeightLayers = modelLayers[i].getWeights();
-      const modelWeights = modelWeightLayers[0].dataSync();
-      const modelBiases = modelWeightLayers[1].dataSync();
+    // for (let i = 0; i < modelLayers.length; i++) {
+    //   const modelWeightLayers = modelLayers[i].getWeights();
+    //   const modelWeights = modelWeightLayers[0].dataSync();
+    //   const modelBiases = modelWeightLayers[1].dataSync();
 
-      const extractedLayer : ModelLayer = {
-        weights: modelWeights.map(Math.abs),
-        biases: modelBiases.map(Math.abs)
-      };
-      extractedLayers.push(extractedLayer);
-    }
+    //   const extractedLayer : ModelLayer = {
+    //     weights: modelWeights.map(Math.abs),
+    //     biases: modelBiases.map(Math.abs)
+    //   };
+    //   extractedLayers.push(extractedLayer);
+    // }
 
-    console.log("Extracted layers: ", extractedLayers );
-
-    resolve(extractedLayers);
+    // resolve(extractedLayers);
   });
 }
 
@@ -127,17 +287,40 @@ export function compareLabelAlphabetically(a: LabelConfidencePair, b: LabelConfi
   return 0;
 }
 
-// Classify data synchronously
-export function classifySync() : PredictionResults {
-  const currentState = get(state);
-  const classifyingUnavailable = !currentState.isInputConnected || !currentState.isPredicting || currentState.isRecording || currentState.isTraining;
-  if (classifyingUnavailable) return [];
+// function getInputs() : any {
+//   // push data from data-points
+//   const { x, y, z } = getPrevData();
 
-  // Pass parameters to classify
-  const results : PredictionResults = get(model).classifySync(getInputs());
-  results.sort(compareLabelAlphabetically)
-  classifyEvent.invoke(results);
-  return results;
+//   // Turn the data into an object of up to 12 parameters
+//   return makeInputs(x, y, z);
+// }
+
+// // Classify data synchronously
+// export function classifySync() : PredictionResults {
+//   const currentState = get(state);
+//   const classifyingUnavailable = !currentState.isInputConnected || !currentState.isPredicting || currentState.isRecording || currentState.isTraining;
+//   if (classifyingUnavailable) return [];
+
+//   // Pass parameters to classify
+//   const results : PredictionResults = get(model).classifySync(getInputs());
+//   results.sort(compareLabelAlphabetically)
+//   classifyEvent.invoke(results);
+//   return results;
+// }
+
+export function classifySync() {
+  return [
+    {
+        "1637677921852": 0.9734976887702942,
+        "label": "1637677921852",
+        "confidence": 0.9734976887702942
+    },
+    {
+        "1637677924329": 0.02650230936706066,
+        "label": "1637677924329",
+        "confidence": 0.02650230936706066
+    }
+  ]
 }
 
 export function getIndexOfGreatestPrediction(predictions: PredictionResults) : number {
@@ -344,6 +527,8 @@ function setupPredictionInterval(): void {
   });
 }
 
+export const classifyEvent = new Event<PredictionResults>();
+
 // Classify data
 export function classify() {
   // Get currentState to check whether the prediction has been interrupted by other processes
@@ -367,6 +552,25 @@ export function classify() {
   }
 
   if (!currentState.isInputConnected) return;
+
+  // Mock of classifysync
+  const mockResult = [
+    {
+        "1637677921852": 0.9734976887702942,
+        "label": "1637677921852",
+        "confidence": 0.9734976887702942
+    },
+    {
+        "1637677924329": 0.02650230936706066,
+        "label": "1637677924329",
+        "confidence": 0.02650230936706066
+    }
+  ]
+
+  mockResult.sort(compareLabelAlphabetically)
+  classifyEvent.invoke(mockResult);
+
+
 
   // Get formatted version of previous data
   const data = getPrevData();

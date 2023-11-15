@@ -27,11 +27,6 @@ export const translations: TranslationMap = {
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
 
-		// Introduction Video Modal
-		"content.introductionVideo.heading": "Introvideo",
-		"content.introductionVideo.description": NEEDS_TRANSLATION,
-		"content.introductionVideo.button": NEEDS_TRANSLATION,
-
 		// HOME PAGE:
 		"content.index.title": NEEDS_TRANSLATION,
 		"content.index.toolInfo": NEEDS_TRANSLATION,
@@ -284,11 +279,6 @@ export const translations: TranslationMap = {
 		"alert.twoGestures": "You need at least two classes",
 		"alert.oneDataRepresentation": "You need at least one data representation",
 		"alert.recordingsPerGesture": "You need at least three examples per class",
-
-		// Introduction Video modal
-		"content.introductionVideo.heading": "Intro Video",
-		"content.introductionVideo.description": "Watch our short guide to the key features.",
-		"content.introductionVideo.button": "Get started",
 
 		// HOME PAGE:
 		"content.index.title": "machine learning tool",

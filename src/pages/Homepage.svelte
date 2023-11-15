@@ -46,10 +46,7 @@
     <ConnectDialogContainer bind:this={connectDialogReference} />
 
     <div class="flex flex-col items-center justify-center m-10">
-      <video
-        class="w-150 mb-5"
-        controls
-        width="550">
+      <video class="w-150 mb-5" controls width="550">
         <source src={introVideoUrl} type="video/mp4" />
       </video>
       <p>{$t('content.index.toolInfo')}</p>

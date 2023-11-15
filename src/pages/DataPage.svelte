@@ -25,7 +25,6 @@
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
   import TrainingButton from './training/TrainingButton.svelte';
-  import { Paths, navigate } from '../router/paths';
   import TabView from '../views/TabView.svelte';
 
   let isConnectionDialogOpen = false;

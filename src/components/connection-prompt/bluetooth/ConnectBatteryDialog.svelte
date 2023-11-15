@@ -4,24 +4,28 @@
   SPDX-License-Identifier: MIT
  -->
 
- <script lang="ts">
-    import StandardButton from '../../StandardButton.svelte';
-    import { t } from '../../../i18n';
-  
-    export let onNextClick: () => void;
-    export let onBackClick: () => void;
-  </script>
-  
-  <main>
-    <div class="w-180 leading-10 pb-5">
-      <p class="font-bold text-2xl text-left pb-3">
-        {$t('connectMB.connectBattery.heading')}
-      </p>
-      <p>{$t('connectMB.connectBattery.subtitle')}</p>
-      <img src="public/imgs/stylised-microbit-connected.svg" alt="Battery connection diagram" class="px-40 pt-5"/>
-    </div>
-    <div class="justify-end gap-x-5 flex pt-10">
-      <StandardButton outlined={true} onClick={onBackClick}>{$t('connectMB.backButton')}</StandardButton>
-      <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
-    </div>
-  </main>
+<script lang="ts">
+  import StandardButton from '../../StandardButton.svelte';
+  import { t } from '../../../i18n';
+
+  export let onNextClick: () => void;
+  export let onBackClick: () => void;
+</script>
+
+<main>
+  <div class="w-180 leading-10 pb-5">
+    <p class="font-bold text-2xl text-left pb-3">
+      {$t('connectMB.connectBattery.heading')}
+    </p>
+    <p>{$t('connectMB.connectBattery.subtitle')}</p>
+    <img
+      src="public/imgs/stylised-microbit-connected.svg"
+      alt="Battery connection diagram"
+      class="px-40 pt-5" />
+  </div>
+  <div class="justify-end gap-x-5 flex pt-10">
+    <StandardButton outlined={true} onClick={onBackClick}
+      >{$t('connectMB.backButton')}</StandardButton>
+    <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
+  </div>
+</main>

@@ -39,7 +39,7 @@
     <div class="flex flex-col items-center justify-center m-10">
       <video
         on:canplaythrough={() => ($state.isLoading = false)}
-        class="w-200 mb-5"
+        class="w-150 mb-5"
         controls
         width="550">
         <source src={introVideoUrl} type="video/mp4" />
@@ -50,16 +50,24 @@
     <StandardButton onClick={connectButtonClicked}
       >{$t('footer.connectButtonNotConnected')}</StandardButton>
 
-    <h1 class="ml-10 mt-10 text-2xl">{$t('content.index.toolProcessCards.main.title')}</h1>
+    <h1 class="ml-10 mt-10 text-2xl">
+      {$t('content.index.toolProcessCards.main.title')}
+    </h1>
     <div class="grid-container grid-cols-3 min-w-800px p-10 pb-2 pt-2 mt-3">
       <FrontPageContentTile>
-        <h2 class="text-center text-xl">{$t('content.index.toolProcessCards.data.title')}</h2>
+        <h2 class="text-center text-xl">
+          {$t('content.index.toolProcessCards.data.title')}
+        </h2>
       </FrontPageContentTile>
       <FrontPageContentTile>
-        <h2 class="text-center text-xl">{$t('content.index.toolProcessCards.train.title')}</h2>
+        <h2 class="text-center text-xl">
+          {$t('content.index.toolProcessCards.train.title')}
+        </h2>
       </FrontPageContentTile>
       <FrontPageContentTile>
-        <h2 class="text-center text-xl">{$t('content.index.toolProcessCards.model.title')}</h2>
+        <h2 class="text-center text-xl">
+          {$t('content.index.toolProcessCards.model.title')}
+        </h2>
       </FrontPageContentTile>
     </div>
   </div>

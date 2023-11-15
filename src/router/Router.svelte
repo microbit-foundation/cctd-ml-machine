@@ -8,6 +8,7 @@
   import { onMount } from 'svelte';
   import DataPage from '../pages/DataPage.svelte';
   import Homepage from '../pages/Homepage.svelte';
+  import TrainingPage from '../pages/training/TrainingPage.svelte';
   import ModelPage from '../pages/model/ModelPage.svelte';
   import FilterPage from '../pages/filter/FilterPage.svelte';
   import { currentPageComponent } from '../views/currentComponentStore';
@@ -19,6 +20,8 @@
         return Homepage;
       case Paths.DATA:
         return DataPage;
+      case Paths.TRAINING:
+        return TrainingPage;
       case Paths.MODEL:
         return ModelPage;
       case Paths.FILTERS:

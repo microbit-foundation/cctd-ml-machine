@@ -10,6 +10,7 @@ export const Paths = {
   HOME: '/',
   DATA: 'data',
   MODEL: 'model',
+  TRAINING: 'training',
   FILTERS: 'training/filters',
 } as const;
 

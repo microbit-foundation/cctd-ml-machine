@@ -134,6 +134,8 @@ export const translations: TranslationMap = {
 		"menu.data.examples": "eksempler",
 
 		// TRAINER MENU:
+		"menu.trainer.helpHeading": "Træner",
+		"menu.trainer.helpBody": "Træneren kigger på eksemplerne i klasserne og forsøger at 'lære', hvordan de forskellige klasser kan genkendes ved at finde mønstre i dataet. Her kan i træne en model, der kan genkende forskellige bevægelser.", //Derudover kan i indstille træneren, vælge hvordan træneren skal forstå dataet og oprette test-sæt.",
 		"menu.trainer.notConnected1": "Du har ikke tilkoblet en BBC micro:bit.",
 		"menu.trainer.notConnected2": "Gør dette vha. knappen nedenfor",
 		"menu.trainer.notEnoughDataHeader1": "Ikke nok data!\nGå til Data-siden",
@@ -392,6 +394,8 @@ export const translations: TranslationMap = {
 		"menu.data.examples": "examples",
 
 		// TRAINER MENU:
+		"menu.trainer.helpHeading": "Trainer",
+		"menu.trainer.helpBody": "The Trainer looks at the examples in each of the classes and tries to 'learn' how the different classes can be recognized by searching for patterns in the data. Here you can train a model to recognize different gestures.", // In addition, you can configure the trainer, choose how the trainer should interpret the data and create test sets.",
 		"menu.trainer.notConnected1": "You have not connected a micro:bit.",
 		"menu.trainer.notConnected2": " Please do so via the button below",
 		"menu.trainer.notEnoughDataHeader1": "Not Enough Data\nGo to Data page",

@@ -76,9 +76,9 @@
         </div>
 
         {#if $state.isInputConnected}
-        <div class="h-160px w-full">
-          <BottomPanel />
-        </div>
+          <div class="h-160px w-full">
+            <BottomPanel />
+          </div>
         {/if}
       </div>
     </main>

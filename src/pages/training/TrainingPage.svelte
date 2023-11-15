@@ -12,6 +12,16 @@
   import { slide } from 'svelte/transition';
   import TrainingButton from './TrainingButton.svelte';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
+  import TabView from '../../views/TabView.svelte';
+  import { Paths, navigate } from '../../router/paths';
+
+  $: onDisconnect($state.isInputConnected);
+
+  function onDisconnect(isConnected: boolean) {
+    if (!isConnected) {
+      navigate(Paths.HOME);
+    }
+  }
 
   const sufficientData = hasSufficientData();
 
@@ -46,6 +56,7 @@
 </StandardDialog>
 
 <div class="flex flex-col h-full pb-10">
+  <TabView />
   <div class="flex flex-col flex-grow justify-center items-center text-center">
     {#if !$state.isInputConnected}
       <PleaseConnectFirst />

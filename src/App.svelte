@@ -9,7 +9,6 @@
   import InputBehaviour from './script/connection-behaviours/InputBehaviour';
   import OutputBehaviour from './script/connection-behaviours/OutputBehaviour';
   import OverlayView from './views/OverlayView.svelte';
-  import TabView from './views/TabView.svelte';
   import PageContentView from './views/PageContentView.svelte';
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
   import { fade } from 'svelte/transition';
@@ -68,8 +67,6 @@
             <SelectLanguageControlBarDropdown />
           </div>
         </ControlBar>
-
-        <TabView />
 
         <div class="relative z-1 flex-1 overflow-y-auto flex-row">
           <PageContentView />

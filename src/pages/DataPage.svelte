@@ -25,6 +25,16 @@
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
   import TrainingButton from './training/TrainingButton.svelte';
+  import { Paths, navigate } from '../router/paths';
+  import TabView from '../views/TabView.svelte';
+
+  $: onDisconnect($state.isInputConnected);
+
+  function onDisconnect(isConnected: boolean) {
+    if (!isConnected) {
+      navigate(Paths.HOME);
+    }
+  }
 
   let isConnectionDialogOpen = false;
 
@@ -69,6 +79,7 @@
 </script>
 
 <main class="h-full inline-block min-w-full">
+  <TabView />
   <div>
     <DataPageControlBar
       clearDisabled={$gestures.length === 0}

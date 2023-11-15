@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import Gesture from '../components/Gesture.svelte';
-  import { hasSufficientData, state } from '../script/stores/uiStore';
+  import { state } from '../script/stores/uiStore';
   import {
     clearGestures,
     downloadDataset,
@@ -80,6 +80,7 @@
 
 <main class="h-full inline-block min-w-full">
   <TabView />
+
   <div>
     <DataPageControlBar
       clearDisabled={$gestures.length === 0}
@@ -88,6 +89,7 @@
       {onDownloadGestures}
       {onUploadGestures} />
   </div>
+
   {#if !hasSomeData() && !$state.isInputConnected}
     <div class="mt-4">
       <PleaseConnectFirst />

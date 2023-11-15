@@ -42,12 +42,11 @@
 </script>
 
 <main class="h-full flex flex-col">
-  <div class:hidden={$state.isLoading}>
+  <div>
     <ConnectDialogContainer bind:this={connectDialogReference} />
 
     <div class="flex flex-col items-center justify-center m-10">
       <video
-        on:canplaythrough={() => ($state.isLoading = false)}
         class="w-150 mb-5"
         controls
         width="550">

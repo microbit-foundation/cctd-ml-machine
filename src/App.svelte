@@ -43,12 +43,6 @@
     <!-- Denies mobile users access to the platform -->
     <IncompatiblePlatformView />
   {:else}
-    {#if $state.isLoading}
-      <main class="h-screen w-screen bg-primary flex absolute z-10" transition:fade>
-        <LoadingSpinner />
-      </main>
-    {/if}
-
     <main class="h-screen w-screen m-0 relative flex">
       <CookieBanner />
       <OverlayView />

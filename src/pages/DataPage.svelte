@@ -28,14 +28,6 @@
   import { Paths, navigate } from '../router/paths';
   import TabView from '../views/TabView.svelte';
 
-  $: onDisconnect($state.isInputConnected);
-
-  function onDisconnect(isConnected: boolean) {
-    if (!isConnected) {
-      navigate(Paths.HOME);
-    }
-  }
-
   let isConnectionDialogOpen = false;
 
   $: hasSomeData = (): boolean => {

@@ -19,7 +19,7 @@
     </p>
     <p>{$t('connectMB.connectBattery.subtitle')}</p>
     <img
-      src="public/imgs/stylised-microbit-connected.svg"
+      src="/imgs/stylised-microbit-connected.svg"
       alt="Battery connection diagram"
       class="px-40 pt-5" />
   </div>

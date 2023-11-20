@@ -11,9 +11,8 @@ import { state } from './uiStore';
 import { AxesType, FilterType, Axes, Filters } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
-import StaticConfiguration from '../../StaticConfiguration';
-import { PersistantGestureData } from './Gestures';
-import Gesture from './Gesture';
+import { PersistantGestureData } from '../domain/Gestures';
+import Gesture from '../domain/Gesture';
 import { gestures } from './Stores';
 
 export type RecordingData = {

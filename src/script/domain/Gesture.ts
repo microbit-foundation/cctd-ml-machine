@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { Readable, Subscriber, Unsubscriber, Writable, derived, get } from 'svelte/store';
-import { GestureData, GestureOutput, RecordingData, SoundData } from './mlStore';
+import { GestureData, GestureOutput, RecordingData, SoundData } from '../stores/mlStore';
 import { PersistantGestureData } from './Gestures';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';

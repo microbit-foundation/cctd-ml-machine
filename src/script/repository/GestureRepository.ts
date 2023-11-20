@@ -3,25 +3,23 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { PersistantGestureData } from '../stores/Gestures';
-import Gesture from '../stores/Gesture';
+import Gestures, { PersistantGestureData } from '../domain/Gestures';
+import Gesture from '../domain/Gesture';
 import ControlledStorage from '../ControlledStorage';
 import {
   Readable,
   Subscriber,
   Unsubscriber,
   Writable,
-  derived,
   get,
   writable,
 } from 'svelte/store';
-import ModelRepository from '../stores/ModelRepository';
+import ClassifierRepository from './ClassifierRepository';
 
 class GestureRepository implements Readable<Gesture[]> {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private static gestureStore: Writable<Gesture[]>;
-
-  constructor(private modelRepository: ModelRepository) {
+  constructor(private modelRepository: ClassifierRepository) {
     GestureRepository.gestureStore = writable([]);
     GestureRepository.gestureStore.set(this.getPersistedGestures());
   }

@@ -12,9 +12,9 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { GestureData, GestureOutput, RecordingData } from './mlStore';
+import { GestureData, GestureOutput, RecordingData } from '../stores/mlStore';
 import Gesture from './Gesture';
-import GestureRepository from '../gestures/GestureRepository';
+import GestureRepository from '../repository/GestureRepository';
 
 export type PersistantGestureData = {
   name: string;

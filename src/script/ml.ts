@@ -20,9 +20,8 @@ import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
-import Gestures from './Gestures';
 import { gestures } from './stores/Stores';
-import Repositories from './Repositories';
+import Repositories from './repository/Repositories';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -47,6 +46,7 @@ function createModel(): LayersModel {
   const inputShape = [
     get(settings).includedFilters.size * get(settings).includedAxes.length,
   ];
+
 
   const input = tf.input({ shape: inputShape });
   const normalizer = tf.layers.batchNormalization().apply(input);

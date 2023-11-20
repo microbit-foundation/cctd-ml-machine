@@ -33,7 +33,7 @@
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import Gesture from '../../script/stores/Gesture';
+  import Gesture from '../../script/domain/Gesture';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 

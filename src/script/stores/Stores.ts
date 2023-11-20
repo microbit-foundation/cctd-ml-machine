@@ -3,9 +3,11 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import Repositories from '../Repositories';
-import Gestures from './Gestures';
+import Repositories from '../repository/Repositories';
+import Gestures from '../domain/Gestures';
+import Classifier from '../domain/Classifier';
 
 const repositories = new Repositories();
 
 export const gestures: Gestures = new Gestures(repositories.getGestureRepository());
+export const classifier: Classifier = repositories.getModelRepository().getClassifier();

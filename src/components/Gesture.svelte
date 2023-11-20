@@ -28,7 +28,7 @@
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
-  import Gesture from '../script/stores/Gesture';
+  import Gesture from '../script/domain/Gesture';
   import { gestures } from '../script/stores/Stores';
 
   // Variables for component

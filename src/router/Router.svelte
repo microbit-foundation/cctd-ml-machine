@@ -19,8 +19,8 @@
     switch (path) {
       case Paths.HOME:
         return Homepage;
-        case Paths.PLAYGROUND:
-          return PlaygroundPage;
+      case Paths.PLAYGROUND:
+        return PlaygroundPage;
       case Paths.DATA:
         return DataPage;
       case Paths.TRAINING:

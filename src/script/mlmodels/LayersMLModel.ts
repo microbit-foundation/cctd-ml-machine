@@ -10,12 +10,11 @@ class LayersMLModel implements MLModel {
     prediction
       .data()
       .then(data => {
-        console.log("Prediction", data as Float32Array);
+        console.log('Prediction', data as Float32Array);
       })
       .catch(err => console.error('Prediction error:', err));
-      return []
+    return [];
   }
-
 }
 
 export default LayersMLModel;

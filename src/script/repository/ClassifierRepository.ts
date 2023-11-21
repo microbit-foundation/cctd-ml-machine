@@ -41,7 +41,7 @@ class ClassifierRepository {
     const initialConfidence = new Map<number, number>();
     ClassifierRepository.confidences = writable(initialConfidence);
     ClassifierRepository.mlModel = writable(new NoneMLModel());
-    ClassifierRepository.filterArray = writable([])
+    ClassifierRepository.filterArray = writable([]);
     ClassifierRepository.filters = writable(
       new Filters(ClassifierRepository.filterArray),
     );
@@ -59,7 +59,7 @@ class ClassifierRepository {
     return this.classifierFactory.buildClassifier(
       ClassifierRepository.mlModel,
       this.getTrainerConsumer(),
-      ClassifierRepository.filters
+      ClassifierRepository.filters,
     );
   }
 
@@ -77,12 +77,11 @@ class ClassifierRepository {
     return <T extends MLModel>(trainer: ModelTrainer<T>) => this.trainModel(trainer);
   }
 
-  private addAllFilters(): void { // todo to be removed
-    ClassifierRepository.filters.set(new Filters(writable([
-      new MaxFilter(),
-      new MinFilter(),
-      new PeaksFilter()
-    ])));
+  private addAllFilters(): void {
+    // todo to be removed
+    ClassifierRepository.filters.set(
+      new Filters(writable([new MaxFilter(), new MinFilter(), new PeaksFilter()])),
+    );
   }
 
   /*

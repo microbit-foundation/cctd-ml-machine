@@ -47,7 +47,6 @@ function createModel(): LayersModel {
     get(settings).includedFilters.size * get(settings).includedAxes.length,
   ];
 
-
   const input = tf.input({ shape: inputShape });
   const normalizer = tf.layers.batchNormalization().apply(input);
   const dense = tf.layers.dense({ units: 16, activation: 'relu' }).apply(normalizer);

@@ -12,12 +12,12 @@ class Filters implements Readable<Filter[]> {
 
   public compute(values: number[]): number[] {
     return get(this.filters).map(filter => {
-      return filter.filter(values)
+      return filter.filter(values);
     });
   }
 
   public count(): number {
-    return get(this.filters).length
+    return get(this.filters).length;
   }
 }
 

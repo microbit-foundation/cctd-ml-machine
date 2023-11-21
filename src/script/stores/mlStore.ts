@@ -88,6 +88,7 @@ export type SoundData = {
 };
 
 export type LiveData = {
+  //Todo remove this
   accelX: number;
   accelY: number;
   accelZ: number;

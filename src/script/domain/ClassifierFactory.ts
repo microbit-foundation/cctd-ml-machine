@@ -15,7 +15,7 @@ class ClassifierFactory {
   public buildClassifier(
     model: Writable<MLModel>,
     trainerConsumer: TrainerConsumer,
-    filters: Writable<Filters>
+    filters: Writable<Filters>,
   ): Classifier {
     return new Classifier(this.buildModel(trainerConsumer, model), filters, model);
   }

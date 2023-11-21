@@ -13,14 +13,13 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
 
     trainingData.classes.forEach((gestureClass, index) => {
       gestureClass.samples.forEach(sample => {
-
         features.push(sample.value);
 
         const label: number[] = new Array(numberOfClasses) as number[];
         label.fill(0, 0, numberOfClasses);
         label[index] = 1;
         labels.push(label);
-        });
+      });
     });
 
     const tensorFeatures = tf.tensor(features);

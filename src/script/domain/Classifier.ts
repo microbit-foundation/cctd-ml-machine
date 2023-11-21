@@ -1,18 +1,19 @@
 import { Readable, Subscriber, Unsubscriber, Writable, derived, get } from 'svelte/store';
 import Model, { ModelData } from './Model';
-    import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
+import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import Filters from './Filters';
 import MLModel from './MLModel';
-
-
 
 type ClassifierData = {
   model: ModelData;
 };
 
 export class Classifier implements Readable<ClassifierData> {
-
-  constructor(private model: Readable<Model>, private filters: Writable<Filters>, private mlModel: Readable<MLModel>) {}
+  constructor(
+    private model: Readable<Model>,
+    private filters: Writable<Filters>,
+    private mlModel: Readable<MLModel>,
+  ) {}
   public subscribe(
     run: Subscriber<ClassifierData>,
     invalidate?: ((value?: ClassifierData | undefined) => void) | undefined,

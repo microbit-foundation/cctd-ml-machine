@@ -1,42 +1,45 @@
-import { Subscriber, Unsubscriber, Writable, derived, writable } from "svelte/store";
-import Classifier from "../domain/Classifier";
-import Engine, { EngineData } from "../domain/Engine";
-import GestureConfidence from "../domain/GestureConfidence";
-import Gestures from "../domain/Gestures";
+import { Subscriber, Unsubscriber, Writable, derived, writable } from 'svelte/store';
+import Classifier from '../domain/Classifier';
+import Engine, { EngineData } from '../domain/Engine';
+import GestureConfidence from '../domain/GestureConfidence';
+import Gestures from '../domain/Gestures';
 
 class PollingPredictorEngine implements Engine {
-    private pollingInterval: ReturnType<typeof setInterval>;
-    private pollingIntervalTime = 100;
-    private isRunning: Writable<boolean>;
+  private pollingInterval: ReturnType<typeof setInterval>;
+  private pollingIntervalTime = 100;
+  private isRunning: Writable<boolean>;
 
-    constructor(private classifier: Classifier) {
-        this.isRunning = writable(true);
-        this.pollingInterval = setInterval(() => {
-            this.predict();
-        }, this.pollingIntervalTime)
-    }
-    public subscribe(run: Subscriber<EngineData>, invalidate?: ((value?: EngineData | undefined) => void) | undefined): Unsubscriber {
-        return derived([this.isRunning], stores => {
-            const isRunning = stores[0];
-            return {
-                isRunning: isRunning
-            }
-        }).subscribe(run, invalidate);
-    }
+  constructor(private classifier: Classifier) {
+    this.isRunning = writable(true);
+    this.pollingInterval = setInterval(() => {
+      this.predict();
+    }, this.pollingIntervalTime);
+  }
+  public subscribe(
+    run: Subscriber<EngineData>,
+    invalidate?: ((value?: EngineData | undefined) => void) | undefined,
+  ): Unsubscriber {
+    return derived([this.isRunning], stores => {
+      const isRunning = stores[0];
+      return {
+        isRunning: isRunning,
+      };
+    }).subscribe(run, invalidate);
+  }
 
-    public start(): void {
-        this.isRunning.set(true);
-    }
+  public start(): void {
+    this.isRunning.set(true);
+  }
 
-    public stop(): void {
-        this.isRunning.set(false);
-    }
+  public stop(): void {
+    this.isRunning.set(false);
+  }
 
-    private predict() {
-        if (this.classifier.getModel().isTrained() && this.isRunning) {
-            console.log("Classifiyy")
-        }
+  private predict() {
+    if (this.classifier.getModel().isTrained() && this.isRunning) {
+      console.log('Classifiyy');
     }
+  }
 }
 
 export default PollingPredictorEngine;

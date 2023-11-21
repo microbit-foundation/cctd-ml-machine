@@ -1,12 +1,12 @@
-import { Readable } from "svelte/store";
+import { Readable } from 'svelte/store';
 
 export type EngineData = {
-    isRunning: boolean;
-}
+  isRunning: boolean;
+};
 
-interface Engine extends Readable<EngineData>{
-    start(): void;
-    stop(): void;
+interface Engine extends Readable<EngineData> {
+  start(): void;
+  stop(): void;
 }
 
 export default Engine;

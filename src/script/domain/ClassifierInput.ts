@@ -1,7 +1,7 @@
-import Filters from "./Filters";
+import Filters from './Filters';
 
 interface ClassifierInput {
-    getInput(filters: Filters): number[];
+  getInput(filters: Filters): number[];
 }
 
 export default ClassifierInput;

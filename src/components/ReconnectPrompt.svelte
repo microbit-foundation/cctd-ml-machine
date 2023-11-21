@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -16,13 +16,14 @@
 
   let reconnectText: string;
   let reconnectButtonText: string;
+
   state.subscribe(s => {
     if (s.reconnectState === DeviceRequestStates.INPUT) {
-      reconnectText = $t('popup.disconnectedWarning.input');
-      reconnectButtonText = $t('popup.disconnectedWarning.reconnectButton.input');
+      reconnectText = $t('disconnectedWarning.input');
+      reconnectButtonText = $t('disconnectedWarning.reconnectButton.input');
     } else if (s.reconnectState === DeviceRequestStates.OUTPUT) {
-      reconnectText = $t('popup.disconnectedWarning.output');
-      reconnectButtonText = $t('popup.disconnectedWarning.reconnectButton.output');
+      reconnectText = $t('disconnectedWarning.output');
+      reconnectButtonText = $t('disconnectedWarning.reconnectButton.output');
     }
   });
   // When disconnected by lost connection, offer the option to attempt to reconnect

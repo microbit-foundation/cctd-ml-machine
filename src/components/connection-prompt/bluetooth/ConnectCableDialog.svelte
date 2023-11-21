@@ -12,14 +12,29 @@
     export let onNextClick: () => void;
     export let onBackClick: () => void;
     export let onSkipClick: () => void;
+    export let currentStage: string;
   </script>
   
   <main>
     <div class="w-200 leading-10">
       <p class="font-bold text-2xl text-left pb-5">
-        {$t("connectMB.connectCable.heading")}
+        {#if currentStage==="usb"}
+          {$t("connectMB.connectCable.heading")}
+        {:else if currentStage==="usb1"}
+          {$t("connectMB.connectCableMB1.heading")}
+        {:else if currentStage==="usb2"}
+          PLACEHOLDER TEXT
+        {/if}
       </p>
-      <p class="leading-normal">{$t('connectMB.connectCable.subtitle')}</p>
+      <p class="leading-normal">
+        {#if currentStage==="usb"}
+          {$t('connectMB.connectCable.subtitle')}
+        {:else if currentStage==="usb1"}
+          {$t('connectMB.connectCableMB1.subtitle')}
+        {:else if currentStage==="usb2"}
+          PLACEHOLDER TEXT
+        {/if}
+      </p>
       <img src="imgs/connect-cable.gif" alt="GIF of connecting micro:bit" class="px-55 py-5"/>
     </div>
     <div class="flex">

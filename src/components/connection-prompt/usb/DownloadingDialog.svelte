@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../../i18n';
-
+  export let currentStage: string;
   export let transferProgress: number;
   $: transferProgressLabel = `${Math.round(transferProgress * 100)}%`;
 </script>
@@ -14,7 +14,13 @@
 <main>
   <div class="w-600px text-left">
     <h1 class="font-bold mb-5 text-2xl">
-      {$t('connectMB.usbDownloading.header')}
+      {#if currentStage === "usb"}
+        {$t('connectMB.usbDownloading.header')}
+      {:else if currentStage === "usb1"}
+        {$t('connectMB.usbDownloadingMB1.header')}
+      {:else if currentStage === "usb2"}
+        NOT DONE YET
+      {/if}
     </h1>
     <p class="mb-2">
       {$t('connectMB.usbDownloading.subtitle')}

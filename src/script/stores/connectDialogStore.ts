@@ -15,13 +15,7 @@ export enum DeviceRequestStates {
 export enum ConnectDialogStates {
   NONE, // No connection in progress -> Dialog box closed
   START_RADIO, // Initial box. Main prompt is to connect via radio however includes choice to connect via bluetooth
-  CONNECT_CABLE_MB1, // Instructions to connect micro:bit 1 via usb
-  USB_DOWNLOADING_MB1, // Downloading via usb to micro:bit 1 prompt
-  CONNECT_BATTERY_MB1, // Instructions to connect micro:bit 1 to battery
-  CONNECT_CABLE_MB2, // Instructions to connect micro:bit 2 via usb
-  USB_DOWNLOADING_MB2, // Downloading via usb to micro:bit 2 prompt
   CONNECTING_MICROBITS, // Micro:bits connecting prompt
-
   START_BLUETOOTH, // Initial box to begin the bluetooth connection flow
   START_OUTPUT, // Initial box if input microbit is already connected. Choice between same and other microbit for output
   BAD_FIRMWARE, // We detected an issue with the firmware of the micro:bit trying to transfer program.

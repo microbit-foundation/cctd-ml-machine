@@ -176,6 +176,8 @@ export const translations: TranslationMap = {
 		"connectMB.webPopup.instruction1": TRANSLATION_NEEDED,
 		"connectMB.webPopup.instruction2": TRANSLATION_NEEDED,
 		// DOWNLOADING PROGRAM TO MICROBIT
+		"connectMB.usbDownloadingMB1.header": TRANSLATION_NEEDED,
+
 		"connectMB.usbDownloading.header": TRANSLATION_NEEDED,
 		"connectMB.usbDownloading.subtitle": TRANSLATION_NEEDED,
 		// CONNECT BATTERY
@@ -457,6 +459,8 @@ export const translations: TranslationMap = {
 		"connectMB.webPopup.instruction1": "Choose your micro:bit",
 		"connectMB.webPopup.instruction2": "Select 'Connect'",
 		// DOWNLOADING PROGRAM TO MICROBIT
+		"connectMB.usbDownloadingMB1.header": "Downloading program to micro:bit 1",
+
 		"connectMB.usbDownloading.header": "Downloading program to micro:bit",
 		"connectMB.usbDownloading.subtitle": "Please wait. Downloading program to micro:bit.",
 		// CONNECT BATTERY

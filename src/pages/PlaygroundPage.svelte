@@ -3,7 +3,7 @@
     import Gesture from '../script/domain/Gesture';
   import Model from '../script/domain/Model';
   import LayersModelTrainer from '../script/mlmodels/LayersModelTrainer';
-  import { classifier, gestures } from '../script/stores/Stores';
+  import { classifier, engine, gestures } from '../script/stores/Stores';
     import AccelerometerClassifierInput from '../script/mlmodels/AccelerometerClassifierInput';
     import { get } from 'svelte/store';
 
@@ -41,7 +41,15 @@
   <p class="text-2xl">Classifier store</p>
   <p class="whitespace-pre">{JSON.stringify($classifier, null, 2)}</p>
 </div>
+<div>
+  <p class="text-2xl">Engine store</p>
+  <p class="whitespace-pre">{JSON.stringify($engine, null, 2)}</p>
+</div>
 <button class="border-1 p-2 m-1" on:click={trainModelButtonClicked}>train model!</button>
 <button class="border-1 p-2 m-1" on:click={predictButtonClicked}
   >Predict random gesture!</button>
+  <button class="border-1 p-2 m-1" on:click={() => engine.start()}
+    >Start engine!</button>
+    <button class="border-1 p-2 m-1" on:click={() => engine.stop()}
+      >Stop engine!</button>
 </div>

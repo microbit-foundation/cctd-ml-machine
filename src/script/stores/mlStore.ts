@@ -98,6 +98,7 @@ export type LiveData = {
 
 export enum TrainingStatus {
   Untrained,
+  InProgress,
   Success,
   Failure,
 }

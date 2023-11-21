@@ -31,7 +31,24 @@ class Model implements Readable<ModelData> {
   }
 
   public async train<T extends MLModel>(modelTrainer: ModelTrainer<T>): Promise<void> {
-    return await this.trainerConsumer(modelTrainer);
+    this.modelData.update(state => {
+      state.trainingStatus = TrainingStatus.InProgress
+      return state;
+    })
+    try {
+      return await this.trainerConsumer(modelTrainer);
+    } catch (err) {
+      this.modelData.update(state => {
+        state.trainingStatus = TrainingStatus.Failure;
+        return state;
+      })
+      console.error(err);
+    } finally {
+      this.modelData.update(state => {
+        state.trainingStatus = TrainingStatus.Success;
+        return state;
+      })
+    }
   }
 
   public isTrained(): boolean {

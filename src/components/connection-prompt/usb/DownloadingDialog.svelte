@@ -12,12 +12,12 @@
 </script>
 
 <main>
-  <div class="w-600px text-center">
-    <h1 class="font-bold mb-8">
-      {$t('connectMB.usb.header')}
+  <div class="w-600px text-left">
+    <h1 class="font-bold mb-5 text-2xl">
+      {$t('connectMB.usbDownloading.header')}
     </h1>
-    <p class="font-bold mb-2">
-      {$t('connectMB.usb.pleaseWait')}
+    <p class="mb-2">
+      {$t('connectMB.usbDownloading.subtitle')}
     </p>
     <div class="flex justify-center mb-2">
       <div class="flex-1 mr-2">

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-const NEEDS_TRANSLATION = "PLACEHOLDER TEXT";
+const TRANSLATION_NEEDED = "TRANSLATION NEEDED"
 
 type TranslationMap = { [localeCode: string]: { [translationId: string]: string } }
 
@@ -26,14 +26,13 @@ export const translations: TranslationMap = {
 		"alert.twoGestures": "Du skal have mindst to klasser",
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
-
 		// HOME PAGE:
-		"content.index.title": NEEDS_TRANSLATION,
-		"content.index.toolInfo": NEEDS_TRANSLATION,
-		"content.index.toolProcessCards.main.title": NEEDS_TRANSLATION,
-		"content.index.toolProcessCards.data.title": NEEDS_TRANSLATION,
-		"content.index.toolProcessCards.train.title": NEEDS_TRANSLATION,
-		"content.index.toolProcessCards.model.title": NEEDS_TRANSLATION,
+		"content.index.title": TRANSLATION_NEEDED,
+		"content.index.toolInfo": TRANSLATION_NEEDED,
+		"content.index.toolProcessCards.main.title": TRANSLATION_NEEDED,
+		"content.index.toolProcessCards.data.title": TRANSLATION_NEEDED,
+		"content.index.toolProcessCards.train.title": TRANSLATION_NEEDED,
+		"content.index.toolProcessCards.model.title": TRANSLATION_NEEDED,
 		"content.index.recordButtonDescription": "\"Optag\"-knap",
 
 		// DATA PAGE:
@@ -56,8 +55,8 @@ export const translations: TranslationMap = {
 		"content.data.controlbar.button.downloadData": "Download dataset",
 		"content.data.controlbar.button.uploadData": "Upload dataset",
 
-		"content.data.trainDialog.title": NEEDS_TRANSLATION,
-		"content.data.trainDialog.text": NEEDS_TRANSLATION,
+		"content.data.trainDialog.title": TRANSLATION_NEEDED,
+		"content.data.trainDialog.text": TRANSLATION_NEEDED,
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Træning mislykkedes",
@@ -116,14 +115,14 @@ export const translations: TranslationMap = {
 		"content.model.output.popup.body": "Hvis du ikke har tilsluttet en output-micro:bit, kan du ikke se resultatet af de ændringer du laver på denne side. Tilslut nedenfor.",
 
 		// FOOTER:
-		"footer.connectButtonNotConnected": NEEDS_TRANSLATION,
+		"footer.connectButtonNotConnected": TRANSLATION_NEEDED,
 		"footer.disconnectButton": "Frakobl",
 		"footer.helpHeader": "Live graf",
 		"footer.helpContent": "Når du har forbundet en micro:bit kan du live se Accelerometer-data for alle tre akser på denne graf. Prøv at bevæge din forbundende micro:bit og se, hvordan den data der produceres af bevægelserne ser ud for computeren!",
 		"footer.reconnecting":"Genopretter forbindelsen. Vent venligst",
 
 		//DATA MENU:
-		"menu.data.helpHeading": NEEDS_TRANSLATION,
+		"menu.data.helpHeading": TRANSLATION_NEEDED,
 		"menu.data.helpBody": "For at træne en model til at genkende forskellige bevægelser, skal vi have gode eksempler på 'god opførsel', som vi kan vise træneren. Her kan i oprette klasser (en type bevægelse) og optage eksempler til hver klasse. Der skal være mindst 2 klasser med hver 3 eksempler før træneren kan træne en model.",
 		"menu.data.examples": "eksempler",
 
@@ -142,46 +141,67 @@ export const translations: TranslationMap = {
 		"menu.trainer.isTrainingModelButton": "Træner model...",
 
 		// MODEL MENU:
-		"menu.model.helpHeading": NEEDS_TRANSLATION,
+		"menu.model.helpHeading": TRANSLATION_NEEDED,
 		"menu.model.helpBody": "Modellen kan bruges i et interaktivt system. Her bruger vi den trænede model til at forudsige bevægelser. Du kan tilslutte endnu en micro:bit og få den til at reagere på de bevægelser du laver.",
 		"menu.model.noModel": "Ingen model",
 		"menu.model.connectOutputButton": "Tilslut output-micro:bit",
 		"menu.model.disconnect": "Frakobl output-micro:bit",
 
-		//CONNECT MICROBIT POP UP:
-		"popup.connectMB.main.bluetooth.subtitle": "Tilslut med Bluetooth",
+		// CONNECT MICROBIT:
 
-		"popup.connectMB.bluetooth.heading": "Tilslut med Bluetooth",
-		"popup.connectMB.bluetooth.cancelledConnection": "Du anullerede forbindelses-processen. Prøv igen hvis du ønsker at fortsætte.",
-		"popup.connectMB.bluetooth.step0": "Tilslut et batteri til din BBC micro:bit",
-		"popup.connectMB.bluetooth.step1": "Tegn mønstret du ser på BBC micro:bit'en",
-		"popup.connectMB.bluetooth.step2": "Tryk på knappen nedenfor.",
-		"popup.connectMB.bluetooth.step3": "Vælg din BBC micro:bit og tryk 'tilslut'.",
-		"popup.connectMB.bluetooth.connect": "Tilslut",
-		"popup.connectMB.bluetooth.connecting": "Tilslutter...",
-		"popup.connectMB.bluetooth.invalidPattern": "Mønstret du har tegnet er ikke gyldig",
+		"connectMB.nextButton": "Næste",
+		"connectMB.backButton": TRANSLATION_NEEDED,
+		// RADIO CONNECTION START
+		"connectMB.radioStart.heading": TRANSLATION_NEEDED,
+		"connectMB.radioStart.requirements1": TRANSLATION_NEEDED,
+		"connectMB.radioStart.requirements2": TRANSLATION_NEEDED,
+		"connectMB.radioStart.requirements3": TRANSLATION_NEEDED,
+		"connectMB.radioStart.switchBluetooth": TRANSLATION_NEEDED,
+		// BLUETOOTH CONNECTION START
+		"connectMB.bluetoothStart.heading": TRANSLATION_NEEDED,
+		"connectMB.bluetoothStart.subtitle": TRANSLATION_NEEDED,
+		"connectMB.bluetoothStart.requirements1": TRANSLATION_NEEDED,
+		"connectMB.bluetoothStart.requirements2": TRANSLATION_NEEDED,
+		"connectMB.bluetoothStart.requirements3": TRANSLATION_NEEDED,
+		"connectMB.bluetoothStart.switchRadio": TRANSLATION_NEEDED,
+		// CONNECT CABLE TO MICROBIT
+		"connectMB.connectCable.heading": TRANSLATION_NEEDED,
+		"connectMB.connectCable.subtitle": TRANSLATION_NEEDED,
+		// SELECT MICROBIT FROM WEB POPUP
+		"connectMB.webPopup": TRANSLATION_NEEDED,
+		"connectMB.webPopup.instruction1": TRANSLATION_NEEDED,
+		"connectMB.webPopup.instruction2": TRANSLATION_NEEDED,
+		// DOWNLOADING PROGRAM TO MICROBIT
+		"connectMB.usbDownloading.header": TRANSLATION_NEEDED,
+		"connectMB.usbDownloading.subtitle": TRANSLATION_NEEDED,
+		// CONNECT BATTERY
+		"connectMB.connectBattery.heading": TRANSLATION_NEEDED,
+		"connectMB.connectBattery.subtitle": TRANSLATION_NEEDED,
+		// BLUETOOTH CONNECTION
+		"connectMB.pattern.heading": TRANSLATION_NEEDED,
+		"connectMB.pattern.subtitle": TRANSLATION_NEEDED,
+		// CONNECTING BLUETOOTH
+		"connectMB.bluetooth.heading": "Tilslut med Bluetooth",
+		"connectMB.main.bluetooth.subtitle": "Tilslut med Bluetooth",
+		"connectMB.bluetooth.cancelledConnection": "Du anullerede forbindelses-processen. Prøv igen hvis du ønsker at fortsætte.",
 
-		"popup.disconnectedWarning.input": "Din input-micro:bit mistede forbindelsen, vil du prøve igen?",
-		"popup.disconnectedWarning.output": "Din output-micro:bit mistede forbindelsen, vil du prøve igen?",
-		"popup.disconnectedWarning.reconnectButton.input": "Tilslut input igen",
-		"popup.disconnectedWarning.reconnectButton.output": "Tilslut output igen",
+		"connectMB.bluetooth.connecting": "Tilslutter...",
+		"connectMB.bluetooth.invalidPattern": "Mønstret du har tegnet er ikke gyldig",
 
-		// NEW CONNECTION PROMPTS - TODO: Rename, merge with above and clean up
-		"connectMB.main.usbHeader": "DOWNLOAD PROGRAM TIL BBC MICRO:BIT",
-		"connectMB.main.btHeader": "TILSLUT DIN BBC MICRO:BIT VIA BLUETOOTH",
-		"connectMB.main.usbBody": "Hvis du ikke tidligere har downloadet programmet",
-		"connectMB.main.btBody": "Hvis du allerede har downloadet programmet",
-		"connectMB.main.connectButton": "Tilslut",
-		"connectMB.main.installButton": "Download",
+		"disconnectedWarning.input": "Din input-micro:bit mistede forbindelsen, vil du prøve igen?",
+		"disconnectedWarning.output": "Din output-micro:bit mistede forbindelsen, vil du prøve igen?",
+		"disconnectedWarning.reconnectButton.input": "Tilslut input igen",
+		"disconnectedWarning.reconnectButton.output": "Tilslut output igen",
+
+
+		// USB CONNECTION PROMPTS:
 
 		"connectMB.output.header": "En micro:bit er allerede forbundet",
 
-		"connectMB.usb.header": "DOWNLOAD PROGRAM TIL BBC MICRO:BIT",
 		"connectMB.usb.body1": "Tilslut din BBC micro:bit med USB-kabel og tryk på 'næste'",
 		"connectMB.usb.body2": "Tryk 'Find USB-enhed' og vælg 'BBC micro:bit CMSIS-DAP' eller 'DAPLink CMSIS-DAP' fra popup-beskeden som kommer",
 		"connectMB.usb.button1": "Næste",
 		"connectMB.usb.button2": "Find USB-enhed",
-		"connectMB.usb.pleaseWait": "Vent venligst. Downloader program til micro:bit'en",
 		"connectMB.usb.done.body1": "Færdig - programmet er downloadet.",
 		"connectMB.usb.done.body2": "Du kan nu tilkoble dig via bluetooth.",
 		"connectMB.usb.done.body3": "Hvis du har et batteri til din micro:bit kan du nu tage usb-kablet ud og tilslutte batteriet i stedet.",
@@ -242,9 +262,9 @@ export const translations: TranslationMap = {
 		"popup.compatibility.bluetooth.explain": "Din nuværende browser understøtter ikke bluetooth. Bluetooth bruges til at drive siden. Uden det virker den ikke.",
 		"popup.compatibility.bluetooth.advice": "Sikre at din browser er opdateret. Ellers kan du vælge en af de nedestående browsere, som understøtter bluetooth.",
 
-		"popup.connectMB.USBCompatibility.transferStep.step1": "Åben placering af den firmware fil du lige har downloadet. Den findes oftest i din download mappe.",
-		"popup.connectMB.USBCompatibility.transferStep.step2": "Træk filen over i micro:bit'en gennem din computers stifinder.",
-		"popup.connectMB.USBCompatibility.transferStep.step3": "Når overførslen er færdig, kan du tilslutte din micro:bit med Bluetooth.",
+		"connectMB.USBCompatibility.transferStep.step1": "Åben placering af den firmware fil du lige har downloadet. Den findes oftest i din download mappe.",
+		"connectMB.USBCompatibility.transferStep.step2": "Træk filen over i micro:bit'en gennem din computers stifinder.",
+		"connectMB.USBCompatibility.transferStep.step3": "Når overførslen er færdig, kan du tilslutte din micro:bit med Bluetooth.",
 
 		"compatibility.platform.notSupported": "Værktøjet er ikke understøttet på din nuværende platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Vi ses på computer.",
@@ -402,40 +422,64 @@ export const translations: TranslationMap = {
 		"menu.model.connectOutputButton": "Connect output micro:bit",
 		"menu.model.disconnect": "Disconnect output micro:bit",
 
-		//CONNECT MICROBIT POP UP:
-		"popup.connectMB.main.bluetooth.subtitle": "Connect using Bluetooth",
+		// CONNECT MICROBIT:
+		"connectMB.nextButton": "Next",
+		"connectMB.backButton": "Back",
 
-		"popup.connectMB.bluetooth.heading": "Connect using Bluetooth",
-		"popup.connectMB.bluetooth.cancelledConnection": "You cancelled the connection process. Try again, if you wish to proceed.",
-		"popup.connectMB.bluetooth.step0": "Connect your micro:bit to a battery",
-		"popup.connectMB.bluetooth.step1": "Draw the pattern as displayed on the micro:bit",
-		"popup.connectMB.bluetooth.step2": "Press the 'Connect' button below.",
-		"popup.connectMB.bluetooth.step3": "Select your micro:bit and press 'Connect'.",
-		"popup.connectMB.bluetooth.connect": "Connect",
-		"popup.connectMB.bluetooth.connecting": "Connecting...",
-		"popup.connectMB.bluetooth.invalidPattern": "The pattern you drew is invalid",
+		// RADIO CONNECTION START
+		"connectMB.radioStart.heading": "What you will need to get started:",
+		"connectMB.radioStart.requirements1": "2 x micro:bits",
+		"connectMB.radioStart.requirements2": "1 x USB cable, battery pack & micro:bit holder",
+		"connectMB.radioStart.requirements3": "1 x computer",
+		"connectMB.radioStart.switchBluetooth": "I only have one micro:bit",
 
-		"popup.disconnectedWarning.input": "Your input micro:bit lost connection, do want to try again?",
-		"popup.disconnectedWarning.output": "Your output micro:bit lost connection, do want to try again?",
-		"popup.disconnectedWarning.reconnectButton.input": "Reconnect input",
-		"popup.disconnectedWarning.reconnectButton.output": "Reconnect output",
+		// BLUETOOTH CONNECTION START
+		"connectMB.bluetoothStart.heading": "If you only have one micro:bit",
+		"connectMB.bluetoothStart.subtitle": "You will need to have web Bluetooth enabled on your computer and in your web browser.",
+		"connectMB.bluetoothStart.requirements1": "1 x micro:bits",
+		"connectMB.bluetoothStart.requirements2": "1 x USB cable, battery pack & micro:bit holder",
+		"connectMB.bluetoothStart.requirements3": "1 x computer",
+		"connectMB.bluetoothStart.switchRadio": "I have two micro:bits",
 
-		// NEW CONNECTION PROMPTS - TODO: Rename, merge with above and clean up
-		"connectMB.main.usbHeader": "DOWNLOAD PROGRAM TO MICRO:BIT",
-		"connectMB.main.btHeader": "CONNECT YOUR MICRO:BIT USING BLUETOOTH",
-		"connectMB.main.usbBody": "If you have not previously downloaded the program",
-		"connectMB.main.btBody": "If you have already downloaded the program",
-		"connectMB.main.connectButton": "Connect",
-		"connectMB.main.installButton": "Download",
+		// CONNECT CABLE TO MICROBIT
+		"connectMB.connectCable.heading": "Connect cable",
+		"connectMB.connectCable.subtitle": "Connect a micro:bit to this computer with a USB cable so that the <brand name> program can be downloaded to it.",
+
+		// SELECT MICROBIT FROM WEB POPUP
+		"connectMB.webPopup":"Select micro:bit",
+		"connectMB.webPopup.instruction1": "Choose your micro:bit",
+		"connectMB.webPopup.instruction2": "Select 'Connect'",
+
+		// DOWNLOADING PROGRAM TO MICROBIT
+		"connectMB.usbDownloading.header": "Downloading program to micro:bit",
+		"connectMB.usbDownloading.subtitle": "Please wait. Downloading program to micro:bit.",
+
+		// CONNECT BATTERY
+		"connectMB.connectBattery.heading": "Connect battery pack",
+		"connectMB.connectBattery.subtitle": "Disconnect the micro:bit from the computer and connect the battery pack.",
+
+		// BLUETOOTH CONNECTION
+		"connectMB.pattern.heading": "Copy pattern",
+		"connectMB.pattern.subtitle": "Copy the pattern displayed on the micro:bit",
+
+		// CONNECTING BLUETOOTH
+		"connectMB.bluetooth.heading": "Connect using Bluetooth",
+		"connectMB.main.bluetooth.subtitle": "Connect using Bluetooth",
+		"connectMB.bluetooth.cancelledConnection": "You cancelled the connection process. Try again, if you wish to proceed.",
+
+		"connectMB.bluetooth.connecting": "Connecting...",
+		"connectMB.bluetooth.invalidPattern": "The pattern you drew is invalid",
+
+		"disconnectedWarning.input": "Your input micro:bit lost connection, do want to try again?",
+		"disconnectedWarning.output": "Your output micro:bit lost connection, do want to try again?",
+		"disconnectedWarning.reconnectButton.input": "Reconnect input",
+		"disconnectedWarning.reconnectButton.output": "Reconnect output",
 
 		"connectMB.output.header": "A micro:bit is already connected",
-
-		"connectMB.usb.header": "DOWNLOAD PROGRAM TO MICRO:BIT",
 		"connectMB.usb.body1": "Connect your micro:bit using a USB-cable and click 'Next'",
 		"connectMB.usb.body2": "Click 'Find USB unit' and select 'BBC micro:bit CMSIS-DAP' or 'DAPLink CMSIS-DAP' from the popup that appears",
 		"connectMB.usb.button1": "Next",
 		"connectMB.usb.button2": "Find USB unit",
-		"connectMB.usb.pleaseWait": "Please wait. Downloading program to the micro:bit",
 		"connectMB.usb.done.body1": "Done - the program has been downloaded.",
 		"connectMB.usb.done.body2": "You can now connect through bluetooth.",
 		"connectMB.usb.done.body3": "If you have a battery for the micro:bit, you can now remove the usb-cable and use the battery instead.",
@@ -495,9 +539,9 @@ export const translations: TranslationMap = {
 		"popup.compatibility.bluetooth.explain": "The browser you are currently using does not support bluetooth.",
 		"popup.compatibility.bluetooth.advice": "Please update the browser or use another one from our supported browsers list below.",
 
-		"popup.connectMB.USBCompatibility.transferStep.step1": "Open the location to which the firmware was downloaded. Most commonly found in your download folder.",
-		"popup.connectMB.USBCompatibility.transferStep.step2": "Drag the file onto the micro:bit on your computer's file explorer.",
-		"popup.connectMB.USBCompatibility.transferStep.step3": "Once the file has finished transferring, the micro:bit can be connected using Bluetooth.",
+		"connectMB.USBCompatibility.transferStep.step1": "Open the location to which the firmware was downloaded. Most commonly found in your download folder.",
+		"connectMB.USBCompatibility.transferStep.step2": "Drag the file onto the micro:bit on your computer's file explorer.",
+		"connectMB.USBCompatibility.transferStep.step3": "Once the file has finished transferring, the micro:bit can be connected using Bluetooth.",
 
 		"compatibility.platform.notSupported": "The tool is not supported on your current platform.",
 		"compatibility.platform.notSupported.joinDesktop": "Join us on desktop.",

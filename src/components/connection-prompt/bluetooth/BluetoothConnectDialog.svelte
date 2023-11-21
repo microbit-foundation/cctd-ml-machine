@@ -5,139 +5,42 @@
  -->
 
 <script lang="ts">
-  import MBSpecs from '../../../script/microbit-interfacing/MBSpecs';
   import PatternMatrix from '../../PatternMatrix.svelte';
   import { t } from '../../../i18n';
-  import { onDestroy, onMount } from 'svelte';
-  import StandardButton from '../../StandardButton.svelte';
-  import { onCatastrophicError, state } from '../../../script/stores/uiStore';
+  import { DeviceRequestStates } from '../../../script/stores/connectDialogStore';
   import {
     btPatternInput,
     btPatternOutput,
-    isInputPatternValid,
   } from '../../../script/stores/connectionStore';
   import type { Writable } from 'svelte/store';
-  import Microbits from '../../../script/microbit-interfacing/Microbits';
-  import { DeviceRequestStates } from '../../../script/stores/connectDialogStore';
-  import Environment from '../../../script/Environment';
-  import StaticConfiguration from '../../../StaticConfiguration';
+  import StandardButton from '../../StandardButton.svelte';
 
   // callbacks
   export let deviceState: DeviceRequestStates;
-  export let onBluetoothConnected: () => void;
-
-  let isConnecting = false;
-
-  let attemptedToPairWithInvalidPattern = false;
+  export let onBackClick: () => void;
+  export let onNextClick: () => void;
 
   let patternMatrixState: Writable<boolean[]> =
     deviceState === DeviceRequestStates.INPUT ? btPatternInput : btPatternOutput;
-
-  let timeoutProgress = 0;
-
-  const connectButtonClicked = () => {
-    if (!isInputPatternValid()) {
-      attemptedToPairWithInvalidPattern = true;
-      return;
-    }
-    timeoutProgress = 0;
-    if (isConnecting) {
-      // Safeguard to prevent trying to connect multiple times at once
-      return;
-    }
-    isConnecting = true;
-    let name = MBSpecs.Utility.patternToName($patternMatrixState);
-    const connectionResult = () => {
-      if (deviceState == DeviceRequestStates.INPUT) {
-        return Microbits.assignInput(name);
-      } else {
-        return Microbits.assignOutput(name);
-      }
-    };
-
-    const interval = 50; // ms - Higher -> choppier animation. Lower -> smoother animation
-    const timeoutInterval = setInterval(() => {
-      timeoutProgress += interval / StaticConfiguration.connectTimeoutDuration;
-    }, interval);
-    const connectTimeout = setTimeout(() => {
-      clearInterval(timeoutInterval);
-      Environment.isInDevelopment && console.log('Connection timed out');
-      onCatastrophicError();
-    }, StaticConfiguration.connectTimeoutDuration);
-
-    void connectionResult().then(didSucceed => {
-      clearTimeout(connectTimeout);
-      clearInterval(timeoutInterval);
-      Environment.isInDevelopment && console.log('Connection result ', didSucceed);
-      if (didSucceed) {
-        onBluetoothConnected();
-      } else {
-        isConnecting = false;
-      }
-    });
-  };
-
-  function connectOnEnterClick(event: KeyboardEvent): void {
-    if (event.code !== 'Enter') {
-      return;
-    }
-    void connectButtonClicked();
-  }
+  let attemptedToPairWithInvalidPattern = false;
 
   function updateMatrix(matrix: boolean[]): void {
     $patternMatrixState = matrix;
     attemptedToPairWithInvalidPattern = false;
   }
-
-  onMount(() => {
-    document.addEventListener('keypress', connectOnEnterClick);
-  });
-  onDestroy(() => {
-    document.removeEventListener('keypress', connectOnEnterClick);
-  });
-
-  onMount(() => {
-    // Resets the bluetooth connection prompt for cancelled device requests
-    $state.requestDeviceWasCancelled = false;
-  });
 </script>
 
-<main>
-  <h1 class="mb-5 font-bold">
-    {$t('popup.connectMB.bluetooth.heading')}
+<main class="w-180">
+  <h1 class="mb-5 font-bold text-2xl justify-center">
+    {$t('connectMB.pattern.heading')}
   </h1>
-
-  {#if $state.requestDeviceWasCancelled && !isConnecting}
-    <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
-  {/if}
-  {#if attemptedToPairWithInvalidPattern}
-    <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.invalidPattern')}</p>
-  {/if}
-  {#if isConnecting}
-    <!-- Show spinner while connecting -->
-    <div class="w-650px flex flex-col justify-center items-center">
-      <p>{$t('popup.connectMB.bluetooth.connecting')}</p>
-      <img alt="loading" src="/imgs/loadingspinner.gif" width="100px" />
-      <div class="bg-primary rounded w-full h-5">
-        <div
-          style="width: {`${timeoutProgress * 100}%`};"
-          class="bg-secondary rounded h-full" />
-      </div>
-    </div>
-  {:else}
-    <div class="grid grid-cols-3 mb-5 w-650px">
-      <div class="col-span-2 pt-5">
-        <p>1. {$t('popup.connectMB.bluetooth.step0')}</p>
-        <p>2. {$t('popup.connectMB.bluetooth.step1')}</p>
-        <p>3. {$t('popup.connectMB.bluetooth.step2')}</p>
-        <p>4. {$t('popup.connectMB.bluetooth.step3')}</p>
-      </div>
-      <div>
-        <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
-      </div>
-    </div>
-    <StandardButton onClick={connectButtonClicked}
-      >{$t('popup.connectMB.bluetooth.connect')}</StandardButton>
-  {/if}
-  <!-- </div> -->
+  <p>{$t('connectMB.pattern.subtitle')}</p>
+  <div class="flex justify-center pt-20 pb-10">
+    <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
+  </div>
+  <div class="justify-end gap-x-5 flex pt-10">
+    <StandardButton outlined={true} onClick={onBackClick}
+      >{$t('connectMB.backButton')}</StandardButton>
+    <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
+  </div>
 </main>

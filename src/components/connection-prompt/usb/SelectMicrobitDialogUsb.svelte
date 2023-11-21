@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -29,7 +29,7 @@
       {$t('connectMB.webPopup')}
     </p>
     <img
-      src="public/imgs/select-microbit.png"
+      src="/imgs/select-microbit.png"
       alt="Instructions on how to choose microbit from web popup using usb"
       class="left-0 pt-5" />
     <p class="absolute left-3/4 transform -translate-x-1/2 top-1/2 -translate-y-28">

@@ -12,9 +12,8 @@ type ClassifierData = {
 export class Classifier implements Readable<ClassifierData> {
 
   constructor(
-    private model: Readable<Model>,
+    private model: Model,
     private filters: Writable<Filters>,
-    private mlModel: Readable<MLModel>,
     private gestures: Gesture[],
     private confidenceSetter: ((gestureId: GestureID, confidence: number) => void)
   ) {}
@@ -26,7 +25,7 @@ export class Classifier implements Readable<ClassifierData> {
     return derived([this.model], stores => {
       const modelStore = stores[0];
       return {
-        model: get(modelStore),
+        model: modelStore,
       };
     }).subscribe(run, invalidate);
   }
@@ -41,7 +40,7 @@ export class Classifier implements Readable<ClassifierData> {
   }
 
   public getModel(): Model {
-    return get(this.model);
+    return this.model;
   }
 }
 

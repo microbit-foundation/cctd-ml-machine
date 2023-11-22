@@ -20,7 +20,7 @@ class ClassifierFactory {
     gestures: Gesture[],
     confidenceSetter: (gestureId: GestureID, confidence: number) => void
   ): Classifier {
-    return new Classifier(this.buildModel(trainerConsumer, model), filters, model, gestures, confidenceSetter);
+    return new Classifier(this.buildModel(trainerConsumer, model), filters, gestures, confidenceSetter);
   }
 
   public buildTrainingData(gestures: Gesture[], filters: Filters): TrainingData {
@@ -35,8 +35,8 @@ class ClassifierFactory {
     };
   }
 
-  private buildModel(trainerConsumer: TrainerConsumer, mlModel: Writable<MLModel>) {
-    const model = writable(new Model(trainerConsumer, mlModel));
+  private buildModel(trainerConsumer: TrainerConsumer, mlModel: Writable<MLModel>): Model {
+    const model = new Model(trainerConsumer, mlModel);
     return model;
   }
 

@@ -5,6 +5,8 @@
   import { classifier, engine, gestures, liveData } from '../script/stores/Stores';
   import AccelerometerClassifierInput from '../script/mlmodels/AccelerometerClassifierInput';
     import PlaygroundGestureView from '../components/playground/PlaygroundGestureView.svelte';
+    import playgroundContext from '../components/playground/PlaygroundContext';
+    import PlaygroundLog from '../components/playground/PlaygroundLog.svelte';
 
   const getRandomGesture = (): Gesture => {
     return gestures.getGestures()[
@@ -14,25 +16,31 @@
 
   const model: Model = classifier.getModel();
   const trainModelButtonClicked = () => {
+    playgroundContext.addMessage("training model...")
     model
       .train(
         new LayersModelTrainer({
           noOfEpochs: 80,
         }),
-      )
+      ).then(() =>{
+        playgroundContext.addMessage("Finished training!")
+      })
   };
   
   const predictButtonClicked = () => {
+
     const randGesture = getRandomGesture();
+    playgroundContext.addMessage("Predicting on random recording of: "+ randGesture.getName())
     const input = new AccelerometerClassifierInput(randGesture.getRecordings()[0].data);
-    classifier.classify(input).then(result => {
+    classifier.classify(input).then(() => {
+      playgroundContext.addMessage("Finished predicting")
     });
   };
 
 </script>
 
-<div class="flex space-between p-5">
-  <div>
+<div class="flex p-5">
+  <div class="flex flex-col flex-shrink">
     <div>
       <p class="text-2xl mt-2">Model store</p>
       <p class="whitespace-pre">{JSON.stringify($model, null, 2).substring(2, JSON.stringify($model, null, 2).length-1)}</p>
@@ -56,15 +64,19 @@
        {/each}
     </div>
   </div>
-  <div class="flex-grow"></div>
-  <div class="flex flex-col">
+  <div class="flex-grow">
+
+  </div>
+  <div class="flex flex-col w-100">
     <button class="border-1 p-2 m-1" on:click={trainModelButtonClicked}
       >train model!</button>
     <button class="border-1 p-2 m-1" on:click={predictButtonClicked}
       >Predict random gesture!</button>
-    <button class="border-1 p-2 m-1" on:click={() => engine.start()}
+    <button class="border-1 p-2 m-1" on:click={() => {playgroundContext.addMessage("Starting engine"); engine.start()}}
       >Start engine!</button>
-    <button class="border-1 p-2 m-1" on:click={() => engine.stop()}>Stop engine!</button>
+    <button class="border-1 p-2 m-1" on:click={() => {playgroundContext.addMessage("Stopping engine"); engine.stop()}}>Stop engine!</button>
+
+    <PlaygroundLog/>
   </div>
 </div>
  

@@ -30,8 +30,8 @@
 
   const startTraining = () => {
     closeTrainingDialog();
-    trainModel();
     navigate(Paths.TRAINING);
+    trainModel();
   };
 </script>
 

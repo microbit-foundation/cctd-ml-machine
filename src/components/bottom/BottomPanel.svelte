@@ -16,11 +16,6 @@
   import View3DLive from '../3d-inspector/View3DLive.svelte';
 
   let componentWidth: number;
-  // let connectDialogReference: ConnectDialogContainer;
-
-  // const connectButtonClicked = () => {
-  //   startConnectionProcess();
-  // };
 
   const inputDisconnectButtonClicked = () => {
     Microbits.expelInputAndOutput();

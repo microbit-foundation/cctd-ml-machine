@@ -16,7 +16,11 @@
   import DownloadingDialog from './usb/DownloadingDialog.svelte';
   import FindUsbDialog from './usb/FindUsbDialog.svelte';
   import ManualInstallTutorial from './usb/manual/ManualInstallTutorial.svelte';
-  import { ConnectDialogStates, connectionDialogState, DeviceRequestStates } from '../../script/stores/connectDialogStore';
+  import {
+    ConnectDialogStates,
+    connectionDialogState,
+    DeviceRequestStates,
+  } from '../../script/stores/connectDialogStore';
   import ConnectSameDialog from './ConnectSameDialog.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { btPatternInput, btPatternOutput } from '../../script/stores/connectionStore';

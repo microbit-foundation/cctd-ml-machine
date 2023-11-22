@@ -9,8 +9,8 @@ import { writable, Writable, get, derived } from 'svelte/store';
 export const Paths = {
   HOME: '/',
   DATA: 'data',
-  MODEL: 'model',
   TRAINING: 'training',
+  MODEL: 'model',
   FILTERS: 'training/filters',
 } as const;
 

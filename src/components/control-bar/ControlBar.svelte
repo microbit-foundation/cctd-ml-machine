@@ -11,6 +11,6 @@
   }
 </style>
 
-<div class="h-18 px-10 flex w-full items-center">
+<div class="h-16 px-10 flex w-full items-center">
   <slot />
 </div>

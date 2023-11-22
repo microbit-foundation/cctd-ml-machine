@@ -5,19 +5,10 @@
  -->
 
 <script lang="ts">
-  import { Paths, navigate } from '../../router/paths';
   import { ModelView, state } from '../../script/stores/uiStore';
   import TabView from '../../views/TabView.svelte';
   import ModelPageStackView from './ModelPageStackView.svelte';
   import ModelPageTileView from './ModelPageTileView.svelte';
-
-  $: onDisconnect($state.isInputConnected);
-
-  function onDisconnect(isConnected: boolean) {
-    if (!isConnected) {
-      navigate(Paths.HOME);
-    }
-  }
 </script>
 
 <div>

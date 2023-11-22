@@ -13,17 +13,8 @@
   import TrainingButton from './TrainingButton.svelte';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import TabView from '../../views/TabView.svelte';
-  import { Paths, navigate } from '../../router/paths';
-
-  $: onDisconnect($state.isInputConnected);
 
   $: sufficientData = hasSufficientData($gestures);
-
-  function onDisconnect(isConnected: boolean) {
-    if (!isConnected) {
-      navigate(Paths.HOME);
-    }
-  }
 
   let isFailedTrainingDialogOpen = false;
 

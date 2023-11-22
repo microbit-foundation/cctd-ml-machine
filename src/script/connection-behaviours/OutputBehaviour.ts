@@ -14,6 +14,7 @@ import TypingUtils from '../TypingUtils';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
 import Microbits from '../microbit-interfacing/Microbits';
 import StaticConfiguration from '../../StaticConfiguration';
+import { Paths, navigate } from '../../router/paths';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -89,6 +90,7 @@ class OutputBehaviour extends LoggingDecorator {
       return s;
     });
     clearTimeout(this.reconnectTimeout);
+    navigate(Paths.DATA);
   }
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {

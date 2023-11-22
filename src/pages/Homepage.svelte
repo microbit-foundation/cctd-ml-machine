@@ -19,26 +19,12 @@
   import StandardButton from '../components/StandardButton.svelte';
   import { t } from '../i18n';
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
-  import { state } from '../script/stores/uiStore';
   import ConnectDialogContainer from '../components/connection-prompt/ConnectDialogContainer.svelte';
-  import { Paths, navigate } from '../router/paths';
 
   const introVideoUrl =
     'https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4';
 
   let connectDialogReference: ConnectDialogContainer;
-
-  const connectButtonClicked = () => {
-    startConnectionProcess();
-  };
-
-  $: onConnection($state.isInputConnected);
-
-  function onConnection(isConnected: boolean) {
-    if (isConnected) {
-      navigate(Paths.DATA);
-    }
-  }
 </script>
 
 <main class="h-full flex flex-col">
@@ -52,7 +38,7 @@
       <p>{$t('content.index.toolInfo')}</p>
     </div>
 
-    <StandardButton onClick={connectButtonClicked}
+    <StandardButton onClick={startConnectionProcess}
       >{$t('footer.connectButtonNotConnected')}</StandardButton>
 
     <h1 class="ml-10 mt-10 text-2xl">

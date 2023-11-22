@@ -88,16 +88,15 @@
   }
 
   onMount(() => {
+    // Resets the bluetooth connection prompt for cancelled device requests
+    $state.requestDeviceWasCancelled = false;
+
     document.addEventListener('keypress', connectOnEnterClick);
     connectBluetooth();
   });
+
   onDestroy(() => {
     document.removeEventListener('keypress', connectOnEnterClick);
-  });
-
-  onMount(() => {
-    // Resets the bluetooth connection prompt for cancelled device requests
-    $state.requestDeviceWasCancelled = false;
   });
 </script>
 

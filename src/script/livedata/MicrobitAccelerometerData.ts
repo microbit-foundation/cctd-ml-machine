@@ -22,9 +22,11 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
       smoothedAccelZ: 0,
     });
   }
+
   put(data: MicrobitAccelerometerData): void {
     throw new Error('Method not implemented.');
   }
+  
   subscribe(
     run: Subscriber<MicrobitAccelerometerData>,
     invalidate?: ((value?: MicrobitAccelerometerData | undefined) => void) | undefined,

@@ -25,20 +25,21 @@ import Filter from '../domain/Filter';
 import MaxFilter from '../filters/MaxFilter';
 import MinFilter from '../filters/MinFilter';
 import PeaksFilter from '../filters/PeaksFilter';
+import { GestureID } from '../domain/Gesture';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
 ) => Promise<void>;
 
 class ClassifierRepository {
-  private static confidences: Writable<Map<number, number>>;
+  private static confidences: Writable<Map<GestureID, number>>;
   private static mlModel: Writable<MLModel>;
   private static filters: Writable<Filters>;
   private static filterArray: Writable<Filter[]>;
   private classifierFactory: ClassifierFactory;
 
   constructor() {
-    const initialConfidence = new Map<number, number>();
+    const initialConfidence = new Map<GestureID, number>();
     ClassifierRepository.confidences = writable(initialConfidence);
     ClassifierRepository.mlModel = writable(new NoneMLModel());
     ClassifierRepository.filterArray = writable([]);
@@ -60,6 +61,10 @@ class ClassifierRepository {
       ClassifierRepository.mlModel,
       this.getTrainerConsumer(),
       ClassifierRepository.filters,
+      get(Repositories.getInstance().getGestureRepository()),
+      (gestureId: GestureID, confidence: number) => {
+        this.setGestureConfidence(gestureId, confidence)
+      }
     );
   }
 
@@ -84,10 +89,7 @@ class ClassifierRepository {
     );
   }
 
-  /*
-    TODO: Should be private. Once a model store is created, this should only be handled by that store.
-    */
-  public setGestureConfidence(gestureId: number, confidence: number) {
+  private setGestureConfidence(gestureId: GestureID, confidence: number) {
     if (confidence < 0 || confidence > 1) {
       throw new Error('Cannot set gesture confidence. Must be in the range 0.0-1.0');
     }

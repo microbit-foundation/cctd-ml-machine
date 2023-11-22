@@ -12,7 +12,7 @@ import { AxesType, FilterType, Axes, Filters } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import { PersistantGestureData } from '../domain/Gestures';
-import Gesture from '../domain/Gesture';
+import Gesture, { GestureID } from '../domain/Gesture';
 import { gestures } from './Stores';
 
 export type RecordingData = {
@@ -65,7 +65,7 @@ export function clearGestures() {
 
 export type GestureData = {
   name: string;
-  ID: number;
+  ID: GestureID;
   recordings: RecordingData[];
   output: GestureOutput;
   confidence: {

@@ -1,5 +1,5 @@
 interface MLModel {
-  predict(filteredData: number[]): number[];
+  predict(filteredData: number[]): Promise<number[]>;
 }
 
 export default MLModel;

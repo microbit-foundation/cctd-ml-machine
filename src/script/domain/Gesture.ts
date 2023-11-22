@@ -11,15 +11,15 @@ import MBSpecs from '../microbit-interfacing/MBSpecs';
 import BindableValue from './BindableValue';
 import GestureConfidence from './GestureConfidence';
 
+export type GestureID = number;
+
 class Gesture implements Readable<GestureData> {
   private store: Readable<GestureData>;
-  private gestureConfidence: GestureConfidence;
 
   constructor(
     private persistedData: Writable<PersistantGestureData>,
-    confidence: GestureConfidence,
+    private gestureConfidence: GestureConfidence,
   ) {
-    this.gestureConfidence = confidence;
     this.store = this.deriveStore();
   }
 
@@ -30,7 +30,7 @@ class Gesture implements Readable<GestureData> {
     return this.store.subscribe(run, invalidate);
   }
 
-  public getId(): number {
+  public getId(): GestureID {
     return get(this.store).ID;
   }
 

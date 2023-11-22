@@ -3,17 +3,22 @@ import Model, { ModelData } from './Model';
 import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import Filters from './Filters';
 import MLModel from './MLModel';
+import Gesture, { GestureID } from './Gesture';
 
 type ClassifierData = {
   model: ModelData;
 };
 
 export class Classifier implements Readable<ClassifierData> {
+
   constructor(
     private model: Readable<Model>,
     private filters: Writable<Filters>,
     private mlModel: Readable<MLModel>,
+    private gestures: Gesture[],
+    private confidenceSetter: ((gestureId: GestureID, confidence: number) => void)
   ) {}
+
   public subscribe(
     run: Subscriber<ClassifierData>,
     invalidate?: ((value?: ClassifierData | undefined) => void) | undefined,
@@ -26,8 +31,13 @@ export class Classifier implements Readable<ClassifierData> {
     }).subscribe(run, invalidate);
   }
 
-  public classify(input: AccelerometerClassifierInput) {
-    this.getModel().predict(input.getInput(get(this.filters)));
+  public async classify(input: AccelerometerClassifierInput): Promise<void> {
+    const filteredInput = input.getInput(get(this.filters))
+    const predictions = await this.getModel().predict(filteredInput);
+    predictions.forEach((confidence, index) => {
+      const gesture = this.gestures[index];
+      this.confidenceSetter(gesture.getId(), confidence);
+    })
   }
 
   public getModel(): Model {

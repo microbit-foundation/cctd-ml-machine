@@ -1,8 +1,6 @@
 import { Subscriber, Unsubscriber, Writable, derived, writable } from 'svelte/store';
 import Classifier from '../domain/Classifier';
 import Engine, { EngineData } from '../domain/Engine';
-import GestureConfidence from '../domain/GestureConfidence';
-import Gestures from '../domain/Gestures';
 
 class PollingPredictorEngine implements Engine {
   private pollingInterval: ReturnType<typeof setInterval>;
@@ -37,7 +35,6 @@ class PollingPredictorEngine implements Engine {
 
   private predict() {
     if (this.classifier.getModel().isTrained() && this.isRunning) {
-      console.log('Classifiyy');
     }
   }
 }

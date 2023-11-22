@@ -2,7 +2,7 @@ import { Writable, writable } from 'svelte/store';
 import { RecordingData } from '../stores/mlStore';
 import Classifier from './Classifier';
 import Filters from './Filters';
-import Gesture from './Gesture';
+import Gesture, { GestureID } from './Gesture';
 import Gestures from './Gestures';
 import Model from './Model';
 import { TrainingData } from './ModelTrainer';
@@ -12,13 +12,17 @@ import ClassifierRepository, {
 } from '../repository/ClassifierRepository';
 
 class ClassifierFactory {
+
   public buildClassifier(
     model: Writable<MLModel>,
     trainerConsumer: TrainerConsumer,
     filters: Writable<Filters>,
+    gestures: Gesture[],
+    confidenceSetter: (gestureId: GestureID, confidence: number) => void
   ): Classifier {
-    return new Classifier(this.buildModel(trainerConsumer, model), filters, model);
+    return new Classifier(this.buildModel(trainerConsumer, model), filters, model, gestures, confidenceSetter);
   }
+
   public buildTrainingData(gestures: Gesture[], filters: Filters): TrainingData {
     const classes = gestures.map(gesture => {
       return {

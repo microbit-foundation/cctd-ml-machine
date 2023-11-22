@@ -299,10 +299,10 @@ function tfHandlePrediction(result: Float32Array) {
   const gestureData = get(gestures);
 
   gestureData.forEach(({ ID }, index) => {
-    Repositories.getInstance()
+    /*Repositories.getInstance()
       .getModelRepository()
       .setGestureConfidence(ID, result[index]);
-
+*/
     gestureConfidences.update(confidenceMap => {
       confidenceMap[ID] = result[index];
       return confidenceMap;

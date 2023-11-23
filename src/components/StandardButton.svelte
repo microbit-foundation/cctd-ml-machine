@@ -45,7 +45,7 @@
   export let bold = true;
   export let shadows = true;
   export let position: 'center' | 'right' = 'center';
-  export let extraClasses: string = "";
+  export let extraClasses: string = '';
 
   const bgColors: { [key in variants]: string } = {
     primary: windi.theme.extend.colors.primary,

@@ -4,7 +4,6 @@
   SPDX-License-Identifier: MIT
  -->
 
-
 <script lang="ts">
     import StandardButton from '../../StandardButton.svelte';
     import { t } from '../../../i18n';
@@ -14,7 +13,7 @@
     export let onSkipClick: () => void;
     export let currentStage: string;
   </script>
-  
+
   <main>
     <div class="w-200 leading-10">
       <p class="font-bold text-2xl text-left pb-5">

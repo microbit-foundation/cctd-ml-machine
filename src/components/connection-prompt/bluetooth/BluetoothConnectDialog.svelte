@@ -35,11 +35,12 @@
     {$t('connectMB.pattern.heading')}
   </h1>
   <p>{$t('connectMB.pattern.subtitle')}</p>
-    <div class="flex justify-center pt-20 pb-10">
-      <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
-    </div>
+  <div class="flex justify-center pt-20 pb-10">
+    <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
+  </div>
   <div class="justify-end gap-x-5 flex pt-10">
-    <StandardButton outlined={true} onClick={onBackClick}>{$t('connectMB.backButton')}</StandardButton>
+    <StandardButton outlined={true} onClick={onBackClick}
+      >{$t('connectMB.backButton')}</StandardButton>
     <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
   </div>
 </main>

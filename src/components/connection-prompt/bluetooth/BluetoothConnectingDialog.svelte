@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 
- <script lang="ts">
+<script lang="ts">
   import MBSpecs from '../../../script/microbit-interfacing/MBSpecs';
   import { t } from '../../../i18n';
   import { onDestroy, onMount } from 'svelte';

@@ -10,6 +10,9 @@
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import { t } from '../../i18n';
   import { gestures } from '../../script/stores/Stores';
+    import StandardButton from '../../components/StandardButton.svelte';
+    import { Paths, navigate } from '../../router/paths';
+
 
   let isFilterInspectorDialogOpen = false;
   let currentFilter: FilterType | undefined = undefined;
@@ -23,7 +26,20 @@
 </script>
 
 <div class="flex flex-col h-full">
-  <ControlBar />
+  <ControlBar>
+    <StandardButton
+    fillOnHover
+    small
+    outlined
+    bold={false}
+    shadows={false}
+    color={'primary'}
+    onClick={() => {
+      navigate(Paths.TRAINING);
+    }}>
+    <i class="fas fa-solid fa-arrow-left"></i>
+  </StandardButton>
+  </ControlBar>
   {#if $gestures.length === 0}
     <div class="flex flex-col flex-grow justify-center items-center text-center">
       <div class="w-full text-primarytext">

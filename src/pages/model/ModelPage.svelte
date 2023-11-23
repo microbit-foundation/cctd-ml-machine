@@ -23,11 +23,13 @@
 
 <div>
   <ControlBar>
+    <!--
     <ExpandableControlBarMenu>
       <StandardButton small outlined onClick={openMakeCodeInNewTab}>
         MakeCode HEX
       </StandardButton>
     </ExpandableControlBarMenu>
+    -->
   </ControlBar>
 </div>
 <div class="pt-4 pl-3">

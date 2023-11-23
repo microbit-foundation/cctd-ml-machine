@@ -22,10 +22,18 @@
         {:else if currentStage==="usb1"}
           {$t("connectMB.connectCableMB1.heading")}
         {:else if currentStage==="usb2"}
-          {$t("connectMB.connectCable.heading")}
+          {$t("connectMB.connectCableMB2.heading")}
         {/if}
       </p>
-      <p class="leading-normal">{$t('connectMB.connectCable.subtitle')}</p>
+      <p class="leading-normal">
+        {#if currentStage==="usb"}
+        {$t('connectMB.connectCable.subtitle')}
+      {:else if currentStage==="usb1"}
+        {$t("connectMB.connectCableMB1.subtitle")}
+      {:else if currentStage==="usb2"}
+        {$t("connectMB.connectCableMB2.subtitle")}
+      {/if}
+      </p>
       <img src="imgs/connect-cable.gif" alt="GIF of connecting micro:bit" class="px-55 py-5"/>
     </div>
     <div class="flex">

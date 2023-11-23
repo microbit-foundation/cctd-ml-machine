@@ -18,7 +18,6 @@
 </script>
 
 <ControlBar>
-  <ExpandableControlBarMenu>
     <StandardButton
       fillOnHover
       small
@@ -53,5 +52,4 @@
       color="primary">
       {$t('content.data.controlbar.button.uploadData')}
     </StandardButton>
-  </ExpandableControlBarMenu>
 </ControlBar>

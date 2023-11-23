@@ -8,7 +8,7 @@ export default {
 	"da": { // APPROXIMATE SORTING ORDER: First alphabetically, then order of appearance from top to bottom of page
 		// ALERTS:
 		//In gesture.svelte 
-		"alert.data.classNameLengthAlert": "Navne må kun bestå af 25 tegn",
+		"alert.data.classNameLengthAlert": "Navne må kun bestå af {{maxLen}} tegn",
 		"alert.recording.disconnectedDuringRecording":"micro:bit frakoblede under optagelse",
 
 		//In common.js
@@ -33,7 +33,16 @@ export default {
 		"content.index.contactBody": "Hvis du finder fejl og mangler på denne platform, skal du være velkommen til at skrive til os. Hvis du har andre efterspørgsler, ideer eller generel interesse, skal du være velkommen til at kontakte os. Skaberne af denne platform kan kontaktes på:",
 		"content.index.contactBodyGithub": "Du kan også besøge vores Github side:",
 		"content.index.contactMail": "keb@cs.au.dk",
-		"content.index.acknowledgement": "Udviklet af Center for Computational Thinking og Design, Aarhus Universitet",
+		"content.index.acknowledgement": "Udviklet af Center for Computational Thinking og Design, Aarhus Universitet",		
+		"content.index.newzHeading": "Nyheder",
+		"content.index.newzBodyMakecode": "Du kan nu programmere omkring outputtet fra dine modeller i MakeCode. See den øverste på modelsiden.",
+		"content.index.newzBodyViz": "Vi har fået en visualisering af datarepreæsentationen.",
+		"content.index.MLHeading": "Hvordan virker det?",
+		"content.index.MLSubheading": "ML-Machine bygger machine learning modeller til at genkende mønstre i accelerometer data.",
+		"content.index.MLExplainer1": "Med ML-Machine kan du kuratere data eksempler af forskellige bevægelser og gestikker, som en machine learning algoritme analyserer. Den finder mønstre i dataen som kan bruges til at forudsige/gætte om micro:bit’en bliver bevæget i cirkler, ryster, er tapet til benet af en person som hopper, m.m.",
+		"content.index.MLExplainer2": "For kunne dette laver ml-machine.org en datarepræsentation af eksemplerne ved at udregne specifikke egenskaber af hvert eksempel, fx standardafvigelse, samlet acceleration, den maximale værdi.",
+		"content.index.MLExplainer3": "Data repræsentationerne af eksemplerne vises til et neuralt netværk. Det neurale netværk “lærer” fra disse eksempler ved at finde mønstre i og imellem eksemplerne.",
+		"content.index.MLExplainer4": "Denne træningsprocess resulterer i et trænet neuralt netværk (vi kalder det også en machine learning model), der kan gætte/forudsige, hvordan micro:bit’en bevæges, når de samme egenskaber (standardafvigelse, samlet acceleration, den maximale værdi m.m.) beregnes fra det live accelerometer data.",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Klik for at ændre navnet",
 		"content.data.record": "Optag",
@@ -61,20 +70,23 @@ export default {
 		"content.trainer.failure.todo": "Gå tilbage til datasiden og ændr i din data.",
 		"content.trainer.controlbar.filters": "Filtre",
 
+		// FILTER PAGE
+		"content.filters.NoDataHeader": "Der er ikke noget data",
+		"content.filters.NoDataBody": "Gå til Data-siden for at indsamle data.",
 		"content.filters.max.title" : "Maksværdier",
-		"content.filters.max.description" : "Det højeste punkt blandt alle datapunkter i en bevægelse.",
+		"content.filters.max.description" : "Det maksimale punkt blandt alle datapunkter i en bevægelse.",
 		"content.filters.min.title" : "Minimumsværdier",
-		"content.filters.min.description" : "Det laveste punkt blandt alle datapunkter i en bevægelse.",
+		"content.filters.min.description" : "Det minimale punkt blandt alle datapunkter i en bevægelse.",
 		"content.filters.std.title" : "Standardafvigelse",
 		"content.filters.std.description" : "Den gennemsnitlige afvigelse fra 0 blandt alle datapunkter i en bevægelse.",
 		"content.filters.peaks.title" : "Antal ekstremer",
 		"content.filters.peaks.description" : "Antallet af ekstremer blandt alle datapunkter i en bevægelse.",
 		"content.filters.acc.title" : "Samlet acceleration",
-		"content.filters.acc.description" : "Summen af acceleration for hele bevægelsen, udregnet med absolutte værdier, således at minus tæller som plus. God til at forstå mængden af bevægelse.",
+		"content.filters.acc.description" : "Summen af acceleration for hele bevægelsen, udregnet med absolutte værdier. God til at forstå mængden af bevægelse.",
 		"content.filters.mean.title" : "Gennemsnit",
-		"content.filters.mean.description": "Gennemsnit af acceleration for de forskellige axer.",
+		"content.filters.mean.description": "Gennemsnit af acceleration.",
 		"content.filters.zcr.title" : "Zero crossing rate",
-		"content.filters.zcr.description": "Hvor ofte inputer (accelerationen) går fra positiv til negativ eller omvend.t",
+		"content.filters.zcr.description": "Hvor ofte inputet (accelerationen) går fra positiv til negativ eller omvendt",
 		"content.filters.rms.title" : "Effektiv værdi ",
 		"content.filters.rms.description": "Root mean square.",
 
@@ -152,6 +164,8 @@ export default {
 		"popup.connectMB.bluetooth.step3": "Vælg din BBC micro:bit og tryk 'tilslut'.",
 		"popup.connectMB.bluetooth.connect": "Tilslut",
 		"popup.connectMB.bluetooth.connecting": "Tilslutter...",
+		"popup.connectMB.bluetooth.invalidPattern": "Mønstret du har tegnet er ikke gyldig",
+		"popup.connectMB.bluetooth.timeouted": "Dukker der ikke et forbind-vindue op? Prøv at indlæse siden igen.",
 
 		"popup.disconnectedWarning.input": "Din input-micro:bit mistede forbindelsen, vil du prøve igen?",
 		"popup.disconnectedWarning.output": "Din output-micro:bit mistede forbindelsen, vil du prøve igen?",
@@ -247,13 +261,21 @@ export default {
 		// CONNECTION LOST DIALOG
 
 		"dialog.connection.lost.header": "Forbindelse offline",
-		"dialog.connection.lost.body": "Vi kan ikke oprette forbindelse til internettet, nogle funktioner virker muligvis ikke som forventet."
+		"dialog.connection.lost.body": "Vi kan ikke oprette forbindelse til internettet, nogle funktioner virker muligvis ikke som forventet.",
 
+		// OUTDATED MICROBIT WARNING
+
+		"popup.outdatedmicrobit.header": "Din micro:bit mangler en opdatering.",
+		"popup.outdatedmicrobit.text": "Vi anbefaler stærkt at opdatere nu, nogle funktioner virker muligvis ikke som forventet.",
+		"popup.outdatedmicrobit.text.mkcd": "Åben den nyeste MakeCode skabelon for at bruge den opdaterede MakeCode extension.",
+		"popup.outdatedmicrobit.button.later": "Senere",
+		"popup.outdatedmicrobit.button.update": "Opdatér nu",
+		"popup.outdatedmicrobit.button.update.mkcd": "Åben MakeCode",
 	},
 	"en": {
 		// ALERTS:
 		//In gesture.svelte
-		"alert.data.classNameLengthAlert": "Names must consists of maximum 25 characters.",
+		"alert.data.classNameLengthAlert": "Names must consists of maximum {{maxLen}} characters.",
 		"alert.recording.disconnectedDuringRecording":"micro:bit disconnected during recording",
 
 		//In common.js
@@ -279,6 +301,15 @@ export default {
 		"content.index.contactBodyGithub": "You can also visit our Github page:",
 		"content.index.contactMail": "keb@cs.au.dk",
 		"content.index.acknowledgement": "Developed by Center for Computational Thinking and Design, Aarhus University",
+		"content.index.newzHeading": "News",
+		"content.index.newzBodyMakecode": "You can now program around your model's output in MakeCode. See top bar on model page.",
+		"content.index.newzBodyViz": "We now have a vizualization of the data representaion.",
+		"content.index.MLHeading": "How does it work?",
+		"content.index.MLSubheading": "ML-Machine builds machine learning models to recognize patterns in the accelerometer data.",
+		"content.index.MLExplainer1": "With ML-Machine, you curate data samples of different gestures or movements, which a machine learning algorithm analyzes. It finds patterns in the data that can be used to predict/guess if the micro:bit is moved in circles, shaken, taped to the leg of the person jumping, etc.",
+		"content.index.MLExplainer2": "To achieve this, ml-machine.org  makes a data representation of the samples by calculating specific properties of each sample, such as standard deviation, cumulated acceleration, and maximum value.",
+		"content.index.MLExplainer3": "The data representations of the data samples are shown to a neural network. The neural network “learns” from these examples by finding patterns in and between the samples.",
+		"content.index.MLExplainer4": "This training process results in a trained neural network (we also call it a machine learning model) that can guess/predict how the micro:bit is moved when the same properties (standard deviation, cumulated acceleration, maximum value, etc.) are calculated from the live accelerometer data.",
 		// DATA PAGE:
 		"content.data.classPlaceholderNewClass": "Press here to change name",
 		"content.data.record": "Record",
@@ -306,20 +337,23 @@ export default {
 		"content.trainer.failure.todo": "Return to the data page and change your data.",
 		"content.trainer.controlbar.filters": "Filters",
 
+		// FILTER PAGE
+		"content.filters.NoDataHeader": "No available data",
+		"content.filters.NoDataBody": "Go to the Data page to collect data samples.",
 		"content.filters.max.title" : "Max values",
-		"content.filters.max.description" : "The tallest point among all datapoints in a gesture.",
+		"content.filters.max.description" : "The maximum point among all datapoints in a gesture.",
 		"content.filters.min.title" : "Minimum values",
-		"content.filters.min.description" : "The lowest point among all datapoints in a gesture.",
+		"content.filters.min.description" : "The minimum point among all datapoints in a gesture.",
 		"content.filters.std.title" : "Standard deviation",
 		"content.filters.std.description" : "The average deviation from 0 among all datapoints in a gesture.",
 		"content.filters.peaks.title" : "Number of extremes",
 		"content.filters.peaks.description" : "The number of extremes among all datapoints in a gesture.",
 		"content.filters.acc.title" : "Total acceleration",
-		"content.filters.acc.description" : "The sum of acceleration for the whole gesture, calculated in absolute values, so that minus counts as plus. Good for understanding the amount of movement.",
+		"content.filters.acc.description" : "The sum of acceleration for the whole gesture, calculated in absolute values. Good for understanding the amount of movement.",
 		"content.filters.mean.title" : "Mean",
-		"content.filters.mean.description": "Mean value of accelerations at different axes",
+		"content.filters.mean.description": "Mean value of accelerations",
 		"content.filters.zcr.title" : "Zero crossing rate",
-		"content.filters.zcr.description": "The rate at which the input (acceleration) transitions from positive to zero to negative or negative to zero to positive.",
+		"content.filters.zcr.description": "The rate at which the input (acceleration) transitions between positive and negative.",
 		"content.filters.rms.title" : "Root mean square",
 		"content.filters.rms.description": "",
 
@@ -398,6 +432,8 @@ export default {
 		"popup.connectMB.bluetooth.step3": "Select your micro:bit and press 'Connect'.",
 		"popup.connectMB.bluetooth.connect": "Connect",
 		"popup.connectMB.bluetooth.connecting": "Connecting...",
+		"popup.connectMB.bluetooth.invalidPattern": "The pattern you drew is invalid",
+		"popup.connectMB.bluetooth.timeouted": "Not seeing a connection prompt? Try refreshing the page.",
 
 		"popup.disconnectedWarning.input": "Your input micro:bit lost connection, do want to try again?",
 		"popup.disconnectedWarning.output": "Your output micro:bit lost connection, do want to try again?",
@@ -491,7 +527,16 @@ export default {
 		// CONNECTION LOST DIALOG
 
 		"dialog.connection.lost.header": "Connection offline",
-		"dialog.connection.lost.body": "Your internet connection is offline, some features may not work properly"
+		"dialog.connection.lost.body": "Your internet connection is offline, some features may not work properly",
+
+		// OUTDATED MICROBIT WARNING
+
+		"popup.outdatedmicrobit.header": "Your micro:bit firmware is outdated.",
+		"popup.outdatedmicrobit.text": "We strongly recommend that you update it now, as some features may not work as expected.",
+		"popup.outdatedmicrobit.text.mkcd": "Open the newest MakeCode template to use the updated extension.",
+		"popup.outdatedmicrobit.button.later": "Later",
+		"popup.outdatedmicrobit.button.update": "Update now",
+		"popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode",
 	}
 };
   

@@ -54,7 +54,7 @@ class CookieManager {
   }
 
   public static hasFeatureFlag(flag: string): boolean {
-    const flags = Cookies.get('fflags');
+    const flags = Cookies.get(this.featureFlagsCookieName);
     if (!flags) {
       return false;
     }

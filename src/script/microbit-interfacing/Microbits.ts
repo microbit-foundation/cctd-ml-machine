@@ -16,13 +16,20 @@ import MicrobitUSB from './MicrobitUSB';
 import type ConnectionBehaviour from '../connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
 import StaticConfiguration from '../../StaticConfiguration';
+import { settings } from '../stores/mlStore';
 
 type QueueElement = {
   service: BluetoothRemoteGATTCharacteristic;
   view: DataView;
 };
 
-type UARTMessageType = "g" | "s"
+export enum HexOrigin {
+  UNKNOWN,
+  MAKECODE,
+  PROPRIETARY,
+}
+
+type UARTMessageType = 'g' | 's';
 
 /**
  * Entry point for microbit interfaces / Facade pattern
@@ -47,6 +54,17 @@ class Microbits {
 
   private static isInputReconnecting = false;
   private static isOutputReconnecting = false;
+
+  private static outputOrigin = HexOrigin.UNKNOWN;
+  private static inputOrigin = HexOrigin.UNKNOWN;
+
+  private static inputBuildVersion: number | undefined = undefined;
+  private static outputBuildVersion: number | undefined = undefined;
+
+  private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined =
+    undefined;
+  private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined =
+    undefined;
 
   /**
    * Maps pin to the number of times, it has been asked to turn on.
@@ -173,6 +191,7 @@ class Microbits {
     const onInitialInputConnect = (microbit: MicrobitBluetooth) => {
       this.assignedInputMicrobit = microbit;
       this.inputName = name;
+
       connectionBehaviour.onConnected(name);
       Microbits.listenToInputServices()
         .then(() => {
@@ -184,6 +203,7 @@ class Microbits {
     };
 
     const onInputDisconnect = (manual?: boolean) => {
+      this.inputBuildVersion = undefined;
       if (this.isInputOutputTheSame()) {
         ConnectionBehaviours.getOutputBehaviour().onDisconnected();
       }
@@ -218,11 +238,13 @@ class Microbits {
       connectionBehaviour.onConnected(name);
       Microbits.listenToInputServices()
         .then(() => {
+          clearTimeout(this.inputVersionIdentificationTimeout);
           if (this.isInputOutputTheSame()) {
             this.assignedOutputMicrobit = microbit;
             this.inputName = name;
             Microbits.listenToOutputServices()
               .then(() => {
+                clearTimeout(this.outputVersionIdentificationTimeout);
                 connectionBehaviour.onReady();
                 ConnectionBehaviours.getOutputBehaviour().onReady();
               })
@@ -298,6 +320,28 @@ class Microbits {
       'B',
       connectionBehaviour.buttonChange.bind(connectionBehaviour),
     );
+    await this.getInput().listenToUART(data => this.inputUartHandler(data));
+    this.inputVersionIdentificationTimeout = setTimeout(() => {
+      connectionBehaviour.onIdentifiedAsOutdated();
+    }, StaticConfiguration.versionIdentificationTimeoutDuration);
+  }
+
+  private static async listenToOutputServices(): Promise<void> {
+    const connectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
+
+    if (!this.isOutputConnected()) {
+      throw new Error('Could not listen to services, no microbit connected!');
+    }
+    this.outputIO = await this.getIOOf(this.getOutput());
+    this.outputMatrix = await this.getMatrixOf(this.getOutput());
+    const uartService = await this.getOutput().getUARTService();
+    this.outputUart = await uartService.getCharacteristic(
+      MBSpecs.Characteristics.UART_DATA_RX,
+    );
+    this.outputVersionIdentificationTimeout = setTimeout(() => {
+      connectionBehaviour.onIdentifiedAsOutdated();
+    }, StaticConfiguration.versionIdentificationTimeoutDuration);
+    await this.getOutput().listenToUART(data => this.outputUartHandler(data));
   }
 
   /**
@@ -324,6 +368,7 @@ class Microbits {
     };
 
     const onOutputDisconnect = (manual?: boolean) => {
+      this.outputBuildVersion = undefined;
       if (manual) {
         if (this.isOutputAssigned()) {
           ConnectionBehaviours.getOutputBehaviour().onExpelled(manual);
@@ -381,6 +426,61 @@ class Microbits {
     return false;
   }
 
+  private static inputUartHandler(data: string) {
+    const connectionBehaviour = ConnectionBehaviours.getInputBehaviour();
+    if (data === 'id_mkcd') {
+      this.inputOrigin = HexOrigin.MAKECODE;
+      connectionBehaviour.onIdentifiedAsMakecode();
+    }
+    if (data === 'id_prop') {
+      this.inputOrigin = HexOrigin.PROPRIETARY;
+      connectionBehaviour.onIdentifiedAsProprietary();
+    }
+    if (data.includes('vi_')) {
+      const version = parseInt(data.substring(3));
+      this.inputBuildVersion = version;
+      if (this.isInputOutputTheSame()) {
+        clearTimeout(this.outputVersionIdentificationTimeout);
+      }
+      clearTimeout(this.inputVersionIdentificationTimeout);
+      connectionBehaviour.onVersionIdentified(version);
+      const isOutdated = StaticConfiguration.isMicrobitOutdated(
+        this.inputOrigin,
+        version,
+      );
+      if (isOutdated) {
+        connectionBehaviour.onIdentifiedAsOutdated();
+      }
+    }
+    connectionBehaviour.onUartMessageReceived(data);
+  }
+
+  private static outputUartHandler(data: string) {
+    const connectionBehaviour = ConnectionBehaviours.getOutputBehaviour();
+    if (data === 'id_mkcd') {
+      this.outputOrigin = HexOrigin.MAKECODE;
+      connectionBehaviour.onIdentifiedAsMakecode();
+    }
+    if (data === 'id_prop') {
+      this.outputOrigin = HexOrigin.PROPRIETARY;
+      connectionBehaviour.onIdentifiedAsProprietary();
+    }
+    if (data.includes('vi_')) {
+      clearTimeout(this.outputVersionIdentificationTimeout);
+      const version = parseInt(data.substring(3));
+      this.outputBuildVersion = version;
+      connectionBehaviour.onVersionIdentified(version);
+      const isOutdated = StaticConfiguration.isMicrobitOutdated(
+        this.outputOrigin,
+        version,
+      );
+      if (isOutdated) {
+        connectionBehaviour.onIdentifiedAsOutdated();
+      }
+    }
+    connectionBehaviour.onUartMessageReceived(data);
+  }
+
   private static onFailedConnection(behaviour: ConnectionBehaviour) {
     return (err: Error) => {
       if (err) {
@@ -413,18 +513,6 @@ class Microbits {
     const uartService = await microbit.getUARTService();
     await uartService.getCharacteristic(MBSpecs.Characteristics.UART_DATA_RX);
     microbit.disconnect();
-  }
-
-  private static async listenToOutputServices(): Promise<void> {
-    if (!this.isOutputConnected()) {
-      throw new Error('Could not listen to services, no microbit connected!');
-    }
-    this.outputIO = await this.getIOOf(this.getOutput());
-    this.outputMatrix = await this.getMatrixOf(this.getOutput());
-    const uartService = await this.getOutput().getUARTService();
-    this.outputUart = await uartService.getCharacteristic(
-      MBSpecs.Characteristics.UART_DATA_RX,
-    );
   }
 
   /**
@@ -613,15 +701,39 @@ class Microbits {
     this.assignedOutputMicrobit = this.getInput();
     this.outputName = this.inputName;
     this.outputVersion = this.inputVersion;
+    this.outputOrigin = this.inputOrigin;
+    this.outputBuildVersion = this.inputBuildVersion;
 
     ConnectionBehaviours.getOutputBehaviour().onAssigned(
       this.getOutput(),
       this.outputName,
     );
     ConnectionBehaviours.getOutputBehaviour().onConnected(this.outputName);
+
     this.listenToOutputServices()
       .then(() => {
         ConnectionBehaviours.getOutputBehaviour().onReady();
+        if (this.inputOrigin === HexOrigin.MAKECODE) {
+          ConnectionBehaviours.getOutputBehaviour().onIdentifiedAsMakecode();
+        }
+        if (this.inputOrigin === HexOrigin.PROPRIETARY) {
+          ConnectionBehaviours.getOutputBehaviour().onIdentifiedAsProprietary();
+        }
+        if (this.outputBuildVersion) {
+          ConnectionBehaviours.getOutputBehaviour().onVersionIdentified(
+            this.outputBuildVersion,
+          );
+          if (
+            StaticConfiguration.isMicrobitOutdated(
+              this.outputOrigin,
+              this.outputBuildVersion,
+            )
+          ) {
+            ConnectionBehaviours.getOutputBehaviour().onIdentifiedAsOutdated();
+          } else {
+            clearTimeout(this.outputVersionIdentificationTimeout);
+          }
+        }
       })
       .catch(e => {
         console.log(e);
@@ -709,7 +821,7 @@ class Microbits {
    */
   public static sendUARTGestureMessageToOutput(value: string) {
     if (!this.isOutputReady()) {
-      throw new Error("No output microbit is ready to receive UART gesture messages")
+      throw new Error('No output microbit is ready to receive UART gesture messages');
     }
     this.sendToOutputUart('g', value);
   }
@@ -727,6 +839,10 @@ class Microbits {
     }
   }
 
+  /**
+   * Gets the microbit connected through USB.
+   * @returns The USB-Connected microbit
+   */
   public static getLinked(): MicrobitUSB {
     if (!this.isMicrobitLinked() || !this.linkedMicrobit) {
       throw new Error('No microbit has been linked!');
@@ -735,11 +851,30 @@ class Microbits {
     return this.linkedMicrobit;
   }
 
+  /**
+   * Attempt to disconnect a USB-connected microbit
+   */
   public static async unlinkMicrobit() {
     if (!this.isMicrobitLinked()) {
       throw new Error('Cannot disconnect USB. No USB microbit could be found');
     }
     await this.getLinked().disconnect();
+  }
+
+  /**
+   * Whether the output microbit is a makecode hex.
+   * @returns True if the output microbit is from Makecode.
+   */
+  public static isOutputMakecode() {
+    return this.outputOrigin === HexOrigin.MAKECODE;
+  }
+
+  /**
+   * Whether the input microbit is a makecode hex,
+   * @returns True if the input microbit is from Makecode.
+   */
+  public static isInputMakecode() {
+    return this.inputOrigin === HexOrigin.MAKECODE;
   }
 
   /**
@@ -760,6 +895,14 @@ class Microbits {
       throw new Error('Cannot get friendly name from USB, none are connected!');
     }
     return await this.getLinked().getFriendlyName();
+  }
+
+  public static getInputOrigin(): HexOrigin {
+    return this.inputOrigin;
+  }
+
+  public static getOutputOrigin(): HexOrigin {
+    return this.outputOrigin;
   }
 
   /**

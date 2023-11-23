@@ -15,59 +15,56 @@
 
 <script lang="ts">
   // IMPORT AND DEFAULTS
-  import OutputMatrix from './output/OutputMatrix.svelte';
+  import OutputMatrix from './OutputMatrix.svelte';
   import {
     settings,
-    gestureConfidences,
     updateGestureSoundOutput,
-    type GestureData,
     type SoundData,
     updateGesturePinOutput,
-  } from '../script/stores/mlStore';
-  import { t } from '../i18n';
-  import OutputSoundSelector from './output/OutputSoundSelector.svelte';
-  import Microbits from '../script/microbit-interfacing/Microbits';
-  import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
-  import GestureTilePart from './GestureTilePart.svelte';
-  import PinSelector from './output/PinSelector.svelte';
-  import { state } from '../script/stores/uiStore';
-  import StaticConfiguration from '../StaticConfiguration';
-  import Information from './information/Information.svelte';
-  import { PinTurnOnState } from './output/PinSelectorUtil';
-  import MBSpecs from '../script/microbit-interfacing/MBSpecs';
-  import ConnectionBehaviours from '../script/connection-behaviours/ConnectionBehaviours';
+  } from '../../script/stores/mlStore';
+  import { t } from '../../i18n';
+  import OutputSoundSelector from './OutputSoundSelector.svelte';
+  import Microbits from '../../script/microbit-interfacing/Microbits';
+  import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
+  import GestureTilePart from '../GestureTilePart.svelte';
+  import PinSelector from './PinSelector.svelte';
+  import { state } from '../../script/stores/uiStore';
+  import StaticConfiguration from '../../StaticConfiguration';
+  import Information from '../information/Information.svelte';
+  import { PinTurnOnState } from './PinSelectorUtil';
+  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
+  import Gesture from '../../script/stores/Gesture';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component
-  export let gesture: GestureData;
+  export let gesture: Gesture;
   export let onUserInteraction: () => void = () => {
     return;
   };
   let wasTriggered = false;
   let triggerFunctions: (() => void)[] = [];
-  let selectedSound: SoundData | undefined = gesture.output.sound;
-  let selectedPin: MBSpecs.UsableIOPin = gesture.output.outputPin
-    ? gesture.output.outputPin.pin
+  let selectedSound: SoundData | undefined = $gesture.output.sound;
+  let selectedPin: MBSpecs.UsableIOPin = $gesture.output.outputPin
+    ? $gesture.output.outputPin.pin
     : StaticConfiguration.defaultOutputPin;
 
   let pinIOEnabled = StaticConfiguration.pinIOEnabledByDefault;
-  let turnOnTime = gesture.output.outputPin
-    ? gesture.output.outputPin.turnOnTime
+  let turnOnTime = $gesture.output.outputPin
+    ? $gesture.output.outputPin.turnOnTime
     : StaticConfiguration.defaultPinToggleTime;
-  let turnOnState = gesture.output.outputPin
-    ? gesture.output.outputPin.pinState
+  let turnOnState = $gesture.output.outputPin
+    ? $gesture.output.outputPin.pinState
     : StaticConfiguration.defaultPinTurnOnState;
 
   let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
-  $: currentConfidence = $state.isInputReady ? $gestureConfidences[gesture.ID] : 0;
 
   const getTriggerAction = (
     lastWasTriggered: boolean,
     confidence: number,
     requiredConfidence: number,
   ): TriggerAction => {
-    let isConfident = requiredConfidence <= confidence * 100;
+    let isConfident = requiredConfidence <= confidence;
     if ((!lastWasTriggered || !$settings.automaticClassification) && isConfident) {
       return 'turnOn';
     }
@@ -77,18 +74,18 @@
     return 'none';
   };
 
+  const wasTurnedOn = () => {
+    triggerComponents();
+    playSound();
+    wasTriggered = true;
+  };
+
   const handleTriggering = (action: TriggerAction) => {
     if (action === 'none') {
       return;
     }
     if (action === 'turnOn') {
-      triggerComponents();
-      playSound();
-      wasTriggered = true;
-      ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
-        gesture.ID,
-        gesture.name,
-      );
+      wasTurnedOn();
     } else {
       wasTriggered = false;
     }
@@ -103,8 +100,8 @@
   $: {
     let triggerAction = getTriggerAction(
       wasTriggered,
-      currentConfidence,
-      requiredConfidence,
+      $gesture.confidence.currentConfidence,
+      $gesture.confidence.requiredConfidence,
     );
     handleTriggering(triggerAction);
   }
@@ -131,7 +128,7 @@
 
   function onSoundSelected(sound: SoundData | undefined): void {
     selectedSound = sound;
-    updateGestureSoundOutput(gesture.ID, sound);
+    updateGestureSoundOutput($gesture.ID, sound);
     onUserInteraction();
   }
 
@@ -157,7 +154,7 @@
     }
     selectedPin = selected;
     refreshAfterChange();
-    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
+    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
   };
 
   const triggerComponents = () =>
@@ -172,7 +169,7 @@
     turnOnState = state.turnOnState;
     turnOnTime = state.turnOnTime;
     refreshAfterChange();
-    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
+    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
     if (wasTriggered) {
       setOutputPin(true);
     }
@@ -183,10 +180,17 @@
     setOutputPin(false);
   };
 
+  let sliderValue = requiredConfidence * 100;
+  $: {
+    gesture.getConfidence().setRequiredConfidence(sliderValue / 100);
+  }
+
   let hasLoadedMicrobitImage = false;
+
+  $: meterHeightPct = 100 * $gesture.confidence.currentConfidence;
 </script>
 
-<main class="pl-3 mb-4 items-center flex flex-row">
+<main class="mb-4 items-center flex flex-row">
   <!-- NAMES AND CONFIDENCE METER -->
   <GestureTilePart>
     <div class="items-center flex p-2">
@@ -194,7 +198,7 @@
         class="w-36 text-center font-semibold rounded-xl
                     px-1 py-1 border border-gray-300
                     border-dashed mr-2 break-words">
-        <h3>{gesture.name}</h3>
+        <h3>{$gesture.name}</h3>
       </div>
       <div class="h-31" />
       <input
@@ -205,7 +209,7 @@
         min="10"
         max="90"
         id=""
-        bind:value={requiredConfidence} />
+        bind:value={sliderValue} />
 
       <!-- METER -->
       <div class="w-4 h-25 relative">
@@ -213,11 +217,10 @@
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
           <div
             class="absolute w-5 {wasTriggered ? 'bg-primary' : 'bg-info'} z-index: -10"
-            style="height: {100 * currentConfidence}px; margin-top: {100 -
-              100 * currentConfidence}px;" />
+            style="height: {meterHeightPct}px; margin-top: {100 - meterHeightPct}px;" />
           <div
             class="absolute w-5 bg-primary"
-            style="height: 1px; margin-top: {6.5 - 0.068 * requiredConfidence}rem;" />
+            style="height: 1px; margin-top: {6.5 - 0.068 * sliderValue}rem;" />
           <div class="absolute">
             {#each [75, 50, 25] as line}
               <div class="w-5 bg-gray-300 mt-6" style="height: 1px;">
@@ -271,7 +274,7 @@
         class="bg-black p-0 m-0 absolute top-9 left-12.7"
         class:hidden={!hasLoadedMicrobitImage}
         on:click={onUserInteraction}>
-        <OutputMatrix bind:trigger={triggerFunctions[0]} {gesture} />
+        <OutputMatrix bind:trigger={triggerFunctions[0]} gesture={$gesture} />
       </div>
     </div>
     <OutputSoundSelector onSoundSelection={onSoundSelected} {selectedSound} />

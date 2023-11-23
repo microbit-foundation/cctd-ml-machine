@@ -5,11 +5,14 @@
  -->
 
 <script lang="ts">
-  import { SvelteComponent } from 'svelte';
+  import { ComponentType } from 'svelte';
 
-  export let contentComponent: SvelteComponent;
+  export let contentComponent: ComponentType;
+  export let fillColumns: number = 1;
 </script>
 
-<div class="border-gray-200 border border-solid bg-white rounded-lg p-6 shadow-xl">
+<div
+  class="border-gray-200 border border-solid bg-white rounded-lg p-6 shadow-xl {'col-span-' +
+    fillColumns}">
   <svelte:component this={contentComponent} />
 </div>

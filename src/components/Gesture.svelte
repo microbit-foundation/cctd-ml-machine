@@ -9,7 +9,7 @@
   import {
     alertUser,
     buttonPressed,
-    isReady,
+    areActionsAllowed,
     state,
     microbitInteraction,
     MicrobitInteractions,
@@ -17,10 +17,8 @@
   import {
     addRecording,
     chosenGesture,
-    type GestureData,
     livedata,
     type RecordingData,
-    removeGesture,
     removeRecording,
     settings,
   } from '../script/stores/mlStore';
@@ -30,42 +28,48 @@
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
+  import Gesture from '../script/stores/Gesture';
+  import { gestures } from '../script/stores/Stores';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
-  export let gesture: GestureData;
+  export let gesture: Gesture;
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = get(settings).duration;
 
   let isThisRecording = false;
 
+  const nameBind = gesture.bindName();
+
   // When title is clicked. Remove name
   function titleClicked(): void {
-    if (gesture.name === defaultNewName) {
-      gesture.name = '';
+    if (gesture.getName() === defaultNewName) {
+      gesture.setName('');
     }
   }
 
   function removeClicked(): void {
-    if (!isReady(false)) {
+    if (!areActionsAllowed(false)) {
       return;
     }
 
-    if (!window.confirm($t('alert.deleteGestureConfirm') + '"' + gesture.name + '"?')) {
+    if (
+      !window.confirm($t('alert.deleteGestureConfirm') + '"' + gesture.getName() + '"?')
+    ) {
       return;
     }
     $state.isPredicting = false;
 
     setTimeout(() => {
-      removeGesture(gesture);
+      gestures.removeGesture(gesture.getId());
     }, 450);
   }
 
   // method for recording data point for that specific gesture
   function recordClicked(e?: Event): void {
     e?.stopPropagation();
-    if (!isReady()) {
+    if (!areActionsAllowed()) {
       return;
     }
 
@@ -89,7 +93,7 @@
       unsubscribe();
       if (get(settings).numSamples <= newData.x.length) {
         const recording = { ID: Date.now(), data: newData } as RecordingData;
-        addRecording(gesture.ID, recording);
+        addRecording(gesture.getId(), recording);
       } else {
         alertUser($t('alert.recording.disconnectedDuringRecording'));
       }
@@ -98,11 +102,11 @@
 
   // Delete recording from recordings array
   function deleteRecording(recording: RecordingData) {
-    if (!isReady(false)) {
+    if (!areActionsAllowed(false)) {
       return;
     }
     $state.isPredicting = false;
-    removeRecording(gesture.ID, recording.ID);
+    removeRecording(gesture.getId(), recording.ID);
   }
 
   // Selecting this gesture for recording. Updates settings accordingly
@@ -117,13 +121,13 @@
       onNoMicrobitSelect();
       return;
     }
-    chosenGesture.update(storedGesture => {
-      if (storedGesture === gesture) {
-        storedGesture = null;
+    chosenGesture.update(chosen => {
+      if (chosen === gesture) {
+        chosen = null;
       } else {
-        storedGesture = gesture;
+        chosen = gesture;
       }
-      return storedGesture;
+      return chosen;
     });
   }
 
@@ -144,11 +148,6 @@
   }
 
   function onTitleKeypress(event: KeyboardEvent) {
-    // Check backspace, delete and enter before alerting user, because we don't want to pop a warning when
-    // the user is at 25 characters, but is pressing enter.
-    if (event.code === 'Backspace' || event.code === 'Delete') {
-      return true;
-    }
     if (event.code === 'Enter') {
       event.preventDefault();
       if (event.target instanceof HTMLElement) {
@@ -156,9 +155,14 @@
       }
       return true;
     }
-    if (gesture.name.length >= StaticConfiguration.gestureNameMaxLength) {
+
+    if ($nameBind.length >= StaticConfiguration.gestureNameMaxLength) {
       event.preventDefault();
-      alertUser($t('alert.data.classNameLengthAlert'));
+      alertUser(
+        $t('alert.data.classNameLengthAlert', {
+          maxLen: StaticConfiguration.gestureNameMaxLength,
+        }),
+      );
       return false;
     }
   }
@@ -196,8 +200,8 @@
 									rounded-xl border border-gray-300
 									border-solid hover:bg-gray-100">
           <h3
-            bind:textContent={gesture.name}
             contenteditable
+            bind:innerText={$nameBind}
             on:click={titleClicked}
             on:keypress={onTitleKeypress} />
         </div>
@@ -234,10 +238,10 @@
       {/if}
     </GestureTilePart>
     <!-- Show recording for each recording -->
-    {#if gesture.recordings.length > 0}
+    {#if $gesture.recordings.length > 0}
       <GestureTilePart small>
         <div class="flex p-2 h-30">
-          {#each gesture.recordings as recording (String(gesture.ID) + String(recording.ID))}
+          {#each $gesture.recordings as recording (String($gesture.ID) + String(recording.ID))}
             <Recording {recording} onDelete={deleteRecording} />
           {/each}
         </div>

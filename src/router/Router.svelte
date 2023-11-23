@@ -8,7 +8,7 @@
   import { onMount } from 'svelte';
   import DataPage from '../pages/DataPage.svelte';
   import Homepage from '../pages/Homepage.svelte';
-  import ModelPage from '../pages/ModelPage.svelte';
+  import ModelPage from '../pages/model/ModelPage.svelte';
   import FilterPage from '../pages/filter/FilterPage.svelte';
   import TrainingPage from '../pages/training/TrainingPage.svelte';
   import { currentPageComponent } from '../views/currentComponentStore';
@@ -27,11 +27,6 @@
       case Paths.FILTERS:
         return FilterPage;
     }
-    // Hacky way of ensuring exhaustive switch statement (at compile time)
-    // since typescript does not have this by default.
-    const exhaustiveCheck: never = path;
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    throw new Error(`Non Exhaustive switch. ${exhaustiveCheck} not handled.`);
   }
 
   const onPathChange = (path: PathType) => {

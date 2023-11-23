@@ -5,7 +5,7 @@
  */
 
 import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { buttonPressed, state } from '../stores/uiStore';
+import { ModelView, buttonPressed, onCatastrophicError, state } from '../stores/uiStore';
 import { livedata } from '../stores/mlStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
@@ -38,22 +38,36 @@ class InputBehaviour extends LoggingDecorator {
     });
   }
 
+  onIdentifiedAsOutdated(): void {
+    super.onIdentifiedAsOutdated();
+    state.update(s => {
+      s.isInputOutdated = true;
+      return s;
+    });
+  }
+
+  onVersionIdentified(versionNumber: number): void {
+    super.onVersionIdentified(versionNumber);
+  }
+
+  onIdentifiedAsMakecode(): void {
+    super.onIdentifiedAsMakecode();
+    state.update(s => {
+      s.modelView = ModelView.TILE;
+      return s;
+    });
+  }
+
+  onIdentifiedAsProprietary(): void {
+    super.onIdentifiedAsProprietary();
+  }
+
   onGestureRecognized(id: number, gestureName: string): void {
     super.onGestureRecognized(id, gestureName);
   }
 
   onUartMessageReceived(message: string): void {
     super.onUartMessageReceived(message);
-    if (message === "id_mkcd") {
-      this.announceIsMakecode();
-    }
-  }
-
-  private announceIsMakecode() {
-    state.update(s => {
-      s.isInputMakecodeHex = true;
-      return s;
-    })
   }
 
   onReady() {
@@ -67,7 +81,6 @@ class InputBehaviour extends LoggingDecorator {
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
     super.onAssigned(microbitBluetooth, name);
-    microbitBluetooth.listenToUART((data) => this.onUartMessageReceived(data))
     state.update(s => {
       s.isInputAssigned = true;
       return s;
@@ -103,7 +116,7 @@ class InputBehaviour extends LoggingDecorator {
       s.offerReconnect = false;
       s.isInputReady = false;
       s.reconnectState = DeviceRequestStates.NONE;
-      s.isInputMakecodeHex = false;
+      s.isInputOutdated = false;
       return s;
     });
   }
@@ -121,7 +134,7 @@ class InputBehaviour extends LoggingDecorator {
     // Works like this: If the MB manages to connect, wait `reconnectTimeoutDuration` milliseconds
     // if MB does not call onReady before that expires, refresh the page
     clearTimeout(this.reconnectTimeout);
-    const onTimeout = () => this.onCatastrophicError();
+    const onTimeout = () => onCatastrophicError();
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, StaticConfiguration.reconnectTimeoutDuration);
@@ -163,17 +176,6 @@ class InputBehaviour extends LoggingDecorator {
         return obj;
       });
     }
-  }
-
-  /**
-   * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
-   * Refresh the page is the only known solution
-   * @private
-   */
-  private onCatastrophicError() {
-    // Set flag to offer reconnect when page reloads
-    CookieManager.setReconnectFlag();
-    location.reload();
   }
 }
 

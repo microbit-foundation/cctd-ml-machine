@@ -12,17 +12,18 @@
 </style>
 
 <script lang="ts">
-  import OutputGesture from '../components/OutputGesture.svelte';
-  import { buttonPressed, isReady, state } from '../script/stores/uiStore';
-  import { gestures, settings } from '../script/stores/mlStore';
+  import { buttonPressed, areActionsAllowed, state } from '../../script/stores/uiStore';
+  import { settings } from '../../script/stores/mlStore';
   import { get } from 'svelte/store';
   import { onMount } from 'svelte';
-  import { classify } from '../script/ml';
-  import { t } from '../i18n';
+  import { classify } from '../../script/ml';
+  import { t } from '../../i18n';
   import { fade } from 'svelte/transition';
-  import ControlBar from '../components/control-bar/ControlBar.svelte';
-  import Information from '../components/information/Information.svelte';
-  import Microbits from '../script/microbit-interfacing/Microbits';
+  import Information from '../../components/information/Information.svelte';
+  import Microbits from '../../script/microbit-interfacing/Microbits';
+  import TrainModelFirstTitle from '../../components/TrainModelFirstTitle.svelte';
+  import OutputGesture from '../../components/output/OutputGesture.svelte';
+  import { gestures } from '../../script/stores/Stores';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -41,7 +42,7 @@
    */
   // method for recording gesture for that specific gesture
   function classifyClicked() {
-    if (!isReady()) return;
+    if (!areActionsAllowed()) return;
 
     $state.isRecording = true;
     // lastRecording = undefined;
@@ -95,10 +96,7 @@
 <main class="h-full flex flex-col">
   {#if $state.isPredicting}
     <div>
-      <ControlBar />
-    </div>
-    <div>
-      <div class="relative flex h-8 mt-4">
+      <div class="relative flex h-8">
         <div class="absolute left-5 flex">
           <Information
             isLightTheme={false}
@@ -131,8 +129,8 @@
 
       <div class="pl-1">
         <!-- Display all gestures and their output capabilities -->
-        {#each $gestures as gesture}
-          <OutputGesture {gesture} {onUserInteraction} />
+        {#each gestures.getGestures() as gesture}
+          <OutputGesture variant="stack" {gesture} {onUserInteraction} />
         {/each}
       </div>
       {#if !$state.isOutputConnected && !hasClosedPopup && hasInteracted}
@@ -140,7 +138,7 @@
           transition:fade
           class="grid grid-cols-5 absolute bottom-5 w-full min-w-729px">
           <div
-            class=" flex relative col-start-2 rounded-lg col-end-5 h-35"
+            class="flex relative col-start-2 rounded-lg col-end-5 h-35"
             style="background-color:rgba(231, 229, 228, 0.85)">
             <div class="m-4 mr-2 w-3/4">
               <p class="text-2xl font-bold">
@@ -173,12 +171,6 @@
       {/if}
     </div>
   {:else}
-    <div class="flex flex-col flex-grow justify-center">
-      <p class="text-primarytext text-center text-3xl bold">
-        {$t('content.model.trainModelFirstHeading')}
-        <br />
-        {$t('content.model.trainModelFirstBody')}
-      </p>
-    </div>
+    <TrainModelFirstTitle />
   {/if}
 </main>

@@ -13,19 +13,36 @@ import Environment from '../Environment';
  * Used for logging / Decorator pattern
  */
 abstract class LoggingDecorator implements ConnectionBehaviour {
-
   private enableLogging: boolean = Environment.isInDevelopment && true;
 
   // For preventing spam of accelerometer data
   private logTimer = new Date().getTime();
   private logInterval = 1000;
 
+  onIdentifiedAsOutdated(): void {
+    this.enableLogging && console.log(`Microbit identified as an outdated device!`);
+  }
+
+  onVersionIdentified(versionNumber: number): void {
+    this.enableLogging &&
+      console.log(`Microbit identified as version number ${versionNumber}`);
+  }
+
+  onIdentifiedAsProprietary(): void {
+    this.enableLogging && console.log('Microbit identified as proprietary HEX');
+  }
+
+  onIdentifiedAsMakecode(): void {
+    this.enableLogging && console.log('Microbit identified as makecode HEX');
+  }
+
   onBluetoothConnectionError(error?: unknown): void {
     this.enableLogging && console.log('An error occured while connecting.', error);
   }
 
   onGestureRecognized(id: number, gestureName: string): void {
-    this.enableLogging && console.log(`Gesture '${gestureName}' with id ${id} was recognized`);
+    this.enableLogging &&
+      console.log(`Gesture '${gestureName}' with id ${id} was recognized`);
   }
 
   onUartMessageReceived(message: string): void {

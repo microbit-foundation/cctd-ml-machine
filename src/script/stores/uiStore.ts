@@ -10,8 +10,10 @@ import {
   checkCompatibility,
 } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
-import { gestures } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
+import CookieManager from '../CookieManager';
+import { isInputPatternValid } from './connectionStore';
+import { gestures } from './Stores';
 
 // TODO: Rename? Split up further?
 
@@ -24,12 +26,14 @@ export const isBluetoothWarningDialogOpen = writable<boolean>(
   get(compatibility) ? !get(compatibility).bluetooth : false,
 );
 
+export enum ModelView {
+  TILE,
+  STACK,
+}
+
 // Store current state to prevent error prone actions
 export const state = writable<{
-  isRequestingDevice:
-  | DeviceRequestStates.NONE
-  | DeviceRequestStates.OUTPUT
-  | DeviceRequestStates.INPUT; // fix for a bug caused by too low rollup version. Must be 3x or higher.
+  isRequestingDevice: DeviceRequestStates;
   isFlashingDevice: boolean;
   isTesting: boolean;
   isRecording: boolean;
@@ -45,8 +49,9 @@ export const state = writable<{
   isOutputAssigned: boolean;
   isOutputReady: boolean;
   isLoading: boolean;
-  isOutputMakecodeHex: boolean;
-  isInputMakecodeHex: boolean;
+  modelView: ModelView;
+  isInputOutdated: boolean;
+  isOutputOutdated: boolean;
 }>({
   isRequestingDevice: DeviceRequestStates.NONE,
   isFlashingDevice: false,
@@ -64,8 +69,9 @@ export const state = writable<{
   isOutputAssigned: false,
   isOutputReady: false,
   isLoading: true,
-  isOutputMakecodeHex: false,
-  isInputMakecodeHex: false,
+  modelView: ModelView.STACK,
+  isInputOutdated: false,
+  isOutputOutdated: false,
 });
 
 // Message store to propagate allow all components to inform users.
@@ -86,7 +92,7 @@ export function alertUser(text: string): void {
 }
 
 // Assess whether an action is allowed. Alert user if not
-export function isReady(actionAllowed = true, alertIfNotReady = true): boolean {
+export function areActionsAllowed(actionAllowed = true, alertIfNotReady = true): boolean {
   const status = assessStateStatus(actionAllowed);
 
   if (!status.isReady && alertIfNotReady) {
@@ -110,13 +116,13 @@ function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: strin
 }
 
 export const hasSufficientData = (): boolean => {
-  if (!get(gestures)) {
+  if (!gestures) {
     return false;
   }
-  if (get(gestures).length < 2) {
+  if (gestures.getNumberOfGestures() < 2) {
     return false;
   }
-  return !get(gestures).some(gesture => gesture.recordings.length < 3);
+  return !gestures.getGestures().some(gesture => gesture.getRecordings().length < 3);
 };
 
 export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
@@ -135,3 +141,15 @@ const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB
 export const microbitInteraction = writable<MicrobitInteractions>(
   initialMicrobitInteraction,
 );
+
+/**
+ * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
+ * Refresh the page is the only known solution
+ */
+export const onCatastrophicError = () => {
+  // Set flag to offer reconnect when page reloads
+  if (isInputPatternValid()) {
+    CookieManager.setReconnectFlag();
+  }
+  location.reload();
+};

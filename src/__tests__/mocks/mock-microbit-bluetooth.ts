@@ -15,8 +15,8 @@ class MockBTDevice implements BluetoothDevice {
   readonly id: string = '';
   readonly watchingAdvertisements: boolean = false;
   public gatt: BluetoothRemoteGATTServer;
-  public willFailConnection: boolean = false;
-  private microbitVersion: number = 0;
+  public willFailConnection = false;
+  private microbitVersion = 0;
   private listeners: DeviceListener[] = [];
 
   constructor() {
@@ -49,17 +49,29 @@ class MockBTDevice implements BluetoothDevice {
     return this;
   }
 
-  onadvertisementreceived(ev: BluetoothAdvertisingEvent): any {}
+  onadvertisementreceived(ev: BluetoothAdvertisingEvent): any {
+    /* Empty */
+  }
 
-  oncharacteristicvaluechanged(ev: Event): any {}
+  oncharacteristicvaluechanged(ev: Event): any {
+    /* Empty */
+  }
 
-  ongattserverdisconnected(ev: Event): any {}
+  ongattserverdisconnected(ev: Event): any {
+    /* Empty */
+  }
 
-  onserviceadded(ev: Event): any {}
+  onserviceadded(ev: Event): any {
+    /* Empty */
+  }
 
-  onservicechanged(ev: Event): any {}
+  onservicechanged(ev: Event): any {
+    /* Empty */
+  }
 
-  onserviceremoved(ev: Event): any {}
+  onserviceremoved(ev: Event): any {
+    /* Empty */
+  }
 
   addEventListener(
     type: 'gattserverdisconnected',
@@ -129,7 +141,9 @@ class MockBTDevice implements BluetoothDevice {
     type: string,
     callback: EventListenerOrEventListenerObject | null,
     options?: EventListenerOptions | boolean,
-  ): void {}
+  ): void {
+    /* Empty */
+  }
 
   watchAdvertisements(options?: WatchAdvertisementsOptions): Promise<void> {
     return Promise.resolve(undefined);
@@ -179,6 +193,12 @@ class MockGattServer implements BluetoothRemoteGATTServer {
     if (service === MBSpecs.Services.BUTTON_SERVICE) {
       return Promise.resolve(new MockBluetoothGattservice(this.device));
     }
+    if (service === MBSpecs.Services.UART_SERVICE) {
+      return Promise.resolve(new MockBluetoothGattservice(this.device));
+    }
+    console.warn(
+      'The primary service, you tried to fetch were unknown. Was this on purpose?',
+    );
     return Promise.reject(undefined);
   }
 

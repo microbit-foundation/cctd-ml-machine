@@ -62,12 +62,15 @@ describe('Microbit facade tests', () => {
   beforeEach(() => {
     try {
       Microbits.expelInputAndOutput();
-    } catch (_e) {}
+    } catch (_e) {
+      /* empty */
+    }
   });
 
   test('Should give correct hex file', () => {
     expect(Microbits.hexFiles[1]).toBe('firmware/ml-microbit-cpp-version-combined.hex');
     expect(Microbits.hexFiles[2]).toBe('firmware/MICROBIT.hex');
+    expect(Microbits.hexFiles['universal']).toBe('firmware/universal-hex.hex');
   });
 
   test('Input should not be connected before connecting', () => {

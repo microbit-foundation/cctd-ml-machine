@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { state } from '../stores/uiStore';
+import MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
+import { ModelView, onCatastrophicError, state } from '../stores/uiStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
@@ -31,6 +31,18 @@ class OutputBehaviour extends LoggingDecorator {
     });
   }
 
+  onIdentifiedAsOutdated(): void {
+    super.onIdentifiedAsOutdated();
+    state.update(s => {
+      s.isOutputOutdated = true;
+      return s;
+    });
+  }
+
+  onVersionIdentified(versionNumber: number): void {
+    super.onVersionIdentified(versionNumber);
+  }
+
   onGestureRecognized(id: number, gestureName: string): void {
     super.onGestureRecognized(id, gestureName);
     if (Microbits.isOutputReady()) {
@@ -38,29 +50,28 @@ class OutputBehaviour extends LoggingDecorator {
     }
   }
 
-  onUartMessageReceived(message: string): void {
-    super.onUartMessageReceived(message);
-    if (message === "id_mkcd") {
-      this.announceIsMakecode();
-    }
+  onIdentifiedAsMakecode(): void {
+    super.onIdentifiedAsMakecode();
+    state.update(s => {
+      s.modelView = ModelView.TILE;
+      return s;
+    });
   }
 
-  private announceIsMakecode() {
+  onIdentifiedAsProprietary(): void {
+    super.onIdentifiedAsProprietary();
     state.update(s => {
-      s.isOutputMakecodeHex = true;
+      s.modelView = ModelView.STACK;
       return s;
-    })
+    });
+  }
+
+  onUartMessageReceived(message: string): void {
+    super.onUartMessageReceived(message);
   }
 
   onReady() {
     super.onReady();
-
-    if (Microbits.isInputOutputTheSame()) {
-      state.update(s => {
-        s.isOutputMakecodeHex = s.isInputMakecodeHex;
-        return s;
-      })
-    }
 
     // Reset any output pins currently active.
     const pinResetArguments: { pin: MBSpecs.UsableIOPin; on: boolean }[] = [];
@@ -71,6 +82,10 @@ class OutputBehaviour extends LoggingDecorator {
     Microbits.sendToOutputPin(pinResetArguments);
 
     state.update(s => {
+      if (Microbits.isInputOutputTheSame()) {
+        s.modelView = Microbits.isOutputMakecode() ? ModelView.TILE : s.modelView;
+      }
+
       s.isOutputReady = true;
       return s;
     });
@@ -79,7 +94,6 @@ class OutputBehaviour extends LoggingDecorator {
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
     super.onAssigned(microbitBluetooth, name);
-    microbitBluetooth.listenToUART((data) => this.onUartMessageReceived(data))
     state.update(s => {
       s.isOutputAssigned = true;
       return s;
@@ -130,7 +144,7 @@ class OutputBehaviour extends LoggingDecorator {
 
     // Reset connection reconnectTimeoutTime
     clearTimeout(this.reconnectTimeout);
-    const onTimeout = () => this.onCatastrophicError();
+    const onTimeout = () => onCatastrophicError();
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, StaticConfiguration.reconnectTimeoutDuration);
@@ -142,20 +156,9 @@ class OutputBehaviour extends LoggingDecorator {
     state.update(s => {
       s.isOutputConnected = false;
       s.isOutputReady = false;
-      s.isOutputMakecodeHex = false;
+      s.isOutputOutdated = false;
       return s;
     });
-  }
-
-  /**
-   * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
-   * Refresh the page is the only known solution
-   * @private
-   */
-  private onCatastrophicError() {
-    // Set flag to offer reconnect when page reloads
-    CookieManager.setReconnectFlag();
-    location.reload();
   }
 }
 

@@ -11,6 +11,7 @@
 
 <p class="text-lg mb-2 font-semibold">{$t('content.index.newzHeading')}</p>
 
+<!--
 <p>
   {$t('content.index.newzBodyMakecode')}
 </p>
@@ -21,16 +22,17 @@
     src="/imgs/Makecode_integration.png"
     width={200} />
 </div>
+-->
 
-<p class="mt-4">
+<p class="mt-4 mb-5">
   <a class="text-link hover:underline" href="/training/filters"
     >{$t('content.index.newzBodyViz')}</a>
 </p>
 
 <div class="flex justify-center">
   <ImageSkeleton
-    alt="microbit guide"
-    height={200}
+    alt="One of the new visualizations"
+    height={400}
     src="/imgs/data_rep_viz.png"
-    width={250} />
+    width={500} />
 </div>

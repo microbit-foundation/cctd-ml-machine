@@ -10,12 +10,13 @@
   import { t } from '../../../i18n';
   import { onDestroy, onMount } from 'svelte';
   import StandardButton from '../../StandardButton.svelte';
-  import { onCatastrophicError, state } from '../../../script/stores/uiStore';
+  import { state } from '../../../script/stores/uiStore';
   import {
     btPatternInput,
     btPatternOutput,
     isInputPatternValid,
   } from '../../../script/stores/connectionStore';
+  import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import { DeviceRequestStates } from '../../../script/stores/connectDialogStore';
@@ -33,14 +34,17 @@
   let patternMatrixState: Writable<boolean[]> =
     deviceState === DeviceRequestStates.INPUT ? btPatternInput : btPatternOutput;
 
-  let timeoutProgress = 0;
+  let timeoutProgress = writable<number>(0);
+
+  let timeouted = writable<boolean>(false);
+
 
   const connectButtonClicked = () => {
     if (!isInputPatternValid()) {
       attemptedToPairWithInvalidPattern = true;
       return;
     }
-    timeoutProgress = 0;
+    timeoutProgress.set(0);
     if (isConnecting) {
       // Safeguard to prevent trying to connect multiple times at once
       return;
@@ -55,19 +59,15 @@
       }
     };
 
-    const interval = 50; // ms - Higher -> choppier animation. Lower -> smoother animation
-    const timeoutInterval = setInterval(() => {
-      timeoutProgress += interval / StaticConfiguration.connectTimeoutDuration;
-    }, interval);
+
     const connectTimeout = setTimeout(() => {
-      clearInterval(timeoutInterval);
       Environment.isInDevelopment && console.log('Connection timed out');
-      onCatastrophicError();
+      timeouted.set(true);
     }, StaticConfiguration.connectTimeoutDuration);
 
     void connectionResult().then(didSucceed => {
       clearTimeout(connectTimeout);
-      clearInterval(timeoutInterval);
+      timeouted.set(false);
       Environment.isInDevelopment && console.log('Connection result ', didSucceed);
       if (didSucceed) {
         onBluetoothConnected();
@@ -119,6 +119,11 @@
       <p>{$t('popup.connectMB.bluetooth.connecting')}</p>
       <img alt="loading" src="/imgs/loadingspinner.gif" width="100px" />
     </div>
+    {#if $timeouted}
+    <div>
+     <p class="text-red-500">{$t('popup.connectMB.bluetooth.timeouted')}</p>
+    </div>
+    {/if}
   {:else}
     <div class="grid grid-cols-3 mb-5 w-650px">
       <div class="col-span-2 pt-5">

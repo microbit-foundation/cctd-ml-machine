@@ -19,7 +19,7 @@
       {:else if currentStage === "usb1"}
         {$t('connectMB.usbDownloadingMB1.header')}
       {:else if currentStage === "usb2"}
-        NOT DONE YET
+        {$t('connectMB.usbDownloadingMB2.header')}
       {/if}
     </h1>
     <p class="mb-2">

@@ -23,22 +23,16 @@
         {:else if currentStage==="usb1"}
           {$t("connectMB.connectCableMB1.heading")}
         {:else if currentStage==="usb2"}
-          PLACEHOLDER TEXT
+          {$t("connectMB.connectCable.heading")}
         {/if}
       </p>
-      <p class="leading-normal">
-        {#if currentStage==="usb"}
-          {$t('connectMB.connectCable.subtitle')}
-        {:else if currentStage==="usb1"}
-          {$t('connectMB.connectCableMB1.subtitle')}
-        {:else if currentStage==="usb2"}
-          PLACEHOLDER TEXT
-        {/if}
-      </p>
+      <p class="leading-normal">{$t('connectMB.connectCable.subtitle')}</p>
       <img src="imgs/connect-cable.gif" alt="GIF of connecting micro:bit" class="px-55 py-5"/>
     </div>
     <div class="flex">
-      <p class="self-center w-full hover:cursor-pointer" on:click={onSkipClick}>Skip: program already downloaded?</p>
+      {#if currentStage === "usb" || currentStage === "usb1"}
+        <p class="self-center w-full hover:cursor-pointer" on:click={onSkipClick}>Skip: program already downloaded?</p>
+      {/if}
       <div class="flex w-full justify-end gap-x-5">
         <StandardButton outlined={true} onClick={onBackClick}>{$t('connectMB.backButton')}</StandardButton>
         <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>

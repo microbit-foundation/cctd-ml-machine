@@ -165,6 +165,7 @@ export default {
 		"popup.connectMB.bluetooth.connect": "Tilslut",
 		"popup.connectMB.bluetooth.connecting": "Tilslutter...",
 		"popup.connectMB.bluetooth.invalidPattern": "Mønstret du har tegnet er ikke gyldig",
+		"popup.connectMB.bluetooth.timeouted": "Dukker der ikke et forbind-vindue op? Prøv at indlæse siden igen.",
 
 		"popup.disconnectedWarning.input": "Din input-micro:bit mistede forbindelsen, vil du prøve igen?",
 		"popup.disconnectedWarning.output": "Din output-micro:bit mistede forbindelsen, vil du prøve igen?",
@@ -432,6 +433,7 @@ export default {
 		"popup.connectMB.bluetooth.connect": "Connect",
 		"popup.connectMB.bluetooth.connecting": "Connecting...",
 		"popup.connectMB.bluetooth.invalidPattern": "The pattern you drew is invalid",
+		"popup.connectMB.bluetooth.timeouted": "Not seeing a connection prompt? Try refreshing the page.",
 
 		"popup.disconnectedWarning.input": "Your input micro:bit lost connection, do want to try again?",
 		"popup.disconnectedWarning.output": "Your output micro:bit lost connection, do want to try again?",

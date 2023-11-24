@@ -84,6 +84,16 @@
     $connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH_CONNECTING;
   }
 
+  function onConnectingSerial(): void {
+    MicrobitSerial.connect()
+    .then(() => {
+      $connectionDialogState.connectionState = ConnectDialogStates.NONE;
+      })
+    .catch(() => {
+      // Errors to consider: microbit is disconnected, some sort of connection error
+    })
+  }
+
   function connectSame() {
     Microbits.useInputAsOutput();
     $connectionDialogState.connectionState = ConnectDialogStates.NONE;
@@ -219,7 +229,7 @@
         onBackClick={() =>
           ($connectionDialogState.connectionState =
             ConnectDialogStates.CONNECT_TUTORIAL_USB)}
-        onNextClick={MicrobitSerial.connect} />
+        onNextClick={onConnectingSerial} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECTING_MICROBITS}
       CONNECTING_MICROBITS
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_START}

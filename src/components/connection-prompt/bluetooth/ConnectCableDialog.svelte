@@ -5,44 +5,50 @@
  -->
 
 <script lang="ts">
-    import StandardButton from '../../StandardButton.svelte';
-    import { t } from '../../../i18n';
-  
-    export let onNextClick: () => void;
-    export let onBackClick: () => void;
-    export let onSkipClick: () => void;
-    export let currentStage: string;
-  </script>
+  import StandardButton from '../../StandardButton.svelte';
+  import { t } from '../../../i18n';
 
-  <main>
-    <div class="w-200 leading-10">
-      <p class="font-bold text-2xl text-left pb-5">
-        {#if currentStage==="usb"}
-          {$t("connectMB.connectCable.heading")}
-        {:else if currentStage==="usb1"}
-          {$t("connectMB.connectCableMB1.heading")}
-        {:else if currentStage==="usb2"}
-          {$t("connectMB.connectCableMB2.heading")}
-        {/if}
-      </p>
-      <p class="leading-normal">
-        {#if currentStage==="usb"}
+  export let onNextClick: () => void;
+  export let onBackClick: () => void;
+  export let onSkipClick: () => void;
+  export let currentStage: string;
+</script>
+
+<main>
+  <div class="w-200 leading-10">
+    <p class="font-bold text-2xl text-left pb-5">
+      {#if currentStage === 'usb'}
+        {$t('connectMB.connectCable.heading')}
+      {:else if currentStage === 'usb1'}
+        {$t('connectMB.connectCableMB1.heading')}
+      {:else if currentStage === 'usb2'}
+        {$t('connectMB.connectCableMB2.heading')}
+      {/if}
+    </p>
+    <p class="leading-normal">
+      {#if currentStage === 'usb'}
         {$t('connectMB.connectCable.subtitle')}
-      {:else if currentStage==="usb1"}
-        {$t("connectMB.connectCableMB1.subtitle")}
-      {:else if currentStage==="usb2"}
-        {$t("connectMB.connectCableMB2.subtitle")}
+      {:else if currentStage === 'usb1'}
+        {$t('connectMB.connectCableMB1.subtitle')}
+      {:else if currentStage === 'usb2'}
+        {$t('connectMB.connectCableMB2.subtitle')}
       {/if}
+    </p>
+    <img
+      src="imgs/connect-cable.gif"
+      alt="GIF of connecting micro:bit"
+      class="px-55 py-5" />
+  </div>
+  <div class="flex">
+    {#if currentStage === 'usb' || currentStage === 'usb1'}
+      <p class="self-center w-full hover:cursor-pointer" on:click={onSkipClick}>
+        Skip: program already downloaded?
       </p>
-      <img src="imgs/connect-cable.gif" alt="GIF of connecting micro:bit" class="px-55 py-5"/>
+    {/if}
+    <div class="flex w-full justify-end gap-x-5">
+      <StandardButton outlined={true} onClick={onBackClick}
+        >{$t('connectMB.backButton')}</StandardButton>
+      <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
     </div>
-    <div class="flex">
-      {#if currentStage === "usb" || currentStage === "usb1"}
-        <p class="self-center w-full hover:cursor-pointer" on:click={onSkipClick}>Skip: program already downloaded?</p>
-      {/if}
-      <div class="flex w-full justify-end gap-x-5">
-        <StandardButton outlined={true} onClick={onBackClick}>{$t('connectMB.backButton')}</StandardButton>
-        <StandardButton onClick={onNextClick}>{$t('connectMB.nextButton')}</StandardButton>
-      </div>
-    </div>
-  </main>
+  </div>
+</main>

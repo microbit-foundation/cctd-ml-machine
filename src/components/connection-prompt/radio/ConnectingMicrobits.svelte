@@ -4,13 +4,10 @@
   SPDX-License-Identifier: MIT
  -->
 
- <script lang="ts">
-    // temp
-  </script>
+<script lang="ts">
+  // temp
+</script>
 
 <main>
-<h1 class="mb-5 font-bold w-150">
-    PLACEHOLDER: CONNECTING MICROBITS
-</h1>
+  <h1 class="mb-5 font-bold w-150">PLACEHOLDER: CONNECTING MICROBITS</h1>
 </main>
-  

@@ -14,11 +14,11 @@
 <main>
   <div class="w-600px text-left">
     <h1 class="font-bold mb-5 text-2xl">
-      {#if currentStage === "usb"}
+      {#if currentStage === 'usb'}
         {$t('connectMB.usbDownloading.header')}
-      {:else if currentStage === "usb1"}
+      {:else if currentStage === 'usb1'}
         {$t('connectMB.usbDownloadingMB1.header')}
-      {:else if currentStage === "usb2"}
+      {:else if currentStage === 'usb2'}
         {$t('connectMB.usbDownloadingMB2.header')}
       {/if}
     </h1>

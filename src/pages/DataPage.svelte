@@ -131,7 +131,7 @@
         </div>
       {/if}
       <!-- Display all gestures -->
-      {#each $gestures as gesture}
+      {#each $gestures as gesture (gesture.ID)}
         <Gesture
           gesture={gestures.getGesture(gesture.ID)}
           onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />

@@ -220,3 +220,26 @@ export function determineFilter(filter: FilterType): FilterStrategy {
       throw new Error('Filter not found');
   }
 }
+
+export function getFilterLimits(filter: FilterType): { min: number; max: number } {
+  switch (filter) {
+    case Filters.MAX:
+      return { min: -2.4, max: 2.4 };
+    case Filters.MIN:
+      return { min: -2.4, max: 2.4 };
+    case Filters.STD:
+      return { min: 0, max: 2.4 };
+    case Filters.PEAKS:
+      return { min: 0, max: 10 };
+    case Filters.ACC:
+      return { min: 0, max: 160 };
+    case Filters.MEAN:
+      return { min: -2.4, max: 2.4 };
+    case Filters.ZCR:
+      return { min: 0, max: 1 };
+    case Filters.RMS:
+      return { min: 0, max: 2 };
+    default:
+      throw new Error('Filter not found');
+  }
+}

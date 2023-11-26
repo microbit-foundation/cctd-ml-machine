@@ -63,8 +63,8 @@ class ClassifierRepository {
       ClassifierRepository.filters,
       get(Repositories.getInstance().getGestureRepository()),
       (gestureId: GestureID, confidence: number) => {
-        this.setGestureConfidence(gestureId, confidence)
-      }
+        this.setGestureConfidence(gestureId, confidence);
+      },
     );
   }
 

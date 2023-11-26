@@ -12,15 +12,19 @@ import ClassifierRepository, {
 } from '../repository/ClassifierRepository';
 
 class ClassifierFactory {
-
   public buildClassifier(
     model: Writable<MLModel>,
     trainerConsumer: TrainerConsumer,
     filters: Writable<Filters>,
     gestures: Gesture[],
-    confidenceSetter: (gestureId: GestureID, confidence: number) => void
+    confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ): Classifier {
-    return new Classifier(this.buildModel(trainerConsumer, model), filters, gestures, confidenceSetter);
+    return new Classifier(
+      this.buildModel(trainerConsumer, model),
+      filters,
+      gestures,
+      confidenceSetter,
+    );
   }
 
   public buildTrainingData(gestures: Gesture[], filters: Filters): TrainingData {
@@ -35,7 +39,10 @@ class ClassifierFactory {
     };
   }
 
-  private buildModel(trainerConsumer: TrainerConsumer, mlModel: Writable<MLModel>): Model {
+  private buildModel(
+    trainerConsumer: TrainerConsumer,
+    mlModel: Writable<MLModel>,
+  ): Model {
     const model = new Model(trainerConsumer, mlModel);
     return model;
   }

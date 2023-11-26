@@ -24,9 +24,9 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
   }
 
   put(data: MicrobitAccelerometerData): void {
-    throw new Error('Method not implemented.');
+    this.store.set(data);
   }
-  
+
   subscribe(
     run: Subscriber<MicrobitAccelerometerData>,
     invalidate?: ((value?: MicrobitAccelerometerData | undefined) => void) | undefined,

@@ -24,7 +24,10 @@ export type ModelData = {
 class Model implements Readable<ModelData> {
   private modelData: Writable<ModelData>;
 
-  constructor(private trainerConsumer: TrainerConsumer, private mlModel: Readable<MLModel>) {
+  constructor(
+    private trainerConsumer: TrainerConsumer,
+    private mlModel: Readable<MLModel>,
+  ) {
     this.modelData = writable({
       trainingStatus: TrainingStatus.Untrained,
     });
@@ -32,9 +35,9 @@ class Model implements Readable<ModelData> {
 
   public async train<T extends MLModel>(modelTrainer: ModelTrainer<T>): Promise<void> {
     this.modelData.update(state => {
-      state.trainingStatus = TrainingStatus.InProgress
+      state.trainingStatus = TrainingStatus.InProgress;
       return state;
-    })
+    });
     try {
       await this.trainerConsumer(modelTrainer);
       this.modelData.update(state => {
@@ -45,7 +48,7 @@ class Model implements Readable<ModelData> {
       this.modelData.update(state => {
         state.trainingStatus = TrainingStatus.Failure;
         return state;
-      })
+      });
       console.error(err);
     }
   }

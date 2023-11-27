@@ -3,8 +3,8 @@
   import IntervalSlider from './IntervalSlider.svelte';
   import accelerometerSynthesizer from './AccelerometerDataSynthesizer';
 
-  const minInterval = 50;
-  const maxInterval = 2000;
+  const minInterval = 5;
+  const maxInterval = 300;
 
   const setIntervalValue = newValue => {
     const interval = ((maxInterval - minInterval) * newValue) / 100 + minInterval;

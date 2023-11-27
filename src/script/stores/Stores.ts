@@ -11,11 +11,13 @@ import LiveData from '../domain/LiveData';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerData,
 } from '../livedata/MicrobitAccelerometerData';
+import LiveDataBuffer from '../domain/LiveDataBuffer';
 
 const repositories = new Repositories();
 
 export const gestures: Gestures = new Gestures(repositories.getGestureRepository());
 export const classifier: Classifier = repositories.getModelRepository().getClassifier();
-export const engine: PollingPredictorEngine = new PollingPredictorEngine(classifier);
+const liveDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(1000);
 export const liveData: LiveData<MicrobitAccelerometerData> =
-  new MicrobitAccelerometerLiveData();
+  new MicrobitAccelerometerLiveData(liveDataBuffer);
+export const engine: PollingPredictorEngine = new PollingPredictorEngine(classifier, liveData);

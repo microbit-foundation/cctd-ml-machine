@@ -1,5 +1,6 @@
 import { Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
 import LiveData from '../domain/LiveData';
+import LiveDataBuffer from '../domain/LiveDataBuffer';
 
 export type MicrobitAccelerometerData = {
   accelX: number;
@@ -12,7 +13,7 @@ export type MicrobitAccelerometerData = {
 
 class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerData> {
   private store: Writable<MicrobitAccelerometerData>;
-  constructor() {
+  constructor(private dataBuffer: LiveDataBuffer<MicrobitAccelerometerData>) {
     this.store = writable({
       accelX: 0,
       accelY: 0,
@@ -22,12 +23,17 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
       smoothedAccelZ: 0,
     });
   }
-
-  put(data: MicrobitAccelerometerData): void {
-    this.store.set(data);
+  
+  public getBuffer(): LiveDataBuffer<MicrobitAccelerometerData> {
+    return this.dataBuffer;
   }
 
-  subscribe(
+  public put(data: MicrobitAccelerometerData): void {
+    this.store.set(data);
+    this.dataBuffer.addValue(data);
+  }
+
+  public subscribe(
     run: Subscriber<MicrobitAccelerometerData>,
     invalidate?: ((value?: MicrobitAccelerometerData | undefined) => void) | undefined,
   ): Unsubscriber {

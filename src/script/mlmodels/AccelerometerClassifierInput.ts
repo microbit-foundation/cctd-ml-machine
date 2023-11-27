@@ -1,7 +1,7 @@
 import ClassifierInput from '../domain/ClassifierInput';
 import Filters from '../domain/Filters';
 
-type AccelerometerRecording = {
+export type AccelerometerRecording = {
   x: number[];
   y: number[];
   z: number[];

@@ -26,6 +26,11 @@ import MaxFilter from '../filters/MaxFilter';
 import MinFilter from '../filters/MinFilter';
 import PeaksFilter from '../filters/PeaksFilter';
 import { GestureID } from '../domain/Gesture';
+import MeanFilter from '../filters/MeanFilter';
+import RootMeanSquareFilter from '../filters/RootMeanSquareFilter';
+import StandardDeviationFilter from '../filters/StandardDeviationFilter';
+import TotalAccFilter from '../filters/TotalAccFilter';
+import ZeroCrossingRateFilter from '../filters/ZeroCrossingRateFilter';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
@@ -85,7 +90,18 @@ class ClassifierRepository {
   private addAllFilters(): void {
     // todo to be removed
     ClassifierRepository.filters.set(
-      new Filters(writable([new MaxFilter(), new MinFilter(), new PeaksFilter()])),
+      new Filters(
+        writable([
+          new MaxFilter(),
+          new MeanFilter(),
+          new MinFilter(),
+          new PeaksFilter(),
+          new RootMeanSquareFilter(),
+          new StandardDeviationFilter(),
+          new TotalAccFilter(),
+          new ZeroCrossingRateFilter(),
+        ]),
+      ),
     );
   }
 

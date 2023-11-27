@@ -8,6 +8,7 @@
   import playgroundContext from '../components/playground/PlaygroundContext';
   import PlaygroundLog from '../components/playground/PlaygroundLog.svelte';
   import MicrobitAccelerometerDataSynthesizer from '../components/playground/inputSynthesizer/MicrobitAccelerometerDataSynthesizer.svelte';
+    import LiveDataBufferUtilizationPercentage from '../components/playground/LiveDataBufferUtilizationPercentage.svelte';
 
   const getRandomGesture = (): Gesture => {
     return gestures.getGestures()[
@@ -109,4 +110,5 @@
     </div>
   </div>
   <MicrobitAccelerometerDataSynthesizer />
+  <LiveDataBufferUtilizationPercentage />
 </div>

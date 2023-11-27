@@ -3,7 +3,9 @@ import Classifier from '../domain/Classifier';
 import Engine, { EngineData } from '../domain/Engine';
 import LiveData from '../domain/LiveData';
 import { liveData } from '../stores/Stores';
-import AccelerometerClassifierInput, { AccelerometerRecording } from '../mlmodels/AccelerometerClassifierInput';
+import AccelerometerClassifierInput, {
+  AccelerometerRecording,
+} from '../mlmodels/AccelerometerClassifierInput';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
 class PollingPredictorEngine implements Engine {
@@ -12,7 +14,10 @@ class PollingPredictorEngine implements Engine {
   private isRunning: Writable<boolean>;
   private isReady: boolean;
 
-  constructor(private classifier: Classifier, private liveData: LiveData<MicrobitAccelerometerData>) {
+  constructor(
+    private classifier: Classifier,
+    private liveData: LiveData<MicrobitAccelerometerData>,
+  ) {
     this.isRunning = writable(true);
     this.isReady = true;
     this.pollingInterval = setInterval(() => {
@@ -41,7 +46,7 @@ class PollingPredictorEngine implements Engine {
 
   private predict() {
     if (this.classifier.getModel().isTrained() && get(this.isRunning)) {
-      void this.classifier.classify(this.bufferToInput())
+      void this.classifier.classify(this.bufferToInput());
     }
   }
 
@@ -50,9 +55,9 @@ class PollingPredictorEngine implements Engine {
     const input: AccelerometerRecording = {
       x: bufferedData.map(data => data.value.accelX),
       y: bufferedData.map(data => data.value.accelY),
-      z: bufferedData.map(data => data.value.accelZ)
-    }
-    return new AccelerometerClassifierInput(input)
+      z: bufferedData.map(data => data.value.accelZ),
+    };
+    return new AccelerometerClassifierInput(input);
   }
 }
 

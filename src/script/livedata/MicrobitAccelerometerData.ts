@@ -23,7 +23,7 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
       smoothedAccelZ: 0,
     });
   }
-  
+
   public getBuffer(): LiveDataBuffer<MicrobitAccelerometerData> {
     return this.dataBuffer;
   }

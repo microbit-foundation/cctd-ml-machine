@@ -12,9 +12,9 @@ import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAcce
 
 type AccelerometerSynthesizerData = {
   intervalSpeed: number;
-  xSpeed: number,
-  ySpeed: number,
-  zSpeed: number
+  xSpeed: number;
+  ySpeed: number;
+  zSpeed: number;
 };
 
 class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData> {
@@ -27,7 +27,7 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
       intervalSpeed: defaultSpeed,
       xSpeed: 1,
       ySpeed: 1,
-      zSpeed: 1
+      zSpeed: 1,
     });
   }
 
@@ -61,23 +61,23 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
 
   public setXSpeed(value: number) {
     this.store.update(updater => {
-        updater.xSpeed = value / 1000;
-        return updater;
-    })
+      updater.xSpeed = value / 1000;
+      return updater;
+    });
   }
 
   public setYSpeed(value: number) {
     this.store.update(updater => {
-        updater.ySpeed = value / 1000;
-        return updater;
-    })
+      updater.ySpeed = value / 1000;
+      return updater;
+    });
   }
 
   public setZSpeed(value: number) {
     this.store.update(updater => {
-        updater.zSpeed = value / 1000;
-        return updater;
-    })
+      updater.zSpeed = value / 1000;
+      return updater;
+    });
   }
 
   public setIntervalSpeed(value: number) {

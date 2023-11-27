@@ -17,7 +17,10 @@ const repositories = new Repositories();
 
 export const gestures: Gestures = new Gestures(repositories.getGestureRepository());
 export const classifier: Classifier = repositories.getModelRepository().getClassifier();
-const liveDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(1000);
+const liveDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(400);
 export const liveData: LiveData<MicrobitAccelerometerData> =
   new MicrobitAccelerometerLiveData(liveDataBuffer);
-export const engine: PollingPredictorEngine = new PollingPredictorEngine(classifier, liveData);
+export const engine: PollingPredictorEngine = new PollingPredictorEngine(
+  classifier,
+  liveData,
+);

@@ -11,9 +11,7 @@
   import OverlayView from './views/OverlayView.svelte';
   import PageContentView from './views/PageContentView.svelte';
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
-  import { fade } from 'svelte/transition';
   import { state } from './script/stores/uiStore';
-  import LoadingSpinner from './components/LoadingSpinner.svelte';
   import { checkCompatibility } from './script/compatibility/CompatibilityChecker';
   import IncompatiblePlatformView from './views/IncompatiblePlatformView.svelte';
   import BluetoothIncompatibilityWarningDialog from './components/BluetoothIncompatibilityWarningDialog.svelte';

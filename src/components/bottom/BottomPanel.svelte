@@ -32,9 +32,7 @@
   bind:clientWidth={componentWidth}
   class="h-full w-full"
   class:bg-gray-300={$state.isInputAssigned && !$state.isInputReady}>
-  {#if !$state.isInputAssigned}
-    <!-- No input microbit assigned -->
-  {:else}
+  {#if $state.isInputAssigned}
     <!-- Input microbit is assigned -->
     <div class="relative w-full h-full bg-white">
       <div class="absolute w-full h-full">
@@ -58,7 +56,6 @@
         <div class="absolute right-2 top-2 m-0 float-right">
           <ConnectedLiveGraphButtons
             onInputDisconnectButtonClicked={inputDisconnectButtonClicked}
-            onOutputConnectButtonClicked={() => {}}
             onOutputDisconnectButtonClicked={outputDisconnectButtonClicked} />
         </div>
       </div>

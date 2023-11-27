@@ -47,7 +47,6 @@ export const translations: TranslationMap = {
 		"content.data.choice.header": "Valg af klasse",
 		"content.data.choice.body": "Her vælger du, hvilken klasse du vil tilføje data til. Efter at du har valgt en klasse at tilføje data til, kan du trykke på \"Optag\" knappen nedenfor, eller på en af knapperne på din micro:bit for at optage et data-segment. Se billedet nedenfor.",
 		"content.data.dataDescription": "Her kan du se din indsamlede data. Generelt vil det være en fordel at have mere data, da dette giver lærings-algoritmen mere infomration at lære ud fra.",
-		"content.data.addDataNoConnection": "Du kan ikke tilføje data, uden at være tilsluttet en micro:bit",
 		"content.data.noData": "Du har ingen bevægelser at træne med. Tilføj nogle bevægelser, som du vil træne din BBC micro:bit til at genkende.",
 
 		"content.data.controlbar.button.clearData": "Ryd eksempler",
@@ -144,7 +143,6 @@ export const translations: TranslationMap = {
 		"menu.model.helpHeading": TRANSLATION_NEEDED,
 		"menu.model.helpBody": "Modellen kan bruges i et interaktivt system. Her bruger vi den trænede model til at forudsige bevægelser. Du kan tilslutte endnu en micro:bit og få den til at reagere på de bevægelser du laver.",
 		"menu.model.noModel": "Ingen model",
-		"menu.model.connectOutputButton": "Tilslut output-micro:bit",
 		"menu.model.disconnect": "Frakobl output-micro:bit",
 
 		// CONNECT MICROBIT:
@@ -322,7 +320,6 @@ export const translations: TranslationMap = {
 		"content.data.choice.body": "Here, you choose which class you want to add data to. After having selected a class, you can either press the \"Record\" button below or press one of the buttons on your micro:bit to record a data segment. See the picture below.",
 
 		"content.data.dataDescription": "Here you can see the gathered data. ",
-		"content.data.addDataNoConnection": "You cannot add data without being connected with a micro:bit",
 		"content.data.noData": "You do not have any gestures to train on. Add the gestures you wish the micro:bit should learn to recognise.",
 
 		"content.data.controlbar.button.clearData": "Clear examples",
@@ -419,7 +416,6 @@ export const translations: TranslationMap = {
 		"menu.model.helpHeading": "Model",
 		"menu.model.helpBody": "The model can be used in an interactive system. Here we use the trained model to predict gestures. You can connect another micro:bit and make it respond to the predicted gestures.",
 		"menu.model.noModel": "No model",
-		"menu.model.connectOutputButton": "Connect output micro:bit",
 		"menu.model.disconnect": "Disconnect output micro:bit",
 
 		// CONNECT MICROBIT:

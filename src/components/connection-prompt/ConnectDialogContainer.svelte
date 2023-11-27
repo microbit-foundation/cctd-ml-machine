@@ -85,7 +85,7 @@
   }
 
   function onConnectingSerial(): void {
-    MicrobitSerial.connect()
+    MicrobitSerial.connect(Microbits.getLinked())
     .then(() => {
       $connectionDialogState.connectionState = ConnectDialogStates.NONE;
       })

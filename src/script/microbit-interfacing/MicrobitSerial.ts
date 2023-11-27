@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-const serialNavigator = navigator && navigator.serial;
+import MicrobitUSB from './MicrobitUSB';
 
 const baudRate = 115200;
 
@@ -64,9 +64,8 @@ const processMessage = (message: string) => {
 };
 
 class MicrobitSerial {
-  public static async connect(): Promise<void> {
-    const serialPort = await serialNavigator.requestPort({ filters: [] });
-    await MicrobitSerial.streamData(serialPort, { baudRate });
+  public static async connect(usb: MicrobitUSB): Promise<void> {
+    await MicrobitSerial.streamData(usb.serialPort, { baudRate });
   }
 
   private static async streamData(

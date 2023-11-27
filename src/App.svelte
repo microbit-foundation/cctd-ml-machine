@@ -60,7 +60,7 @@
           </div>
         </ControlBar>
 
-        <div class="relative z-1 flex-1 overflow-y-auto flex-row">
+        <div class="relative z-1 flex-1 flex-row">
           <PageContentView />
         </div>
 

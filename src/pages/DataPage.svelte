@@ -65,7 +65,7 @@
   });
 </script>
 
-<main class="h-full inline-block min-w-full">
+<main class="h-full inline-block w-full">
   <TabView />
 
   <div>
@@ -82,7 +82,7 @@
       <PleaseConnectFirst />
     </div>
   {:else}
-    <div class="mt-4 mx-10">
+    <div class="mt-4 mx-10 overflow-y-auto">
       {#if $gestures.length > 0}
         <div class=" p-0 relative flex h-7">
           <div class="absolute left-3 flex">
@@ -122,8 +122,7 @@
       {/each}
 
       <NewGestureButton />
-
-      <TrainingButton />
     </div>
+    <TrainingButton />
   {/if}
 </main>

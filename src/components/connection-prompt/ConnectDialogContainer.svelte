@@ -86,12 +86,12 @@
 
   function onConnectingSerial(): void {
     MicrobitSerial.connect(Microbits.getLinked())
-    .then(() => {
-      $connectionDialogState.connectionState = ConnectDialogStates.NONE;
+      .then(() => {
+        $connectionDialogState.connectionState = ConnectDialogStates.NONE;
       })
-    .catch(() => {
-      // Errors to consider: microbit is disconnected, some sort of connection error
-    })
+      .catch(() => {
+        // Errors to consider: microbit is disconnected, some sort of connection error
+      });
   }
 
   function connectSame() {

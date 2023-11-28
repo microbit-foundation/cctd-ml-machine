@@ -1,4 +1,10 @@
-import Filter from './Filter';
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+import Filter from '../domain/Filter';
 
 abstract class FilterWithMaths implements Filter {
   abstract filter(inValues: number[]): number;

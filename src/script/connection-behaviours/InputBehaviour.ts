@@ -158,7 +158,7 @@ class InputBehaviour extends LoggingDecorator {
       smoothedAccelX: this.smoothedAccelX,
       smoothedAccelY: this.smoothedAccelY,
       smoothedAccelZ: this.smoothedAccelZ,
-    }
+    };
 
     livedata.set(data); // This is the old livedata store
     liveData.put(data);

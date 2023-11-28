@@ -1,15 +1,17 @@
-import { Writable, writable } from 'svelte/store';
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+import { Writable } from 'svelte/store';
 import { RecordingData } from '../stores/mlStore';
 import Classifier from './Classifier';
 import Filters from './Filters';
 import Gesture, { GestureID } from './Gesture';
-import Gestures from './Gestures';
 import Model from './Model';
 import { TrainingData } from './ModelTrainer';
 import MLModel from './MLModel';
-import ClassifierRepository, {
-  TrainerConsumer,
-} from '../repository/ClassifierRepository';
+import { TrainerConsumer } from '../repository/ClassifierRepository';
 
 class ClassifierFactory {
   public buildClassifier(

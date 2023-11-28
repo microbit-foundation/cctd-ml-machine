@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import {
   Readable,
   Subscriber,
@@ -8,9 +13,7 @@ import {
 } from 'svelte/store';
 import { TrainingStatus } from '../stores/mlStore';
 import MLModel from './MLModel';
-import ClassifierRepository, {
-  TrainerConsumer,
-} from '../repository/ClassifierRepository';
+import { TrainerConsumer } from '../repository/ClassifierRepository';
 import ModelTrainer from './ModelTrainer';
 
 export enum ModelType {

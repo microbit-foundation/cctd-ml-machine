@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 export type TimestampedData<T> = {
   value: T;
   timestamp: number;
@@ -41,14 +46,19 @@ class LiveDataBuffer<T> {
       i++;
     }
 
-    this.bufferUtilization = Math.max(series.length / this.maxLen, noOfElements / this.maxLen);
+    this.bufferUtilization = Math.max(
+      series.length / this.maxLen,
+      noOfElements / this.maxLen,
+    );
 
     // Now the series array is filled with elements within the timeframe.
     // We should now find `noOfElements` number of items to return
     if (series.length < noOfElements) {
-      console.error('Insufficient buffer data! Try increasing the polling rate or decrease the number of elements requested');
+      console.error(
+        'Insufficient buffer data! Try increasing the polling rate or decrease the number of elements requested',
+      );
     }
-    
+
     if (series.length > 10 * noOfElements) {
       console.warn(
         'The number of values in LiveDataBuffer, that fit the timeframe is greater than 1000%! Maybe decrease the polling frequency or increase the number of elements fetched from buffer to improve performance',

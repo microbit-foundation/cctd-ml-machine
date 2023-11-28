@@ -1,9 +1,14 @@
-<script>
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
+ <script>
   import IntervalSlider from './IntervalSlider.svelte';
   import Slider from '@bulatdashiev/svelte-slider';
   import Visualizer from './Visualizer.svelte';
   import accelerometerSynthesizer from './AccelerometerDataSynthesizer';
-  import { liveData } from '../../../script/stores/Stores';
 </script>
 
 <div class="flex flex-col">

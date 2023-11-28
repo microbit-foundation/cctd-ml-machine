@@ -3,15 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import {
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
-  derived,
-  get,
-  writable,
-} from 'svelte/store';
+import { Readable, Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
 import GestureConfidence from '../domain/GestureConfidence';
 import NoneMLModel from '../mlmodels/NoneMLModel';

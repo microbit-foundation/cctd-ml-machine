@@ -1,3 +1,9 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+import Axes from './Axes';
 import Filters from './Filters';
 import MLModel from './MLModel';
 

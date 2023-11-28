@@ -1,4 +1,10 @@
-<script lang="ts">
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
+ <script lang="ts">
   import Gesture from '../script/domain/Gesture';
   import Model from '../script/domain/Model';
   import LayersModelTrainer from '../script/mlmodels/LayersModelTrainer';
@@ -8,7 +14,7 @@
   import playgroundContext from '../components/playground/PlaygroundContext';
   import PlaygroundLog from '../components/playground/PlaygroundLog.svelte';
   import MicrobitAccelerometerDataSynthesizer from '../components/playground/inputSynthesizer/MicrobitAccelerometerDataSynthesizer.svelte';
-    import LiveDataBufferUtilizationPercentage from '../components/playground/LiveDataBufferUtilizationPercentage.svelte';
+  import LiveDataBufferUtilizationPercentage from '../components/playground/LiveDataBufferUtilizationPercentage.svelte';
 
   const getRandomGesture = (): Gesture => {
     return gestures.getGestures()[

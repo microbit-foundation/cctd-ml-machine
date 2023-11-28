@@ -1,6 +1,9 @@
-import Filter from '../domain/Filter';
-import FilterWithMaths from '../domain/FilterWithMaths';
-import MeanFilter from './MeanFilter';
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+import FilterWithMaths from './FilterWithMaths';
 
 class StandardDeviationFilter extends FilterWithMaths {
   public filter(inValues: number[]): number {

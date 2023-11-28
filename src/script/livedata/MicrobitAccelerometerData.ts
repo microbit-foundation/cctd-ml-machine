@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import { Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
 import LiveData from '../domain/LiveData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';

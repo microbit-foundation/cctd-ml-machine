@@ -15,9 +15,6 @@ import * as path from 'path';
 const ignoredFiles: string[] = ['.DS_Store'];
 const directoriesToScan = ['./src/', './microbit/v2/source/', './microbit/v1/source/'];
 
-const licenseIdentifierStringContributors =
-  'Center for Computational Thinking and Design at Aarhus University and contributors';
-
 const licenseIdentifierStringSPDX = 'SPDX-License-Identifier:';
 
 const readFile = (fileLocation: string, expect: string) => {
@@ -83,10 +80,7 @@ describe('License identifier tests', () => {
         return acc.concat(flattenDirectory(current));
       }, []);
 
-      const faultyFiles = filesMissingIdentifier(flatten, [
-        licenseIdentifierStringContributors,
-        licenseIdentifierStringSPDX,
-      ]);
+      const faultyFiles = filesMissingIdentifier(flatten, [licenseIdentifierStringSPDX]);
       expect(
         faultyFiles.length,
         'Some files do not contain identifier! ' +

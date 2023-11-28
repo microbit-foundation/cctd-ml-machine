@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -60,8 +60,7 @@
               $connectionDialogState.connectionState =
                 ConnectDialogStates.CONNECT_BATTERY;
             } else if (currentStage === 'usb2') {
-              $connectionDialogState.connectionState =
-                ConnectDialogStates.CONNECT_TUTORIAL_SERIAL;
+              onConnectingSerial();
             }
           })
           .catch(() => {
@@ -85,13 +84,10 @@
   }
 
   function onConnectingSerial(): void {
-    MicrobitSerial.connect(Microbits.getLinked())
-      .then(() => {
-        $connectionDialogState.connectionState = ConnectDialogStates.NONE;
-      })
-      .catch(() => {
-        // Errors to consider: microbit is disconnected, some sort of connection error
-      });
+    $connectionDialogState.connectionState = ConnectDialogStates.NONE;
+    MicrobitSerial.connect(Microbits.getLinked()).catch(() => {
+      // Errors to consider: microbit is disconnected, some sort of connection error
+    });
   }
 
   function connectSame() {
@@ -223,13 +219,6 @@
           $connectionDialogState.connectionState = ConnectDialogStates.NONE;
         }}
         deviceState={$connectionDialogState.deviceState} />
-    {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECT_TUTORIAL_SERIAL}
-      CONNECT TUTORIAL SERIAL
-      <SelectMicrobitDialogSerial
-        onBackClick={() =>
-          ($connectionDialogState.connectionState =
-            ConnectDialogStates.CONNECT_TUTORIAL_USB)}
-        onNextClick={onConnectingSerial} />
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.CONNECTING_MICROBITS}
       CONNECTING_MICROBITS
     {:else if $connectionDialogState.connectionState === ConnectDialogStates.USB_START}

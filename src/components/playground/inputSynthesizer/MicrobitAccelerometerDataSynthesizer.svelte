@@ -8,13 +8,14 @@
 
 <div class="flex flex-col">
   <p class="text-lg">Live data synthesizer</p>
+  <p class="text-sm">Uses sine-waves to produce LiveData</p>
   <div class="grid grid-cols-2">
     <IntervalSlider />
-    <p>x Speed</p>
+    <p>x Speed (Frequency)</p>
     <Slider on:input={e => accelerometerSynthesizer.setXSpeed(e.detail[0])} />
-    <p>y Speed</p>
+    <p>y Speed (Frequency)</p>
     <Slider on:input={e => accelerometerSynthesizer.setYSpeed(e.detail[0])} />
-    <p>z Speed</p>
+    <p>z Speed (Frequency)</p>
     <Slider on:input={e => accelerometerSynthesizer.setZSpeed(e.detail[0])} />
   </div>
   <Visualizer width={800} />

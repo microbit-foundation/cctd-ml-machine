@@ -16,7 +16,6 @@ import MicrobitUSB from './MicrobitUSB';
 import type ConnectionBehaviour from '../connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
 import StaticConfiguration from '../../StaticConfiguration';
-import { settings } from '../stores/mlStore';
 
 type QueueElement = {
   service: BluetoothRemoteGATTCharacteristic;

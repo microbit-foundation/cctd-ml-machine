@@ -1,24 +1,20 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import { TrainingStatus, trainingStatus } from '../../script/stores/mlStore';
+  import { TrainingStatus, gestures, trainingStatus } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
   import TrainingButton from './TrainingButton.svelte';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
-  import ControlBar from '../../components/control-bar/ControlBar.svelte';
-  import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
-  import StandardButton from '../../components/StandardButton.svelte';
-  import { Paths, navigate } from '../../router/paths';
-  import CookieManager from '../../script/CookieManager';
+  import TabView from '../../views/TabView.svelte';
 
-  const sufficientData = hasSufficientData();
+  $: sufficientData = hasSufficientData($gestures);
 
   let isFailedTrainingDialogOpen = false;
 
@@ -49,22 +45,9 @@
     </div>
   </div>
 </StandardDialog>
-<div class="flex flex-col h-full">
-  <!-- Should be introduced again before pushed to production branch -->
-  <!--{#if CookieManager.hasFeatureFlag('filters')} -->
-  <ControlBar>
-    <ExpandableControlBarMenu>
-      <StandardButton
-        small
-        outlined
-        onClick={() => {
-          navigate(Paths.FILTERS);
-        }}>
-        {$t('content.trainer.controlbar.filters')}
-      </StandardButton>
-    </ExpandableControlBarMenu>
-  </ControlBar>
-  <!-- {/if} -->
+
+<div class="flex flex-col h-full pb-10">
+  <TabView />
   <div class="flex flex-col flex-grow justify-center items-center text-center">
     {#if !$state.isInputConnected}
       <PleaseConnectFirst />
@@ -97,10 +80,9 @@
             {$t('menu.trainer.TrainingFinished.body')}
           </p>
         {/if}
-        <div class="w-full pt-5 text-white">
-          <TrainingButton />
-        </div>
       </div>
     {/if}
   </div>
+
+  <TrainingButton />
 </div>

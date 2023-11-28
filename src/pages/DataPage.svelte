@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -15,15 +15,13 @@
   } from '../script/stores/mlStore';
   import { t } from '../i18n';
   import RecordInformationContent from '../components/datacollection/RecordInformationContent.svelte';
-  import StandardDialog from '../components/dialogs/StandardDialog.svelte';
-  import MainConnectDialog from '../components/connection-prompt/ConnectDialogContainer.svelte';
   import NewGestureButton from '../components/NewGestureButton.svelte';
-  import StandardButton from '../components/StandardButton.svelte';
-  import { startConnectionProcess } from '../script/stores/connectDialogStore';
   import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
+  import TrainingButton from './training/TrainingButton.svelte';
+  import TabView from '../views/TabView.svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -67,8 +65,9 @@
   });
 </script>
 
-<!-- Main pane -->
-<main class="h-full inline-block min-w-full">
+<main class="h-full inline-block w-full">
+  <TabView />
+
   <div>
     <DataPageControlBar
       clearDisabled={$gestures.length === 0}
@@ -77,28 +76,13 @@
       {onDownloadGestures}
       {onUploadGestures} />
   </div>
+
   {#if !hasSomeData() && !$state.isInputConnected}
-    <div class="mt-4">
+    <div class="h-full flex justify-center items-center">
       <PleaseConnectFirst />
     </div>
   {:else}
-    <div class="mt-4 ml-3">
-      <StandardDialog
-        isOpen={isConnectionDialogOpen}
-        onClose={() => (isConnectionDialogOpen = false)}>
-        <div class="w-70 text-center">
-          <p class="mb-5">
-            {$t('content.data.addDataNoConnection')}
-          </p>
-          <StandardButton
-            onClick={() => {
-              isConnectionDialogOpen = false;
-              startConnectionProcess();
-            }}>{$t('footer.connectButtonNotConnected')}</StandardButton>
-        </div>
-      </StandardDialog>
-      <MainConnectDialog />
-
+    <div class="mt-4 mx-10 overflow-y-auto">
       {#if $gestures.length > 0}
         <div class=" p-0 relative flex h-7">
           <div class="absolute left-3 flex">
@@ -136,7 +120,9 @@
           bind:gesture
           onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
       {/each}
+
       <NewGestureButton />
     </div>
+    <TrainingButton />
   {/if}
 </main>

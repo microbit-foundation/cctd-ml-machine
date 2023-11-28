@@ -30,6 +30,7 @@
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
+  import BaseDialog from './dialogs/BaseDialog.svelte';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -39,6 +40,30 @@
   const recordingDuration = get(settings).duration;
 
   let isThisRecording = false;
+
+  let showCountdown = false;
+
+  const countdownInitialValue = 3;
+
+  let countdownValue = 3;
+
+  let countdownInterval: number = 500; // the countdown interval in milliseconds
+
+  // Countdown to collect data
+  async function countdownStart(): Promise<void> {
+    countdownValue = countdownInitialValue;
+    return new Promise<void>(resolve => {
+      const interval = setInterval(() => {
+        countdownValue --;
+          if (countdownValue === 0 && showCountdown === true) {
+            recordClicked();
+            clearInterval(interval);
+            showCountdown = false;
+            resolve();
+            }
+          }, countdownInterval);
+    });
+  }
 
   // When title is clicked. Remove name
   function titleClicked(): void {
@@ -63,11 +88,13 @@
   }
 
   // method for recording data point for that specific gesture
-  function recordClicked(e?: Event): void {
+  async function recordClicked(e?: Event): Promise<void> {
+    //await countdownStart();
     e?.stopPropagation();
     if (!areActionsAllowed()) {
       return;
     }
+    // marisa double check
 
     $state.isRecording = true;
     isThisRecording = true;
@@ -235,7 +262,9 @@
             <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" />
           </div>
           <StandardButton
-            onClick={recordClicked}
+            onClick={() => {
+              showCountdown = true;
+              countdownStart()}}
             small
             shadows={false}
             outlined
@@ -243,6 +272,20 @@
         </div>
       {/if}
     </GestureTilePart>
+
+    {#if showCountdown === true}
+    <BaseDialog
+      isOpen={showCountdown}
+      onClose={() => (showCountdown = false)}>
+      <div class="space-y-10 w-max">
+        <GestureTilePart elevated={true}>
+          <p class="text-9xl text-center">{countdownValue}</p>
+          <p>START ACTION BEFORE THE COUNTDOWN FINISHES</p>
+        </GestureTilePart>
+        <StandardButton onClick={() => showCountdown=false}>CANCEL RECORDING</StandardButton>
+      </div>
+    </BaseDialog>
+    {/if}
     <!-- Show recording for each recording -->
     {#if gesture.recordings.length > 0}
       <GestureTilePart small>

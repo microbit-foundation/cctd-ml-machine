@@ -34,7 +34,8 @@
     "noFallthroughCasesInSwitch": true,
     "types": [
       "jest",
-      "svelte"
+      "svelte",
+      "w3c-web-serial"
     ]
   },
   "files": [

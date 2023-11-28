@@ -305,7 +305,8 @@ export class MicrobitBluetooth {
    * @param {Event} event The disconnect event
    * @private
    */
-  private disconnectListener(event: Event): void {
+  private disconnectListener(): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.device
       .gatt!.connect()
       .then(() => {

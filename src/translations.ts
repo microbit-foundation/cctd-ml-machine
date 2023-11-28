@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import PleaseConnectFirst from "./components/PleaseConnectFirst.svelte";
+
 const TRANSLATION_NEEDED = "TRANSLATION NEEDED"
 
 type TranslationMap = { [localeCode: string]: { [translationId: string]: string } }
@@ -163,6 +165,12 @@ export const translations: TranslationMap = {
 		"connectMB.bluetoothStart.requirements3": TRANSLATION_NEEDED,
 		"connectMB.bluetoothStart.switchRadio": TRANSLATION_NEEDED,
 		// CONNECT CABLE TO MICROBIT
+		"connectMB.connectCableMB1.heading": TRANSLATION_NEEDED,
+		"connectMB.connectCableMB1.subtitle": TRANSLATION_NEEDED,
+
+		"connectMB.connectCableMB2.heading": TRANSLATION_NEEDED,
+		"connectMB.connectCableMB2.subtitle": TRANSLATION_NEEDED,
+
 		"connectMB.connectCable.heading": TRANSLATION_NEEDED,
 		"connectMB.connectCable.subtitle": TRANSLATION_NEEDED,
 		// SELECT MICROBIT FROM WEB POPUP
@@ -170,6 +178,8 @@ export const translations: TranslationMap = {
 		"connectMB.webPopup.instruction1": TRANSLATION_NEEDED,
 		"connectMB.webPopup.instruction2": TRANSLATION_NEEDED,
 		// DOWNLOADING PROGRAM TO MICROBIT
+		"connectMB.usbDownloadingMB1.header": TRANSLATION_NEEDED,
+		"connectMB.usbDownloadingMB2.header": TRANSLATION_NEEDED,
 		"connectMB.usbDownloading.header": TRANSLATION_NEEDED,
 		"connectMB.usbDownloading.subtitle": TRANSLATION_NEEDED,
 		// CONNECT BATTERY
@@ -438,6 +448,12 @@ export const translations: TranslationMap = {
 		"connectMB.bluetoothStart.switchRadio": "I have two micro:bits",
 
 		// CONNECT CABLE TO MICROBIT
+		"connectMB.connectCableMB1.heading": "Connect cable to micro:bit 1",
+		"connectMB.connectCableMB1.subtitle": "Connect the first micro:bit to this computer with a USB cable so that the <brand name> program can be downloaded to it.",
+
+		"connectMB.connectCableMB2.heading": "Connect cable to micro:bit 2",
+		"connectMB.connectCableMB2.subtitle": "Connect a second micro:bit to this computer with a USB cable.",
+
 		"connectMB.connectCable.heading": "Connect cable",
 		"connectMB.connectCable.subtitle": "Connect a micro:bit to this computer with a USB cable so that the <brand name> program can be downloaded to it.",
 
@@ -447,6 +463,8 @@ export const translations: TranslationMap = {
 		"connectMB.webPopup.instruction2": "Select 'Connect'",
 
 		// DOWNLOADING PROGRAM TO MICROBIT
+		"connectMB.usbDownloadingMB1.header": "Downloading program to micro:bit 1",
+		"connectMB.usbDownloadingMB2.header": "Downloading program to micro:bit 2",
 		"connectMB.usbDownloading.header": "Downloading program to micro:bit",
 		"connectMB.usbDownloading.subtitle": "Please wait. Downloading program to micro:bit.",
 

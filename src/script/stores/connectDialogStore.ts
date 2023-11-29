@@ -14,14 +14,22 @@ export enum DeviceRequestStates {
 }
 export enum ConnectDialogStates {
   NONE, // No connection in progress -> Dialog box closed
-  START, // Initial box with choice between usb installation and bluetooth connection
+  START_RADIO, // Initial box. Main prompt is to connect via radio however includes choice to connect via bluetooth
+  CONNECTING_MICROBITS, // Micro:bits connecting prompt
+  START_BLUETOOTH, // Initial box to begin the bluetooth connection flow
   START_OUTPUT, // Initial box if input microbit is already connected. Choice between same and other microbit for output
-  BLUETOOTH, // Main bluetooth connect prompt, with pattern drawing
-  USB_START, // Initial usb installation prompt
+  BAD_FIRMWARE, // We detected an issue with the firmware of the micro:bit trying to transfer program.
+  CONNECT_CABLE, // Instructions how to connect micro:bit via usb
+  CONNECT_TUTORIAL_USB, // Instructions how to select micro:bit on popup when connected by usb
   USB_DOWNLOADING, // Downloading usb program status bar prompt
+  CONNECT_BATTERY, // Instructions to connect micro:bit to battery
+  BLUETOOTH, // Bluetooth connect prompt, with pattern drawing
+  CONNECT_TUTORIAL_BLUETOOTH, // Instructions on how to connect micro:bit when connecting to bluetooth
+  BLUETOOTH_CONNECTING, // Downloading BlueTooth prompt
+  CONNECT_TUTORIAL_SERIAL, // Instructions how to connect the micro:bit using a serial connection
+  USB_START, // Initial usb installation prompt
   USB_DONE, // Installation done prompt
   MANUAL_TUTORIAL, // Prompt with tutorial gif for manual installation (and downloading of program)
-  BAD_FIRMWARE, // We detected an issue with the firmware of the micro:bit trying to transfer program.
 }
 
 export const connectionDialogState = writable<{
@@ -36,7 +44,7 @@ export const startConnectionProcess = (): void => {
   connectionDialogState.update(s => {
     s.connectionState = get(state).isInputConnected
       ? ConnectDialogStates.START_OUTPUT
-      : ConnectDialogStates.START;
+      : ConnectDialogStates.START_RADIO;
     s.deviceState = get(state).isInputConnected
       ? DeviceRequestStates.OUTPUT
       : DeviceRequestStates.INPUT;

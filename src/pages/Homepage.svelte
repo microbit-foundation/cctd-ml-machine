@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -16,44 +16,50 @@
 
 <script lang="ts">
   import FrontPageContentTile from '../components/FrontPageContentTile.svelte';
-  import DoItYourselfMachineLearningTile from './home-page-content-tiles/DoItYourselfMachineLearningTile.svelte';
-  import IntroVideoTile from './home-page-content-tiles/IntroVideoTile.svelte';
-  import ControlBar from '../components/control-bar/ControlBar.svelte';
-  import ContactUsControlBarButton from '../components/control-bar/control-bar-items/ContactUsControlBarButton.svelte';
-  import SelectLanguageControlBarDropdown from '../components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
+  import StandardButton from '../components/StandardButton.svelte';
   import { t } from '../i18n';
-  import { state } from '../script/stores/uiStore';
+  import { startConnectionProcess } from '../script/stores/connectDialogStore';
+  import ConnectDialogContainer from '../components/connection-prompt/ConnectDialogContainer.svelte';
 
-  // Just add the content titles you wish to put on front page, in the order you wish them to be there
-  const contentTiles = [DoItYourselfMachineLearningTile, IntroVideoTile];
+  const introVideoUrl =
+    'https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4';
+
+  let connectDialogReference: ConnectDialogContainer;
 </script>
 
 <main class="h-full flex flex-col">
-  <div class:hidden={$state.isLoading}>
-    <div>
-      <ControlBar>
-        <div class="w-full">
-          <div class="float-right flex flex-row">
-            <ContactUsControlBarButton />
-            <SelectLanguageControlBarDropdown />
-          </div>
-        </div>
-      </ControlBar>
+  <div>
+    <ConnectDialogContainer bind:this={connectDialogReference} />
+
+    <div class="flex flex-col items-center justify-center m-10">
+      <video class="w-150 mb-5" controls width="550">
+        <source src={introVideoUrl} type="video/mp4" />
+      </video>
+      <p>{$t('content.index.toolInfo')}</p>
     </div>
-    <div class="p-10 pb-2 pt-2 mt-3">
-      <div class="grid-container grid-cols-2 min-w-800px">
-        {#each contentTiles as contentTile}
-          <FrontPageContentTile contentComponent={contentTile} />
-        {/each}
-      </div>
-    </div>
-    <div class="flex-grow flex items-end">
-      <div class="pb-2 pl-10">
-        <p>
-          {$t('content.index.acknowledgement')} -
-          <a class="text-link hover:underline" href="https://cctd.au.dk/">cctd.au.dk</a>
-        </p>
-      </div>
+
+    <StandardButton onClick={startConnectionProcess}
+      >{$t('footer.connectButtonNotConnected')}</StandardButton>
+
+    <h1 class="ml-10 mt-10 text-2xl">
+      {$t('content.index.toolProcessCards.main.title')}
+    </h1>
+    <div class="grid-container grid-cols-3 min-w-800px p-10 pb-2 pt-2 mt-3">
+      <FrontPageContentTile>
+        <h2 class="text-center text-xl">
+          {$t('content.index.toolProcessCards.data.title')}
+        </h2>
+      </FrontPageContentTile>
+      <FrontPageContentTile>
+        <h2 class="text-center text-xl">
+          {$t('content.index.toolProcessCards.train.title')}
+        </h2>
+      </FrontPageContentTile>
+      <FrontPageContentTile>
+        <h2 class="text-center text-xl">
+          {$t('content.index.toolProcessCards.model.title')}
+        </h2>
+      </FrontPageContentTile>
     </div>
   </div>
 </main>

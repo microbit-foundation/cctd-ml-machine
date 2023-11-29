@@ -10,7 +10,7 @@ import {
   checkCompatibility,
 } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
-import { gestures } from './mlStore';
+import { GestureData } from './mlStore';
 import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
@@ -48,7 +48,6 @@ export const state = writable<{
   isInputAssigned: boolean;
   isOutputAssigned: boolean;
   isOutputReady: boolean;
-  isLoading: boolean;
   modelView: ModelView;
   isInputOutdated: boolean;
   isOutputOutdated: boolean;
@@ -68,7 +67,6 @@ export const state = writable<{
   isInputAssigned: false,
   isOutputAssigned: false,
   isOutputReady: false,
-  isLoading: true,
   modelView: ModelView.STACK,
   isInputOutdated: false,
   isOutputOutdated: false,
@@ -115,14 +113,14 @@ function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: strin
   return { isReady: true, msg: '' };
 }
 
-export const hasSufficientData = (): boolean => {
-  if (!get(gestures)) {
+export const hasSufficientData = (gestures: GestureData[]): boolean => {
+  if (!gestures) {
     return false;
   }
-  if (get(gestures).length < 2) {
+  if (gestures.length < 2) {
     return false;
   }
-  return !get(gestures).some(gesture => gesture.recordings.length < 3);
+  return !gestures.some(gesture => gesture.recordings.length < 3);
 };
 
 export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({

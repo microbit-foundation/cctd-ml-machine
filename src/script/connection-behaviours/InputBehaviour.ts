@@ -11,10 +11,10 @@ import { t } from '../../i18n';
 import { get } from 'svelte/store';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import LoggingDecorator from './LoggingDecorator';
-import CookieManager from '../CookieManager';
 import TypingUtils from '../TypingUtils';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
 import StaticConfiguration from '../../StaticConfiguration';
+import { Paths, navigate } from '../../router/paths';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -77,6 +77,7 @@ class InputBehaviour extends LoggingDecorator {
       s.isInputReady = true;
       return s;
     });
+    navigate(Paths.DATA);
   }
 
   onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {

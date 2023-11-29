@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -53,12 +53,6 @@
       {iconText}
     </p>
   {/if}
-
-  <i
-    class="far fa-question-circle flex text-white
-             w-auto h-auto mr-0 ml-1 mt-4px"
-    class:hovering={isOpen}
-    style="color: {colors.iconColor}" />
 
   {#if isOpen}
     <div

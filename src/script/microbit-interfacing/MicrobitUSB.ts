@@ -5,6 +5,7 @@
  */
 
 import { CortexM, DAPLink, WebUSB } from 'dapjs';
+import { WebUSBSerialDevice } from './WebUSBSerial';
 import MBSpecs from './MBSpecs';
 
 /**
@@ -119,6 +120,10 @@ class MicrobitUSB extends CortexM {
       return Promise.reject(error);
     }
     return Promise.resolve();
+  }
+
+  public get serialPort(): SerialPort {
+    return new WebUSBSerialDevice(this.transport);
   }
 }
 

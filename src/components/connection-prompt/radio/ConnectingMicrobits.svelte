@@ -5,7 +5,9 @@
  -->
 
 <script lang="ts">
-  import BottomPanel from '../components/bottom/BottomPanel.svelte';
+  // temp
 </script>
 
-<BottomPanel />
+<main>
+  <h1 class="mb-5 font-bold w-150">PLACEHOLDER: CONNECTING MICROBITS</h1>
+</main>

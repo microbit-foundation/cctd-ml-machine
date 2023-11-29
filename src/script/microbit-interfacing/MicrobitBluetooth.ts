@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { Paths, navigate } from '../../router/paths';
 import TypingUtils from '../TypingUtils';
 import MBSpecs from './MBSpecs';
 
@@ -304,7 +305,8 @@ export class MicrobitBluetooth {
    * @param {Event} event The disconnect event
    * @private
    */
-  private disconnectListener(event: Event): void {
+  private disconnectListener(): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.device
       .gatt!.connect()
       .then(() => {
@@ -322,6 +324,7 @@ export class MicrobitBluetooth {
   private disconnectEventHandler(manual?: boolean): void {
     if (this.device === undefined) return;
     this.onDisconnect(manual);
+    navigate(Paths.HOME);
   }
 
   /**

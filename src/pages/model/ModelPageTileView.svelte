@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -80,7 +80,7 @@
   $: triggerButtonsClicked($buttonPressed);
 </script>
 
-<main class="h-full flex flex-col">
+<main class="h-full flex flex-col pt-4 pl-4">
   {#if !$state.isPredicting}
     <TrainModelFirstTitle />
   {:else}

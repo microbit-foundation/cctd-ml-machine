@@ -21,9 +21,6 @@ export type MenuProperties = {
   additionalExpandPaths?: PathType[];
 };
 
-/**
- * Wrapper for the menu logic, use navigation if possible, this is for fine-grained control of menus.
- */
 class Menus {
   private static menuStore = writable<MenuProperties[]>([
     {

@@ -52,9 +52,9 @@
   </div>
   <div class="grid grid-cols-3 mb-5 w-900px">
     <div class="col-span-2">
-      <p>1. {$t('popup.connectMB.USBCompatibility.transferStep.step1')}</p>
-      <p>2. {$t('popup.connectMB.USBCompatibility.transferStep.step2')}</p>
-      <p>3. {$t('popup.connectMB.USBCompatibility.transferStep.step3')}</p>
+      <p>1. {$t('connectMB.USBCompatibility.transferStep.step1')}</p>
+      <p>2. {$t('connectMB.USBCompatibility.transferStep.step2')}</p>
+      <p>3. {$t('connectMB.USBCompatibility.transferStep.step3')}</p>
     </div>
     <div>
       <div class="">

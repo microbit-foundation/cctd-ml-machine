@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -11,7 +11,6 @@
   import StandardButton from '../StandardButton.svelte';
 
   export let onOutputDisconnectButtonClicked: () => void;
-  export let onOutputConnectButtonClicked: () => void;
   export let onInputDisconnectButtonClicked: () => void;
 </script>
 
@@ -29,10 +28,6 @@
           <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
         </StandardButton>
       {/if}
-    {:else}
-      <StandardButton onClick={onOutputConnectButtonClicked}>
-        {$t('menu.model.connectOutputButton')}
-      </StandardButton>
     {/if}
   {/if}
   <div class="ml-2">

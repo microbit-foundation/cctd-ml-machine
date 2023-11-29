@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -8,9 +8,9 @@
   import { onMount } from 'svelte';
   import DataPage from '../pages/DataPage.svelte';
   import Homepage from '../pages/Homepage.svelte';
+  import TrainingPage from '../pages/training/TrainingPage.svelte';
   import ModelPage from '../pages/model/ModelPage.svelte';
   import FilterPage from '../pages/filter/FilterPage.svelte';
-  import TrainingPage from '../pages/training/TrainingPage.svelte';
   import { currentPageComponent } from '../views/currentComponentStore';
   import { currentPath, navigate, Paths, PathType } from './paths';
 

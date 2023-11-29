@@ -47,7 +47,7 @@
       <BluetoothIncompatibilityWarningDialog />
 
       <div
-        class="h-full w-full overflow-y-hidden overflow-x-auto flex flex-col bg-backgrounddark">
+        class="h-full w-full overflow-x-auto flex flex-col bg-backgrounddark">
         <ControlBar>
           <img
             class="mr-8"

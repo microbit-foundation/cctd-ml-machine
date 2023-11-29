@@ -1,10 +1,14 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
 <style>
+  .large {
+    font-size: 20px;
+    padding: 20px 55px;
+  }
   .normal {
     padding: 12px 40px;
   }
@@ -34,12 +38,13 @@
   import TypingUtils from '../script/TypingUtils.js';
   import windi from './../../windi.config.js';
 
+  type ButtonSize = 'small' | 'normal' | 'large';
   type variants = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight' | 'disabled';
 
   export let color: variants = 'secondary';
   export let onClick: (e: Event) => void = TypingUtils.emptyFunction;
   export let disabled = false;
-  export let small = false;
+  export let size: ButtonSize = 'normal';
   export let outlined = false;
   export let fillOnHover = false;
   export let bold = true;
@@ -69,11 +74,9 @@
     {disabled}
     style="--color: {bgColors[disabled ? 'disabled' : color]}
     ; --border-width: {bold ? '2px' : '1px'}"
-    class="outline-none rounded-full"
+    class="outline-none rounded-full {size}"
     class:shadow-md={shadows}
     class:font-bold={bold}
-    class:small
-    class:normal={!small}
     class:outlined
     class:filled={!outlined}
     class:fillOnHover={fillOnHover && !disabled}

@@ -4,16 +4,6 @@
   SPDX-License-Identifier: MIT
  -->
 
-<style>
-  .grid-container {
-    display: grid;
-    gap: 1rem 1rem;
-    grid-template-areas:
-      'a b'
-      'a c';
-  }
-</style>
-
 <script lang="ts">
   import FrontPageContentTile from '../components/FrontPageContentTile.svelte';
   import StandardButton from '../components/StandardButton.svelte';
@@ -30,7 +20,7 @@
 </script>
 
 <main class="h-full flex flex-col">
-  <div class="mb-8">
+  <div class="overflow-x-auto mb-8">
     <ConnectDialogContainer bind:this={connectDialogReference} />
 
     <div class="flex flex-col items-center justify-center m-10">
@@ -40,33 +30,36 @@
       <p>{$t('content.index.toolInfo1')} <a class="text-link" href="" target="_blank">{$t('content.index.toolInfo2')}</a></p>
     </div>
 
-    <h1 class="ml-10 mt-10 text-3xl">
-      {$t('content.index.toolProcessCards.main.title')}
-    </h1>
-    <div class="grid-container grid-cols-3 min-w-800px p-10 pb-2 pt-2 mt-3">
-      <FrontPageContentTile>
-        <h2 class="text-center text-3xl mb-5">
-          {$t('content.index.toolProcessCards.data.title')}
-        </h2>
-        <img class="mb-5" alt="add data" src="/imgs/InputData.svg" width={tileImageSize} />
-        <p class="text-center w-75">{$t('content.index.toolProcessCards.data.description')}</p>
-      </FrontPageContentTile>
 
-      <FrontPageContentTile>
-        <h2 class="text-center text-3xl mb-5">
-          {$t('content.index.toolProcessCards.train.title')}
-        </h2>
-        <img class="mb-5" alt="train model" src="/imgs/TrainModel.svg" width={tileImageSize} />
-        <p class="text-center w-75">{$t('content.index.toolProcessCards.train.description')}</p>
-      </FrontPageContentTile>
+    <div class="flex flex-col flex-wrap items-center">
+      <h1 class="text-3xl px-10 w-325">
+        {$t('content.index.toolProcessCards.main.title')}
+      </h1>
+      <div class="flex justify-between p-10 gap-5 w-325">
+        <FrontPageContentTile>
+          <h2 class="text-center text-3xl mb-5">
+            {$t('content.index.toolProcessCards.data.title')}
+          </h2>
+          <img class="mb-5" alt="add data" src="/imgs/InputData.svg" width={tileImageSize} />
+          <p class="text-center w-75">{$t('content.index.toolProcessCards.data.description')}</p>
+        </FrontPageContentTile>
 
-      <FrontPageContentTile>
-        <h2 class="text-center text-3xl mb-5">
-          {$t('content.index.toolProcessCards.model.title')}
-        </h2>
-        <img class="mb-5" alt="test model" src="/imgs/TestModel.svg" width={tileImageSize} />
-        <p class="text-center w-75">{$t('content.index.toolProcessCards.model.description')}</p>
-      </FrontPageContentTile>
+        <FrontPageContentTile>
+          <h2 class="text-center text-3xl mb-5">
+            {$t('content.index.toolProcessCards.train.title')}
+          </h2>
+          <img class="mb-5" alt="train model" src="/imgs/TrainModel.svg" width={tileImageSize} />
+          <p class="text-center w-75">{$t('content.index.toolProcessCards.train.description')}</p>
+        </FrontPageContentTile>
+
+        <FrontPageContentTile>
+          <h2 class="text-center text-3xl mb-5">
+            {$t('content.index.toolProcessCards.model.title')}
+          </h2>
+          <img class="mb-5" alt="test model" src="/imgs/TestModel.svg" width={tileImageSize} />
+          <p class="text-center w-75">{$t('content.index.toolProcessCards.model.description')}</p>
+        </FrontPageContentTile>
+      </div>
     </div>
 
     <StandardButton size="large" color="primary" onClick={startConnectionProcess}

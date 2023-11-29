@@ -323,7 +323,7 @@ export const translations: TranslationMap = {
 		"content.index.toolProcessCards.data.title": "Add data",
 		"content.index.toolProcessCards.data.description": "Add samples of the actions you would like your model to recognise (e.g. waving and clapping).",
 		"content.index.toolProcessCards.train.title": "Train model",
-		"content.index.toolProcessCards.train.description": "Ask the computer to use your training samples to train the mcahine learning model to recognise deifferent actions.",
+		"content.index.toolProcessCards.train.description": "Ask the computer to use your training samples to train the machine learning model to recognise different actions.",
 		"content.index.toolProcessCards.model.title": "Test model",
 		"content.index.toolProcessCards.model.description": "Find out if it correctly recognises each action. Add more data to improve the model.",
 		"content.index.recordButtonDescription": "\"Record\"-button",

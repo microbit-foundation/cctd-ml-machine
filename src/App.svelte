@@ -41,13 +41,13 @@
     <!-- Denies mobile users access to the platform -->
     <IncompatiblePlatformView />
   {:else}
-    <main class="h-screen w-screen m-0 relative flex">
+    <main class="h-full w-screen m-0 relative flex">
       <CookieBanner />
       <OverlayView />
       <BluetoothIncompatibilityWarningDialog />
 
       <div
-        class="h-full w-full overflow-x-auto flex flex-col bg-backgrounddark">
+        class="h-full w-full flex flex-col bg-backgrounddark">
         <ControlBar>
           <img
             class="mr-8"

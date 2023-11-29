@@ -94,7 +94,6 @@
     if (!areActionsAllowed()) {
       return;
     }
-    // marisa double check
 
     $state.isRecording = true;
     isThisRecording = true;
@@ -167,7 +166,8 @@
       (buttons.buttonA && triggerButton === MicrobitInteractions.A) ||
       (buttons.buttonB && triggerButton === MicrobitInteractions.B)
     )
-      recordClicked();
+    showCountdown = true;
+    countdownStart();
   }
 
   function onTitleKeypress(event: KeyboardEvent) {
@@ -276,7 +276,7 @@
     {#if showCountdown === true}
     <BaseDialog
       isOpen={showCountdown}
-      onClose={() => (showCountdown = false)}>
+      onClose={() => showCountdown = false}>
       <div class="space-y-10 w-max">
         <GestureTilePart elevated={true}>
           <p class="text-9xl text-center">{countdownValue}</p>

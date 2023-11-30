@@ -212,16 +212,28 @@
   }
 </script>
 
+<style>
+  @keyframes loading-bar {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
+
+  .animate-loading-bar {
+    animation: loading-bar 1.8s linear;
+  }
+</style>
+
 <main class="flex-row flex mb-2">
   <!-- Recordingbar to show recording-progress -->
-
-  <div
-    class="bg-red-600 h-1.5 rounded-full absolute mt-123px ml-14px"
-    style={isThisRecording
-      ? 'transition: ' +
-        /* TODO: Clean this up! : */ (recordingDuration / 1000).toString() +
-        's linear; width: 97%;'
-      : 'width:0;'} />
+    <BaseDialog
+    background="light"
+    isOpen={isThisRecording}
+    onClose={() => isThisRecording=false}>
+      <div class="w-70 h-6 bg-red-200 rounded-full overflow-hidden">
+        <div class="h-full bg-red-600 animate-loading-bar"
+        ></div>
+      </div>
+    </BaseDialog>
 
   <div class="items-center flex mb-1">
     <!-- Title of gesture-->
@@ -275,6 +287,7 @@
 
     {#if showCountdown === true}
     <BaseDialog
+      background="light"
       isOpen={showCountdown}
       onClose={() => showCountdown = false}>
       <div class="space-y-10 w-max">
@@ -286,6 +299,7 @@
       </div>
     </BaseDialog>
     {/if}
+
     <!-- Show recording for each recording -->
     {#if gesture.recordings.length > 0}
       <GestureTilePart small>

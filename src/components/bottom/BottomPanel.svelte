@@ -30,7 +30,7 @@
 
 <div
   bind:clientWidth={componentWidth}
-  class="h-full w-full"
+  class="h-full w-full bg-backgrounddark"
   class:bg-gray-300={$state.isInputAssigned && !$state.isInputReady}>
   {#if $state.isInputAssigned}
     <!-- Input microbit is assigned -->

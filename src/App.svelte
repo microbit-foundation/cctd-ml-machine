@@ -46,8 +46,7 @@
       <OverlayView />
       <BluetoothIncompatibilityWarningDialog />
 
-      <div
-        class="h-full w-full flex flex-col bg-backgrounddark">
+      <div class="w-full flex flex-col bg-backgrounddark">
         <ControlBar>
           <img
             class="mr-8"

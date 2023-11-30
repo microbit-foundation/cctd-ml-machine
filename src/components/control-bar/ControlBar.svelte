@@ -8,9 +8,12 @@
   div {
     background-color: #00a000;
     color: white;
+    position: sticky;
+    top: 0;
+    z-index: 5;
   }
 </style>
 
-<div class="h-16 px-10 flex w-full items-center">
+<div class="min-h-16 px-10 flex w-full items-center">
   <slot />
 </div>

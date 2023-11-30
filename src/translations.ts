@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import PleaseConnectFirst from "./components/PleaseConnectFirst.svelte";
-
 const TRANSLATION_NEEDED = "TRANSLATION NEEDED"
 
 type TranslationMap = { [localeCode: string]: { [translationId: string]: string } }
@@ -28,13 +26,18 @@ export const translations: TranslationMap = {
 		"alert.twoGestures": "Du skal have mindst to klasser",
 		"alert.oneDataRepresentation": "Du skal have mindst en data-repræsentation",
 		"alert.recordingsPerGesture": "Du skal have mindst tre eksempler for hver klasse",
+
 		// HOME PAGE:
 		"content.index.title": TRANSLATION_NEEDED,
-		"content.index.toolInfo": TRANSLATION_NEEDED,
+		"content.index.toolInfo1": TRANSLATION_NEEDED,
+		"content.index.toolInfo2": TRANSLATION_NEEDED,
 		"content.index.toolProcessCards.main.title": TRANSLATION_NEEDED,
 		"content.index.toolProcessCards.data.title": TRANSLATION_NEEDED,
+		"content.index.toolProcessCards.data.description": TRANSLATION_NEEDED,
 		"content.index.toolProcessCards.train.title": TRANSLATION_NEEDED,
+		"content.index.toolProcessCards.train.description": TRANSLATION_NEEDED,
 		"content.index.toolProcessCards.model.title": TRANSLATION_NEEDED,
+		"content.index.toolProcessCards.model.description": TRANSLATION_NEEDED,
 		"content.index.recordButtonDescription": "\"Optag\"-knap",
 
 		// DATA PAGE:
@@ -148,15 +151,16 @@ export const translations: TranslationMap = {
 		"menu.model.disconnect": "Frakobl output-micro:bit",
 
 		// CONNECT MICROBIT:
-
 		"connectMB.nextButton": "Næste",
 		"connectMB.backButton": TRANSLATION_NEEDED,
+
 		// RADIO CONNECTION START
 		"connectMB.radioStart.heading": TRANSLATION_NEEDED,
 		"connectMB.radioStart.requirements1": TRANSLATION_NEEDED,
 		"connectMB.radioStart.requirements2": TRANSLATION_NEEDED,
 		"connectMB.radioStart.requirements3": TRANSLATION_NEEDED,
 		"connectMB.radioStart.switchBluetooth": TRANSLATION_NEEDED,
+
 		// BLUETOOTH CONNECTION START
 		"connectMB.bluetoothStart.heading": TRANSLATION_NEEDED,
 		"connectMB.bluetoothStart.subtitle": TRANSLATION_NEEDED,
@@ -164,6 +168,7 @@ export const translations: TranslationMap = {
 		"connectMB.bluetoothStart.requirements2": TRANSLATION_NEEDED,
 		"connectMB.bluetoothStart.requirements3": TRANSLATION_NEEDED,
 		"connectMB.bluetoothStart.switchRadio": TRANSLATION_NEEDED,
+
 		// CONNECT CABLE TO MICROBIT
 		"connectMB.connectCableMB1.heading": TRANSLATION_NEEDED,
 		"connectMB.connectCableMB1.subtitle": TRANSLATION_NEEDED,
@@ -173,21 +178,26 @@ export const translations: TranslationMap = {
 
 		"connectMB.connectCable.heading": TRANSLATION_NEEDED,
 		"connectMB.connectCable.subtitle": TRANSLATION_NEEDED,
+
 		// SELECT MICROBIT FROM WEB POPUP
 		"connectMB.webPopup": TRANSLATION_NEEDED,
 		"connectMB.webPopup.instruction1": TRANSLATION_NEEDED,
 		"connectMB.webPopup.instruction2": TRANSLATION_NEEDED,
+
 		// DOWNLOADING PROGRAM TO MICROBIT
 		"connectMB.usbDownloadingMB1.header": TRANSLATION_NEEDED,
 		"connectMB.usbDownloadingMB2.header": TRANSLATION_NEEDED,
 		"connectMB.usbDownloading.header": TRANSLATION_NEEDED,
 		"connectMB.usbDownloading.subtitle": TRANSLATION_NEEDED,
+
 		// CONNECT BATTERY
 		"connectMB.connectBattery.heading": TRANSLATION_NEEDED,
 		"connectMB.connectBattery.subtitle": TRANSLATION_NEEDED,
+
 		// BLUETOOTH CONNECTION
 		"connectMB.pattern.heading": TRANSLATION_NEEDED,
 		"connectMB.pattern.subtitle": TRANSLATION_NEEDED,
+
 		// CONNECTING BLUETOOTH
 		"connectMB.bluetooth.heading": "Tilslut med Bluetooth",
 		"connectMB.main.bluetooth.subtitle": "Tilslut med Bluetooth",
@@ -201,9 +211,7 @@ export const translations: TranslationMap = {
 		"disconnectedWarning.reconnectButton.input": "Tilslut input igen",
 		"disconnectedWarning.reconnectButton.output": "Tilslut output igen",
 
-
 		// USB CONNECTION PROMPTS:
-
 		"connectMB.output.header": "En micro:bit er allerede forbundet",
 
 		"connectMB.usb.body1": "Tilslut din BBC micro:bit med USB-kabel og tryk på 'næste'",
@@ -232,7 +240,6 @@ export const translations: TranslationMap = {
 		"connectMB.outputMB.different": "Tilslut anden BBC micro:bit",
 		"connectMB.outputMB.sameButton": "Samme",
 		"connectMB.outputMB.otherButton": "Anden",
-
 
 		// COOKIE BANNER
 		"cookies.banner.title": "Cookie politik",
@@ -310,11 +317,15 @@ export const translations: TranslationMap = {
 
 		// HOME PAGE:
 		"content.index.title": "machine learning tool",
-		"content.index.toolInfo": "This tool is designed for use with activity 5 in the next gen Playground survey",
-		"content.index.toolProcessCards.main.title": "How to create a model",
-		"content.index.toolProcessCards.data.title": "Data",
-		"content.index.toolProcessCards.train.title": "Train",
-		"content.index.toolProcessCards.model.title": "Model",
+		"content.index.toolInfo1": "Use this tool with the",
+		"content.index.toolInfo2": "BBC micro:bit playground survey",
+		"content.index.toolProcessCards.main.title": "How this tool works",
+		"content.index.toolProcessCards.data.title": "Add data",
+		"content.index.toolProcessCards.data.description": "Add samples of the actions you would like your model to recognise (e.g. waving and clapping).",
+		"content.index.toolProcessCards.train.title": "Train model",
+		"content.index.toolProcessCards.train.description": "Ask the computer to use your training samples to train the machine learning model to recognise different actions.",
+		"content.index.toolProcessCards.model.title": "Test model",
+		"content.index.toolProcessCards.model.description": "Find out if it correctly recognises each action. Add more data to improve the model.",
 		"content.index.recordButtonDescription": "\"Record\"-button",
 
 		// DATA PAGE:

@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -236,7 +236,7 @@
           </div>
           <StandardButton
             onClick={recordClicked}
-            small
+            size={'small'}
             shadows={false}
             outlined
             fillOnHover>{$t('content.data.record')}</StandardButton>

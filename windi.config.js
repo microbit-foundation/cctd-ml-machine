@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#3a3a3a',
+        primary: '#2c92d6',
         primarytext: '#000000',
         secondary: '#a0a0a0',
         secondarytext: '#FFFFFF',
@@ -18,7 +18,7 @@ export default {
         backgrounddark: '#F5F5F5',
         backgroundlight: '#ffffff',
         infolight: '#93c5fd',
-        link: '#258aff',
+        link: '#6c4bc1',
         warning: '#ffaaaa',
         disabled: '#8892A3',
         primaryborder: '#E5E7EB',

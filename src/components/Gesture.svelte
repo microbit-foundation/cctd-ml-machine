@@ -274,7 +274,7 @@
           <StandardButton
             onClick={() => {
               countdownStart()}}
-            small
+            size="small"
             shadows={false}
             outlined
             fillOnHover>{$t('content.data.record')}</StandardButton>

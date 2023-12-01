@@ -9,7 +9,6 @@
 
   export let isOpen: boolean;
   export let onClose: () => void;
-  export let background: "light" | "dark" = "dark";
 
   let additionalClass: string;
 
@@ -20,7 +19,9 @@
     }
   }
 
-  if (background === "light") {
+  export let backgroundClass: "light" | "dark" = "dark";
+
+  if (backgroundClass === "light") {
     additionalClass = " bg-white/80 bg-blend-lighten"
     console.log("hi");
   }

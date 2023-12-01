@@ -274,9 +274,7 @@
             <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" />
           </div>
           <StandardButton
-            onClick={() => {
-              showCountdown = true;
-              countdownStart()}}
+            onClick={countdownStart}
             small
             shadows={false}
             outlined

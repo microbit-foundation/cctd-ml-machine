@@ -51,12 +51,13 @@
 
   // Countdown to collect data
   async function countdownStart(): Promise<void> {
+    showCountdown = true;
     countdownValue = countdownInitialValue;
     return new Promise<void>(resolve => {
-      const interval = setInterval(() => {
+      const interval = setInterval(() => { 
         countdownValue --;
           if (countdownValue === 0 && showCountdown === true) {
-            recordClicked();
+            recordData();
             clearInterval(interval);
             showCountdown = false;
             resolve();
@@ -88,9 +89,7 @@
   }
 
   // method for recording data point for that specific gesture
-  async function recordClicked(e?: Event): Promise<void> {
-    //await countdownStart();
-    e?.stopPropagation();
+  async function recordData(): Promise<void> {
     if (!areActionsAllowed()) {
       return;
     }
@@ -166,7 +165,6 @@
       (buttons.buttonA && triggerButton === MicrobitInteractions.A) ||
       (buttons.buttonB && triggerButton === MicrobitInteractions.B)
     )
-    showCountdown = true;
     countdownStart();
   }
 
@@ -275,7 +273,6 @@
           </div>
           <StandardButton
             onClick={() => {
-              showCountdown = true;
               countdownStart()}}
             small
             shadows={false}
@@ -285,7 +282,6 @@
       {/if}
     </GestureTilePart>
 
-    {#if showCountdown === true}
     <BaseDialog
       backgroundClass="light"
       isOpen={showCountdown}
@@ -293,12 +289,11 @@
       <div class="space-y-10 w-max">
         <GestureTilePart elevated={true}>
           <p class="text-9xl text-center">{countdownValue}</p>
-          <p>START ACTION BEFORE THE COUNTDOWN FINISHES</p>
+          <p>{$t("content.data.recording.description")}</p>
         </GestureTilePart>
-        <StandardButton onClick={() => showCountdown=false}>CANCEL RECORDING</StandardButton>
+        <StandardButton onClick={() => showCountdown=false}>{$t("content.data.recording.button.cancel")}</StandardButton>
       </div>
     </BaseDialog>
-    {/if}
 
     <!-- Show recording for each recording -->
     {#if gesture.recordings.length > 0}

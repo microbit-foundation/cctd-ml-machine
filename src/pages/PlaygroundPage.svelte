@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 
- <script lang="ts">
+<script lang="ts">
   import Gesture from '../script/domain/Gesture';
   import Model from '../script/domain/Model';
   import LayersModelTrainer from '../script/mlmodels/LayersModelTrainer';

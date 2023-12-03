@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import FilterWithMaths from "./FilterWithMaths";
+import FilterWithMaths from './FilterWithMaths';
 
 class PeaksFilter extends FilterWithMaths {
   public filter(inValues: number[]): number {

@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 
- <script>
+<script>
   import IntervalSlider from './IntervalSlider.svelte';
   import Slider from '@bulatdashiev/svelte-slider';
   import Visualizer from './Visualizer.svelte';

@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 
- <script>
+<script>
   import Slider from '@bulatdashiev/svelte-slider';
   import accelerometerSynthesizer from './AccelerometerDataSynthesizer';
 

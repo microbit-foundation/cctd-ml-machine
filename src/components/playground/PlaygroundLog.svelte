@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 
- <script lang="ts">
+<script lang="ts">
   import playgroundContext from './PlaygroundContext';
 </script>
 

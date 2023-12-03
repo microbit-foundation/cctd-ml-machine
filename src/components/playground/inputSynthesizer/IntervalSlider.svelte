@@ -6,7 +6,6 @@
 
  <script>
   import Slider from '@bulatdashiev/svelte-slider';
-  import IntervalSlider from './IntervalSlider.svelte';
   import accelerometerSynthesizer from './AccelerometerDataSynthesizer';
 
   const minInterval = 5;

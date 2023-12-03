@@ -20,7 +20,7 @@ import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
-import { gestures } from './stores/Stores';
+import { classifier, gestures, liveData } from './stores/Stores';
 import Repositories from './repository/Repositories';
 
 let text: (key: string, vars?: object) => string;
@@ -299,10 +299,9 @@ function tfHandlePrediction(result: Float32Array) {
   const gestureData = get(gestures);
 
   gestureData.forEach(({ ID }, index) => {
-    /*Repositories.getInstance()
+    Repositories.getInstance()
       .getModelRepository()
       .setGestureConfidence(ID, result[index]);
-*/
     gestureConfidences.update(confidenceMap => {
       confidenceMap[ID] = result[index];
       return confidenceMap;

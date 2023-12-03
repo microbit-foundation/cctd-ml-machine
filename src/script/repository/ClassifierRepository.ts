@@ -97,7 +97,8 @@ class ClassifierRepository {
     );
   }
 
-  private setGestureConfidence(gestureId: GestureID, confidence: number) {
+  /* TODO: Should be private, but currently ml.ts is depending on it. That should change by removing the functionality from ml.ts and using classifier instead */
+  public setGestureConfidence(gestureId: GestureID, confidence: number) {
     if (confidence < 0 || confidence > 1) {
       throw new Error('Cannot set gesture confidence. Must be in the range 0.0-1.0');
     }

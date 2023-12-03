@@ -8,6 +8,7 @@ import Model, { ModelData } from './Model';
 import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import Filters from './Filters';
 import Gesture, { GestureID } from './Gesture';
+import ClassifierInput from './ClassifierInput';
 
 type ClassifierData = {
   model: ModelData;
@@ -33,7 +34,7 @@ class Classifier implements Readable<ClassifierData> {
     }).subscribe(run, invalidate);
   }
 
-  public async classify(input: AccelerometerClassifierInput): Promise<void> {
+  public async classify(input: ClassifierInput): Promise<void> {
     const filteredInput = input.getInput(get(this.filters));
     const predictions = await this.getModel().predict(filteredInput);
     predictions.forEach((confidence, index) => {

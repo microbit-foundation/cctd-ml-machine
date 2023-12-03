@@ -13,7 +13,7 @@ type ClassifierData = {
   model: ModelData;
 };
 
-export class Classifier implements Readable<ClassifierData> {
+class Classifier implements Readable<ClassifierData> {
   constructor(
     private model: Model,
     private filters: Writable<Filters>,

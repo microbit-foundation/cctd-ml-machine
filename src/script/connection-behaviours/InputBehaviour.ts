@@ -15,6 +15,7 @@ import CookieManager from '../CookieManager';
 import TypingUtils from '../TypingUtils';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
 import StaticConfiguration from '../../StaticConfiguration';
+import { liveData } from '../stores/Stores';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -150,14 +151,17 @@ class InputBehaviour extends LoggingDecorator {
     this.smoothedAccelY = accelY * 0.25 + this.smoothedAccelY * 0.75;
     this.smoothedAccelZ = accelZ * 0.25 + this.smoothedAccelZ * 0.75;
 
-    livedata.set({
+    const data = {
       accelX,
       accelY,
       accelZ,
       smoothedAccelX: this.smoothedAccelX,
       smoothedAccelY: this.smoothedAccelY,
       smoothedAccelZ: this.smoothedAccelZ,
-    });
+    };
+
+    livedata.set(data); // This is the old livedata store
+    liveData.put(data);
   }
 
   buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {

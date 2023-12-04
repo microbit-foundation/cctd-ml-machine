@@ -35,7 +35,7 @@
     onClick={() => {
       navigate(Paths.TRAINING);
     }}>
-    <i class="fas fa-solid fa-arrow-left"></i>
+    <i class="fas fa-solid fa-arrow-left" />
   </StandardButton>
 </ControlBar>
 {#if $gestures.length === 0}

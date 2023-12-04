@@ -20,7 +20,7 @@
   import GestureTilePart from '../GestureTilePart.svelte';
   import Information from '../information/Information.svelte';
   import { Writable } from 'svelte/store';
-  import Gesture from '../../script/stores/Gesture';
+  import Gesture from '../../script/domain/Gesture';
 
   // Variables for component
   export let gesture: Gesture;

@@ -12,33 +12,17 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { GestureData, GestureOutput, RecordingData } from './mlStore';
-import Gesture from './Gesture';
-import GestureRepository from '../gestures/GestureRepository';
+import { GestureData, GestureOutput, RecordingData } from '../stores/mlStore';
+import Gesture, { GestureID } from './Gesture';
+import GestureRepository from '../repository/GestureRepository';
 
 export type PersistantGestureData = {
   name: string;
-  ID: number;
+  ID: GestureID;
   recordings: RecordingData[];
   output: GestureOutput;
 };
 
-/**
- * Gestures is a custom store. It handles an array of [Gesture]. It acts as a regular store, but it cannot be updated
- * using the regular $ subscription. One has to use the functions attached to the store such as `createGesture("someName")`.
- * Calls to these functions causes updates at subscribers
- *
- * Example:
- * ```ts
- * <script lang="ts">
- *    const gestures = Stores.gestures;
- * </script>
- *
- * {#each $gestures as gesture}
- *  <p>{gesture.name}</p>
- * {/each}
- * ```
- */
 class Gestures implements Readable<GestureData[]> {
   private static subscribableGestures: Writable<Gesture[]>;
   private repository: GestureRepository;
@@ -46,7 +30,6 @@ class Gestures implements Readable<GestureData[]> {
   constructor(repository: GestureRepository) {
     this.repository = repository;
     Gestures.subscribableGestures = writable();
-
     this.repository.subscribe(storeArray => {
       Gestures.subscribableGestures.set(storeArray);
     });

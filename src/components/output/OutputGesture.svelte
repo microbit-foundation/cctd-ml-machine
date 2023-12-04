@@ -7,7 +7,7 @@
   import CookieManager from '../../script/CookieManager';
   import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
   import Microbits from '../../script/microbit-interfacing/Microbits';
-  import Gesture from '../../script/stores/Gesture';
+  import Gesture from '../../script/domain/Gesture';
   import OutputGestureStack from './OutputGestureStack.svelte';
   import OutputGestureTile from './OutputGestureTile.svelte';
 

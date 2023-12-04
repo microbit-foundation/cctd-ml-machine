@@ -11,9 +11,8 @@ import { state } from './uiStore';
 import { AxesType, FilterType, Axes, Filters } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
-import StaticConfiguration from '../../StaticConfiguration';
-import { PersistantGestureData } from './Gestures';
-import Gesture from './Gesture';
+import { PersistantGestureData } from '../domain/Gestures';
+import Gesture, { GestureID } from '../domain/Gesture';
 import { gestures } from './Stores';
 
 export type RecordingData = {
@@ -66,7 +65,7 @@ export function clearGestures() {
 
 export type GestureData = {
   name: string;
-  ID: number;
+  ID: GestureID;
   recordings: RecordingData[];
   output: GestureOutput;
   confidence: {
@@ -89,6 +88,7 @@ export type SoundData = {
 };
 
 export type LiveData = {
+  //Todo remove this
   accelX: number;
   accelY: number;
   accelZ: number;
@@ -99,6 +99,7 @@ export type LiveData = {
 
 export enum TrainingStatus {
   Untrained,
+  InProgress,
   Success,
   Failure,
 }

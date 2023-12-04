@@ -20,9 +20,8 @@ import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
-import Gestures from './Gestures';
-import { gestures } from './stores/Stores';
-import Repositories from './Repositories';
+import { classifier, gestures, liveData } from './stores/Stores';
+import Repositories from './repository/Repositories';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -303,7 +302,6 @@ function tfHandlePrediction(result: Float32Array) {
     Repositories.getInstance()
       .getModelRepository()
       .setGestureConfidence(ID, result[index]);
-
     gestureConfidences.update(confidenceMap => {
       confidenceMap[ID] = result[index];
       return confidenceMap;

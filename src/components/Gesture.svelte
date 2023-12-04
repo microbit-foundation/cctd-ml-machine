@@ -286,10 +286,10 @@
       backgroundClass="light"
       isOpen={showCountdown}
       onClose={() => showCountdown = false}>
-      <div class="space-y-10 w-max">
+      <div class="space-y-10 w-70">
         <GestureTilePart elevated={true}>
-          <p class="text-9xl text-center">{countdownValue}</p>
-          <p>{$t("content.data.recording.description")}</p>
+          <p class="text-9xl text-center text-gray-400">{countdownValue}</p>
+          <p class="pt-5 px-10 text-gray-400 text-center">{$t("content.data.recording.description")}</p>
         </GestureTilePart>
         <StandardButton onClick={() => showCountdown=false}>{$t("content.data.recording.button.cancel")}</StandardButton>
       </div>

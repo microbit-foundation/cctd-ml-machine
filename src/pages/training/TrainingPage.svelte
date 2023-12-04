@@ -49,19 +49,19 @@
   </div>
 </StandardDialog>
 <div class="flex flex-col h-full">
-  <ControlBar>   
-      <StandardButton
-        fillOnHover
-        small
-        outlined
-        bold={false}
-        shadows={false}
-        color={'primary'}
-        onClick={() => {
-          navigate(Paths.FILTERS);
-        }}>
-        {$t('content.trainer.controlbar.filters')}
-      </StandardButton>
+  <ControlBar>
+    <StandardButton
+      fillOnHover
+      small
+      outlined
+      bold={false}
+      shadows={false}
+      color={'primary'}
+      onClick={() => {
+        navigate(Paths.FILTERS);
+      }}>
+      {$t('content.trainer.controlbar.filters')}
+    </StandardButton>
   </ControlBar>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
     {#if !$state.isInputConnected}

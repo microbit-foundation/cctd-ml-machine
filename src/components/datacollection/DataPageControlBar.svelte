@@ -18,38 +18,38 @@
 </script>
 
 <ControlBar>
-    <StandardButton
-      fillOnHover
-      small
-      disabled={clearDisabled}
-      onClick={onClearGestures}
-      bold={false}
-      outlined
-      shadows={false}
-      color={'primary'}>
-      {$t('content.data.controlbar.button.clearData')}
-    </StandardButton>
-    <div class="ml-2" />
-    <StandardButton
-      fillOnHover
-      small
-      disabled={downloadDisabled}
-      onClick={onDownloadGestures}
-      bold={false}
-      outlined
-      shadows={false}
-      color={'primary'}>
-      {$t('content.data.controlbar.button.downloadData')}
-    </StandardButton>
-    <div class="ml-2" />
-    <StandardButton
-      fillOnHover
-      small
-      onClick={onUploadGestures}
-      bold={false}
-      outlined
-      shadows={false}
-      color="primary">
-      {$t('content.data.controlbar.button.uploadData')}
-    </StandardButton>
+  <StandardButton
+    fillOnHover
+    small
+    disabled={clearDisabled}
+    onClick={onClearGestures}
+    bold={false}
+    outlined
+    shadows={false}
+    color={'primary'}>
+    {$t('content.data.controlbar.button.clearData')}
+  </StandardButton>
+  <div class="ml-2" />
+  <StandardButton
+    fillOnHover
+    small
+    disabled={downloadDisabled}
+    onClick={onDownloadGestures}
+    bold={false}
+    outlined
+    shadows={false}
+    color={'primary'}>
+    {$t('content.data.controlbar.button.downloadData')}
+  </StandardButton>
+  <div class="ml-2" />
+  <StandardButton
+    fillOnHover
+    small
+    onClick={onUploadGestures}
+    bold={false}
+    outlined
+    shadows={false}
+    color="primary">
+    {$t('content.data.controlbar.button.uploadData')}
+  </StandardButton>
 </ControlBar>

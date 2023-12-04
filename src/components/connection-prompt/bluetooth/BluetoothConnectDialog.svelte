@@ -38,7 +38,6 @@
 
   let timeouted = writable<boolean>(false);
 
-
   const connectButtonClicked = () => {
     if (!isInputPatternValid()) {
       attemptedToPairWithInvalidPattern = true;
@@ -58,7 +57,6 @@
         return Microbits.assignOutput(name);
       }
     };
-
 
     const connectTimeout = setTimeout(() => {
       Environment.isInDevelopment && console.log('Connection timed out');
@@ -120,9 +118,9 @@
       <img alt="loading" src="/imgs/loadingspinner.gif" width="100px" />
     </div>
     {#if $timeouted}
-    <div>
-     <p class="text-red-500">{$t('popup.connectMB.bluetooth.timeouted')}</p>
-    </div>
+      <div>
+        <p class="text-red-500">{$t('popup.connectMB.bluetooth.timeouted')}</p>
+      </div>
     {/if}
   {:else}
     <div class="grid grid-cols-3 mb-5 w-650px">

@@ -24,7 +24,10 @@ class GestureConfidence implements Readable<ConfidenceData> {
 
   private store: Readable<ConfidenceData>;
 
-  constructor(requiredConfidence: number, private confidence: Readable<number>) {
+  constructor(
+    requiredConfidence: number,
+    private confidence: Readable<number>,
+  ) {
     /**/
     this.requiredConfidence = writable(requiredConfidence);
     this.store = this.deriveStore();

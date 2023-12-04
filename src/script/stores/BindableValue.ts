@@ -17,7 +17,10 @@ import {
 class BindableValue<T> implements Writable<T> {
   private store: Writable<T>;
 
-  constructor(private setter: (newValue: T) => void, private subscribable: Readable<T>) {
+  constructor(
+    private setter: (newValue: T) => void,
+    private subscribable: Readable<T>,
+  ) {
     this.store = writable(get(subscribable));
   }
   public set(value: T): void {

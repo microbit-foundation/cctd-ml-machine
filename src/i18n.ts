@@ -26,7 +26,7 @@ locale.subscribe(newLocal => {
   }
 });
 
-await init({
+void init({
   fallbackLocale: 'en',
   initialLocale: get(persistantLocale),
 });

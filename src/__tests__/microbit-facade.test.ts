@@ -35,7 +35,7 @@ describe('Microbit facade tests', () => {
     Object.assign(navigator, {
       bluetooth: {
         requestDevice(
-          options?: RequestDeviceOptions & { filters?: any | any[] },
+          options?: RequestDeviceOptions & { filters?: { namePrefix: string }[] },
         ): Promise<BluetoothDevice> {
           const microBitName = 'vatav';
           if (!options) {
@@ -97,7 +97,7 @@ describe('Microbit facade tests', () => {
 
   test('Can connect the same microbit to output and input', async () => {
     const wasConnected = await Microbits.assignInput('vatav');
-    await Microbits.useInputAsOutput();
+    Microbits.useInputAsOutput();
     expect(wasConnected).toBeTruthy();
     expect(Microbits.isOutputAssigned()).toBeTruthy();
     expect(Microbits.isInputAssigned()).toBeTruthy();
@@ -106,7 +106,7 @@ describe('Microbit facade tests', () => {
 
   test('When same, disconnecting input also disconnects output', async () => {
     const wasConnected = await Microbits.assignInput('vatav');
-    await Microbits.useInputAsOutput();
+    Microbits.useInputAsOutput();
     expect(wasConnected).toBeTruthy();
     Microbits.expelInputAndOutput();
     expect(Microbits.isOutputAssigned()).toBeFalsy();

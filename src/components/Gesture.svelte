@@ -56,7 +56,7 @@
     return new Promise<void>(resolve => {
       const interval = setInterval(() => { 
         countdownValue --;
-          if (countdownValue === 0 && showCountdown === true) {
+          if (countdownValue === 0) {
             recordData();
             clearInterval(interval);
             showCountdown = false;

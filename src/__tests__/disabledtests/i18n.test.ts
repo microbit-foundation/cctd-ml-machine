@@ -7,7 +7,6 @@
  * SPDX-License-Identifier: MIT
  */
 import { get } from 'svelte/store';
-import * as i18n from '../i18n';
 
 describe('Initialization tests', () => {
   let windowSpy: jest.SpyInstance;
@@ -22,12 +21,13 @@ describe('Initialization tests', () => {
     jest.resetModules();
   });
 
-  test('Language is set to danish when it is the preferred browser option', () => {
+  test('Language is set to danish when it is the preferred browser option', async () => {
     windowSpy.mockImplementation(() => ({
       navigator: {
-        languages: ['da'],
+        languages: ['da', 'en'],
       },
     }));
+    const i18n = await import('../i18n');
     const getText = get(i18n.t);
 
     const translatedText = getText('alert.isRecording');
@@ -35,12 +35,13 @@ describe('Initialization tests', () => {
     expect(translatedText).toBe('Du er i gang med at optage!');
   });
 
-  test('Language falls back to english when an unsupported language is selected', () => {
+  test('Language falls back to english when an unsupported language is selected', async () => {
     windowSpy.mockImplementation(() => ({
       navigator: {
         languages: ['random-language'],
       },
     }));
+    const i18n = await import('../i18n');
     const getText = get(i18n.t);
 
     const translatedText = getText('alert.isRecording');

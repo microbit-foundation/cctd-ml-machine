@@ -15,8 +15,7 @@
     "public/*",
   ],
   "compilerOptions": {
-    "module": "esnext",
-    "target": "es2017",
+    "module": "ESNext",
     "lib": [
       "DOM",
       "ESNext",
@@ -35,7 +34,8 @@
     "noFallthroughCasesInSwitch": true,
     "types": [
       "jest",
-      "svelte"
+      "svelte",
+      "node"
     ]
   },
   "files": [

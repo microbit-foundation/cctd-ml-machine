@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import translations from '../translations';
+import en from './../messages/ui.en.json';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -67,7 +67,7 @@ const filesIncludesExpression = (files: string[], expect: string): boolean => {
 test(
   'All translations should be used',
   () => {
-    const translationKeys = Object.getOwnPropertyNames(translations.en);
+    const translationKeys = Object.getOwnPropertyNames(en);
     const flatten = flattenDirectory('./src/');
     for (let i = 0; i < translationKeys.length; i++) {
       const translationKey = translationKeys[i];

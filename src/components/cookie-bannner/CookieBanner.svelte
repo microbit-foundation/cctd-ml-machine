@@ -7,7 +7,8 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
   import CookieManager from '../../script/CookieManager';
-  import { t, locale, locales } from '../../i18n';
+  import { t } from '../../i18n';
+  import { locale, locales } from 'svelte-i18n';
   import StandardDialog from '../dialogs/StandardDialog.svelte';
   import { onMount } from 'svelte';
   import BaseDialog from '../dialogs/BaseDialog.svelte';
@@ -57,7 +58,7 @@
     <select
       class="absolute bg-white right-5 top-5 text-primarytext ml-2 mr-2 pl-2 pr-2"
       bind:value={$locale}>
-      {#each locales as l}
+      {#each $locales as l}
         <option value={l}>{l}</option>
       {/each}
     </select>

@@ -160,7 +160,9 @@
       event.preventDefault();
       alertUser(
         $t('alert.data.classNameLengthAlert', {
-          maxLen: StaticConfiguration.gestureNameMaxLength,
+          values: {
+            maxLen: StaticConfiguration.gestureNameMaxLength,
+          },
         }),
       );
       return false;

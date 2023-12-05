@@ -11,7 +11,7 @@ import ConnectionBehaviours from '../connection-behaviours/ConnectionBehaviours'
 import { get, writable } from 'svelte/store';
 import MBSpecs from './MBSpecs';
 import MicrobitBluetooth from './MicrobitBluetooth';
-import { outputting } from '../stores/uiStore';
+import { onCatastrophicError, outputting } from '../stores/uiStore';
 import MicrobitUSB from './MicrobitUSB';
 import type ConnectionBehaviour from '../connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
@@ -1002,7 +1002,7 @@ class Microbits {
       .catch(err => {
         // Catches a characteristic not found error, preventing further output.
         // Why does this happens is not clear
-        console.log(err);
+        console.error(err);
         if (err) {
           if ((err as DOMException).message.includes('GATT Service no longer exists')) {
             this.listenToOutputServices()
@@ -1015,6 +1015,11 @@ class Microbits {
                 );
               });
           }
+        }
+
+        if ((err as DOMException).message.includes('operation failed for unknown reason.')) {
+          // This is an error we get when the bluetooth protocol implementation completely bricks.
+          onCatastrophicError();
         }
         get(this.bluetoothServiceActionQueue).busy = false;
         this.processServiceActionQueue();

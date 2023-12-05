@@ -248,14 +248,14 @@ class Microbits {
                 ConnectionBehaviours.getOutputBehaviour().onReady();
               })
               .catch(reason => {
-                console.log(reason);
+                console.error(reason);
               });
           } else {
             connectionBehaviour.onReady();
           }
         })
         .catch(reason => {
-          console.log(reason);
+          console.error(reason);
         });
     };
 
@@ -284,7 +284,7 @@ class Microbits {
       this.inputVersion = this.getInput().getVersion();
       return true;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       this.onFailedConnection(connectionBehaviour)(e as Error);
     }
     return false;

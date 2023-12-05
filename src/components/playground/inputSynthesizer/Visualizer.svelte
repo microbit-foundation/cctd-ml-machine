@@ -7,7 +7,7 @@
 <script lang="ts">
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import { Unsubscriber } from 'svelte/store';
-  import { liveData } from '../../../script/stores/Stores';
+  import { liveAccelerometerData } from '../../../script/stores/Stores';
   import { onMount } from 'svelte';
 
   // Updates width to ensure that the canvas fills the whole screen
@@ -48,7 +48,7 @@
 
   // If state is connected. Start updating the graph whenever there is new data
   // From the Micro:Bit
-  unsubscribeFromData = liveData.subscribe(data => {
+  unsubscribeFromData = liveAccelerometerData.subscribe(data => {
     const t = new Date().getTime();
     lineX.append(t, data.accelX, false);
     lineY.append(t, data.accelY, false);

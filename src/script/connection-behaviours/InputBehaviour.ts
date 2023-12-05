@@ -15,7 +15,7 @@ import CookieManager from '../CookieManager';
 import TypingUtils from '../TypingUtils';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
 import StaticConfiguration from '../../StaticConfiguration';
-import { liveData } from '../stores/Stores';
+import { liveAccelerometerData } from '../stores/Stores';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -161,7 +161,7 @@ class InputBehaviour extends LoggingDecorator {
     };
 
     livedata.set(data); // This is the old livedata store
-    liveData.put(data);
+    liveAccelerometerData.put(data);
   }
 
   buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {

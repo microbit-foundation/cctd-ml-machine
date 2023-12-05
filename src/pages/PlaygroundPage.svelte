@@ -8,7 +8,7 @@
   import Gesture from '../script/domain/Gesture';
   import Model from '../script/domain/Model';
   import LayersModelTrainer from '../script/mlmodels/LayersModelTrainer';
-  import { classifier, engine, gestures, liveData } from '../script/stores/Stores';
+  import { classifier, engine, gestures, liveAccelerometerData } from '../script/stores/Stores';
   import AccelerometerClassifierInput from '../script/mlmodels/AccelerometerClassifierInput';
   import PlaygroundGestureView from '../components/playground/PlaygroundGestureView.svelte';
   import playgroundContext from '../components/playground/PlaygroundContext';
@@ -81,9 +81,9 @@
       <div>
         <p class="text-2xl mt-2">LiveData store</p>
         <p class="whitespace-pre">
-          {JSON.stringify($liveData, null, 2).substring(
+          {JSON.stringify($liveAccelerometerData, null, 2).substring(
             2,
-            JSON.stringify($liveData, null, 2).length - 1,
+            JSON.stringify($liveAccelerometerData, null, 2).length - 1,
           )}
         </p>
       </div>

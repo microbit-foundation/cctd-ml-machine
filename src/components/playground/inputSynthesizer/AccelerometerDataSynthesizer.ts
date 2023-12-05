@@ -11,7 +11,7 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { liveData } from '../../../script/stores/Stores';
+import { liveAccelerometerData } from '../../../script/stores/Stores';
 import LiveData from '../../../script/domain/LiveData';
 import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
 
@@ -94,6 +94,6 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
   }
 }
 
-const accelerometerSynthesizer = new AccelerometerSynthesizer(liveData);
+const accelerometerSynthesizer = new AccelerometerSynthesizer(liveAccelerometerData);
 
 export default accelerometerSynthesizer;

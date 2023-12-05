@@ -6,11 +6,12 @@
 
 <script lang="ts">
   import { state } from '../../script/stores/uiStore';
-  import { currentData, settings } from '../../script/stores/mlStore';
+  import { settings } from '../../script/stores/mlStore';
   import { onMount } from 'svelte';
   import { get, type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
+    import { liveAccelerometerData } from '../../script/stores/Stores';
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
@@ -103,11 +104,12 @@
   function updateCanvas(isConnected: boolean) {
     // TODO: Clean this
     if (isConnected) {
-      unsubscribeFromData = currentData.subscribe(data => {
+      unsubscribeFromData = liveAccelerometerData.subscribe(data => {
         const t = new Date().getTime();
-        lineX.append(t, data.x, false);
-        lineY.append(t, data.y, false);
-        lineZ.append(t, data.z, false);
+        // Todo: Theres an issue here regarding responsibility, maybe
+        lineX.append(t, data.accelX, false);
+        lineY.append(t, data.accelY, false);
+        lineZ.append(t, data.accelZ, false);
       });
 
       // Else if we're currently subscribed to data. Unsubscribe.

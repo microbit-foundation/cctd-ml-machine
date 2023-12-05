@@ -1017,10 +1017,6 @@ class Microbits {
           }
         }
 
-        if ((err as DOMException).message.includes('operation failed for unknown reason.')) {
-          // This is an error we get when the bluetooth protocol implementation completely bricks.
-          onCatastrophicError();
-        }
         get(this.bluetoothServiceActionQueue).busy = false;
         this.processServiceActionQueue();
       });

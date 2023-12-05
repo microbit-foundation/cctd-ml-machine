@@ -19,14 +19,13 @@
     }
   }
 
-  export let backgroundClass: "light" | "dark" = "dark";
+  export let backgroundClass: 'light' | 'dark' = 'dark';
 
-  if (backgroundClass === "light") {
-    additionalClass = " bg-white/80 bg-blend-lighten"
-    console.log("hi");
-  }
-  else {
-    additionalClass = "bg-black/50 bg-blend-darken"
+  if (backgroundClass === 'light') {
+    additionalClass = ' bg-white/80 bg-blend-lighten';
+    console.log('hi');
+  } else {
+    additionalClass = 'bg-black/50 bg-blend-darken';
   }
 </script>
 

@@ -1,3 +1,18 @@
+<style>
+  @keyframes loading-bar {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+
+  .animate-loading-bar {
+    animation: loading-bar 1.8s linear;
+  }
+</style>
+
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
 
@@ -54,15 +69,15 @@
     showCountdown = true;
     countdownValue = countdownInitialValue;
     return new Promise<void>(resolve => {
-      const interval = setInterval(() => { 
-        countdownValue --;
-          if (countdownValue === 0) {
-            recordData();
-            clearInterval(interval);
-            showCountdown = false;
-            resolve();
-            }
-          }, countdownInterval);
+      const interval = setInterval(() => {
+        countdownValue--;
+        if (countdownValue === 0) {
+          recordData();
+          clearInterval(interval);
+          showCountdown = false;
+          resolve();
+        }
+      }, countdownInterval);
     });
   }
 
@@ -165,7 +180,7 @@
       (buttons.buttonA && triggerButton === MicrobitInteractions.A) ||
       (buttons.buttonB && triggerButton === MicrobitInteractions.B)
     )
-    countdownStart();
+      countdownStart();
   }
 
   function onTitleKeypress(event: KeyboardEvent) {
@@ -210,28 +225,16 @@
   }
 </script>
 
-<style>
-  @keyframes loading-bar {
-    0% { width: 0%; }
-    100% { width: 100%; }
-  }
-
-  .animate-loading-bar {
-    animation: loading-bar 1.8s linear;
-  }
-</style>
-
 <main class="flex-row flex mb-2">
   <!-- Recordingbar to show recording-progress -->
-    <BaseDialog
+  <BaseDialog
     backgroundClass="light"
     isOpen={isThisRecording}
-    onClose={() => isThisRecording=false}>
-      <div class="w-70 h-6 bg-red-200 rounded-full overflow-hidden">
-        <div class="h-full bg-red-600 animate-loading-bar"
-        ></div>
-      </div>
-    </BaseDialog>
+    onClose={() => (isThisRecording = false)}>
+    <div class="w-70 h-6 bg-red-200 rounded-full overflow-hidden">
+      <div class="h-full bg-red-600 animate-loading-bar" />
+    </div>
+  </BaseDialog>
 
   <div class="items-center flex mb-1">
     <!-- Title of gesture-->
@@ -273,7 +276,8 @@
           </div>
           <StandardButton
             onClick={() => {
-              countdownStart()}}
+              countdownStart();
+            }}
             size="small"
             shadows={false}
             outlined
@@ -285,13 +289,16 @@
     <BaseDialog
       backgroundClass="light"
       isOpen={showCountdown}
-      onClose={() => showCountdown = false}>
+      onClose={() => (showCountdown = false)}>
       <div class="space-y-10 w-70">
         <GestureTilePart elevated={true}>
           <p class="text-9xl text-center text-gray-400">{countdownValue}</p>
-          <p class="pt-5 px-10 text-gray-400 text-center">{$t("content.data.recording.description")}</p>
+          <p class="pt-5 px-10 text-gray-400 text-center">
+            {$t('content.data.recording.description')}
+          </p>
         </GestureTilePart>
-        <StandardButton onClick={() => showCountdown=false}>{$t("content.data.recording.button.cancel")}</StandardButton>
+        <StandardButton onClick={() => (showCountdown = false)}
+          >{$t('content.data.recording.button.cancel')}</StandardButton>
       </div>
     </BaseDialog>
 

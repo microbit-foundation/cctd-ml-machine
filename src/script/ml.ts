@@ -20,7 +20,7 @@ import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
 import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
-import { classifier, gestures, liveData } from './stores/Stores';
+import { gestures } from './stores/Stores';
 import Repositories from './repository/Repositories';
 
 let text: (key: string, vars?: object) => string;

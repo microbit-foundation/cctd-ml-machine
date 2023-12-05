@@ -138,6 +138,7 @@
   "menu.model.noModel": "Ingen model",
   "menu.model.connectOutputButton": "Tilslut output-micro:bit",
   "menu.model.disconnect": "Frakobl output-micro:bit",
+  "menu.model.connectInputMicrobit": "Forbind micro:bit",
 
   "popup.connectMB.main.bluetooth.subtitle": "Tilslut med Bluetooth",
 

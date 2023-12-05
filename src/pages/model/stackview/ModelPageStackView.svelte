@@ -4,16 +4,23 @@
   SPDX-License-Identifier: MIT
  -->
 
+<style>
+  .arrow-filter-color {
+    filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%)
+      contrast(100%);
+  }
+</style>
+
 <script lang="ts">
+  import { buttonPressed, areActionsAllowed, state } from '../../../script/stores/uiStore';
+  import { settings } from '../../../script/stores/mlStore';
   import { get } from 'svelte/store';
-  import { areActionsAllowed, buttonPressed, state } from '../../script/stores/uiStore';
-  import { settings } from '../../script/stores/mlStore';
-  import { classify } from '../../script/ml';
   import { onMount } from 'svelte';
-  import Microbits from '../../script/microbit-interfacing/Microbits';
-  import OutputGesture from '../../components/output/OutputGesture.svelte';
-  import MediaQuery from '../../components/MediaQuery.svelte';
-  import { gestures } from '../../script/stores/Stores';
+  import { classify } from '../../../script/ml';
+  import Microbits from '../../../script/microbit-interfacing/Microbits';
+  import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
+  import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
+    import PleaseConnectFirst from '../../../components/PleaseConnectFirst.svelte';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -21,10 +28,6 @@
 
   // Bool flags to know whether output microbit popup should be show
   let hasInteracted = false;
-
-  function onUserInteraction(): void {
-    hasInteracted = true;
-  }
 
   /**
    * Classify based on button click
@@ -81,30 +84,15 @@
   $: triggerButtonsClicked($buttonPressed);
 </script>
 
-<MediaQuery query="(max-width: 1000px)" let:matches>
-  {#if matches}
-    <div class="grid grid-cols-3 gap-4">
-      {#each gestures.getGestures() as gesture}
-        <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
-      {/each}
-    </div>
+<!-- Main pane -->
+<main class="h-full flex flex-col">
+  {#if $state.isPredicting}
+    {#if $state.isInputReady}
+      <ModelPageStackViewContent/>
+      {:else}
+      <PleaseConnectFirst/>
+    {/if}
+  {:else}
+    <TrainModelFirstTitle />
   {/if}
-</MediaQuery>
-<MediaQuery query="(min-width: 1000px) and (max-width: 1367px)" let:matches>
-  {#if matches}
-    <div class="grid grid-cols-4 gap-4">
-      {#each gestures.getGestures() as gesture}
-        <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
-      {/each}
-    </div>
-  {/if}
-</MediaQuery>
-<MediaQuery query="(min-width: 1367px)" let:matches>
-  {#if matches}
-    <div class="grid grid-cols-5 gap-4">
-      {#each gestures.getGestures() as gesture}
-        <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
-      {/each}
-    </div>
-  {/if}
-</MediaQuery>
+</main>

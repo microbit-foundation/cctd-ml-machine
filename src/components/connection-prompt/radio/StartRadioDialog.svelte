@@ -29,7 +29,7 @@
         </p>
       </div>
       <div>
-        <img src="" alt="PLACEHOLDER" />
+        <img src="../public/imgs/stylised_computer.svg" alt="PLACEHOLDER" />
         <p class="pt-10 text-center font-bold">
           {$t('connectMB.radioStart.requirements3')}
         </p>

@@ -15,20 +15,14 @@
 
 <script lang="ts">
   // IMPORT AND DEFAULTS
-  import OutputMatrix from './OutputMatrix.svelte';
   import {
     settings,
-    updateGestureSoundOutput,
     type GestureData,
     type SoundData,
-    updateGesturePinOutput,
   } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
-  import OutputSoundSelector from './OutputSoundSelector.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
-  import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from '../GestureTilePart.svelte';
-  import PinSelector from './PinSelector.svelte';
   import { state } from '../../script/stores/uiStore';
   import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
@@ -40,7 +34,7 @@
 
   // Variables for component
   export let gesture: GestureData;
-  export let onUserInteraction: () => void = () => {
+  export const onUserInteraction: () => void = () => {
     return;
   };
   let wasTriggered = false;
@@ -130,12 +124,6 @@
     }
   }
 
-  function onSoundSelected(sound: SoundData | undefined): void {
-    selectedSound = sound;
-    updateGestureSoundOutput(gesture.ID, sound);
-    onUserInteraction();
-  }
-
   function playSound() {
     if (selectedSound === undefined) {
       return;
@@ -152,32 +140,10 @@
     }
   }
 
-  const onPinSelect = (selected: MBSpecs.UsableIOPin) => {
-    if (selected === selectedPin) {
-      pinIOEnabled = !pinIOEnabled;
-    }
-    selectedPin = selected;
-    refreshAfterChange();
-    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
-  };
-
   const triggerComponents = () =>
     triggerFunctions.forEach(triggerFunc => {
       triggerFunc();
     });
-
-  const onTurnOnTimeSelect = (state: {
-    turnOnState: PinTurnOnState;
-    turnOnTime: number;
-  }) => {
-    turnOnState = state.turnOnState;
-    turnOnTime = state.turnOnTime;
-    refreshAfterChange();
-    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
-    if (wasTriggered) {
-      setOutputPin(true);
-    }
-  };
 
   const refreshAfterChange = () => {
     Microbits.resetIOPins();
@@ -190,8 +156,6 @@
       return sliderValue / 100;
     });
   }
-
-  let hasLoadedMicrobitImage = false;
 </script>
 
 <main class="mb-4 items-center flex flex-row">
@@ -245,50 +209,4 @@
       </div>
     </div>
   </GestureTilePart>
-
-  <!-- ARROW -->
-  <div class="text-center w-15">
-    <img
-      class="m-auto"
-      class:hidden={wasTriggered}
-      src={'imgs/right_arrow.svg'}
-      alt="right arrow icon"
-      width="30px" />
-    <img
-      class="m-auto"
-      class:hidden={!wasTriggered || !$state.isInputReady}
-      src={'imgs/right_arrow_blue.svg'}
-      alt="right arrow icon"
-      width="30px" />
-  </div>
-
-  <!-- OUTPUT SETTINGS -->
-  <div class="relative flex items-center">
-    <div
-      class="w-177px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
-      <ImageSkeleton
-        src="imgs/blank_microbit.svg"
-        alt="microbit guide"
-        width={177}
-        height={144}
-        loadingColorSecondary="#818181"
-        loadingColorPrimary="#4A4A4A"
-        onLoaded={() => (hasLoadedMicrobitImage = true)} />
-      <div
-        class="bg-black p-0 m-0 absolute top-9 left-12.7"
-        class:hidden={!hasLoadedMicrobitImage}
-        on:click={onUserInteraction}>
-        <OutputMatrix bind:trigger={triggerFunctions[0]} {gesture} />
-      </div>
-    </div>
-    <OutputSoundSelector onSoundSelection={onSoundSelected} {selectedSound} />
-  </div>
-  <div class="ml-4">
-    <PinSelector
-      selectedPin={pinIOEnabled ? selectedPin : undefined}
-      {turnOnState}
-      {turnOnTime}
-      {onPinSelect}
-      {onTurnOnTimeSelect} />
-  </div>
 </main>

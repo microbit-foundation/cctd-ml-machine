@@ -1,4 +1,9 @@
-<script lang="ts">
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+ <script lang="ts">
     import { fade } from "svelte/transition";
     import Information from "../../../components/information/Information.svelte";
     import OutputGesture from "../../../components/output/OutputGesture.svelte";

@@ -319,7 +319,11 @@ class Microbits {
       'B',
       connectionBehaviour.buttonChange.bind(connectionBehaviour),
     );
-    await this.getInput().listenToUART(data => this.inputUartHandler(data));
+    try {
+      await this.getInput().listenToUART(data => this.inputUartHandler(data));
+    } catch (error) {
+      console.error(error);      
+    }
     this.inputVersionIdentificationTimeout = setTimeout(() => {
       connectionBehaviour.onIdentifiedAsOutdated();
     }, StaticConfiguration.versionIdentificationTimeoutDuration);
@@ -340,7 +344,11 @@ class Microbits {
     this.outputVersionIdentificationTimeout = setTimeout(() => {
       connectionBehaviour.onIdentifiedAsOutdated();
     }, StaticConfiguration.versionIdentificationTimeoutDuration);
-    await this.getOutput().listenToUART(data => this.outputUartHandler(data));
+    try {
+      await this.getOutput().listenToUART(data => this.outputUartHandler(data));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /**

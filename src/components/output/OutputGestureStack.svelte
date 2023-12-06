@@ -38,6 +38,8 @@
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
+  const enableOutputGestures = false;
+
   // Variables for component
   export let gesture: GestureData;
   export let onUserInteraction: () => void = () => {
@@ -262,33 +264,35 @@
       width="30px" />
   </div>
 
-  <!-- OUTPUT SETTINGS -->
-  <div class="relative flex items-center">
-    <div
-      class="w-177px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
-      <ImageSkeleton
-        src="imgs/blank_microbit.svg"
-        alt="microbit guide"
-        width={177}
-        height={144}
-        loadingColorSecondary="#818181"
-        loadingColorPrimary="#4A4A4A"
-        onLoaded={() => (hasLoadedMicrobitImage = true)} />
+  {#if enableOutputGestures}
+    <!-- OUTPUT SETTINGS -->
+    <div class="relative flex items-center">
       <div
-        class="bg-black p-0 m-0 absolute top-9 left-12.7"
-        class:hidden={!hasLoadedMicrobitImage}
-        on:click={onUserInteraction}>
-        <OutputMatrix bind:trigger={triggerFunctions[0]} {gesture} />
+        class="w-177px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
+        <ImageSkeleton
+          src="imgs/blank_microbit.svg"
+          alt="microbit guide"
+          width={177}
+          height={144}
+          loadingColorSecondary="#818181"
+          loadingColorPrimary="#4A4A4A"
+          onLoaded={() => (hasLoadedMicrobitImage = true)} />
+        <div
+          class="bg-black p-0 m-0 absolute top-9 left-12.7"
+          class:hidden={!hasLoadedMicrobitImage}
+          on:click={onUserInteraction}>
+          <OutputMatrix bind:trigger={triggerFunctions[0]} {gesture} />
+        </div>
       </div>
+      <OutputSoundSelector onSoundSelection={onSoundSelected} {selectedSound} />
     </div>
-    <OutputSoundSelector onSoundSelection={onSoundSelected} {selectedSound} />
-  </div>
-  <div class="ml-4">
-    <PinSelector
-      selectedPin={pinIOEnabled ? selectedPin : undefined}
-      {turnOnState}
-      {turnOnTime}
-      {onPinSelect}
-      {onTurnOnTimeSelect} />
-  </div>
+    <div class="ml-4">
+      <PinSelector
+        selectedPin={pinIOEnabled ? selectedPin : undefined}
+        {turnOnState}
+        {turnOnTime}
+        {onPinSelect}
+        {onTurnOnTimeSelect} />
+    </div>
+  {/if}
 </main>

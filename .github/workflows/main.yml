@@ -46,7 +46,11 @@ jobs:
         run: |
           npm install
           npm run prettier
-          git status | grep "modified"
+          git status | grep -c "modified"
+      - name: Missing format report
+        shell: bash
+        if: ${{ !failure() }}
+        run: echo "Missing prettier formatting. Please format files using 'npm run prettier' and resubmit!"
       
 #      - name: Run Prettier
 #        id: prettier-run

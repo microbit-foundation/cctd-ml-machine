@@ -100,6 +100,6 @@
     {/if}
     {#if !$state.isInputConnected}
       <PleaseConnectFirst />
-      {/if}
+    {/if}
   </div>
 </div>

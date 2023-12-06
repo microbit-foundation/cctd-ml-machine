@@ -27,7 +27,10 @@ class BindableValue<T> implements Writable<T> {
    * The setter is the function that will be used when the bound variable receives an update instruction.
    * The subscribable is the store that will be used as data source
    */
-  constructor(private setter: (newValue: T) => void, private subscribable: Readable<T>) {}
+  constructor(
+    private setter: (newValue: T) => void,
+    private subscribable: Readable<T>,
+  ) {}
   public set(value: T): void {
     this.setter(value);
   }

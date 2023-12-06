@@ -20,7 +20,7 @@ const classifier: Classifier = repositories.getModelRepository().getClassifier()
 
 const accelerometerDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(400);
 const liveAccelerometerData: LiveData<MicrobitAccelerometerData> =
-new MicrobitAccelerometerLiveData(accelerometerDataBuffer);
+  new MicrobitAccelerometerLiveData(accelerometerDataBuffer);
 
 const engine: PollingPredictorEngine = new PollingPredictorEngine(
   classifier,
@@ -28,4 +28,4 @@ const engine: PollingPredictorEngine = new PollingPredictorEngine(
 );
 
 // Export the stores here. Please be mindful when exporting stores, avoid whenever possible.
-export {engine, gestures, classifier, liveAccelerometerData}
+export { engine, gestures, classifier, liveAccelerometerData };

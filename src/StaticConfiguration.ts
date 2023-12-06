@@ -48,9 +48,12 @@ class StaticConfiguration {
     if (origin === HexOrigin.UNKNOWN) return true;
 
     const versionNumbers = new Map();
-    versionNumbers.set(HexOrigin.MAKECODE, 1);
-    versionNumbers.set(HexOrigin.PROPRIETARY, 1);
+    versionNumbers.set(HexOrigin.MAKECODE, 1); // Change the number to advise users to update old hex files
+    versionNumbers.set(HexOrigin.PROPRIETARY, 1); // Change the number to advise users to update old hex files
     return versionNumbers.get(origin) !== version;
   };
+
+  // Line colors are picked in the order of this array.
+  public static readonly liveGraphColors = ['#f9808e', '#80f98e', '#808ef9'];
 }
 export default StaticConfiguration;

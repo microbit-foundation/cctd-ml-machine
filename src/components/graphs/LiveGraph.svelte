@@ -11,27 +11,29 @@
   import { get, type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
-    import LiveData from '../../script/domain/LiveData';
+  import LiveData from '../../script/domain/LiveData';
+  import StaticConfiguration from '../../StaticConfiguration';
+
+  /**
+   * TimesSeries, but with the data array added.
+   * data[i][0] is the timestamp,
+   * data[i][1] is the value,
+   */
+  type TimeSeriesWithData = TimeSeries & { data: number[][] };
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
-  export let liveData: LiveData<any>
+  export let liveData: LiveData<any>;
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
-  const lines: TimeSeries[] = []
+  const lines: TimeSeriesWithData[] = [];
+
   for (let i = 0; i < liveData.getSeriesSize(); i++) {
-    lines.push(new TimeSeries());
+    lines.push(new TimeSeries() as TimeSeriesWithData);
   }
   let recordLines = new TimeSeries();
   const lineWidth = 2;
-
-  // Line colors are picked in the order of this array.
-  const colors = [
-    '#f9808e',
-    '#80f98e',
-    '#808ef9'
-  ]
 
   // On mount draw smoothieChart
   onMount(() => {
@@ -48,9 +50,14 @@
       interpolation: 'linear',
     });
 
-    lines.forEach((line, index) => {
-      chart!.addTimeSeries(line, {lineWidth, strokeStyle: colors[index]})
-    })
+    let i = 0;
+    for (const line of lines) {
+      chart.addTimeSeries(line, {
+        lineWidth,
+        strokeStyle: StaticConfiguration.liveGraphColors[i],
+      });
+      i++;
+    }
 
     chart.addTimeSeries(recordLines, {
       lineWidth: 3,
@@ -103,7 +110,7 @@
 
   // When state changes, update the state of the canvas
   $: {
-    const isConnected = $state.isInputConnected;
+    const isConnected = $state.isInputReady;
     updateCanvas(isConnected);
   }
 
@@ -112,16 +119,9 @@
   // If state is connected. Start updating the graph whenever there is new data
   // From the Micro:Bit
   function updateCanvas(isConnected: boolean) {
-    // TODO: Clean this
     if (isConnected) {
       unsubscribeFromData = liveData.subscribe(data => {
-        const t = new Date().getTime();
-
-        let i = 0;
-        for(const property in data) {
-          lines[i].append(t, data[property], false)
-          i++;
-        }
+        addDataToGraphLines(data);
       });
 
       // Else if we're currently subscribed to data. Unsubscribe.
@@ -131,6 +131,29 @@
       unsubscribeFromData = undefined;
     }
   }
+
+  const addDataToGraphLines = (data: any) => {
+    const t = new Date().getTime();
+    let i = 0;
+    for (const property in data) {
+      const line: TimeSeriesWithData = lines[i];
+      if (!line) {
+        break;
+      }
+      const rawInput = data[property];
+      line.append(t, getNewValue(line, rawInput), false);
+      i++;
+    }
+  };
+
+  const getNewValue = (line: TimeSeriesWithData, rawData: number) => {
+    if (line.data.length == 0) {
+      return rawData;
+    }
+    const previousValue = line.data[line.data.length - 1][1];
+    const smoothedInput = rawData * 0.25 + previousValue * 0.75;
+    return smoothedInput;
+  };
 </script>
 
 <main class="flex">

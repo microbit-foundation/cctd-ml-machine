@@ -322,7 +322,7 @@ class Microbits {
     try {
       await this.getInput().listenToUART(data => this.inputUartHandler(data));
     } catch (error) {
-      console.error(error);      
+      console.error(error);
     }
     this.inputVersionIdentificationTimeout = setTimeout(() => {
       connectionBehaviour.onIdentifiedAsOutdated();

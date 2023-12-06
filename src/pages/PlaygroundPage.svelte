@@ -8,7 +8,12 @@
   import Gesture from '../script/domain/Gesture';
   import Model from '../script/domain/Model';
   import LayersModelTrainer from '../script/mlmodels/LayersModelTrainer';
-  import { classifier, engine, gestures, liveAccelerometerData } from '../script/stores/Stores';
+  import {
+    classifier,
+    engine,
+    gestures,
+    liveAccelerometerData,
+  } from '../script/stores/Stores';
   import AccelerometerClassifierInput from '../script/mlmodels/AccelerometerClassifierInput';
   import PlaygroundGestureView from '../components/playground/PlaygroundGestureView.svelte';
   import playgroundContext from '../components/playground/PlaygroundContext';

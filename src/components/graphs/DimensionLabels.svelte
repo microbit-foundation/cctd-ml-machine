@@ -14,14 +14,21 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
-  import { currentData } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
+  import LiveData from '../../script/domain/LiveData';
+  import StaticConfiguration from '../../StaticConfiguration';
+  import { smoothNewValue } from '../../script/utils/graphUtils';
+
+  export let liveData: LiveData<any>;
 
   let unsubscribeFromLiveData: Unsubscriber | undefined = undefined;
 
   onMount(() => {
-    unsubscribeFromLiveData = currentData.subscribe(data => {
-      const dataInArray = [data.x, data.y, data.z];
+    unsubscribeFromLiveData = liveData.subscribe(data => {
+      const dataInArray = [];
+      for (const property in data) {
+        dataInArray.push(data[property]);
+      }
       updateDimensionLabels(dataInArray);
     });
   });
@@ -31,14 +38,34 @@
   });
 
   let labels = [
-    { label: 'x', arrowHeight: 0, labelHeight: 0, color: '#f9808e', id: 0 },
-    { label: 'y', arrowHeight: 0, labelHeight: 0, color: '#80f98e', id: 1 },
-    { label: 'z', arrowHeight: 0, labelHeight: 0, color: '#808ef9', id: 2 },
+    {
+      label: 'x',
+      arrowHeight: 0,
+      labelHeight: 0,
+      color: StaticConfiguration.liveGraphColors[0],
+      id: 0,
+    },
+    {
+      label: 'y',
+      arrowHeight: 0,
+      labelHeight: 0,
+      color: StaticConfiguration.liveGraphColors[1],
+      id: 1,
+    },
+    {
+      label: 'z',
+      arrowHeight: 0,
+      labelHeight: 0,
+      color: StaticConfiguration.liveGraphColors[2],
+      id: 2,
+    },
   ];
 
   function updateDimensionLabels(axes: number[]) {
     for (let i = 0; i < 3; i++) {
-      labels[i].arrowHeight = (2.1 - axes[labels[i].id]) * 2.32;
+      const oldValue = labels[i].arrowHeight;
+      const newValue = (2.1 - axes[labels[i].id]) * 2.32;
+      labels[i].arrowHeight = smoothNewValue(oldValue, newValue);
     }
     fixOverlappingLabels();
   }

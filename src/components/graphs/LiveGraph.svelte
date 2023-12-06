@@ -13,11 +13,13 @@
   import DimensionLabels from './DimensionLabels.svelte';
   import LiveData from '../../script/domain/LiveData';
   import StaticConfiguration from '../../StaticConfiguration';
+  import { smoothNewValue } from '../../script/utils/graphUtils';
+  import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
 
   /**
    * TimesSeries, but with the data array added.
-   * data[i][0] is the timestamp,
-   * data[i][1] is the value,
+   * `data[i][0]` is the timestamp,
+   * `data[i][1]` is the value,
    */
   type TimeSeriesWithData = TimeSeries & { data: number[][] };
 
@@ -25,11 +27,13 @@
   export let width: number;
   export let liveData: LiveData<any>;
 
+  const smoothedLiveData = new SmoothedLiveData(liveData);
+
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
   const lines: TimeSeriesWithData[] = [];
 
-  for (let i = 0; i < liveData.getSeriesSize(); i++) {
+  for (let i = 0; i < smoothedLiveData.getSeriesSize(); i++) {
     lines.push(new TimeSeries() as TimeSeriesWithData);
   }
   let recordLines = new TimeSeries();
@@ -120,7 +124,7 @@
   // From the Micro:Bit
   function updateCanvas(isConnected: boolean) {
     if (isConnected) {
-      unsubscribeFromData = liveData.subscribe(data => {
+      unsubscribeFromData = smoothedLiveData.subscribe(data => {
         addDataToGraphLines(data);
       });
 
@@ -140,23 +144,23 @@
       if (!line) {
         break;
       }
-      const rawInput = data[property];
-      line.append(t, getNewValue(line, rawInput), false);
+      const newValue = data[property];
+      line.append(t, newValue, false);
       i++;
     }
   };
 
-  const getNewValue = (line: TimeSeriesWithData, rawData: number) => {
+  const getNewValue = (line: TimeSeriesWithData, newValue: number) => {
     if (line.data.length == 0) {
-      return rawData;
+      return newValue;
     }
     const previousValue = line.data[line.data.length - 1][1];
-    const smoothedInput = rawData * 0.25 + previousValue * 0.75;
+    const smoothedInput = smoothNewValue(previousValue, newValue);
     return smoothedInput;
   };
 </script>
 
 <main class="flex">
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
-  <DimensionLabels />
+  <DimensionLabels liveData={smoothedLiveData} />
 </main>

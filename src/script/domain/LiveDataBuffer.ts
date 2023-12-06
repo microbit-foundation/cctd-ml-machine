@@ -8,11 +8,11 @@ export type TimestampedData<T> = {
   timestamp: number;
 };
 class LiveDataBuffer<T> {
-  private buffer: TimestampedData<T>[];
-  private bufferPtr = 0;
+  private buffer: (TimestampedData<T> | null)[];
+  private bufferPtr = 0; // The buffer pointer keeps increasing from 0 to infinity each time a new item is added
   private bufferUtilization = 0;
   constructor(private maxLen: number) {
-    this.buffer = new Array<TimestampedData<T>>(maxLen).fill(null!);
+    this.buffer = new Array<TimestampedData<T> | null>(maxLen).fill(null);
   }
 
   public addValue(value: T) {
@@ -22,6 +22,20 @@ class LiveDataBuffer<T> {
       timestamp: Date.now(),
       value: value,
     };
+  }
+
+  public getNewestValues(noOfValues: number): (T | null)[] {
+    const values = [];
+    for (let i = 0; i < noOfValues; i++) {
+      const item = this.buffer[this.getBufferIndexFrom(this.bufferPtr - (i + 1))];
+      if (item) {
+        values.push(item.value);
+      } else {
+        values.push(null);
+      }
+    }
+
+    return values;
   }
 
   public getSeries(time: number, noOfElements: number) {

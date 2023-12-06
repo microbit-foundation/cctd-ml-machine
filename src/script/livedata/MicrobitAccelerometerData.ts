@@ -20,9 +20,6 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
       accelX: 0,
       accelY: 0,
       accelZ: 0,
-      smoothedAccelX: 0,
-      smoothedAccelY: 0,
-      smoothedAccelZ: 0,
     });
   }
 

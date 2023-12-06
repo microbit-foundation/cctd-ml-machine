@@ -17,7 +17,7 @@ class StaticConfiguration {
   public static readonly connectTimeoutDuration: number = 10000; // initial connection
 
   // After how long should we consider the connection lost if ping was not able to conclude?
-  public static readonly connectionLostTimeoutDuration: number           = 3000;
+  public static readonly connectionLostTimeoutDuration: number = 3000;
 
   // Which pins are supported?
   public static supportedPins: MBSpecs.UsableIOPin[] = [0, 1, 2];

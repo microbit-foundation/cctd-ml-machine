@@ -50,7 +50,9 @@ jobs:
       - name: Missing format report
         shell: bash
         if: ${{ !failure() }}
-        run: echo "Missing prettier formatting. Please format files using 'npm run prettier' and resubmit!"
+        run: | 
+          echo "Missing prettier formatting. Please format files using 'npm run prettier' and resubmit!"
+          exit 1
       
 #      - name: Run Prettier
 #        id: prettier-run

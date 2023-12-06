@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Install prettier-svelte
+      - name: Install packages
         shell: bash
         run: npm install
       

@@ -134,7 +134,11 @@
       <div class="pl-1">
         <!-- Display all gestures and their output capabilities -->
         {#each $gestures as gesture}
-          <OutputGesture variant="stack" {gesture} {onUserInteraction} enableOutputGestures={enableOutputGestures}/>
+          <OutputGesture
+            variant="stack"
+            {gesture}
+            {onUserInteraction}
+            {enableOutputGestures} />
         {/each}
       </div>
       {#if !$state.isOutputConnected && !hasClosedPopup && hasInteracted}

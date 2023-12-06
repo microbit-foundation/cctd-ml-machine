@@ -59,7 +59,7 @@
 </script>
 
 {#if variant === 'stack'}
-  <OutputGestureStack {gesture} {onUserInteraction} enableOutputGestures={enableOutputGestures} />
+  <OutputGestureStack {gesture} {onUserInteraction} {enableOutputGestures} />
 {/if}
 
 {#if variant === 'tile'}

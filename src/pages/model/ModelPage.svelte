@@ -17,6 +17,6 @@
   {#if $state.modelView == ModelView.TILE}
     <ModelPageTileView />
   {:else}
-    <ModelPageStackView />
+    <ModelPageStackView enableOutputGestures={false}/>
   {/if}
 </div>

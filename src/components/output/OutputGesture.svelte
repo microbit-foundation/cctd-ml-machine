@@ -4,7 +4,6 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import CookieManager from '../../script/CookieManager';
   import Gestures from '../../script/Gestures';
   import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
   import Microbits from '../../script/microbit-interfacing/Microbits';
@@ -12,6 +11,9 @@
   import { state } from '../../script/stores/uiStore';
   import OutputGestureStack from './OutputGestureStack.svelte';
   import OutputGestureTile from './OutputGestureTile.svelte';
+
+  // Bool flag that determines the visibility of the output gesture panels
+  export let enableOutputGestures = false;
 
   export let gesture: GestureData;
   let wasTriggered = false;
@@ -57,7 +59,7 @@
 </script>
 
 {#if variant === 'stack'}
-  <OutputGestureStack {gesture} {onUserInteraction} />
+  <OutputGestureStack {gesture} {onUserInteraction} enableOutputGestures={enableOutputGestures} />
 {/if}
 
 {#if variant === 'tile'}

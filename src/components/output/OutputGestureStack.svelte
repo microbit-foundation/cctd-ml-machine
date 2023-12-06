@@ -38,7 +38,8 @@
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
-  const enableOutputGestures = false;
+  // Bool flag that determines the visibility of the output gesture panels
+  export let enableOutputGestures = false;
 
   // Variables for component
   export let gesture: GestureData;
@@ -248,23 +249,23 @@
     </div>
   </GestureTilePart>
 
-  <!-- ARROW -->
-  <div class="text-center w-15">
-    <img
-      class="m-auto"
-      class:hidden={wasTriggered}
-      src={'imgs/right_arrow.svg'}
-      alt="right arrow icon"
-      width="30px" />
-    <img
-      class="m-auto"
-      class:hidden={!wasTriggered || !$state.isInputReady}
-      src={'imgs/right_arrow_blue.svg'}
-      alt="right arrow icon"
-      width="30px" />
-  </div>
-
   {#if enableOutputGestures}
+    <!-- ARROW -->
+    <div class="text-center w-15">
+      <img
+        class="m-auto"
+        class:hidden={wasTriggered}
+        src={'imgs/right_arrow.svg'}
+        alt="right arrow icon"
+        width="30px" />
+      <img
+        class="m-auto"
+        class:hidden={!wasTriggered || !$state.isInputReady}
+        src={'imgs/right_arrow_blue.svg'}
+        alt="right arrow icon"
+        width="30px" />
+    </div>
+
     <!-- OUTPUT SETTINGS -->
     <div class="relative flex items-center">
       <div

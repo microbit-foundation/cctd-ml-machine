@@ -28,6 +28,9 @@
   let recordingTime = 0;
   // let lastRecording;
 
+  // Bool flag to know whether to show the titles for the output gestures
+  export let enableOutputGestures: boolean;
+
   // Bool flags to know whether output microbit popup should be show
   let hasClosedPopup = false;
   let hasInteracted = false;
@@ -103,33 +106,35 @@
             titleText={$t('content.model.output.prediction.descriptionTitle')}
             bodyText={$t('content.model.output.prediction.descriptionBody')} />
         </div>
-        <div class="absolute left-78 flex">
-          <Information
-            isLightTheme={false}
-            iconText={$t('content.model.output.ledOutput.descriptionTitle')}
-            titleText={$t('content.model.output.ledOutput.descriptionTitle')}
-            bodyText={$t('content.model.output.ledOutput.descriptionBody')} />
-        </div>
-        <div class="absolute left-125 flex">
-          <Information
-            isLightTheme={false}
-            iconText={$t('content.model.output.sound.iconTitle')}
-            titleText={$t('content.model.output.sound.descriptionTitle')}
-            bodyText={$t('content.model.output.sound.descriptionBody')} />
-        </div>
-        <div class="absolute left-167 flex">
-          <Information
-            isLightTheme={false}
-            iconText={$t('content.model.output.pin.iconTitle')}
-            titleText={$t('content.model.output.pin.descriptionTitle')}
-            bodyText={$t('content.model.output.pin.descriptionBody')} />
-        </div>
+        {#if enableOutputGestures}
+          <div class="absolute left-78 flex">
+            <Information
+              isLightTheme={false}
+              iconText={$t('content.model.output.ledOutput.descriptionTitle')}
+              titleText={$t('content.model.output.ledOutput.descriptionTitle')}
+              bodyText={$t('content.model.output.ledOutput.descriptionBody')} />
+          </div>
+          <div class="absolute left-125 flex">
+            <Information
+              isLightTheme={false}
+              iconText={$t('content.model.output.sound.iconTitle')}
+              titleText={$t('content.model.output.sound.descriptionTitle')}
+              bodyText={$t('content.model.output.sound.descriptionBody')} />
+          </div>
+          <div class="absolute left-167 flex">
+            <Information
+              isLightTheme={false}
+              iconText={$t('content.model.output.pin.iconTitle')}
+              titleText={$t('content.model.output.pin.descriptionTitle')}
+              bodyText={$t('content.model.output.pin.descriptionBody')} />
+          </div>
+        {/if}
       </div>
 
       <div class="pl-1">
         <!-- Display all gestures and their output capabilities -->
         {#each $gestures as gesture}
-          <OutputGesture variant="stack" {gesture} {onUserInteraction} />
+          <OutputGesture variant="stack" {gesture} {onUserInteraction} enableOutputGestures={enableOutputGestures}/>
         {/each}
       </div>
       {#if !$state.isOutputConnected && !hasClosedPopup && hasInteracted}

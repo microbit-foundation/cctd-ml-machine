@@ -43,22 +43,24 @@ jobs:
         uses: actions/checkout@v2
       - name: Install packages
         shell: bash
-        run: npm install
+        run: |
+          npm install
+          npm run prettier
       
-      - name: Run Prettier
-        id: prettier-run
-        uses: rutajdash/prettier-cli-action@v1.0.0
-        with:
-          config_path: ./.prettierrc.cjs
+#      - name: Run Prettier
+#        id: prettier-run
+#        uses: rutajdash/prettier-cli-action@v1.0.0
+#        with:
+#          config_path: ./.prettierrc.cjs
 
       # This step only runs if prettier finds errors causing the previous step to fail
       # This steps lists the files where errors were found
-      - name: Prettier Output
-        if: ${{ failure() }}
-        shell: bash
-        run: |
-          echo "The following files are not formatted:"
-          echo "${{steps.prettier-run.outputs.prettier_output}}"
+#      - name: Prettier Output
+#        if: ${{ failure() }}
+#        shell: bash
+#        run: |
+#         echo "The following files are not formatted:"
+#         echo "${{steps.prettier-run.outputs.prettier_output}}"
 
   build_and_deploy:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')

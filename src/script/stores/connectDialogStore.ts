@@ -33,6 +33,7 @@ export const connectionDialogState = writable<{
 });
 
 export const startConnectionProcess = (): void => {
+  // Updating the state will cause a popup to appear, from where the connection process will take place
   connectionDialogState.update(s => {
     s.connectionState = get(state).isInputConnected
       ? ConnectDialogStates.START_OUTPUT

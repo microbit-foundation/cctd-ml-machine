@@ -11,7 +11,7 @@ import ConnectionBehaviours from '../connection-behaviours/ConnectionBehaviours'
 import { get, writable } from 'svelte/store';
 import MBSpecs from './MBSpecs';
 import MicrobitBluetooth from './MicrobitBluetooth';
-import { outputting } from '../stores/uiStore';
+import { onCatastrophicError, outputting } from '../stores/uiStore';
 import MicrobitUSB from './MicrobitUSB';
 import type ConnectionBehaviour from '../connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
@@ -248,14 +248,14 @@ class Microbits {
                 ConnectionBehaviours.getOutputBehaviour().onReady();
               })
               .catch(reason => {
-                console.log(reason);
+                console.error(reason);
               });
           } else {
             connectionBehaviour.onReady();
           }
         })
         .catch(reason => {
-          console.log(reason);
+          console.error(reason);
         });
     };
 
@@ -284,7 +284,7 @@ class Microbits {
       this.inputVersion = this.getInput().getVersion();
       return true;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       this.onFailedConnection(connectionBehaviour)(e as Error);
     }
     return false;
@@ -319,7 +319,11 @@ class Microbits {
       'B',
       connectionBehaviour.buttonChange.bind(connectionBehaviour),
     );
-    await this.getInput().listenToUART(data => this.inputUartHandler(data));
+    try {
+      await this.getInput().listenToUART(data => this.inputUartHandler(data));
+    } catch (error) {
+      console.error(error);      
+    }
     this.inputVersionIdentificationTimeout = setTimeout(() => {
       connectionBehaviour.onIdentifiedAsOutdated();
     }, StaticConfiguration.versionIdentificationTimeoutDuration);
@@ -340,7 +344,11 @@ class Microbits {
     this.outputVersionIdentificationTimeout = setTimeout(() => {
       connectionBehaviour.onIdentifiedAsOutdated();
     }, StaticConfiguration.versionIdentificationTimeoutDuration);
-    await this.getOutput().listenToUART(data => this.outputUartHandler(data));
+    try {
+      await this.getOutput().listenToUART(data => this.outputUartHandler(data));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /**
@@ -994,7 +1002,7 @@ class Microbits {
       .catch(err => {
         // Catches a characteristic not found error, preventing further output.
         // Why does this happens is not clear
-        console.log(err);
+        console.error(err);
         if (err) {
           if ((err as DOMException).message.includes('GATT Service no longer exists')) {
             this.listenToOutputServices()
@@ -1008,6 +1016,7 @@ class Microbits {
               });
           }
         }
+
         get(this.bluetoothServiceActionQueue).busy = false;
         this.processServiceActionQueue();
       });

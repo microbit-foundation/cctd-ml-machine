@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Install packages
+      - name: Run prettier
         shell: bash
         run: |
           npm install

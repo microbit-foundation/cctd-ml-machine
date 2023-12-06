@@ -38,7 +38,7 @@
     </div>
   </div>
   <div class="flex items-center w-full">
-    <div on:click={onStartRadioClick} class="w-min-60 align-bottom hover:cursor-pointer">
+    <div on:click={onStartRadioClick} class="w-min-60 align-bottom hover:cursor-pointer text-link">
       {$t('connectMB.bluetoothStart.switchRadio')}
     </div>
     <StandardButton extraClasses="basis-full" position="right" onClick={onNextClick}

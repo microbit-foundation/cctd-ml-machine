@@ -41,8 +41,8 @@
   </div>
   <div class="flex">
     {#if currentStage === 'usb' || currentStage === 'usb1'}
-      <p class="self-center w-full hover:cursor-pointer" on:click={onSkipClick}>
-        Skip: program already downloaded?
+      <p class="self-center w-full hover:cursor-pointer text-link" on:click={onSkipClick}>
+        {$t('connectMB.connectCable.skip')}
       </p>
     {/if}
     <div class="flex w-full justify-end gap-x-5">

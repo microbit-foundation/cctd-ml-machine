@@ -64,9 +64,7 @@
     </StandardButton>
   </ControlBar>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
-    {#if !$state.isInputConnected}
-      <PleaseConnectFirst />
-    {:else if !sufficientData}
+    {#if !sufficientData}
       <div class="w-full text-primarytext">
         <h1 class="w-3/4 text-3xl bold m-auto">
           {$t('menu.trainer.notEnoughDataHeader1')}
@@ -86,7 +84,7 @@
         </p>
       </div>
     {:else}
-      <div class="w-3/4 text-primarytext">
+      <div cla54s="w-3/4 text-primarytext">
         {#if $state.isPredicting}
           <p class="bold text-3xl bold mt-10">
             {$t('menu.trainer.TrainingFinished')}
@@ -95,10 +93,13 @@
             {$t('menu.trainer.TrainingFinished.body')}
           </p>
         {/if}
-        <div class="w-full pt-5 text-white">
+        <div class="w-full pt-5 text-white pb-5">
           <TrainingButton />
         </div>
       </div>
     {/if}
+    {#if !$state.isInputConnected}
+      <PleaseConnectFirst />
+      {/if}
   </div>
 </div>

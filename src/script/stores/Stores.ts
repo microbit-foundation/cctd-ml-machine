@@ -13,7 +13,10 @@ import MicrobitAccelerometerLiveData, {
 } from '../livedata/MicrobitAccelerometerData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 
-throw new Error("")
+throw new Error("Todo: Split up the MicrobitAccelerometerLiveData into a raw version, and a smoothed version, that is derived from the other, such that the micro:bit do not have the responsibility of smoothing data" +
+"It should be generic as well, the LiveGraph.svelte component should not have to know about the MicrobitAccelerometerData, as it means it cannot be replicated with magnetic stuff."+
+"The question then arises, how to handle the labels on each line? How to handle color(probably just the responsibility of the livegraph)?"+
+"i am adding this reminder, because i suspect there will be a merge conflict, and therefore i am going to stop now :))))")
 const repositories = new Repositories();
 
 const gestures: Gestures = new Gestures(repositories.getGestureRepository());

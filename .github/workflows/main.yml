@@ -42,6 +42,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Install prettier-svelte
+        shell: bash
         run: npm install --global prettier-plugin-svelte
       
       - name: Run Prettier

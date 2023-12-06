@@ -41,7 +41,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
+      - name: Install prettier-svelte
+        run: npm install --global prettier-plugin-svelte
+      
       - name: Run Prettier
         id: prettier-run
         uses: rutajdash/prettier-cli-action@v1.0.0

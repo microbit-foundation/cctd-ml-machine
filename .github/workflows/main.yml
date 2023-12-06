@@ -45,7 +45,7 @@ jobs:
         shell: bash
         run: |
           npm install
-          npm run prettier
+          prettier --check src/.
           git status | grep -c "modified" # if we find the string modified after running git status, it indicates that prettier has changed files!
       - name: Missing format report
         shell: bash

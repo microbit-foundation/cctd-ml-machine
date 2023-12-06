@@ -41,7 +41,7 @@
   type ButtonSize = 'small' | 'normal' | 'large';
   type variants = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight' | 'disabled';
 
-  export let color: variants = 'secondary';
+  export let color: variants = 'primary';
   export let onClick: (e: Event) => void = TypingUtils.emptyFunction;
   export let disabled = false;
   export let size: ButtonSize = 'normal';

@@ -46,6 +46,7 @@ jobs:
         run: |
           npm install
           npm run prettier
+          git status
       
 #      - name: Run Prettier
 #        id: prettier-run

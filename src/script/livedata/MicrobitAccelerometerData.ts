@@ -11,9 +11,6 @@ export type MicrobitAccelerometerData = {
   accelX: number;
   accelY: number;
   accelZ: number;
-  smoothedAccelX: number;
-  smoothedAccelY: number;
-  smoothedAccelZ: number;
 };
 
 class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerData> {
@@ -27,6 +24,10 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
       smoothedAccelY: 0,
       smoothedAccelZ: 0,
     });
+  }
+
+  public getSeriesSize(): number {
+    return 3;
   }
 
   public getBuffer(): LiveDataBuffer<MicrobitAccelerometerData> {

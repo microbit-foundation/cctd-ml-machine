@@ -11,18 +11,27 @@
   import { get, type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
-    import { liveAccelerometerData } from '../../script/stores/Stores';
+    import LiveData from '../../script/domain/LiveData';
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
+  export let liveData: LiveData<any>
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
-  let lineX = new TimeSeries();
-  let lineY = new TimeSeries();
-  let lineZ = new TimeSeries();
+  const lines: TimeSeries[] = []
+  for (let i = 0; i < liveData.getSeriesSize(); i++) {
+    lines.push(new TimeSeries());
+  }
   let recordLines = new TimeSeries();
   const lineWidth = 2;
+
+  // Line colors are picked in the order of this array.
+  const colors = [
+    '#f9808e',
+    '#80f98e',
+    '#808ef9'
+  ]
 
   // On mount draw smoothieChart
   onMount(() => {
@@ -39,9 +48,10 @@
       interpolation: 'linear',
     });
 
-    chart.addTimeSeries(lineX, { lineWidth, strokeStyle: '#f9808e' });
-    chart.addTimeSeries(lineY, { lineWidth, strokeStyle: '#80f98e' });
-    chart.addTimeSeries(lineZ, { lineWidth, strokeStyle: '#808ef9' });
+    lines.forEach((line, index) => {
+      chart!.addTimeSeries(line, {lineWidth, strokeStyle: colors[index]})
+    })
+
     chart.addTimeSeries(recordLines, {
       lineWidth: 3,
       strokeStyle: '#4040ff44',
@@ -104,12 +114,14 @@
   function updateCanvas(isConnected: boolean) {
     // TODO: Clean this
     if (isConnected) {
-      unsubscribeFromData = liveAccelerometerData.subscribe(data => {
+      unsubscribeFromData = liveData.subscribe(data => {
         const t = new Date().getTime();
-        // Todo: Theres an issue here regarding responsibility, maybe
-        lineX.append(t, data.accelX, false);
-        lineY.append(t, data.accelY, false);
-        lineZ.append(t, data.accelZ, false);
+
+        let i = 0;
+        for(const property in data) {
+          lines[i].append(t, data[property], false)
+          i++;
+        }
       });
 
       // Else if we're currently subscribed to data. Unsubscribe.

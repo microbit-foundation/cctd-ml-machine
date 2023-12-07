@@ -30,7 +30,7 @@
     </p>
     <img
       src="/imgs/select-microbit.png"
-      alt="Instructions on how to choose microbit from web popup using usb"
+      alt="Screenshot of the browser window that will appear next.  Your connected micro:bit will be listed. Choose your micro:bit then select the Connect button."
       class="left-0 pt-5" />
     <p class="absolute left-3/4 transform -translate-x-1/2 top-1/2 -translate-y-28">
       {$t('connectMB.webPopup.instruction1')}

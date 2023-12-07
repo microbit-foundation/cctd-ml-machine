@@ -20,7 +20,7 @@
     <p>{$t('connectMB.connectBattery.subtitle')}</p>
     <img
       src="/imgs/stylised-microbit-connected.svg"
-      alt="Battery connection diagram"
+      alt="Showing the batteries need to go into the battery pack and the battery pack should be connected at the top left of the micro:bit."
       class="px-40 pt-5" />
   </div>
   <div class="justify-end gap-x-5 flex pt-10">

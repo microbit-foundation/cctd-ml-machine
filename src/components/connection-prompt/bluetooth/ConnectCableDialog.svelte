@@ -36,7 +36,7 @@
     </p>
     <img
       src="imgs/connect-cable.gif"
-      alt="GIF of connecting micro:bit"
+      alt="USB cable being connected at the top, centre of the micro:bit."
       class="px-55 py-5" />
   </div>
   <div class="flex">

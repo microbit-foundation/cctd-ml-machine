@@ -1,3 +1,9 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+
+  SPDX-License-Identifier: MIT
+ -->
+
 <style>
   @keyframes loading-bar {
     0% {
@@ -12,12 +18,6 @@
     animation: loading-bar 1.8s linear;
   }
 </style>
-
-<!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
-
-  SPDX-License-Identifier: MIT
- -->
 
 <script lang="ts">
   import { get } from 'svelte/store';
@@ -47,34 +47,30 @@
   import StaticConfiguration from '../StaticConfiguration';
   import BaseDialog from './dialogs/BaseDialog.svelte';
 
-  // Variables for component
   export let onNoMicrobitSelect: () => void;
   export let gesture: GestureData;
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = get(settings).duration;
-
-  let isThisRecording = false;
-
-  let showCountdown = false;
-
   const countdownInitialValue = 3;
 
-  let countdownValue = 3;
-
+  let isThisRecording = false;
+  let showCountdown = false;
+  let countdownValue = countdownInitialValue;
   let countdownInterval: number = 500; // the countdown interval in milliseconds
 
-  // Countdown to collect data
   async function countdownStart(): Promise<void> {
     showCountdown = true;
-    countdownValue = countdownInitialValue;
+
     return new Promise<void>(resolve => {
       const interval = setInterval(() => {
         countdownValue--;
-        if (countdownValue === 0) {
+        if (countdownValue === 0 && showCountdown) {
           recordData();
-          clearInterval(interval);
           showCountdown = false;
+        } else if (!showCountdown) {
+          clearInterval(interval);
+          countdownValue = countdownInitialValue;
           resolve();
         }
       }, countdownInterval);

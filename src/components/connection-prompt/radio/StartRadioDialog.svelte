@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -40,7 +40,10 @@
     <div on:click={onStartBluetoothClick} class="w-min-70 hover:cursor-pointer text-link">
       {$t('connectMB.radioStart.switchBluetooth')}
     </div>
-    <StandardButton extraClasses="basis-full" position="right" onClick={onNextClick}
-      >{$t('connectMB.nextButton')}</StandardButton>
+    <StandardButton
+      extraClasses="basis-full"
+      position="right"
+      onClick={onNextClick}
+      type="primary">{$t('connectMB.nextButton')}</StandardButton>
   </div>
 </main>

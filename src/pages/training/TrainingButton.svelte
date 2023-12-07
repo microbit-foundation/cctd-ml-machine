@@ -40,6 +40,7 @@
     trainingDialogOpen = true;
   }}
   disabled={trainingButtonDisabled}
+  type="primary"
   >{$t(trainButtonLabel)}
 </StandardButton>
 
@@ -52,7 +53,7 @@
     <div class="flex justify-end">
       <!-- TODO: translation for "Back" button -->
       <StandardButton onClick={closeTrainingDialog}>Back</StandardButton>
-      <StandardButton onClick={startTraining}
+      <StandardButton onClick={startTraining} type='primary'
         >{$t('content.data.trainDialog.title')}</StandardButton>
     </div>
   </div>

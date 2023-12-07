@@ -35,6 +35,7 @@
 
   for (let i = 0; i < smoothedLiveData.getSeriesSize(); i++) {
     lines.push(new TimeSeries() as TimeSeriesWithData);
+    throw new Error("TODO: Fix the remaining of the graph to use the new SmoothedLiveData store")
   }
   let recordLines = new TimeSeries();
   const lineWidth = 2;

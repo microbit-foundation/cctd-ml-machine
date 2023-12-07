@@ -182,6 +182,8 @@ export const translations: TranslationMap = {
 		"connectMB.connectCable.heading": TRANSLATION_NEEDED,
 		"connectMB.connectCable.subtitle": TRANSLATION_NEEDED,
 
+		"connectMB.connectCable.skip": TRANSLATION_NEEDED,
+
 		// SELECT MICROBIT FROM WEB POPUP
 		"connectMB.webPopup": TRANSLATION_NEEDED,
 		"connectMB.webPopup.instruction1": TRANSLATION_NEEDED,
@@ -442,6 +444,8 @@ export const translations: TranslationMap = {
 
 		"connectMB.connectCable.heading": "Connect cable",
 		"connectMB.connectCable.subtitle": "Connect a micro:bit to this computer with a USB cable so that the <brand name> program can be downloaded to it.",
+
+		"connectMB.connectCable.skip": "Skip: program already downloaded?",
 
 		// SELECT MICROBIT FROM WEB POPUP
 		"connectMB.webPopup":"Select micro:bit",

@@ -276,8 +276,7 @@
             }}
             size="small"
             shadows={false}
-            outlined
-            fillOnHover>{$t('content.data.record')}</StandardButton>
+            type="primary">{$t('content.data.record')}</StandardButton>
         </div>
       {/if}
     </GestureTilePart>

@@ -21,10 +21,10 @@
       <!-- Output is assigned -->
       {#if !$state.isOutputConnected || $state.isOutputReady}
         <!-- Output MB is not in the connection process -->
-        <StandardButton onClick={onOutputDisconnectButtonClicked} color="warning"
+        <StandardButton onClick={onOutputDisconnectButtonClicked} type="warning"
           >{$t('menu.model.disconnect')}</StandardButton>
       {:else}
-        <StandardButton onClick={TypingUtils.emptyFunction} color="disabled">
+        <StandardButton onClick={TypingUtils.emptyFunction} disabled>
           <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
         </StandardButton>
       {/if}
@@ -33,10 +33,10 @@
   <div class="ml-2">
     {#if !$state.isInputConnected || $state.isInputReady}
       <!-- Input MB is not in the connection process -->
-      <StandardButton onClick={onInputDisconnectButtonClicked} color="warning"
+      <StandardButton onClick={onInputDisconnectButtonClicked} type="warning"
         >{$t('footer.disconnectButton')}</StandardButton>
     {:else}
-      <StandardButton onClick={TypingUtils.emptyFunction} color="disabled">
+      <StandardButton onClick={TypingUtils.emptyFunction} disabled>
         <img alt="loading" src="/imgs/loadingspinner.gif" style="height:24px" />
       </StandardButton>
     {/if}

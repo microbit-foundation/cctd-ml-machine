@@ -42,6 +42,7 @@
     trainingDialogOpen = true;
   }}
   disabled={trainingButtonDisabled}
+  type="primary"
   >{$t(trainButtonLabel)}
 </StandardButton>
 
@@ -54,7 +55,7 @@
     <div class="flex justify-end gap-3">
       <StandardButton onClick={closeTrainingDialog}
         >{$t('connectMB.backButton')}</StandardButton>
-      <StandardButton color="primary" onClick={startTraining}
+      <StandardButton type="primary" onClick={startTraining}
         >{$t('content.data.trainDialog.title')}</StandardButton>
     </div>
   </div>

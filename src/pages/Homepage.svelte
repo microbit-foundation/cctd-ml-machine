@@ -86,7 +86,7 @@
       </div>
     </div>
 
-    <StandardButton size="large" color="primary" onClick={startConnectionProcess}
+    <StandardButton size="large" type="primary" onClick={startConnectionProcess}
       >{$t('footer.connectButtonNotConnected')}</StandardButton>
   </div>
 </main>

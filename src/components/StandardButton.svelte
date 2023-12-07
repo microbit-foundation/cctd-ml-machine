@@ -7,11 +7,11 @@
 <style>
   .large {
     font-size: 20px;
-    padding: 20px 55px;
+    padding: 16px 50px;
   }
 
   .normal {
-    padding: 12px 40px;
+    padding: 10px 35px;
   }
 
   .small {

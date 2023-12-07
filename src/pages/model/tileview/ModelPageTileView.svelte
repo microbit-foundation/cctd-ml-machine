@@ -6,13 +6,13 @@
 
 <script lang="ts">
   import { get } from 'svelte/store';
-  import TrainModelFirstTitle from '../../components/TrainModelFirstTitle.svelte';
-  import { areActionsAllowed, buttonPressed, state } from '../../script/stores/uiStore';
-  import { settings } from '../../script/stores/mlStore';
-  import { classify } from '../../script/ml';
+  import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
+  import { areActionsAllowed, buttonPressed, state } from '../../../script/stores/uiStore';
+  import { settings } from '../../../script/stores/mlStore';
+  import { classify } from '../../../script/ml';
   import { onMount } from 'svelte';
-  import Microbits from '../../script/microbit-interfacing/Microbits';
-  import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
+  import Microbits from '../../../script/microbit-interfacing/Microbits';
+    import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;

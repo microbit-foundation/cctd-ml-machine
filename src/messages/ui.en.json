@@ -139,6 +139,7 @@
   "menu.model.noModel": "No model",
   "menu.model.connectOutputButton": "Connect output micro:bit",
   "menu.model.disconnect": "Disconnect output micro:bit",
+  "menu.model.connectInputMicrobit": "Connect micro:bit",
 
   "popup.connectMB.main.bluetooth.subtitle": "Connect using Bluetooth",
 

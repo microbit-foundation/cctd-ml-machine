@@ -16,6 +16,6 @@
     : 'menu.trainer.trainNewModelButton';
 </script>
 
-{#if sufficientData && $state.isInputConnected && !$state.isTraining}
+{#if sufficientData && !$state.isTraining}
   <StandardButton onClick={trainModel}>{$t(trainButtonLabel)}</StandardButton>
 {/if}

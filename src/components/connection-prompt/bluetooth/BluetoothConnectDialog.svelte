@@ -72,6 +72,8 @@
       } else {
         isConnecting = false;
       }
+    }).catch(e => {
+      console.error(e);
     });
   };
 

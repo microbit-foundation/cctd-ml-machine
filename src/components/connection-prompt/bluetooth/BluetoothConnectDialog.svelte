@@ -63,18 +63,20 @@
       timeouted.set(true);
     }, StaticConfiguration.connectTimeoutDuration);
 
-    void connectionResult().then(didSucceed => {
-      clearTimeout(connectTimeout);
-      timeouted.set(false);
-      Environment.isInDevelopment && console.log('Connection result ', didSucceed);
-      if (didSucceed) {
-        onBluetoothConnected();
-      } else {
-        isConnecting = false;
-      }
-    }).catch(e => {
-      console.error(e);
-    });
+    void connectionResult()
+      .then(didSucceed => {
+        clearTimeout(connectTimeout);
+        timeouted.set(false);
+        Environment.isInDevelopment && console.log('Connection result ', didSucceed);
+        if (didSucceed) {
+          onBluetoothConnected();
+        } else {
+          isConnecting = false;
+        }
+      })
+      .catch(e => {
+        console.error(e);
+      });
   };
 
   function connectOnEnterClick(event: KeyboardEvent): void {

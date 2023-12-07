@@ -19,10 +19,10 @@
       return $t('menu.model.connectInputMicrobit');
     }
     if (bestPrediction) {
-      return bestPrediction.name
+      return bestPrediction.name;
     }
     return '...';
-  }
+  };
 
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
   $: predictionLabel = getPredictionLabel($state.isInputReady, $bestPrediction);
@@ -41,9 +41,10 @@
   {:else}
     <div
       class="grid break-words mr-auto ml-auto w-3/4 h-70px border-2 rounded-lg border-solid text-center align-center content-center">
-      <p class="w-full max-w-[100%] text-2xl break-all"
-      class:text-2xl={$state.isInputReady}
-      class:text-md={!$state.isInputReady}>
+      <p
+        class="w-full max-w-[100%] text-2xl break-all"
+        class:text-2xl={$state.isInputReady}
+        class:text-md={!$state.isInputReady}>
         {predictionLabel}
       </p>
     </div>

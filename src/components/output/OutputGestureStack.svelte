@@ -38,9 +38,6 @@
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
-  // Bool flag that determines the visibility of the output gesture panels
-  export let enableOutputGestures = false;
-
   // Variables for component
   export let gesture: GestureData;
   export let onUserInteraction: () => void = () => {
@@ -62,6 +59,9 @@
     : StaticConfiguration.defaultPinTurnOnState;
 
   const confidence = Gestures.getConfidence(gesture.ID);
+
+  // Bool flag that determines the visibility of the output gesture panels
+  const enableOutputGestures = false;
 
   let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
   $: currentConfidence = $state.isInputReady ? $confidence : 0;

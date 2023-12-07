@@ -28,12 +28,12 @@
   let recordingTime = 0;
   // let lastRecording;
 
-  // Bool flag to know whether to show the titles for the output gestures
-  export let enableOutputGestures: boolean;
-
   // Bool flags to know whether output microbit popup should be show
   let hasClosedPopup = false;
   let hasInteracted = false;
+
+  // Bool flag to know whether to show the titles for the output gestures
+  const enableOutputGestures = false;
 
   function onUserInteraction(): void {
     hasInteracted = true;
@@ -134,11 +134,7 @@
       <div class="pl-1">
         <!-- Display all gestures and their output capabilities -->
         {#each $gestures as gesture}
-          <OutputGesture
-            variant="stack"
-            {gesture}
-            {onUserInteraction}
-            {enableOutputGestures} />
+          <OutputGesture variant="stack" {gesture} {onUserInteraction} />
         {/each}
       </div>
       {#if !$state.isOutputConnected && !hasClosedPopup && hasInteracted}

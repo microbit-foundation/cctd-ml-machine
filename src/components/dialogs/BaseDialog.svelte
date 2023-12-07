@@ -9,8 +9,7 @@
 
   export let isOpen: boolean;
   export let onClose: () => void;
-
-  let additionalClass: string;
+  export let background: 'light' | 'dark' = 'dark';
 
   function handleKeyPress(event: KeyboardEvent) {
     if (event.key === 'Escape') {
@@ -19,13 +18,11 @@
     }
   }
 
-  export let backgroundClass: 'light' | 'dark' = 'dark';
-
-  if (backgroundClass === 'light') {
-    additionalClass = ' bg-white/80 bg-blend-lighten';
-    console.log('hi');
+  let backgroundClasses: string;
+  if (background === 'light') {
+    backgroundClasses = ' bg-white/80 bg-blend-lighten';
   } else {
-    additionalClass = 'bg-black/50 bg-blend-darken';
+    backgroundClasses = 'bg-black/50 bg-blend-darken';
   }
 </script>
 
@@ -44,7 +41,7 @@
       flex
       justify-center
       items-center
-      {additionalClass}
+      {backgroundClasses}
     "
     on:click={onClose}>
     <slot />

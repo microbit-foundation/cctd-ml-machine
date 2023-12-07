@@ -228,7 +228,7 @@
 <main class="flex-row flex mb-2">
   <!-- Recordingbar to show recording-progress -->
   <BaseDialog
-    backgroundClass="light"
+    background="light"
     isOpen={isThisRecording}
     onClose={() => (isThisRecording = false)}>
     <div class="w-70 h-6 bg-red-200 rounded-full overflow-hidden">
@@ -287,7 +287,7 @@
     </GestureTilePart>
 
     <BaseDialog
-      backgroundClass="light"
+      background="light"
       isOpen={showCountdown}
       onClose={() => (showCountdown = false)}>
       <div class="space-y-10 w-70">

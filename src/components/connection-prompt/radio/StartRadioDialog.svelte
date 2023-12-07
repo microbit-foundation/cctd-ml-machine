@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -29,7 +29,7 @@
         </p>
       </div>
       <div>
-        <img src="" alt="PLACEHOLDER" />
+        <img src="/imgs/stylised_computer.svg" alt="PLACEHOLDER" />
         <p class="pt-10 text-center font-bold">
           {$t('connectMB.radioStart.requirements3')}
         </p>

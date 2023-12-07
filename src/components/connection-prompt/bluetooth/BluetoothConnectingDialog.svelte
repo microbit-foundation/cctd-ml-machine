@@ -115,11 +115,6 @@
     <div class="w-650px flex flex-col justify-center items-center">
       <p>{$t('connectMB.bluetooth.connecting')}</p>
       <img alt="loading" src="/imgs/loadingspinner.gif" width="100px" />
-      <div class="bg-primary rounded w-full h-5">
-        <div
-          style="width: {`${timeoutProgress * 100}%`};"
-          class="bg-secondary rounded h-full" />
-      </div>
     </div>
   {/if}
 </main>

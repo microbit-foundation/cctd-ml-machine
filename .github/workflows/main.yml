@@ -46,8 +46,8 @@ jobs:
         run: |
           npm install
           npm run prettier
-          git status | grep -c "modified" # if we find the string modified after running git status, it indicates that prettier has changed files!
-          if [ $? -eq 0]; then
+          # if we find the string modified after running git status, it indicates that prettier has changed files!
+          if git status | grep -c "modified" -eq 0; then
               exit 1
           else
               exit 0

@@ -12,7 +12,6 @@
   import SelectMicrobitDialogUsb from './usb/SelectMicrobitDialogUsb.svelte';
   import ConnectBatteryDialog from './bluetooth/ConnectBatteryDialog.svelte';
   import BluetoothConnectDialog from './bluetooth/BluetoothConnectDialog.svelte';
-  import SelectMicrobitDialogSerial from './radio/SelectMicrobitDialogSerial.svelte';
   import DoneDownloadingDialog from './usb/DoneDownloadingDialog.svelte';
   import DownloadingDialog from './usb/DownloadingDialog.svelte';
   import FindUsbDialog from './usb/FindUsbDialog.svelte';

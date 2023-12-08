@@ -22,12 +22,12 @@
 </script>
 
 <div>
-  <ControlBar>   
+  <ControlBar>
     <ExpandableControlBarMenu>
       <StandardButton small outlined onClick={openMakeCodeInNewTab}>
         MakeCode HEX
       </StandardButton>
-    </ExpandableControlBarMenu>  
+    </ExpandableControlBarMenu>
   </ControlBar>
 </div>
 

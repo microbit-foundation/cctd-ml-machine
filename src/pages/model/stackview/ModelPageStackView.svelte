@@ -12,7 +12,11 @@
 </style>
 
 <script lang="ts">
-  import { buttonPressed, areActionsAllowed, state } from '../../../script/stores/uiStore';
+  import {
+    buttonPressed,
+    areActionsAllowed,
+    state,
+  } from '../../../script/stores/uiStore';
   import { settings } from '../../../script/stores/mlStore';
   import { get } from 'svelte/store';
   import { onMount } from 'svelte';
@@ -20,7 +24,7 @@
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
-    import PleaseConnectFirst from '../../../components/PleaseConnectFirst.svelte';
+  import PleaseConnectFirst from '../../../components/PleaseConnectFirst.svelte';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -88,9 +92,9 @@
 <main class="h-full flex flex-col">
   {#if $state.isPredicting}
     {#if $state.isInputReady}
-      <ModelPageStackViewContent/>
-      {:else}
-      <PleaseConnectFirst/>
+      <ModelPageStackViewContent />
+    {:else}
+      <PleaseConnectFirst />
     {/if}
   {:else}
     <TrainModelFirstTitle />

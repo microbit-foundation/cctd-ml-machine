@@ -35,6 +35,30 @@ jobs:
         run: |
           npm install 
           npm test
+  prettier:
+    name: Prettier Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Run prettier
+        shell: bash
+        run: |
+          npm install
+          npm run prettier
+          # if we find the string modified after running git status, it indicates that prettier has changed files!
+          if git status | grep -c "modified" -eq 0; then
+              exit 1
+          else
+              exit 0
+          fi
+      - name: Missing format report
+        shell: bash
+        if: ${{ failure() }}
+        run: | 
+          echo "Missing prettier formatting. Please format files using 'npm run prettier' and resubmit!"
+          exit 1
+
   build_and_deploy:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest

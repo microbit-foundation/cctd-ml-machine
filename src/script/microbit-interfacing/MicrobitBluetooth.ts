@@ -281,7 +281,7 @@ export class MicrobitBluetooth {
     if (matrix.length !== 5 || matrix[0].length !== 5) {
       throw new Error('Matrix must be 5x5');
     }
-    
+
     // To match overloads we must cast the matrix to a number[][]
     let numMatrix = matrix as number[][];
     if (typeof matrix[0][0] === 'boolean') {
@@ -308,8 +308,8 @@ export class MicrobitBluetooth {
    */
   private disconnectListener(_event: Event): void {
     if (this.device.gatt) {
-      this.device
-        .gatt.connect()
+      this.device.gatt
+        .connect()
         .then(() => {
           this.onReconnect?.(this);
         })
@@ -318,7 +318,7 @@ export class MicrobitBluetooth {
           void this.onReconnectFailed();
         });
     } else {
-      Environment.isInDevelopment && console.error("No gatt server found!");
+      Environment.isInDevelopment && console.error('No gatt server found!');
     }
 
     this.disconnectEventHandler(false);

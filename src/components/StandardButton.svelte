@@ -2,7 +2,7 @@
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
 
   SPDX-License-Identifier: MIT
- -->
+-->
 
 <style>
   .large {
@@ -16,6 +16,13 @@
 
   .small {
     padding: 1px 10px;
+  }
+
+  :disabled {
+    background-color: transparent;
+    border-color: #ccc;
+    color: #ccc;
+    box-shadow: none;
   }
 </style>
 

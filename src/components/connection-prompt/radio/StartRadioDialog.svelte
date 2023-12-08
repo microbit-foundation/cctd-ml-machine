@@ -10,28 +10,48 @@
 
   export let onNextClick: () => void;
   export let onStartBluetoothClick: () => void;
+
+  const imageHeight = 25;
 </script>
 
 <main>
   <div class="w-200">
     <p class="font-bold pb-10 text-2xl text-left">{$t('connectMB.radioStart.heading')}</p>
-    <div class="inline-grid grid-cols-3 gap-20 py-20 px-10">
-      <div>
-        <img src="" alt="PLACEHOLDER" />
+    <div class="inline-grid grid-cols-4 gap-20 py-20 px-10">
+      <div class="flex flex-col">
+        <img
+          class="h-{imageHeight}"
+          src="/imgs/stylised-microbit-black.svg"
+          alt={$t('connectMB.radioStart.requirements1')} />
         <p class="pt-10 text-center font-bold">
           {$t('connectMB.radioStart.requirements1')}
         </p>
       </div>
-      <div>
-        <img src="" alt="PLACEHOLDER" />
+      <div class="flex flex-col">
+        <img
+          class="h-{imageHeight}"
+          src="/imgs/stylised_computer.svg"
+          alt={$t('connectMB.radioStart.requirements2')} />
         <p class="pt-10 text-center font-bold">
           {$t('connectMB.radioStart.requirements2')}
         </p>
       </div>
-      <div>
-        <img src="/imgs/stylised_computer.svg" alt="PLACEHOLDER" />
+      <div class="flex flex-col">
+        <img
+          class="h-{imageHeight}"
+          src="/imgs/stylised-usb-cable.svg"
+          alt={$t('connectMB.radioStart.requirements3')} />
         <p class="pt-10 text-center font-bold">
           {$t('connectMB.radioStart.requirements3')}
+        </p>
+      </div>
+      <div class="flex flex-col">
+        <img
+          class="h-{imageHeight}"
+          src="/imgs/stylised-battery-pack.svg"
+          alt={$t('connectMB.radioStart.requirements4')} />
+        <p class="pt-10 text-center font-bold">
+          {$t('connectMB.radioStart.requirements4')}
         </p>
       </div>
     </div>

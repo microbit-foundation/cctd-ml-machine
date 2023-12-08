@@ -42,8 +42,8 @@
 
   const classes: { [key in ButtonVariant]: string } = {
     primary: 'bg-primary text-white border-solid border-2 border-primary',
-    secondary: 'bg-transparent text-black border-solid border-2 border-primary',
-    warning: 'bg-warning',
+    secondary: 'bg-white text-black border-solid border-2 border-primary',
+    warning: 'bg-warning text-white',
     info: 'bg-info',
     infolight: 'bg-infolight',
   };

@@ -13,7 +13,7 @@
 
 <div>
   <TabView />
-  
+
   {#if $state.modelView == ModelView.TILE}
     <ModelPageTileView />
   {:else}

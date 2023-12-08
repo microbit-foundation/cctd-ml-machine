@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-declare module "svelte-skeleton/Skeleton.svelte";
+declare module 'svelte-skeleton/Skeleton.svelte';

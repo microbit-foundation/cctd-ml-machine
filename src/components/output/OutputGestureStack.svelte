@@ -57,6 +57,9 @@
     ? $gesture.output.outputPin.pinState
     : StaticConfiguration.defaultPinTurnOnState;
 
+  // Bool flag that determines the visibility of the output gesture panels
+  const enableOutputGestures = false;
+
   let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
 
   const getTriggerAction = (
@@ -241,40 +244,21 @@
     </div>
   </GestureTilePart>
 
-  <!-- ARROW -->
-  <div class="text-center w-15">
-    <img
-      class="m-auto"
-      class:hidden={wasTriggered}
-      src={'imgs/right_arrow.svg'}
-      alt="right arrow icon"
-      width="30px" />
-    <img
-      class="m-auto"
-      class:hidden={!wasTriggered || !$state.isInputReady}
-      src={'imgs/right_arrow_blue.svg'}
-      alt="right arrow icon"
-      width="30px" />
-  </div>
-
-  <!-- OUTPUT SETTINGS -->
-  <div class="relative flex items-center">
-    <div
-      class="w-177px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
-      <ImageSkeleton
-        src="imgs/blank_microbit.svg"
-        alt="microbit guide"
-        width={177}
-        height={144}
-        loadingColorSecondary="#818181"
-        loadingColorPrimary="#4A4A4A"
-        onLoaded={() => (hasLoadedMicrobitImage = true)} />
-      <div
-        class="bg-black p-0 m-0 absolute top-9 left-12.7"
-        class:hidden={!hasLoadedMicrobitImage}
-        on:click={onUserInteraction}>
-        <OutputMatrix bind:trigger={triggerFunctions[0]} gesture={$gesture} />
-      </div>
+  {#if enableOutputGestures}
+    <!-- ARROW -->
+    <div class="text-center w-15">
+      <img
+        class="m-auto"
+        class:hidden={wasTriggered}
+        src={'imgs/right_arrow.svg'}
+        alt="right arrow icon"
+        width="30px" />
+      <img
+        class="m-auto"
+        class:hidden={!wasTriggered || !$state.isInputReady}
+        src={'imgs/right_arrow_blue.svg'}
+        alt="right arrow icon"
+        width="30px" />
     </div>
 
     <!-- OUTPUT SETTINGS -->
@@ -293,7 +277,7 @@
           class="bg-black p-0 m-0 absolute top-9 left-12.7"
           class:hidden={!hasLoadedMicrobitImage}
           on:click={onUserInteraction}>
-          <OutputMatrix bind:trigger={triggerFunctions[0]} {gesture} />
+          <OutputMatrix bind:trigger={triggerFunctions[0]} gesture={$gesture} />
         </div>
       </div>
       <OutputSoundSelector onSoundSelection={onSoundSelected} {selectedSound} />
@@ -306,5 +290,5 @@
         {onPinSelect}
         {onTurnOnTimeSelect} />
     </div>
-  </div>
+  {/if}
 </main>

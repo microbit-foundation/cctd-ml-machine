@@ -21,6 +21,7 @@
   import { onMount } from 'svelte';
   import TabView from '../views/TabView.svelte';
   import { gestures } from '../script/stores/Stores';
+  import TrainingButton from './training/TrainingButton.svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -122,5 +123,6 @@
 
       <NewGestureButton />
     </div>
+    <TrainingButton />
   {/if}
 </main>

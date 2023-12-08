@@ -30,7 +30,6 @@
   import { fade } from 'svelte/transition';
   import { message, state } from '../script/stores/uiStore';
   import ReconnectPrompt from '../components/ReconnectPrompt.svelte';
-  import ConnectionOfflineWarning from '../components/ConnectionOfflineWarning.svelte';
   import OutdatedMicrobitWarning from '../components/OutdatedMicrobitWarning.svelte';
   import { isInputPatternValid } from '../script/stores/connectionStore';
 
@@ -77,5 +76,4 @@
   {#if $state.isInputOutdated || $state.isOutputOutdated}
     <OutdatedMicrobitWarning targetRole={$state.isInputOutdated ? 'INPUT' : 'OUTPUT'} />
   {/if}
-  <ConnectionOfflineWarning />
 </div>

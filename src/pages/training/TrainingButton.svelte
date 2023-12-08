@@ -11,13 +11,12 @@
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { Paths, navigate } from '../../router/paths';
-  import { gestures } from '../../script/stores/mlStore';
 
   $: trainButtonLabel = !$state.isPredicting
     ? 'menu.trainer.trainModelButton'
     : 'menu.trainer.trainNewModelButton';
 
-  $: sufficientData = hasSufficientData($gestures);
+  $: sufficientData = hasSufficientData();
 
   $: trainingButtonDisabled = !sufficientData || $state.isTraining;
 

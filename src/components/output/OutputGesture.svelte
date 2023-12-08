@@ -4,28 +4,17 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import Gestures from '../../script/Gestures';
   import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
   import Microbits from '../../script/microbit-interfacing/Microbits';
-  import { GestureData } from '../../script/stores/mlStore';
-  import { state } from '../../script/stores/uiStore';
+  import Gesture from '../../script/domain/Gesture';
   import OutputGestureStack from './OutputGestureStack.svelte';
   import OutputGestureTile from './OutputGestureTile.svelte';
 
-  export let gesture: GestureData;
+  export let gesture: Gesture;
   let wasTriggered = false;
 
-  const confidence = Gestures.getConfidence(gesture.ID);
-  const requiredConfidence = Gestures.getRequiredConfidence(gesture.ID);
-
-  $: currentConfidence = $state.isInputReady ? $confidence : 0;
-
   $: {
-    console.log($requiredConfidence);
-  }
-
-  $: {
-    let isConfident = $requiredConfidence <= currentConfidence;
+    let isConfident = $gesture.confidence.isConfident;
     if (isConfident) {
       if (!wasTriggered) {
         wasTurnedOn();
@@ -42,8 +31,8 @@
   const wasTurnedOn = () => {
     if (Microbits.isOutputMakecode()) {
       ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
-        gesture.ID,
-        gesture.name,
+        $gesture.ID,
+        $gesture.name,
       );
       return;
     }
@@ -60,5 +49,5 @@
 {/if}
 
 {#if variant === 'tile'}
-  <OutputGestureTile {confidence} {requiredConfidence} {gesture} />
+  <OutputGestureTile {gesture} />
 {/if}

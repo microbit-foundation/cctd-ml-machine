@@ -16,12 +16,11 @@
     <div class="text-white text-center flex flex-col justify-center items-center">
       <ImageSkeleton
         alt="Model Icon"
-        src="imgs/model.svg"
+        src="imgs/model_blue.svg"
         height={100}
         width={100}
         loadingColorPrimary="#68BDBF"
-        loadingColorSecondary="#3C81F6"
-        spin />
+        loadingColorSecondary="#3C81F6" />
       <p class="text-white mt-3 mb-4">
         {$t('menu.trainer.TrainingFinished')}
       </p>

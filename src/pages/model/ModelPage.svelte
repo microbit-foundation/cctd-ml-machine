@@ -7,13 +7,13 @@
 <script lang="ts">
   import { ModelView, state } from '../../script/stores/uiStore';
   import TabView from '../../views/TabView.svelte';
-  import ModelPageStackView from './ModelPageStackView.svelte';
-  import ModelPageTileView from './ModelPageTileView.svelte';
+  import ModelPageStackView from './stackview/ModelPageStackView.svelte';
+  import ModelPageTileView from './tileview/ModelPageTileView.svelte';
 </script>
 
 <div>
   <TabView />
-
+  
   {#if $state.modelView == ModelView.TILE}
     <ModelPageTileView />
   {:else}

@@ -138,6 +138,7 @@
   "menu.model.helpBody": "The model can be used in an interactive system. Here we use the trained model to predict gestures. You can connect another micro:bit and make it respond to the predicted gestures.",
   "menu.model.noModel": "No model",
   "menu.model.disconnect": "Disconnect output micro:bit",
+  "menu.model.connectInputMicrobit": "Connect micro:bit",
 
   "connectMB.nextButton": "Next",
   "connectMB.backButton": "Back",

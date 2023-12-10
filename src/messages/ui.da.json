@@ -137,6 +137,7 @@
   "menu.model.helpBody": "Modellen kan bruges i et interaktivt system. Her bruger vi den trænede model til at forudsige bevægelser. Du kan tilslutte endnu en micro:bit og få den til at reagere på de bevægelser du laver.",
   "menu.model.noModel": "Ingen model",
   "menu.model.disconnect": "Frakobl output-micro:bit",
+  "menu.model.connectInputMicrobit": "Tilkobl micro:bit",
 
   "connectMB.nextButton": "Næste",
   "connectMB.backButton": "TRANSLATION_NEEDED",

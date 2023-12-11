@@ -6,12 +6,14 @@
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import StandardButton from '../../components/StandardButton.svelte';
+  import StandardButton, { ButtonVariant } from '../../components/StandardButton.svelte';
   import { trainModel } from '../../script/ml';
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { Paths, navigate } from '../../router/paths';
   import { gestures } from '../../script/stores/mlStore';
+
+  export let type: ButtonVariant = "primary";
 
   $: trainButtonLabel = !$state.isPredicting
     ? 'menu.trainer.trainModelButton'
@@ -42,7 +44,7 @@
     trainingDialogOpen = true;
   }}
   disabled={trainingButtonDisabled}
-  type="primary"
+  type={type}
   >{$t(trainButtonLabel)}
 </StandardButton>
 
@@ -55,7 +57,7 @@
     <div class="flex justify-end gap-3">
       <StandardButton onClick={closeTrainingDialog}
         >{$t('connectMB.backButton')}</StandardButton>
-      <StandardButton type="primary" onClick={startTraining}
+      <StandardButton type={type} onClick={startTraining}
         >{$t('content.data.trainDialog.title')}</StandardButton>
     </div>
   </div>

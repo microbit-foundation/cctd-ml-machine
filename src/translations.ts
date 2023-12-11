@@ -62,9 +62,6 @@ export const translations: TranslationMap = {
 		"content.data.recording.button.cancel": TRANSLATION_NEEDED,
 		"content.data.recording.description": TRANSLATION_NEEDED,
 
-		"content.data.trainDialog.title": TRANSLATION_NEEDED,
-		"content.data.trainDialog.text": TRANSLATION_NEEDED,
-
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Træning mislykkedes",
 		"content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
@@ -326,9 +323,6 @@ export const translations: TranslationMap = {
 
 		"content.data.recording.button.cancel": "Cancel recording",
 		"content.data.recording.description": "Start action before the countdown finishes",
-
-		"content.data.trainDialog.title": "Train the model",
-		"content.data.trainDialog.text": "Do you want to train the model with the data you have added so you can test it?",
 
 		// TRAINER PAGE:
 		"content.trainer.failure.header": "Training Failed",

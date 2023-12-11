@@ -22,6 +22,7 @@
   import { onMount } from 'svelte';
   import TrainingButton from './training/TrainingButton.svelte';
   import TabView from '../views/TabView.svelte';
+  import { navigate } from '../router/paths';
 
   let isConnectionDialogOpen = false;
 
@@ -123,6 +124,6 @@
 
       <NewGestureButton />
     </div>
-    <TrainingButton />
+    <TrainingButton type="navigate" />
   {/if}
 </main>

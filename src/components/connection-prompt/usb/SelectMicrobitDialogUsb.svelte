@@ -8,6 +8,7 @@
   import StandardButton from '../../StandardButton.svelte';
   import { t } from '../../../i18n';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
+  import selectMicrobitImage from '../../../imgs/select-microbit.png';
 
   export let onBackClick: () => void;
   export let onFound: () => void;
@@ -30,7 +31,7 @@
     </h2>
     <div class="flex mt-5">
       <img
-        src="/imgs/select-microbit.png"
+        src={selectMicrobitImage}
         alt="Screenshot of the browser window that will appear next.  Your connected micro:bit will be listed. Choose your micro:bit then select the Connect button." />
       <div class="flex flex-col w-full px-5">
         <h3 class="font-bold text-lg mb-5">

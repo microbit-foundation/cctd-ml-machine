@@ -39,19 +39,23 @@
 </script>
 
 <div
-  class="cursor-pointer w-auto flex"
-  on:mouseenter={() => onMouseEnter()}
-  on:mouseleave={() => (isOpen = false)}
+  class="w-auto flex"
   bind:clientWidth={w}
   bind:clientHeight={h}
   bind:this={domNode}>
   {#if iconText !== undefined}
     <p
-      class="text-white w-auto h-auto mr-0 whitespace-pre-line"
+      class="text-white w-auto h-auto mr-0 whitespace-pre-line pr-1"
       class:underline={underlineIconText}
       style="color: {colors.iconTextColor}">
       {iconText}
     </p>
+    <i
+      class="fas fa-info-circle cursor-pointer"
+      style="color: {colors.iconTextColor}; vertical-align: middle;"
+      on:mouseenter={() => onMouseEnter()}
+      on:mouseleave={() => (isOpen = false)}
+    />
   {/if}
 
   {#if isOpen}

@@ -7,22 +7,27 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
+  import modelGreenImage from "../../imgs/model_green.svg";
+  import dataRepresentationImage from "../../imgs/data_representation.svg";
+  import mlTrainImage from "../../imgs/ML_train.svg";
+  import mlPredictImage from "../../imgs/ML_predict.svg";
+
 
   const MLStepsContent: { image: string; text: string }[] = [
     {
-      image: '/imgs/model_green.svg',
+      image: modelGreenImage,
       text: 'content.index.MLExplainer1',
     },
     {
-      image: '/imgs/data_representation.svg',
+      image: dataRepresentationImage,
       text: 'content.index.MLExplainer2',
     },
     {
-      image: '/imgs/ML_train.svg',
+      image: mlTrainImage,
       text: 'content.index.MLExplainer3',
     },
     {
-      image: '/imgs/ML_predict.svg',
+      image: mlPredictImage,
       text: 'content.index.MLExplainer4',
     },
   ];

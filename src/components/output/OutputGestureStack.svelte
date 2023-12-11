@@ -34,6 +34,9 @@
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   import Gesture from '../../script/domain/Gesture';
+  import rightArrowImage from '../../imgs/right_arrow.svg';
+  import rightArrowBlueImage from '../../imgs/right_arrow_blue.svg';
+  import blankMicrobitImage from '../../imgs/blank_microbit.svg';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -250,13 +253,13 @@
       <img
         class="m-auto"
         class:hidden={wasTriggered}
-        src={'imgs/right_arrow.svg'}
+        src={rightArrowImage}
         alt="right arrow icon"
         width="30px" />
       <img
         class="m-auto"
         class:hidden={!wasTriggered || !$state.isInputReady}
-        src={'imgs/right_arrow_blue.svg'}
+        src={rightArrowBlueImage}
         alt="right arrow icon"
         width="30px" />
     </div>
@@ -266,7 +269,7 @@
       <div
         class="w-177px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
         <ImageSkeleton
-          src="imgs/blank_microbit.svg"
+          src={blankMicrobitImage}
           alt="microbit guide"
           width={177}
           height={144}

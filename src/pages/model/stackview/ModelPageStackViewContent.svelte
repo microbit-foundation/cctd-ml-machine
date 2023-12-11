@@ -10,6 +10,7 @@
   import { gestures } from '../../../script/stores/Stores';
   import { state } from '../../../script/stores/uiStore';
   import { t } from './../../../i18n';
+  import downArrowImage from '../../../imgs/down_arrow.svg';
 
   // Bool flags to know whether output microbit popup should be show
   let hasClosedPopup = false;
@@ -80,7 +81,7 @@
         <div class="text-center ml-0 mb-2 mt-8">
           <img
             class="m-auto arrow-filter-color"
-            src="/imgs/down_arrow.svg"
+            src={downArrowImage}
             alt="down arrow icon"
             width="80px" />
         </div>

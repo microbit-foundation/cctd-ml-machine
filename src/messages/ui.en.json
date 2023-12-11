@@ -42,7 +42,7 @@
   "content.data.controlbar.button.downloadData": "Download dataset",
   "content.data.controlbar.button.uploadData": "Upload dataset",
 
-  "content.data.recording.button.cancel": "Cancel Recording",
+  "content.data.recording.button.cancel": "Cancel recording",
   "content.data.recording.description": "Start action before the countdown finishes",
 
   "content.data.trainDialog.title": "Train the model",

@@ -9,6 +9,7 @@
   import TypingUtils from '../../script/TypingUtils';
   import { state } from '../../script/stores/uiStore';
   import StandardButton from '../StandardButton.svelte';
+  import loadingSpinnerImage from '../../imgs/loadingspinner.gif';
 
   export let onOutputDisconnectButtonClicked: () => void;
   export let onInputDisconnectButtonClicked: () => void;
@@ -25,7 +26,7 @@
           >{$t('menu.model.disconnect')}</StandardButton>
       {:else}
         <StandardButton onClick={TypingUtils.emptyFunction} disabled>
-          <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
+          <img alt="loading" src={loadingSpinnerImage} style="height:24px" />
         </StandardButton>
       {/if}
     {/if}
@@ -33,11 +34,11 @@
   <div class="ml-2">
     {#if !$state.isInputConnected || $state.isInputReady}
       <!-- Input MB is not in the connection process -->
-      <StandardButton onClick={onInputDisconnectButtonClicked} type="warning"
+      <StandardButton onClick={onInputDisconnectButtonClicked} type="secondary"
         >{$t('footer.disconnectButton')}</StandardButton>
     {:else}
       <StandardButton onClick={TypingUtils.emptyFunction} disabled>
-        <img alt="loading" src="/imgs/loadingspinner.gif" style="height:24px" />
+        <img alt="loading" src={loadingSpinnerImage} style="height:24px" />
       </StandardButton>
     {/if}
   </div>

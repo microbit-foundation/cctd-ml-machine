@@ -188,6 +188,7 @@ export const translations: TranslationMap = {
 
 		// SELECT MICROBIT FROM WEB POPUP
 		"connectMB.webPopup": TRANSLATION_NEEDED,
+		"connectMB.webPopup.instruction.heading": TRANSLATION_NEEDED,
 		"connectMB.webPopup.instruction1": TRANSLATION_NEEDED,
 		"connectMB.webPopup.instruction2": TRANSLATION_NEEDED,
 
@@ -453,6 +454,7 @@ export const translations: TranslationMap = {
 
 		// SELECT MICROBIT FROM WEB POPUP
 		"connectMB.webPopup":"Select micro:bit",
+		"connectMB.webPopup.instruction.heading": "In the next popup",
 		"connectMB.webPopup.instruction1": "Choose your micro:bit",
 		"connectMB.webPopup.instruction2": "Select 'Connect'",
 

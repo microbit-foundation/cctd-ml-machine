@@ -46,7 +46,7 @@ export const translations: TranslationMap = {
 		"content.data.addData": "Tilføj data",
 		"content.data.classHelpHeader": "Klasse",
 		"content.data.classHelpBody": "En klasse beskriver en type af bevægelse. Vi kan optage eksempler af en bestemt type bevægelse og putte eksemplerne i samme klasse. Træneren kan finde mønstre i eksemplerne/dataet og bruge disse mønstre til at træne en model, der kan genkende denne type bevægelse. Flere eksmpler vil typisk reulstere i en bedre model, men overvej på hvor mange forskellige måder en bevægelse kan laves.",
-		"content.data.classification": "Klasser",
+		"content.data.classification": TRANSLATION_NEEDED,
 		"content.data.data": "Data",
 		"content.data.choice": "Valg",
 		"content.data.choice.header": "Valg af klasse",
@@ -310,8 +310,8 @@ export const translations: TranslationMap = {
 		"content.data.addData": "Add Data",
 		"content.data.classHelpHeader": "Class",
 		"content.data.classHelpBody": "A class describes a type of gesture. We can record examples of a certain type of gesture and put the examples in the same class. The trainer can find patterns in the examples/data and use these patterns to 'train' a model that can recognize this class of gestures. Multiple examples will typically result in a better model, and consider how many different ways a gesture can be performed.",
-		"content.data.classification": "Classes",
-		"content.data.data": "Data",
+		"content.data.classification": "Action",
+		"content.data.data": "Data samples",
 		"content.data.choice": "Choice",
 		"content.data.choice.header": "Choice of class",
 		"content.data.choice.body": "Here, you choose which class you want to add data to. After having selected a class, you can either press the \"Record\" button below or press one of the buttons on your micro:bit to record a data segment. See the picture below.",
@@ -394,12 +394,12 @@ export const translations: TranslationMap = {
 		"footer.reconnecting":"Reconnecting. Please wait",
 
 		//DATA MENU:
-		"menu.data.helpHeading": "Data",
+		"menu.data.helpHeading": "1. Add data",
 		"menu.data.helpBody": "In order to train a model to recognize different movements, we need good examples of 'good behavior' that we can show the Trainer. Here you can create classes (types of gestures) and record examples for each class. There must be at least 2 classes with 3 examples each before the trainer can train a model.",
 		"menu.data.examples": "examples",
 
 		// TRAINER MENU:
-		"menu.trainer.helpHeading": "Trainer",
+		"menu.trainer.helpHeading": "2. Train model",
 		"menu.trainer.helpBody": "The Trainer looks at the examples in each of the classes and tries to 'learn' how the different classes can be recognized by searching for patterns in the data. Here you can train a model to recognize different gestures.", // In addition, you can configure the trainer, choose how the trainer should interpret the data and create test sets.",
 		"menu.trainer.notConnected1": "You have not connected a micro:bit.",
 		"menu.trainer.notConnected2": " Please do so via the button below",
@@ -413,7 +413,7 @@ export const translations: TranslationMap = {
 		"menu.trainer.isTrainingModelButton": "Training model",
 
 		// MODEL MENU:
-		"menu.model.helpHeading": "Model",
+		"menu.model.helpHeading": "3. Test model",
 		"menu.model.helpBody": "The model can be used in an interactive system. Here we use the trained model to predict gestures. You can connect another micro:bit and make it respond to the predicted gestures.",
 		"menu.model.noModel": "No model",
 		"menu.model.disconnect": "Disconnect output micro:bit",

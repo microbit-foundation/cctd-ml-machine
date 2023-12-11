@@ -292,7 +292,7 @@
             {$t('content.data.recording.description')}
           </p>
         </GestureTilePart>
-        <StandardButton onClick={() => (showCountdown = false)}
+        <StandardButton type="warning" onClick={() => (showCountdown = false)}
           >{$t('content.data.recording.button.cancel')}</StandardButton>
       </div>
     </BaseDialog>

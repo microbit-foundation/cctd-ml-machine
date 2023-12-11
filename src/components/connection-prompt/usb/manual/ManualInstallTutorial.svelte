@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -71,7 +71,7 @@
     </div>
   </div>
   <div class="grid grid-cols-1 place-items-center w-full">
-    <StandardButton onClick={onConnectBluetoothClick}
+    <StandardButton type="primary" onClick={onConnectBluetoothClick}
       >{$t('connectMB.usb.manual.done')}</StandardButton>
   </div>
 </main>

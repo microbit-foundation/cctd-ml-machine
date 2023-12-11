@@ -66,6 +66,9 @@ export const translations: TranslationMap = {
 		"content.data.trainDialog.text": TRANSLATION_NEEDED,
 
 		// TRAINER PAGE:
+		"content.trainer.header": TRANSLATION_NEEDED,
+		"content.trainer.description": TRANSLATION_NEEDED,
+
 		"content.trainer.failure.header": "Træning mislykkedes",
 		"content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
 		"content.trainer.failure.todo": "Gå tilbage til datasiden og ændr i din data.",
@@ -331,6 +334,9 @@ export const translations: TranslationMap = {
 		"content.data.trainDialog.text": "Do you want to train the model with the data you have added so you can test it?",
 
 		// TRAINER PAGE:
+		"content.trainer.header": "Training a model",
+		"content.trainer.description": "The computer program spots patterns or differences in your data samples, and uses these to build a mathematical model that allows the micro:bit machine learning tool to recognise different actions when you move your micro:bit.",
+
 		"content.trainer.failure.header": "Training Failed",
 		"content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
 		"content.trainer.failure.todo": "Return to the data page and change your data.",
@@ -403,8 +409,8 @@ export const translations: TranslationMap = {
 		"menu.trainer.helpBody": "The Trainer looks at the examples in each of the classes and tries to 'learn' how the different classes can be recognized by searching for patterns in the data. Here you can train a model to recognize different gestures.", // In addition, you can configure the trainer, choose how the trainer should interpret the data and create test sets.",
 		"menu.trainer.notConnected1": "You have not connected a micro:bit.",
 		"menu.trainer.notConnected2": " Please do so via the button below",
-		"menu.trainer.notEnoughDataHeader1": "Not Enough Data\nGo to Data page",
-		"menu.trainer.notEnoughDataInfoBody": "You need at least 2 classes with 3 examples each to attempt to train a model.",
+		"menu.trainer.notEnoughDataHeader1": "Status: You don't have enough data.",
+		"menu.trainer.notEnoughDataInfoBody": "You need at least 3 data samples for 2 actions to train a model.",
 		"menu.trainer.notEnoughDataInfo": "You have not collected enough data to train a model. You need at least 2 classes with 3 examples each. Please go to the Data page to collect more data",
 		"menu.trainer.trainModelButton": "Train model",
 		"menu.trainer.trainNewModelButton": "Train a new model",

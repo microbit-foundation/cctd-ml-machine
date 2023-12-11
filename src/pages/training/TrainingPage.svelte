@@ -12,6 +12,9 @@
   import { slide } from 'svelte/transition';
   import TrainingButton from './TrainingButton.svelte';
   import TabView from '../../views/TabView.svelte';
+  import trainModelImage from '../../imgs/TrainModel.svg';
+
+  let descriptionTextColour = '#8892A3';
 
   $: sufficientData = hasSufficientData($gestures);
 
@@ -45,15 +48,20 @@
   </div>
 </StandardDialog>
 
-<div class="flex flex-col h-full pb-10">
+<div class="flex flex-col pb-5">
   <TabView />
+  <img class="self-center pt-50" src={trainModelImage} alt="train model" width="350" />
+  <p class="text-2xl font-semibold self-center pb-5">{$t('content.trainer.header')}</p>
+  <p class="text-center self-center leading-relaxed text-[{descriptionTextColour}] w-180">
+    {$t('content.trainer.description')}
+  </p>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
     {#if !sufficientData}
-      <div class="w-full text-primarytext">
-        <h1 class="w-3/4 text-3xl bold m-auto">
+      <div class="w-full py-10">
+        <h1 class="text-xl bold m-auto font-semibold">
           {$t('menu.trainer.notEnoughDataHeader1')}
         </h1>
-        <p class="w-3/5 text-xl m-auto mt-5">
+        <p class="pt-5 text-[{descriptionTextColour}]">
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
       </div>

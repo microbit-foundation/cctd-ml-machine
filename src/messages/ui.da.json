@@ -55,25 +55,19 @@
   "content.filters.NoDataHeader": "Der er ikke noget data",
   "content.filters.NoDataBody": "Gå til Data-siden for at indsamle data.",
   "content.filters.max.title": "Maksværdier",
-  "content.filters.max.description":
-    "Det maksimale punkt blandt alle datapunkter i en bevægelse.",
+  "content.filters.max.description": "Det maksimale punkt blandt alle datapunkter i en bevægelse.",
   "content.filters.min.title": "Minimumsværdier",
-  "content.filters.min.description":
-    "Det minimale punkt blandt alle datapunkter i en bevægelse.",
+  "content.filters.min.description": "Det minimale punkt blandt alle datapunkter i en bevægelse.",
   "content.filters.std.title": "Standardafvigelse",
-  "content.filters.std.description":
-    "Den gennemsnitlige afvigelse fra 0 blandt alle datapunkter i en bevægelse.",
+  "content.filters.std.description": "Den gennemsnitlige afvigelse fra 0 blandt alle datapunkter i en bevægelse.",
   "content.filters.peaks.title": "Antal ekstremer",
-  "content.filters.peaks.description":
-    "Antallet af ekstremer blandt alle datapunkter i en bevægelse.",
+  "content.filters.peaks.description": "Antallet af ekstremer blandt alle datapunkter i en bevægelse.",
   "content.filters.acc.title": "Samlet acceleration",
-  "content.filters.acc.description":
-    "Summen af acceleration for hele bevægelsen, udregnet med absolutte værdier. God til at forstå mængden af bevægelse.",
+  "content.filters.acc.description": "Summen af acceleration for hele bevægelsen, udregnet med absolutte værdier. God til at forstå mængden af bevægelse.",
   "content.filters.mean.title": "Gennemsnit",
   "content.filters.mean.description": "Gennemsnit af acceleration.",
   "content.filters.zcr.title": "Zero crossing rate",
-  "content.filters.zcr.description":
-    "Hvor ofte inputet (accelerationen) går fra positiv til negativ eller omvendt",
+  "content.filters.zcr.description": "Hvor ofte inputet (accelerationen) går fra positiv til negativ eller omvendt",
   "content.filters.rms.title": "Effektiv værdi ",
   "content.filters.rms.description": "Root mean square.",
 
@@ -169,6 +163,7 @@
   "connectMB.connectCable.skip": "TRANSLATION_NEEDED",
 
   "connectMB.webPopup": "TRANSLATION_NEEDED",
+  "connectMB.webPopup.instruction.heading": "TRANSLATION_NEEDED",
   "connectMB.webPopup.instruction1": "TRANSLATION_NEEDED",
   "connectMB.webPopup.instruction2": "TRANSLATION_NEEDED",
 

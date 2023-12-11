@@ -71,6 +71,8 @@ export const translations: TranslationMap = {
 
 		"content.trainer.enoughdata.title": TRANSLATION_NEEDED,
 
+		"content.trainer.training.title": TRANSLATION_NEEDED,
+
 		"content.trainer.failure.header": "Træning mislykkedes",
 		"content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
 		"content.trainer.failure.todo": "Gå tilbage til datasiden og ændr i din data.",
@@ -150,7 +152,6 @@ export const translations: TranslationMap = {
 		"menu.trainer.trainNewModelButton": "Træn en ny model",
 		"menu.trainer.TrainingFinished": "Træning færdig",
 		"menu.trainer.TrainingFinished.body": "Gå til Model-siden for at undersøge hvor godt din model virker",
-		"menu.trainer.isTrainingModelButton": "Træner model...",
 
 		// MODEL MENU:
 		"menu.model.helpHeading": TRANSLATION_NEEDED,
@@ -341,6 +342,8 @@ export const translations: TranslationMap = {
 		
 		"content.trainer.enoughdata.title": "Status: You've collected enough data to train the model.",
 
+		"content.trainer.training.title": "Status: training the model in progress.",
+
 		"content.trainer.failure.header": "Training Failed",
 		"content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
 		"content.trainer.failure.todo": "Return to the data page and change your data.",
@@ -421,7 +424,6 @@ export const translations: TranslationMap = {
 		"menu.trainer.trainNewModelButton": "Train a new model",
 		"menu.trainer.TrainingFinished": "Training done",
 		"menu.trainer.TrainingFinished.body": "Go to the Model-page to examine how well your model works",
-		"menu.trainer.isTrainingModelButton": "Training model",
 
 		// MODEL MENU:
 		"menu.model.helpHeading": "Model",

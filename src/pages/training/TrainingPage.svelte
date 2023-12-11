@@ -13,6 +13,7 @@
   import TrainingButton from './TrainingButton.svelte';
   import TabView from '../../views/TabView.svelte';
   import trainModelImage from '../../imgs/TrainModel.svg';
+  import loadingSpinnerImage from '../../imgs/loadingspinner.gif';
 
   let descriptionTextColour = '#8892A3';
 
@@ -68,14 +69,11 @@
     {:else if sufficientData && !$state.isTraining}
       <p class="font-semibold text-2xl py-10">{$t('content.trainer.enoughdata.title')}</p>
     {:else if $state.isTraining}
-      <div class="w-3/4 text-primarytext">
-        <div class="ml-auto mr-auto flex center-items justify-center">
-          <i
-            class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
+      <div class="text-primarytext">
+        <div class="ml-auto mr-auto flex flex-col center-items justify-center">
+          <p class="text-2xl font-semibold pt-10">{$t('content.trainer.training.title')}</p>
+          <img alt="loading" src={loadingSpinnerImage} width="100px" class="self-center" />
         </div>
-        <p class="bold text-3xl bold mt-10">
-          {$t('menu.trainer.isTrainingModelButton')}
-        </p>
       </div>
     {:else}
       <div class="w-3/4 text-primarytext">

@@ -69,6 +69,8 @@ export const translations: TranslationMap = {
 		"content.trainer.header": TRANSLATION_NEEDED,
 		"content.trainer.description": TRANSLATION_NEEDED,
 
+		"content.trainer.enoughdata.title": TRANSLATION_NEEDED,
+
 		"content.trainer.failure.header": "Træning mislykkedes",
 		"content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
 		"content.trainer.failure.todo": "Gå tilbage til datasiden og ændr i din data.",
@@ -336,10 +338,13 @@ export const translations: TranslationMap = {
 		// TRAINER PAGE:
 		"content.trainer.header": "Training a model",
 		"content.trainer.description": "The computer program spots patterns or differences in your data samples, and uses these to build a mathematical model that allows the micro:bit machine learning tool to recognise different actions when you move your micro:bit.",
+		
+		"content.trainer.enoughdata.title": "Status: You've collected enough data to train the model.",
 
 		"content.trainer.failure.header": "Training Failed",
 		"content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
 		"content.trainer.failure.todo": "Return to the data page and change your data.",
+
 
 		"content.filters.max.title" : "Max values",
 		"content.filters.max.description" : "The tallest point among all datapoints in a gesture.",

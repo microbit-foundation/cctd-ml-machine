@@ -65,6 +65,8 @@
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
       </div>
+    {:else if sufficientData && !$state.isTraining}
+      <p class="font-semibold text-2xl py-10">{$t('content.trainer.enoughdata.title')}</p>
     {:else if $state.isTraining}
       <div class="w-3/4 text-primarytext">
         <div class="ml-auto mr-auto flex center-items justify-center">

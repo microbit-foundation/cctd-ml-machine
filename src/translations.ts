@@ -162,6 +162,7 @@ export const translations: TranslationMap = {
 		"connectMB.radioStart.requirements1": TRANSLATION_NEEDED,
 		"connectMB.radioStart.requirements2": TRANSLATION_NEEDED,
 		"connectMB.radioStart.requirements3": TRANSLATION_NEEDED,
+		"connectMB.radioStart.requirements4": TRANSLATION_NEEDED,
 		"connectMB.radioStart.switchBluetooth": TRANSLATION_NEEDED,
 
 		// BLUETOOTH CONNECTION START
@@ -170,6 +171,7 @@ export const translations: TranslationMap = {
 		"connectMB.bluetoothStart.requirements1": TRANSLATION_NEEDED,
 		"connectMB.bluetoothStart.requirements2": TRANSLATION_NEEDED,
 		"connectMB.bluetoothStart.requirements3": TRANSLATION_NEEDED,
+		"connectMB.bluetoothStart.requirements4": TRANSLATION_NEEDED,
 		"connectMB.bluetoothStart.switchRadio": TRANSLATION_NEEDED,
 
 		// CONNECT CABLE TO MICROBIT
@@ -323,7 +325,7 @@ export const translations: TranslationMap = {
 		"content.data.controlbar.button.downloadData": "Download dataset",
 		"content.data.controlbar.button.uploadData": "Upload dataset",
 
-		"content.data.recording.button.cancel": "Cancel Recording",
+		"content.data.recording.button.cancel": "Cancel recording",
 		"content.data.recording.description": "Start action before the countdown finishes",
 
 		"content.data.trainDialog.title": "Train the model",
@@ -423,17 +425,19 @@ export const translations: TranslationMap = {
 
 		// RADIO CONNECTION START
 		"connectMB.radioStart.heading": "What you will need to get started:",
-		"connectMB.radioStart.requirements1": "2 x micro:bits",
-		"connectMB.radioStart.requirements2": "1 x USB cable, battery pack & micro:bit holder",
-		"connectMB.radioStart.requirements3": "1 x computer",
+		"connectMB.radioStart.requirements1": "2 micro:bits",
+		"connectMB.radioStart.requirements2": "Computer",
+		"connectMB.radioStart.requirements3": "Micro USB cable",
+		"connectMB.radioStart.requirements4": "Battery holder",
 		"connectMB.radioStart.switchBluetooth": "I only have one micro:bit",
 
 		// BLUETOOTH CONNECTION START
 		"connectMB.bluetoothStart.heading": "If you only have one micro:bit",
 		"connectMB.bluetoothStart.subtitle": "You will need to have web Bluetooth enabled on your computer and in your web browser.",
-		"connectMB.bluetoothStart.requirements1": "1 x micro:bits",
-		"connectMB.bluetoothStart.requirements2": "1 x USB cable, battery pack & micro:bit holder",
-		"connectMB.bluetoothStart.requirements3": "1 x computer",
+		"connectMB.bluetoothStart.requirements1": "1 micro:bit",
+		"connectMB.bluetoothStart.requirements2": "Computer",
+		"connectMB.bluetoothStart.requirements3": "Micro USB cable",
+		"connectMB.bluetoothStart.requirements4": "Battery holder",
 		"connectMB.bluetoothStart.switchRadio": "I have two micro:bits",
 
 		// CONNECT CABLE TO MICROBIT

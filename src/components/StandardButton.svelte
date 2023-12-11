@@ -2,7 +2,7 @@
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
 
   SPDX-License-Identifier: MIT
- -->
+-->
 
 <style>
   .large {
@@ -16,6 +16,13 @@
 
   .small {
     padding: 1px 10px;
+  }
+
+  :disabled {
+    background-color: transparent;
+    border-color: #ccc;
+    color: #ccc;
+    box-shadow: none;
   }
 </style>
 
@@ -35,8 +42,8 @@
 
   const classes: { [key in ButtonVariant]: string } = {
     primary: 'bg-primary text-white border-solid border-2 border-primary',
-    secondary: 'bg-transparent text-black border-solid border-2 border-primary',
-    warning: 'bg-warning',
+    secondary: 'bg-white text-black border-solid border-2 border-primary',
+    warning: 'bg-warning text-white',
     info: 'bg-info',
     infolight: 'bg-infolight',
   };

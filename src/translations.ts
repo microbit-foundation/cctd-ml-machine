@@ -150,8 +150,7 @@ export const translations: TranslationMap = {
 		"menu.trainer.notEnoughDataInfo": "Du har ikke indsamlet nok data til at træne en model. Der er brug for minimum 2 klasser med 3 eksempler i hver. Gå til Data-siden for at indsamle mere data",
 		"menu.trainer.trainModelButton": "Træn model",
 		"menu.trainer.trainNewModelButton": "Træn en ny model",
-		"menu.trainer.TrainingFinished": "Træning færdig",
-		"menu.trainer.TrainingFinished.body": "Gå til Model-siden for at undersøge hvor godt din model virker",
+		"menu.trainer.TrainingFinished": TRANSLATION_NEEDED,
 
 		// MODEL MENU:
 		"menu.model.helpHeading": TRANSLATION_NEEDED,
@@ -422,8 +421,7 @@ export const translations: TranslationMap = {
 		"menu.trainer.notEnoughDataInfo": "You have not collected enough data to train a model. You need at least 2 classes with 3 examples each. Please go to the Data page to collect more data",
 		"menu.trainer.trainModelButton": "Train model",
 		"menu.trainer.trainNewModelButton": "Train a new model",
-		"menu.trainer.TrainingFinished": "Training done",
-		"menu.trainer.TrainingFinished.body": "Go to the Model-page to examine how well your model works",
+		"menu.trainer.TrainingFinished": "Status: Your model is trained.",
 
 		// MODEL MENU:
 		"menu.model.helpHeading": "Model",

@@ -66,7 +66,7 @@
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
       </div>
-    {:else if sufficientData && !$state.isTraining}
+    {:else if sufficientData && !$state.isTraining && !$state.isPredicting}
       <p class="font-semibold text-2xl py-10">{$t('content.trainer.enoughdata.title')}</p>
     {:else if $state.isTraining}
       <div class="text-primarytext">
@@ -76,16 +76,11 @@
         </div>
       </div>
     {:else}
-      <div class="w-3/4 text-primarytext">
         {#if $state.isPredicting}
-          <p class="bold text-3xl bold mt-10">
+          <p class="text-2xl font-semibold mt-10 pb-10">
             {$t('menu.trainer.TrainingFinished')}
           </p>
-          <p class="bold text-xl bold mt-10">
-            {$t('menu.trainer.TrainingFinished.body')}
-          </p>
         {/if}
-      </div>
     {/if}
   </div>
 

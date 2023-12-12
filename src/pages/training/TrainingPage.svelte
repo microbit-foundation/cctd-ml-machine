@@ -80,24 +80,26 @@
     {:else if $state.isTraining}
       <div class="text-primarytext">
         <div class="ml-auto mr-auto flex flex-col center-items justify-center">
-          <p class="text-2xl font-semibold pt-10">{$t('content.trainer.training.title')}</p>
-          <img alt="loading" src={loadingSpinnerImage} width="100px" class="self-center" />
+          <p class="text-2xl font-semibold pt-10">
+            {$t('content.trainer.training.title')}
+          </p>
+          <img
+            alt="loading"
+            src={loadingSpinnerImage}
+            width="100px"
+            class="self-center" />
         </div>
       </div>
-    {:else}
-        {#if $state.isPredicting}
-          <p class="text-2xl font-semibold mt-10 pb-10">
-            {$t('menu.trainer.TrainingFinished')}
-          </p>
-          <div class="flex flexbox space-x-10">
-            <StandardButton
-              onClick={navigateDataPage}
-              type="secondary">{$t('menu.trainer.addMoreDataButton')}</StandardButton>
-            <StandardButton
-              onClick={navigateModelPage}
-              type="primary">{$t('menu.trainer.testModelButton')}</StandardButton>
-          </div>
-        {/if}
+    {:else if $state.isPredicting}
+      <p class="text-2xl font-semibold mt-10 pb-10">
+        {$t('menu.trainer.TrainingFinished')}
+      </p>
+      <div class="flex flexbox space-x-10">
+        <StandardButton onClick={navigateDataPage} type="secondary"
+          >{$t('menu.trainer.addMoreDataButton')}</StandardButton>
+        <StandardButton onClick={navigateModelPage} type="primary"
+          >{$t('menu.trainer.testModelButton')}</StandardButton>
+      </div>
     {/if}
   </div>
 

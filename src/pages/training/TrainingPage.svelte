@@ -6,14 +6,14 @@
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import { TrainingStatus, gestures, trainingStatus } from '../../script/stores/mlStore';
+  import { TrainingStatus, trainingStatus } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
   import TrainingButton from './TrainingButton.svelte';
   import TabView from '../../views/TabView.svelte';
 
-  $: sufficientData = hasSufficientData($gestures);
+  $: sufficientData = hasSufficientData();
 
   let isFailedTrainingDialogOpen = false;
 

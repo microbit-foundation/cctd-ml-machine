@@ -131,9 +131,12 @@
   "menu.trainer.notEnoughDataHeader1": "Ikke nok data!\nGå til Data-siden",
   "menu.trainer.notEnoughDataInfoBody": "Der er brug for minimum 2 klasser med 3 eksempler i hver for at kunne træne en model.",
   "menu.trainer.notEnoughDataInfo": "Du har ikke indsamlet nok data til at træne en model. Der er brug for minimum 2 klasser med 3 eksempler i hver. Gå til Data-siden for at indsamle mere data",
-  "menu.trainer.trainModelButton": "Træn model",
   "menu.trainer.trainNewModelButton": "Træn en ny model",
   "menu.trainer.TrainingFinished": "TRANSLATION_NEEDED",
+
+  "menu.trainer.trainModelButton": "TRANSLATION_NEEDED",
+  "menu.trainer.addMoreDataButton": "TRANSLATION_NEEDED",
+  "menu.trainer.testModelButton": "TRANSLATION_NEEDED",
 
   "menu.model.helpHeading": "TRANSLATION_NEEDED",
   "menu.model.helpBody": "Modellen kan bruges i et interaktivt system. Her bruger vi den trænede model til at forudsige bevægelser. Du kan tilslutte endnu en micro:bit og få den til at reagere på de bevægelser du laver.",

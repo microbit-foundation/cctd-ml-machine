@@ -92,10 +92,10 @@
           <div class="flex flexbox space-x-10">
             <StandardButton
               onClick={navigateDataPage}
-              type="secondary">ADD MORE DATA</StandardButton>
+              type="secondary">{$t('menu.trainer.addMoreDataButton')}</StandardButton>
             <StandardButton
               onClick={navigateModelPage}
-              type="primary">TEST MODEL</StandardButton>
+              type="primary">{$t('menu.trainer.testModelButton')}</StandardButton>
           </div>
         {/if}
     {/if}

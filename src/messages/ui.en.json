@@ -131,9 +131,12 @@
   "menu.trainer.notEnoughDataHeader1": "Status: You don't have enough data.",
   "menu.trainer.notEnoughDataInfoBody": "You need at least 3 data samples for 2 actions to train the model.",
   "menu.trainer.notEnoughDataInfo": "You have not collected enough data to train a model. You need at least 2 classes with 3 examples each. Please go to the Data page to collect more data",
-  "menu.trainer.trainModelButton": "Train model",
   "menu.trainer.trainNewModelButton": "Train a new model",
   "menu.trainer.TrainingFinished": "Status: Your model is trained.",
+  
+  "menu.trainer.trainModelButton": "Train model",
+  "menu.trainer.addMoreDataButton": "Add more data",
+  "menu.trainer.testModelButton": "Test model",
 
   "menu.model.helpHeading": "3. Test model",
   "menu.model.helpBody": "The model can be used in an interactive system. Here we use the trained model to predict gestures. You can connect another micro:bit and make it respond to the predicted gestures.",

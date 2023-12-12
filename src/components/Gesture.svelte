@@ -58,7 +58,7 @@
   let isThisRecording = false;
   let showCountdown = false;
   let countdownValue = countdownInitialValue;
-  let countdownInterval: number = 500; // the countdown interval in milliseconds
+  let countdownInterval: number = 1000; // the countdown interval in milliseconds
 
   async function countdownStart(): Promise<void> {
     showCountdown = true;

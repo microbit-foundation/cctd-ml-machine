@@ -5,10 +5,15 @@
  -->
 
 <script lang="ts">
+  import StaticConfiguration from '../../StaticConfiguration';
   import { liveAccelerometerData } from '../../script/stores/Stores';
   import LiveGraph from './LiveGraph.svelte';
 
   export let width: number;
 </script>
 
-<LiveGraph minValue={-2} maxValue={2.3} liveData={liveAccelerometerData} {width} />
+<LiveGraph
+  minValue={StaticConfiguration.liveGraphValueBounds.min}
+  maxValue={StaticConfiguration.liveGraphValueBounds.max}
+  liveData={liveAccelerometerData}
+  {width} />

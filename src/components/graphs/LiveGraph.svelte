@@ -25,10 +25,10 @@
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
   export let liveData: LiveData<any>;
-    export let maxValue: number;
-    export let minValue: number;
+  export let maxValue: number;
+  export let minValue: number;
 
-    // Smoothes real-time data by using the 3 most recent data points
+  // Smoothes real-time data by using the 3 most recent data points
   const smoothedLiveData = new SmoothedLiveData(liveData, 3);
 
   var canvas: HTMLCanvasElement | undefined = undefined;
@@ -151,10 +151,14 @@
       i++;
     }
   };
-
 </script>
 
 <main class="flex">
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
-  <DimensionLabels hidden={!$state.isInputConnected} minValue={minValue} graphHeight={160} maxValue={maxValue} liveData={smoothedLiveData} />
+  <DimensionLabels
+    hidden={!$state.isInputConnected}
+    {minValue}
+    graphHeight={160}
+    {maxValue}
+    liveData={smoothedLiveData} />
 </main>

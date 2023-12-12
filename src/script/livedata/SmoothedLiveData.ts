@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import { Readable, Subscriber, Unsubscriber, derived } from 'svelte/store';
 import LiveData from '../domain/LiveData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
@@ -5,7 +10,7 @@ import { smoothNewValue } from '../utils/graphUtils';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.
- * 
+ *
  * Each entry in the SmoothedLiveData will be interpolated with previous values seen. I.e `y_i = 0.75x_(i-1) + 0.25x_i`
  */
 class SmoothedLiveData<T> implements LiveData<T> {
@@ -15,7 +20,10 @@ class SmoothedLiveData<T> implements LiveData<T> {
    * Creates a new SmoothedLiveData store, using the provided LiveData store as data reference.
    * @param noOfSamples The number of samples to interpolate over
    */
-  constructor(private referenceStore: LiveData<T>, private noOfSamples: number) {
+  constructor(
+    private referenceStore: LiveData<T>,
+    private noOfSamples: number,
+  ) {
     this.smoothedStore = this.deriveStore();
   }
 
@@ -66,7 +74,7 @@ class SmoothedLiveData<T> implements LiveData<T> {
   private deriveStore() {
     return derived([this.referenceStore], stores => {
       const referenceData = stores[0];
-      
+
       const oldValues = this.referenceStore.getBuffer().getNewestValues(this.noOfSamples);
       if (oldValues.some(val => val === null)) {
         // Theres not enough data in the buffer yet.
@@ -75,10 +83,8 @@ class SmoothedLiveData<T> implements LiveData<T> {
 
       const newObject: T = { ...referenceData };
       for (const property in newObject) {
-        const values = oldValues.map(val => val![property] as number)
-        newObject[property] = smoothNewValue(
-          ...values
-        ) as never;
+        const values = oldValues.map(val => val![property] as number);
+        newObject[property] = smoothNewValue(...values) as never;
       }
       return newObject;
     });

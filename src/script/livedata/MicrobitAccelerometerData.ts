@@ -37,7 +37,7 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
   }
 
   public getLabels(): string[] {
-    return ["X", "Y", "Z"];
+    return ['X', 'Y', 'Z'];
   }
 
   public getPropertyNames(): string[] {

@@ -16,23 +16,23 @@
   import type { Unsubscriber } from 'svelte/store';
   import { state } from '../../script/stores/uiStore';
   import StaticConfiguration from '../../StaticConfiguration';
-    import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
+  import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
 
-    type LabelData = {
-      id: number,
-      label: string,
-      color: string,
-      arrowHeight: number,
-      textHeight: number
-    }
-    // The height of character is used to fix overlapping line labels
-    const CHARACTER_HEIGHT = 16;
+  type LabelData = {
+    id: number;
+    label: string;
+    color: string;
+    arrowHeight: number;
+    textHeight: number;
+  };
+  // The height of character is used to fix overlapping line labels
+  const CHARACTER_HEIGHT = 16;
 
-    export let liveData: SmoothedLiveData<any>;
-    export let maxValue: number;
-    export let minValue: number;
-    export let graphHeight: number;
-    export let hidden: boolean = false;
+  export let liveData: SmoothedLiveData<any>;
+  export let maxValue: number;
+  export let minValue: number;
+  export let graphHeight: number;
+  export let hidden: boolean = false;
 
   let unsubscribeFromLiveData: Unsubscriber | undefined = undefined;
 
@@ -52,20 +52,20 @@
 
   // Initialize labels with all-0 values
   const initializeLabels = (): LabelData[] => {
-    const labels = []
+    const labels = [];
     for (let i = 0; i < liveData.getSeriesSize(); i++) {
       const label = liveData.getLabels()[i];
       const color = StaticConfiguration.liveGraphColors[i];
       labels.push({
         label: label,
         color: color,
-        arrowHeight:0,
-        textHeight:0,
-        id:i
-      })
+        arrowHeight: 0,
+        textHeight: 0,
+        id: i,
+      });
     }
     return labels;
-  }
+  };
 
   let labels: LabelData[] = initializeLabels();
 
@@ -74,10 +74,10 @@
       const normalMax = maxValue - minValue;
       const normalValue = axes[labels[i].id] - minValue;
       const newValue = (normalValue / normalMax) * graphHeight;
-      if (labels[i].label === "Z") {
+      if (labels[i].label === 'Z') {
       }
       labels[i].arrowHeight = newValue + 4; // We add 4 to align the arrow to the graph line
-       // labelHeight will be overridden in fixOverlappingLabels if necessary
+      // labelHeight will be overridden in fixOverlappingLabels if necessary
       labels[i].textHeight = newValue - CHARACTER_HEIGHT + 2; // Subract height to align with arrow
     }
     fixOverlappingLabels();
@@ -89,7 +89,7 @@
     });
     for (let i = 1; i < labels.length; i++) {
       const element = labels[i];
-      const previousLabel = labels[i-1];
+      const previousLabel = labels[i - 1];
       if (element.textHeight < previousLabel.textHeight + CHARACTER_HEIGHT) {
         // Label is overlapping, push it down.
         element.textHeight = previousLabel.textHeight + CHARACTER_HEIGHT;

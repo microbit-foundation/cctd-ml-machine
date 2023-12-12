@@ -5,10 +5,10 @@
  -->
 
 <script lang="ts">
-    import { liveAccelerometerData } from "../../script/stores/Stores";
-    import LiveGraph from "./LiveGraph.svelte";
+  import { liveAccelerometerData } from '../../script/stores/Stores';
+  import LiveGraph from './LiveGraph.svelte';
 
-    export let width: number;
+  export let width: number;
 </script>
 
- <LiveGraph minValue={-2} maxValue={2.3} liveData={liveAccelerometerData} width={width}/>
+<LiveGraph minValue={-2} maxValue={2.3} liveData={liveAccelerometerData} {width} />

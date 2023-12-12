@@ -7,10 +7,9 @@ import { Readable } from 'svelte/store';
 import LiveDataBuffer from './LiveDataBuffer';
 
 /**
- * A container for real-time data. Uses a LiveDataBuffer to store data points. 
+ * A container for real-time data. Uses a LiveDataBuffer to store data points.
  */
 interface LiveData<T> extends Readable<T> {
-  
   /**
    * Inserts a new data point to the LiveData object
    */
@@ -35,7 +34,7 @@ interface LiveData<T> extends Readable<T> {
   /**
    * Returns the property names of generic type T. Useful for iterating over individual data points for a single sample point.
    */
-  getPropertyNames(): string[]
+  getPropertyNames(): string[];
 }
 
 export default LiveData;

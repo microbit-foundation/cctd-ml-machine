@@ -16,7 +16,7 @@
 </script>
 
 <!-- These are the buttons that are present while the input micro:bit is connected-->
-<div class="flex flex-row">
+<div class="flex flex-row mr-4">
   {#if $state.isPredicting || $state.isTraining || $state.isOutputConnected}
     {#if $state.isOutputAssigned}
       <!-- Output is assigned -->

@@ -40,6 +40,7 @@
   class:animate-spin={spin}
   class:hidden={!hasLoaded}
   class:shadow-md={castShadow}
+  class="h-[{height}px]"
   {height}
   on:load={onLoad}
   {src}

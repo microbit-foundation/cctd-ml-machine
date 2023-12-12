@@ -46,6 +46,13 @@ const config = {
       type: 'local',
       domain,
       category: 'essential',
+      name: 'MLSettings',
+      purpose: 'Stores settings for the machine learning model',
+    },
+    {
+      type: 'local',
+      domain,
+      category: 'essential',
       name: 'lang',
       purpose: 'Stores your chosen language',
     },

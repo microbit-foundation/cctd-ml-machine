@@ -71,7 +71,7 @@
   "content.filters.rms.title": "Root mean square",
   "content.filters.rms.description": "",
 
-  "content.model.trainModelFirstHeading": "Train the model first!",
+  "content.model.trainModelFirstHeading": "Test model",
   "content.model.trainModelBody1": "You cannot test the model until it has been trained.",
   "content.model.trainModelBody2": "You need at least 3 data samples for 2 actions to train a model.",
   "content.model.classification.helpHeading": "Probabil-ometer",

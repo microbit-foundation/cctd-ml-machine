@@ -29,7 +29,7 @@
   "content.data.addData": "Tilføj data",
   "content.data.classHelpHeader": "Klasse",
   "content.data.classHelpBody": "En klasse beskriver en type af bevægelse. Vi kan optage eksempler af en bestemt type bevægelse og putte eksemplerne i samme klasse. Træneren kan finde mønstre i eksemplerne/dataet og bruge disse mønstre til at træne en model, der kan genkende denne type bevægelse. Flere eksmpler vil typisk reulstere i en bedre model, men overvej på hvor mange forskellige måder en bevægelse kan laves.",
-  "content.data.classification": "Klasser",
+  "content.data.classification": "TRANSLATION_NEEDED",
   "content.data.data": "Data",
   "content.data.choice": "Valg",
   "content.data.choice.header": "Valg af klasse",
@@ -78,8 +78,9 @@
   "content.filters.rms.title": "Effektiv værdi ",
   "content.filters.rms.description": "Root mean square.",
 
-  "content.model.trainModelFirstHeading": "Træn modellen først!",
-  "content.model.trainModelFirstBody": "Gå til 'Træner'-siden",
+  "content.model.trainModelFirstHeading": "TRANSLATION_NEEDED",
+  "content.model.trainModelBody1": "TRANSLATION_NEEDED",
+  "content.model.trainModelBody2": "TRANSLATION_NEEDED",
   "content.model.classification.helpHeading": "Sandsynligheds-meteret",
   "content.model.classification.helpBody": "For hver forudsigelse, vil modellen producere et procent-tal, der beskriver hvor sikker modellen er i sin fordusigelse. Dette meter går fra 0% til 100%. Med slideren ved siden af, kan du bestemme grænsen for, hvor sikker modellen skal være i sin forudsigelse for at lave et output (fx afspille en lyd)",
   "content.model.output.soundOptionCongratulations": "Tillykke",
@@ -110,6 +111,8 @@
 
   "content.model.output.popup.header": "Tilslut output-micro:bit",
   "content.model.output.popup.body": "Hvis du ikke har tilsluttet en output-micro:bit, kan du ikke se resultatet af de ændringer du laver på denne side. Tilslut nedenfor.",
+
+  "content.model.addData": "TRANSLATION_NEEDED",
 
   "footer.connectButtonNotConnected": "TRANSLATION_NEEDED",
   "footer.disconnectButton": "Frakobl",

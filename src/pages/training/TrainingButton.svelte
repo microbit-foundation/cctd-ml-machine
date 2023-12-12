@@ -6,13 +6,14 @@
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import StandardButton from '../../components/StandardButton.svelte';
+  import StandardButton, { ButtonVariant } from '../../components/StandardButton.svelte';
   import { trainModel } from '../../script/ml';
   import { t } from '../../i18n';
   import { Paths, navigate } from '../../router/paths';
   import { gestures } from '../../script/stores/Stores';
 
-  export let type: 'navigate' | 'train' = 'train';
+  export let type: ButtonVariant = 'primary';
+  export let action: 'navigate' | 'train' = 'train';
 
   $: trainButtonLabel = !$state.isPredicting
     ? 'menu.trainer.trainModelButton'
@@ -40,8 +41,8 @@
 </script>
 
 <StandardButton
-  onClick={type === 'navigate' ? navitgateToTrainingPage : startTraining}
+  onClick={action === 'navigate' ? navitgateToTrainingPage : startTraining}
   disabled={trainingButtonDisabled}
-  type="primary"
+  {type}
   >{$t(trainButtonLabel)}
 </StandardButton>

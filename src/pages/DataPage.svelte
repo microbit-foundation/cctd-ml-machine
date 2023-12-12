@@ -88,12 +88,16 @@
           <div class="absolute left-3 flex">
             <Information
               isLightTheme={false}
+              underlineIconText={false}
               iconText={$t('content.data.classification')}
               titleText={$t('content.data.classHelpHeader')}
               bodyText={$t('content.data.classHelpBody')} />
           </div>
           <div class="absolute left-55 flex">
-            <Information isLightTheme={false} iconText={$t('content.data.choice')}>
+            <Information
+              isLightTheme={false}
+              iconText={$t('content.data.choice')}
+              underlineIconText={false}>
               <RecordInformationContent isLightTheme={false} />
             </Information>
           </div>
@@ -101,6 +105,7 @@
             <div class="absolute left-92 flex">
               <Information
                 isLightTheme={false}
+                underlineIconText={false}
                 iconText={$t('content.data.data')}
                 titleText={$t('content.data.data')}
                 bodyText={$t('content.data.dataDescription')} />
@@ -123,6 +128,6 @@
 
       <NewGestureButton />
     </div>
-    <TrainingButton type="navigate" />
+    <TrainingButton action="navigate" />
   {/if}
 </main>

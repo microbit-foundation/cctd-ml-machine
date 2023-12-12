@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import { state } from '../../script/stores/uiStore.js';
+  import { state } from '../../script/stores/uiStore';
 </script>
 
 <p class="text-lg mb-2 font-semibold">

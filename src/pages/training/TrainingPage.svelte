@@ -84,7 +84,7 @@
         </p>
       </div>
     {:else}
-      <div cla54s="w-3/4 text-primarytext">
+      <div class="w-3/4 text-primarytext">
         {#if $state.isPredicting}
           <p class="bold text-3xl bold mt-10">
             {$t('menu.trainer.TrainingFinished')}

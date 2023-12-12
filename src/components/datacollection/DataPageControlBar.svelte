@@ -8,7 +8,7 @@
   import ControlBar from '../control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import StandardButton from '../StandardButton.svelte';
-  import { t } from '../../i18n.js';
+  import { t } from '../../i18n';
 
   export let downloadDisabled = false;
   export let clearDisabled = false;

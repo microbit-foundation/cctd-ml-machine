@@ -15,6 +15,7 @@
     "public/*",
   ],
   "compilerOptions": {
+    "allowJs": true,
     "module": "ESNext",
     "lib": [
       "DOM",
@@ -33,12 +34,12 @@
     "ignoreDeprecations": "5.0",
     "noFallthroughCasesInSwitch": true,
     "types": [
-      "jest",
       "svelte",
-      "node"
-    ]
+      "node",
+      "vitest/globals"
+    ],
   },
   "files": [
-    "node_modules/jest-expect-message/types/index.d.ts"
+    "./windi.config.js"
   ]
 }

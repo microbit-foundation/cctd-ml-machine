@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import { TrainingStatus, gestures, trainingStatus } from '../../script/stores/mlStore';
+  import { TrainingStatus, trainingStatus } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
@@ -26,7 +26,7 @@
   function navigateDataPage(): void {
     navigate(Paths.DATA);
   }
-  $: sufficientData = hasSufficientData($gestures);
+  $: sufficientData = hasSufficientData();
 
   let isFailedTrainingDialogOpen = false;
 

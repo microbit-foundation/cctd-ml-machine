@@ -10,7 +10,6 @@
   import {
     clearGestures,
     downloadDataset,
-    gestures,
     loadDatasetFromFile,
   } from '../script/stores/mlStore';
   import { t } from '../i18n';
@@ -20,8 +19,9 @@
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
-  import TrainingButton from './training/TrainingButton.svelte';
   import TabView from '../views/TabView.svelte';
+  import { gestures } from '../script/stores/Stores';
+  import TrainingButton from './training/TrainingButton.svelte';
 
   let isConnectionDialogOpen = false;
 
@@ -88,12 +88,16 @@
           <div class="absolute left-3 flex">
             <Information
               isLightTheme={false}
+              underlineIconText={false}
               iconText={$t('content.data.classification')}
               titleText={$t('content.data.classHelpHeader')}
               bodyText={$t('content.data.classHelpBody')} />
           </div>
           <div class="absolute left-55 flex">
-            <Information isLightTheme={false} iconText={$t('content.data.choice')}>
+            <Information
+              isLightTheme={false}
+              iconText={$t('content.data.choice')}
+              underlineIconText={false}>
               <RecordInformationContent isLightTheme={false} />
             </Information>
           </div>
@@ -101,6 +105,7 @@
             <div class="absolute left-92 flex">
               <Information
                 isLightTheme={false}
+                underlineIconText={false}
                 iconText={$t('content.data.data')}
                 titleText={$t('content.data.data')}
                 bodyText={$t('content.data.dataDescription')} />
@@ -117,12 +122,12 @@
       <!-- Display all gestures -->
       {#each $gestures as gesture (gesture.ID)}
         <Gesture
-          bind:gesture
+          gesture={gestures.getGesture(gesture.ID)}
           onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
       {/each}
 
       <NewGestureButton />
     </div>
-    <TrainingButton />
+    <TrainingButton action="navigate" />
   {/if}
 </main>

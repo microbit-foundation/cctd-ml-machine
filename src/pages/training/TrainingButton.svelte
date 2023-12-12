@@ -6,18 +6,21 @@
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import StandardButton from '../../components/StandardButton.svelte';
+  import StandardButton, { ButtonVariant } from '../../components/StandardButton.svelte';
   import { trainModel } from '../../script/ml';
   import { t } from '../../i18n';
-  import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { Paths, navigate } from '../../router/paths';
-  import { gestures } from '../../script/stores/mlStore';
+  import { gestures } from '../../script/stores/Stores';
+
+  export let type: ButtonVariant = 'primary';
+  export let action: 'navigate' | 'train' = 'train';
 
   $: trainButtonLabel = !$state.isPredicting
     ? 'menu.trainer.trainModelButton'
     : 'menu.trainer.trainNewModelButton';
 
-  $: sufficientData = hasSufficientData($gestures);
+  // Workaround: hasSufficientData uses gestures but isn't reactive
+  $: sufficientData = $gestures && hasSufficientData();
 
   $: trainingButtonDisabled = !sufficientData || $state.isTraining;
 
@@ -27,36 +30,19 @@
     trainingDialogOpen = false;
   };
 
-  const startTraining = async (): Promise<void> => {
+  const startTraining = () => {
     closeTrainingDialog();
+    trainModel();
+  };
+
+  const navitgateToTrainingPage = () => {
     navigate(Paths.TRAINING);
-    const shouldRedirect = await trainModel();
-    if (shouldRedirect) {
-      navigate(Paths.MODEL);
-    }
   };
 </script>
 
 <StandardButton
-  onClick={() => {
-    trainingDialogOpen = true;
-  }}
+  onClick={action === 'navigate' ? navitgateToTrainingPage : startTraining}
   disabled={trainingButtonDisabled}
-  type="primary"
+  {type}
   >{$t(trainButtonLabel)}
 </StandardButton>
-
-<StandardDialog
-  isOpen={trainingDialogOpen && !$state.isTraining}
-  onClose={closeTrainingDialog}>
-  <div class="w-150">
-    <h1 class="text-xl font-bold mb-4">{$t('content.data.trainDialog.title')}</h1>
-    <p>{$t('content.data.trainDialog.text')}</p>
-    <div class="flex justify-end gap-3">
-      <StandardButton onClick={closeTrainingDialog}
-        >{$t('connectMB.backButton')}</StandardButton>
-      <StandardButton type="primary" onClick={startTraining}
-        >{$t('content.data.trainDialog.title')}</StandardButton>
-    </div>
-  </div>
-</StandardDialog>

@@ -10,6 +10,7 @@
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
 import MBSpecs from './script/microbit-interfacing/MBSpecs';
 import { HexOrigin } from './script/microbit-interfacing/Microbits';
+import { LayersModelTrainingSettings } from './script/mlmodels/LayersModelTrainer';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
@@ -61,5 +62,14 @@ class StaticConfiguration {
     min: -2,
     max: 2.3,
   };
+
+  // The settings given to the LayersModelTrainer
+  public static readonly layersModelTrainingSettings: LayersModelTrainingSettings = {
+    noOfEpochs: 80,
+    batchSize: 16,
+    learningRate: 0.5,
+    validationSplit: 0.1,
+    noOfUnits: 16 // size of hidden layer
+  }
 }
 export default StaticConfiguration;

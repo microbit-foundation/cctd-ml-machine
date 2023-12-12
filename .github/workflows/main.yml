@@ -46,10 +46,15 @@ jobs:
         run: |
           npm install
           npm run prettier
-          git status | grep -c "modified" # if we find the string modified after running git status, it indicates that prettier has changed files!
+          # if we find the string modified after running git status, it indicates that prettier has changed files!
+          if git status | grep -c "modified" -eq 0; then
+              exit 1
+          else
+              exit 0
+          fi
       - name: Missing format report
         shell: bash
-        if: ${{ !failure() }}
+        if: ${{ failure() }}
         run: | 
           echo "Missing prettier formatting. Please format files using 'npm run prettier' and resubmit!"
           exit 1

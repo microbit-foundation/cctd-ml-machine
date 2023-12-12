@@ -38,11 +38,7 @@
   }
 </script>
 
-<div
-  class="w-auto flex"
-  bind:clientWidth={w}
-  bind:clientHeight={h}
-  bind:this={domNode}>
+<div class="w-auto flex" bind:clientWidth={w} bind:clientHeight={h} bind:this={domNode}>
   {#if iconText !== undefined}
     <p
       class="text-white w-auto h-auto mr-0 whitespace-pre-line pr-1"
@@ -54,8 +50,7 @@
       class="fas fa-info-circle cursor-pointer"
       style="color: {colors.iconTextColor}; vertical-align: middle;"
       on:mouseenter={() => onMouseEnter()}
-      on:mouseleave={() => (isOpen = false)}
-    />
+      on:mouseleave={() => (isOpen = false)} />
   {/if}
 
   {#if isOpen}

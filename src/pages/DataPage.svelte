@@ -94,7 +94,10 @@
               bodyText={$t('content.data.classHelpBody')} />
           </div>
           <div class="absolute left-55 flex">
-            <Information isLightTheme={false} iconText={$t('content.data.choice')} underlineIconText={false}>
+            <Information
+              isLightTheme={false}
+              iconText={$t('content.data.choice')}
+              underlineIconText={false}>
               <RecordInformationContent isLightTheme={false} />
             </Information>
           </div>

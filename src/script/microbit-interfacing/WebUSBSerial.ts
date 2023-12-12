@@ -91,7 +91,10 @@ export class WebUSBSerialDevice
   protected toWrite: Uint8Array | undefined;
   protected connected = false;
 
-  constructor(protected device: WebUSB, protected serialDelay = DEFAULT_SERIAL_DELAY) {
+  constructor(
+    protected device: WebUSB,
+    protected serialDelay = DEFAULT_SERIAL_DELAY,
+  ) {
     super();
   }
 

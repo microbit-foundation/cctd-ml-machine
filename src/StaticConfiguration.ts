@@ -8,14 +8,13 @@
  * Static configuration values. These values are not expected to change, while the application is running.
  */
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
-import { Axes, Filters, FilterType } from './script/datafunctions';
 import MBSpecs from './script/microbit-interfacing/MBSpecs';
 import { HexOrigin } from './script/microbit-interfacing/Microbits';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
   public static readonly reconnectTimeoutDuration: number = 7500;
-  public static readonly connectTimeoutDuration: number = 17000; // initial connection
+  public static readonly connectTimeoutDuration: number = 10000; // initial connection
 
   // After how long should we consider the connection lost if ping was not able to conclude?
   public static readonly connectionLostTimeoutDuration: number = 3000;
@@ -52,27 +51,6 @@ class StaticConfiguration {
     versionNumbers.set(HexOrigin.MAKECODE, 1);
     versionNumbers.set(HexOrigin.PROPRIETARY, 1);
     return versionNumbers.get(origin) !== version;
-  };
-
-  public static readonly initialMLSettings = {
-    duration: 1800,
-    numSamples: 80,
-    minSamples: 80,
-    automaticClassification: true,
-    updatesPrSecond: 4,
-    numEpochs: 80,
-    learningRate: 0.5,
-    includedAxes: [Axes.X, Axes.Y, Axes.Z],
-    includedFilters: new Set<FilterType>([
-      Filters.MAX,
-      Filters.MEAN,
-      Filters.MIN,
-      Filters.STD,
-      Filters.PEAKS,
-      Filters.ACC,
-      Filters.ZCR,
-      Filters.RMS,
-    ]),
   };
 }
 export default StaticConfiguration;

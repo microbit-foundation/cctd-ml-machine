@@ -12,7 +12,12 @@ import 'jest-expect-message';
 import * as path from 'path';
 
 // Place files you wish to ignore by name in here
-const ignoredFiles: RegExp[] = [/^\.DS_Store$/, /\.(gif|svg|png|jpg|jpeg)$/];
+const ignoredFiles: RegExp[] = [
+  /^\.DS_Store$/,
+  /^ui.[a-z-]+.json$/,
+  /\.(gif|svg|png|jpg|jpeg)$/,
+  /^README.md$/,
+];
 const directoriesToScan = ['./src/', './microbit/v2/source/', './microbit/v1/source/'];
 
 const licenseIdentifierStringSPDX = 'SPDX-License-Identifier:';

@@ -9,7 +9,7 @@
   import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
   import ImageSkeleton from '../components/skeletonloading/ImageSkeleton.svelte';
-  import modelImage from '../imgs/model.svg';
+  import modelImage from '../imgs/model_blue.svg';
 </script>
 
 <div class="h-40 w-40 m-auto mt-2 flex flex-col justify-center">
@@ -21,8 +21,7 @@
         height={100}
         width={100}
         loadingColorPrimary="#68BDBF"
-        loadingColorSecondary="#3C81F6"
-        spin />
+        loadingColorSecondary="#3C81F6" />
       <p class="text-white mt-3 mb-4">
         {$t('menu.trainer.TrainingFinished')}
       </p>

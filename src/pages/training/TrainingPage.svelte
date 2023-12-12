@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import { TrainingStatus, gestures, trainingStatus } from '../../script/stores/mlStore';
+  import { TrainingStatus, trainingStatus } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
@@ -14,9 +14,8 @@
   import TabView from '../../views/TabView.svelte';
   import trainModelImage from '../../imgs/TrainModel.svg';
   import loadingSpinnerImage from '../../imgs/loadingspinner.gif';
-    import StandardButton from '../../components/StandardButton.svelte';
-    import { Paths, navigate } from '../../router/paths';
-    import PageContentView from '../../views/PageContentView.svelte';
+  import StandardButton from '../../components/StandardButton.svelte';
+  import { Paths, navigate } from '../../router/paths';
 
   let descriptionTextColour = '#8892A3';
 
@@ -27,7 +26,7 @@
   function navigateDataPage(): void {
     navigate(Paths.DATA);
   }
-  $: sufficientData = hasSufficientData($gestures);
+  $: sufficientData = hasSufficientData();
 
   let isFailedTrainingDialogOpen = false;
 

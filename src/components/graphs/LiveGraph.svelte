@@ -10,6 +10,7 @@
   import { onMount } from 'svelte';
   import { get, type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
+  import DimensionLabels from './DimensionLabels.svelte';
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
@@ -118,6 +119,7 @@
   }
 </script>
 
-<main>
-  <canvas bind:this={canvas} height="160" id="smoothie-chart" {width} />
+<main class="flex">
+  <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
+  <DimensionLabels />
 </main>

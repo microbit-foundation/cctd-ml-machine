@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -91,11 +91,7 @@
 <!-- Main pane -->
 <main class="h-full flex flex-col">
   {#if $state.isPredicting}
-    {#if $state.isInputReady}
-      <ModelPageStackViewContent />
-    {:else}
-      <PleaseConnectFirst />
-    {/if}
+    <ModelPageStackViewContent />
   {:else}
     <TrainModelFirstTitle />
   {/if}

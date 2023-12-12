@@ -26,11 +26,14 @@
   }
 </style>
 
+<script lang="ts" context="module">
+  export type ButtonVariant = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight';
+</script>
+
 <script lang="ts">
   import TypingUtils from '../script/TypingUtils.js';
 
   type ButtonSize = 'small' | 'normal' | 'large';
-  type ButtonVariant = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight';
 
   export let type: ButtonVariant = 'secondary';
   export let onClick: (e: Event) => void = TypingUtils.emptyFunction;

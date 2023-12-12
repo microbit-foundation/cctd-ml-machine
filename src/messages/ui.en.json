@@ -71,8 +71,9 @@
   "content.filters.rms.title": "Root mean square",
   "content.filters.rms.description": "",
 
-  "content.model.trainModelFirstHeading": "Train the model first!",
-  "content.model.trainModelFirstBody": "Go to the 'Trainer' page",
+  "content.model.trainModelFirstHeading": "Test model",
+  "content.model.trainModelBody1": "You cannot test the model until it has been trained.",
+  "content.model.trainModelBody2": "You need at least 3 data samples for 2 actions to train a model.",
   "content.model.classification.helpHeading": "Probabil-ometer",
   "content.model.classification.helpBody": "For each prediction you make, the model will produce a percentage that describes how confident the model is in its prediction. This meter goes from 0% to 100%. With the slider next to it, you can determine the limit of how certain the model should be in its preduction to make an output (e.g. play a sound)",
   "content.model.output.soundOptionCongratulations": "Congratulations",
@@ -103,6 +104,8 @@
 
   "content.model.output.popup.header": "Connect output micro:bit",
   "content.model.output.popup.body": "If you have not connected an output micro:bit, you cannot see the results of the changed made on this page. Use the connect button below",
+
+  "content.model.addData": "Add data",
 
   "footer.connectButtonNotConnected": "Start",
   "footer.disconnectButton": "Disconnect",

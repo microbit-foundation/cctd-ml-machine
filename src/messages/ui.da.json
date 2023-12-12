@@ -71,8 +71,9 @@
   "content.filters.rms.title": "Effektiv værdi ",
   "content.filters.rms.description": "Root mean square.",
 
-  "content.model.trainModelFirstHeading": "Træn modellen først!",
-  "content.model.trainModelFirstBody": "Gå til 'Træner'-siden",
+  "content.model.trainModelFirstHeading": "TRANSLATION_NEEDED",
+  "content.model.trainModelBody1": "TRANSLATION_NEEDED",
+  "content.model.trainModelBody2": "TRANSLATION_NEEDED",
   "content.model.classification.helpHeading": "Sandsynligheds-meteret",
   "content.model.classification.helpBody": "For hver forudsigelse, vil modellen producere et procent-tal, der beskriver hvor sikker modellen er i sin fordusigelse. Dette meter går fra 0% til 100%. Med slideren ved siden af, kan du bestemme grænsen for, hvor sikker modellen skal være i sin forudsigelse for at lave et output (fx afspille en lyd)",
   "content.model.output.soundOptionCongratulations": "Tillykke",
@@ -103,6 +104,8 @@
 
   "content.model.output.popup.header": "Tilslut output-micro:bit",
   "content.model.output.popup.body": "Hvis du ikke har tilsluttet en output-micro:bit, kan du ikke se resultatet af de ændringer du laver på denne side. Tilslut nedenfor.",
+
+  "content.model.addData": "TRANSLATION_NEEDED",
 
   "footer.connectButtonNotConnected": "TRANSLATION_NEEDED",
   "footer.disconnectButton": "Frakobl",

@@ -28,6 +28,7 @@ export default defineConfig({
     EnvironmentPlugin('all'),
   ],
   build: {
+    target: "esnext",
     rollupOptions: {
       input: 'index.html',
     },

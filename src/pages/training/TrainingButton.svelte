@@ -11,7 +11,7 @@
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { Paths, navigate } from '../../router/paths';
-  import { gestures } from '../../script/stores/mlStore';
+  import { gestures } from '../../script/stores/Stores';
 
   export let type: ButtonVariant = "primary";
 
@@ -19,7 +19,8 @@
     ? 'menu.trainer.trainModelButton'
     : 'menu.trainer.trainNewModelButton';
 
-  $: sufficientData = hasSufficientData($gestures);
+  // Workaround: hasSufficientData uses gestures but isn't reactive
+  $: sufficientData = $gestures && hasSufficientData();
 
   $: trainingButtonDisabled = !sufficientData || $state.isTraining;
 

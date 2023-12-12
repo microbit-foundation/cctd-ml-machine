@@ -5,6 +5,7 @@
  */
 
 import { Paths, navigate } from '../../router/paths';
+import Environment from '../Environment';
 import TypingUtils from '../TypingUtils';
 import MBSpecs from './MBSpecs';
 
@@ -57,7 +58,7 @@ export class MicrobitBluetooth {
    * Adds a listener for the 'gattserverdisconnected' event.
    * @param {Event => void} callback The function to execute.
    */
-  public listenForDisconnect(callback: (event: Event) => any): void {
+  public listenForDisconnect(callback: (event: Event) => unknown): void {
     return this.device.addEventListener('gattserverdisconnected', callback);
   }
 
@@ -65,7 +66,7 @@ export class MicrobitBluetooth {
    * Removes a listener for the 'gattserverdisconnected' event.
    * @param callback
    */
-  public removeDisconnectListener(callback: (event: Event) => any): void {
+  public removeDisconnectListener(callback: (event: Event) => unknown): void {
     return this.device.removeEventListener('gattserverdisconnected', callback);
   }
 
@@ -278,8 +279,9 @@ export class MicrobitBluetooth {
    * @param matrix The matrix to display.
    */
   public async setLEDMatrix(matrix: unknown[][]): Promise<void> {
-    if (matrix.length !== 5 || matrix[0].length !== 5)
+    if (matrix.length !== 5 || matrix[0].length !== 5) {
       throw new Error('Matrix must be 5x5');
+    }
 
     // To match overloads we must cast the matrix to a number[][]
     let numMatrix = matrix as number[][];
@@ -302,19 +304,24 @@ export class MicrobitBluetooth {
 
   /**
    * Reference for the disconnect listener. Makes it easier to remove it again later.
-   * @param {Event} event The disconnect event
+   * @param {Event} _event The disconnect event
    * @private
    */
-  private disconnectListener(): void {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.device
-      .gatt!.connect()
-      .then(() => {
-        this.onReconnect?.(this);
-      })
-      .catch(() => {
-        void this.onReconnectFailed();
-      });
+  private disconnectListener(_event: Event): void {
+    if (this.device.gatt) {
+      this.device.gatt
+        .connect()
+        .then(() => {
+          this.onReconnect?.(this);
+        })
+        .catch(e => {
+          Environment.isInDevelopment && console.error(e);
+          void this.onReconnectFailed();
+        });
+    } else {
+      Environment.isInDevelopment && console.error('No gatt server found!');
+    }
+
     this.disconnectEventHandler(false);
   }
 
@@ -355,8 +362,12 @@ export class MicrobitBluetooth {
           .then(btDevice => {
             resolve(btDevice);
           })
-          .catch(e => reject(e));
+          .catch(e => {
+            Environment.isInDevelopment && console.error(e);
+            reject(e);
+          });
       } catch (e: unknown) {
+        Environment.isInDevelopment && console.error(e);
         onRequestFailed(e as Error);
         reject(e);
       }
@@ -423,7 +434,7 @@ export class MicrobitBluetooth {
     try {
       return await this.gattServer.getPrimaryService(serviceUuid);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
     throw new Error('Failed to get primary service!');
   }

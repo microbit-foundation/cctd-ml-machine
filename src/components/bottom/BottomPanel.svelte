@@ -18,6 +18,7 @@
   import BaseDialog from '../dialogs/BaseDialog.svelte';
   import View3DLive from '../3d-inspector/View3DLive.svelte';
   import { liveAccelerometerData } from '../../script/stores/Stores';
+    import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -53,7 +54,7 @@
     <!-- Input microbit is assigned -->
     <div class="relative w-full h-full">
       <div class="absolute w-full h-full">
-        <LiveGraph minValue={-2} maxValue={2.3} liveData={liveAccelerometerData} width={componentWidth - 160} />
+        <MicrobitLiveGraph width={componentWidth - 160} />
       </div>
       {#if !$state.isInputReady}
         <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->

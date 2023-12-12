@@ -32,6 +32,7 @@
     export let maxValue: number;
     export let minValue: number;
     export let graphHeight: number;
+    export let hidden: boolean = false;
 
   let unsubscribeFromLiveData: Unsubscriber | undefined = undefined;
 
@@ -97,7 +98,7 @@
   }
 </script>
 
-{#if $state.isInputConnected}
+{#if !hidden}
   <div class="h-40 w-6 relative">
     {#each labels as label}
       <div

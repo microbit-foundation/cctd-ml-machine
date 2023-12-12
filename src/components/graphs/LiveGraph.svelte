@@ -156,5 +156,5 @@
 
 <main class="flex">
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
-  <DimensionLabels minValue={minValue} graphHeight={160} maxValue={maxValue} liveData={smoothedLiveData} />
+  <DimensionLabels hidden={!$state.isInputConnected} minValue={minValue} graphHeight={160} maxValue={maxValue} liveData={smoothedLiveData} />
 </main>

@@ -58,9 +58,6 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
       accelX: Math.sin(val * get(this.store).xSpeed),
       accelY: Math.sin(val * get(this.store).ySpeed),
       accelZ: Math.sin(val * get(this.store).zSpeed),
-      smoothedAccelX: val,
-      smoothedAccelY: val,
-      smoothedAccelZ: val,
     });
   }
 

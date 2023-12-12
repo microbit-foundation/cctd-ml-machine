@@ -69,7 +69,7 @@ class StaticConfiguration {
     batchSize: 16,
     learningRate: 0.5,
     validationSplit: 0.1,
-    noOfUnits: 16 // size of hidden layer
-  }
+    noOfUnits: 16, // size of hidden layer
+  };
 }
 export default StaticConfiguration;

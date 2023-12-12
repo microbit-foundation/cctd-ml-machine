@@ -6,7 +6,13 @@
 import ModelTrainer, { TrainingData } from '../domain/ModelTrainer';
 import LayersMLModel from './LayersMLModel';
 import * as tf from '@tensorflow/tfjs';
-export type LayersModelTrainingSettings = { noOfEpochs: number, noOfUnits:number, validationSplit: number, learningRate: number, batchSize: number };
+export type LayersModelTrainingSettings = {
+  noOfEpochs: number;
+  noOfUnits: number;
+  validationSplit: number;
+  learningRate: number;
+  batchSize: number;
+};
 class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
   constructor(private settings: LayersModelTrainingSettings) {}
   public async trainModel(trainingData: TrainingData): Promise<LayersMLModel> {
@@ -34,7 +40,9 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
 
     const input = tf.input({ shape: inputShape });
     const normalizer = tf.layers.batchNormalization().apply(input);
-    const dense = tf.layers.dense({ units: this.settings.noOfUnits, activation: 'relu' }).apply(normalizer);
+    const dense = tf.layers
+      .dense({ units: this.settings.noOfUnits, activation: 'relu' })
+      .apply(normalizer);
     const softmax = tf.layers
       .dense({ units: numberOfClasses, activation: 'softmax' })
       .apply(dense) as tf.SymbolicTensor;

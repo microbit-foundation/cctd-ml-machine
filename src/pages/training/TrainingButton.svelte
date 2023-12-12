@@ -13,7 +13,7 @@
   import { Paths, navigate } from '../../router/paths';
   import { gestures } from '../../script/stores/Stores';
 
-  export let type: ButtonVariant = "primary";
+  export let type: ButtonVariant = 'primary';
 
   $: trainButtonLabel = !$state.isPredicting
     ? 'menu.trainer.trainModelButton'
@@ -45,7 +45,7 @@
     trainingDialogOpen = true;
   }}
   disabled={trainingButtonDisabled}
-  type={type}
+  {type}
   >{$t(trainButtonLabel)}
 </StandardButton>
 
@@ -58,7 +58,7 @@
     <div class="flex justify-end gap-3">
       <StandardButton onClick={closeTrainingDialog}
         >{$t('connectMB.backButton')}</StandardButton>
-      <StandardButton type={type} onClick={startTraining}
+      <StandardButton {type} onClick={startTraining}
         >{$t('content.data.trainDialog.title')}</StandardButton>
     </div>
   </div>

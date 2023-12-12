@@ -1,6 +1,13 @@
 /**
  * Smoothes values by interpolating between old value and new value
  */
-export const smoothNewValue = (oldValue: number, newValue: number) => {
-  return newValue * 0.25 + oldValue * 0.75;
+export const smoothNewValue = (...values: number[]) => {
+  const numberOfValues = values.length;
+  let smoothed = 0;
+  values.forEach((value, index) => {
+    // Using weighted sum
+    const weight  =  (numberOfValues - index)/(numberOfValues*(numberOfValues + 1)/2)
+    smoothed+= value * weight
+  })
+  return smoothed;
 };

@@ -13,7 +13,6 @@
   import DimensionLabels from './DimensionLabels.svelte';
   import LiveData from '../../script/domain/LiveData';
   import StaticConfiguration from '../../StaticConfiguration';
-  import { smoothNewValue } from '../../script/utils/graphUtils';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
 
   /**
@@ -26,8 +25,9 @@
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
   export let liveData: LiveData<any>;
-
-  const smoothedLiveData = new SmoothedLiveData(liveData);
+    
+    // Smoothes real-time data by using the 3 most recent data points
+  const smoothedLiveData = new SmoothedLiveData(liveData, 3);
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
@@ -35,7 +35,6 @@
 
   for (let i = 0; i < smoothedLiveData.getSeriesSize(); i++) {
     lines.push(new TimeSeries() as TimeSeriesWithData);
-    throw new Error("TODO: Fix the remaining of the graph to use the new SmoothedLiveData store")
   }
   let recordLines = new TimeSeries();
   const lineWidth = 2;
@@ -151,14 +150,6 @@
     }
   };
 
-  const getNewValue = (line: TimeSeriesWithData, newValue: number) => {
-    if (line.data.length == 0) {
-      return newValue;
-    }
-    const previousValue = line.data[line.data.length - 1][1];
-    const smoothedInput = smoothNewValue(previousValue, newValue);
-    return smoothedInput;
-  };
 </script>
 
 <main class="flex">

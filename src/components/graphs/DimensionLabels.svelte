@@ -15,11 +15,17 @@
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
   import { state } from '../../script/stores/uiStore';
-  import LiveData from '../../script/domain/LiveData';
   import StaticConfiguration from '../../StaticConfiguration';
-  import { smoothNewValue } from '../../script/utils/graphUtils';
+    import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
 
-  export let liveData: LiveData<any>;
+    type labelData = {
+      id: number,
+      label: string,
+      color: string,
+      arrowHeight: number,
+      labelHeight: number
+    }
+  export let liveData: SmoothedLiveData<any>;
 
   let unsubscribeFromLiveData: Unsubscriber | undefined = undefined;
 
@@ -37,35 +43,30 @@
     unsubscribeFromLiveData?.();
   });
 
-  let labels = [
-    {
-      label: 'x',
-      arrowHeight: 0,
-      labelHeight: 0,
-      color: StaticConfiguration.liveGraphColors[0],
-      id: 0,
-    },
-    {
-      label: 'y',
-      arrowHeight: 0,
-      labelHeight: 0,
-      color: StaticConfiguration.liveGraphColors[1],
-      id: 1,
-    },
-    {
-      label: 'z',
-      arrowHeight: 0,
-      labelHeight: 0,
-      color: StaticConfiguration.liveGraphColors[2],
-      id: 2,
-    },
-  ];
+  // Initialize labels with all-0 values
+  const initializeLabels = (): labelData[] => {
+    const labels = []
+    for (let i = 0; i < liveData.getSeriesSize(); i++) {
+      const label = liveData.getLabels()[i];
+      const color = StaticConfiguration.liveGraphColors[i];
+      labels.push({
+        label: label,
+        color: color,
+        arrowHeight:0,
+        labelHeight:0,
+        id:i
+      })
+    }
+    return labels;
+  }
+
+  let labels: labelData[] = initializeLabels();
 
   function updateDimensionLabels(axes: number[]) {
-    for (let i = 0; i < 3; i++) {
-      const oldValue = labels[i].arrowHeight;
+    for (let i = 0; i < axes.length; i++) {
       const newValue = (2.1 - axes[labels[i].id]) * 2.32;
-      labels[i].arrowHeight = smoothNewValue(oldValue, newValue);
+      labels[i].arrowHeight = newValue
+      labels[i].labelHeight = newValue; // will be overridden in fixOverlappingLabels if necessary
     }
     fixOverlappingLabels();
   }
@@ -74,39 +75,14 @@
     labels.sort((a, b) => {
       return a.arrowHeight - b.arrowHeight;
     });
-
-    const height0 = labels[0].arrowHeight;
-    const height1 = labels[1].arrowHeight;
-    const height2 = labels[2].arrowHeight;
-
-    const MAX_DISTANCE = 1.1;
-    const maxDistanceBetweenAll = height2 - height0;
-
-    // If all notes are too close
-    if (maxDistanceBetweenAll < MAX_DISTANCE * 2) {
-      // Find middle and place labels around them
-      const middle = maxDistanceBetweenAll / 2 + height0;
-      labels[0].labelHeight = middle - MAX_DISTANCE;
-      labels[1].labelHeight = middle;
-      labels[2].labelHeight = middle + MAX_DISTANCE;
-      return;
-    }
-
-    labels[0].labelHeight = height0;
-    labels[1].labelHeight = height1;
-    labels[2].labelHeight = height2;
-
-    // If a pair are too close.
-    for (let i = 0; i < 2; i++) {
-      const diff = labels[i + 1].labelHeight - labels[i].labelHeight;
-      if (diff > MAX_DISTANCE) continue;
-
-      // Find middle and place labels around middle
-      const middle = diff / 2 + labels[i].labelHeight;
-      labels[i + 1].labelHeight = middle + MAX_DISTANCE / 2;
-      labels[i].labelHeight = middle - MAX_DISTANCE / 2;
-
-      break; // Only one will be close to the other. Otherwise all were too close
+    const MIN_DISTANCE = 1.1;
+    for (let i = 1; i < labels.length; i++) {
+      const element = labels[i];
+      const previousLabel = labels[i-1];
+      if (element.labelHeight < previousLabel.labelHeight + MIN_DISTANCE) {
+        // Label is overlapping, push it down
+        element.labelHeight = previousLabel.labelHeight + MIN_DISTANCE;
+      }
     }
   }
 </script>

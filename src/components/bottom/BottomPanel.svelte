@@ -16,7 +16,6 @@
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
   import BaseDialog from '../dialogs/BaseDialog.svelte';
-  import Live3DViewCompatabilityWrapper from '../3d-inspector/View3D.svelte';
   import View3DLive from '../3d-inspector/View3DLive.svelte';
   import { liveAccelerometerData } from '../../script/stores/Stores';
 

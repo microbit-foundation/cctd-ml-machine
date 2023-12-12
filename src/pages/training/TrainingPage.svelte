@@ -14,9 +14,8 @@
   import TabView from '../../views/TabView.svelte';
   import trainModelImage from '../../imgs/TrainModel.svg';
   import loadingSpinnerImage from '../../imgs/loadingspinner.gif';
-    import StandardButton from '../../components/StandardButton.svelte';
-    import { Paths, navigate } from '../../router/paths';
-    import PageContentView from '../../views/PageContentView.svelte';
+  import StandardButton from '../../components/StandardButton.svelte';
+  import { Paths, navigate } from '../../router/paths';
 
   let descriptionTextColour = '#8892A3';
 

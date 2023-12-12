@@ -12,6 +12,7 @@ import EnvironmentPlugin from 'vite-plugin-environment';
 
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
+  base: process.env.BASE_URL ?? '/',
   plugins: [
     svelte({
       preprocess: sveltePreprocess({ typescript: true }),
@@ -27,6 +28,7 @@ export default defineConfig({
     EnvironmentPlugin('all'),
   ],
   build: {
+    target: "esnext",
     rollupOptions: {
       input: 'index.html',
     },

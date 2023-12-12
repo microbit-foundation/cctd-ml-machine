@@ -127,7 +127,10 @@ export class MockBluetoothModelNumberCharacteristic
   readonly service: BluetoothRemoteGATTService;
   readonly uuid: string = '';
 
-  constructor(public versionNumber: number, service: BluetoothRemoteGATTService) {
+  constructor(
+    public versionNumber: number,
+    service: BluetoothRemoteGATTService,
+  ) {
     this.service = service;
   }
 

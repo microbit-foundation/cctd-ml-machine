@@ -13,20 +13,20 @@
     "node_modules/*",
     "__sapper__/*",
     "public/*",
-    "svelte.config.js",
-    "windi.config.js",
-    "src/setup_tests.ts"
   ],
   "compilerOptions": {
-    "module": "ES6",
+    "module": "ESNext",
     "lib": [
       "DOM",
-      "ES6",
+      "ESNext",
       "WebWorker"
     ],
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "noImplicitAny": true,
+    "noEmit": true,
     "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
     "importsNotUsedAsValues": "remove",
     "strict": true,
     "verbatimModuleSyntax": false,
@@ -34,6 +34,7 @@
     "noFallthroughCasesInSwitch": true,
     "types": [
       "jest",
+      "node",
       "svelte",
       "w3c-web-serial"
     ]

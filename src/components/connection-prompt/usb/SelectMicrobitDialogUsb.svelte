@@ -8,6 +8,7 @@
   import StandardButton from '../../StandardButton.svelte';
   import { t } from '../../../i18n';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
+  import selectMicrobitImage from '../../../imgs/select-microbit.png';
 
   export let onBackClick: () => void;
   export let onFound: () => void;
@@ -25,19 +26,23 @@
 
 <main>
   <div class="w-180 leading-10 pb-5">
-    <p class="font-bold text-2xl text-left">
+    <h2 class="font-bold text-2xl">
       {$t('connectMB.webPopup')}
-    </p>
-    <img
-      src="/imgs/select-microbit.png"
-      alt="Screenshot of the browser window that will appear next.  Your connected micro:bit will be listed. Choose your micro:bit then select the Connect button."
-      class="left-0 pt-5" />
-    <p class="absolute left-3/4 transform -translate-x-1/2 top-1/2 -translate-y-28">
-      {$t('connectMB.webPopup.instruction1')}
-    </p>
-    <p class="absolute left-3/4 transform -translate-x-1/2 -translate-y-13">
-      {$t('connectMB.webPopup.instruction2')}
-    </p>
+    </h2>
+    <div class="flex mt-5">
+      <img
+        src={selectMicrobitImage}
+        alt="Screenshot of the browser window that will appear next.  Your connected micro:bit will be listed. Choose your micro:bit then select the Connect button." />
+      <div class="flex flex-col w-full px-5">
+        <h3 class="font-bold text-lg mb-5">
+          {$t('connectMB.webPopup.instruction.heading')}:
+        </h3>
+        <ol class="list-decimal list-inside">
+          <li>{$t('connectMB.webPopup.instruction1')}</li>
+          <li>{$t('connectMB.webPopup.instruction2')}</li>
+        </ol>
+      </div>
+    </div>
   </div>
   <div class="justify-end flex flex-space-10 gap-x-5">
     <StandardButton position="right" onClick={onBackClick}

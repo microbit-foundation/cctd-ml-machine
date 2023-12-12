@@ -8,9 +8,10 @@
   import { onMount } from 'svelte';
   import DataPage from '../pages/DataPage.svelte';
   import Homepage from '../pages/Homepage.svelte';
-  import TrainingPage from '../pages/training/TrainingPage.svelte';
   import ModelPage from '../pages/model/ModelPage.svelte';
   import FilterPage from '../pages/filter/FilterPage.svelte';
+  import TrainingPage from '../pages/training/TrainingPage.svelte';
+  import PlaygroundPage from '../pages/PlaygroundPage.svelte';
   import { currentPageComponent } from '../views/currentComponentStore';
   import { currentPath, navigate, Paths, PathType } from './paths';
 
@@ -18,6 +19,8 @@
     switch (path) {
       case Paths.HOME:
         return Homepage;
+      case Paths.PLAYGROUND:
+        return PlaygroundPage;
       case Paths.DATA:
         return DataPage;
       case Paths.TRAINING:
@@ -40,7 +43,10 @@
     }
 
     if (shouldPushState) {
-      const url = window.location.origin + (path.startsWith('/') ? '' : '/') + path;
+      const url =
+        window.location.origin +
+        import.meta.env.BASE_URL +
+        (path.startsWith('/') ? path.slice(1) : path);
       history.pushState({ path: path }, '', url);
     }
   };

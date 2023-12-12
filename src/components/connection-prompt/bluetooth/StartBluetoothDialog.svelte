@@ -7,6 +7,10 @@
 <script lang="ts">
   import StandardButton from '../../StandardButton.svelte';
   import { t } from '../../../i18n';
+  import microbitImage from '../../../imgs/stylised-microbit-black.svg';
+  import computerImage from '../../../imgs/stylised_computer.svg';
+  import usbCableImage from '../../../imgs/stylised-usb-cable.svg';
+  import batteryPackImage from '../../../imgs/stylised-battery-pack.svg';
 
   export let onNextClick: () => void;
   export let onStartRadioClick: () => void;
@@ -22,7 +26,7 @@
       <div class="flex flex-col">
         <img
           class="h-{imageHeight}"
-          src="/imgs/stylised-microbit-black.svg"
+          src={microbitImage}
           alt={$t('connectMB.bluetoothStart.requirements1')} />
         <p class="pt-10 text-center font-bold">
           {$t('connectMB.bluetoothStart.requirements1')}
@@ -31,7 +35,7 @@
       <div class="flex flex-col">
         <img
           class="h-{imageHeight}"
-          src="/imgs/stylised_computer.svg"
+          src={computerImage}
           alt={$t('connectMB.bluetoothStart.requirements2')} />
         <p class="pt-10 text-center font-bold">
           {$t('connectMB.bluetoothStart.requirements2')}
@@ -40,7 +44,7 @@
       <div class="flex flex-col">
         <img
           class="h-{imageHeight}"
-          src="/imgs/stylised-usb-cable.svg"
+          src={usbCableImage}
           alt={$t('connectMB.bluetoothStart.requirements3')} />
         <p class="pt-10 text-center font-bold">
           {$t('connectMB.bluetoothStart.requirements3')}
@@ -49,7 +53,7 @@
       <div class="flex flex-col">
         <img
           class="h-{imageHeight}"
-          src="/imgs/stylised-battery-pack.svg"
+          src={batteryPackImage}
           alt={$t('connectMB.bluetoothStart.requirements4')} />
         <p class="pt-10 text-center font-bold">
           {$t('connectMB.bluetoothStart.requirements4')}

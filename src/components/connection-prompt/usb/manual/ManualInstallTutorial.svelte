@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 
@@ -11,6 +11,9 @@
   import Microbits from '../../../../script/microbit-interfacing/Microbits';
   import ImageSkeleton from '../../../skeletonloading/ImageSkeleton.svelte';
   import Bowser from 'bowser';
+  import transferFirmwareMacOSImage from '../../../../imgs/transfer_firmware_macos.gif';
+  import transferFirmwareChromeOSImage from '../../../../imgs/transfer_firmware_chromeos.gif';
+  import transferFirmwareWindowsImage from '../../../../imgs/transfer_firmware_windows.gif';
 
   export let onConnectBluetoothClick: () => void;
 
@@ -23,13 +26,13 @@
   const getIllustrationGif = (os: string) => {
     switch (os) {
       case 'Chrome OS':
-        return 'imgs/transfer_firmware_chromeos.gif';
+        return transferFirmwareChromeOSImage;
       case 'Windows':
-        return 'imgs/transfer_firmware_windows.gif';
+        return transferFirmwareWindowsImage;
       case 'macOS':
-        return 'imgs/transfer_firmware_macos.gif';
+        return transferFirmwareMacOSImage;
       default:
-        return 'imgs/transfer_firmware_macos.gif';
+        return transferFirmwareMacOSImage;
     }
   };
 
@@ -68,7 +71,7 @@
     </div>
   </div>
   <div class="grid grid-cols-1 place-items-center w-full">
-    <StandardButton onClick={onConnectBluetoothClick}
+    <StandardButton type="primary" onClick={onConnectBluetoothClick}
       >{$t('connectMB.usb.manual.done')}</StandardButton>
   </div>
 </main>

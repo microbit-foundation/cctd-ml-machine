@@ -9,13 +9,14 @@
   import TypingUtils from '../../script/TypingUtils';
   import { state } from '../../script/stores/uiStore';
   import StandardButton from '../StandardButton.svelte';
+  import loadingSpinnerImage from '../../imgs/loadingspinner.gif';
 
   export let onOutputDisconnectButtonClicked: () => void;
   export let onInputDisconnectButtonClicked: () => void;
 </script>
 
 <!-- These are the buttons that are present while the input micro:bit is connected-->
-<div class="flex flex-row">
+<div class="flex flex-row mr-4">
   {#if $state.isPredicting || $state.isTraining || $state.isOutputConnected}
     {#if $state.isOutputAssigned}
       <!-- Output is assigned -->
@@ -25,7 +26,7 @@
           >{$t('menu.model.disconnect')}</StandardButton>
       {:else}
         <StandardButton onClick={TypingUtils.emptyFunction} disabled>
-          <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
+          <img alt="loading" src={loadingSpinnerImage} style="height:24px" />
         </StandardButton>
       {/if}
     {/if}
@@ -37,7 +38,7 @@
         >{$t('footer.disconnectButton')}</StandardButton>
     {:else}
       <StandardButton onClick={TypingUtils.emptyFunction} disabled>
-        <img alt="loading" src="/imgs/loadingspinner.gif" style="height:24px" />
+        <img alt="loading" src={loadingSpinnerImage} style="height:24px" />
       </StandardButton>
     {/if}
   </div>

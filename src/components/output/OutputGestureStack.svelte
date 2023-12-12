@@ -19,7 +19,6 @@
   import {
     settings,
     updateGestureSoundOutput,
-    type GestureData,
     type SoundData,
     updateGesturePinOutput,
   } from '../../script/stores/mlStore';
@@ -34,37 +33,37 @@
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import Gestures from '../../script/Gestures';
+  import Gesture from '../../script/domain/Gesture';
+  import rightArrowImage from '../../imgs/right_arrow.svg';
+  import rightArrowBlueImage from '../../imgs/right_arrow_blue.svg';
+  import blankMicrobitImage from '../../imgs/blank_microbit.svg';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component
-  export let gesture: GestureData;
+  export let gesture: Gesture;
   export let onUserInteraction: () => void = () => {
     return;
   };
   let wasTriggered = false;
   let triggerFunctions: (() => void)[] = [];
-  let selectedSound: SoundData | undefined = gesture.output.sound;
-  let selectedPin: MBSpecs.UsableIOPin = gesture.output.outputPin
-    ? gesture.output.outputPin.pin
+  let selectedSound: SoundData | undefined = $gesture.output.sound;
+  let selectedPin: MBSpecs.UsableIOPin = $gesture.output.outputPin
+    ? $gesture.output.outputPin.pin
     : StaticConfiguration.defaultOutputPin;
 
   let pinIOEnabled = StaticConfiguration.pinIOEnabledByDefault;
-  let turnOnTime = gesture.output.outputPin
-    ? gesture.output.outputPin.turnOnTime
+  let turnOnTime = $gesture.output.outputPin
+    ? $gesture.output.outputPin.turnOnTime
     : StaticConfiguration.defaultPinToggleTime;
-  let turnOnState = gesture.output.outputPin
-    ? gesture.output.outputPin.pinState
+  let turnOnState = $gesture.output.outputPin
+    ? $gesture.output.outputPin.pinState
     : StaticConfiguration.defaultPinTurnOnState;
-
-  const confidence = Gestures.getConfidence(gesture.ID);
 
   // Bool flag that determines the visibility of the output gesture panels
   const enableOutputGestures = false;
 
   let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
-  $: currentConfidence = $state.isInputReady ? $confidence : 0;
 
   const getTriggerAction = (
     lastWasTriggered: boolean,
@@ -107,8 +106,8 @@
   $: {
     let triggerAction = getTriggerAction(
       wasTriggered,
-      currentConfidence,
-      requiredConfidence,
+      $gesture.confidence.currentConfidence,
+      $gesture.confidence.requiredConfidence,
     );
     handleTriggering(triggerAction);
   }
@@ -135,7 +134,7 @@
 
   function onSoundSelected(sound: SoundData | undefined): void {
     selectedSound = sound;
-    updateGestureSoundOutput(gesture.ID, sound);
+    updateGestureSoundOutput($gesture.ID, sound);
     onUserInteraction();
   }
 
@@ -161,7 +160,7 @@
     }
     selectedPin = selected;
     refreshAfterChange();
-    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
+    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
   };
 
   const triggerComponents = () =>
@@ -176,7 +175,7 @@
     turnOnState = state.turnOnState;
     turnOnTime = state.turnOnTime;
     refreshAfterChange();
-    updateGesturePinOutput(gesture.ID, selectedPin, turnOnState, turnOnTime);
+    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
     if (wasTriggered) {
       setOutputPin(true);
     }
@@ -189,12 +188,12 @@
 
   let sliderValue = requiredConfidence * 100;
   $: {
-    Gestures.getRequiredConfidence(gesture.ID).update(val => {
-      return sliderValue / 100;
-    });
+    gesture.getConfidence().setRequiredConfidence(sliderValue / 100);
   }
 
   let hasLoadedMicrobitImage = false;
+
+  $: meterHeightPct = 100 * $gesture.confidence.currentConfidence;
 </script>
 
 <main class="mb-4 items-center flex flex-row">
@@ -205,7 +204,7 @@
         class="w-36 text-center font-semibold rounded-xl
                     px-1 py-1 border border-gray-300
                     border-dashed mr-2 break-words">
-        <h3>{gesture.name}</h3>
+        <h3>{$gesture.name}</h3>
       </div>
       <div class="h-31" />
       <input
@@ -223,8 +222,7 @@
           class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
           <div
             class="absolute w-5 {wasTriggered ? 'bg-primary' : 'bg-info'} z-index: -10"
-            style="height: {100 * currentConfidence}px; margin-top: {100 -
-              100 * currentConfidence}px;" />
+            style="height: {meterHeightPct}px; margin-top: {100 - meterHeightPct}px;" />
           <div
             class="absolute w-5 bg-primary"
             style="height: 1px; margin-top: {6.5 - 0.068 * sliderValue}rem;" />
@@ -255,13 +253,13 @@
       <img
         class="m-auto"
         class:hidden={wasTriggered}
-        src={'imgs/right_arrow.svg'}
+        src={rightArrowImage}
         alt="right arrow icon"
         width="30px" />
       <img
         class="m-auto"
         class:hidden={!wasTriggered || !$state.isInputReady}
-        src={'imgs/right_arrow_blue.svg'}
+        src={rightArrowBlueImage}
         alt="right arrow icon"
         width="30px" />
     </div>
@@ -271,7 +269,7 @@
       <div
         class="w-177px relative rounded-xl bg-transparent h-full border-1 border-primaryborder">
         <ImageSkeleton
-          src="imgs/blank_microbit.svg"
+          src={blankMicrobitImage}
           alt="microbit guide"
           width={177}
           height={144}
@@ -282,7 +280,7 @@
           class="bg-black p-0 m-0 absolute top-9 left-12.7"
           class:hidden={!hasLoadedMicrobitImage}
           on:click={onUserInteraction}>
-          <OutputMatrix bind:trigger={triggerFunctions[0]} {gesture} />
+          <OutputMatrix bind:trigger={triggerFunctions[0]} gesture={$gesture} />
         </div>
       </div>
       <OutputSoundSelector onSoundSelection={onSoundSelected} {selectedSound} />

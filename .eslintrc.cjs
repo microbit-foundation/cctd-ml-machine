@@ -49,5 +49,5 @@ module.exports = {
     process: true,
   },
   plugins: ['svelte3', '@typescript-eslint'],
-  ignorePatterns: ['node_modules', 'svelte.config.js', '.eslintrc.cjs'],
+  ignorePatterns: ['node_modules', 'svelte.config.js', '.eslintrc.cjs', "babel.config.cjs", "jest.config.js"],
 };

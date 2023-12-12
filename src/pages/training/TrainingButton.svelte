@@ -10,7 +10,7 @@
   import { trainModel } from '../../script/ml';
   import { t } from '../../i18n';
   import { Paths, navigate } from '../../router/paths';
-  import { gestures } from '../../script/stores/mlStore';
+  import { gestures } from '../../script/stores/Stores';
 
   export let type: 'navigate' | 'train' = 'train';
 
@@ -18,7 +18,8 @@
     ? 'menu.trainer.trainModelButton'
     : 'menu.trainer.trainNewModelButton';
 
-  $: sufficientData = hasSufficientData($gestures);
+  // Workaround: hasSufficientData uses gestures but isn't reactive
+  $: sufficientData = $gestures && hasSufficientData();
 
   $: trainingButtonDisabled = !sufficientData || $state.isTraining;
 

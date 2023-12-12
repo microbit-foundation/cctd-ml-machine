@@ -27,7 +27,7 @@ interface LiveData<T> extends Readable<T> {
   getSeriesSize(): number;
 
   /**
-   * Returns labels accociated with each data point
+   * Returns labels accociated with each data point (Such as for the LiveGraph)
    */
   getLabels(): string[];
 

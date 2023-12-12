@@ -65,6 +65,9 @@ function createModel(): LayersModel {
 }
 
 export function trainModel() {
+
+  throw new Error("TODO: REMOVE THIS. The two models are challenging eachother. Use the model store instead to make predictions. Remove this an all that follows with it"+
+  " Make the set gesture confidence private as well in the repository!")
   state.update(obj => {
     obj.isTraining = true;
     return obj;

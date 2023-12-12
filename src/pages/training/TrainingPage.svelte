@@ -14,9 +14,19 @@
   import TabView from '../../views/TabView.svelte';
   import trainModelImage from '../../imgs/TrainModel.svg';
   import loadingSpinnerImage from '../../imgs/loadingspinner.gif';
+    import StandardButton from '../../components/StandardButton.svelte';
+    import { Paths, navigate } from '../../router/paths';
+    import PageContentView from '../../views/PageContentView.svelte';
 
   let descriptionTextColour = '#8892A3';
 
+  function navigateModelPage(): void {
+    navigate(Paths.MODEL);
+  }
+
+  function navigateDataPage(): void {
+    navigate(Paths.DATA);
+  }
   $: sufficientData = hasSufficientData($gestures);
 
   let isFailedTrainingDialogOpen = false;
@@ -80,6 +90,14 @@
           <p class="text-2xl font-semibold mt-10 pb-10">
             {$t('menu.trainer.TrainingFinished')}
           </p>
+          <div class="flex flexbox space-x-10">
+            <StandardButton
+              onClick={navigateDataPage}
+              type="secondary">ADD MORE DATA</StandardButton>
+            <StandardButton
+              onClick={navigateModelPage}
+              type="primary">TEST MODEL</StandardButton>
+          </div>
         {/if}
     {/if}
   </div>

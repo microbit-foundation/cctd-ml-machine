@@ -18,14 +18,20 @@
   import StaticConfiguration from '../../StaticConfiguration';
     import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
 
-    type labelData = {
+    type LabelData = {
       id: number,
       label: string,
       color: string,
       arrowHeight: number,
-      labelHeight: number
+      textHeight: number
     }
-  export let liveData: SmoothedLiveData<any>;
+    // The height of character is used to fix overlapping line labels
+    const CHARACTER_HEIGHT = 16;
+
+    export let liveData: SmoothedLiveData<any>;
+    export let maxValue: number;
+    export let minValue: number;
+    export let graphHeight: number;
 
   let unsubscribeFromLiveData: Unsubscriber | undefined = undefined;
 
@@ -44,7 +50,7 @@
   });
 
   // Initialize labels with all-0 values
-  const initializeLabels = (): labelData[] => {
+  const initializeLabels = (): LabelData[] => {
     const labels = []
     for (let i = 0; i < liveData.getSeriesSize(); i++) {
       const label = liveData.getLabels()[i];
@@ -53,20 +59,25 @@
         label: label,
         color: color,
         arrowHeight:0,
-        labelHeight:0,
+        textHeight:0,
         id:i
       })
     }
     return labels;
   }
 
-  let labels: labelData[] = initializeLabels();
+  let labels: LabelData[] = initializeLabels();
 
   function updateDimensionLabels(axes: number[]) {
     for (let i = 0; i < axes.length; i++) {
-      const newValue = (2.1 - axes[labels[i].id]) * 2.32;
-      labels[i].arrowHeight = newValue
-      labels[i].labelHeight = newValue; // will be overridden in fixOverlappingLabels if necessary
+      const normalMax = maxValue - minValue;
+      const normalValue = axes[labels[i].id] - minValue;
+      const newValue = (normalValue / normalMax) * graphHeight;
+      if (labels[i].label === "Z") {
+      }
+      labels[i].arrowHeight = newValue + 4; // We add 4 to align the arrow to the graph line
+       // labelHeight will be overridden in fixOverlappingLabels if necessary
+      labels[i].textHeight = newValue - CHARACTER_HEIGHT + 2; // Subract height to align with arrow
     }
     fixOverlappingLabels();
   }
@@ -75,13 +86,12 @@
     labels.sort((a, b) => {
       return a.arrowHeight - b.arrowHeight;
     });
-    const MIN_DISTANCE = 1.1;
     for (let i = 1; i < labels.length; i++) {
       const element = labels[i];
       const previousLabel = labels[i-1];
-      if (element.labelHeight < previousLabel.labelHeight + MIN_DISTANCE) {
-        // Label is overlapping, push it down
-        element.labelHeight = previousLabel.labelHeight + MIN_DISTANCE;
+      if (element.textHeight < previousLabel.textHeight + CHARACTER_HEIGHT) {
+        // Label is overlapping, push it down.
+        element.textHeight = previousLabel.textHeight + CHARACTER_HEIGHT;
       }
     }
   }
@@ -89,16 +99,14 @@
 
 {#if $state.isInputConnected}
   <div class="h-40 w-6 relative">
-    {#each labels as dimension}
+    {#each labels as label}
       <div
         class="absolute arrowLeft -m-3.5"
-        style="transform: translateY({dimension.arrowHeight +
-          0.75}rem) scale(1, 0.75); border-right-color: {dimension.color};" />
+        style="bottom: {label.arrowHeight}px; border-right-color: {label.color};" />
       <p
         class="absolute ml-3 text-xl"
-        style="transform: translateY({dimension.labelHeight -
-          0.5}rem); color: {dimension.color};">
-        {dimension.label}
+        style="bottom: {label.textHeight}px; color: {label.color};">
+        {label.label}
       </p>
     {/each}
   </div>

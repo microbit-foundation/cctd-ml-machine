@@ -25,7 +25,9 @@
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
   export let liveData: LiveData<any>;
-    
+    export let maxValue: number;
+    export let minValue: number;
+
     // Smoothes real-time data by using the 3 most recent data points
   const smoothedLiveData = new SmoothedLiveData(liveData, 3);
 
@@ -42,8 +44,8 @@
   // On mount draw smoothieChart
   onMount(() => {
     chart = new SmoothieChart({
-      maxValue: 2.3,
-      minValue: -2,
+      maxValue,
+      minValue,
       millisPerPixel: 7,
       grid: {
         fillStyle: '#ffffff00',
@@ -100,14 +102,14 @@
     }
 
     // Set start line
-    recordLines.append(new Date().getTime() - 1, -2, false);
-    recordLines.append(new Date().getTime(), 2.3, false);
+    recordLines.append(new Date().getTime() - 1, maxValue, false);
+    recordLines.append(new Date().getTime(), minValue, false);
 
     // Wait a second and set end line
     blockRecordingStart = true;
     setTimeout(() => {
-      recordLines.append(new Date().getTime() - 1, 2.3, false);
-      recordLines.append(new Date().getTime(), -2, false);
+      recordLines.append(new Date().getTime() - 1, maxValue, false);
+      recordLines.append(new Date().getTime(), minValue, false);
       blockRecordingStart = false;
     }, get(settings).duration);
   }
@@ -154,5 +156,5 @@
 
 <main class="flex">
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
-  <DimensionLabels liveData={smoothedLiveData} />
+  <DimensionLabels minValue={minValue} graphHeight={160} maxValue={maxValue} liveData={smoothedLiveData} />
 </main>

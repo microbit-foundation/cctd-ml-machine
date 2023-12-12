@@ -53,7 +53,7 @@
     <!-- Input microbit is assigned -->
     <div class="relative w-full h-full">
       <div class="absolute w-full h-full">
-        <LiveGraph liveData={liveAccelerometerData} width={componentWidth - 160} />
+        <LiveGraph minValue={-2} maxValue={2.3} liveData={liveAccelerometerData} width={componentWidth - 160} />
       </div>
       {#if !$state.isInputReady}
         <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->

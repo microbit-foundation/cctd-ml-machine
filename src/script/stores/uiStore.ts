@@ -31,7 +31,7 @@ export enum ModelView {
   STACK,
 }
 
-throw new Error("See todo below")
+throw new Error('See todo below');
 
 // Store current state to prevent error prone actions
 export const state = writable<{

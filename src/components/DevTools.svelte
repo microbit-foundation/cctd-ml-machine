@@ -3,7 +3,7 @@
  
   SPDX-License-Identifier: MIT
  -->
- <script lang="ts">
+<script lang="ts">
   import { Paths, navigate } from '../router/paths';
   import StandardButton from './StandardButton.svelte';
 </script>

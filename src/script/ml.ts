@@ -5,10 +5,7 @@
  */
 
 import { alertUser } from './stores/uiStore';
-import {
-  type GestureData,
-  settings,
-} from './stores/mlStore';
+import { type GestureData, settings } from './stores/mlStore';
 import { get } from 'svelte/store';
 import { t } from '../i18n';
 

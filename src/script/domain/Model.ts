@@ -81,20 +81,20 @@ class Model implements Readable<ModelData> {
    */
   public markAsUntrained(): void {
     this.modelData.update(updater => {
-      updater.trainingStatus = TrainingStatus.Untrained
+      updater.trainingStatus = TrainingStatus.Untrained;
       return updater;
     });
   }
 
   /**
    * Manually perform a prediction using an array of numbers as input values. Returns an array of confidences with size equivalent to the number of gestures.
-   * 
+   *
    * Use if you have to, but see `classifier.classify()` first
    */
   public async predict(inputData: number[]): Promise<number[]> {
     const mlModel = get(this.mlModel);
     if (!mlModel) {
-      throw new Error("Cannot predict, no MLModel has been specified")
+      throw new Error('Cannot predict, no MLModel has been specified');
     }
     return await mlModel.predict(inputData);
   }

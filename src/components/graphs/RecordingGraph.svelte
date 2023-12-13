@@ -234,10 +234,10 @@
     <canvas bind:this={canvas} />
   </div>
   {#if enableInspector}
-  <RecordingInspector
-    dataPoint={getDataByIndex(hoverIndex)}
-    position={modalPosition}
-    isOpen={!isNaN(hoverIndex)}
-    size={modalSize} />
+    <RecordingInspector
+      dataPoint={getDataByIndex(hoverIndex)}
+      position={modalPosition}
+      isOpen={!isNaN(hoverIndex)}
+      size={modalSize} />
   {/if}
 </div>

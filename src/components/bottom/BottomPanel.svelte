@@ -63,7 +63,10 @@
       <div
         class="absolute right-0 cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
         on:click={() => (isLive3DOpen = true)}>
-        <View3DLive width={live3dViewSize} height={live3dViewSize} freeze={isLive3DOpen} />
+        <View3DLive
+          width={live3dViewSize}
+          height={live3dViewSize}
+          freeze={isLive3DOpen} />
       </div>
       <BaseDialog isOpen={isLive3DOpen} onClose={() => (isLive3DOpen = false)}>
         <!-- hardcoded margin-left matches the size of the sidebar -->

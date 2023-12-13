@@ -18,10 +18,6 @@
     animation: loading-bar 1.8s linear;
   }
 
-  .record-button.disabled {
-    cursor: default;
-  }
-
   .record-button.disabled i {
     color: lightgray;
   }
@@ -278,7 +274,10 @@
           class="h-full w-35 flex justify-center"
           class:cursor-pointer={$state.isInputConnected}
           on:click={$chosenGesture === gesture ? countdownStart : selectClicked}>
-          <button class="record-button" class:disabled={$chosenGesture !== gesture}>
+          <button
+            class="record-button"
+            class:disabled={$chosenGesture !== gesture}
+            class:cursor-default={!$state.isInputConnected}>
             <i class="fas fa-circle text-rose-600 text-4xl" />
           </button>
         </div>

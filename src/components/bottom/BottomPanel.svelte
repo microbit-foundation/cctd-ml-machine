@@ -48,12 +48,12 @@
         </div>
       {/if}
       <div
-        class="h-full p-0 m-0 absolute top-0 left-0 right-40 border-r border-solid border-black border-opacity-60">
+        class="h-full flex p-0 m-0 absolute top-0 left-0 right-40 border-r border-solid border-black border-opacity-60">
         <!-- The live text and info box -->
-        <div class="float-left mt-2 ml-2">
+        <div class="mt-5 ml-2">
           <LiveGraphInformationSection />
         </div>
-        <div class="absolute right-2 top-2 m-0 float-right">
+        <div class="mt-4">
           <ConnectedLiveGraphButtons
             onInputDisconnectButtonClicked={inputDisconnectButtonClicked}
             onOutputDisconnectButtonClicked={outputDisconnectButtonClicked} />

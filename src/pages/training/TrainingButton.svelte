@@ -46,5 +46,6 @@
   disabled={trainingButtonDisabled}
   {type}
   {position}
+  extraClasses="mx-10"
   >{$t(trainButtonLabel)}
 </StandardButton>

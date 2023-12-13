@@ -17,6 +17,14 @@
   .animate-loading-bar {
     animation: loading-bar 1.8s linear;
   }
+
+  .record-button.disabled {
+    cursor: default;
+  }
+
+  .record-button.disabled i {
+    color: lightgray;
+  }
 </style>
 
 <script lang="ts">
@@ -40,10 +48,8 @@
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
   import StandardButton from './StandardButton.svelte';
-  import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
-  import microbitRecordingGuideImage from '../imgs/microbit_record_guide.svg';
   import BaseDialog from './dialogs/BaseDialog.svelte';
   import Gesture from '../script/domain/Gesture';
   import { gestures } from '../script/stores/Stores';
@@ -221,20 +227,20 @@
 <main class="flex-row flex mb-2">
   <!-- Recording countdown popup -->
   <BaseDialog
-      background="light"
-      isOpen={showCountdown}
-      onClose={() => (showCountdown = false)}>
-      <div class="space-y-10 w-70">
-        <GestureTilePart elevated={true}>
-          <p class="text-9xl text-center text-gray-400">{countdownValue}</p>
-          <p class="pt-5 px-10 text-gray-400 text-center">
-            {$t('content.data.recording.description')}
-          </p>
-        </GestureTilePart>
-        <StandardButton type="warning" onClick={() => (showCountdown = false)}
-          >{$t('content.data.recording.button.cancel')}</StandardButton>
-      </div>
-    </BaseDialog>
+    background="light"
+    isOpen={showCountdown}
+    onClose={() => (showCountdown = false)}>
+    <div class="space-y-10 w-70">
+      <GestureTilePart elevated={true}>
+        <p class="text-9xl text-center text-gray-400">{countdownValue}</p>
+        <p class="pt-5 px-10 text-gray-400 text-center">
+          {$t('content.data.recording.description')}
+        </p>
+      </GestureTilePart>
+      <StandardButton type="warning" onClick={() => (showCountdown = false)}
+        >{$t('content.data.recording.button.cancel')}</StandardButton>
+    </div>
+  </BaseDialog>
 
   <!-- Recording bar to show recording progress -->
   <BaseDialog
@@ -250,8 +256,7 @@
     <!-- Title of gesture-->
     <GestureTilePart mr small elevated>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
-        <div
-          class="w-40 col-start-2 col-end-5 transition ease rounded bg-gray-100">
+        <div class="w-40 col-start-2 col-end-5 transition ease rounded bg-gray-100">
           <h3
             class="px-2"
             contenteditable
@@ -268,30 +273,17 @@
     </GestureTilePart>
 
     <div class="flex rounded-lg bg-backgroundlight shadow-md">
-      <GestureTilePart small mr elevated={$chosenGesture === gesture}>
-        {#if $chosenGesture !== gesture}
-          <div class="text-center w-35 cursor-pointer" on:click={selectClicked}>
-            <div class="w-full text-center">
-              <i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext" />
-            </div>
-            <p class="w-full text-center">
-              {$t('content.data.addData')}
-            </p>
-          </div>
-        {:else}
-          <div class="text-center w-35 cursor-pointer" on:click={selectClicked}>
-            <div class="w-full text-center">
-              <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" />
-            </div>
-            <StandardButton
-              onClick={() => {
-                countdownStart();
-              }}
-              size="small"
-              shadows={false}
-              type="primary">{$t('content.data.record')}</StandardButton>
-          </div>
-        {/if}
+      <GestureTilePart small mr>
+        <div
+          class="h-full w-35 flex justify-center"
+          class:cursor-pointer={$state.isInputConnected}
+          on:click={$chosenGesture === gesture ? countdownStart : selectClicked}>
+          <button
+            class="record-button"
+            class:disabled={$chosenGesture !== gesture}>
+            <i class="fas fa-circle text-rose-600 text-4xl" />
+          </button>
+        </div>
       </GestureTilePart>
 
       {#if $gesture.recordings.length > 0}
@@ -300,21 +292,6 @@
             {#each $gesture.recordings as recording (String($gesture.ID) + String(recording.ID))}
               <Recording {recording} onDelete={deleteRecording} />
             {/each}
-          </div>
-        </GestureTilePart>
-      {:else if $chosenGesture === gesture}
-        <GestureTilePart small>
-          <div class="relative float-left text-left h-30 w-60 justify-start flex">
-            <div class="text-left float-left mt-auto mb-auto ml-3">
-              <ImageSkeleton
-                height={95}
-                width={140}
-                src={microbitRecordingGuideImage}
-                alt="microbit recording guide" />
-            </div>
-            <p class="text-center absolute w-60px right-23px top-30px">
-              {$t('content.index.recordButtonDescription')}
-            </p>
           </div>
         </GestureTilePart>
       {/if}

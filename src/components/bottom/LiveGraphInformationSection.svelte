@@ -6,7 +6,6 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import { state } from '../../script/stores/uiStore';
   import Information from '../information/Information.svelte';
 </script>
 

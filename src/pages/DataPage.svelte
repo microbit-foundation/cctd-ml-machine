@@ -13,7 +13,6 @@
     loadDatasetFromFile,
   } from '../script/stores/mlStore';
   import { t } from '../i18n';
-  import RecordInformationContent from '../components/datacollection/RecordInformationContent.svelte';
   import NewGestureButton from '../components/NewGestureButton.svelte';
   import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';

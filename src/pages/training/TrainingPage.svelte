@@ -74,33 +74,34 @@
         <p class="pt-5 pb-10 text-[{descriptionTextColour}]">
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
-        <StandardButton
-          onClick={navigateDataPage}
-          type="primary"`>{$t('menu.trainer.addDataButton')}</StandardButton>
+        <StandardButton onClick={navigateDataPage} type="primary" `
+          >{$t('menu.trainer.addDataButton')}</StandardButton>
       </div>
     {:else if sufficientData && !$state.isTraining && !$state.isPredicting}
       <p class="font-semibold text-2xl py-10">{$t('content.trainer.enoughdata.title')}</p>
     {:else if $state.isTraining}
       <div class="text-primarytext">
         <div class="ml-auto mr-auto flex flex-col center-items justify-center">
-          <p class="text-2xl font-semibold pt-10">{$t('content.trainer.training.title')}</p>
-          <img alt="loading" src={loadingSpinnerImage} width="100px" class="self-center" />
+          <p class="text-2xl font-semibold pt-10">
+            {$t('content.trainer.training.title')}
+          </p>
+          <img
+            alt="loading"
+            src={loadingSpinnerImage}
+            width="100px"
+            class="self-center" />
         </div>
       </div>
-    {:else}
-        {#if $state.isPredicting}
-          <p class="text-2xl font-semibold mt-10 pb-10">
-            {$t('menu.trainer.TrainingFinished')}
-          </p>
-          <div class="flex flexbox space-x-10">
-            <StandardButton
-              onClick={navigateDataPage}
-              type="secondary">ADD MORE DATA</StandardButton>
-            <StandardButton
-              onClick={navigateModelPage}
-              type="primary">TEST MODEL</StandardButton>
-          </div>
-        {/if}
+    {:else if $state.isPredicting}
+      <p class="text-2xl font-semibold mt-10 pb-10">
+        {$t('menu.trainer.TrainingFinished')}
+      </p>
+      <div class="flex flexbox space-x-10">
+        <StandardButton onClick={navigateDataPage} type="secondary"
+          >ADD MORE DATA</StandardButton>
+        <StandardButton onClick={navigateModelPage} type="primary"
+          >TEST MODEL</StandardButton>
+      </div>
     {/if}
   </div>
 

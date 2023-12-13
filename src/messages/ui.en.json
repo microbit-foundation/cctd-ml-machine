@@ -133,7 +133,7 @@
   "menu.trainer.notEnoughDataInfo": "You have not collected enough data to train a model. You need at least 2 classes with 3 examples each. Please go to the Data page to collect more data",
   "menu.trainer.trainNewModelButton": "Train a new model",
   "menu.trainer.TrainingFinished": "Status: Your model is trained.",
-  
+
   "menu.trainer.trainModelButton": "Train model",
   "menu.trainer.addDataButton": "Add data",
 

@@ -15,7 +15,6 @@ import {
 import { GestureData, GestureOutput, RecordingData } from '../stores/mlStore';
 import Gesture, { GestureID } from './Gesture';
 import GestureRepository from '../repository/GestureRepository';
-import GestureConfidence from './GestureConfidence';
 
 export type PersistantGestureData = {
   name: string;

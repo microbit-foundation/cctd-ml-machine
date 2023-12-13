@@ -11,10 +11,16 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { TrainingStatus } from '../stores/mlStore';
 import MLModel from './MLModel';
 import { TrainerConsumer } from '../repository/ClassifierRepository';
 import ModelTrainer from './ModelTrainer';
+
+export enum TrainingStatus {
+  Untrained,
+  InProgress,
+  Success,
+  Failure,
+}
 
 export enum ModelType {
   LAYERS,
@@ -29,7 +35,7 @@ class Model implements Readable<ModelData> {
 
   constructor(
     private trainerConsumer: TrainerConsumer,
-    private mlModel: Readable<MLModel>,
+    private mlModel: Readable<MLModel | undefined>,
   ) {
     this.modelData = writable({
       trainingStatus: TrainingStatus.Untrained,
@@ -56,12 +62,33 @@ class Model implements Readable<ModelData> {
     }
   }
 
+  /**
+   * Whether a model has been trained successfully.
+   */
   public isTrained(): boolean {
     return get(this.modelData).trainingStatus === TrainingStatus.Success;
   }
 
+  /**
+   * Returns true if a MLModel is specified. Returns false if MLModel is undefined. Note canPredict may be true, even if isTrained() is false.
+   */
+  public canPredict(): boolean {
+    return get(this.mlModel) != undefined;
+  }
+
+  public markAsUntrained(): void {
+    this.modelData.update(updater => {
+      updater.trainingStatus = TrainingStatus.Untrained
+      return updater;
+    });
+  }
+
   public async predict(inputData: number[]): Promise<number[]> {
-    return await get(this.mlModel).predict(inputData);
+    const mlModel = get(this.mlModel);
+    if (!mlModel) {
+      throw new Error("Cannot predict, no MLModel has been specified")
+    }
+    return await mlModel.predict(inputData);
   }
 
   public subscribe(

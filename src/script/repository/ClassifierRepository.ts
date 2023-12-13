@@ -6,7 +6,6 @@
 import { Readable, Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
 import GestureConfidence from '../domain/GestureConfidence';
-import NoneMLModel from '../mlmodels/NoneMLModel';
 import MLModel from '../domain/MLModel';
 import ModelTrainer from '../domain/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
@@ -30,7 +29,7 @@ export type TrainerConsumer = <T extends MLModel>(
 
 class ClassifierRepository {
   private static confidences: Writable<Map<GestureID, number>>;
-  private static mlModel: Writable<MLModel>;
+  private static mlModel: Writable<MLModel | undefined>;
   private static filters: Writable<Filters>;
   private static filterArray: Writable<Filter[]>;
   private classifierFactory: ClassifierFactory;
@@ -38,7 +37,7 @@ class ClassifierRepository {
   constructor() {
     const initialConfidence = new Map<GestureID, number>();
     ClassifierRepository.confidences = writable(initialConfidence);
-    ClassifierRepository.mlModel = writable(new NoneMLModel());
+    ClassifierRepository.mlModel = writable(undefined);
     ClassifierRepository.filterArray = writable([]);
     ClassifierRepository.filters = writable(
       new Filters(ClassifierRepository.filterArray),
@@ -47,7 +46,7 @@ class ClassifierRepository {
     this.addAllFilters();
   }
 
-  public getMLModel(): Readable<MLModel> {
+  public getMLModel(): Readable<MLModel | undefined> {
     return {
       subscribe: ClassifierRepository.mlModel.subscribe,
     };

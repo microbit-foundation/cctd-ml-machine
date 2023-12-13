@@ -15,7 +15,7 @@ import { TrainerConsumer } from '../repository/ClassifierRepository';
 
 class ClassifierFactory {
   public buildClassifier(
-    model: Writable<MLModel>,
+    model: Writable<MLModel | undefined>,
     trainerConsumer: TrainerConsumer,
     filters: Writable<Filters>,
     gestures: Gesture[],
@@ -43,7 +43,7 @@ class ClassifierFactory {
 
   private buildModel(
     trainerConsumer: TrainerConsumer,
-    mlModel: Writable<MLModel>,
+    mlModel: Writable<MLModel | undefined>,
   ): Model {
     const model = new Model(trainerConsumer, mlModel);
     return model;

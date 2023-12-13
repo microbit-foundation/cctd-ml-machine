@@ -13,7 +13,7 @@ import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import { PersistantGestureData } from '../domain/Gestures';
 import Gesture, { GestureID } from '../domain/Gesture';
-import { gestures } from './Stores';
+import { classifier, gestures } from './Stores';
 
 export type RecordingData = {
   ID: number;
@@ -97,13 +97,6 @@ export type LiveData = {
   smoothedAccelZ: number;
 };
 
-export enum TrainingStatus {
-  Untrained,
-  InProgress,
-  Success,
-  Failure,
-}
-
 type MlSettings = {
   duration: number; // Duration of recording
   numSamples: number; // number of samples in one recording (when recording samples)
@@ -171,7 +164,7 @@ function updateToUntrainedState() {
     s.isPredicting = false;
     return s;
   });
-  trainingStatus.set(TrainingStatus.Untrained);
+  classifier.getModel().markAsUntrained();
 }
 
 // Delete this, maybe? updateToUntrainedState
@@ -226,8 +219,6 @@ export const bestPrediction = writable<GestureData | undefined>(undefined);
 
 // Store for components to assess model status
 export const model = writable<LayersModel>(undefined);
-
-export const trainingStatus = writable<TrainingStatus>(TrainingStatus.Untrained);
 
 // Stores and manages previous data-elements. Used for classifying current gesture
 // TODO: Only used for 'getPrevData' (which is only used for ml.ts). Do we even want this as global state?

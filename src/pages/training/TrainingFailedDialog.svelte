@@ -5,12 +5,12 @@
  -->
 
 <script lang="ts">
-  import { TrainingStatus, trainingStatus } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
 
   import { classifier } from '../../script/stores/Stores';
+    import { TrainingStatus } from '../../script/domain/Model';
 
   let isFailedTrainingDialogOpen = false;
 
@@ -19,7 +19,7 @@
   $: {
     if ($model.trainingStatus === TrainingStatus.Failure) {
       isFailedTrainingDialogOpen = true;
-      trainingStatus.update(() => TrainingStatus.Untrained);
+      model.markAsUntrained();
     }
   }
 </script>

@@ -31,13 +31,15 @@ export enum ModelView {
   STACK,
 }
 
+throw new Error("See todo below")
+
 // Store current state to prevent error prone actions
 export const state = writable<{
   isRequestingDevice: DeviceRequestStates;
   isFlashingDevice: boolean;
   isTesting: boolean;
   isRecording: boolean;
-  isTraining: boolean;
+  isTraining: boolean; // TODO REMOVE THIS AND ALL THE ELEMENTS THAT FOLLOW. REPLACE IT WITH THE MODEL EQUIVALENT
   isInputConnected: boolean;
   isOutputConnected: boolean;
   isPredicting: boolean;

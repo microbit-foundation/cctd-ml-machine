@@ -236,14 +236,6 @@ livedata.subscribe(data => {
   }
 });
 
-// Store for training state. Used to radiate current epoch state (not done presently).
-// TODO: Not used for anything presently (only ever updated). Use or delete
-export const trainingState = writable({
-  percentage: 0,
-  loss: 0,
-  epochs: 0,
-});
-
 // TODO: Only used at one location (ml.ts). Move to ml.ts?
 export function getPrevData(): { x: number[]; y: number[]; z: number[] } | undefined {
   const data: LiveData[] = get(prevData);

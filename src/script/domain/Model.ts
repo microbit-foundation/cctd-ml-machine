@@ -76,6 +76,9 @@ class Model implements Readable<ModelData> {
     return get(this.mlModel) != undefined;
   }
 
+  /**
+   * Marks the model as untrained. If model was previously trained, the predict method will still work, because the model doesn't get dropped
+   */
   public markAsUntrained(): void {
     this.modelData.update(updater => {
       updater.trainingStatus = TrainingStatus.Untrained

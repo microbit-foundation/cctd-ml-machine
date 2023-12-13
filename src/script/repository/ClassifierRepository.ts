@@ -65,6 +65,10 @@ class ClassifierRepository {
     );
   }
 
+  /**
+   * Takes a trainer as parameter and produces a MLModel. This function is passed into the classifier when built. 
+   * See getTrainerConsumer() and getClassifier()
+   */
   private async trainModel<T extends MLModel>(trainer: ModelTrainer<T>): Promise<void> {
     const gestureRepository = Repositories.getInstance().getGestureRepository();
     const trainingData = this.classifierFactory.buildTrainingData(

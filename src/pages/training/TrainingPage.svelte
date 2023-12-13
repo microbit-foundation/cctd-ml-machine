@@ -10,44 +10,18 @@
   import { t } from '../../i18n';
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
-  import TrainingButton from './TrainingButton.svelte';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import StandardButton from '../../components/StandardButton.svelte';
   import { Paths, navigate } from '../../router/paths';
-  import CookieManager from '../../script/CookieManager';
+    import TrainModelButton from './TrainModelButton.svelte';
+    import { classifier } from '../../script/stores/Stores';
+    import TrainingFailedDialog from './TrainingFailedDialog.svelte';
 
   const sufficientData = hasSufficientData();
-
-  let isFailedTrainingDialogOpen = false;
-
-  $: {
-    if ($trainingStatus === TrainingStatus.Failure) {
-      isFailedTrainingDialogOpen = true;
-      trainingStatus.update(() => TrainingStatus.Untrained);
-    }
-  }
 </script>
 
-<StandardDialog
-  isOpen={isFailedTrainingDialogOpen}
-  onClose={() => (isFailedTrainingDialogOpen = false)}>
-  <div
-    class="justify-center items-center content-center w-150 bg-white m-auto"
-    transition:slide>
-    <div>
-      <p class="text-warning font-bold text-center text-xl mb-5">
-        {$t('content.trainer.failure.header')}
-      </p>
-      <p class="mb-3">
-        {$t('content.trainer.failure.body')}
-      </p>
-      <p class="font-bold">
-        {$t('content.trainer.failure.todo')}
-      </p>
-    </div>
-  </div>
-</StandardDialog>
+<TrainingFailedDialog/>
 <div class="flex flex-col h-full">
   <ControlBar>
     <StandardButton
@@ -94,12 +68,14 @@
           </p>
         {/if}
         <div class="w-full pt-5 text-white pb-5">
-          <TrainingButton />
+          <TrainModelButton />
         </div>
       </div>
     {/if}
     {#if !$state.isInputConnected}
-      <PleaseConnectFirst />
+      <div class="mt-10">
+        <PleaseConnectFirst />
+      </div>
     {/if}
   </div>
 </div>

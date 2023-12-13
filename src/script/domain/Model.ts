@@ -64,7 +64,7 @@ class Model implements Readable<ModelData> {
     return await get(this.mlModel).predict(inputData);
   }
 
-  subscribe(
+  public subscribe(
     run: Subscriber<ModelData>,
     invalidate?: ((value?: ModelData | undefined) => void) | undefined,
   ): Unsubscriber {

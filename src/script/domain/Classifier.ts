@@ -5,7 +5,6 @@
  */
 import { Readable, Subscriber, Unsubscriber, Writable, derived, get } from 'svelte/store';
 import Model, { ModelData } from './Model';
-import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import Filters from './Filters';
 import Gesture, { GestureID } from './Gesture';
 import ClassifierInput from './ClassifierInput';

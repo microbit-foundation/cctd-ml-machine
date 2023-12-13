@@ -72,12 +72,6 @@ class LiveDataBuffer<T> {
       );
     }
 
-    if (series.length > 10 * noOfElements) {
-      console.warn(
-        'The number of values in LiveDataBuffer, that fit the timeframe is greater than 1000%! Maybe decrease the polling frequency or increase the number of elements fetched from buffer to improve performance',
-      );
-    }
-
     // We will spread out the values evenly and return the result
     const resultSeries = [];
     for (let i = 0; i < noOfElements; i++) {

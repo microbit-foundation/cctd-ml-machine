@@ -61,10 +61,12 @@ class PollingPredictorEngine implements Engine {
   }
 
   private bufferToInput(): AccelerometerClassifierInput {
-    const bufferedData = this.liveData.getBuffer().getSeries(
-        StaticConfiguration.pollingPredictionSampleDuration, 
-        StaticConfiguration.pollingPredictionSampleSize
-    );
+    const bufferedData = this.liveData
+      .getBuffer()
+      .getSeries(
+        StaticConfiguration.pollingPredictionSampleDuration,
+        StaticConfiguration.pollingPredictionSampleSize,
+      );
     const input: AccelerometerRecording = {
       x: bufferedData.map(data => data.value.accelX),
       y: bufferedData.map(data => data.value.accelY),

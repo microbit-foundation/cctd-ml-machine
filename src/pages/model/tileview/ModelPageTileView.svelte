@@ -13,7 +13,6 @@
     state,
   } from '../../../script/stores/uiStore';
   import { settings } from '../../../script/stores/mlStore';
-  import { classify } from '../../../script/ml';
   import { onMount } from 'svelte';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';

@@ -11,10 +11,10 @@ import AccelerometerClassifierInput, {
   AccelerometerRecording,
 } from '../mlmodels/AccelerometerClassifierInput';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
+import StaticConfiguration from '../../StaticConfiguration';
 
 class PollingPredictorEngine implements Engine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;
-  private pollingIntervalTime = 100;
   private isRunning: Writable<boolean>;
 
   constructor(
@@ -51,7 +51,7 @@ class PollingPredictorEngine implements Engine {
   private startPolling() {
     this.pollingInterval = setInterval(() => {
       void this.predict();
-    }, this.pollingIntervalTime);
+    }, StaticConfiguration.pollingPredictionInterval);
   }
 
   private predict() {
@@ -61,7 +61,10 @@ class PollingPredictorEngine implements Engine {
   }
 
   private bufferToInput(): AccelerometerClassifierInput {
-    const bufferedData = this.liveData.getBuffer().getSeries(1800, 80); // Todo: Replace these values with appropriate sources of truth
+    const bufferedData = this.liveData.getBuffer().getSeries(
+        StaticConfiguration.pollingPredictionSampleDuration, 
+        StaticConfiguration.pollingPredictionSampleSize
+    );
     const input: AccelerometerRecording = {
       x: bufferedData.map(data => data.value.accelX),
       y: bufferedData.map(data => data.value.accelY),

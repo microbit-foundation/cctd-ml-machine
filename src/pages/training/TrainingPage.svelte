@@ -74,7 +74,7 @@
         <p class="pt-5 pb-10 text-[{descriptionTextColour}]">
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
-        <StandardButton onClick={navigateDataPage} type="primary" `
+        <StandardButton onClick={navigateDataPage} type="primary"
           >{$t('menu.trainer.addDataButton')}</StandardButton>
       </div>
     {:else if sufficientData && !$state.isTraining && !$state.isPredicting}
@@ -98,9 +98,9 @@
       </p>
       <div class="flex flexbox space-x-10">
         <StandardButton onClick={navigateDataPage} type="secondary"
-          >ADD MORE DATA</StandardButton>
+          >{$t('menu.trainer.addMoreDataButton')}</StandardButton>
         <StandardButton onClick={navigateModelPage} type="primary"
-          >TEST MODEL</StandardButton>
+          >{$t('menu.trainer.testModelButton')}</StandardButton>
       </div>
     {/if}
   </div>

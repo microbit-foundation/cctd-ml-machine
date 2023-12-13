@@ -136,6 +136,8 @@
 
   "menu.trainer.trainModelButton": "Train model",
   "menu.trainer.addDataButton": "Add data",
+  "menu.trainer.addMoreDataButton": "Add more data",
+  "menu.trainer.testModelButton": "Test model",
 
   "menu.model.helpHeading": "3. Test model",
   "menu.model.helpBody": "The model can be used in an interactive system. Here we use the trained model to predict gestures. You can connect another micro:bit and make it respond to the predicted gestures.",

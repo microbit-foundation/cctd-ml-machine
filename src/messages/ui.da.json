@@ -134,8 +134,10 @@
   "menu.trainer.trainNewModelButton": "Træn en ny model",
   "menu.trainer.TrainingFinished": "TRANSLATION_NEEDED",
 
-  "menu.trainer.trainModelButton": "Train model",
-  "menu.trainer.addDataButton": "Add data",
+  "menu.trainer.trainModelButton": "TRANSLATION_NEEDED",
+  "menu.trainer.addDataButton": "TRANSLATION_NEEDED",
+  "menu.trainer.addMoreDataButton": "TRANSLATION_NEEDED",
+  "menu.trainer.testModelButton": "TRANSLATION_NEEDED",
 
   "menu.model.helpHeading": "TRANSLATION_NEEDED",
   "menu.model.helpBody": "Modellen kan bruges i et interaktivt system. Her bruger vi den trænede model til at forudsige bevægelser. Du kan tilslutte endnu en micro:bit og få den til at reagere på de bevægelser du laver.",

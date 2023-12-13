@@ -13,7 +13,6 @@
   import { settings } from '../../../script/stores/mlStore';
   import { get } from 'svelte/store';
   import { onMount } from 'svelte';
-  import { classify } from '../../../script/ml';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
@@ -51,7 +50,7 @@
       // lastRecording = getPrevData();
       $state.isRecording = false;
       recordingTime = 0;
-      classify();
+      // classify();
     }, duration);
   }
 

@@ -19,8 +19,8 @@ import { FilterType, Axes, determineFilter, AxesType } from './datafunctions';
 import { get, type Unsubscriber } from 'svelte/store';
 import { t } from '../i18n';
 import * as tf from '@tensorflow/tfjs';
-import { LayersModel, SymbolicTensor, Tensor } from '@tensorflow/tfjs';
-import { classifier, gestures, liveAccelerometerData } from './stores/Stores';
+import { Tensor } from '@tensorflow/tfjs';
+import { gestures } from './stores/Stores';
 import Repositories from './repository/Repositories';
 
 let text: (key: string, vars?: object) => string;
@@ -30,39 +30,12 @@ t.subscribe(t => (text = t));
 // Such that prediction continues on with the same settings as during training
 let modelSettings: { axes: AxesType[]; filters: Set<FilterType> };
 
-// Hacky "timer" to pad the training time if needed
-let trainingTimerPromise: Promise<boolean>;
-
 // Add parameter to allow unsubscribing from store, when predicting ends.
 // Prevents memory leak.
-let unsubscribeFromSettings: Unsubscriber | undefined = undefined;
+const unsubscribeFromSettings: Unsubscriber | undefined = undefined;
 
 // Variable for accessing the predictionInterval
 let predictionInterval: NodeJS.Timeout | undefined = undefined;
-
-function createModel(): LayersModel {
-  const gestureData = get(gestures);
-  const numberOfClasses: number = gestureData.length;
-  const inputShape = [
-    get(settings).includedFilters.size * get(settings).includedAxes.length,
-  ];
-
-  const input = tf.input({ shape: inputShape });
-  const normalizer = tf.layers.batchNormalization().apply(input);
-  const dense = tf.layers.dense({ units: 16, activation: 'relu' }).apply(normalizer);
-  const softmax = tf.layers
-    .dense({ units: numberOfClasses, activation: 'softmax' })
-    .apply(dense) as SymbolicTensor;
-  const model = tf.model({ inputs: input, outputs: softmax });
-
-  model.compile({
-    loss: 'categoricalCrossentropy',
-    optimizer: tf.train.sgd(0.5),
-    metrics: ['accuracy'],
-  });
-
-  return model;
-}
 
 export function isParametersLegal(): boolean {
   const s = get(settings);
@@ -81,18 +54,6 @@ export function sufficientGestureData(gestureData: GestureData[], messageUser: b
     }
   });
   return sufficientData;
-}
-
-// Set state to not-Training and initiate prediction.
-function finishedTraining() {
-  // Wait for promise to resolve, to ensure a minimum of 2.5 sec of training from users perspective
-  void trainingTimerPromise.then(() => {
-    state.update(obj => {
-      obj.isTraining = false;
-      return obj;
-    });
-    setupPredictionInterval();
-  });
 }
 
 // makeInput reduces array of x, y and z inputs to a single number array with values.
@@ -125,36 +86,6 @@ function setIsPredicting(isPredicting: boolean): void {
   state.update(s => {
     s.isPredicting = isPredicting;
     return s;
-  });
-}
-
-// Setup prediction. Listens for user-settings (Updates pr second).
-// Whenever this changes, the updatesPrSecond also changes.
-function setupPredictionInterval(): void {
-  // Set state and fetch updatesPrSecond.
-  setIsPredicting(true);
-  const updatesPrSecond = get(settings).updatesPrSecond;
-
-  const classifyAutomatically = get(settings).automaticClassification;
-
-  if (classifyAutomatically) {
-    predictionInterval = setInterval(classify, 1000 / updatesPrSecond);
-  }
-
-  // When user changes settings
-  unsubscribeFromSettings = settings.subscribe(update => {
-    // Only if the updatesPrSecond changed or buttons changed
-    // TODO: Change to early exit structure
-    if (
-      update.updatesPrSecond !== updatesPrSecond ||
-      update.automaticClassification !== classifyAutomatically
-    ) {
-      if (predictionInterval !== undefined) {
-        clearInterval(predictionInterval);
-      }
-      predictionInterval = undefined;
-      setupPredictionInterval();
-    }
   });
 }
 

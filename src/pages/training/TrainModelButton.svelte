@@ -23,6 +23,7 @@
       .train(new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings))
       .then(() => {
         $state.isTraining = false;
+        $state.isPredicting = true;
       });
   };
 </script>

@@ -54,7 +54,7 @@
       // lastRecording = getPrevData();
       $state.isRecording = false;
       recordingTime = 0;
-      classify();
+      // classify();
     }, duration);
   }
 

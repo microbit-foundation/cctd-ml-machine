@@ -13,7 +13,6 @@
     state,
   } from '../../../script/stores/uiStore';
   import { settings } from '../../../script/stores/mlStore';
-  import { classify } from '../../../script/ml';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import MediaQuery from '../../../components/MediaQuery.svelte';
   import { gestures } from '../../../script/stores/Stores';
@@ -55,7 +54,7 @@
       // lastRecording = getPrevData();
       $state.isRecording = false;
       recordingTime = 0;
-      classify();
+      // classify();
     }, duration);
   }
 

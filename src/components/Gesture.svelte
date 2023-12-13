@@ -268,7 +268,7 @@
       </div>
     </GestureTilePart>
 
-    <div class="flex rounded-lg bg-backgroundlight shadow-md">
+    <div class="flex rounded-lg bg-backgroundlight shadow-md ml-10">
       <GestureTilePart small mr>
         <div
           class="h-full w-35 flex justify-center"

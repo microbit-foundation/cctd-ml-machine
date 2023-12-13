@@ -93,7 +93,7 @@
               titleText={$t('content.data.classHelpHeader')}
               bodyText={$t('content.data.classHelpBody')} />
           </div>
-          <div class="absolute left-55 flex">
+          <div class="absolute left-65 flex">
             <Information
               isLightTheme={false}
               underlineIconText={false}

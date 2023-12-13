@@ -278,9 +278,7 @@
           class="h-full w-35 flex justify-center"
           class:cursor-pointer={$state.isInputConnected}
           on:click={$chosenGesture === gesture ? countdownStart : selectClicked}>
-          <button
-            class="record-button"
-            class:disabled={$chosenGesture !== gesture}>
+          <button class="record-button" class:disabled={$chosenGesture !== gesture}>
             <i class="fas fa-circle text-rose-600 text-4xl" />
           </button>
         </div>

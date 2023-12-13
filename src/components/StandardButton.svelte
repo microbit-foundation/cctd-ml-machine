@@ -59,7 +59,7 @@
   }
 </script>
 
-<div class="grid grid-cols-1 {extraClasses} {getPosition()}">
+<div class="grid grid-cols-1 mx-10 {extraClasses} {getPosition()}">
   <button
     {disabled}
     class="{classes[type]} font-bold outline-none rounded-full {size}"

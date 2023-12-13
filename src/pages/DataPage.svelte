@@ -119,6 +119,6 @@
       <NewGestureButton />
     </div>
 
-    <TrainingButton action="navigate" />
+    <TrainingButton action="navigate" position="right" />
   {/if}
 </main>

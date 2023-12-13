@@ -12,7 +12,20 @@
   import { slide } from 'svelte/transition';
   import TrainingButton from './TrainingButton.svelte';
   import TabView from '../../views/TabView.svelte';
+  import trainModelImage from '../../imgs/TrainModel.svg';
+  import loadingSpinnerImage from '../../imgs/loadingspinner.gif';
+  import StandardButton from '../../components/StandardButton.svelte';
+  import { Paths, navigate } from '../../router/paths';
 
+  let descriptionTextColour = '#8892A3';
+
+  function navigateModelPage(): void {
+    navigate(Paths.MODEL);
+  }
+
+  function navigateDataPage(): void {
+    navigate(Paths.DATA);
+  }
   $: sufficientData = hasSufficientData();
 
   let isFailedTrainingDialogOpen = false;
@@ -45,41 +58,52 @@
   </div>
 </StandardDialog>
 
-<div class="flex flex-col h-full pb-10">
+<div class="flex flex-col pb-5">
   <TabView />
+  <img class="self-center pt-50" src={trainModelImage} alt="train model" width="350" />
+  <p class="text-2xl font-semibold self-center pb-5">{$t('content.trainer.header')}</p>
+  <p class="text-center self-center leading-relaxed text-[{descriptionTextColour}] w-180">
+    {$t('content.trainer.description')}
+  </p>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
     {#if !sufficientData}
-      <div class="w-full text-primarytext">
-        <h1 class="w-3/4 text-3xl bold m-auto">
+      <div class="w-full py-10">
+        <h1 class="text-xl bold m-auto font-semibold">
           {$t('menu.trainer.notEnoughDataHeader1')}
         </h1>
-        <p class="w-3/5 text-xl m-auto mt-5">
+        <p class="pt-5 text-[{descriptionTextColour}]">
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
       </div>
+    {:else if sufficientData && !$state.isTraining && !$state.isPredicting}
+      <p class="font-semibold text-2xl py-10">{$t('content.trainer.enoughdata.title')}</p>
     {:else if $state.isTraining}
-      <div class="w-3/4 text-primarytext">
-        <div class="ml-auto mr-auto flex center-items justify-center">
-          <i
-            class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
+      <div class="text-primarytext">
+        <div class="ml-auto mr-auto flex flex-col center-items justify-center">
+          <p class="text-2xl font-semibold pt-10">
+            {$t('content.trainer.training.title')}
+          </p>
+          <img
+            alt="loading"
+            src={loadingSpinnerImage}
+            width="100px"
+            class="self-center" />
         </div>
-        <p class="bold text-3xl bold mt-10">
-          {$t('menu.trainer.isTrainingModelButton')}
-        </p>
       </div>
-    {:else}
-      <div class="w-3/4 text-primarytext">
-        {#if $state.isPredicting}
-          <p class="bold text-3xl bold mt-10">
-            {$t('menu.trainer.TrainingFinished')}
-          </p>
-          <p class="bold text-xl bold mt-10">
-            {$t('menu.trainer.TrainingFinished.body')}
-          </p>
-        {/if}
+    {:else if $state.isPredicting}
+      <p class="text-2xl font-semibold mt-10 pb-10">
+        {$t('menu.trainer.TrainingFinished')}
+      </p>
+      <div class="flex flexbox space-x-10">
+        <StandardButton onClick={navigateDataPage} type="secondary"
+          >{$t('menu.trainer.addMoreDataButton')}</StandardButton>
+        <StandardButton onClick={navigateModelPage} type="primary"
+          >{$t('menu.trainer.testModelButton')}</StandardButton>
       </div>
     {/if}
   </div>
 
-  <TrainingButton />
+  <div class="pt-10">
+    <TrainingButton />
+  </div>
 </div>

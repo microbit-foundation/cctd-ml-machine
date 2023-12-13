@@ -48,6 +48,13 @@
   "content.data.trainDialog.title": "Train the model",
   "content.data.trainDialog.text": "Do you want to train the model with the data you have added so you can test it?",
 
+  "content.trainer.header": "Training a model",
+  "content.trainer.description": "The computer program spots patterns or differences in your data samples, and uses these to build a mathematical model that allows the micro:bit machine learning tool to recognise different actions when you move your micro:bit.",
+
+  "content.trainer.enoughdata.title": "Status: You've collected enough data to train the model.",
+
+  "content.trainer.training.title": "Status: training the model in progress.",
+
   "content.trainer.failure.header": "Training Failed",
   "content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
   "content.trainer.failure.todo": "Return to the data page and change your data.",
@@ -121,14 +128,15 @@
   "menu.trainer.helpBody": "The Trainer looks at the examples in each of the classes and tries to 'learn' how the different classes can be recognized by searching for patterns in the data. Here you can train a model to recognize different gestures.",
   "menu.trainer.notConnected1": "You have not connected a micro:bit.",
   "menu.trainer.notConnected2": " Please do so via the button below",
-  "menu.trainer.notEnoughDataHeader1": "Not Enough Data\nGo to Data page",
-  "menu.trainer.notEnoughDataInfoBody": "You need at least 2 classes with 3 examples each to attempt to train a model.",
+  "menu.trainer.notEnoughDataHeader1": "Status: You don't have enough data.",
+  "menu.trainer.notEnoughDataInfoBody": "You need at least 3 data samples for 2 actions to train the model.",
   "menu.trainer.notEnoughDataInfo": "You have not collected enough data to train a model. You need at least 2 classes with 3 examples each. Please go to the Data page to collect more data",
-  "menu.trainer.trainModelButton": "Train model",
   "menu.trainer.trainNewModelButton": "Train a new model",
-  "menu.trainer.TrainingFinished": "Training done",
-  "menu.trainer.TrainingFinished.body": "Go to the Model-page to examine how well your model works",
-  "menu.trainer.isTrainingModelButton": "Training model",
+  "menu.trainer.TrainingFinished": "Status: Your model is trained.",
+
+  "menu.trainer.trainModelButton": "Train model",
+  "menu.trainer.addMoreDataButton": "Add more data",
+  "menu.trainer.testModelButton": "Test model",
 
   "menu.model.helpHeading": "3. Test model",
   "menu.model.helpBody": "The model can be used in an interactive system. Here we use the trained model to predict gestures. You can connect another micro:bit and make it respond to the predicted gestures.",

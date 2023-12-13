@@ -6,10 +6,8 @@
 
 <script lang="ts">
   import { state } from '../script/stores/uiStore';
-  import { GestureData } from '../script/stores/mlStore';
   import { t } from '../i18n';
     import { gestures } from '../script/stores/Stores';
-    import { get } from 'svelte/store';
     import Gesture from '../script/domain/Gesture';
 
     const bestPrediction = gestures.getBestPrediction();

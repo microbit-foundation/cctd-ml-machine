@@ -1,18 +1,17 @@
-
 <script lang="ts">
-    import { Paths, navigate } from "../router/paths";
-    import StandardButton from "./StandardButton.svelte";
+  import { Paths, navigate } from '../router/paths';
+  import StandardButton from './StandardButton.svelte';
 </script>
 
 <StandardButton
-    fillOnHover
-    small
-    outlined
-    bold={false}
-    shadows={false}
-    color={'primary'}
-    onClick={() => {
+  fillOnHover
+  small
+  outlined
+  bold={false}
+  shadows={false}
+  color={'primary'}
+  onClick={() => {
     navigate(Paths.PLAYGROUND);
-    }}>
-    Go to playground
+  }}>
+  Go to playground
 </StandardButton>

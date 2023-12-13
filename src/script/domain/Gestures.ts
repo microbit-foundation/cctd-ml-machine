@@ -81,20 +81,23 @@ class Gestures implements Readable<GestureData[]> {
   }
 
   public getBestPrediction(): Readable<Gesture> {
-    return derived(get(Gestures.subscribableGestures).map(gest => gest.getConfidence()), confidences => {
-      const sorted = [...confidences].map((data, index) => {
-        return {
-        index: index,
-        value: data,
-      }
-      });
-      
-      sorted.sort((confidence1, confidence2) => {
-        return confidence2.value.confidence - confidence1.value.confidence;
-      })
+    return derived(
+      get(Gestures.subscribableGestures).map(gest => gest.getConfidence()),
+      confidences => {
+        const sorted = [...confidences].map((data, index) => {
+          return {
+            index: index,
+            value: data,
+          };
+        });
 
-      return get(Gestures.subscribableGestures)[sorted[0].index];
-    });
+        sorted.sort((confidence1, confidence2) => {
+          return confidence2.value.confidence - confidence1.value.confidence;
+        });
+
+        return get(Gestures.subscribableGestures)[sorted[0].index];
+      },
+    );
   }
 
   private addGestureFromPersistedData(gestureData: PersistantGestureData): Gesture {

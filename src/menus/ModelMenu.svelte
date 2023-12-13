@@ -7,10 +7,10 @@
 <script lang="ts">
   import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
-    import { gestures } from '../script/stores/Stores';
-    import Gesture from '../script/domain/Gesture';
+  import { gestures } from '../script/stores/Stores';
+  import Gesture from '../script/domain/Gesture';
 
-    const bestPrediction = gestures.getBestPrediction();
+  const bestPrediction = gestures.getBestPrediction();
 
   $: confidence = $state.isInputReady
     ? $bestPrediction.getConfidence().getCurrentConfidence()

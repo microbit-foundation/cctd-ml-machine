@@ -14,14 +14,14 @@
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import StandardButton from '../../components/StandardButton.svelte';
   import { Paths, navigate } from '../../router/paths';
-    import TrainModelButton from './TrainModelButton.svelte';
-    import { classifier } from '../../script/stores/Stores';
-    import TrainingFailedDialog from './TrainingFailedDialog.svelte';
+  import TrainModelButton from './TrainModelButton.svelte';
+  import { classifier } from '../../script/stores/Stores';
+  import TrainingFailedDialog from './TrainingFailedDialog.svelte';
 
   const sufficientData = hasSufficientData();
 </script>
 
-<TrainingFailedDialog/>
+<TrainingFailedDialog />
 <div class="flex flex-col h-full">
   <ControlBar>
     <StandardButton

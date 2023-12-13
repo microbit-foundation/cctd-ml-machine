@@ -21,10 +21,7 @@
     if (!isInputReady) {
       return $t('menu.model.connectInputMicrobit');
     }
-    if (bestPrediction.getConfidence().isConfident()) {
-      return bestPrediction.getName();
-    }
-    return '...';
+    return bestPrediction.getName();
   };
 
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';

@@ -15,6 +15,7 @@ import {
 import { GestureData, GestureOutput, RecordingData } from '../stores/mlStore';
 import Gesture, { GestureID } from './Gesture';
 import GestureRepository from '../repository/GestureRepository';
+import GestureConfidence from './GestureConfidence';
 
 export type PersistantGestureData = {
   name: string;
@@ -77,6 +78,23 @@ class Gestures implements Readable<GestureData[]> {
 
   public getNumberOfGestures(): number {
     return get(Gestures.subscribableGestures).length;
+  }
+
+  public getBestPrediction(): Readable<Gesture> {
+    return derived(get(Gestures.subscribableGestures).map(gest => gest.getConfidence()), confidences => {
+      const sorted = [...confidences].map((data, index) => {
+        return {
+        index: index,
+        value: data,
+      }
+      });
+      
+      sorted.sort((confidence1, confidence2) => {
+        return confidence2.value.confidence - confidence1.value.confidence;
+      })
+
+      return get(Gestures.subscribableGestures)[sorted[0].index];
+    });
   }
 
   private addGestureFromPersistedData(gestureData: PersistantGestureData): Gesture {

@@ -6,20 +6,25 @@
 
 <script lang="ts">
   import { state } from '../script/stores/uiStore';
-  import { GestureData, bestPrediction } from '../script/stores/mlStore';
+  import { GestureData } from '../script/stores/mlStore';
   import { t } from '../i18n';
+    import { gestures } from '../script/stores/Stores';
+    import { get } from 'svelte/store';
+    import Gesture from '../script/domain/Gesture';
+
+    const bestPrediction = gestures.getBestPrediction();
 
   $: confidence = $state.isInputReady
-    ? $bestPrediction?.confidence.currentConfidence ?? 0
+    ? $bestPrediction.getConfidence().getCurrentConfidence()
     : 0;
   confidence = isNaN(confidence) ? 0 : confidence;
 
-  const getPredictionLabel = (isInputReady: boolean, bestPrediction?: GestureData) => {
+  const getPredictionLabel = (isInputReady: boolean, bestPrediction: Gesture) => {
     if (!isInputReady) {
       return $t('menu.model.connectInputMicrobit');
     }
-    if (bestPrediction) {
-      return bestPrediction.name;
+    if (bestPrediction.getConfidence().isConfident()) {
+      return bestPrediction.getName();
     }
     return '...';
   };

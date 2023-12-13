@@ -24,7 +24,7 @@
   "content.index.toolProcessCards.model.description": "Find out if it correctly recognises each action. Add more data to improve the model.",
   "content.index.recordButtonDescription": "\"Record\"-button",
 
-  "content.data.classPlaceholderNewClass": "Press here to change name",
+  "content.data.classPlaceholderNewClass": "Name of action",
   "content.data.record": "Record",
   "content.data.addData": "Add Data",
   "content.data.classHelpHeader": "Class",

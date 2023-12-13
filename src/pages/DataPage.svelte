@@ -96,21 +96,11 @@
           <div class="absolute left-55 flex">
             <Information
               isLightTheme={false}
-              iconText={$t('content.data.choice')}
-              underlineIconText={false}>
-              <RecordInformationContent isLightTheme={false} />
-            </Information>
+              underlineIconText={false}
+              iconText={$t('content.data.data')}
+              titleText={$t('content.data.data')}
+              bodyText={$t('content.data.dataDescription')} />
           </div>
-          {#if hasSomeData()}
-            <div class="absolute left-92 flex">
-              <Information
-                isLightTheme={false}
-                underlineIconText={false}
-                iconText={$t('content.data.data')}
-                titleText={$t('content.data.data')}
-                bodyText={$t('content.data.dataDescription')} />
-            </div>
-          {/if}
         </div>
       {:else}
         <div class="flex justify-center">
@@ -119,7 +109,7 @@
           </div>
         </div>
       {/if}
-      <!-- Display all gestures -->
+
       {#each $gestures as gesture (gesture.ID)}
         <Gesture
           gesture={gestures.getGesture(gesture.ID)}
@@ -128,6 +118,7 @@
 
       <NewGestureButton />
     </div>
+
     <TrainingButton action="navigate" />
   {/if}
 </main>

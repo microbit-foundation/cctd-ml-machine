@@ -102,8 +102,8 @@
     }
 
     // Set start line
-    recordLines.append(new Date().getTime() - 1, maxValue, false);
-    recordLines.append(new Date().getTime(), minValue, false);
+    recordLines.append(new Date().getTime() - 1, minValue, false);
+    recordLines.append(new Date().getTime(), maxValue, false);
 
     // Wait a second and set end line
     blockRecordingStart = true;

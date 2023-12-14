@@ -71,9 +71,11 @@
         <h1 class="text-xl bold m-auto font-semibold">
           {$t('menu.trainer.notEnoughDataHeader1')}
         </h1>
-        <p class="pt-5 text-[{descriptionTextColour}]">
+        <p class="pt-5 pb-10 text-[{descriptionTextColour}]">
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
+        <StandardButton onClick={navigateDataPage} type="primary"
+          >{$t('menu.trainer.addDataButton')}</StandardButton>
       </div>
     {:else if sufficientData && !$state.isTraining && !$state.isPredicting}
       <p class="font-semibold text-2xl py-10">{$t('content.trainer.enoughdata.title')}</p>

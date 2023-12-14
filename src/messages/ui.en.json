@@ -135,6 +135,7 @@
   "menu.trainer.TrainingFinished": "Status: Your model is trained.",
 
   "menu.trainer.trainModelButton": "Train model",
+  "menu.trainer.addDataButton": "Add data",
   "menu.trainer.addMoreDataButton": "Add more data",
   "menu.trainer.testModelButton": "Test model",
 

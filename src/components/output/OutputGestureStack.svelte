@@ -7,9 +7,8 @@
 <style>
   input[type='range'] {
     writing-mode: bt-lr;
-    appearance: slider-vertical;
-    width: 20px;
-    background: #13bba4;
+    appearance: slider-sideways;
+    width: 20rem;
   }
 </style>
 
@@ -209,9 +208,8 @@
   </GestureTilePart>
 
   <GestureTilePart>
-    
     <!-- METER -->
-    <div class="w-4 h-25 relative">
+    <div class="w-100 h-25 relative">
       <div
       class="w-4 h-full absolute rounded border border-solid border-gray-400 overflow-hidden">
       <div
@@ -238,8 +236,10 @@
     bodyText={$t('content.model.classification.helpBody')}
     isLightTheme={false} />
   </div>
+  <!-- RECOGNITION POINT BAR -->
+  <p class="text-sm text-gray-500">{$t('content.model.output.recognitionPoint')}</p>
   <input
-    class="h-25 rotate-90 accent-primary"
+    class="accent-primary"
     type="range"
     name=""
     min="10"

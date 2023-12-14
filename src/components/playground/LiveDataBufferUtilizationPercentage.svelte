@@ -5,11 +5,11 @@
  -->
 
 <script lang="ts">
-  import { liveData } from '../../script/stores/Stores';
+  import { liveAccelerometerData } from '../../script/stores/Stores';
 
   let utilization = 0;
   setInterval(() => {
-    utilization = liveData.getBuffer().getBufferUtilization();
+    utilization = liveAccelerometerData.getBuffer().getBufferUtilization();
   }, 1000);
 </script>
 

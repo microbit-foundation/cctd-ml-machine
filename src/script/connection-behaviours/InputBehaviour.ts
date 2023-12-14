@@ -15,7 +15,7 @@ import CookieManager from '../CookieManager';
 import TypingUtils from '../TypingUtils';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
 import StaticConfiguration from '../../StaticConfiguration';
-import { liveData } from '../stores/Stores';
+import { liveAccelerometerData } from '../stores/Stores';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -151,7 +151,7 @@ class InputBehaviour extends LoggingDecorator {
     this.smoothedAccelY = accelY * 0.25 + this.smoothedAccelY * 0.75;
     this.smoothedAccelZ = accelZ * 0.25 + this.smoothedAccelZ * 0.75;
 
-    const data = {
+    const oldLiveData = {
       accelX,
       accelY,
       accelZ,
@@ -160,8 +160,12 @@ class InputBehaviour extends LoggingDecorator {
       smoothedAccelZ: this.smoothedAccelZ,
     };
 
-    livedata.set(data); // This is the old livedata store
-    liveData.put(data);
+    livedata.set(oldLiveData); // This is the old livedata store
+    liveAccelerometerData.put({
+      accelX,
+      accelY,
+      accelZ,
+    });
   }
 
   buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {

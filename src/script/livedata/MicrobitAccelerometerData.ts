@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
+import { Subscriber, Unsubscriber, Writable, get, writable } from 'svelte/store';
 import LiveData from '../domain/LiveData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 
@@ -11,9 +11,6 @@ export type MicrobitAccelerometerData = {
   accelX: number;
   accelY: number;
   accelZ: number;
-  smoothedAccelX: number;
-  smoothedAccelY: number;
-  smoothedAccelZ: number;
 };
 
 class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerData> {
@@ -23,9 +20,6 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
       accelX: 0,
       accelY: 0,
       accelZ: 0,
-      smoothedAccelX: 0,
-      smoothedAccelY: 0,
-      smoothedAccelZ: 0,
     });
   }
 
@@ -36,6 +30,18 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
   public put(data: MicrobitAccelerometerData): void {
     this.store.set(data);
     this.dataBuffer.addValue(data);
+  }
+
+  public getSeriesSize(): number {
+    return 3;
+  }
+
+  public getLabels(): string[] {
+    return ['X', 'Y', 'Z'];
+  }
+
+  public getPropertyNames(): string[] {
+    return Object.getOwnPropertyNames(get(this.store));
   }
 
   public subscribe(

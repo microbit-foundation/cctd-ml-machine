@@ -15,12 +15,17 @@ import LiveDataBuffer from '../domain/LiveDataBuffer';
 
 const repositories = new Repositories();
 
-export const gestures: Gestures = new Gestures(repositories.getGestureRepository());
-export const classifier: Classifier = repositories.getModelRepository().getClassifier();
-const liveDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(400);
-export const liveData: LiveData<MicrobitAccelerometerData> =
-  new MicrobitAccelerometerLiveData(liveDataBuffer);
-export const engine: PollingPredictorEngine = new PollingPredictorEngine(
+const gestures: Gestures = new Gestures(repositories.getGestureRepository());
+const classifier: Classifier = repositories.getModelRepository().getClassifier();
+
+const accelerometerDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(400);
+const liveAccelerometerData: LiveData<MicrobitAccelerometerData> =
+  new MicrobitAccelerometerLiveData(accelerometerDataBuffer);
+
+const engine: PollingPredictorEngine = new PollingPredictorEngine(
   classifier,
-  liveData,
+  liveAccelerometerData,
 );
+
+// Export the stores here. Please be mindful when exporting stores, avoid whenever possible.
+export { engine, gestures, classifier, liveAccelerometerData };

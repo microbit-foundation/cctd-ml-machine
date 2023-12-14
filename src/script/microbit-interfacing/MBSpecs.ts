@@ -246,7 +246,6 @@ namespace MBSpecs {
       } catch (e) {
         console.log(e);
       }
-      // Something went wrong
       throw new Error('Could not read model number');
     }
 

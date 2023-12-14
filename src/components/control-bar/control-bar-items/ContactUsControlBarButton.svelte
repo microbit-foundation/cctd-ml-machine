@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import StandardDialog from '../../dialogs/StandardDialog.svelte';
-  import { t } from '../../../i18n.js';
+  import { t } from '../../../i18n';
   import StandardButton from '../../StandardButton.svelte';
 
   let isContactDialogOpen = false;

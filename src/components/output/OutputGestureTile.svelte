@@ -32,6 +32,10 @@
 
   $: active =
     $gesture.confidence.currentConfidence > $gesture.confidence.requiredConfidence;
+
+  const noTypeCheckNonStandardOrientProp = (orient?: 'vertical' | 'horizontal'): any => ({
+    orient,
+  });
 </script>
 
 <GestureTilePart>
@@ -48,7 +52,7 @@
       <input
         class="h-25 rotate-90 accent-primary"
         type="range"
-        orient="vertical"
+        {...noTypeCheckNonStandardOrientProp('vertical')}
         name=""
         min="10"
         max="90"

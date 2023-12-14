@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
@@ -7,18 +7,20 @@
  * SPDX-License-Identifier: MIT
  */
 import { get } from 'svelte/store';
+import { MockInstance } from 'vitest';
+import { spyOn } from '@vitest/spy';
 
 describe('Initialization tests', () => {
-  let windowSpy: jest.SpyInstance;
+  let windowSpy: MockInstance<[], any>;
 
   beforeEach(() => {
-    windowSpy = jest.spyOn(window, 'window', 'get');
+    windowSpy = spyOn(window, 'window', 'get');
   });
 
   afterEach(() => {
     windowSpy.mockRestore();
     localStorage.clear();
-    jest.resetModules();
+    vitest.resetModules();
   });
 
   test('Language is set to danish when it is the preferred browser option', async () => {

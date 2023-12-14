@@ -9,7 +9,7 @@
   import Menus, { MenuProperties } from '../script/navigation/Menus';
   import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
-  import Environment from '../script/Environment.js';
+  import Environment from '../script/Environment';
   import { Paths, currentPath, navigate } from '../router/paths';
   import { state } from '../script/stores/uiStore';
 

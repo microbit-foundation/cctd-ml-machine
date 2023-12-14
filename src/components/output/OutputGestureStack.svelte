@@ -188,6 +188,10 @@
   let hasLoadedMicrobitImage = false;
 
   $: meterHeightPct = 100 * $gesture.confidence.currentConfidence;
+
+  const noTypeCheckNonStandardOrientProp = (orient?: 'vertical' | 'horizontal'): any => ({
+    orient,
+  });
 </script>
 
 <main class="mb-4 items-center flex flex-row">
@@ -204,7 +208,7 @@
       <input
         class="h-25 rotate-90 accent-primary"
         type="range"
-        orient="vertical"
+        {...noTypeCheckNonStandardOrientProp('vertical')}
         name=""
         min="10"
         max="90"

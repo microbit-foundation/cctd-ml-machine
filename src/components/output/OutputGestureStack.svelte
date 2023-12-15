@@ -197,30 +197,30 @@
   $: meterWidthPct = 100 * $gesture.confidence.currentConfidence;
 </script>
 
-<main class="mb-4 items-center flex flex-row space-x-10 pl-20">
+<main class="mb-4 items-center flex flex-row space-x-2">
   <!-- ACTION TITLE -->
-  <GestureTilePart>
-    <div class="items-center flex p-2 w-100">
+  <GestureTilePart elevated={true}>
+    <div class="items-center flex p-2 w-60 h-29">
       <div
-        class="pr-20 font-semibold rounded-xl
+        class="pr-20 font-semibold rounded
                     px-1 py-1
-                    mr-2 break-words">
+                    ml-5 break-words text-2xl">
         <h3>{$gesture.name}</h3>
     </div>
   </GestureTilePart>
 
-  <GestureTilePart>
+  <GestureTilePart elevated={true}>
     <!-- METER -->
-    <div class="w-90 h-15 relative">
+    <div class="w-90 h-13 relative">
       <div class="pt-7 pl-5">
         <div
-        class="h-4 rounded-full bg-gray-200 overflow-hidden"
+        class="h-3 rounded-full bg-gray-200 overflow-hidden"
         style="width: {meterTotalWidth}rem">
         <div
-        class="absolute h-4 rounded-full {wasTriggered ? 'bg-secondary' : 'bg-gray-500'} z-index: -10"
+        class="absolute h-3 rounded-full {wasTriggered ? 'bg-secondary' : 'bg-gray-500'}"
         style="width: {(meterWidthPct > 5) ? meterWidthPct * meterTotalWidth * 0.01 : 1}rem;" />
         <div />
-          <div class="grid grid-cols-10">
+          <div class="relative pl-5 grid grid-cols-8">
             {#each Array(10) as _, index (index)}
               <div class="bg-white w-0.5 h-5" />
             {/each}
@@ -239,7 +239,7 @@
   <div class="pl-5 pb-5">
     <p class="text-sm text-gray-500 pl">{$t('content.model.output.recognitionPoint')}</p>
     <input
-      class="accent-primary"
+      class="accent-gray-500"
       type="range"
       name=""
       min="10"

@@ -27,7 +27,7 @@
 
 <div>
   <div class="relative flex h-8">
-    <div class="absolute left-5 flex">
+    <div class="absolute left-15 space-x-45 flex">
       <Information
         isLightTheme={false}
         iconText={$t('content.model.output.action.iconTitle')}
@@ -64,7 +64,7 @@
     {/if}
   </div>
 
-  <div class="pl-1">
+  <div class="pl-15">
     <!-- Display all gestures and their output capabilities -->
     {#each gestures.getGestures() as gesture}
       <OutputGesture variant="stack" {gesture} {onUserInteraction} />

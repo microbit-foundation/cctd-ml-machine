@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { t } from '../i18n.js';
+  import { t } from '../i18n';
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
   import StandardButton from './StandardButton.svelte';
   import ConnectDialogContainer from './connection-prompt/ConnectDialogContainer.svelte';

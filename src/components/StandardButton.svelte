@@ -31,7 +31,7 @@
 </script>
 
 <script lang="ts">
-  import TypingUtils from '../script/TypingUtils.js';
+  import TypingUtils from '../script/TypingUtils';
 
   type ButtonSize = 'small' | 'normal' | 'large';
 

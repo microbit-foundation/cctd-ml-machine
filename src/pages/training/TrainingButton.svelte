@@ -14,6 +14,7 @@
 
   export let type: ButtonVariant = 'primary';
   export let action: 'navigate' | 'train' = 'train';
+  export let position: 'center' | 'right' = 'center';
 
   $: trainButtonLabel = !$state.isPredicting
     ? 'menu.trainer.trainModelButton'
@@ -44,5 +45,7 @@
   onClick={action === 'navigate' ? navitgateToTrainingPage : startTraining}
   disabled={trainingButtonDisabled}
   {type}
+  {position}
+  extraClasses="mx-10"
   >{$t(trainButtonLabel)}
 </StandardButton>

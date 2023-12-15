@@ -26,14 +26,28 @@
 </script>
 
 <div>
+  <div class="h-1 bg-gray-200 width-full" />
+  <div class="flex justify-center space-x-10 py-3">
+    <Information
+    underlineIconText={false}
+    isLightTheme={false}
+    iconText={$t('content.model.output.action.iconTitle')}
+    titleText={$t('content.model.output.action.descriptionTitle')}
+    bodyText={$t('content.model.output.action.descriptionBody')} />
+    <p class="font-semibold text-xl">CURRENT ACTION</p>
+    <p class="bg-secondary text-white rounded w-15 text-center">XX%</p>
+  </div>
+  <div class="h-1 bg-gray-200 width-full" />
   <div class="relative flex h-8">
     <div class="absolute left-15 space-x-45 flex">
       <Information
+        underlineIconText={false}
         isLightTheme={false}
         iconText={$t('content.model.output.action.iconTitle')}
         titleText={$t('content.model.output.action.descriptionTitle')}
         bodyText={$t('content.model.output.action.descriptionBody')} />
       <Information
+        underlineIconText={false}
         isLightTheme={false}
         iconText={$t('content.model.output.certainty.iconTitle')}
         titleText={$t('content.model.output.certainty.descriptionTitle')}

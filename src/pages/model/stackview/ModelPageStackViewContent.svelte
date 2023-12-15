@@ -30,9 +30,14 @@
     <div class="absolute left-5 flex">
       <Information
         isLightTheme={false}
-        iconText={$t('content.model.output.prediction.iconTitle')}
-        titleText={$t('content.model.output.prediction.descriptionTitle')}
-        bodyText={$t('content.model.output.prediction.descriptionBody')} />
+        iconText={$t('content.model.output.action.iconTitle')}
+        titleText={$t('content.model.output.action.descriptionTitle')}
+        bodyText={$t('content.model.output.action.descriptionBody')} />
+      <Information
+        isLightTheme={false}
+        iconText={$t('content.model.output.certainty.iconTitle')}
+        titleText={$t('content.model.output.certainty.descriptionTitle')}
+        bodyText={$t('content.model.output.certainty.descriptionBody')} />
     </div>
     {#if enableOutputGestures}
       <div class="absolute left-78 flex">

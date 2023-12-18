@@ -11,6 +11,7 @@
   import { state } from '../../../script/stores/uiStore';
   import { t } from './../../../i18n';
   import downArrowImage from '../../../imgs/down_arrow.svg';
+  import { bestPrediction } from '../../../script/stores/mlStore';
 
   // Bool flags to know whether output microbit popup should be show
   let hasClosedPopup = false;
@@ -23,6 +24,8 @@
   function onUserInteraction(): void {
     hasInteracted = true;
   }
+
+  $: currentEstimatedGestureConfidence = $bestPrediction?.confidence.currentConfidence;
 </script>
 
 <div>
@@ -34,8 +37,10 @@
     iconText={$t('content.model.output.action.iconTitle')}
     titleText={$t('content.model.output.action.descriptionTitle')}
     bodyText={$t('content.model.output.action.descriptionBody')} />
-    <p class="font-semibold text-xl">CURRENT ACTION</p>
-    <p class="bg-secondary text-white rounded w-15 text-center">XX%</p>
+    <p class="font-semibold text-xl">{$bestPrediction?.name? $bestPrediction?.name : 'None'}</p>
+    {#if currentEstimatedGestureConfidence}
+      <p class="bg-secondary text-white rounded w-15 text-center">{Math.floor(currentEstimatedGestureConfidence*100)}%</p>
+    {/if}
   </div>
   <div class="h-1 bg-gray-200 width-full" />
   <div class="relative flex h-8">

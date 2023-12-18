@@ -30,21 +30,21 @@
 
 <div>
   <div class="h-1 bg-gray-200 width-full" />
-  <div class="flex justify-center space-x-10 py-3">
+  <div class="flex justify-center space-x-10 py-5 text-xl">
     <Information
     underlineIconText={false}
     isLightTheme={false}
-    iconText={$t('content.model.output.action.iconTitle')}
-    titleText={$t('content.model.output.action.descriptionTitle')}
-    bodyText={$t('content.model.output.action.descriptionBody')} />
-    <p class="font-semibold text-xl">{$bestPrediction?.name? $bestPrediction?.name : 'None'}</p>
+    iconText={$t('content.model.output.estimatedGesture.iconTitle')}
+    titleText={$t('content.model.output.estimatedGesture.descriptionTitle')}
+    bodyText={$t('content.model.output.estimatedGesture.descriptionBody')} />
+    <p class="font-semibold text-2xl">{$bestPrediction?.name? $bestPrediction?.name : 'None'}</p>
     {#if currentEstimatedGestureConfidence}
       <p class="bg-secondary text-white rounded w-15 text-center">{Math.floor(currentEstimatedGestureConfidence*100)}%</p>
     {/if}
   </div>
   <div class="h-1 bg-gray-200 width-full" />
-  <div class="relative flex h-8">
-    <div class="absolute left-15 space-x-45 flex">
+  <div class="relative flex h-8 text-xl">
+    <div class="absolute left-15 space-x-45 flex py-5">
       <Information
         underlineIconText={false}
         isLightTheme={false}
@@ -85,9 +85,11 @@
 
   <div class="pl-15">
     <!-- Display all gestures and their output capabilities -->
-    {#each gestures.getGestures() as gesture}
-      <OutputGesture variant="stack" {gesture} {onUserInteraction} />
-    {/each}
+    <div class='pt-6'>
+      {#each gestures.getGestures() as gesture}
+        <OutputGesture variant="stack" {gesture} {onUserInteraction} />
+      {/each}
+    </div>
   </div>
   {#if !$state.isOutputConnected && !hasClosedPopup && hasInteracted}
     <div transition:fade class="grid grid-cols-5 absolute bottom-5 w-full min-w-729px">

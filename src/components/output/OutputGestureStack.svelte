@@ -206,47 +206,58 @@
                     px-1 py-1
                     ml-5 break-words text-2xl">
         <h3>{$gesture.name}</h3>
-    </div>
-  </GestureTilePart>
+      </div>
+    </div></GestureTilePart>
 
   <GestureTilePart elevated={true}>
     <!-- METER -->
     <div class="w-90 h-13 relative">
       <div class="pt-7 pl-5">
         <div
-        class="h-3 rounded-full bg-gray-200 overflow-hidden"
-        style="width: {meterTotalWidth}rem">
-        <div
-        class="absolute h-3 rounded-full {wasTriggered ? 'bg-secondary' : 'bg-gray-500'}"
-        style="width: {(meterWidthPct > 5) ? meterWidthPct * meterTotalWidth * 0.01 : 1}rem;" />
-        <div />
+          class="h-3 rounded-full bg-gray-200 overflow-hidden"
+          style="width: {meterTotalWidth}rem">
+          <div
+            class="absolute h-3 rounded-full {wasTriggered
+              ? 'bg-secondary'
+              : 'bg-gray-500'}"
+            style="width: {meterWidthPct > 5
+              ? meterWidthPct * meterTotalWidth * 0.01
+              : 1}rem;" />
+          <div />
           <div class="relative pl-5 grid grid-cols-8">
             {#each Array(10) as _, index (index)}
               <div class="bg-white w-0.5 h-5" />
             {/each}
           </div>
+        </div>
+        <p
+          class="absolute right-5 top-5 {wasTriggered
+            ? 'bg-secondary'
+            : 'bg-gray-500'} text-white rounded w-15 text-xl text-center">
+          {~~meterWidthPct}%
+        </p>
       </div>
-      <p class="absolute right-5 top-5 {wasTriggered ? 'bg-secondary' : 'bg-gray-500'} text-white rounded w-15 text-xl text-center">{~~meterWidthPct}%</p>
     </div>
-  </div>
-  <div class="relative self-start">
-    <Information
-    titleText="{$t('content.model.classification.helpHeading')}"
-    bodyText={$t('content.model.classification.helpBody')}
-    isLightTheme={false} />
-  </div>
-  <!-- RECOGNITION POINT BAR -->
-  <div class="pl-5 pb-5">
-    <p class="text-sm text-gray-500 pl">{$t('content.model.output.recognitionPoint')}</p>
-    <input
-      class="accent-gray-500"
-      type="range"
-      name=""
-      min="10"
-      max="90"
-      id=""
-      bind:value={sliderValue} />
-  </div>
+    <div class="relative self-start">
+      <Information
+        titleText={$t('content.model.classification.helpHeading')}
+        bodyText={$t('content.model.classification.helpBody')}
+        isLightTheme={false} />
+    </div>
+    <!-- RECOGNITION POINT BAR -->
+    <div class="pl-5 pb-5">
+      <p class="text-sm text-gray-500 pl">
+        {$t('content.model.output.recognitionPoint')}
+      </p>
+      <input
+        class="accent-gray-500"
+        type="range"
+        name=""
+        min="10"
+        max="90"
+        id=""
+        bind:value={sliderValue} />
+    </div>
   </GestureTilePart>
 
   {#if enableOutputGestures}

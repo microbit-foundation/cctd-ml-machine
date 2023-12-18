@@ -32,14 +32,18 @@
   <div class="h-1 bg-gray-200 width-full" />
   <div class="flex justify-center space-x-10 py-5 text-xl">
     <Information
-    underlineIconText={false}
-    isLightTheme={false}
-    iconText={$t('content.model.output.estimatedGesture.iconTitle')}
-    titleText={$t('content.model.output.estimatedGesture.descriptionTitle')}
-    bodyText={$t('content.model.output.estimatedGesture.descriptionBody')} />
-    <p class="font-semibold text-2xl">{$bestPrediction?.name? $bestPrediction?.name : 'None'}</p>
+      underlineIconText={false}
+      isLightTheme={false}
+      iconText={$t('content.model.output.estimatedGesture.iconTitle')}
+      titleText={$t('content.model.output.estimatedGesture.descriptionTitle')}
+      bodyText={$t('content.model.output.estimatedGesture.descriptionBody')} />
+    <p class="font-semibold text-2xl">
+      {$bestPrediction?.name ? $bestPrediction?.name : 'None'}
+    </p>
     {#if currentEstimatedGestureConfidence}
-      <p class="bg-secondary text-white rounded w-15 text-center">{Math.floor(currentEstimatedGestureConfidence*100)}%</p>
+      <p class="bg-secondary text-white rounded w-15 text-center">
+        {Math.floor(currentEstimatedGestureConfidence * 100)}%
+      </p>
     {/if}
   </div>
   <div class="h-1 bg-gray-200 width-full" />
@@ -85,7 +89,7 @@
 
   <div class="pl-15">
     <!-- Display all gestures and their output capabilities -->
-    <div class='pt-6'>
+    <div class="pt-6">
       {#each gestures.getGestures() as gesture}
         <OutputGesture variant="stack" {gesture} {onUserInteraction} />
       {/each}

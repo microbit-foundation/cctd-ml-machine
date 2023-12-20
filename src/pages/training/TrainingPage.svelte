@@ -17,6 +17,8 @@
 
   const model = classifier.getModel();
 
+  const filters = classifier.getFilters();
+
   const sufficientData = hasSufficientData();
 </script>
 
@@ -58,7 +60,7 @@
       </div>
     {:else}
       <div class="w-3/4 text-primarytext">
-        {#if $model.hasModel}
+        {#if $model.isTrained}
           <p class="bold text-3xl bold mt-10">
             {$t('menu.trainer.TrainingFinished')}
           </p>
@@ -66,9 +68,16 @@
             {$t('menu.trainer.TrainingFinished.body')}
           </p>
         {/if}
+        {#if $filters.length == 0}
+        <p class="bold text-xl bold mt-10">
+          {$t('menu.trainer.noFilters')}
+        </p>
+        {:else}
         <div class="w-full pt-5 text-white pb-5">
           <TrainModelButton />
         </div>
+                {/if}
+
       </div>
     {/if}
     {#if !$state.isInputConnected}

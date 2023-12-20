@@ -131,6 +131,7 @@
   "menu.trainer.trainNewModelButton": "Træn en ny model",
   "menu.trainer.TrainingFinished": "Træning færdig",
   "menu.trainer.TrainingFinished.body": "Gå til Model-siden for at undersøge hvor godt din model virker",
+  "menu.trainer.noFilters": "Du har ikke valgt nogle filtre. Der skal mindst være valgt 1 filter for at kunne træne en model",
   "menu.trainer.isTrainingModelButton": "Træner model...",
 
   "menu.model.helpHeading": "Model",

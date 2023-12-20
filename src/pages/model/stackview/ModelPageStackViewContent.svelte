@@ -1,6 +1,6 @@
 <!--
   (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- 
+
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
@@ -28,7 +28,7 @@
   $: currentEstimatedGestureConfidence = $bestPrediction?.confidence.currentConfidence;
 </script>
 
-<div>
+<div class="bg-backgrounddark">
   <div class="h-1 bg-gray-200 width-full" />
   <div class="flex justify-center space-x-10 py-5 text-xl">
     <Information

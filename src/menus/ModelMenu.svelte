@@ -7,7 +7,7 @@
 <script lang="ts">
   import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
-  import { gestures } from '../script/stores/Stores';
+  import { classifier, gestures } from '../script/stores/Stores';
   import Gesture from '../script/domain/Gesture';
 
   const bestPrediction = gestures.getBestPrediction();
@@ -24,12 +24,14 @@
     return bestPrediction.getName();
   };
 
+  const model = classifier.getModel();
+
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
   $: predictionLabel = getPredictionLabel($state.isInputReady, $bestPrediction);
 </script>
 
 <div class="w-full text-center justify-center pt-5">
-  {#if !$state.isPredicting}
+  {#if !$model.hasModel}
     <div
       class="h-34 w-34 m-auto mb-8 border-2 border-white border-opacity-30 rounded-lg border-dashed font-bold text-warm-gray-300">
       <div class="flex h-full">

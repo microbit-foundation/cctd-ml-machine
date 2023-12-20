@@ -17,16 +17,21 @@ class ClassifierFactory {
   public buildClassifier(
     model: Writable<MLModel | undefined>,
     trainerConsumer: TrainerConsumer,
-    filters: Writable<Filters>,
+    filters: Filters,
     gestures: Gesture[],
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ): Classifier {
-    return new Classifier(
+    const classifier = new Classifier(
       this.buildModel(trainerConsumer, model),
       filters,
       gestures,
       confidenceSetter,
     );
+    filters.subscribe(() => {
+      // Filters has changed
+      classifier.getModel().markAsUntrained();
+    });
+    return classifier;
   }
 
   public buildTrainingData(gestures: Gesture[], filters: Filters): TrainingData {

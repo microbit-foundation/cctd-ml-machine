@@ -16,6 +16,7 @@
   import { onMount } from 'svelte';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
+  import { classifier } from '../../../script/stores/Stores';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -81,10 +82,12 @@
   });
 
   $: triggerButtonsClicked($buttonPressed);
+
+  const model = classifier.getModel();
 </script>
 
 <main class="h-full flex flex-col">
-  {#if !$state.isPredicting}
+  {#if !$model.hasModel}
     <TrainModelFirstTitle />
   {:else}
     <ModelPageTileViewTiles />

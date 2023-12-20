@@ -5,14 +5,16 @@
  -->
 
 <script lang="ts">
-  import { slide } from 'svelte/transition';
-  import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
   import ImageSkeleton from '../components/skeletonloading/ImageSkeleton.svelte';
+  import { classifier } from '../script/stores/Stores';
+  import { TrainingStatus } from '../script/domain/Model';
+
+  const model = classifier.getModel();
 </script>
 
 <div class="h-40 w-40 m-auto mt-2 flex flex-col justify-center">
-  {#if $state.isPredicting}
+  {#if $model.isTrained}
     <div class="text-white text-center flex flex-col justify-center items-center">
       <ImageSkeleton
         alt="Model Icon"

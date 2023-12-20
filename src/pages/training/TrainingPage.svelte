@@ -6,17 +6,16 @@
 
 <script lang="ts">
   import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import { TrainingStatus, trainingStatus } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
-  import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
-  import { slide } from 'svelte/transition';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import StandardButton from '../../components/StandardButton.svelte';
   import { Paths, navigate } from '../../router/paths';
+  import TrainingFailedDialog from './TrainingFailedDialog.svelte';
   import TrainModelButton from './TrainModelButton.svelte';
   import { classifier } from '../../script/stores/Stores';
-  import TrainingFailedDialog from './TrainingFailedDialog.svelte';
+
+  const model = classifier.getModel();
 
   const sufficientData = hasSufficientData();
 </script>
@@ -47,7 +46,7 @@
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
       </div>
-    {:else if $state.isTraining}
+    {:else if $model.isTraining}
       <div class="w-3/4 text-primarytext">
         <div class="ml-auto mr-auto flex center-items justify-center">
           <i
@@ -59,7 +58,7 @@
       </div>
     {:else}
       <div class="w-3/4 text-primarytext">
-        {#if $state.isPredicting}
+        {#if $model.hasModel}
           <p class="bold text-3xl bold mt-10">
             {$t('menu.trainer.TrainingFinished')}
           </p>

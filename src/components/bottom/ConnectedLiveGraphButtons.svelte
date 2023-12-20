@@ -7,17 +7,20 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import TypingUtils from '../../script/TypingUtils';
+  import { classifier } from '../../script/stores/Stores';
   import { state } from '../../script/stores/uiStore';
   import StandardButton from '../StandardButton.svelte';
 
   export let onOutputDisconnectButtonClicked: () => void;
   export let onOutputConnectButtonClicked: () => void;
   export let onInputDisconnectButtonClicked: () => void;
+
+  const model = classifier.getModel();
 </script>
 
 <!-- These are the buttons that are present while the input micro:bit is connected-->
 <div class="flex flex-row mr-4">
-  {#if $state.isPredicting || $state.isTraining || $state.isOutputConnected}
+  {#if $model.hasModel || $model.isTraining || $state.isOutputConnected}
     {#if $state.isOutputAssigned}
       <!-- Output is assigned -->
       {#if !$state.isOutputConnected || $state.isOutputReady}

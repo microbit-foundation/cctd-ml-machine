@@ -8,6 +8,7 @@ import {
   Subscriber,
   Unsubscriber,
   Writable,
+  derived,
   get,
   writable,
 } from 'svelte/store';
@@ -26,12 +27,18 @@ export enum ModelType {
   LAYERS,
 }
 
-export type ModelData = {
+type BaseModelData = {
   trainingStatus: TrainingStatus;
 };
 
+export type ModelData = {
+  isTraining: boolean;
+  isTrained: boolean;
+  hasModel: boolean;
+} & BaseModelData;
+
 class Model implements Readable<ModelData> {
-  private modelData: Writable<ModelData>;
+  private modelData: Writable<BaseModelData>;
 
   constructor(
     private trainerConsumer: TrainerConsumer,
@@ -72,8 +79,8 @@ class Model implements Readable<ModelData> {
   /**
    * Returns true if a MLModel is specified. Returns false if MLModel is undefined. Note canPredict may be true, even if isTrained() is false.
    */
-  public canPredict(): boolean {
-    return get(this.mlModel) != undefined;
+  public hasModel(): boolean {
+    return get(this.mlModel) !== undefined;
   }
 
   /**
@@ -84,6 +91,10 @@ class Model implements Readable<ModelData> {
       updater.trainingStatus = TrainingStatus.Untrained;
       return updater;
     });
+  }
+
+  public isTraining(): boolean {
+    return get(this.modelData).trainingStatus === TrainingStatus.InProgress;
   }
 
   /**
@@ -103,7 +114,17 @@ class Model implements Readable<ModelData> {
     run: Subscriber<ModelData>,
     invalidate?: ((value?: ModelData | undefined) => void) | undefined,
   ): Unsubscriber {
-    return this.modelData.subscribe(run, invalidate);
+    const derivedStore = derived([this.modelData, this.mlModel], stores => {
+      const inputStore = stores[0];
+      const mlModelStore = stores[1];
+      return {
+        trainingStatus: inputStore.trainingStatus,
+        isTraining: inputStore.trainingStatus === TrainingStatus.InProgress,
+        hasModel: mlModelStore !== undefined,
+        isTrained: inputStore.trainingStatus === TrainingStatus.Success,
+      };
+    });
+    return derivedStore.subscribe(run, invalidate);
   }
 }
 

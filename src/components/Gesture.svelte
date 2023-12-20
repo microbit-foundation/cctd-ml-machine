@@ -29,7 +29,7 @@
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
   import Gesture from '../script/domain/Gesture';
-  import { gestures } from '../script/stores/Stores';
+  import { classifier, gestures } from '../script/stores/Stores';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -59,7 +59,8 @@
     ) {
       return;
     }
-    $state.isPredicting = false;
+    const model = classifier.getModel();
+    model.markAsUntrained();
 
     setTimeout(() => {
       gestures.removeGesture(gesture.getId());
@@ -102,10 +103,12 @@
 
   // Delete recording from recordings array
   function deleteRecording(recording: RecordingData) {
+    // TODO: Altering the recording data should mark the model as untrained, this should not be a manual action
     if (!areActionsAllowed(false)) {
       return;
     }
-    $state.isPredicting = false;
+    const model = classifier.getModel();
+    model.markAsUntrained();
     removeRecording(gesture.getId(), recording.ID);
   }
 

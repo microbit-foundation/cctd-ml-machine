@@ -12,19 +12,14 @@
   import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
   import StaticConfiguration from '../../StaticConfiguration';
 
-  $: trainButtonLabel = !$state.isPredicting
+  const model = classifier.getModel();
+
+  $: trainButtonLabel = !$model.hasModel
     ? 'menu.trainer.trainModelButton'
     : 'menu.trainer.trainNewModelButton';
 
   const onClick = () => {
-    $state.isTraining = true;
-    classifier
-      .getModel()
-      .train(new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings))
-      .then(() => {
-        $state.isTraining = false;
-        $state.isPredicting = true;
-      });
+    model.train(new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings));
   };
 </script>
 

@@ -131,6 +131,7 @@ const initialMLSettings: MlSettings = {
 };
 
 // Store with ML-Algorithm settings
+// TODO When finishing the filter page, check where this is used and attempt to remove it
 export const settings = persistantWritable<MlSettings>('MLSettings', initialMLSettings);
 
 export const livedata = writable<LiveData>({
@@ -159,35 +160,27 @@ livedata.subscribe(data => {
 // Store for current gestures
 export const chosenGesture = writable<Gesture | null>(null);
 
-function updateToUntrainedState() {
-  state.update(s => {
-    s.isPredicting = false;
-    return s;
-  });
-  classifier.getModel().markAsUntrained();
-}
-
 // Delete this, maybe? updateToUntrainedState
 export function addGesture(name: string): void {
-  updateToUntrainedState();
+  classifier.getModel().markAsUntrained();
   gestures.createGesture(name);
 }
 
 // Delete this, maybe? updateToUntrainedState
 export function removeGesture(gesture: GestureData) {
-  updateToUntrainedState();
+  classifier.getModel().markAsUntrained();
   gestures.removeGesture(gesture.ID);
 }
 
 // Delete this, maybe? updateToUntrainedState
 export function addRecording(gestureID: number, recording: RecordingData) {
-  updateToUntrainedState();
+  classifier.getModel().markAsUntrained();
   gestures.getGesture(gestureID).addRecording(recording);
 }
 
 // Delete this, maybe? updateToUntrainedState
 export function removeRecording(gestureID: number, recordingID: number) {
-  updateToUntrainedState();
+  classifier.getModel().markAsUntrained();
   gestures.getGesture(gestureID).removeRecording(recordingID);
 }
 

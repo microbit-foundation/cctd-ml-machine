@@ -22,6 +22,7 @@ import RootMeanSquareFilter from '../filters/RootMeanSquareFilter';
 import StandardDeviationFilter from '../filters/StandardDeviationFilter';
 import TotalAccFilter from '../filters/TotalAccFilter';
 import ZeroCrossingRateFilter from '../filters/ZeroCrossingRateFilter';
+import { FilterType } from '../domain/FilterTypes';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
@@ -30,7 +31,7 @@ export type TrainerConsumer = <T extends MLModel>(
 class ClassifierRepository {
   private static confidences: Writable<Map<GestureID, number>>;
   private static mlModel: Writable<MLModel | undefined>;
-  private static filters: Writable<Filters>;
+  private static filters: Filters;
   private static filterArray: Writable<Filter[]>;
   private classifierFactory: ClassifierFactory;
 
@@ -39,9 +40,9 @@ class ClassifierRepository {
     ClassifierRepository.confidences = writable(initialConfidence);
     ClassifierRepository.mlModel = writable(undefined);
     ClassifierRepository.filterArray = writable([]);
-    ClassifierRepository.filters = writable(
-      new Filters(ClassifierRepository.filterArray),
-    );
+
+    // Create a 'Filters' store with an error callback for when
+    ClassifierRepository.filters = new Filters(ClassifierRepository.filterArray);
     this.classifierFactory = new ClassifierFactory();
     this.addAllFilters();
   }
@@ -53,6 +54,7 @@ class ClassifierRepository {
   }
 
   public getClassifier(): Classifier {
+    // TODO: We should cache this object, as it can function as a singleton. This would improve performance
     return this.classifierFactory.buildClassifier(
       ClassifierRepository.mlModel,
       this.getTrainerConsumer(),
@@ -72,7 +74,7 @@ class ClassifierRepository {
     const gestureRepository = Repositories.getInstance().getGestureRepository();
     const trainingData = this.classifierFactory.buildTrainingData(
       get(gestureRepository),
-      get(ClassifierRepository.filters),
+      ClassifierRepository.filters,
     );
     const model = await trainer.trainModel(trainingData);
     ClassifierRepository.mlModel.set(model);
@@ -84,24 +86,19 @@ class ClassifierRepository {
 
   private addAllFilters(): void {
     // todo to be removed
-    ClassifierRepository.filters.set(
-      new Filters(
-        writable([
-          new MaxFilter(),
-          new MeanFilter(),
-          new MinFilter(),
-          new PeaksFilter(),
-          new RootMeanSquareFilter(),
-          new StandardDeviationFilter(),
-          new TotalAccFilter(),
-          new ZeroCrossingRateFilter(),
-        ]),
-      ),
-    );
+    ClassifierRepository.filters.set([
+      FilterType.MAX,
+      FilterType.MIN,
+      FilterType.MEAN,
+      FilterType.PEAKS,
+      FilterType.RMS,
+      FilterType.ACC,
+      FilterType.STD,
+      FilterType.ZCR,
+    ]);
   }
 
-  /* TODO: Should be private, but currently ml.ts is depending on it. That should change by removing the functionality from ml.ts and using classifier instead */
-  public setGestureConfidence(gestureId: GestureID, confidence: number) {
+  private setGestureConfidence(gestureId: GestureID, confidence: number) {
     if (confidence < 0 || confidence > 1) {
       throw new Error('Cannot set gesture confidence. Must be in the range 0.0-1.0');
     }

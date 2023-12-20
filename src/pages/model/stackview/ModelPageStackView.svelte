@@ -17,13 +17,10 @@
   import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
   import PleaseConnectFirst from '../../../components/PleaseConnectFirst.svelte';
+  import { classifier } from '../../../script/stores/Stores';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
-  // let lastRecording;
-
-  // Bool flags to know whether output microbit popup should be show
-  let hasInteracted = false;
 
   /**
    * Classify based on button click
@@ -77,12 +74,14 @@
     Microbits.resetIOPins();
   });
 
+  const model = classifier.getModel();
+
   $: triggerButtonsClicked($buttonPressed);
 </script>
 
 <!-- Main pane -->
 <main class="h-full flex flex-col">
-  {#if $state.isPredicting}
+  {#if $model.isTrained}
     {#if $state.isInputReady}
       <ModelPageStackViewContent />
     {:else}

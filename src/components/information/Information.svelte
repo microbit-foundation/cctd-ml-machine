@@ -11,9 +11,7 @@
   export let boxOffset: { x: number; y: number } = { x: 0, y: 0 };
   export let width = 300;
   export let isLightTheme = true;
-  // TODO: This makes the component a weird combination of a general component which can handle all kinds of
-  //       children, and a component specialised for text. In my opinion (Jon) this should be split up into one general
-  //       and one for text (which uses the general one)
+
   export let iconText: string | undefined = undefined;
   export let titleText: string | undefined = undefined;
   export let bodyText: string | undefined = undefined;

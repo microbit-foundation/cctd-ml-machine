@@ -20,6 +20,9 @@ class StaticConfiguration {
   // After how long should we consider the connection lost if ping was not able to conclude?
   public static readonly connectionLostTimeoutDuration: number = 3000;
 
+  // In milliseconds, how long should each recording be?
+  public static readonly recordingDuration = 1800;
+
   // Which pins are supported?
   public static supportedPins: MBSpecs.UsableIOPin[] = [0, 1, 2];
   public static readonly defaultOutputPin: MBSpecs.UsableIOPin = 0; // Which pin should be selected by default?
@@ -64,7 +67,7 @@ class StaticConfiguration {
   };
 
   // How long should we wait in between each prediction? (in milliseconds) Higher is more performant, lower is smoother UI
-  public static readonly pollingPredictionInterval: number = 60;
+  public static readonly pollingPredictionInterval: number = 70;
 
   /**
    * How many samples should we use for prediction?

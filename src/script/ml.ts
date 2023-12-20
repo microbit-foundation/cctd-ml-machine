@@ -5,17 +5,11 @@
  */
 
 import { alertUser } from './stores/uiStore';
-import { type GestureData, settings } from './stores/mlStore';
-import { get } from 'svelte/store';
+import { type GestureData } from './stores/mlStore';
 import { t } from '../i18n';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
-
-export function isParametersLegal(): boolean {
-  const s = get(settings);
-  return s.includedAxes.length > 0 && s.includedFilters.size > 0;
-}
 
 // Assess whether each gesture has sufficient data. (Limited by three)
 export function sufficientGestureData(gestureData: GestureData[], messageUser: boolean) {

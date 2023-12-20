@@ -11,7 +11,7 @@
   import { GestureData } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
   import { getPrevData } from '../../script/stores/mlStore';
-  import { gestures } from '../../script/stores/Stores';
+  import { gestures, liveAccelerometerData } from '../../script/stores/Stores';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import FilterGraphLimits from '../../script/utils/FilterLimits';
 
@@ -140,6 +140,7 @@
   }
 
   function createLiveData() {
+    
     const liveData = getPrevData();
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {

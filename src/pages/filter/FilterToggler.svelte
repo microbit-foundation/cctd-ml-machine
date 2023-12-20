@@ -8,7 +8,6 @@
   import Information from '../../components/information/Information.svelte';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import { classifier } from '../../script/stores/Stores';
-  import { settings } from '../../script/stores/mlStore';
   import D3Plot from './D3Plot.svelte';
 
   export let filterType: FilterType;

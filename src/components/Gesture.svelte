@@ -20,7 +20,6 @@
     livedata,
     type RecordingData,
     removeRecording,
-    settings,
   } from '../script/stores/mlStore';
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
@@ -36,7 +35,7 @@
   export let gesture: Gesture;
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
-  const recordingDuration = get(settings).duration;
+  const recordingDuration = StaticConfiguration.recordingDuration;
 
   let isThisRecording = false;
 
@@ -92,7 +91,7 @@
       $state.isRecording = false;
       isThisRecording = false;
       unsubscribe();
-      if (get(settings).numSamples <= newData.x.length) {
+      if (StaticConfiguration.pollingPredictionSampleSize <= newData.x.length) {
         const recording = { ID: Date.now(), data: newData } as RecordingData;
         addRecording(gesture.getId(), recording);
       } else {
@@ -103,7 +102,7 @@
 
   // Delete recording from recordings array
   function deleteRecording(recording: RecordingData) {
-    // TODO: Altering the recording data should mark the model as untrained, this should not be a manual action
+    // TODO: Altering the recording data should mark the model as untrained, this should not be a manual
     if (!areActionsAllowed(false)) {
       return;
     }

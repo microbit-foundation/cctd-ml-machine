@@ -12,11 +12,11 @@
     buttonPressed,
     state,
   } from '../../../script/stores/uiStore';
-  import { settings } from '../../../script/stores/mlStore';
   import { onMount } from 'svelte';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
   import { classifier } from '../../../script/stores/Stores';
+    import StaticConfiguration from '../../../StaticConfiguration';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -40,7 +40,7 @@
     // lastRecording = undefined;
 
     // Get duration
-    const duration = get(settings).duration;
+    const duration = StaticConfiguration.recordingDuration;
 
     // Loading interval
     const loadingInterval = setInterval(() => {
@@ -66,9 +66,7 @@
       return;
     }
 
-    let shouldClassify: boolean =
-      !get(settings).automaticClassification &&
-      (buttons.buttonA === 1 || buttons.buttonB === 1);
+    let shouldClassify: boolean = (buttons.buttonA === 1 || buttons.buttonB === 1);
 
     if (shouldClassify) {
       classifyClicked();

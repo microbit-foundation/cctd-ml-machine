@@ -17,7 +17,6 @@
   // IMPORT AND DEFAULTS
   import OutputMatrix from './OutputMatrix.svelte';
   import {
-    settings,
     updateGestureSoundOutput,
     type SoundData,
     updateGesturePinOutput,
@@ -65,7 +64,7 @@
     requiredConfidence: number,
   ): TriggerAction => {
     let isConfident = requiredConfidence <= confidence;
-    if ((!lastWasTriggered || !$settings.automaticClassification) && isConfident) {
+    if ((!lastWasTriggered) && isConfident) {
       return 'turnOn';
     }
     if (lastWasTriggered && !isConfident) {

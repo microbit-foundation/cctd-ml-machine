@@ -8,7 +8,6 @@
   import Gesture from '../components/Gesture.svelte';
   import { state } from '../script/stores/uiStore';
   import {
-    clearGestures,
     downloadDataset,
     loadDatasetFromFile,
   } from '../script/stores/mlStore';
@@ -36,7 +35,7 @@
 
   const onClearGestures = () => {
     if (confirm($t('content.data.controlbar.button.clearData.confirm'))) {
-      clearGestures();
+      gestures.clearGestures();
     }
   };
 

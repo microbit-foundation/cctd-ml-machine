@@ -4,16 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { persistantWritable } from './storeUtil';
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
-import { state } from './uiStore';
-import { AxesType, FilterType, Axes, Filters } from '../datafunctions';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import { PersistantGestureData } from '../domain/Gestures';
 import Gesture, { GestureID } from '../domain/Gesture';
 import { classifier, gestures } from './Stores';
+import StaticConfiguration from '../../StaticConfiguration';
 
 export type RecordingData = {
   ID: number;
@@ -32,7 +30,6 @@ export function loadDatasetFromFile(file: File) {
     }
     const contents = e.target.result;
     if (typeof contents === 'string') {
-      // TODO: fix the following really unsafe parsing and casting
       const gestureData: PersistantGestureData[] = JSON.parse(
         contents,
       ) as PersistantGestureData[];
@@ -56,11 +53,6 @@ export function downloadDataset() {
 
   element.click();
   document.body.removeChild(element);
-}
-
-// Delete this function!
-export function clearGestures() {
-  gestures.clearGestures();
 }
 
 export type GestureData = {
@@ -88,7 +80,7 @@ export type SoundData = {
 };
 
 export type LiveData = {
-  //Todo remove this
+  //TODO: remove this
   accelX: number;
   accelY: number;
   accelZ: number;
@@ -96,43 +88,6 @@ export type LiveData = {
   smoothedAccelY: number;
   smoothedAccelZ: number;
 };
-
-type MlSettings = {
-  duration: number; // Duration of recording
-  numSamples: number; // number of samples in one recording (when recording samples)
-  minSamples: number; // minimum number of samples for reliable detection (when detecting gestures)
-  automaticClassification: boolean; // If true, automatically classify gestures
-  updatesPrSecond: number; // Times algorithm predicts data pr second
-  numEpochs: number; // Number of epochs for ML
-  learningRate: number;
-  includedAxes: AxesType[];
-  includedFilters: Set<FilterType>;
-};
-
-const initialMLSettings: MlSettings = {
-  duration: 1800,
-  numSamples: 80,
-  minSamples: 80,
-  automaticClassification: true,
-  updatesPrSecond: 4,
-  numEpochs: 80,
-  learningRate: 0.5,
-  includedAxes: [Axes.X, Axes.Y, Axes.Z],
-  includedFilters: new Set<FilterType>([
-    Filters.MAX,
-    Filters.MEAN,
-    Filters.MIN,
-    Filters.STD,
-    Filters.PEAKS,
-    Filters.ACC,
-    Filters.ZCR,
-    Filters.RMS,
-  ]),
-};
-
-// Store with ML-Algorithm settings
-// TODO When finishing the filter page, check where this is used and attempt to remove it
-export const settings = persistantWritable<MlSettings>('MLSettings', initialMLSettings);
 
 export const livedata = writable<LiveData>({
   accelX: 0,
@@ -215,7 +170,7 @@ export const model = writable<LayersModel>(undefined);
 
 // Stores and manages previous data-elements. Used for classifying current gesture
 // TODO: Only used for 'getPrevData' (which is only used for ml.ts). Do we even want this as global state?
-export const prevData = writable<LiveData[]>(new Array(get(settings).minSamples));
+export const prevData = writable<LiveData[]>(new Array(StaticConfiguration.pollingPredictionSampleSize));
 
 let liveDataIndex = 0;
 livedata.subscribe(data => {
@@ -224,12 +179,12 @@ livedata.subscribe(data => {
     return prevDataArray;
   });
   liveDataIndex++;
-  if (liveDataIndex >= get(settings).minSamples) {
+  if (liveDataIndex >= StaticConfiguration.pollingPredictionSampleSize) {
     liveDataIndex = 0;
   }
 });
 
-// TODO: Only used at one location (ml.ts). Move to ml.ts?
+// TODO: Should be replaced by the livedata buffer instead
 export function getPrevData(): { x: number[]; y: number[]; z: number[] } | undefined {
   const data: LiveData[] = get(prevData);
   const dataLength: number = data.length;
@@ -250,8 +205,3 @@ export function getPrevData(): { x: number[]; y: number[]; z: number[] } | undef
 
   return { x, y, z };
 }
-
-// // Never used?
-// export const lossGraphStore = writable(undefined);
-// // Never used?
-// export const classificationStore = writable({ lastRecording: undefined, recordingTime: undefined });

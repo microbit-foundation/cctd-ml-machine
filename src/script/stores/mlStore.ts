@@ -6,10 +6,8 @@
 
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
-import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
-import MBSpecs from '../microbit-interfacing/MBSpecs';
 import { PersistantGestureData } from '../domain/Gestures';
-import Gesture, { GestureData, SoundData } from '../domain/Gesture';
+import Gesture, { GestureData } from '../domain/Gesture';
 import { classifier, gestures, liveAccelerometerData } from './Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
@@ -78,49 +76,29 @@ export const livedata = writable<LiveData>({
 // Store for current gestures
 export const chosenGesture = writable<Gesture | null>(null);
 
-// Delete this, maybe? updateToUntrainedState
+// TODO: Should be deleted, and model should automatically be marked as untrained, markAsUntrained should not be called in practice
 export function addGesture(name: string): void {
   classifier.getModel().markAsUntrained();
   gestures.createGesture(name);
 }
 
-// Delete this, maybe? updateToUntrainedState
+
+// TODO: Should be deleted, and model should automatically be marked as untrained, markAsUntrained should not be called in practice
 export function removeGesture(gesture: GestureData) {
   classifier.getModel().markAsUntrained();
   gestures.removeGesture(gesture.ID);
 }
 
-// Delete this, maybe? updateToUntrainedState
+// TODO: Should be deleted, and model should automatically be marked as untrained, markAsUntrained should not be called in practice
 export function addRecording(gestureID: number, recording: RecordingData) {
   classifier.getModel().markAsUntrained();
   gestures.getGesture(gestureID).addRecording(recording);
 }
 
-// Delete this, maybe? updateToUntrainedState
+// TODO: Should be deleted, and model should automatically be marked as untrained, markAsUntrained should not be called in practice
 export function removeRecording(gestureID: number, recordingID: number) {
   classifier.getModel().markAsUntrained();
   gestures.getGesture(gestureID).removeRecording(recordingID);
-}
-
-// Delete this, maybe? updateToUntrainedState
-export function updateGestureSoundOutput(
-  gestureID: number,
-  sound: SoundData | undefined,
-) {
-  gestures.getGesture(gestureID).setSoundOutput(sound);
-}
-
-export function updateGesturePinOutput(
-  gestureID: number,
-  pin: MBSpecs.UsableIOPin,
-  state: PinTurnOnState,
-  time: number,
-) {
-  gestures.getGesture(gestureID).setIOPinOutput(pin, state, time);
-}
-
-export function updateGestureLEDOutput(gestureID: number, matrix: boolean[]) {
-  gestures.getGesture(gestureID).setLEDOutput(matrix);
 }
 
 export const gestureConfidences = writable<{ [id: string]: number }>({});

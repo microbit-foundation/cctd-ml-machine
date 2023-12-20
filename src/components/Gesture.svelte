@@ -17,7 +17,6 @@
   import {
     addRecording,
     chosenGesture,
-    livedata,
     type RecordingData,
     removeRecording,
   } from '../script/stores/mlStore';
@@ -28,7 +27,7 @@
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
   import Gesture from '../script/domain/Gesture';
-  import { classifier, gestures } from '../script/stores/Stores';
+  import { classifier, gestures, liveAccelerometerData } from '../script/stores/Stores';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -80,7 +79,7 @@
     let newData: { x: number[]; y: number[]; z: number[] } = { x: [], y: [], z: [] };
 
     // Set timeout to allow recording in 1s
-    const unsubscribe = livedata.subscribe(data => {
+    const unsubscribe = liveAccelerometerData.subscribe(data => {
       newData.x.push(data.accelX);
       newData.y.push(data.accelY);
       newData.z.push(data.accelZ);

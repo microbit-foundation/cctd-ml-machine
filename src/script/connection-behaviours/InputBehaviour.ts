@@ -6,12 +6,10 @@
 
 import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
 import { ModelView, buttonPressed, onCatastrophicError, state } from '../stores/uiStore';
-import { livedata } from '../stores/mlStore';
 import { t } from '../../i18n';
 import { get } from 'svelte/store';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import LoggingDecorator from './LoggingDecorator';
-import CookieManager from '../CookieManager';
 import TypingUtils from '../TypingUtils';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
 import StaticConfiguration from '../../StaticConfiguration';
@@ -24,9 +22,6 @@ t.subscribe(t => (text = t));
  * Implementation of the input ConnectionBehaviour
  */
 class InputBehaviour extends LoggingDecorator {
-  private smoothedAccelX = 0;
-  private smoothedAccelY = 0;
-  private smoothedAccelZ = 0;
 
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
 
@@ -147,20 +142,7 @@ class InputBehaviour extends LoggingDecorator {
     const accelX = x / 1000.0;
     const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
-    this.smoothedAccelX = accelX * 0.25 + this.smoothedAccelX * 0.75;
-    this.smoothedAccelY = accelY * 0.25 + this.smoothedAccelY * 0.75;
-    this.smoothedAccelZ = accelZ * 0.25 + this.smoothedAccelZ * 0.75;
 
-    const oldLiveData = {
-      accelX,
-      accelY,
-      accelZ,
-      smoothedAccelX: this.smoothedAccelX,
-      smoothedAccelY: this.smoothedAccelY,
-      smoothedAccelZ: this.smoothedAccelZ,
-    };
-
-    livedata.set(oldLiveData); // This is the old livedata store
     liveAccelerometerData.put({
       accelX,
       accelY,

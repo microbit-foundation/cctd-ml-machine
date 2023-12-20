@@ -54,9 +54,10 @@
 <script lang="ts">
   // TODO: Shares a lot with 'PatternMatrix'. Extract 'Matrix' component and reuse
 
-  import { type GestureData, updateGestureLEDOutput } from '../../script/stores/mlStore';
+  import { updateGestureLEDOutput } from '../../script/stores/mlStore';
   import microbits from '../../script/microbit-interfacing/Microbits';
   import Microbits from '../../script/microbit-interfacing/Microbits';
+  import { GestureData } from '../../script/domain/Gesture';
 
   // TODO: Generalize such that it becomes ConnectionBehaviour.setMatrixTo() instead
   // TODO: Which is used. The function defined here. Or the one in 'OutputGesture.svelte'

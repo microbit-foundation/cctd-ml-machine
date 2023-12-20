@@ -9,7 +9,7 @@ import { LayersModel } from '@tensorflow/tfjs-layers';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import { PersistantGestureData } from '../domain/Gestures';
-import Gesture, { GestureID } from '../domain/Gesture';
+import Gesture, { GestureData, SoundData } from '../domain/Gesture';
 import { classifier, gestures } from './Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 
@@ -54,30 +54,6 @@ export function downloadDataset() {
   element.click();
   document.body.removeChild(element);
 }
-
-export type GestureData = {
-  name: string;
-  ID: GestureID;
-  recordings: RecordingData[];
-  output: GestureOutput;
-  confidence: {
-    currentConfidence: number;
-    requiredConfidence: number;
-    isConfident: boolean;
-  };
-};
-
-export type GestureOutput = {
-  matrix?: boolean[];
-  sound?: SoundData;
-  outputPin?: { pin: MBSpecs.UsableIOPin; pinState: PinTurnOnState; turnOnTime: number };
-};
-
-export type SoundData = {
-  name: string;
-  id: string;
-  path: string;
-};
 
 export type LiveData = {
   //TODO: remove this
@@ -170,7 +146,9 @@ export const model = writable<LayersModel>(undefined);
 
 // Stores and manages previous data-elements. Used for classifying current gesture
 // TODO: Only used for 'getPrevData' (which is only used for ml.ts). Do we even want this as global state?
-export const prevData = writable<LiveData[]>(new Array(StaticConfiguration.pollingPredictionSampleSize));
+export const prevData = writable<LiveData[]>(
+  new Array(StaticConfiguration.pollingPredictionSampleSize),
+);
 
 let liveDataIndex = 0;
 livedata.subscribe(data => {

@@ -16,7 +16,7 @@
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
   import PleaseConnectFirst from '../../../components/PleaseConnectFirst.svelte';
   import { classifier } from '../../../script/stores/Stores';
-    import StaticConfiguration from '../../../StaticConfiguration';
+  import StaticConfiguration from '../../../StaticConfiguration';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -58,7 +58,7 @@
       return;
     }
 
-    let shouldClassify: boolean = (buttons.buttonA === 1 || buttons.buttonB === 1);
+    let shouldClassify: boolean = buttons.buttonA === 1 || buttons.buttonB === 1;
 
     if (shouldClassify) {
       classifyClicked();

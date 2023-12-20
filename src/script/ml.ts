@@ -5,8 +5,8 @@
  */
 
 import { alertUser } from './stores/uiStore';
-import { type GestureData } from './stores/mlStore';
 import { t } from '../i18n';
+import { GestureData } from './domain/Gesture';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));

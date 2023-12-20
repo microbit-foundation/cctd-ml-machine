@@ -18,7 +18,6 @@
   import OutputMatrix from './OutputMatrix.svelte';
   import {
     updateGestureSoundOutput,
-    type SoundData,
     updateGesturePinOutput,
   } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
@@ -32,7 +31,7 @@
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import Gesture from '../../script/domain/Gesture';
+  import Gesture, { SoundData } from '../../script/domain/Gesture';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -64,7 +63,7 @@
     requiredConfidence: number,
   ): TriggerAction => {
     let isConfident = requiredConfidence <= confidence;
-    if ((!lastWasTriggered) && isConfident) {
+    if (!lastWasTriggered && isConfident) {
       return 'turnOn';
     }
     if (lastWasTriggered && !isConfident) {

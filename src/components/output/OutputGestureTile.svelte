@@ -15,11 +15,9 @@
 
 <script lang="ts">
   // IMPORT AND DEFAULTS
-  import { type GestureData } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import GestureTilePart from '../GestureTilePart.svelte';
   import Information from '../information/Information.svelte';
-  import { Writable } from 'svelte/store';
   import Gesture from '../../script/domain/Gesture';
 
   // Variables for component

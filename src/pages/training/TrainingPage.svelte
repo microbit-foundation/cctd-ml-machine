@@ -69,15 +69,14 @@
           </p>
         {/if}
         {#if $filters.length == 0}
-        <p class="bold text-xl bold mt-10">
-          {$t('menu.trainer.noFilters')}
-        </p>
+          <p class="bold text-xl bold mt-10">
+            {$t('menu.trainer.noFilters')}
+          </p>
         {:else}
-        <div class="w-full pt-5 text-white pb-5">
-          <TrainModelButton />
-        </div>
-                {/if}
-
+          <div class="w-full pt-5 text-white pb-5">
+            <TrainModelButton />
+          </div>
+        {/if}
       </div>
     {/if}
     {#if !$state.isInputConnected}

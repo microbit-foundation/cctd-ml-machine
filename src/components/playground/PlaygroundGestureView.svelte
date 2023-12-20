@@ -5,8 +5,7 @@
  -->
 
 <script lang="ts">
-  import Gesture from '../../script/domain/Gesture';
-  import { GestureData } from '../../script/stores/mlStore';
+  import Gesture, { GestureData } from '../../script/domain/Gesture';
 
   export let gesture: Gesture;
   const reduceData = (gestureData: GestureData) => {

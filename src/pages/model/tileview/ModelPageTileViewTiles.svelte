@@ -15,7 +15,7 @@
   import MediaQuery from '../../../components/MediaQuery.svelte';
   import { gestures } from '../../../script/stores/Stores';
   import OutputGesture from '../../../components/output/OutputGesture.svelte';
-    import StaticConfiguration from '../../../StaticConfiguration';
+  import StaticConfiguration from '../../../StaticConfiguration';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -65,7 +65,7 @@
       return;
     }
 
-    let shouldClassify: boolean = (buttons.buttonA === 1 || buttons.buttonB === 1);
+    let shouldClassify: boolean = buttons.buttonA === 1 || buttons.buttonB === 1;
 
     if (shouldClassify) {
       classifyClicked();

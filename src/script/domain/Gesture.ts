@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { Readable, Subscriber, Unsubscriber, Writable, derived, get } from 'svelte/store';
-import { GestureData, GestureOutput, RecordingData, SoundData } from '../stores/mlStore';
+import { RecordingData } from '../stores/mlStore';
 import { PersistantGestureData } from './Gestures';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
@@ -12,6 +12,30 @@ import BindableValue from './BindableValue';
 import GestureConfidence from './GestureConfidence';
 
 export type GestureID = number;
+
+export type GestureData = {
+  name: string;
+  ID: GestureID;
+  recordings: RecordingData[];
+  output: GestureOutput;
+  confidence: {
+    currentConfidence: number;
+    requiredConfidence: number;
+    isConfident: boolean;
+  };
+};
+
+export type GestureOutput = {
+  matrix?: boolean[];
+  sound?: SoundData;
+  outputPin?: { pin: MBSpecs.UsableIOPin; pinState: PinTurnOnState; turnOnTime: number };
+};
+
+export type SoundData = {
+  name: string;
+  id: string;
+  path: string;
+};
 
 class Gesture implements Readable<GestureData> {
   private store: Readable<GestureData>;

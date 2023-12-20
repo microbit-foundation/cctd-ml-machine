@@ -8,12 +8,12 @@
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
-  import { GestureData } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
   import { getPrevData } from '../../script/stores/mlStore';
   import { gestures, liveAccelerometerData } from '../../script/stores/Stores';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import FilterGraphLimits from '../../script/utils/FilterLimits';
+  import { GestureData } from '../../script/domain/Gesture';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
@@ -140,7 +140,6 @@
   }
 
   function createLiveData() {
-    
     const liveData = getPrevData();
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {

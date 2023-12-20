@@ -7,10 +7,7 @@
 <script lang="ts">
   import Gesture from '../components/Gesture.svelte';
   import { state } from '../script/stores/uiStore';
-  import {
-    downloadDataset,
-    loadDatasetFromFile,
-  } from '../script/stores/mlStore';
+  import { downloadDataset, loadDatasetFromFile } from '../script/stores/mlStore';
   import { t } from '../i18n';
   import RecordInformationContent from '../components/datacollection/RecordInformationContent.svelte';
   import StandardDialog from '../components/dialogs/StandardDialog.svelte';

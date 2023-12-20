@@ -10,7 +10,6 @@
   import { PinTurnOnState } from './PinSelectorUtil';
   import { t } from '../../i18n';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import { currentData } from '../../script/stores/mlStore';
   export let onPinSelect: (pin: MBSpecs.UsableIOPin) => void;
   export let onTurnOnTimeSelect: (turnOnArgs: {
     turnOnState: PinTurnOnState;

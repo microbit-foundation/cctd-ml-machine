@@ -10,8 +10,9 @@ import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
 import { PersistantGestureData } from '../domain/Gestures';
 import Gesture, { GestureData, SoundData } from '../domain/Gesture';
-import { classifier, gestures } from './Stores';
+import { classifier, gestures, liveAccelerometerData } from './Stores';
 import StaticConfiguration from '../../StaticConfiguration';
+import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
 export type RecordingData = {
   ID: number;
@@ -74,20 +75,6 @@ export const livedata = writable<LiveData>({
   smoothedAccelZ: 0,
 });
 
-export const currentData = writable<{ x: number; y: number; z: number }>({
-  x: 0,
-  y: 0,
-  z: 0,
-});
-
-livedata.subscribe(data => {
-  currentData.set({
-    x: data.smoothedAccelX,
-    y: data.smoothedAccelY,
-    z: data.smoothedAccelZ,
-  });
-});
-
 // Store for current gestures
 export const chosenGesture = writable<Gesture | null>(null);
 
@@ -146,13 +133,13 @@ export const model = writable<LayersModel>(undefined);
 
 // Stores and manages previous data-elements. Used for classifying current gesture
 // TODO: Only used for 'getPrevData' (which is only used for ml.ts). Do we even want this as global state?
-export const prevData = writable<LiveData[]>(
+export const prevData = writable<MicrobitAccelerometerData[]>(
   new Array(StaticConfiguration.pollingPredictionSampleSize),
 );
 
 let liveDataIndex = 0;
-livedata.subscribe(data => {
-  prevData.update((prevDataArray: LiveData[]) => {
+liveAccelerometerData.subscribe(data => {
+  prevData.update((prevDataArray: MicrobitAccelerometerData[]) => {
     prevDataArray[liveDataIndex] = data;
     return prevDataArray;
   });
@@ -164,7 +151,7 @@ livedata.subscribe(data => {
 
 // TODO: Should be replaced by the livedata buffer instead
 export function getPrevData(): { x: number[]; y: number[]; z: number[] } | undefined {
-  const data: LiveData[] = get(prevData);
+  const data: MicrobitAccelerometerData[] = get(prevData);
   const dataLength: number = data.length;
   // Returns undefined if there has not being collected minSamples data yet
   if (Object.values(data).length !== data.length) {

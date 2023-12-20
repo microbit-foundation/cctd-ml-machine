@@ -5,10 +5,6 @@
  -->
 
 <style global windi:preflights:global windi:safelist:global>
-  .textAnimation {
-    animation: 3s textAni ease;
-  }
-
   @keyframes textAni {
     0% {
       opacity: 0;

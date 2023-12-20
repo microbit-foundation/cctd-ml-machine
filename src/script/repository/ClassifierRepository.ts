@@ -13,15 +13,7 @@ import Repositories from './Repositories';
 import Filters from '../domain/Filters';
 import Classifier from '../domain/Classifier';
 import Filter from '../domain/Filter';
-import MaxFilter from '../filters/MaxFilter';
-import MinFilter from '../filters/MinFilter';
-import PeaksFilter from '../filters/PeaksFilter';
 import { GestureID } from '../domain/Gesture';
-import MeanFilter from '../filters/MeanFilter';
-import RootMeanSquareFilter from '../filters/RootMeanSquareFilter';
-import StandardDeviationFilter from '../filters/StandardDeviationFilter';
-import TotalAccFilter from '../filters/TotalAccFilter';
-import ZeroCrossingRateFilter from '../filters/ZeroCrossingRateFilter';
 import { FilterType } from '../domain/FilterTypes';
 
 export type TrainerConsumer = <T extends MLModel>(

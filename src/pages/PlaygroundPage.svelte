@@ -20,6 +20,7 @@
   import PlaygroundLog from '../components/playground/PlaygroundLog.svelte';
   import MicrobitAccelerometerDataSynthesizer from '../components/playground/inputSynthesizer/MicrobitAccelerometerDataSynthesizer.svelte';
   import LiveDataBufferUtilizationPercentage from '../components/playground/LiveDataBufferUtilizationPercentage.svelte';
+    import StaticConfiguration from '../StaticConfiguration';
 
   const getRandomGesture = (): Gesture => {
     return gestures.getGestures()[
@@ -32,9 +33,7 @@
     playgroundContext.addMessage('training model...');
     model
       .train(
-        new LayersModelTrainer({
-          noOfEpochs: 80,
-        }),
+        new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings),
       )
       .then(() => {
         playgroundContext.addMessage('Finished training!');

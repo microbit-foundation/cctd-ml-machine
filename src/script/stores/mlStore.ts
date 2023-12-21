@@ -82,7 +82,6 @@ export function addGesture(name: string): void {
   gestures.createGesture(name);
 }
 
-
 // TODO: Should be deleted, and model should automatically be marked as untrained, markAsUntrained should not be called in practice
 export function removeGesture(gesture: GestureData) {
   classifier.getModel().markAsUntrained();

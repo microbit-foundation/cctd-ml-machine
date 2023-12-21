@@ -8,6 +8,7 @@
   input[type='range'][orient='vertical'] {
     writing-mode: bt-lr; /* IE */
     -webkit-appearance: slider-vertical; /* WebKit */
+    appearance: slider-vertical;
     width: 20px;
     background: #13bba4;
   }
@@ -28,7 +29,7 @@
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   import Gesture, { SoundData } from '../../script/domain/Gesture';
-    import { gestures } from '../../script/stores/Stores';
+  import { gestures } from '../../script/stores/Stores';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 

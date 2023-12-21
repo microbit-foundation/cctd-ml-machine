@@ -18,7 +18,7 @@ import ClassifierRepository from './ClassifierRepository';
 
 class GestureRepository implements Readable<Gesture[]> {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
-  private static gestureStore: Writable<Gesture[]>;
+  private static gestureStore: Writable<Gesture[]>; // TODO: Remake as persistant writable
   constructor(private modelRepository: ClassifierRepository) {
     GestureRepository.gestureStore = writable([]);
     GestureRepository.gestureStore.set(this.getPersistedGestures());

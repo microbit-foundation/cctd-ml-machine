@@ -23,7 +23,7 @@ export type TrainerConsumer = <T extends MLModel>(
 ) => Promise<void>;
 
 class ClassifierRepository {
-  private static readonly PERSISTANT_FILTERS_KEY = 'filters'
+  private static readonly PERSISTANT_FILTERS_KEY = 'filters';
   private static confidences: Writable<Map<GestureID, number>>;
   private static mlModel: Writable<MLModel | undefined>;
   private static filters: Filters;
@@ -34,7 +34,10 @@ class ClassifierRepository {
     const initialConfidence = new Map<GestureID, number>();
     ClassifierRepository.confidences = writable(initialConfidence);
     ClassifierRepository.mlModel = writable(undefined);
-    ClassifierRepository.persistedFilters = new PersistantWritable(FilterTypes.toIterable(), ClassifierRepository.PERSISTANT_FILTERS_KEY);
+    ClassifierRepository.persistedFilters = new PersistantWritable(
+      FilterTypes.toIterable(),
+      ClassifierRepository.PERSISTANT_FILTERS_KEY,
+    );
     ClassifierRepository.filters = new Filters(this.getFilters());
     this.classifierFactory = new ClassifierFactory();
   }
@@ -102,18 +105,23 @@ class ClassifierRepository {
   private getFilters(): Writable<Filter[]> {
     // Create and fetch a persistant store
     const derivedStore = derived([ClassifierRepository.persistedFilters], stores => {
-      const persistedFilters = stores[0]
-      return persistedFilters.map(persistedFilter => FilterTypes.createFilter(persistedFilter));
-    })
+      const persistedFilters = stores[0];
+      return persistedFilters.map(persistedFilter =>
+        FilterTypes.createFilter(persistedFilter),
+      );
+    });
     // Convert a store of type 'FilterType' to type 'filter'.
     return {
       subscribe: derivedStore.subscribe,
-      set: (newFiltersArray) => ClassifierRepository.persistedFilters.set(newFiltersArray.map(newFilter=>newFilter.getType())),
-      update: (updater) => {
-        const updatedStore = updater(get(derivedStore)).map(filter=>filter.getType());
+      set: newFiltersArray =>
+        ClassifierRepository.persistedFilters.set(
+          newFiltersArray.map(newFilter => newFilter.getType()),
+        ),
+      update: updater => {
+        const updatedStore = updater(get(derivedStore)).map(filter => filter.getType());
         ClassifierRepository.persistedFilters.set(updatedStore);
-      }
-    }
+      },
+    };
   }
 
   public getGestureConfidence(gestureId: number): GestureConfidence {

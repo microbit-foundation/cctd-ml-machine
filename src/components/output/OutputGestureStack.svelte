@@ -28,7 +28,7 @@
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   import Gesture, { SoundData } from '../../script/domain/Gesture';
-    import { gestures } from '../../script/stores/Stores';
+  import { gestures } from '../../script/stores/Stores';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 

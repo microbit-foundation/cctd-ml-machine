@@ -22,7 +22,7 @@ class ControlledStorage {
   }
 
   public static has(key: string): boolean {
-    return !!localStorage.getItem(key);
+    return !!localStorage.getItem(key)
   }
 
   private static getStoredItem(key: string): string {

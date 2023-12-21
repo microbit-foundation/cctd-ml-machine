@@ -22,6 +22,7 @@ t.subscribe(t => (text = t));
  * Implementation of the input ConnectionBehaviour
  */
 class InputBehaviour extends LoggingDecorator {
+
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
 
   onBluetoothConnectionError(error?: unknown) {

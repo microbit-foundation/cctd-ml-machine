@@ -56,7 +56,7 @@
   import microbits from '../../script/microbit-interfacing/Microbits';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { GestureData } from '../../script/domain/Gesture';
-  import { gestures } from '../../script/stores/Stores';
+    import { gestures } from '../../script/stores/Stores';
 
   // TODO: Generalize such that it becomes ConnectionBehaviour.setMatrixTo() instead
   // TODO: Which is used. The function defined here. Or the one in 'OutputGesture.svelte'

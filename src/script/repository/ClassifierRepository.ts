@@ -14,29 +14,29 @@ import Filters from '../domain/Filters';
 import Classifier from '../domain/Classifier';
 import Filter from '../domain/Filter';
 import { GestureID } from '../domain/Gesture';
-import { FilterType } from '../domain/FilterTypes';
+import FilterTypes, { FilterType } from '../domain/FilterTypes';
+import PersistantWritable from './PersistantWritable';
+import { a } from 'vitest/dist/suite-9ReVEt_h';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
 ) => Promise<void>;
 
 class ClassifierRepository {
+  private static readonly PERSISTANT_FILTERS_KEY = 'filters'
   private static confidences: Writable<Map<GestureID, number>>;
   private static mlModel: Writable<MLModel | undefined>;
   private static filters: Filters;
-  private static filterArray: Writable<Filter[]>;
+  private static persistedFilters: PersistantWritable<FilterType[]>;
   private classifierFactory: ClassifierFactory;
 
   constructor() {
     const initialConfidence = new Map<GestureID, number>();
     ClassifierRepository.confidences = writable(initialConfidence);
     ClassifierRepository.mlModel = writable(undefined);
-    ClassifierRepository.filterArray = writable([]);
-
-    // Create a 'Filters' store with an error callback for when
-    ClassifierRepository.filters = new Filters(ClassifierRepository.filterArray);
+    ClassifierRepository.persistedFilters = new PersistantWritable(FilterTypes.toIterable(), ClassifierRepository.PERSISTANT_FILTERS_KEY);
+    ClassifierRepository.filters = new Filters(this.getFilters());
     this.classifierFactory = new ClassifierFactory();
-    this.addAllFilters();
   }
 
   public getMLModel(): Readable<MLModel | undefined> {
@@ -97,6 +97,23 @@ class ClassifierRepository {
     const newConfidences = get(ClassifierRepository.confidences);
     newConfidences.set(gestureId, confidence);
     ClassifierRepository.confidences.set(newConfidences);
+  }
+
+  private getFilters(): Writable<Filter[]> {
+    // Create and fetch a persistant store
+    const derivedStore = derived([ClassifierRepository.persistedFilters], stores => {
+      const persistedFilters = stores[0]
+      return persistedFilters.map(persistedFilter => FilterTypes.createFilter(persistedFilter));
+    })
+    // Convert a store of type 'FilterType' to type 'filter'.
+    return {
+      subscribe: derivedStore.subscribe,
+      set: (newFiltersArray) => ClassifierRepository.persistedFilters.set(newFiltersArray.map(newFilter=>newFilter.getType())),
+      update: (updater) => {
+        const updatedStore = updater(get(derivedStore)).map(filter=>filter.getType());
+        ClassifierRepository.persistedFilters.set(updatedStore);
+      }
+    }
   }
 
   public getGestureConfidence(gestureId: number): GestureConfidence {

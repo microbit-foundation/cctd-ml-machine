@@ -97,7 +97,7 @@ class GestureRepository implements Readable<Gesture[]> {
     };
   }
 
-  private getPersistedGestures() {
+  private getPersistedGestures(): Gesture[] {
     const resultFromFetch: PersistantGestureData[] = this.getPersistedData();
     return resultFromFetch.map(persistedData => this.buildGesture(persistedData));
   }

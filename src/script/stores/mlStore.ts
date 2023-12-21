@@ -6,7 +6,6 @@
 
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
-import { PersistantGestureData } from '../domain/Gestures';
 import Gesture, { GestureData } from '../domain/Gesture';
 import { classifier, gestures, liveAccelerometerData } from './Stores';
 import StaticConfiguration from '../../StaticConfiguration';
@@ -20,58 +19,6 @@ export type RecordingData = {
     z: number[];
   };
 };
-
-export function loadDatasetFromFile(file: File) {
-  const reader = new FileReader();
-  reader.onload = function (e: ProgressEvent<FileReader>) {
-    if (!e.target) {
-      return;
-    }
-    const contents = e.target.result;
-    if (typeof contents === 'string') {
-      const gestureData: PersistantGestureData[] = JSON.parse(
-        contents,
-      ) as PersistantGestureData[];
-      gestures.importFrom(gestureData);
-    }
-  };
-  reader.readAsText(file as Blob);
-}
-
-export function downloadDataset() {
-  const element = document.createElement('a');
-  element.setAttribute(
-    'href',
-    'data:application/json;charset=utf-8,' +
-      encodeURIComponent(JSON.stringify(get(gestures), null, 2)),
-  );
-  element.setAttribute('download', 'dataset');
-
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-  document.body.removeChild(element);
-}
-
-export type LiveData = {
-  //TODO: remove this
-  accelX: number;
-  accelY: number;
-  accelZ: number;
-  smoothedAccelX: number;
-  smoothedAccelY: number;
-  smoothedAccelZ: number;
-};
-
-export const livedata = writable<LiveData>({
-  accelX: 0,
-  accelY: 0,
-  accelZ: 0,
-  smoothedAccelX: 0,
-  smoothedAccelY: 0,
-  smoothedAccelZ: 0,
-});
 
 // Store for current gestures
 export const chosenGesture = writable<Gesture | null>(null);

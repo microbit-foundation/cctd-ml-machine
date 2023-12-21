@@ -13,11 +13,7 @@ import GestureConfidence from './GestureConfidence';
 
 export type GestureID = number;
 
-export type GestureData = {
-  name: string;
-  ID: GestureID;
-  recordings: RecordingData[];
-  output: GestureOutput;
+export type GestureData = PersistantGestureData & {
   confidence: {
     currentConfidence: number;
     requiredConfidence: number;

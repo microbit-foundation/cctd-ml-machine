@@ -19,8 +19,8 @@
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
   import { gestures } from '../script/stores/Stores';
-    import FileUtility from '../script/repository/FileUtility';
-    import { get } from 'svelte/store';
+  import FileUtility from '../script/repository/FileUtility';
+  import { get } from 'svelte/store';
 
   let isConnectionDialogOpen = false;
 

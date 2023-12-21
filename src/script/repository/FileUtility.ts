@@ -1,9 +1,10 @@
-import { GestureData } from "../domain/Gesture";
-import { PersistantGestureData } from "../domain/Gestures";
-import { gestures } from "../stores/Stores";
+import { GestureData } from '../domain/Gesture';
+import { PersistantGestureData } from '../domain/Gestures';
+import { gestures } from '../stores/Stores';
 
 class FileUtility {
-    public static loadDatasetFromFile(file: File) {
+  // TODO: The problem right now is that this function is called directly from svelte code, maybe the code should only be executed from the repository?
+  public static loadDatasetFromFile(file: File) {
     const reader = new FileReader();
     reader.onload = function (e: ProgressEvent<FileReader>) {
       if (!e.target) {
@@ -16,7 +17,7 @@ class FileUtility {
     };
     reader.readAsText(file as Blob);
   }
-  
+
   public static downloadDataset(gestureData: GestureData[]) {
     const element = document.createElement('a');
     element.setAttribute(
@@ -25,14 +26,13 @@ class FileUtility {
         encodeURIComponent(JSON.stringify(gestureData, null, 2)),
     );
     element.setAttribute('download', 'dataset');
-  
+
     element.style.display = 'none';
     document.body.appendChild(element);
-  
+
     element.click();
     document.body.removeChild(element);
   }
-  
 }
 
 export default FileUtility;

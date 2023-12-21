@@ -8,7 +8,6 @@
   input[type='range'][orient='vertical'] {
     writing-mode: bt-lr; /* IE */
     -webkit-appearance: slider-vertical; /* WebKit */
-    appearance: slider-vertical;
     width: 20px;
     background: #13bba4;
   }

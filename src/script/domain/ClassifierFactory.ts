@@ -12,7 +12,6 @@ import Model from './Model';
 import { TrainingData } from './ModelTrainer';
 import MLModel from './MLModel';
 import { TrainerConsumer } from '../repository/ClassifierRepository';
-import GestureRepository from '../repository/GestureRepository';
 
 class ClassifierFactory {
   public buildClassifier(
@@ -30,6 +29,10 @@ class ClassifierFactory {
     );
     filters.subscribe(() => {
       // Filters has changed
+      classifier.getModel().markAsUntrained();
+    });
+    gestures.subscribe(() => {
+      // Gesture was removed or added (doesn't detect if number of recordings change)
       classifier.getModel().markAsUntrained();
     });
     return classifier;

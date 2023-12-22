@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Writable, derived, get, writable } from 'svelte/store';
+import { Readable, Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
 import GestureConfidence from '../domain/GestureConfidence';
 import MLModel from '../domain/MLModel';
@@ -13,7 +13,7 @@ import Repositories from './Repositories';
 import Filters from '../domain/Filters';
 import Classifier from '../domain/Classifier';
 import Filter from '../domain/Filter';
-import { GestureID } from '../domain/Gesture';
+import Gesture, { GestureID } from '../domain/Gesture';
 import FilterTypes, { FilterType } from '../domain/FilterTypes';
 import PersistantWritable from './PersistantWritable';
 
@@ -42,7 +42,8 @@ class ClassifierRepository {
   }
 
   public getClassifier(): Classifier {
-    const gestureRepository = Repositories.getInstance().getGestureRepository();
+    const gestureRepository: Readable<Gesture[]> =
+      Repositories.getInstance().getGestureRepository();
     // TODO: We should cache this object, as it can function as a singleton. This would improve performance
     const classifier = this.classifierFactory.buildClassifier(
       ClassifierRepository.mlModel,

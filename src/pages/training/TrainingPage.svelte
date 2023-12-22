@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { hasSufficientData, state } from '../../script/stores/uiStore';
+  import { state } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
@@ -13,13 +13,13 @@
   import { Paths, navigate } from '../../router/paths';
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
   import TrainModelButton from './TrainModelButton.svelte';
-  import { classifier } from '../../script/stores/Stores';
+  import { classifier, gestures } from '../../script/stores/Stores';
 
   const model = classifier.getModel();
 
   const filters = classifier.getFilters();
 
-  const sufficientData = hasSufficientData();
+  const sufficientData = gestures.hasSufficientData();
 </script>
 
 <TrainingFailedDialog />

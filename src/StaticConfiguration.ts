@@ -92,6 +92,11 @@ class StaticConfiguration {
    */
   public static readonly minNoOfRecordingsPerGesture = 3;
 
+  /**
+   * The minimum number of gesture to indicate sufficient data.
+   */
+  public static readonly minNoOfGestures = 2;
+
   // The settings given to the LayersModelTrainer
   public static readonly layersModelTrainingSettings: LayersModelTrainingSettings = {
     noOfEpochs: 80,

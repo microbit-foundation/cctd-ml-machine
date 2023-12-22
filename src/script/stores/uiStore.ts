@@ -13,11 +13,12 @@ import { t } from '../../i18n';
 import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
-import { classifier, gestures } from './Stores';
+import { classifier } from './Stores';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
+// TODO: Do we expect combaitibility to change? Why is it a store?
 export const compatibility = writable<CompatibilityStatus>(checkCompatibility());
 
 export const isBluetoothWarningDialogOpen = writable<boolean>(
@@ -108,21 +109,12 @@ function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: strin
   return { isReady: true, msg: '' };
 }
 
-export const hasSufficientData = (): boolean => {
-  if (!gestures) {
-    return false;
-  }
-  if (gestures.getNumberOfGestures() < 2) {
-    return false;
-  }
-  return !gestures.getGestures().some(gesture => gesture.getRecordings().length < 3);
-};
-
 export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
   buttonA: 0,
   buttonB: 0,
 });
 
+// TODO: Should be in MBSpecs.ts
 export enum MicrobitInteractions {
   A,
   B,

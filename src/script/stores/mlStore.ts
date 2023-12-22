@@ -7,7 +7,7 @@
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
 import Gesture, { GestureData } from '../domain/Gesture';
-import { classifier, gestures, liveAccelerometerData } from './Stores';
+import { liveAccelerometerData } from './Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
@@ -22,30 +22,6 @@ export type RecordingData = {
 
 // Store for current gestures
 export const chosenGesture = writable<Gesture | null>(null);
-
-// TODO: Should be deleted, and model should automatically be marked as untrained, markAsUntrained should not be called in practice
-export function addGesture(name: string): void {
-  classifier.getModel().markAsUntrained();
-  gestures.createGesture(name);
-}
-
-// TODO: Should be deleted, and model should automatically be marked as untrained, markAsUntrained should not be called in practice
-export function removeGesture(gesture: GestureData) {
-  classifier.getModel().markAsUntrained();
-  gestures.removeGesture(gesture.ID);
-}
-
-// TODO: Should be deleted, and model should automatically be marked as untrained, markAsUntrained should not be called in practice
-export function addRecording(gestureID: number, recording: RecordingData) {
-  classifier.getModel().markAsUntrained();
-  gestures.getGesture(gestureID).addRecording(recording);
-}
-
-// TODO: Should be deleted, and model should automatically be marked as untrained, markAsUntrained should not be called in practice
-export function removeRecording(gestureID: number, recordingID: number) {
-  classifier.getModel().markAsUntrained();
-  gestures.getGesture(gestureID).removeRecording(recordingID);
-}
 
 export const gestureConfidences = writable<{ [id: string]: number }>({});
 

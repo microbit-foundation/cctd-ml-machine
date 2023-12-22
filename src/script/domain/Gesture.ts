@@ -39,6 +39,7 @@ class Gesture implements Readable<GestureData> {
   constructor(
     private persistedData: Writable<PersistantGestureData>,
     private gestureConfidence: GestureConfidence,
+    private onRecordingsChanged: () => void,
   ) {
     this.store = this.deriveStore();
   }
@@ -74,6 +75,7 @@ class Gesture implements Readable<GestureData> {
   }
 
   public addRecording(recording: RecordingData) {
+    this.onRecordingsChanged();
     this.persistedData.update(newVal => {
       newVal.recordings = [recording, ...newVal.recordings];
       return newVal;
@@ -81,6 +83,7 @@ class Gesture implements Readable<GestureData> {
   }
 
   public removeRecording(recordingId: number) {
+    this.onRecordingsChanged();
     this.persistedData.update(newVal => {
       newVal.recordings = newVal.recordings.filter(
         recording => recording.ID !== recordingId,

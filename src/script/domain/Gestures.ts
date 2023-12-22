@@ -50,7 +50,10 @@ class Gestures implements Readable<GestureData[]> {
     this.repository.clearGestures();
   }
 
-  public haveSufficientData(): boolean {
+  public hasSufficientData(): boolean {
+    if (get(Gestures.subscribableGestures).length < StaticConfiguration.minNoOfGestures) {
+      return false;
+    }
     const recordingsCount = get(Gestures.subscribableGestures).map(
       gesture => gesture.getRecordings().length,
     );

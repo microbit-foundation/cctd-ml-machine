@@ -14,12 +14,7 @@
     microbitInteraction,
     MicrobitInteractions,
   } from '../script/stores/uiStore';
-  import {
-    addRecording,
-    chosenGesture,
-    type RecordingData,
-    removeRecording,
-  } from '../script/stores/mlStore';
+  import { chosenGesture, type RecordingData } from '../script/stores/mlStore';
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
   import StandardButton from './StandardButton.svelte';
@@ -57,8 +52,6 @@
     ) {
       return;
     }
-    const model = classifier.getModel();
-    model.markAsUntrained();
 
     setTimeout(() => {
       gestures.removeGesture(gesture.getId());
@@ -92,7 +85,7 @@
       unsubscribe();
       if (StaticConfiguration.pollingPredictionSampleSize <= newData.x.length) {
         const recording = { ID: Date.now(), data: newData } as RecordingData;
-        addRecording(gesture.getId(), recording);
+        gesture.addRecording(recording);
       } else {
         alertUser($t('alert.recording.disconnectedDuringRecording'));
       }
@@ -105,9 +98,7 @@
     if (!areActionsAllowed(false)) {
       return;
     }
-    const model = classifier.getModel();
-    model.markAsUntrained();
-    removeRecording(gesture.getId(), recording.ID);
+    gesture.removeRecording(recording.ID);
   }
 
   // Selecting this gesture for recording. Updates settings accordingly

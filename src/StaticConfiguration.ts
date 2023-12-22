@@ -81,12 +81,16 @@ class StaticConfiguration {
    */
   public static readonly pollingPredictionSampleDuration = 1800;
 
-
   /**
    * The size od the accelerometer livedata buffer. Larger means more memory is consumed.
    * Insertions are O(1) and fetching is O(n) where n is the number of items fetched.
    */
   public static readonly accelerometerLiveDataBufferSize = 600;
+
+  /**
+   * The minimum number of recordings per gesture to indicate sufficient data.
+   */
+  public static readonly minNoOfRecordingsPerGesture = 3;
 
   // The settings given to the LayersModelTrainer
   public static readonly layersModelTrainingSettings: LayersModelTrainingSettings = {

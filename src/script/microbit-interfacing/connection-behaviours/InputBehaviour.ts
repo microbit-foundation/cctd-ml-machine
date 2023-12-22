@@ -5,7 +5,12 @@
  */
 
 import type MicrobitBluetooth from '../MicrobitBluetooth';
-import { ModelView, buttonPressed, onCatastrophicError, state } from '../../stores/uiStore';
+import {
+  ModelView,
+  buttonPressed,
+  onCatastrophicError,
+  state,
+} from '../../stores/uiStore';
 import { t } from '../../../i18n';
 import { get } from 'svelte/store';
 import MBSpecs from '../MBSpecs';

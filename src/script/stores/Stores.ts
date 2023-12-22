@@ -19,7 +19,9 @@ const repositories = new Repositories();
 const gestures: Gestures = new Gestures(repositories.getGestureRepository());
 const classifier: Classifier = repositories.getModelRepository().getClassifier();
 
-const accelerometerDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(StaticConfiguration.accelerometerLiveDataBufferSize);
+const accelerometerDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(
+  StaticConfiguration.accelerometerLiveDataBufferSize,
+);
 const liveAccelerometerData: LiveData<MicrobitAccelerometerData> =
   new MicrobitAccelerometerLiveData(accelerometerDataBuffer);
 

@@ -15,6 +15,7 @@ import {
 import { RecordingData } from '../stores/mlStore';
 import Gesture, { GestureData, GestureID, GestureOutput } from './Gesture';
 import GestureRepository from '../repository/GestureRepository';
+import StaticConfiguration from '../../StaticConfiguration';
 
 export type PersistantGestureData = {
   // TODO: Where does this live?
@@ -47,6 +48,15 @@ class Gestures implements Readable<GestureData[]> {
 
   public clearGestures() {
     this.repository.clearGestures();
+  }
+
+  public haveSufficientData(): boolean {
+    const recordingsCount = get(Gestures.subscribableGestures).map(
+      gesture => gesture.getRecordings().length,
+    );
+    return !recordingsCount.some(
+      noOfRecordings => noOfRecordings < StaticConfiguration.minNoOfRecordingsPerGesture,
+    );
   }
 
   public getGesture(gestureID: number): Gesture {

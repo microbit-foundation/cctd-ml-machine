@@ -9,6 +9,10 @@
 export default {
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Helvetica', 'Arial', 'sans-serif'],
+        serif: ['serif'],
+      },
       colors: {
         primary: '#2c92d6',
         primarytext: '#000000',

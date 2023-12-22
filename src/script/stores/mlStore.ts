@@ -11,7 +11,7 @@ import { liveAccelerometerData } from './Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
-export type RecordingData = {
+export type RecordingData = { // TODO: Migrate to recording.ts
   ID: number;
   data: {
     x: number[];

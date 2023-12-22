@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Writable } from 'svelte/store';
+import { Readable, Writable } from 'svelte/store';
 import { RecordingData } from '../stores/mlStore';
 import Classifier from './Classifier';
 import Filters from './Filters';
@@ -12,13 +12,14 @@ import Model from './Model';
 import { TrainingData } from './ModelTrainer';
 import MLModel from './MLModel';
 import { TrainerConsumer } from '../repository/ClassifierRepository';
+import GestureRepository from '../repository/GestureRepository';
 
 class ClassifierFactory {
   public buildClassifier(
     model: Writable<MLModel | undefined>,
     trainerConsumer: TrainerConsumer,
     filters: Filters,
-    gestures: Gesture[],
+    gestures: Readable<Gesture[]>,
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ): Classifier {
     const classifier = new Classifier(

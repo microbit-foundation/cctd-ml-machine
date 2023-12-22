@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Subscriber, Unsubscriber, derived } from 'svelte/store';
+import { Readable, Subscriber, Unsubscriber, derived, get } from 'svelte/store';
 import Model, { ModelData } from './Model';
 import Filters from './Filters';
 import Gesture, { GestureID } from './Gesture';
@@ -17,7 +17,7 @@ class Classifier implements Readable<ClassifierData> {
   constructor(
     private model: Model,
     private filters: Filters,
-    private gestures: Gesture[],
+    private gestures: Readable<Gesture[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ) {}
 
@@ -40,7 +40,7 @@ class Classifier implements Readable<ClassifierData> {
     const filteredInput = input.getInput(this.filters);
     const predictions = await this.getModel().predict(filteredInput);
     predictions.forEach((confidence, index) => {
-      const gesture = this.gestures[index];
+      const gesture = get(this.gestures)[index];
       this.confidenceSetter(gesture.getId(), confidence);
     });
   }

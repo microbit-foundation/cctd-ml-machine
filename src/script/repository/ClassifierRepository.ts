@@ -42,16 +42,19 @@ class ClassifierRepository {
   }
 
   public getClassifier(): Classifier {
+    const gestureRepository = Repositories.getInstance().getGestureRepository();
     // TODO: We should cache this object, as it can function as a singleton. This would improve performance
-    return this.classifierFactory.buildClassifier(
+    const classifier = this.classifierFactory.buildClassifier(
       ClassifierRepository.mlModel,
       this.getTrainerConsumer(),
       ClassifierRepository.filters,
-      get(Repositories.getInstance().getGestureRepository()),
+      gestureRepository,
       (gestureId: GestureID, confidence: number) => {
         this.setGestureConfidence(gestureId, confidence);
       },
     );
+
+    return classifier;
   }
 
   /**

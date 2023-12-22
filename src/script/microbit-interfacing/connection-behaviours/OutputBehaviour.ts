@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: MIT
  */
 
-import MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import { ModelView, onCatastrophicError, state } from '../stores/uiStore';
-import { t } from '../../i18n';
+import MicrobitBluetooth from '../MicrobitBluetooth';
+import { ModelView, onCatastrophicError, state } from '../../stores/uiStore';
+import { t } from '../../../i18n';
 import { get } from 'svelte/store';
-import MBSpecs from '../microbit-interfacing/MBSpecs';
+import MBSpecs from '../MBSpecs';
 import LoggingDecorator from './LoggingDecorator';
-import CookieManager from '../CookieManager';
-import TypingUtils from '../TypingUtils';
-import { DeviceRequestStates } from '../stores/connectDialogStore';
-import Microbits from '../microbit-interfacing/Microbits';
-import StaticConfiguration from '../../StaticConfiguration';
+import CookieManager from '../../CookieManager';
+import TypingUtils from '../../TypingUtils';
+import { DeviceRequestStates } from '../../stores/connectDialogStore';
+import Microbits from '../Microbits';
+import StaticConfiguration from '../../../StaticConfiguration';
 
 let text = get(t);
 t.subscribe(t => (text = t));

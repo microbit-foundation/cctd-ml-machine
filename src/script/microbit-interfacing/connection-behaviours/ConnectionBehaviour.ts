@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import MBSpecs from '../microbit-interfacing/MBSpecs';
+import type MicrobitBluetooth from '../MicrobitBluetooth';
+import MBSpecs from '../MBSpecs';
 
 /**
  * Contract for the behaviour of micro:bit connections.

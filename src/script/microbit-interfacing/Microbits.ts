@@ -7,13 +7,13 @@
 /**
  * Entrypoint for the Microbit facade pattern
  */
-import ConnectionBehaviours from '../connection-behaviours/ConnectionBehaviours';
+import ConnectionBehaviours from './connection-behaviours/ConnectionBehaviours';
 import { get, writable } from 'svelte/store';
 import MBSpecs from './MBSpecs';
 import MicrobitBluetooth from './MicrobitBluetooth';
 import { onCatastrophicError, outputting } from '../stores/uiStore';
 import MicrobitUSB from './MicrobitUSB';
-import type ConnectionBehaviour from '../connection-behaviours/ConnectionBehaviour';
+import type ConnectionBehaviour from './connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
 import StaticConfiguration from '../../StaticConfiguration';
 

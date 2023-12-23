@@ -6,10 +6,10 @@
 
 <script>
   import IntervalSlider from './IntervalSlider.svelte';
-  import Slider from '@bulatdashiev/svelte-slider';
   import accelerometerSynthesizer from './AccelerometerDataSynthesizer';
   import { liveAccelerometerData } from '../../../script/stores/Stores';
   import SynthesizerGraph from './SynthesizerGraph.svelte';
+    import Range from '../../Range.svelte';
 </script>
 
 <div class="flex flex-col">
@@ -17,12 +17,24 @@
   <p class="text-sm">Uses sine-waves to produce LiveData</p>
   <div class="grid grid-cols-2">
     <IntervalSlider />
+    
     <p>x Speed (Frequency)</p>
-    <Slider on:input={e => accelerometerSynthesizer.setXSpeed(e.detail[0])} />
+    <Range min={accelerometerSynthesizer.getMinSineSpeed()} 
+    max={accelerometerSynthesizer.getMaxSineSpeed()} 
+    initialValue={accelerometerSynthesizer.getInitialSineSpeed()} 
+    on:change={e => accelerometerSynthesizer.setXSpeed(e.detail.value)} />
+    
     <p>y Speed (Frequency)</p>
-    <Slider on:input={e => accelerometerSynthesizer.setYSpeed(e.detail[0])} />
+    <Range min={accelerometerSynthesizer.getMinSineSpeed()} 
+    max={accelerometerSynthesizer.getMaxSineSpeed()} 
+    initialValue={accelerometerSynthesizer.getInitialSineSpeed()} 
+    on:change={e => accelerometerSynthesizer.setYSpeed(e.detail.value)} />
+    
     <p>z Speed (Frequency)</p>
-    <Slider on:input={e => accelerometerSynthesizer.setZSpeed(e.detail[0])} />
+    <Range min={accelerometerSynthesizer.getMinSineSpeed()} 
+    max={accelerometerSynthesizer.getMaxSineSpeed()} 
+    initialValue={accelerometerSynthesizer.getInitialSineSpeed()} 
+    on:change={e => accelerometerSynthesizer.setZSpeed(e.detail.value)} />
   </div>
   <SynthesizerGraph
     liveData={liveAccelerometerData}

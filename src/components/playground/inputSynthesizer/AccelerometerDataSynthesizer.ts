@@ -27,13 +27,13 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
   private store: Writable<AccelerometerSynthesizerData>;
 
   constructor(private liveData: LiveData<MicrobitAccelerometerData>) {
-    const defaultSpeed = 50;
     this.store = writable({
-      intervalSpeed: defaultSpeed,
-      xSpeed: 1,
-      ySpeed: 1,
-      zSpeed: 1,
+      intervalSpeed: this.getInitialIntervalValue(),
+      xSpeed: this.getInitialSineSpeed(),
+      ySpeed: this.getInitialSineSpeed() + 1 / 1000,
+      zSpeed: this.getInitialSineSpeed() + 2 / 1000,
     });
+    this.updateInterval();
   }
 
   public subscribe(
@@ -50,6 +50,30 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
     this.interval = setInterval(() => {
       this.generateData();
     }, get(this.store).intervalSpeed);
+  }
+
+  public getMinIntervalValue() {
+    return 5;
+  }
+
+  public getMaxIntervalValue() {
+    return 300;
+  }
+
+  public getInitialIntervalValue() {
+    return this.getMinIntervalValue();
+  }
+
+  public getInitialSineSpeed() {
+    return this.getMinSineSpeed();
+  }
+
+  public getMinSineSpeed() {
+    return 0;
+  }
+
+  public getMaxSineSpeed() {
+    return 100;
   }
 
   public generateData() {

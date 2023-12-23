@@ -15,7 +15,6 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.5",
-    "@bulatdashiev/svelte-slider": "^1.0.3",
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "@testing-library/svelte": "^4.0.0",
     "@tsconfig/svelte": "^4.0.1",

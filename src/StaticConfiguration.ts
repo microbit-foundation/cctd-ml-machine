@@ -67,14 +67,14 @@ class StaticConfiguration {
   };
 
   // How long should we wait in between each prediction? (in milliseconds) Higher is more performant, lower is smoother UI
-  public static readonly pollingPredictionInterval: number = 70;
+  public static readonly pollingPredictionInterval: number = 80;
 
   /**
    * How many samples should we use for prediction?
    * Higher means more data for each prediction, which hopefully means a more accurate prediction, but the higher the value, the more samples must be in the LiveDataBuffer.
    * If this value is too high, the buffer may not contain enough data for predicting.
    */
-  public static readonly pollingPredictionSampleSize = 50;
+  public static readonly pollingPredictionSampleSize = 35;
 
   /**
    * How far back in time should the engine look for sample data for it's current prediction? (in milliseconds).

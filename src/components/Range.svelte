@@ -91,6 +91,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fly, fade } from 'svelte/transition';
+  import TypingUtils from '../script/TypingUtils';
 
   // Props
   export let min = 0;
@@ -277,6 +278,8 @@
         class="range__thumb"
         class:range__thumb--holding={holding}
         bind:this={thumb}
+        on:blur={TypingUtils.emptyFunction}
+        on:focus={TypingUtils.emptyFunction}
         on:touchstart={onDragStart}
         on:mousedown={onDragStart}
         on:mouseover={() => (thumbHover = true)}

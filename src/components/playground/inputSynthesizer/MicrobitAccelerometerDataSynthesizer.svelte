@@ -9,7 +9,7 @@
   import accelerometerSynthesizer from './AccelerometerDataSynthesizer';
   import { liveAccelerometerData } from '../../../script/stores/Stores';
   import SynthesizerGraph from './SynthesizerGraph.svelte';
-    import Range from '../../Range.svelte';
+  import Range from '../../Range.svelte';
 </script>
 
 <div class="flex flex-col">
@@ -17,24 +17,27 @@
   <p class="text-sm">Uses sine-waves to produce LiveData</p>
   <div class="grid grid-cols-2">
     <IntervalSlider />
-    
+
     <p>x Speed (Frequency)</p>
-    <Range min={accelerometerSynthesizer.getMinSineSpeed()} 
-    max={accelerometerSynthesizer.getMaxSineSpeed()} 
-    initialValue={accelerometerSynthesizer.getInitialSineSpeed()} 
-    on:change={e => accelerometerSynthesizer.setXSpeed(e.detail.value)} />
-    
+    <Range
+      min={accelerometerSynthesizer.getMinSineSpeed()}
+      max={accelerometerSynthesizer.getMaxSineSpeed()}
+      initialValue={accelerometerSynthesizer.getInitialSineSpeed()}
+      on:change={e => accelerometerSynthesizer.setXSpeed(e.detail.value)} />
+
     <p>y Speed (Frequency)</p>
-    <Range min={accelerometerSynthesizer.getMinSineSpeed()} 
-    max={accelerometerSynthesizer.getMaxSineSpeed()} 
-    initialValue={accelerometerSynthesizer.getInitialSineSpeed()} 
-    on:change={e => accelerometerSynthesizer.setYSpeed(e.detail.value)} />
-    
+    <Range
+      min={accelerometerSynthesizer.getMinSineSpeed()}
+      max={accelerometerSynthesizer.getMaxSineSpeed()}
+      initialValue={accelerometerSynthesizer.getInitialSineSpeed()}
+      on:change={e => accelerometerSynthesizer.setYSpeed(e.detail.value)} />
+
     <p>z Speed (Frequency)</p>
-    <Range min={accelerometerSynthesizer.getMinSineSpeed()} 
-    max={accelerometerSynthesizer.getMaxSineSpeed()} 
-    initialValue={accelerometerSynthesizer.getInitialSineSpeed()} 
-    on:change={e => accelerometerSynthesizer.setZSpeed(e.detail.value)} />
+    <Range
+      min={accelerometerSynthesizer.getMinSineSpeed()}
+      max={accelerometerSynthesizer.getMaxSineSpeed()}
+      initialValue={accelerometerSynthesizer.getInitialSineSpeed()}
+      on:change={e => accelerometerSynthesizer.setZSpeed(e.detail.value)} />
   </div>
   <SynthesizerGraph
     liveData={liveAccelerometerData}

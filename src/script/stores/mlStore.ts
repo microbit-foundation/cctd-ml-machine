@@ -63,9 +63,9 @@ export function getPrevData(): { x: number[]; y: number[]; z: number[] } | undef
 
   for (let i = 0; i < dataLength; i++) {
     const oldDataIndex = (i + liveDataIndex) % dataLength;
-    x[i] = data[oldDataIndex].accelX;
-    y[i] = data[oldDataIndex].accelY;
-    z[i] = data[oldDataIndex].accelZ;
+    x[i] = data[oldDataIndex].x;
+    y[i] = data[oldDataIndex].y;
+    z[i] = data[oldDataIndex].z;
   }
 
   return { x, y, z };

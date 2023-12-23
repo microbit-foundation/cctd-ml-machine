@@ -65,9 +65,9 @@ class PollingPredictorEngine implements Engine {
         StaticConfiguration.pollingPredictionSampleDuration,
         StaticConfiguration.pollingPredictionSampleSize,
       );
-    const xs = bufferedData.map(data => data.value.accelX);
-    const ys = bufferedData.map(data => data.value.accelY);
-    const zs = bufferedData.map(data => data.value.accelZ);
+    const xs = bufferedData.map(data => data.value.x);
+    const ys = bufferedData.map(data => data.value.y);
+    const zs = bufferedData.map(data => data.value.z);
     return new AccelerometerClassifierInput(xs, ys, zs);
   }
 }

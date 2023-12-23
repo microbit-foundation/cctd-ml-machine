@@ -148,9 +148,9 @@ class InputBehaviour extends LoggingDecorator {
     const accelZ = z / 1000.0;
 
     liveAccelerometerData.put({
-      accelX,
-      accelY,
-      accelZ,
+      x: accelX,
+      y: accelY,
+      z: accelZ,
     });
   }
 

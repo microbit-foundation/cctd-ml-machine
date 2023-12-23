@@ -21,9 +21,7 @@
 
   $: {
     if (!freeze) {
-      liveDataPoint.x = $smoothedLiveData.accelX;
-      liveDataPoint.y = $smoothedLiveData.accelY;
-      liveDataPoint.z = $smoothedLiveData.accelZ;
+      liveDataPoint = $smoothedLiveData;
     }
   }
 </script>

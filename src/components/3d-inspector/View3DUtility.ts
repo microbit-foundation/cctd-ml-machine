@@ -134,7 +134,7 @@ export type Bars = {
   barZ: THREE.Mesh<THREE.CylinderGeometry, THREE.MeshLambertMaterial>;
 };
 
-export type Vector3 = {
+export type Vector3 = { // TODO: do we need Vector3?
   x: number;
   y: number;
   z: number;

@@ -7,9 +7,7 @@ import { Subscriber, Unsubscriber, Writable, derived, get, writable } from 'svel
 import Classifier from '../domain/Classifier';
 import Engine, { EngineData } from '../domain/Engine';
 import LiveData from '../domain/LiveData';
-import AccelerometerClassifierInput, {
-  AccelerometerRecording,
-} from '../mlmodels/AccelerometerClassifierInput';
+import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 import StaticConfiguration from '../../StaticConfiguration';
 
@@ -67,12 +65,10 @@ class PollingPredictorEngine implements Engine {
         StaticConfiguration.pollingPredictionSampleDuration,
         StaticConfiguration.pollingPredictionSampleSize,
       );
-    const input: AccelerometerRecording = {
-      x: bufferedData.map(data => data.value.accelX),
-      y: bufferedData.map(data => data.value.accelY),
-      z: bufferedData.map(data => data.value.accelZ),
-    };
-    return new AccelerometerClassifierInput(input);
+    const xs = bufferedData.map(data => data.value.accelX);
+    const ys = bufferedData.map(data => data.value.accelY);
+    const zs = bufferedData.map(data => data.value.accelZ);
+    return new AccelerometerClassifierInput(xs, ys, zs);
   }
 }
 

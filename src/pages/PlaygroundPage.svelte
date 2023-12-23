@@ -43,7 +43,10 @@
     playgroundContext.addMessage(
       'Predicting on random recording of: ' + randGesture.getName(),
     );
-    const input = new AccelerometerClassifierInput(randGesture.getRecordings()[0].data);
+    const xs = randGesture.getRecordings()[0].data.x;
+    const ys = randGesture.getRecordings()[0].data.y;
+    const zs = randGesture.getRecordings()[0].data.z;
+    const input = new AccelerometerClassifierInput(xs, ys, zs);
     classifier.classify(input).then(() => {
       playgroundContext.addMessage('Finished predicting');
     });

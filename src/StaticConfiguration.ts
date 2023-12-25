@@ -93,6 +93,11 @@ class StaticConfiguration {
   public static readonly minNoOfRecordingsPerGesture = 3;
 
   /**
+   * If insufficient data is found in the buffer, then how many fewer data points should we attempt to sample next attempt?
+   */
+  public static readonly pollingPredictionSampleSizeSearchStepSize = 3;
+
+  /**
    * The minimum number of gesture to indicate sufficient data.
    */
   public static readonly minNoOfGestures = 2;

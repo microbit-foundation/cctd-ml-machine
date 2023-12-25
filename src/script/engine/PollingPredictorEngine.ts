@@ -69,6 +69,9 @@ class PollingPredictorEngine implements Engine {
     return new AccelerometerClassifierInput(xs, ys, zs);
   }
 
+  /**
+   * Searches for an applicable amount of data, by iterately trying fewer data points if buffer fetch fails
+   */
   private getRawDataFromBuffer(
     sampleSize: number,
   ): TimestampedData<MicrobitAccelerometerData>[] {

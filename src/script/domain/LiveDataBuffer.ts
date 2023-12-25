@@ -40,7 +40,7 @@ class LiveDataBuffer<T> {
 
   public getSeries(time: number, noOfElements: number) {
     let searchPointer = this.bufferPtr;
-    this.bufferUtilization = 0; // for debugging
+    this.bufferUtilization = 0;
     // Search for elements that fit the time frame
     const series = [];
     const dateStart = Date.now();

@@ -3,7 +3,7 @@
  
   SPDX-License-Identifier: MIT
  -->
- <style>
+<style>
   .range {
     position: relative;
     flex: 1;

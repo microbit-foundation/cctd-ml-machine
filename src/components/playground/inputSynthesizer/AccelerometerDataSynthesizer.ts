@@ -20,6 +20,7 @@ type AccelerometerSynthesizerData = {
   xSpeed: number;
   ySpeed: number;
   zSpeed: number;
+  isActive: boolean;
 };
 
 class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData> {
@@ -32,6 +33,7 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
       xSpeed: this.getInitialSineSpeed(),
       ySpeed: this.getInitialSineSpeed() + 1 / 1000,
       zSpeed: this.getInitialSineSpeed() + 2 / 1000,
+      isActive: true,
     });
     this.updateInterval();
   }
@@ -112,6 +114,26 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
       return updater;
     });
     this.updateInterval();
+  }
+
+  public stop(): void {
+    clearInterval(this.interval);
+    this.store.update(updater => {
+      updater.isActive = false;
+      return updater;
+    });
+  }
+
+  public start(): void {
+    this.updateInterval();
+    this.store.update(updater => {
+      updater.isActive = true;
+      return updater;
+    });
+  }
+
+  public isActive(): boolean {
+    return get(this).isActive;
   }
 }
 

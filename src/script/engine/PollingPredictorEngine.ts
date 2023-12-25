@@ -10,6 +10,7 @@ import LiveData from '../domain/LiveData';
 import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 import StaticConfiguration from '../../StaticConfiguration';
+import { TimestampedData } from '../domain/LiveDataBuffer';
 
 class PollingPredictorEngine implements Engine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;
@@ -59,16 +60,33 @@ class PollingPredictorEngine implements Engine {
   }
 
   private bufferToInput(): AccelerometerClassifierInput {
-    const bufferedData = this.liveData
-      .getBuffer()
-      .getSeries(
-        StaticConfiguration.pollingPredictionSampleDuration,
-        StaticConfiguration.pollingPredictionSampleSize,
-      );
+    const bufferedData = this.getRawDataFromBuffer(
+      StaticConfiguration.pollingPredictionSampleSize,
+    );
     const xs = bufferedData.map(data => data.value.x);
     const ys = bufferedData.map(data => data.value.y);
     const zs = bufferedData.map(data => data.value.z);
     return new AccelerometerClassifierInput(xs, ys, zs);
+  }
+
+  private getRawDataFromBuffer(
+    sampleSize: number,
+  ): TimestampedData<MicrobitAccelerometerData>[] {
+    try {
+      return this.liveData
+        .getBuffer()
+        .getSeries(StaticConfiguration.pollingPredictionSampleDuration, sampleSize);
+    } catch (_e) {
+      if (sampleSize < 8) {
+        throw new Error(
+          'Was unable to correct buffer data. Less than 8 points were applicable.',
+        );
+      } else {
+        return this.getRawDataFromBuffer(
+          sampleSize - StaticConfiguration.pollingPredictionSampleSizeSearchStepSize,
+        );
+      }
+    }
   }
 }
 

@@ -27,6 +27,6 @@
     <StandardButton onClick={() => navigate(Paths.DATA)}>
       {$t('content.model.addData')}
     </StandardButton>
-    <TrainingButton type="secondary" action="navigate" />
+    <TrainingButton type="secondary" onClick={() => navigate(Paths.TRAINING)} />
   </div>
 </div>

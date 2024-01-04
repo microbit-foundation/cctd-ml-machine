@@ -7,14 +7,13 @@ import { Subscriber, Unsubscriber, Writable, derived, get, writable } from 'svel
 import Classifier from '../domain/Classifier';
 import Engine, { EngineData } from '../domain/Engine';
 import LiveData from '../domain/LiveData';
-import AccelerometerClassifierInput, {
-  AccelerometerRecording,
-} from '../mlmodels/AccelerometerClassifierInput';
+import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
+import StaticConfiguration from '../../StaticConfiguration';
+import { TimestampedData } from '../domain/LiveDataBuffer';
 
 class PollingPredictorEngine implements Engine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;
-  private pollingIntervalTime = 100;
   private isRunning: Writable<boolean>;
 
   constructor(
@@ -51,7 +50,7 @@ class PollingPredictorEngine implements Engine {
   private startPolling() {
     this.pollingInterval = setInterval(() => {
       void this.predict();
-    }, this.pollingIntervalTime);
+    }, StaticConfiguration.pollingPredictionInterval);
   }
 
   private predict() {
@@ -61,13 +60,36 @@ class PollingPredictorEngine implements Engine {
   }
 
   private bufferToInput(): AccelerometerClassifierInput {
-    const bufferedData = this.liveData.getBuffer().getSeries(1800, 80); // Todo: Replace these values with appropriate sources of truth
-    const input: AccelerometerRecording = {
-      x: bufferedData.map(data => data.value.accelX),
-      y: bufferedData.map(data => data.value.accelY),
-      z: bufferedData.map(data => data.value.accelZ),
-    };
-    return new AccelerometerClassifierInput(input);
+    const bufferedData = this.getRawDataFromBuffer(
+      StaticConfiguration.pollingPredictionSampleSize,
+    );
+    const xs = bufferedData.map(data => data.value.x);
+    const ys = bufferedData.map(data => data.value.y);
+    const zs = bufferedData.map(data => data.value.z);
+    return new AccelerometerClassifierInput(xs, ys, zs);
+  }
+
+  /**
+   * Searches for an applicable amount of data, by iterately trying fewer data points if buffer fetch fails
+   */
+  private getRawDataFromBuffer(
+    sampleSize: number,
+  ): TimestampedData<MicrobitAccelerometerData>[] {
+    try {
+      return this.liveData
+        .getBuffer()
+        .getSeries(StaticConfiguration.pollingPredictionSampleDuration, sampleSize);
+    } catch (_e) {
+      if (sampleSize < 8) {
+        throw new Error(
+          'Was unable to correct buffer data. Less than 8 points were applicable.',
+        );
+      } else {
+        return this.getRawDataFromBuffer(
+          sampleSize - StaticConfiguration.pollingPredictionSampleSizeSearchStepSize,
+        );
+      }
+    }
   }
 }
 

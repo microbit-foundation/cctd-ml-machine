@@ -21,6 +21,10 @@ class ControlledStorage {
     localStorage.setItem(key, stringified);
   }
 
+  public static has(key: string): boolean {
+    return !!localStorage.getItem(key);
+  }
+
   private static getStoredItem(key: string): string {
     const value = localStorage.getItem(key);
     if (!value) {

@@ -7,11 +7,6 @@
 <script lang="ts">
   import Gesture from '../components/Gesture.svelte';
   import { state } from '../script/stores/uiStore';
-  import {
-    clearGestures,
-    downloadDataset,
-    loadDatasetFromFile,
-  } from '../script/stores/mlStore';
   import { t } from '../i18n';
   import RecordInformationContent from '../components/datacollection/RecordInformationContent.svelte';
   import StandardDialog from '../components/dialogs/StandardDialog.svelte';
@@ -24,6 +19,8 @@
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
   import { gestures } from '../script/stores/Stores';
+  import FileUtility from '../script/repository/FileUtility';
+  import { get } from 'svelte/store';
 
   let isConnectionDialogOpen = false;
 
@@ -36,12 +33,12 @@
 
   const onClearGestures = () => {
     if (confirm($t('content.data.controlbar.button.clearData.confirm'))) {
-      clearGestures();
+      gestures.clearGestures();
     }
   };
 
   const onDownloadGestures = () => {
-    downloadDataset();
+    FileUtility.downloadDataset(get(gestures));
   };
 
   const onUploadGestures = () => {
@@ -50,6 +47,7 @@
 
   let filePicker: HTMLInputElement;
   onMount(() => {
+    // Todo: Maybe move some of this to the file utility class
     filePicker = document.createElement('input');
     filePicker.type = 'file';
     filePicker.accept = 'application/JSON';
@@ -58,7 +56,7 @@
         return;
       }
       const f = filePicker.files[0];
-      loadDatasetFromFile(f);
+      FileUtility.loadDatasetFromFile(f);
       filePicker.value = ''; // To trick element to trigger onChange if same file selected
     };
     return () => {

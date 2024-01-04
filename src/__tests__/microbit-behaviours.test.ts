@@ -7,9 +7,9 @@
  * SPDX-License-Identifier: MIT
  */
 import Microbits from '../script/microbit-interfacing/Microbits';
-import ConnectionBehaviours from '../script/connection-behaviours/ConnectionBehaviours';
-import OutputBehaviour from '../script/connection-behaviours/OutputBehaviour';
-import InputBehaviour from '../script/connection-behaviours/InputBehaviour';
+import ConnectionBehaviours from '../script/microbit-interfacing/connection-behaviours/ConnectionBehaviours';
+import OutputBehaviour from '../script/microbit-interfacing/connection-behaviours/OutputBehaviour';
+import InputBehaviour from '../script/microbit-interfacing/connection-behaviours/InputBehaviour';
 import SpyConnectionBehaviour from './mocks/SpyConnectionBehaviour';
 import MockBTDevice from './mocks/mock-microbit-bluetooth';
 

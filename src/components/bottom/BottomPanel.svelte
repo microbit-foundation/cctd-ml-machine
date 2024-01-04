@@ -6,7 +6,6 @@
 
 <script lang="ts">
   import { state } from '../../script/stores/uiStore';
-  import LiveGraph from '../graphs/LiveGraph.svelte';
   import { fade } from 'svelte/transition';
   import { t } from '../../i18n';
   import ConnectDialogContainer from '../connection-prompt/ConnectDialogContainer.svelte';
@@ -17,7 +16,6 @@
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
   import BaseDialog from '../dialogs/BaseDialog.svelte';
   import View3DLive from '../3d-inspector/View3DLive.svelte';
-  import { liveAccelerometerData } from '../../script/stores/Stores';
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
 
   let componentWidth: number;

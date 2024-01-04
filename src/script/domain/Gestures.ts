@@ -12,11 +12,13 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { GestureData, GestureOutput, RecordingData } from '../stores/mlStore';
-import Gesture, { GestureID } from './Gesture';
+import { RecordingData } from '../stores/mlStore';
+import Gesture, { GestureData, GestureID, GestureOutput } from './Gesture';
 import GestureRepository from '../repository/GestureRepository';
+import StaticConfiguration from '../../StaticConfiguration';
 
 export type PersistantGestureData = {
+  // TODO: Where does this live?
   name: string;
   ID: GestureID;
   recordings: RecordingData[];
@@ -48,6 +50,18 @@ class Gestures implements Readable<GestureData[]> {
     this.repository.clearGestures();
   }
 
+  public hasSufficientData(): boolean {
+    if (get(Gestures.subscribableGestures).length < StaticConfiguration.minNoOfGestures) {
+      return false;
+    }
+    const recordingsCount = get(Gestures.subscribableGestures).map(
+      gesture => gesture.getRecordings().length,
+    );
+    return !recordingsCount.some(
+      noOfRecordings => noOfRecordings < StaticConfiguration.minNoOfRecordingsPerGesture,
+    );
+  }
+
   public getGesture(gestureID: number): Gesture {
     return this.repository.getGesture(gestureID);
   }
@@ -77,6 +91,26 @@ class Gestures implements Readable<GestureData[]> {
 
   public getNumberOfGestures(): number {
     return get(Gestures.subscribableGestures).length;
+  }
+
+  public getBestPrediction(): Readable<Gesture> {
+    return derived(
+      get(Gestures.subscribableGestures).map(gest => gest.getConfidence()),
+      confidences => {
+        const sorted = [...confidences].map((data, index) => {
+          return {
+            index: index,
+            value: data,
+          };
+        });
+
+        sorted.sort((confidence1, confidence2) => {
+          return confidence2.value.confidence - confidence1.value.confidence;
+        });
+
+        return get(Gestures.subscribableGestures)[sorted[0].index];
+      },
+    );
   }
 
   private addGestureFromPersistedData(gestureData: PersistantGestureData): Gesture {

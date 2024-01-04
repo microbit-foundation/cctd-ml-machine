@@ -6,30 +6,32 @@
 
 <script lang="ts">
   import { state } from '../script/stores/uiStore';
-  import { GestureData, bestPrediction } from '../script/stores/mlStore';
   import { t } from '../i18n';
+  import { classifier, gestures } from '../script/stores/Stores';
+  import Gesture from '../script/domain/Gesture';
+
+  const bestPrediction = gestures.getBestPrediction();
 
   $: confidence = $state.isInputReady
-    ? $bestPrediction?.confidence.currentConfidence ?? 0
+    ? $bestPrediction.getConfidence().getCurrentConfidence()
     : 0;
   confidence = isNaN(confidence) ? 0 : confidence;
 
-  const getPredictionLabel = (isInputReady: boolean, bestPrediction?: GestureData) => {
+  const getPredictionLabel = (isInputReady: boolean, bestPrediction: Gesture) => {
     if (!isInputReady) {
       return $t('menu.model.connectInputMicrobit');
     }
-    if (bestPrediction) {
-      return bestPrediction.name;
-    }
-    return '...';
+    return bestPrediction.getName();
   };
+
+  const model = classifier.getModel();
 
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
   $: predictionLabel = getPredictionLabel($state.isInputReady, $bestPrediction);
 </script>
 
 <div class="w-full text-center justify-center pt-5">
-  {#if !$state.isPredicting}
+  {#if !$model.hasModel}
     <div
       class="h-34 w-34 m-auto mb-8 border-2 border-white border-opacity-30 rounded-lg border-dashed font-bold text-warm-gray-300">
       <div class="flex h-full">

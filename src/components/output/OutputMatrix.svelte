@@ -53,10 +53,10 @@
 
 <script lang="ts">
   // TODO: Shares a lot with 'PatternMatrix'. Extract 'Matrix' component and reuse
-
-  import { type GestureData, updateGestureLEDOutput } from '../../script/stores/mlStore';
   import microbits from '../../script/microbit-interfacing/Microbits';
   import Microbits from '../../script/microbit-interfacing/Microbits';
+  import { GestureData } from '../../script/domain/Gesture';
+  import { gestures } from '../../script/stores/Stores';
 
   // TODO: Generalize such that it becomes ConnectionBehaviour.setMatrixTo() instead
   // TODO: Which is used. The function defined here. Or the one in 'OutputGesture.svelte'
@@ -83,7 +83,7 @@
   function elementClick(i: number) {
     setElementTo = !matrix[i];
     matrix[i] = setElementTo;
-    updateGestureLEDOutput(gesture.ID, matrix);
+    gestures.getGesture(gesture.ID).setLEDOutput(matrix);
   }
 
   // When user hovers over a box. If user is clicking:
@@ -94,7 +94,7 @@
       return;
     }
     matrix[i] = setElementTo;
-    updateGestureLEDOutput(gesture.ID, matrix);
+    gestures.getGesture(gesture.ID).setLEDOutput(matrix);
   }
 </script>
 

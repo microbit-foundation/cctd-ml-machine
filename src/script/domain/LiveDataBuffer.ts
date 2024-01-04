@@ -40,7 +40,7 @@ class LiveDataBuffer<T> {
 
   public getSeries(time: number, noOfElements: number) {
     let searchPointer = this.bufferPtr;
-    this.bufferUtilization = 0; // for debugging
+    this.bufferUtilization = 0;
     // Search for elements that fit the time frame
     const series = [];
     const dateStart = Date.now();
@@ -69,12 +69,6 @@ class LiveDataBuffer<T> {
     if (series.length < noOfElements) {
       throw new Error(
         'Insufficient buffer data! Try increasing the polling rate or decrease the number of elements requested',
-      );
-    }
-
-    if (series.length > 10 * noOfElements) {
-      console.warn(
-        'The number of values in LiveDataBuffer, that fit the timeframe is greater than 1000%! Maybe decrease the polling frequency or increase the number of elements fetched from buffer to improve performance',
       );
     }
 

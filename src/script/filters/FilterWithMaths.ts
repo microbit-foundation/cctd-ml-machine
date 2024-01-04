@@ -5,9 +5,16 @@
  */
 
 import Filter from '../domain/Filter';
+import { FilterType } from '../domain/FilterTypes';
 
 abstract class FilterWithMaths implements Filter {
   abstract filter(inValues: number[]): number;
+
+  abstract getType(): FilterType;
+
+  abstract getName(): string;
+
+  abstract getDescription(): string;
 
   protected stddev(arr: number[]): number {
     const arr_mean = this.mean(arr);

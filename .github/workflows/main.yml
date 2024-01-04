@@ -35,8 +35,8 @@ jobs:
         run: |
           npm install 
           npm test
-  prettier:
-    name: Prettier Check
+  formatting_and_linting:
+    name: Prettier / svelte Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -57,6 +57,15 @@ jobs:
         if: ${{ failure() }}
         run: | 
           echo "Missing prettier formatting. Please format files using 'npm run prettier' and resubmit!"
+          exit 1
+      - name: Svelte check
+        shell: bash
+        run: npm run check
+      - name: Svelte check report
+        shell: bash
+        if: ${{ failure() }}
+        run: | 
+          echo "Running npm run check found warnings, please resolve them before merging!"
           exit 1
 
   build_and_deploy:

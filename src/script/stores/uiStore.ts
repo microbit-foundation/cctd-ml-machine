@@ -13,13 +13,12 @@ import { t } from '../../i18n';
 import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
-import { gestures } from './Stores';
-
-// TODO: Rename? Split up further?
+import { classifier } from './Stores';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
+// TODO: Do we expect combaitibility to change? Why is it a store?
 export const compatibility = writable<CompatibilityStatus>(checkCompatibility());
 
 export const isBluetoothWarningDialogOpen = writable<boolean>(
@@ -35,12 +34,9 @@ export enum ModelView {
 export const state = writable<{
   isRequestingDevice: DeviceRequestStates;
   isFlashingDevice: boolean;
-  isTesting: boolean;
   isRecording: boolean;
-  isTraining: boolean;
   isInputConnected: boolean;
   isOutputConnected: boolean;
-  isPredicting: boolean;
   offerReconnect: boolean;
   requestDeviceWasCancelled: boolean;
   reconnectState: DeviceRequestStates;
@@ -55,12 +51,9 @@ export const state = writable<{
 }>({
   isRequestingDevice: DeviceRequestStates.NONE,
   isFlashingDevice: false,
-  isTesting: false,
   isRecording: false,
-  isTraining: false,
   isInputConnected: false,
   isOutputConnected: false,
-  isPredicting: false,
   offerReconnect: false,
   requestDeviceWasCancelled: false,
   reconnectState: DeviceRequestStates.NONE,
@@ -106,30 +99,22 @@ export function areActionsAllowed(actionAllowed = true, alertIfNotReady = true):
 function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: string } {
   const currentState = get(state);
 
+  const model = classifier.getModel();
+
   if (currentState.isRecording) return { isReady: false, msg: text('alert.isRecording') };
-  if (currentState.isTesting) return { isReady: false, msg: text('alert.isTesting') };
-  if (currentState.isTraining) return { isReady: false, msg: text('alert.isTraining') };
+  if (model.isTraining()) return { isReady: false, msg: text('alert.isTraining') };
   if (!currentState.isInputConnected && actionAllowed)
     return { isReady: false, msg: text('alert.isNotConnected') };
 
   return { isReady: true, msg: '' };
 }
 
-export const hasSufficientData = (): boolean => {
-  if (!gestures) {
-    return false;
-  }
-  if (gestures.getNumberOfGestures() < 2) {
-    return false;
-  }
-  return !gestures.getGestures().some(gesture => gesture.getRecordings().length < 3);
-};
-
 export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
   buttonA: 0,
   buttonB: 0,
 });
 
+// TODO: Should be in MBSpecs.ts
 export enum MicrobitInteractions {
   A,
   B,

@@ -5,10 +5,6 @@
  -->
 
 <style global windi:preflights:global windi:safelist:global>
-  .textAnimation {
-    animation: 3s textAni ease;
-  }
-
   @keyframes textAni {
     0% {
       opacity: 0;
@@ -26,9 +22,9 @@
 </style>
 
 <script lang="ts">
-  import ConnectionBehaviours from './script/connection-behaviours/ConnectionBehaviours';
-  import InputBehaviour from './script/connection-behaviours/InputBehaviour';
-  import OutputBehaviour from './script/connection-behaviours/OutputBehaviour';
+  import ConnectionBehaviours from './script/microbit-interfacing/connection-behaviours/ConnectionBehaviours';
+  import InputBehaviour from './script/microbit-interfacing/connection-behaviours/InputBehaviour';
+  import OutputBehaviour from './script/microbit-interfacing/connection-behaviours/OutputBehaviour';
   import OverlayView from './views/OverlayView.svelte';
   import SideBarMenuView from './views/SideBarMenuView.svelte';
   import PageContentView from './views/PageContentView.svelte';

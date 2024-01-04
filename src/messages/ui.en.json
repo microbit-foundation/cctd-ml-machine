@@ -132,6 +132,7 @@
   "menu.trainer.trainNewModelButton": "Train a new model",
   "menu.trainer.TrainingFinished": "Training done",
   "menu.trainer.TrainingFinished.body": "Go to the Model-page to examine how well your model works",
+  "menu.trainer.noFilters": "No filters have been selected. You must enable at least 1 filter in order to train a model",
   "menu.trainer.isTrainingModelButton": "Training model",
 
   "menu.model.helpHeading": "Model",

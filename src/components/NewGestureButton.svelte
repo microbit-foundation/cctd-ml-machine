@@ -12,8 +12,8 @@
 
 <script lang="ts">
   import { areActionsAllowed } from '../script/stores/uiStore';
-  import { addGesture } from '../script/stores/mlStore';
   import { t } from '../i18n';
+  import { gestures } from '../script/stores/Stores';
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
 
@@ -21,7 +21,7 @@
     if (!areActionsAllowed(false)) {
       return;
     }
-    addGesture(defaultNewName);
+    gestures.createGesture(defaultNewName);
   }
 </script>
 

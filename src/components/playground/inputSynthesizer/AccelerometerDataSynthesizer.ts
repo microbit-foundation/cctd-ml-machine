@@ -20,6 +20,7 @@ type AccelerometerSynthesizerData = {
   xSpeed: number;
   ySpeed: number;
   zSpeed: number;
+  isActive: boolean;
 };
 
 class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData> {
@@ -27,13 +28,14 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
   private store: Writable<AccelerometerSynthesizerData>;
 
   constructor(private liveData: LiveData<MicrobitAccelerometerData>) {
-    const defaultSpeed = 50;
     this.store = writable({
-      intervalSpeed: defaultSpeed,
-      xSpeed: 1,
-      ySpeed: 1,
-      zSpeed: 1,
+      intervalSpeed: this.getInitialIntervalValue(),
+      xSpeed: this.getInitialSineSpeed(),
+      ySpeed: this.getInitialSineSpeed() + 1 / 1000,
+      zSpeed: this.getInitialSineSpeed() + 2 / 1000,
+      isActive: true,
     });
+    this.updateInterval();
   }
 
   public subscribe(
@@ -52,12 +54,36 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
     }, get(this.store).intervalSpeed);
   }
 
+  public getMinIntervalValue() {
+    return 5;
+  }
+
+  public getMaxIntervalValue() {
+    return 300;
+  }
+
+  public getInitialIntervalValue() {
+    return this.getMinIntervalValue();
+  }
+
+  public getInitialSineSpeed() {
+    return this.getMinSineSpeed();
+  }
+
+  public getMinSineSpeed() {
+    return 0;
+  }
+
+  public getMaxSineSpeed() {
+    return 100;
+  }
+
   public generateData() {
     const val = new Date().getTime();
     this.liveData.put({
-      accelX: Math.sin(val * get(this.store).xSpeed),
-      accelY: Math.sin(val * get(this.store).ySpeed),
-      accelZ: Math.sin(val * get(this.store).zSpeed),
+      x: Math.sin(val * get(this.store).xSpeed),
+      y: Math.sin(val * get(this.store).ySpeed),
+      z: Math.sin(val * get(this.store).zSpeed),
     });
   }
 
@@ -88,6 +114,26 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
       return updater;
     });
     this.updateInterval();
+  }
+
+  public stop(): void {
+    clearInterval(this.interval);
+    this.store.update(updater => {
+      updater.isActive = false;
+      return updater;
+    });
+  }
+
+  public start(): void {
+    this.updateInterval();
+    this.store.update(updater => {
+      updater.isActive = true;
+      return updater;
+    });
+  }
+
+  public isActive(): boolean {
+    return get(this).isActive;
   }
 }
 

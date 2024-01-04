@@ -6,30 +6,31 @@
 
 <script lang="ts">
   import Information from '../../components/information/Information.svelte';
-  import { FilterType, determineFilter } from '../../script/datafunctions';
-  import { settings, trainingStatus, TrainingStatus } from '../../script/stores/mlStore';
+  import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
+  import { classifier } from '../../script/stores/Stores';
   import D3Plot from './D3Plot.svelte';
 
-  export let filter: FilterType;
+  export let filterType: FilterType;
   export let openFilterInspector: (filter: FilterType, fullScreen: boolean) => void;
   export let fullScreen = false;
 
   const width = () => (fullScreen ? '1100px' : '550px');
-  const filterStrategy = determineFilter(filter);
-  const filterText = filterStrategy.getText();
+  const filter = FilterTypes.createFilter(filterType);
+  const filterName = filter.getName();
+  const filterDescription = filter.getDescription();
 
-  $: isActive = $settings.includedFilters.has(filter);
+  const filters = classifier.getFilters();
+
+  $: isActive = $filters
+    .map(currentFilter => currentFilter.getType())
+    .includes(filterType);
 
   const toggleFilter = () => {
-    trainingStatus.set(TrainingStatus.Untrained);
-    settings.update(s => {
-      if (s.includedFilters.has(filter)) {
-        s.includedFilters.delete(filter);
-      } else {
-        s.includedFilters.add(filter);
-      }
-      return s;
-    });
+    if (filters.has(filterType)) {
+      filters.remove(filterType);
+    } else {
+      filters.add(filterType);
+    }
   };
 </script>
 
@@ -49,12 +50,12 @@
     <div class="flex flex-row relative">
       <div class="absolute">
         <Information
-          bodyText={filterText.description}
-          titleText={filterText.name}
+          bodyText={filterDescription}
+          titleText={filterName}
           isLightTheme={false} />
       </div>
       <h2 class="mb-2 mr-1 mt-3 ml-8 line-through" class:line-through={false}>
-        {filterText.name}
+        {filterName}
       </h2>
     </div>
     <!-- Buttons -->
@@ -64,7 +65,7 @@
       <div
         class="mr-2 mt-2 cursor-pointer"
         on:click|stopPropagation={() => {
-          openFilterInspector(filter, !fullScreen);
+          openFilterInspector(filterType, !fullScreen);
         }}>
         <i
           class="fa-lg transition ease {fullScreen
@@ -86,7 +87,7 @@
     </div>
   </div>
   <div class="w-full h-min px-5 pb-4">
-    <D3Plot {filter} {fullScreen} />
+    <D3Plot {filterType} {fullScreen} />
   </div>
   <div
     class="

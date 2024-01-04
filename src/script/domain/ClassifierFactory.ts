@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Writable } from 'svelte/store';
+import { Readable, Writable } from 'svelte/store';
 import { RecordingData } from '../stores/mlStore';
 import Classifier from './Classifier';
 import Filters from './Filters';
@@ -15,18 +15,27 @@ import { TrainerConsumer } from '../repository/ClassifierRepository';
 
 class ClassifierFactory {
   public buildClassifier(
-    model: Writable<MLModel>,
+    model: Writable<MLModel | undefined>,
     trainerConsumer: TrainerConsumer,
-    filters: Writable<Filters>,
-    gestures: Gesture[],
+    filters: Filters,
+    gestures: Readable<Gesture[]>,
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ): Classifier {
-    return new Classifier(
+    const classifier = new Classifier(
       this.buildModel(trainerConsumer, model),
       filters,
       gestures,
       confidenceSetter,
     );
+    filters.subscribe(() => {
+      // Filters has changed
+      classifier.getModel().markAsUntrained();
+    });
+    gestures.subscribe(() => {
+      // Gesture was removed or added (doesn't detect if number of recordings change)
+      classifier.getModel().markAsUntrained();
+    });
+    return classifier;
   }
 
   public buildTrainingData(gestures: Gesture[], filters: Filters): TrainingData {
@@ -43,7 +52,7 @@ class ClassifierFactory {
 
   private buildModel(
     trainerConsumer: TrainerConsumer,
-    mlModel: Writable<MLModel>,
+    mlModel: Writable<MLModel | undefined>,
   ): Model {
     const model = new Model(trainerConsumer, mlModel);
     return model;

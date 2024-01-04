@@ -15,6 +15,7 @@ import {
   writable,
 } from 'svelte/store';
 import ClassifierRepository from './ClassifierRepository';
+import { classifier } from '../stores/Stores';
 
 class GestureRepository implements Readable<Gesture[]> {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
@@ -97,15 +98,20 @@ class GestureRepository implements Readable<Gesture[]> {
     };
   }
 
-  private getPersistedGestures() {
+  private getPersistedGestures(): Gesture[] {
     const resultFromFetch: PersistantGestureData[] = this.getPersistedData();
     return resultFromFetch.map(persistedData => this.buildGesture(persistedData));
   }
 
   private buildGesture(persistedData: PersistantGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
-
-    return new Gesture(store, this.modelRepository.getGestureConfidence(get(store).ID));
+    // TODO: The classifier object should be accessed through the repository, not the store. This cannot be done until the classifier is cached.
+    const onRecordingsChanged = () => classifier.getModel().markAsUntrained();
+    return new Gesture(
+      store,
+      this.modelRepository.getGestureConfidence(get(store).ID),
+      onRecordingsChanged,
+    );
   }
 
   private getPersistedData(): PersistantGestureData[] {

@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import CookieManager from '../../script/CookieManager';
-  import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
+  import ConnectionBehaviours from '../../script/microbit-interfacing/connection-behaviours/ConnectionBehaviours';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import Gesture from '../../script/domain/Gesture';
   import OutputGestureStack from './OutputGestureStack.svelte';

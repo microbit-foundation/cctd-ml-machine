@@ -8,18 +8,18 @@ import LiveData from '../domain/LiveData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 
 export type MicrobitAccelerometerData = {
-  accelX: number;
-  accelY: number;
-  accelZ: number;
+  x: number;
+  y: number;
+  z: number;
 };
 
 class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerData> {
   private store: Writable<MicrobitAccelerometerData>;
   constructor(private dataBuffer: LiveDataBuffer<MicrobitAccelerometerData>) {
     this.store = writable({
-      accelX: 0,
-      accelY: 0,
-      accelZ: 0,
+      x: 0,
+      y: 0,
+      z: 0,
     });
   }
 

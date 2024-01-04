@@ -3,9 +3,22 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import { get } from 'svelte/store';
+import { FilterType } from '../domain/FilterTypes';
 import FilterWithMaths from './FilterWithMaths';
+import { t } from 'svelte-i18n';
 
 class PeaksFilter extends FilterWithMaths {
+  public getName(): string {
+    return get(t)('content.filters.peaks.title');
+  }
+  public getDescription(): string {
+    return get(t)('content.filters.peaks.description');
+  }
+  public getType(): FilterType {
+    return FilterType.PEAKS;
+  }
+
   public filter(inValues: number[]): number {
     const lag = 5;
     const threshold = 3.5;

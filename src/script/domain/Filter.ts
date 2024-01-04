@@ -3,8 +3,16 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import { FilterType } from './FilterTypes';
+
 interface Filter {
   filter(inValues: number[]): number;
+
+  getType(): FilterType;
+
+  getName(): string;
+
+  getDescription(): string;
 }
 
 export default Filter;

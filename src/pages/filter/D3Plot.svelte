@@ -8,17 +8,14 @@
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
-  import {
-    FilterType,
-    determineFilter,
-    getFilterLimits,
-  } from '../../script/datafunctions';
-  import { GestureData } from '../../script/stores/mlStore';
   import { state } from '../../script/stores/uiStore';
   import { getPrevData } from '../../script/stores/mlStore';
-  import { gestures } from '../../script/stores/Stores';
+  import { gestures, liveAccelerometerData } from '../../script/stores/Stores';
+  import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
+  import FilterGraphLimits from '../../script/utils/FilterLimits';
+  import { GestureData } from '../../script/domain/Gesture';
 
-  export let filter: FilterType;
+  export let filterType: FilterType;
   export let fullScreen: boolean = false;
 
   $: showLive = $state.isInputConnected;
@@ -36,8 +33,8 @@
 
   // Data
   const uniqueLiveDataID = 983095438740;
-  const filterStrategy = determineFilter(filter);
-  const filterFunction = (data: number[]) => filterStrategy.computeOutput(data);
+  const filter = FilterTypes.createFilter(filterType);
+  const filterFunction = (data: number[]) => filter.filter(data);
   let color: d3.ScaleOrdinal<string, string> | undefined = undefined;
   let classList: { name: string; id: number }[] = [];
   const recordings = createDataRepresentation(); // side effect: updates classList and color
@@ -52,7 +49,7 @@
 
   // Scalars to built graph and insert data in graph
   const dimensions: Axis[] = ['x', 'y', 'z'];
-  const { min, max } = getFilterLimits(filter);
+  const { min, max } = FilterGraphLimits.getFilterLimits(filter);
   const xScalar: d3.ScalePoint<string> = d3
     .scalePoint()
     .range([15, width])
@@ -64,7 +61,7 @@
   onMount(() => {
     // append the svg object for plot
     plot = d3
-      .select('#parallel-plot-' + filter)
+      .select('#parallel-plot-' + filterType)
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -307,5 +304,5 @@
       </div>
     {/each}
   </div>
-  <div id={'parallel-plot-' + filter} class="relative" />
+  <div id={'parallel-plot-' + filterType} class="relative" />
 </div>

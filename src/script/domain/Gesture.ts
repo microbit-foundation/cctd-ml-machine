@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { Readable, Subscriber, Unsubscriber, Writable, derived, get } from 'svelte/store';
-import { GestureData, GestureOutput, RecordingData, SoundData } from '../stores/mlStore';
+import { RecordingData } from '../stores/mlStore';
 import { PersistantGestureData } from './Gestures';
 import { PinTurnOnState } from '../../components/output/PinSelectorUtil';
 import MBSpecs from '../microbit-interfacing/MBSpecs';
@@ -13,12 +13,33 @@ import GestureConfidence from './GestureConfidence';
 
 export type GestureID = number;
 
+export type GestureData = PersistantGestureData & {
+  confidence: {
+    currentConfidence: number;
+    requiredConfidence: number;
+    isConfident: boolean;
+  };
+};
+
+export type GestureOutput = {
+  matrix?: boolean[];
+  sound?: SoundData;
+  outputPin?: { pin: MBSpecs.UsableIOPin; pinState: PinTurnOnState; turnOnTime: number };
+};
+
+export type SoundData = {
+  name: string;
+  id: string;
+  path: string;
+};
+
 class Gesture implements Readable<GestureData> {
   private store: Readable<GestureData>;
 
   constructor(
     private persistedData: Writable<PersistantGestureData>,
     private gestureConfidence: GestureConfidence,
+    private onRecordingsChanged: () => void,
   ) {
     this.store = this.deriveStore();
   }
@@ -54,6 +75,7 @@ class Gesture implements Readable<GestureData> {
   }
 
   public addRecording(recording: RecordingData) {
+    this.onRecordingsChanged();
     this.persistedData.update(newVal => {
       newVal.recordings = [recording, ...newVal.recordings];
       return newVal;
@@ -61,6 +83,7 @@ class Gesture implements Readable<GestureData> {
   }
 
   public removeRecording(recordingId: number) {
+    this.onRecordingsChanged();
     this.persistedData.update(newVal => {
       newVal.recordings = newVal.recordings.filter(
         recording => recording.ID !== recordingId,

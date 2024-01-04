@@ -5,49 +5,24 @@
  -->
 
 <script lang="ts">
-  import { hasSufficientData, state } from '../../script/stores/uiStore';
-  import { TrainingStatus, trainingStatus } from '../../script/stores/mlStore';
+  import { state } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
-  import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
-  import { slide } from 'svelte/transition';
-  import TrainingButton from './TrainingButton.svelte';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import StandardButton from '../../components/StandardButton.svelte';
   import { Paths, navigate } from '../../router/paths';
-  import CookieManager from '../../script/CookieManager';
+  import TrainingFailedDialog from './TrainingFailedDialog.svelte';
+  import TrainModelButton from './TrainModelButton.svelte';
+  import { classifier, gestures } from '../../script/stores/Stores';
 
-  const sufficientData = hasSufficientData();
+  const model = classifier.getModel();
 
-  let isFailedTrainingDialogOpen = false;
+  const filters = classifier.getFilters();
 
-  $: {
-    if ($trainingStatus === TrainingStatus.Failure) {
-      isFailedTrainingDialogOpen = true;
-      trainingStatus.update(() => TrainingStatus.Untrained);
-    }
-  }
+  const sufficientData = gestures.hasSufficientData();
 </script>
 
-<StandardDialog
-  isOpen={isFailedTrainingDialogOpen}
-  onClose={() => (isFailedTrainingDialogOpen = false)}>
-  <div
-    class="justify-center items-center content-center w-150 bg-white m-auto"
-    transition:slide>
-    <div>
-      <p class="text-warning font-bold text-center text-xl mb-5">
-        {$t('content.trainer.failure.header')}
-      </p>
-      <p class="mb-3">
-        {$t('content.trainer.failure.body')}
-      </p>
-      <p class="font-bold">
-        {$t('content.trainer.failure.todo')}
-      </p>
-    </div>
-  </div>
-</StandardDialog>
+<TrainingFailedDialog />
 <div class="flex flex-col h-full">
   <ControlBar>
     <StandardButton
@@ -73,7 +48,7 @@
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
       </div>
-    {:else if $state.isTraining}
+    {:else if $model.isTraining}
       <div class="w-3/4 text-primarytext">
         <div class="ml-auto mr-auto flex center-items justify-center">
           <i
@@ -85,7 +60,7 @@
       </div>
     {:else}
       <div class="w-3/4 text-primarytext">
-        {#if $state.isPredicting}
+        {#if $model.isTrained}
           <p class="bold text-3xl bold mt-10">
             {$t('menu.trainer.TrainingFinished')}
           </p>
@@ -93,13 +68,21 @@
             {$t('menu.trainer.TrainingFinished.body')}
           </p>
         {/if}
-        <div class="w-full pt-5 text-white pb-5">
-          <TrainingButton />
-        </div>
+        {#if $filters.length == 0}
+          <p class="bold text-xl bold mt-10">
+            {$t('menu.trainer.noFilters')}
+          </p>
+        {:else}
+          <div class="w-full pt-5 text-white pb-5">
+            <TrainModelButton />
+          </div>
+        {/if}
       </div>
     {/if}
     {#if !$state.isInputConnected}
-      <PleaseConnectFirst />
+      <div class="mt-10">
+        <PleaseConnectFirst />
+      </div>
     {/if}
   </div>
 </div>

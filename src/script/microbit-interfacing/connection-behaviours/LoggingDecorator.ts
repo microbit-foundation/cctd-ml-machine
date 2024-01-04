@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import MicrobitBluetooth from '../microbit-interfacing/MicrobitBluetooth';
-import MBSpecs from '../microbit-interfacing/MBSpecs';
+import MicrobitBluetooth from '../MicrobitBluetooth';
+import MBSpecs from '../MBSpecs';
 import type ConnectionBehaviour from './ConnectionBehaviour';
-import Environment from '../Environment';
+import Environment from '../../Environment';
 
 /**
  * Used for logging / Decorator pattern

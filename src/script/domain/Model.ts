@@ -8,28 +8,41 @@ import {
   Subscriber,
   Unsubscriber,
   Writable,
+  derived,
   get,
   writable,
 } from 'svelte/store';
-import { TrainingStatus } from '../stores/mlStore';
 import MLModel from './MLModel';
 import { TrainerConsumer } from '../repository/ClassifierRepository';
 import ModelTrainer from './ModelTrainer';
+
+export enum TrainingStatus {
+  Untrained,
+  InProgress,
+  Success,
+  Failure,
+}
 
 export enum ModelType {
   LAYERS,
 }
 
-export type ModelData = {
+type BaseModelData = {
   trainingStatus: TrainingStatus;
 };
 
+export type ModelData = {
+  isTraining: boolean;
+  isTrained: boolean;
+  hasModel: boolean;
+} & BaseModelData;
+
 class Model implements Readable<ModelData> {
-  private modelData: Writable<ModelData>;
+  private modelData: Writable<BaseModelData>;
 
   constructor(
     private trainerConsumer: TrainerConsumer,
-    private mlModel: Readable<MLModel>,
+    private mlModel: Readable<MLModel | undefined>,
   ) {
     this.modelData = writable({
       trainingStatus: TrainingStatus.Untrained,
@@ -56,19 +69,62 @@ class Model implements Readable<ModelData> {
     }
   }
 
+  /**
+   * Whether a model has been trained successfully.
+   */
   public isTrained(): boolean {
     return get(this.modelData).trainingStatus === TrainingStatus.Success;
   }
 
-  public async predict(inputData: number[]): Promise<number[]> {
-    return await get(this.mlModel).predict(inputData);
+  /**
+   * Returns true if a MLModel is specified. Returns false if MLModel is undefined. Note canPredict may be true, even if isTrained() is false.
+   */
+  public hasModel(): boolean {
+    return get(this.mlModel) !== undefined;
   }
 
-  subscribe(
+  /**
+   * Marks the model as untrained. If model was previously trained, the predict method will still work, because the model doesn't get dropped
+   */
+  public markAsUntrained(): void {
+    this.modelData.update(updater => {
+      updater.trainingStatus = TrainingStatus.Untrained;
+      return updater;
+    });
+  }
+
+  public isTraining(): boolean {
+    return get(this.modelData).trainingStatus === TrainingStatus.InProgress;
+  }
+
+  /**
+   * Manually perform a prediction using an array of numbers as input values. Returns an array of confidences with size equivalent to the number of gestures.
+   *
+   * Use if you have to, but see `classifier.classify()` first
+   */
+  public async predict(inputData: number[]): Promise<number[]> {
+    const mlModel = get(this.mlModel);
+    if (!mlModel) {
+      throw new Error('Cannot predict, no MLModel has been specified');
+    }
+    return await mlModel.predict(inputData);
+  }
+
+  public subscribe(
     run: Subscriber<ModelData>,
     invalidate?: ((value?: ModelData | undefined) => void) | undefined,
   ): Unsubscriber {
-    return this.modelData.subscribe(run, invalidate);
+    const derivedStore = derived([this.modelData, this.mlModel], stores => {
+      const inputStore = stores[0];
+      const mlModelStore = stores[1];
+      return {
+        trainingStatus: inputStore.trainingStatus,
+        isTraining: inputStore.trainingStatus === TrainingStatus.InProgress,
+        hasModel: mlModelStore !== undefined,
+        isTrained: inputStore.trainingStatus === TrainingStatus.Success,
+      };
+    });
+    return derivedStore.subscribe(run, invalidate);
   }
 }
 

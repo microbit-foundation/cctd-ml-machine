@@ -8,6 +8,7 @@
   input[type='range'][orient='vertical'] {
     writing-mode: bt-lr; /* IE */
     -webkit-appearance: slider-vertical; /* WebKit */
+    appearance: slider-vertical;
     width: 20px;
     background: #13bba4;
   }
@@ -16,12 +17,6 @@
 <script lang="ts">
   // IMPORT AND DEFAULTS
   import OutputMatrix from './OutputMatrix.svelte';
-  import {
-    settings,
-    updateGestureSoundOutput,
-    type SoundData,
-    updateGesturePinOutput,
-  } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import OutputSoundSelector from './OutputSoundSelector.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
@@ -33,7 +28,8 @@
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import Gesture from '../../script/domain/Gesture';
+  import Gesture, { SoundData } from '../../script/domain/Gesture';
+  import { gestures } from '../../script/stores/Stores';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -65,7 +61,7 @@
     requiredConfidence: number,
   ): TriggerAction => {
     let isConfident = requiredConfidence <= confidence;
-    if ((!lastWasTriggered || !$settings.automaticClassification) && isConfident) {
+    if (!lastWasTriggered && isConfident) {
       return 'turnOn';
     }
     if (lastWasTriggered && !isConfident) {
@@ -128,7 +124,7 @@
 
   function onSoundSelected(sound: SoundData | undefined): void {
     selectedSound = sound;
-    updateGestureSoundOutput($gesture.ID, sound);
+    gestures.getGesture($gesture.ID).setSoundOutput(sound);
     onUserInteraction();
   }
 
@@ -154,7 +150,7 @@
     }
     selectedPin = selected;
     refreshAfterChange();
-    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
+    gestures.getGesture($gesture.ID).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
   };
 
   const triggerComponents = () =>
@@ -169,7 +165,7 @@
     turnOnState = state.turnOnState;
     turnOnTime = state.turnOnTime;
     refreshAfterChange();
-    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
+    gestures.getGesture($gesture.ID).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
     if (wasTriggered) {
       setOutputPin(true);
     }

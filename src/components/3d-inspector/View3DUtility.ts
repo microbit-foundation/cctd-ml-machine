@@ -135,6 +135,7 @@ export type Bars = {
 };
 
 export type Vector3 = {
+  // TODO: do we need Vector3?
   x: number;
   y: number;
   z: number;

@@ -18,5 +18,6 @@
   };
 </script>
 
-<button class="border-1 p-2 m-1" on:click={trainModelButtonClicked}
-  >train KNN model!</button>
+<button class="border-1 p-2 m-1" on:click={trainModelButtonClicked}>
+  train KNN model!
+</button>

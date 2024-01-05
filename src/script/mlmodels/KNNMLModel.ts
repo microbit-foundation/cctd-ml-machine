@@ -8,7 +8,10 @@ import MLModel from '../domain/MLModel';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
 
 class KNNMLModel implements MLModel {
-  constructor(private model: knnClassifier.KNNClassifier, private k: number) {}
+  constructor(
+    private model: knnClassifier.KNNClassifier,
+    private k: number,
+  ) {}
   public async predict(filteredData: number[]): Promise<number[]> {
     const inputTensor = tensor([filteredData]);
 

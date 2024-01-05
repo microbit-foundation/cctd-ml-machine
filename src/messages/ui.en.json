@@ -60,6 +60,7 @@
   "content.trainer.failure.header": "Training failed",
   "content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data samples for different actions are too similar, this can result in issues in the training process.",
   "content.trainer.failure.todo": "Return to the Add data page and change your data.",
+  "content.trainer.retrain.title": "Status: You've collected new data and can retrain the model.",
 
   "content.model.trainModelFirstHeading": "Test model",
   "content.model.imageAlt": "test model",

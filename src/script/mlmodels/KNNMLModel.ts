@@ -8,13 +8,13 @@ import MLModel from '../domain/MLModel';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
 
 class KNNMLModel implements MLModel {
-  constructor(private model: knnClassifier.KNNClassifier) {}
+  constructor(private model: knnClassifier.KNNClassifier, private k: number) {}
   public async predict(filteredData: number[]): Promise<number[]> {
     const inputTensor = tensor([filteredData]);
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-      const prediction = await this.model.predictClass(inputTensor);
+      const prediction = await this.model.predictClass(inputTensor, this.k);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const classes = Object.getOwnPropertyNames(prediction.confidences);
       const confidences: number[] = [];

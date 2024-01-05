@@ -12,8 +12,8 @@
   const model: Model = classifier.getModel();
   const trainModelButtonClicked = () => {
     playgroundContext.addMessage('training model...');
-    model.train(new KNNModelTrainer()).then(() => {
-      playgroundContext.addMessage('Finished training!');
+    model.train(new KNNModelTrainer(10)).then(() => {
+      playgroundContext.addMessage('Finished training a KNN model (k=10)!');
     });
   };
 </script>

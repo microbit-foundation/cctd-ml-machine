@@ -8,7 +8,11 @@ import KNNMLModel from './KNNMLModel';
 import * as tf from '@tensorflow/tfjs';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
 
+/**
+ * Trains a K-Nearest Neighbour model
+ */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
+    constructor(private k: number) { }
   public trainModel(trainingData: TrainingData): Promise<KNNMLModel> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     const knn: knnClassifier.KNNClassifier = knnClassifier.create();
@@ -21,7 +25,7 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
       });
     });
 
-    return Promise.resolve(new KNNMLModel(knn));
+    return Promise.resolve(new KNNMLModel(knn, this.k));
   }
 }
 

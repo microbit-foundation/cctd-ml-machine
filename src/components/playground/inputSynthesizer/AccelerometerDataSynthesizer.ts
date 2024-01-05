@@ -33,9 +33,8 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
       xSpeed: this.getInitialSineSpeed(),
       ySpeed: this.getInitialSineSpeed() + 1 / 1000,
       zSpeed: this.getInitialSineSpeed() + 2 / 1000,
-      isActive: true,
+      isActive: false,
     });
-    this.updateInterval();
   }
 
   public subscribe(

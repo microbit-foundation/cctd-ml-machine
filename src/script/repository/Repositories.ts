@@ -3,11 +3,11 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import GestureRepository from './GestureRepository';
+import LocalStorageGestureRepository from './LocalStorageGestureRepository';
 import ClassifierRepository from './ClassifierRepository';
 
 class Repositories {
-  private gestureRepository: GestureRepository;
+  private gestureRepository: LocalStorageGestureRepository;
 
   private classifierRepository: ClassifierRepository;
 
@@ -20,7 +20,7 @@ class Repositories {
     }
     Repositories.instance = this;
     this.classifierRepository = new ClassifierRepository();
-    this.gestureRepository = new GestureRepository(this.classifierRepository);
+    this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }
 
   public static getInstance() {

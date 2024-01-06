@@ -7,7 +7,6 @@ import { PersistantGestureData } from '../domain/Gestures';
 import Gesture from '../domain/Gesture';
 import ControlledStorage from '../ControlledStorage';
 import {
-  Readable,
   Subscriber,
   Unsubscriber,
   Writable,
@@ -16,17 +15,18 @@ import {
 } from 'svelte/store';
 import ClassifierRepository from './ClassifierRepository';
 import { classifier } from '../stores/Stores';
+import GestureRepository from '../domain/GestureRepository';
 
-class GestureRepository implements Readable<Gesture[]> {
+class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private static gestureStore: Writable<Gesture[]>;
   constructor(private modelRepository: ClassifierRepository) {
-    GestureRepository.gestureStore = writable([]);
-    GestureRepository.gestureStore.set(this.getPersistedGestures());
+    LocalStorageGestureRepository.gestureStore = writable([]);
+    LocalStorageGestureRepository.gestureStore.set(this.getPersistedGestures());
   }
 
-  public getGesture(gestureId: number) {
-    const gestures = get(GestureRepository.gestureStore);
+  public getGesture(gestureId: number): Gesture {
+    const gestures = get(LocalStorageGestureRepository.gestureStore);
     const gestureIndex = gestures.findIndex(gesture => gesture.getId() === gestureId);
     if (gestureIndex === -1) {
       throw new Error(`Could not find gesture with id '${gestureId}'`);
@@ -38,17 +38,17 @@ class GestureRepository implements Readable<Gesture[]> {
     run: Subscriber<Gesture[]>,
     invalidate?: ((value?: Gesture[] | undefined) => void) | undefined,
   ): Unsubscriber {
-    return GestureRepository.gestureStore.subscribe(run, invalidate);
+    return LocalStorageGestureRepository.gestureStore.subscribe(run, invalidate);
   }
 
   public clearGestures(): void {
-    GestureRepository.gestureStore.set([]);
+    LocalStorageGestureRepository.gestureStore.set([]);
     this.saveCurrentGestures();
   }
 
   public addGesture(gestureData: PersistantGestureData): Gesture {
     const gesture = this.buildGesture(gestureData);
-    GestureRepository.gestureStore.update(arr => {
+    LocalStorageGestureRepository.gestureStore.update(arr => {
       arr.push(gesture);
       return arr;
     });
@@ -57,7 +57,7 @@ class GestureRepository implements Readable<Gesture[]> {
   }
 
   public removeGesture(gestureId: number) {
-    GestureRepository.gestureStore.update(arr => {
+    LocalStorageGestureRepository.gestureStore.update(arr => {
       return arr.filter(gesture => gesture.getId() !== gestureId);
     });
     this.saveCurrentGestures();
@@ -72,19 +72,19 @@ class GestureRepository implements Readable<Gesture[]> {
       subscribe: store.subscribe,
       set: val => {
         store.set(val);
-        GestureRepository.gestureStore.update(val => val);
+        LocalStorageGestureRepository.gestureStore.update(val => val);
         this.saveCurrentGestures();
       },
       update: updater => {
         store.update(updater);
-        GestureRepository.gestureStore.update(val => val);
+        LocalStorageGestureRepository.gestureStore.update(val => val);
         this.saveCurrentGestures();
       },
     };
   }
 
   private saveCurrentGestures() {
-    const gestures = get(GestureRepository.gestureStore);
+    const gestures = get(LocalStorageGestureRepository.gestureStore);
     const data = gestures.map(gesture => this.getPersistantValues(gesture));
     ControlledStorage.set<PersistantGestureData[]>(this.LOCAL_STORAGE_KEY, data);
   }
@@ -123,4 +123,4 @@ class GestureRepository implements Readable<Gesture[]> {
   }
 }
 
-export default GestureRepository;
+export default LocalStorageGestureRepository;

@@ -14,7 +14,7 @@ import {
 } from 'svelte/store';
 import { RecordingData } from '../stores/mlStore';
 import Gesture, { GestureData, GestureID, GestureOutput } from './Gesture';
-import GestureRepository from '../repository/GestureRepository';
+import LocalStorageGestureRepository from '../repository/LocalStorageGestureRepository';
 import StaticConfiguration from '../../StaticConfiguration';
 
 export type PersistantGestureData = {
@@ -27,9 +27,9 @@ export type PersistantGestureData = {
 
 class Gestures implements Readable<GestureData[]> {
   private static subscribableGestures: Writable<Gesture[]>;
-  private repository: GestureRepository;
+  private repository: LocalStorageGestureRepository;
 
-  constructor(repository: GestureRepository) {
+  constructor(repository: LocalStorageGestureRepository) {
     this.repository = repository;
     Gestures.subscribableGestures = writable();
     this.repository.subscribe(storeArray => {

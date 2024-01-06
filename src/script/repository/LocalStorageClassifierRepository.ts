@@ -88,12 +88,15 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
 
   private getFilters(): Writable<Filter[]> {
     // Create and fetch a persistant store
-    const derivedStore = derived([LocalStorageClassifierRepository.persistedFilters], stores => {
-      const persistedFilters = stores[0];
-      return persistedFilters.map(persistedFilter =>
-        FilterTypes.createFilter(persistedFilter),
-      );
-    });
+    const derivedStore = derived(
+      [LocalStorageClassifierRepository.persistedFilters],
+      stores => {
+        const persistedFilters = stores[0];
+        return persistedFilters.map(persistedFilter =>
+          FilterTypes.createFilter(persistedFilter),
+        );
+      },
+    );
     // Convert a store of type 'FilterType' to type 'filter'.
     return {
       subscribe: derivedStore.subscribe,
@@ -109,13 +112,16 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
   }
 
   public getGestureConfidence(gestureId: number): GestureConfidence {
-    const derivedConfidence = derived([LocalStorageClassifierRepository.confidences], stores => {
-      const confidenceStore = stores[0];
-      if (confidenceStore.has(gestureId)) {
-        return confidenceStore.get(gestureId) as number;
-      }
-      return 0;
-    });
+    const derivedConfidence = derived(
+      [LocalStorageClassifierRepository.confidences],
+      stores => {
+        const confidenceStore = stores[0];
+        if (confidenceStore.has(gestureId)) {
+          return confidenceStore.get(gestureId) as number;
+        }
+        return 0;
+      },
+    );
     return new GestureConfidence(
       StaticConfiguration.defaultRequiredConfidence,
       derivedConfidence,

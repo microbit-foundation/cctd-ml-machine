@@ -14,7 +14,6 @@ import {
 } from 'svelte/store';
 import { RecordingData } from '../stores/mlStore';
 import Gesture, { GestureData, GestureID, GestureOutput } from './Gesture';
-import LocalStorageGestureRepository from '../repository/LocalStorageGestureRepository';
 import StaticConfiguration from '../../StaticConfiguration';
 import GestureRepository from './GestureRepository';
 

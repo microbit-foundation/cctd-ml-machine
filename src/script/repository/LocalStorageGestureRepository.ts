@@ -6,21 +6,15 @@
 import { PersistantGestureData } from '../domain/Gestures';
 import Gesture from '../domain/Gesture';
 import ControlledStorage from '../ControlledStorage';
-import {
-  Subscriber,
-  Unsubscriber,
-  Writable,
-  get,
-  writable,
-} from 'svelte/store';
-import ClassifierRepository from './ClassifierRepository';
+import { Subscriber, Unsubscriber, Writable, get, writable } from 'svelte/store';
+import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
 import { classifier } from '../stores/Stores';
 import GestureRepository from '../domain/GestureRepository';
 
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private static gestureStore: Writable<Gesture[]>;
-  constructor(private modelRepository: ClassifierRepository) {
+  constructor(private modelRepository: LocalStorageClassifierRepository) {
     LocalStorageGestureRepository.gestureStore = writable([]);
     LocalStorageGestureRepository.gestureStore.set(this.getPersistedGestures());
   }

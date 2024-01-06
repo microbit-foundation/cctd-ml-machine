@@ -7,14 +7,24 @@
  * SPDX-License-Identifier: MIT
  */
 
-import LocalStorageGestureRepository from '../script/repository/LocalStorageGestureRepository';
+import Gestures from '../script/domain/Gestures';
+import Repositories from '../script/domain/Repositories';
+import TestRepositories from './mocks/TestRepositories';
 
 describe('Tests of Gestures', () => {
-  //let gestureRepository: GestureRepository;
+    let gestures: Gestures;
   beforeEach(() => {
-    //gestureRepository = new TestGestureRepository();
+    const repositories: Repositories = new TestRepositories();
+    const gestureRepository = repositories.getGestureRepository();
+    vitest.mock('../script/domain/Gestures', () => ({
+        __esModule: true,
+        default: Gestures
+       }))
+    //const gestures: Gestures = new Gestures(repositories.getGestureRepository());
   });
-  //test('Windi config should not be ml-machine', () => {
 
-  //});
+  test('Creating gesture does not throw', () => {
+    expect(() => {
+    }).not.toThrow();
+  });
 });

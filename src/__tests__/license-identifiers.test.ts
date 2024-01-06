@@ -78,7 +78,7 @@ describe('License identifier tests', () => {
   test(
     'All files should contain license identifier',
     () => {
-      const flatten = directoriesToScan.reduce((acc: any, current) => {
+      const flatten = directoriesToScan.reduce((acc: string[], current) => {
         return acc.concat(flattenDirectory(current));
       }, []);
 

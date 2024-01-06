@@ -1,15 +1,21 @@
-import { Readable } from "svelte/store";
-import Gesture, { GestureID } from "./Gesture";
-import { PersistantGestureData } from "./Gestures";
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+import { Readable } from 'svelte/store';
+import Gesture, { GestureID } from './Gesture';
+import { PersistantGestureData } from './Gestures';
 
 interface GestureRepository extends Readable<Gesture[]> {
-    getGesture(gestureId: GestureID): Gesture;
+  getGesture(gestureId: GestureID): Gesture;
 
-    clearGestures(): void;
+  clearGestures(): void;
 
-    addGesture(gestureData: PersistantGestureData): Gesture;
+  addGesture(gestureData: PersistantGestureData): Gesture;
 
-    removeGesture(gestureId: number): void;
+  removeGesture(gestureId: number): void;
 }
 
 export default GestureRepository;

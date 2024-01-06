@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import Repositories from '../repository/Repositories';
+import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Gestures from '../domain/Gestures';
 import Classifier from '../domain/Classifier';
 import PollingPredictorEngine from '../engine/PollingPredictorEngine';
@@ -13,11 +13,12 @@ import MicrobitAccelerometerLiveData, {
 } from '../livedata/MicrobitAccelerometerData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import StaticConfiguration from '../../StaticConfiguration';
+import Repositories from '../domain/Repositories';
 
-const repositories = new Repositories();
+const repositories: Repositories = new LocalStorageRepositories();
 
 const gestures: Gestures = new Gestures(repositories.getGestureRepository());
-const classifier: Classifier = repositories.getModelRepository().getClassifier();
+const classifier: Classifier = repositories.getClassifierRepository().getClassifier();
 
 const accelerometerDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(
   StaticConfiguration.accelerometerLiveDataBufferSize,

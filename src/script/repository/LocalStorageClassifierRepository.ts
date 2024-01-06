@@ -9,19 +9,20 @@ import GestureConfidence from '../domain/GestureConfidence';
 import MLModel from '../domain/MLModel';
 import ModelTrainer from '../domain/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
-import Repositories from './Repositories';
+import LocalStorageRepositories from './LocalStorageRepositories';
 import Filters from '../domain/Filters';
 import Classifier from '../domain/Classifier';
 import Filter from '../domain/Filter';
 import Gesture, { GestureID } from '../domain/Gesture';
 import FilterTypes, { FilterType } from '../domain/FilterTypes';
 import PersistantWritable from './PersistantWritable';
+import ClassifierRepository from '../domain/ClassifierRepository';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
 ) => Promise<void>;
 
-class ClassifierRepository {
+class LocalStorageClassifierRepository implements ClassifierRepository {
   private static readonly PERSISTANT_FILTERS_KEY = 'filters';
   private static confidences: Writable<Map<GestureID, number>>;
   private static mlModel: Writable<MLModel | undefined>;
@@ -31,24 +32,24 @@ class ClassifierRepository {
 
   constructor() {
     const initialConfidence = new Map<GestureID, number>();
-    ClassifierRepository.confidences = writable(initialConfidence);
-    ClassifierRepository.mlModel = writable(undefined);
-    ClassifierRepository.persistedFilters = new PersistantWritable(
+    LocalStorageClassifierRepository.confidences = writable(initialConfidence);
+    LocalStorageClassifierRepository.mlModel = writable(undefined);
+    LocalStorageClassifierRepository.persistedFilters = new PersistantWritable(
       FilterTypes.toIterable(),
-      ClassifierRepository.PERSISTANT_FILTERS_KEY,
+      LocalStorageClassifierRepository.PERSISTANT_FILTERS_KEY,
     );
-    ClassifierRepository.filters = new Filters(this.getFilters());
+    LocalStorageClassifierRepository.filters = new Filters(this.getFilters());
     this.classifierFactory = new ClassifierFactory();
   }
 
   public getClassifier(): Classifier {
     const gestureRepository: Readable<Gesture[]> =
-      Repositories.getInstance().getGestureRepository();
+      LocalStorageRepositories.getInstance().getGestureRepository();
     // TODO: We should cache this object, as it can function as a singleton. This would improve performance
     const classifier = this.classifierFactory.buildClassifier(
-      ClassifierRepository.mlModel,
+      LocalStorageClassifierRepository.mlModel,
       this.getTrainerConsumer(),
-      ClassifierRepository.filters,
+      LocalStorageClassifierRepository.filters,
       gestureRepository,
       (gestureId: GestureID, confidence: number) => {
         this.setGestureConfidence(gestureId, confidence);
@@ -63,13 +64,14 @@ class ClassifierRepository {
    * See getTrainerConsumer() and getClassifier()
    */
   private async trainModel<T extends MLModel>(trainer: ModelTrainer<T>): Promise<void> {
-    const gestureRepository = Repositories.getInstance().getGestureRepository();
+    const gestureRepository =
+      LocalStorageRepositories.getInstance().getGestureRepository();
     const trainingData = this.classifierFactory.buildTrainingData(
       get(gestureRepository),
-      ClassifierRepository.filters,
+      LocalStorageClassifierRepository.filters,
     );
     const model = await trainer.trainModel(trainingData);
-    ClassifierRepository.mlModel.set(model);
+    LocalStorageClassifierRepository.mlModel.set(model);
   }
 
   private getTrainerConsumer(): TrainerConsumer {
@@ -80,41 +82,47 @@ class ClassifierRepository {
     if (confidence < 0 || confidence > 1) {
       throw new Error('Cannot set gesture confidence. Must be in the range 0.0-1.0');
     }
-    const newConfidences = get(ClassifierRepository.confidences);
+    const newConfidences = get(LocalStorageClassifierRepository.confidences);
     newConfidences.set(gestureId, confidence);
-    ClassifierRepository.confidences.set(newConfidences);
+    LocalStorageClassifierRepository.confidences.set(newConfidences);
   }
 
   private getFilters(): Writable<Filter[]> {
     // Create and fetch a persistant store
-    const derivedStore = derived([ClassifierRepository.persistedFilters], stores => {
-      const persistedFilters = stores[0];
-      return persistedFilters.map(persistedFilter =>
-        FilterTypes.createFilter(persistedFilter),
-      );
-    });
+    const derivedStore = derived(
+      [LocalStorageClassifierRepository.persistedFilters],
+      stores => {
+        const persistedFilters = stores[0];
+        return persistedFilters.map(persistedFilter =>
+          FilterTypes.createFilter(persistedFilter),
+        );
+      },
+    );
     // Convert a store of type 'FilterType' to type 'filter'.
     return {
       subscribe: derivedStore.subscribe,
       set: newFiltersArray =>
-        ClassifierRepository.persistedFilters.set(
+        LocalStorageClassifierRepository.persistedFilters.set(
           newFiltersArray.map(newFilter => newFilter.getType()),
         ),
       update: updater => {
         const updatedStore = updater(get(derivedStore)).map(filter => filter.getType());
-        ClassifierRepository.persistedFilters.set(updatedStore);
+        LocalStorageClassifierRepository.persistedFilters.set(updatedStore);
       },
     };
   }
 
   public getGestureConfidence(gestureId: number): GestureConfidence {
-    const derivedConfidence = derived([ClassifierRepository.confidences], stores => {
-      const confidenceStore = stores[0];
-      if (confidenceStore.has(gestureId)) {
-        return confidenceStore.get(gestureId) as number;
-      }
-      return 0;
-    });
+    const derivedConfidence = derived(
+      [LocalStorageClassifierRepository.confidences],
+      stores => {
+        const confidenceStore = stores[0];
+        if (confidenceStore.has(gestureId)) {
+          return confidenceStore.get(gestureId) as number;
+        }
+        return 0;
+      },
+    );
     return new GestureConfidence(
       StaticConfiguration.defaultRequiredConfidence,
       derivedConfidence,
@@ -122,4 +130,4 @@ class ClassifierRepository {
   }
 }
 
-export default ClassifierRepository;
+export default LocalStorageClassifierRepository;

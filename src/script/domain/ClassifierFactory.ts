@@ -11,7 +11,7 @@ import Gesture, { GestureID } from './Gesture';
 import Model from './Model';
 import { TrainingData } from './ModelTrainer';
 import MLModel from './MLModel';
-import { TrainerConsumer } from '../repository/ClassifierRepository';
+import { TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
 
 class ClassifierFactory {
   public buildClassifier(

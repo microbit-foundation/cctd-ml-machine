@@ -3,13 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import GestureRepository from './GestureRepository';
-import ClassifierRepository from './ClassifierRepository';
+import LocalStorageGestureRepository from './LocalStorageGestureRepository';
+import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
 
 class Repositories {
-  private gestureRepository: GestureRepository;
+  private gestureRepository: LocalStorageGestureRepository;
 
-  private classifierRepository: ClassifierRepository;
+  private classifierRepository: LocalStorageClassifierRepository;
 
   private static instance: Repositories;
 
@@ -19,8 +19,8 @@ class Repositories {
       throw new Error('Could not instantiate repository. It is already instantiated!');
     }
     Repositories.instance = this;
-    this.classifierRepository = new ClassifierRepository();
-    this.gestureRepository = new GestureRepository(this.classifierRepository);
+    this.classifierRepository = new LocalStorageClassifierRepository();
+    this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }
 
   public static getInstance() {

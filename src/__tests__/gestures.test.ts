@@ -7,19 +7,19 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { gestures } from "../script/stores/Stores";
+import { gestures } from '../script/stores/Stores';
 
 describe('Tests of Gestures', () => {
   test('Creating gesture does not throw', () => {
     expect(() => {
-        gestures.createGesture("test");
+      gestures.createGesture('test');
     }).not.toThrow();
   });
 
   test('Can get gesture after creation', () => {
-    const gestureName = "test1234"
+    const gestureName = 'test1234';
     const gesture = gestures.createGesture(gestureName);
     const fetchedGesture = gestures.getGesture(gesture.getId());
     expect(gestureName).toBe(fetchedGesture.getName());
-  })
+  });
 });

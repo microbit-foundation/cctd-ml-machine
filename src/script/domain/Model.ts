@@ -13,7 +13,7 @@ import {
   writable,
 } from 'svelte/store';
 import MLModel from './MLModel';
-import { TrainerConsumer } from '../repository/ClassifierRepository';
+import { TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
 import ModelTrainer from './ModelTrainer';
 
 export enum TrainingStatus {

@@ -5,20 +5,21 @@
  */
 import LocalStorageGestureRepository from './LocalStorageGestureRepository';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
+import Repositories from '../domain/Repositories';
 
-class Repositories {
+class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;
 
   private classifierRepository: LocalStorageClassifierRepository;
 
-  private static instance: Repositories;
+  private static instance: LocalStorageRepositories;
 
   constructor() {
-    if (Repositories.instance) {
+    if (LocalStorageRepositories.instance) {
       // Singleton
       throw new Error('Could not instantiate repository. It is already instantiated!');
     }
-    Repositories.instance = this;
+    LocalStorageRepositories.instance = this;
     this.classifierRepository = new LocalStorageClassifierRepository();
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }
@@ -31,9 +32,9 @@ class Repositories {
     return this.gestureRepository;
   }
 
-  public getModelRepository() {
+  public getClassifierRepository() {
     return this.classifierRepository;
   }
 }
 
-export default Repositories;
+export default LocalStorageRepositories;

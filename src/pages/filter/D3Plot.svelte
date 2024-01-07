@@ -9,11 +9,11 @@
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
   import { state } from '../../script/stores/uiStore';
-  import { RecordingData, getPrevData } from '../../script/stores/mlStore';
   import { gestures, liveAccelerometerData } from '../../script/stores/Stores';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import FilterGraphLimits from '../../script/utils/FilterLimits';
   import { GestureData } from '../../script/domain/stores/gesture/Gesture';
+  import { RecordingData } from '../../script/domain/stores/gesture/Gestures';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
@@ -140,15 +140,15 @@
   }
 
   function createLiveData() {
-    const liveData = getPrevData();
+    const liveData = liveAccelerometerData.getBuffer().getNewestValues(1)[0];
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {
       ID: uniqueLiveDataID,
       gestureClassName: 'live',
       gestureClassID: uniqueLiveDataID,
-      x: filterFunction(liveData.x),
-      y: filterFunction(liveData.y),
-      z: filterFunction(liveData.z),
+      x: filterFunction([liveData!.x]),
+      y: filterFunction([liveData!.y]),
+      z: filterFunction([liveData!.z]),
     };
     return filteredData;
   }

@@ -13,16 +13,23 @@ import {
   writable,
 } from 'svelte/store';
 import Gesture, { GestureData, GestureID, GestureOutput } from './Gesture';
-import { RecordingData } from '../../../stores/mlStore';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import GestureRepository from '../../GestureRepository';
 
 export type PersistantGestureData = {
-  // TODO: Where does this live?
   name: string;
   ID: GestureID;
   recordings: RecordingData[];
   output: GestureOutput;
+};
+
+export type RecordingData = {
+  ID: number;
+  data: {
+    x: number[];
+    y: number[];
+    z: number[];
+  };
 };
 
 class Gestures implements Readable<GestureData[]> {

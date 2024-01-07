@@ -14,7 +14,7 @@
     microbitInteraction,
     MicrobitInteractions,
   } from '../script/stores/uiStore';
-  import { chosenGesture, type RecordingData } from '../script/stores/mlStore';
+  import { chosenGesture } from '../script/stores/mlStore';
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
   import StandardButton from './StandardButton.svelte';
@@ -23,6 +23,7 @@
   import StaticConfiguration from '../StaticConfiguration';
   import { gestures, liveAccelerometerData } from '../script/stores/Stores';
   import Gesture from '../script/domain/stores/gesture/Gesture';
+  import { RecordingData } from '../script/domain/stores/gesture/Gestures';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;

@@ -6,8 +6,8 @@
 
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import type { RecordingData } from '../script/stores/mlStore';
   import RecordingGraph from './graphs/RecordingGraph.svelte';
+  import { RecordingData } from '../script/domain/stores/gesture/Gestures';
 
   // get recording from mother prop
   export let recording: RecordingData;

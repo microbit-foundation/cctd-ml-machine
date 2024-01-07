@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: MIT
  */
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
-import Gestures from '../domain/Gestures';
-import Classifier from '../domain/Classifier';
 import PollingPredictorEngine from '../engine/PollingPredictorEngine';
-import LiveData from '../domain/LiveData';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerData,
 } from '../livedata/MicrobitAccelerometerData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import StaticConfiguration from '../../StaticConfiguration';
 import Repositories from '../domain/Repositories';
-import Engine from '../domain/Engine';
+import Gestures from '../domain/stores/gesture/Gestures';
+import Classifier from '../domain/stores/Classifier';
+import Engine from '../domain/stores/Engine';
+import LiveData from '../domain/stores/LiveData';
 
 const repositories: Repositories = new LocalStorageRepositories();
 

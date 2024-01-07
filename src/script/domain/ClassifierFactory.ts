@@ -5,13 +5,13 @@
  */
 import { Readable, Writable } from 'svelte/store';
 import { RecordingData } from '../stores/mlStore';
-import Classifier from './Classifier';
+import Classifier from './stores/Classifier';
 import Filters from './Filters';
-import Gesture, { GestureID } from './Gesture';
-import Model from './Model';
 import { TrainingData } from './ModelTrainer';
 import MLModel from './MLModel';
 import { TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
+import Gesture, { GestureID } from './stores/gesture/Gesture';
+import Model from './stores/Model';
 
 class ClassifierFactory {
   public buildClassifier(

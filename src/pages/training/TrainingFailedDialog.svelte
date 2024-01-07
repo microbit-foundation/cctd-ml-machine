@@ -10,7 +10,7 @@
   import { slide } from 'svelte/transition';
 
   import { classifier } from '../../script/stores/Stores';
-  import { TrainingStatus } from '../../script/domain/Model';
+  import { TrainingStatus } from '../../script/domain/stores/Model';
 
   let isFailedTrainingDialogOpen = false;
 

@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { GestureData } from '../domain/Gesture';
-import { PersistantGestureData } from '../domain/Gestures';
+import { GestureData } from '../domain/stores/gesture/Gesture';
+import { PersistantGestureData } from '../domain/stores/gesture/Gestures';
 import { gestures } from '../stores/Stores';
 
 class FileUtility {

@@ -3,13 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { PersistantGestureData } from '../domain/Gestures';
-import Gesture from '../domain/Gesture';
 import ControlledStorage from '../ControlledStorage';
 import { Subscriber, Unsubscriber, Writable, get, writable } from 'svelte/store';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
 import { classifier } from '../stores/Stores';
 import GestureRepository from '../domain/GestureRepository';
+import Gesture from '../domain/stores/gesture/Gesture';
+import { PersistantGestureData } from '../domain/stores/gesture/Gestures';
 
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';

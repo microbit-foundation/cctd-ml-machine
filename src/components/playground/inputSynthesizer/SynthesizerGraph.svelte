@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { SmoothieChart, TimeSeries } from 'smoothie';
-  import LiveData from '../../../script/domain/LiveData';
+  import LiveData from '../../../script/domain/stores/LiveData';
   import SmoothedLiveData from '../../../script/livedata/SmoothedLiveData';
   import { onMount } from 'svelte';
   import StaticConfiguration from '../../../StaticConfiguration';

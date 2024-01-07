@@ -12,9 +12,9 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import MLModel from './MLModel';
-import { TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
-import ModelTrainer from './ModelTrainer';
+import { TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
+import MLModel from '../MLModel';
+import ModelTrainer from '../ModelTrainer';
 
 export enum TrainingStatus {
   Untrained,

@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import Classifier from './Classifier';
-import GestureConfidence from './GestureConfidence';
+import Classifier from './stores/Classifier';
+import GestureConfidence from './stores/gesture/GestureConfidence';
 
 interface ClassifierRepository {
   getClassifier(): Classifier;

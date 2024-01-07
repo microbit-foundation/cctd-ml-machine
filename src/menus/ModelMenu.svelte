@@ -8,7 +8,7 @@
   import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
   import { classifier, gestures } from '../script/stores/Stores';
-  import Gesture from '../script/domain/Gesture';
+  import Gesture from '../script/domain/stores/gesture/Gesture';
 
   const bestPrediction = gestures.getBestPrediction();
 

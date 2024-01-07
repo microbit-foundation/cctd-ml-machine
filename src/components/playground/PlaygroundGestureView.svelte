@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import Gesture, { GestureData } from '../../script/domain/Gesture';
+  import Gesture, { GestureData } from '../../script/domain/stores/gesture/Gesture';
 
   export let gesture: Gesture;
   const reduceData = (gestureData: GestureData) => {

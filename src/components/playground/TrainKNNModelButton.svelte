@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import Model from '../../script/domain/Model';
+  import Model from '../../script/domain/stores/Model';
   import KNNModelTrainer from '../../script/mlmodels/KNNModelTrainer';
   import { classifier } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';

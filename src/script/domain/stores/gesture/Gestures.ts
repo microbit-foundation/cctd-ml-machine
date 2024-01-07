@@ -12,10 +12,10 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { RecordingData } from '../stores/mlStore';
 import Gesture, { GestureData, GestureID, GestureOutput } from './Gesture';
-import StaticConfiguration from '../../StaticConfiguration';
-import GestureRepository from './GestureRepository';
+import { RecordingData } from '../../../stores/mlStore';
+import StaticConfiguration from '../../../../StaticConfiguration';
+import GestureRepository from '../../GestureRepository';
 
 export type PersistantGestureData = {
   // TODO: Where does this live?

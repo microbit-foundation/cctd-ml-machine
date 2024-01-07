@@ -6,10 +6,10 @@
 
 import { get, writable } from 'svelte/store';
 import { LayersModel } from '@tensorflow/tfjs-layers';
-import Gesture, { GestureData } from '../domain/Gesture';
 import { liveAccelerometerData } from './Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
+import Gesture, { GestureData } from '../domain/stores/gesture/Gesture';
 
 export type RecordingData = {
   ID: number;

@@ -10,7 +10,7 @@
   import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
-  import LiveData from '../../script/domain/LiveData';
+  import LiveData from '../../script/domain/stores/LiveData';
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { classifier } from '../../script/stores/Stores';

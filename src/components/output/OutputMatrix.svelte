@@ -52,10 +52,11 @@
 </style>
 
 <script lang="ts">
+  import { GestureData } from '../../script/domain/stores/gesture/Gesture';
+
   // TODO: Shares a lot with 'PatternMatrix'. Extract 'Matrix' component and reuse
   import microbits from '../../script/microbit-interfacing/Microbits';
   import Microbits from '../../script/microbit-interfacing/Microbits';
-  import { GestureData } from '../../script/domain/Gesture';
   import { gestures } from '../../script/stores/Stores';
 
   // TODO: Generalize such that it becomes ConnectionBehaviour.setMatrixTo() instead

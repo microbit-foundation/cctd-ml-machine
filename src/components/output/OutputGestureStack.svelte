@@ -28,8 +28,8 @@
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import Gesture, { SoundData } from '../../script/domain/Gesture';
   import { gestures } from '../../script/stores/Stores';
+  import Gesture, { SoundData } from '../../script/domain/stores/gesture/Gesture';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 

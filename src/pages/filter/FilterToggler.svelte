@@ -6,6 +6,7 @@
 
 <script lang="ts">
   import Information from '../../components/information/Information.svelte';
+  import Filter from '../../script/domain/Filter';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import { classifier } from '../../script/stores/Stores';
   import D3Plot from './D3Plot.svelte';
@@ -22,7 +23,7 @@
   const filters = classifier.getFilters();
 
   $: isActive = $filters
-    .map(currentFilter => currentFilter.getType())
+    .map((currentFilter: Filter) => currentFilter.getType())
     .includes(filterType);
 
   const toggleFilter = () => {

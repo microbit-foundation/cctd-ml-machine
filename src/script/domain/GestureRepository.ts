@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 import { Readable } from 'svelte/store';
-import Gesture from './Gesture';
-import { PersistantGestureData } from './Gestures';
+import Gesture from './stores/gesture/Gesture';
+import { PersistantGestureData } from './stores/gesture/Gestures';
 
 interface GestureRepository extends Readable<Gesture[]> {
   getGesture(gestureId: number): Gesture;

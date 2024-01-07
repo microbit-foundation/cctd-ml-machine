@@ -21,6 +21,7 @@
   import { gestures } from '../script/stores/Stores';
   import FileUtility from '../script/repository/FileUtility';
   import { get } from 'svelte/store';
+  import { GestureData } from '../script/domain/stores/gesture/Gesture';
 
   let isConnectionDialogOpen = false;
 
@@ -28,7 +29,7 @@
     if ($gestures.length === 0) {
       return false;
     }
-    return $gestures.some(gesture => gesture.recordings.length > 0);
+    return $gestures.some((gesture: GestureData) => gesture.recordings.length > 0);
   };
 
   const onClearGestures = () => {

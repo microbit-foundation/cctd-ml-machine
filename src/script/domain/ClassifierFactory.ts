@@ -38,7 +38,7 @@ class ClassifierFactory {
       }
     });
     // Gesture was removed or added (doesn't detect if number of recordings change)
-      noOfGesturesStore.subscribe(() => {
+    noOfGesturesStore.subscribe(() => {
       classifier.getModel().markAsUntrained();
     });
     return classifier;

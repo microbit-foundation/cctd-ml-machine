@@ -13,8 +13,8 @@
     state,
     microbitInteraction,
     MicrobitInteractions,
+    chosenGesture,
   } from '../script/stores/uiStore';
-  import { chosenGesture } from '../script/stores/mlStore';
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
   import StandardButton from './StandardButton.svelte';

@@ -14,12 +14,15 @@ import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import { classifier } from './Stores';
+import Gesture from '../domain/stores/gesture/Gesture';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
 // TODO: Do we expect combaitibility to change? Why is it a store?
 export const compatibility = writable<CompatibilityStatus>(checkCompatibility());
+
+export const chosenGesture = writable<Gesture | null>(null);
 
 export const isBluetoothWarningDialogOpen = writable<boolean>(
   get(compatibility) ? !get(compatibility).bluetooth : false,

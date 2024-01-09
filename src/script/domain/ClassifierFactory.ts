@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Writable } from 'svelte/store';
+import { Readable, Writable, derived, get, writable } from 'svelte/store';
 import { RecordingData } from '../stores/mlStore';
 import Classifier from './Classifier';
 import Filters from './Filters';
@@ -31,8 +31,14 @@ class ClassifierFactory {
       // Filters has changed
       classifier.getModel().markAsUntrained();
     });
-    gestures.subscribe(() => {
+    const noOfGesturesStore = writable(0);
+    gestures.subscribe(newVal => {
       // Gesture was removed or added (doesn't detect if number of recordings change)
+      if (newVal.length != get(noOfGesturesStore)) {
+        noOfGesturesStore.set(newVal.length);
+      }
+    });
+    noOfGesturesStore.subscribe(() => {
       classifier.getModel().markAsUntrained();
     });
     return classifier;

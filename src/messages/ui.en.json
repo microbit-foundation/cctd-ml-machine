@@ -62,11 +62,13 @@
   "content.trainer.failure.header": "Training failed",
   "content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data samples for different actions are too similar, this can result in issues in the training process.",
   "content.trainer.failure.todo": "Return to the Add data page and change your data.",
-  "content.trainer.retrain.title": "Status: You've collected new data and can retrain the model.",
+  "content.trainer.retrain.title": "Status: Your data samples have changed. You can retrain the model.",
 
   "content.model.trainModelFirstHeading": "Test model",
-  "content.model.trainModelBody": "You cannot test the model until it has been trained.",
-  "content.model.notEnoughDataInfoBody": "You need at least 3 data samples for 2 actions to train a model.",
+  "content.model.notEnoughDataInfoBody1": "You cannot test the model until it has been trained.",
+  "content.model.notEnoughDataInfoBody2": "You need at least 3 data samples for 2 actions to train a model.",
+  "content.model.trainModelBody": "You need to train your model before you can test it.",
+  "content.model.retrainModelBody": "You need to train your model with the current set of data samples before you can test it.",
   "content.model.addData": "Add data",
 
   "content.model.output.estimatedGesture.iconTitle": "Estimated action:",

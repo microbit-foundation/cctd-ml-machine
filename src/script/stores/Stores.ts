@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import Repositories from '../repository/Repositories';
+import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Gestures from '../domain/Gestures';
 import Classifier from '../domain/Classifier';
 import PollingPredictorEngine from '../engine/PollingPredictorEngine';
@@ -13,11 +13,13 @@ import MicrobitAccelerometerLiveData, {
 } from '../livedata/MicrobitAccelerometerData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import StaticConfiguration from '../../StaticConfiguration';
+import Repositories from '../domain/Repositories';
+import Engine from '../domain/Engine';
 
-const repositories = new Repositories();
+const repositories: Repositories = new LocalStorageRepositories();
 
 const gestures: Gestures = new Gestures(repositories.getGestureRepository());
-const classifier: Classifier = repositories.getModelRepository().getClassifier();
+const classifier: Classifier = repositories.getClassifierRepository().getClassifier();
 
 const accelerometerDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(
   StaticConfiguration.accelerometerLiveDataBufferSize,
@@ -25,10 +27,7 @@ const accelerometerDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(
 const liveAccelerometerData: LiveData<MicrobitAccelerometerData> =
   new MicrobitAccelerometerLiveData(accelerometerDataBuffer);
 
-const engine: PollingPredictorEngine = new PollingPredictorEngine(
-  classifier,
-  liveAccelerometerData,
-);
+const engine: Engine = new PollingPredictorEngine(classifier, liveAccelerometerData);
 
 // Export the stores here. Please be mindful when exporting stores, avoid whenever possible.
 // This helps us avoid leaking too many objects, that aren't meant to be interacted with

@@ -21,6 +21,7 @@
   import { gestures } from '../script/stores/Stores';
   import FileUtility from '../script/repository/FileUtility';
   import { get } from 'svelte/store';
+  import exampleDataset from '../../public/exampleDataset.json';
 
   let isConnectionDialogOpen = false;
 
@@ -63,10 +64,19 @@
       filePicker.remove();
     };
   });
+
+  const importExampleDataset = () => {
+    // Imports 3 gestures, named Shake, Still and Circle (in that order)
+    gestures.importFrom(exampleDataset);
+    // Translate the names, that are originally english
+    gestures.getGestures()[0].setName($t("content.data.noData.exampleName.shake"))
+    gestures.getGestures()[1].setName($t("content.data.noData.exampleName.still"))
+    gestures.getGestures()[2].setName($t("content.data.noData.exampleName.circle"))
+  }
 </script>
 
 <!-- Main pane -->
-<main class="h-full inline-block min-w-full">
+<main class="h-full inline-block min-w-full flex flex-col">
   <div>
     <DataPageControlBar
       clearDisabled={$gestures.length === 0}
@@ -135,6 +145,14 @@
           onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
       {/each}
       <NewGestureButton />
+    </div>
+  {/if}
+  {#if !hasSomeData()}
+    <div class="flex flex-grow"></div>
+    <div class="flex mt-3 mb-3 justify-center">
+      <StandardButton onClick={importExampleDataset}>
+        {$t('content.data.noData.templateDataButton')}
+      </StandardButton>
     </div>
   {/if}
 </main>

@@ -105,7 +105,7 @@ namespace MBSpecs {
    */
   export enum Button {
     A,
-    B
+    B,
   }
 
   export type MBVersion = 1 | 2;

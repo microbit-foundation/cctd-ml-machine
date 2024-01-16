@@ -118,7 +118,7 @@ export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
 export enum MicrobitInteractions {
   A,
   B,
-  AB
+  AB,
 }
 
 const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.A;

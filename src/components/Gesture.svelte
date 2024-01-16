@@ -95,7 +95,6 @@
 
   // Delete recording from recordings array
   function deleteRecording(recording: RecordingData) {
-    // TODO: Altering the recording data should mark the model as untrained, this should not be a manual
     if (!areActionsAllowed(false)) {
       return;
     }
@@ -180,9 +179,7 @@
   <div
     class="bg-red-600 h-1.5 rounded-full absolute mt-123px ml-14px"
     style={isThisRecording
-      ? 'transition: ' +
-        /* TODO: Clean this up! : */ (recordingDuration / 1000).toString() +
-        's linear; width: 97%;'
+      ? `transition:  ${(recordingDuration / 1000).toString()}s linear; width: 97%;`
       : 'width:0;'} />
 
   <div class="items-center flex mb-1">

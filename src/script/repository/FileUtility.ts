@@ -8,7 +8,6 @@ import { PersistantGestureData } from '../domain/stores/gesture/Gestures';
 import { gestures } from '../stores/Stores';
 
 class FileUtility {
-  // TODO: The problem right now is that this function is called directly from svelte code, maybe the code should only be executed from the repository?
   public static loadDatasetFromFile(file: File) {
     const reader = new FileReader();
     reader.onload = function (e: ProgressEvent<FileReader>) {

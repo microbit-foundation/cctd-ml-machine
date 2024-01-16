@@ -31,8 +31,14 @@ class ClassifierFactory {
       // Filters has changed
       classifier.getModel().markAsUntrained();
     });
-    gestures.subscribe(() => {
-      // Gesture was removed or added (doesn't detect if number of recordings change)
+    const noOfGesturesStore = writable(0);
+    gestures.subscribe(newVal => {
+      if (newVal.length != get(noOfGesturesStore)) {
+        noOfGesturesStore.set(newVal.length);
+      }
+    });
+    // Gesture was removed or added (doesn't detect if number of recordings change)
+    noOfGesturesStore.subscribe(() => {
       classifier.getModel().markAsUntrained();
     });
     return classifier;

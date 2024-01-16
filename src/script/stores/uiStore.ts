@@ -19,14 +19,11 @@ import Gesture from '../domain/stores/gesture/Gesture';
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
-// TODO: Do we expect combaitibility to change? Why is it a store?
-export const compatibility = writable<CompatibilityStatus>(checkCompatibility());
+export const compatibility: CompatibilityStatus = checkCompatibility();
 
 export const chosenGesture = writable<Gesture | null>(null);
 
-export const isBluetoothWarningDialogOpen = writable<boolean>(
-  get(compatibility) ? !get(compatibility).bluetooth : false,
-);
+export const isBluetoothWarningDialogOpen = writable<boolean>(!compatibility.bluetooth);
 
 export enum ModelView {
   TILE,
@@ -121,10 +118,10 @@ export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
 export enum MicrobitInteractions {
   A,
   B,
-  AB,
+  AB
 }
 
-const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;
+const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.A;
 
 export const microbitInteraction = writable<MicrobitInteractions>(
   initialMicrobitInteraction,

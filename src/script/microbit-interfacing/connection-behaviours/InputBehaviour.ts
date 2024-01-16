@@ -157,7 +157,7 @@ class InputBehaviour extends LoggingDecorator {
   buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {
     super.buttonChange(buttonState, button);
     if (buttonState === MBSpecs.ButtonStates.Released) return;
-    if (button === 'A') {
+    if (button === MBSpecs.Button.A) {
       buttonPressed.update(obj => {
         obj.buttonA = 1;
         obj.buttonB = 0;

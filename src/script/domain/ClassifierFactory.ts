@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Writable } from 'svelte/store';
+import { Readable, Writable, get, writable } from 'svelte/store';
 import Classifier from './stores/Classifier';
 import Filters from './Filters';
 import { TrainingData } from './ModelTrainer';

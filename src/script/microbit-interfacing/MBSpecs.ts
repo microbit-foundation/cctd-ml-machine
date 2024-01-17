@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { isatty } from 'tty';
-import MicrobitBluetooth from './MicrobitBluetooth';
-
 /* eslint-disable @typescript-eslint/no-namespace */
 /**
  * References to the Bluetooth Profile UUIDs.
@@ -106,7 +103,10 @@ namespace MBSpecs {
   /**
    * The buttons on the micro:bit.
    */
-  export type Button = 'A' | 'B';
+  export enum Button {
+    A,
+    B,
+  }
 
   export type MBVersion = 1 | 2;
 
@@ -228,6 +228,7 @@ namespace MBSpecs {
         );
 
         // TODO: Next line has been observed to fail. Proper error handling needed.
+        //       Triage the issue, if no cause can be found please remove this todo.
         const modelNumber = await deviceInfo.getCharacteristic(
           Characteristics.MODEL_NUMBER,
         );

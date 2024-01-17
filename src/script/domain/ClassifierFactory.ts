@@ -3,15 +3,15 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Writable, derived, get, writable } from 'svelte/store';
-import { RecordingData } from '../stores/mlStore';
-import Classifier from './Classifier';
+import { Readable, Writable, get, writable } from 'svelte/store';
+import Classifier from './stores/Classifier';
 import Filters from './Filters';
-import Gesture, { GestureID } from './Gesture';
-import Model from './Model';
 import { TrainingData } from './ModelTrainer';
 import MLModel from './MLModel';
 import { TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
+import Gesture, { GestureID } from './stores/gesture/Gesture';
+import Model from './stores/Model';
+import { RecordingData } from './stores/gesture/Gestures';
 
 class ClassifierFactory {
   public buildClassifier(

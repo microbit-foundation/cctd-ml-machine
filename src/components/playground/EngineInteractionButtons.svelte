@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import Gesture from '../../script/domain/Gesture';
+  import Gesture from '../../script/domain/stores/gesture/Gesture';
   import AccelerometerClassifierInput from '../../script/mlmodels/AccelerometerClassifierInput';
   import { classifier, engine, gestures } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';

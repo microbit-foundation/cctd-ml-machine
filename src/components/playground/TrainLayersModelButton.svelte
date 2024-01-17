@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import StaticConfiguration from '../../StaticConfiguration';
-  import Model from '../../script/domain/Model';
+  import Model from '../../script/domain/stores/Model';
   import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
   import { classifier } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';

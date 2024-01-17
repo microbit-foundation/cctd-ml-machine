@@ -14,16 +14,16 @@ import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import { classifier } from './Stores';
+import Gesture from '../domain/stores/gesture/Gesture';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
-// TODO: Do we expect combaitibility to change? Why is it a store?
-export const compatibility = writable<CompatibilityStatus>(checkCompatibility());
+export const compatibility: CompatibilityStatus = checkCompatibility();
 
-export const isBluetoothWarningDialogOpen = writable<boolean>(
-  get(compatibility) ? !get(compatibility).bluetooth : false,
-);
+export const chosenGesture = writable<Gesture | null>(null);
+
+export const isBluetoothWarningDialogOpen = writable<boolean>(!compatibility.bluetooth);
 
 export enum ModelView {
   TILE,
@@ -114,7 +114,6 @@ export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
   buttonB: 0,
 });
 
-// TODO: Should be in MBSpecs.ts
 export enum MicrobitInteractions {
   A,
   B,

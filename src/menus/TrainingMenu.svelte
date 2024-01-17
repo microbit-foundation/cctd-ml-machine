@@ -8,7 +8,6 @@
   import { t } from '../i18n';
   import ImageSkeleton from '../components/skeletonloading/ImageSkeleton.svelte';
   import { classifier } from '../script/stores/Stores';
-  import { TrainingStatus } from '../script/domain/Model';
 
   const model = classifier.getModel();
 </script>

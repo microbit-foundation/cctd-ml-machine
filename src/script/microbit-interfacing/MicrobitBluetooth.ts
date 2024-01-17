@@ -206,7 +206,7 @@ export class MicrobitBluetooth {
 
     // Select the correct characteristic to listen to.
     const UUID =
-      buttonToListenFor === 'A'
+      buttonToListenFor === MBSpecs.Button.A
         ? MBSpecs.Characteristics.BUTTON_A
         : MBSpecs.Characteristics.BUTTON_B;
     const buttonCharacteristic: BluetoothRemoteGATTCharacteristic =

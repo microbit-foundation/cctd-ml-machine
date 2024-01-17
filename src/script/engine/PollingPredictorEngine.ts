@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 import { Subscriber, Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
-import Classifier from '../domain/Classifier';
-import Engine, { EngineData } from '../domain/Engine';
-import LiveData from '../domain/LiveData';
 import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 import StaticConfiguration from '../../StaticConfiguration';
 import { TimestampedData } from '../domain/LiveDataBuffer';
+import Engine, { EngineData } from '../domain/stores/Engine';
+import Classifier from '../domain/stores/Classifier';
+import LiveData from '../domain/stores/LiveData';
 
 class PollingPredictorEngine implements Engine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;

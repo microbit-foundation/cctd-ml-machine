@@ -13,16 +13,17 @@
     state,
     microbitInteraction,
     MicrobitInteractions,
+    chosenGesture,
   } from '../script/stores/uiStore';
-  import { chosenGesture, type RecordingData } from '../script/stores/mlStore';
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
   import StandardButton from './StandardButton.svelte';
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
-  import Gesture from '../script/domain/Gesture';
-  import { classifier, gestures, liveAccelerometerData } from '../script/stores/Stores';
+  import { gestures, liveAccelerometerData } from '../script/stores/Stores';
+  import Gesture from '../script/domain/stores/gesture/Gesture';
+  import { RecordingData } from '../script/domain/stores/gesture/Gestures';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -94,7 +95,6 @@
 
   // Delete recording from recordings array
   function deleteRecording(recording: RecordingData) {
-    // TODO: Altering the recording data should mark the model as untrained, this should not be a manual
     if (!areActionsAllowed(false)) {
       return;
     }
@@ -179,9 +179,7 @@
   <div
     class="bg-red-600 h-1.5 rounded-full absolute mt-123px ml-14px"
     style={isThisRecording
-      ? 'transition: ' +
-        /* TODO: Clean this up! : */ (recordingDuration / 1000).toString() +
-        's linear; width: 97%;'
+      ? `transition:  ${(recordingDuration / 1000).toString()}s linear; width: 97%;`
       : 'width:0;'} />
 
   <div class="items-center flex mb-1">

@@ -5,18 +5,18 @@
  */
 import { Readable, Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
-import GestureConfidence from '../domain/GestureConfidence';
 import MLModel from '../domain/MLModel';
 import ModelTrainer from '../domain/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
 import LocalStorageRepositories from './LocalStorageRepositories';
 import Filters from '../domain/Filters';
-import Classifier from '../domain/Classifier';
 import Filter from '../domain/Filter';
-import Gesture, { GestureID } from '../domain/Gesture';
 import FilterTypes, { FilterType } from '../domain/FilterTypes';
 import PersistantWritable from './PersistantWritable';
 import ClassifierRepository from '../domain/ClassifierRepository';
+import Gesture, { GestureID } from '../domain/stores/gesture/Gesture';
+import Classifier from '../domain/stores/Classifier';
+import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,

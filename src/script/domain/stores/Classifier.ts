@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 import { Readable, Subscriber, Unsubscriber, derived, get } from 'svelte/store';
+import Filters from '../Filters';
+import ClassifierInput from '../ClassifierInput';
 import Model, { ModelData } from './Model';
-import Filters from './Filters';
-import Gesture, { GestureID } from './Gesture';
-import ClassifierInput from './ClassifierInput';
+import Gesture, { GestureID } from './gesture/Gesture';
 
 type ClassifierData = {
   model: ModelData;

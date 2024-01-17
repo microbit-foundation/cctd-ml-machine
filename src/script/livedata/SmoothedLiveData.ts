@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 import { Readable, Subscriber, Unsubscriber, derived } from 'svelte/store';
-import LiveData from '../domain/LiveData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
+import LiveData from '../domain/stores/LiveData';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.

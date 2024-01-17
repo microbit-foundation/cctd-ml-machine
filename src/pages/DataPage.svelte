@@ -22,6 +22,7 @@
   import FileUtility from '../script/repository/FileUtility';
   import { get } from 'svelte/store';
   import exampleDataset from '../../public/exampleDataset.json';
+  import { GestureData } from '../script/domain/stores/gesture/Gesture';
 
   let isConnectionDialogOpen = false;
 
@@ -29,7 +30,7 @@
     if ($gestures.length === 0) {
       return false;
     }
-    return $gestures.some(gesture => gesture.recordings.length > 0);
+    return $gestures.some((gesture: GestureData) => gesture.recordings.length > 0);
   };
 
   const onClearGestures = () => {
@@ -69,10 +70,10 @@
     // Imports 3 gestures, named Shake, Still and Circle (in that order)
     gestures.importFrom(exampleDataset);
     // Translate the names, that are originally english
-    gestures.getGestures()[0].setName($t("content.data.noData.exampleName.shake"))
-    gestures.getGestures()[1].setName($t("content.data.noData.exampleName.still"))
-    gestures.getGestures()[2].setName($t("content.data.noData.exampleName.circle"))
-  }
+    gestures.getGestures()[0].setName($t('content.data.noData.exampleName.shake'));
+    gestures.getGestures()[1].setName($t('content.data.noData.exampleName.still'));
+    gestures.getGestures()[2].setName($t('content.data.noData.exampleName.circle'));
+  };
 </script>
 
 <!-- Main pane -->

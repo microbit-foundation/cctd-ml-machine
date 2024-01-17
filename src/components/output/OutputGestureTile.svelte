@@ -17,9 +17,9 @@
 <script lang="ts">
   // IMPORT AND DEFAULTS
   import { t } from '../../i18n';
+  import Gesture from '../../script/domain/stores/gesture/Gesture';
   import GestureTilePart from '../GestureTilePart.svelte';
   import Information from '../information/Information.svelte';
-  import Gesture from '../../script/domain/Gesture';
 
   // Variables for component
   export let gesture: Gesture;

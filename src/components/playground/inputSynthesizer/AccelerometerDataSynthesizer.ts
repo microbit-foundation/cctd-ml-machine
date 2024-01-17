@@ -12,8 +12,8 @@ import {
   writable,
 } from 'svelte/store';
 import { liveAccelerometerData } from '../../../script/stores/Stores';
-import LiveData from '../../../script/domain/LiveData';
 import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
+import LiveData from '../../../script/domain/stores/LiveData';
 
 type AccelerometerSynthesizerData = {
   intervalSpeed: number;

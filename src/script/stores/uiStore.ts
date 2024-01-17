@@ -114,14 +114,13 @@ export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
   buttonB: 0,
 });
 
-// TODO: Should be in MBSpecs.ts
 export enum MicrobitInteractions {
   A,
   B,
   AB,
 }
 
-const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.A;
+const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;
 
 export const microbitInteraction = writable<MicrobitInteractions>(
   initialMicrobitInteraction,

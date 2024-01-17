@@ -70,10 +70,10 @@
     // Imports 3 gestures, named Shake, Still and Circle (in that order)
     gestures.importFrom(exampleDataset);
     // Translate the names, that are originally english
-    gestures.getGestures()[0].setName($t("content.data.noData.exampleName.shake"))
-    gestures.getGestures()[1].setName($t("content.data.noData.exampleName.still"))
-    gestures.getGestures()[2].setName($t("content.data.noData.exampleName.circle"))
-  }
+    gestures.getGestures()[0].setName($t('content.data.noData.exampleName.shake'));
+    gestures.getGestures()[1].setName($t('content.data.noData.exampleName.still'));
+    gestures.getGestures()[2].setName($t('content.data.noData.exampleName.circle'));
+  };
 </script>
 
 <!-- Main pane -->

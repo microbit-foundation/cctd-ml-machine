@@ -35,7 +35,7 @@ const readDirectory = (directory: string, ignoreList: string[]): DirectoryConten
   const filesRead = fs.readdirSync(directory);
   filesRead.forEach(file => {
     if (ignoreList.includes(file)) return;
-    if (file.endsWith('.json')) return;
+    if (file.endsWith('.json')) return; // Json cant have comments
     const fileLocation = path.join(directory, file);
     const stats = fs.statSync(fileLocation);
     if (stats.isFile()) {

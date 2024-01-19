@@ -20,10 +20,49 @@ import { MicrobitConnection } from '../microbit-interfacing/MicrobitConnection';
 let text = get(t);
 t.subscribe(t => (text = t));
 
+// Temporary debug for time between messages received.
+const zeroBins = () => ({
+  '0-20': 0,
+  '21-40': 0,
+  '41-60': 0,
+  '61-80': 0,
+  '81-100': 0,
+  '101-120': 0,
+  '121-140': 0,
+  '141-160': 0,
+  '>160': 0,
+});
+let timeBinsMs = zeroBins();
+
+let interval: any;
+
+const binTimeInterval = (time: number) => {
+  if (time <= 20) {
+    timeBinsMs['0-20']++;
+  } else if (time <= 40) {
+    timeBinsMs['21-40']++;
+  } else if (time <= 60) {
+    timeBinsMs['41-60']++;
+  } else if (time <= 80) {
+    timeBinsMs['61-80']++;
+  } else if (time <= 100) {
+    timeBinsMs['81-100']++;
+  } else if (time <= 120) {
+    timeBinsMs['101-120']++;
+  } else if (time <= 140) {
+    timeBinsMs['121-140']++;
+  } else if (time <= 160) {
+    timeBinsMs['141-160']++;
+  } else {
+    timeBinsMs['>160']++;
+  }
+};
+
 /**
  * Implementation of the input ConnectionBehaviour
  */
 class InputBehaviour extends LoggingDecorator {
+  private t = -1;
   private smoothedAccelX = 0;
   private smoothedAccelY = 0;
   private smoothedAccelZ = 0;
@@ -102,6 +141,9 @@ class InputBehaviour extends LoggingDecorator {
       return s;
     });
     clearTimeout(this.reconnectTimeout);
+    clearInterval(interval);
+    interval = undefined;
+    this.t = -1;
   }
 
   onCancelledBluetoothRequest(): void {
@@ -145,6 +187,22 @@ class InputBehaviour extends LoggingDecorator {
   }
 
   accelerometerChange(x: number, y: number, z: number): void {
+    // FIXME: Debug log, add time between messages received to bins.
+    // Logged every 10 seconds.
+    if (this.t === -1) {
+      this.t = Date.now();
+    } else {
+      let now = Date.now();
+      binTimeInterval(now - this.t);
+      this.t = now;
+      if (!interval) {
+        interval = setInterval(() => {
+          console.log(timeBinsMs);
+          timeBinsMs = zeroBins();
+        }, 10_000);
+      }
+    }
+
     super.accelerometerChange(x, y, z);
 
     const accelX = x / 1000.0;

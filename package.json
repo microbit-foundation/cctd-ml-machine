@@ -6,8 +6,9 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite",
+    "build": "node prepEnv.js simple && vite build",
+    "dev": "node prepEnv.js unbranded && vite",
+    "devML": "node prepEnv.js branded && vite",
     "start": "vite dist --host",
     "check": "svelte-check --fail-on-warnings --tsconfig ./tsconfig.json --compiler-warnings 'a11y-aria-attributes:ignore,a11y-click-events-have-key-events:ignore,a11y-media-has-caption:ignore,a11y-structure:ignore,a11y-role-supports-aria-props:ignore,a11y-role-has-required-aria-props:ignore,a11y-media-has-caption:ignore,a11y-no-static-element-interactions:ignore,a11y-no-noninteractive-element-interactions:ignore,a11y-missing-content:ignore'",
     "test": "vitest",

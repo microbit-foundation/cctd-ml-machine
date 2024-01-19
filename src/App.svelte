@@ -40,6 +40,7 @@
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Environment from './script/Environment';
   import Router from './router/Router.svelte';
+    import { Feature, getFeature } from './script/FeatureToggles';
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -50,7 +51,7 @@
     CookieManager.unsetReconnectFlag();
   }
 
-  document.title = Environment.pageTitle;
+  document.title = getFeature(Feature.TITLE);
 </script>
 
 <Router>

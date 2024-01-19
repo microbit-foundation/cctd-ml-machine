@@ -17,7 +17,3 @@
 .env
 
 /src/.DS_Store
-
-features.json
-
-windi.config.js

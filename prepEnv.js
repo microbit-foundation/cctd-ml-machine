@@ -37,9 +37,6 @@ if (!availableTargets.includes(buildVariantTarget)) {
     throw new Error("Invalid build variant target!")
 }
 
-// Validate build script
-// TODO: do some validation, check all configurations are of same size and move arrays are of size 2
-
 // The actual work
 const copyFiles = fileMoveTargets[buildVariantTarget];
 

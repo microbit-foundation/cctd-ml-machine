@@ -23,7 +23,8 @@ t.subscribe(t => (text = t));
 // Temporary debug for time between messages received.
 const zeroBins = () => ({
   '0-20': 0,
-  '21-40': 0,
+  '21-30': 0,
+  '31-40': 0,
   '41-60': 0,
   '61-80': 0,
   '81-100': 0,
@@ -39,8 +40,10 @@ let interval: any;
 const binTimeInterval = (time: number) => {
   if (time <= 20) {
     timeBinsMs['0-20']++;
+  } else if (time <= 30) {
+    timeBinsMs['21-30']++;
   } else if (time <= 40) {
-    timeBinsMs['21-40']++;
+    timeBinsMs['31-40']++;
   } else if (time <= 60) {
     timeBinsMs['41-60']++;
   } else if (time <= 80) {

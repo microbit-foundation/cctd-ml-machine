@@ -43,6 +43,7 @@
 
   export let onMatrixChange: (matrix: boolean[]) => void;
   export let matrix: boolean[];
+  export let invalid: boolean = false;
 
   const matrixDimension = 5;
   let highlightedColumns: boolean[][] = generateMatrix(matrixDimension, false);
@@ -100,6 +101,7 @@
           on:mouseleave={clearHighlightedColumns} />
       {/each}
       <PatternColumnInput
+        aria-invalid={invalid && column.filter(c => c).length === 0}
         {colIdx}
         on:keydown={e => {
           onKeyDownColumnInput(e, colIdx);

@@ -5,7 +5,7 @@ on:
     types: [created]
   push:
     branches:
-      - "**"
+      - '**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ startsWith(github.ref, 'refs/tags/v') && 'release' || github.ref }}
@@ -19,7 +19,7 @@ jobs:
       packages: read
     env:
       AWS_DEFAULT_REGION: eu-west-1
-      PRODUCTION_CLOUDFRONT_DISTRIBUTION_ID: NOT_YET
+      PRODUCTION_CLOUDFRONT_DISTRIBUTION_ID: EDKYRQ3JZCXQ5
       STAGING_CLOUDFRONT_DISTRIBUTION_ID: E37K3V5Y65XQIX
       REVIEW_CLOUDFRONT_DISTRIBUTION_ID: E3KUGPF02I4CJ4
       VITE_FOUNDATION_BUILD: ${{ github.repository_owner == 'microbit-foundation' }}
@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          registry-url: "https://npm.pkg.github.com"
+          registry-url: 'https://npm.pkg.github.com'
       - run: npm ci
       - run: npm install --no-save @microbit-foundation/website-deploy-aws@0.6 @microbit-foundation/website-deploy-aws-config@0.9 @microbit-foundation/npm-package-versioner@2
         if: github.repository_owner == 'microbit-foundation'

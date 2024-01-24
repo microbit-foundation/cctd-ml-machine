@@ -10,10 +10,6 @@ import { MicrobitConnection } from './MicrobitConnection';
 import MicrobitUSB from './MicrobitUSB';
 import * as protocol from './serialProtocol';
 
-const writeLine = (message: string) => {
-  console.log(message);
-};
-
 const enum SerialProtocolState {
   AwaitingHandshakeResponse,
   Running,
@@ -91,7 +87,7 @@ class MicrobitSerial implements MicrobitConnection {
       attempts++ < 20
     ) {
       const handshakeCmd = protocol.generateCmdHandshake();
-      writeLine(`Sending handshake ${handshakeCmd}`);
+      console.log(`Sending handshake ${handshakeCmd}`);
       await this.usb.serialWrite(handshakeCmd);
       await new Promise(resolve => setTimeout(resolve, 100));
     }
@@ -99,10 +95,6 @@ class MicrobitSerial implements MicrobitConnection {
       throw new Error('Handshake not received');
     }
   }
-
-  public listenForDisconnect(callback: (event: Event) => unknown): void {}
-
-  public removeDisconnectListener(callback: (event: Event) => unknown): void {}
 
   public isConnected(): boolean {
     return this.usb.isSerialConnected();

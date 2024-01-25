@@ -7,12 +7,13 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
   "include": [
     "src/**/*",
-    "src/node_modules/**/*"
+    "src/node_modules/**/*",
   ],
   "exclude": [
     "node_modules/*",
     "__sapper__/*",
     "public/*",
+    "prepEnv.js"
   ],
   "compilerOptions": {
     "allowJs": true,
@@ -40,6 +41,7 @@
     ],
   },
   "files": [
-    "./windi.config.js"
+    "./windi.config.js",
+    "./prepEnv.js"
   ]
 }

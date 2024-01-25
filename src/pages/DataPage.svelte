@@ -21,7 +21,7 @@
   import { gestures } from '../script/stores/Stores';
   import FileUtility from '../script/repository/FileUtility';
   import { get } from 'svelte/store';
-  import exampleDataset from '../../public/exampleDataset.json';
+  import exampleDataset from '../exampleDataset.json';
   import { GestureData } from '../script/domain/stores/gesture/Gesture';
 
   let isConnectionDialogOpen = false;

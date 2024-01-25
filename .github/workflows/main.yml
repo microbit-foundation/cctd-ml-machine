@@ -76,9 +76,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - name: Branding
-        run: |
-          cp -f ./src/__viteBuildVariants__/ml-machine/windi.config.js ./windi.config.js
       - name: Build And Deploy
         uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9
         with:
@@ -87,8 +84,6 @@ jobs:
           action: "upload"
           app_location: ${{ env.APP_LOCATION }}
           app_artifact_location: ${{ env.APP_ARTIFACT_LOCATION }}
-        env:
-          VITE_TITLE: ML-Machine
 
   close:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

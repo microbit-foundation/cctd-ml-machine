@@ -12,12 +12,19 @@
 
   const bestPrediction = gestures.getBestPrediction();
 
-  $: confidence = $state.isInputReady
-    ? $bestPrediction.getConfidence().getCurrentConfidence()
-    : 0;
+  $: confidence =
+    $state.isInputReady && $bestPrediction
+      ? $bestPrediction.getConfidence().getCurrentConfidence()
+      : 0;
   confidence = isNaN(confidence) ? 0 : confidence;
 
-  const getPredictionLabel = (isInputReady: boolean, bestPrediction: Gesture) => {
+  const getPredictionLabel = (
+    isInputReady: boolean,
+    bestPrediction: Gesture | undefined,
+  ) => {
+    if (!bestPrediction) {
+      return $t('menu.model.noModel');
+    }
     if (!isInputReady) {
       return $t('menu.model.connectInputMicrobit');
     }

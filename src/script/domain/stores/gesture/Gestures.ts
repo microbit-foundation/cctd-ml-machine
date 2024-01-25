@@ -100,10 +100,13 @@ class Gestures implements Readable<GestureData[]> {
     return get(Gestures.subscribableGestures).length;
   }
 
-  public getBestPrediction(): Readable<Gesture> {
+  public getBestPrediction(): Readable<Gesture | undefined> {
     return derived(
       get(Gestures.subscribableGestures).map(gest => gest.getConfidence()),
       confidences => {
+        if (confidences.length == 0) {
+          return undefined;
+        }
         const sorted = [...confidences].map((data, index) => {
           return {
             index: index,

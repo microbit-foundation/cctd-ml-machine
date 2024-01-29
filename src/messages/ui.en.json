@@ -192,7 +192,7 @@
 
   "connectMB.pattern.heading": "Copy pattern",
   "connectMB.pattern.subtitle": "Copy the pattern displayed on the micro:bit.",
-  "connectMB.pattern.inputLabel": "Number of lit up LED in column {colNum} displayed on micro:bit",
+  "connectMB.pattern.inputLabel": "Number of LEDs lit in column {colNum} on the micro:bit display",
 
   "connectMB.bluetooth.heading": "Connect using Web Bluetooth",
   "connectMB.main.bluetooth.subtitle": "Connect using Web Bluetooth",

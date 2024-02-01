@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import StaticConfiguration from '../../StaticConfiguration';
-  import StandardButton from '../../components/StandardButton.svelte';
+  import StandardButton from '../../components/buttons/StandardButton.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import { ModelView, state } from '../../script/stores/uiStore';

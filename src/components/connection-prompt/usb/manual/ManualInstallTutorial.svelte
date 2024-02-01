@@ -7,7 +7,7 @@
 <script lang="ts">
   import { t } from '../../../../i18n';
   import { onMount } from 'svelte';
-  import StandardButton from '../../../StandardButton.svelte';
+  import StandardButton from '../../../buttons/StandardButton.svelte';
   import Microbits from '../../../../script/microbit-interfacing/Microbits';
   import ImageSkeleton from '../../../skeletonloading/ImageSkeleton.svelte';
   import Bowser from 'bowser';

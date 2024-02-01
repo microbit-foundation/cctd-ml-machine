@@ -9,11 +9,11 @@
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
-  import StandardButton from '../../components/StandardButton.svelte';
   import { Paths, navigate } from '../../router/paths';
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
   import TrainModelButton from './TrainModelButton.svelte';
   import { classifier, gestures } from '../../script/stores/Stores';
+  import StandardButton from '../../components/buttons/StandardButton.svelte';
 
   const model = classifier.getModel();
 

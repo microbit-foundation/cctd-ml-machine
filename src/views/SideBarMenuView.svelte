@@ -12,7 +12,7 @@
   import Environment from '../script/Environment';
   import { Paths, currentPath, navigate } from '../router/paths';
   import { state } from '../script/stores/uiStore';
-    import { Feature, getFeature } from '../script/FeatureToggles';
+  import { Feature, getFeature } from '../script/FeatureToggles';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;

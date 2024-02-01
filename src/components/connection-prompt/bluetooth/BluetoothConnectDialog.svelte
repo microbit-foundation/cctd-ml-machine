@@ -9,7 +9,7 @@
   import PatternMatrix from '../../PatternMatrix.svelte';
   import { t } from '../../../i18n';
   import { onDestroy, onMount } from 'svelte';
-  import StandardButton from '../../StandardButton.svelte';
+  import StandardButton from '../../buttons/StandardButton.svelte';
   import { state } from '../../../script/stores/uiStore';
   import {
     btPatternInput,

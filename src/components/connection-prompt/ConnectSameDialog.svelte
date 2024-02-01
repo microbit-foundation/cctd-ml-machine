@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import StandardButton from '../StandardButton.svelte';
+  import StandardButton from '../buttons/StandardButton.svelte';
   import { t } from '../../i18n';
 
   export let onConnectSameClick: () => void;
@@ -19,6 +19,7 @@
     </h1>
   </div>
   <div class="grid grid-cols-2 w-600px text-center">
+    <!-- svelte-ignore  -->
     <div
       class="hover:cursor-pointer mr-2 border-gray-200 border border-solid rounded-lg p-6 shadow-lg"
       on:click={onConnectSameClick}>

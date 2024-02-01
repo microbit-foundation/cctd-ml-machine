@@ -9,7 +9,7 @@
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import { t } from '../../i18n';
   import { gestures } from '../../script/stores/Stores';
-  import StandardButton from '../../components/StandardButton.svelte';
+  import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { Paths, navigate } from '../../router/paths';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
 

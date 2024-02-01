@@ -110,5 +110,7 @@ class StaticConfiguration {
     validationSplit: 0.1,
     noOfUnits: 16, // size of hidden layer
   };
+
+  public static readonly knnNeighbourCount = 10;
 }
 export default StaticConfiguration;

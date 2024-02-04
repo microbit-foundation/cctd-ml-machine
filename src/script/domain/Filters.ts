@@ -49,6 +49,10 @@ class Filters implements Readable<Filter[]> {
     ]);
   }
 
+  public clear() {
+    this.filters.set([]);
+  }
+
   public count(): number {
     return get(this.filters).length;
   }

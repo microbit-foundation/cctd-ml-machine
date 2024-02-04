@@ -17,6 +17,7 @@
   import MLModel from '../../script/domain/MLModel';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
+    import { FilterType } from '../../script/domain/FilterTypes';
 
   type ModelEntry = {
     id: string;
@@ -78,6 +79,13 @@
 
   const onClick = () => {
     const selectedModel = availableModels.find(model => model.id === $selectedOption.id);
+
+    if (selectedModel?.id === "KNN") {
+      const knnFilters = [
+        
+      ]
+      classifier.getFilters().clear();
+    }
 
     if (selectedModel) {
       model.train(selectedModel.trainer());

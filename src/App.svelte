@@ -5,9 +5,6 @@
  -->
 
 <script lang="ts">
-  import ConnectionBehaviours from './script/connection-behaviours/ConnectionBehaviours';
-  import InputBehaviour from './script/connection-behaviours/InputBehaviour';
-  import OutputBehaviour from './script/connection-behaviours/OutputBehaviour';
   import OverlayView from './views/OverlayView.svelte';
   import PageContentView from './views/PageContentView.svelte';
   import {
@@ -19,7 +16,6 @@
   import IncompatiblePlatformView from './views/IncompatiblePlatformView.svelte';
   import CompatibilityWarningDialog from './components/CompatibilityWarningDialog.svelte';
   import CookieManager from './script/CookieManager';
-  import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Router from './router/Router.svelte';
   import ControlBar from './components/control-bar/ControlBar.svelte';
   import { t } from './i18n';
@@ -33,9 +29,7 @@
   import ConnectDialogContainer from './components/connection-prompt/ConnectDialogContainer.svelte';
   import { Paths, currentPath, getTitle, navigate } from './router/paths';
   import HomeIcon from 'virtual:icons/ri/home-2-line';
-
-  ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
-  ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
+  import { DeviceRequestStates } from './script/microbit-interfacing/MicrobitConnection';
 
   if (CookieManager.isReconnectFlagSet()) {
     $state.offerReconnect = true;

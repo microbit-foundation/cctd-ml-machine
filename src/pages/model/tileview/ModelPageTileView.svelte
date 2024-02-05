@@ -15,8 +15,8 @@
   import { settings } from '../../../script/stores/mlStore';
   import { classify } from '../../../script/ml';
   import { onMount } from 'svelte';
-  import Microbits from '../../../script/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
+  import Microbits from '../../../script/microbit-interfacing/Microbits';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -78,12 +78,13 @@
   let firstMount = true;
   onMount(() => {
     firstMount = false;
-    Microbits.resetIOPins();
+    Microbits.getOutputMicrobit()?.resetPins();
   });
 
   $: triggerButtonsClicked($buttonPressed);
 </script>
 
+resetPins
 <div class="h-full flex flex-col pt-4 pl-4">
   {#if !$state.isPredicting}
     <TrainModelFirstTitle />

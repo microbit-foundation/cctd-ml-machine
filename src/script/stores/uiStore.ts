@@ -5,15 +5,17 @@
  */
 
 import { get, writable } from 'svelte/store';
-import {
-  type CompatibilityStatus,
-  checkCompatibility,
-} from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
-import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
-import { isInputPatternValid } from './connectionStore';
+import {
+  checkCompatibility,
+  type CompatibilityStatus,
+} from '../compatibility/CompatibilityChecker';
+import MBSpecs from '../microbit-interfacing/MBSpecs';
 import { gestures } from './Stores';
+import { isInputPatternValid } from './connectionStore';
+import { HexOrigin } from '../../StaticConfiguration';
+import { DeviceRequestStates } from '../microbit-interfacing/MicrobitConnection';
 
 // TODO: Rename? Split up further?
 
@@ -46,8 +48,14 @@ export const state = writable<{
   reconnectState: DeviceRequestStates;
   isInputReady: boolean;
   isInputAssigned: boolean;
+  inputHexVersion: number;
+  inputMicrobitVersion: MBSpecs.MBVersion | -1;
+  inputOrigin: HexOrigin;
   isOutputAssigned: boolean;
   isOutputReady: boolean;
+  outputHexVersion: number;
+  outputMicrobitVersion: MBSpecs.MBVersion | -1;
+  outputOrigin: HexOrigin;
   modelView: ModelView;
   isInputOutdated: boolean;
   isOutputOutdated: boolean;
@@ -67,8 +75,14 @@ export const state = writable<{
   reconnectState: DeviceRequestStates.NONE,
   isInputReady: false,
   isInputAssigned: false,
+  inputHexVersion: -1,
+  inputMicrobitVersion: -1,
+  inputOrigin: HexOrigin.UNKNOWN,
   isOutputAssigned: false,
   isOutputReady: false,
+  outputHexVersion: -1,
+  outputMicrobitVersion: -1,
+  outputOrigin: HexOrigin.UNKNOWN,
   modelView: ModelView.STACK,
   isInputOutdated: false,
   isOutputOutdated: false,

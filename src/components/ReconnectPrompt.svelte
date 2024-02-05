@@ -5,23 +5,30 @@
  -->
 
 <script lang="ts">
-  import { t } from '../i18n';
-  import { startConnectionProcess } from '../script/stores/connectDialogStore';
-  import { state } from '../script/stores/uiStore';
-  import StandardButton from './StandardButton.svelte';
-  import StandardDialog from './dialogs/StandardDialog.svelte';
   import ExternalLinkIcon from 'virtual:icons/ri/external-link-line';
+  import StandardButton from '../components/StandardButton.svelte';
+  import { t } from '../i18n';
+  import Microbits from '../script/microbit-interfacing/Microbits';
+  import { stateOnStopOfferingReconnect } from '../script/microbit-interfacing/state-updaters';
+  import { state } from '../script/stores/uiStore';
+  import StandardDialog from './dialogs/StandardDialog.svelte';
+  import { DeviceRequestStates } from '../script/microbit-interfacing/MicrobitConnection';
+  import { startConnectionProcess } from '../script/stores/connectDialogStore';
 
   export let isOpen: boolean = false;
   export let type: 'generic' | 'bluetooth' | 'bridge' | 'remote' = 'generic';
   export let trigger: 'automatic' | 'user' = 'automatic';
 
-  const stopOfferingReconnect = () => {
-    $state.offerReconnect = false;
-  };
-  const reconnect = () => {
-    startConnectionProcess();
-    stopOfferingReconnect();
+  const reconnect = async () => {
+    if ($state.reconnectState !== DeviceRequestStates.NONE) {
+      try {
+        await Microbits.reconnect($state.reconnectState);
+      } catch (e) {
+        startConnectionProcess();
+      } finally {
+        stateOnStopOfferingReconnect();
+      }
+    }
   };
 
   const content = (() => {
@@ -86,7 +93,7 @@
 
 <StandardDialog
   {isOpen}
-  onClose={stopOfferingReconnect}
+  onClose={stateOnStopOfferingReconnect}
   class="{type === 'generic' ? 'w-110' : 'w-150'} space-y-5">
   <svelte:fragment slot="heading">
     {$t(content.heading)}
@@ -115,10 +122,10 @@
           <ExternalLinkIcon />
         </a>
       {/if}
-      <StandardButton onClick={stopOfferingReconnect}
+      <StandardButton onClick={stateOnStopOfferingReconnect}
         >{$t('actions.cancel')}</StandardButton>
       <StandardButton type="primary" onClick={reconnect}
-        >{$t('disconnectedWarning.reconnectButton')}</StandardButton>
+        >{$t('actions.reconnect')}</StandardButton>
     </div>
   </svelte:fragment>
 </StandardDialog>

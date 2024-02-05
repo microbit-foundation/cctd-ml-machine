@@ -15,7 +15,6 @@
   } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import OutputSoundSelector from './OutputSoundSelector.svelte';
-  import Microbits from '../../script/microbit-interfacing/Microbits';
   import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from '../GestureTilePart.svelte';
   import PinSelector from './PinSelector.svelte';
@@ -28,6 +27,7 @@
   import rightArrowBlueImage from '../../imgs/right_arrow_blue.svg';
   import blankMicrobitImage from '../../imgs/blank_microbit.svg';
   import { onMount } from 'svelte';
+  import Microbits from '../../script/microbit-interfacing/Microbits';
 
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -104,22 +104,22 @@
   }
 
   function setOutputPin(on: boolean) {
-    if (!Microbits.isOutputReady()) {
+    if (!$state.isOutputReady) {
       return;
     }
 
     const isOnTimer = turnOnState === PinTurnOnState.X_TIME;
     if (on) {
-      Microbits.sendToOutputPin([{ pin: selectedPin, on: true }]);
+      Microbits.getOutputMicrobit()?.setPin(selectedPin, true);
       // If pin is on timer, set timeout to turn off again
       if (isOnTimer) {
         setTimeout(() => {
-          Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
+          Microbits.getOutputMicrobit()?.setPin(selectedPin, false);
         }, turnOnTime);
       }
     } else if (!isOnTimer) {
       // else if on === false and the pin is not on a timer, turn it off
-      Microbits.sendToOutputPin([{ pin: selectedPin, on: false }]);
+      Microbits.getOutputMicrobit()?.setPin(selectedPin, on);
     }
   }
 
@@ -133,15 +133,15 @@
     if (selectedSound === undefined) {
       return;
     }
-    if (!Microbits.isOutputAssigned()) {
+    if (!$state.isOutputAssigned) {
       return;
     }
 
-    if (Microbits.getAssignedOutput().getVersion() === 1) {
+    if ($state.outputMicrobitVersion === 1) {
       const sound = new Audio(selectedSound.path);
       void sound.play();
     } else {
-      void Microbits.sendUARTSoundMessageToOutput(selectedSound.id);
+      Microbits.getOutputMicrobit()?.sendToOutputUart('s', selectedSound.id);
     }
   }
 
@@ -173,7 +173,7 @@
   };
 
   const refreshAfterChange = () => {
-    Microbits.resetIOPins();
+    Microbits.getOutputMicrobit()?.resetPins();
     setOutputPin(false);
   };
 

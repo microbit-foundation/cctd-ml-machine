@@ -9,12 +9,15 @@
  */
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
 import MBSpecs from './script/microbit-interfacing/MBSpecs';
-import { HexOrigin } from './script/microbit-interfacing/Microbits';
+
+export enum HexOrigin {
+  UNKNOWN,
+  MAKECODE,
+  PROPRIETARY,
+}
 
 class StaticConfiguration {
-  // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
-  public static readonly reconnectTimeoutDuration: number = 7500;
-  public static readonly connectTimeoutDuration: number = 10000; // initial connection
+  public static readonly connectTimeoutDuration: number = 10000;
 
   // After how long should we consider the connection lost if ping was not able to conclude?
   public static readonly connectionLostTimeoutDuration: number = 3000;

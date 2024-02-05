@@ -6,6 +6,8 @@
 
 import { CortexM, DAPLink, WebUSB } from 'dapjs';
 import MBSpecs from './MBSpecs';
+import { HexType, getHexFileUrl } from './Microbits';
+import { logError } from '../utils/logging';
 
 const baudRate = 115200;
 const serialDelay = 5;
@@ -13,11 +15,16 @@ const serialDelay = 5;
 /**
  * A USB connection to a micro:bit.
  */
-class MicrobitUSB extends CortexM {
+class MicrobitUSB {
   private readonly transport: WebUSB;
   private serialPromise: Promise<void> | undefined;
   private serialDAPLink: DAPLink | undefined;
-  private serialCallback: ((data: string) => void) | undefined;
+  private serialCallbacks:
+    | {
+        data: (data: string) => void;
+        error: (e: unknown) => void;
+      }
+    | undefined;
 
   /**
    * Creates a new MicrobitUSB object.
@@ -27,9 +34,7 @@ class MicrobitUSB extends CortexM {
    * @protected constructor for internal use.
    */
   protected constructor(protected usbDevice: USBDevice) {
-    const transport: WebUSB = new WebUSB(usbDevice);
-    super(transport);
-    this.transport = transport;
+    this.transport = new WebUSB(usbDevice);
   }
 
   /**
@@ -50,8 +55,8 @@ class MicrobitUSB extends CortexM {
       const device: USBDevice = await navigator.usb.requestDevice(requestOptions);
       return new MicrobitUSB(device);
     } catch (e) {
-      console.log(e);
-      return Promise.reject(e);
+      logError('USB request device failed/cancelled', e);
+      throw e;
     }
   }
 
@@ -77,25 +82,20 @@ class MicrobitUSB extends CortexM {
    * @returns {string} The friendly name of the micro:bit.
    */
   public async getFriendlyName(): Promise<string> {
-    let result = '';
-    let err: unknown = undefined;
+    const debug = new CortexM(this.transport);
     try {
-      await this.connect();
+      await debug.connect();
       // Microbit only uses MSB of serial number
-      const serial = await this.readMem32(
+      const serial = await debug.readMem32(
         MBSpecs.USBSpecs.FICR + MBSpecs.USBSpecs.DEVICE_ID_1,
       );
-      result = MBSpecs.Utility.serialNumberToName(serial);
+      return MBSpecs.Utility.serialNumberToName(serial);
     } catch (e: unknown) {
-      console.log(e);
-      err = e;
+      logError('USB failed to read name', e);
+      throw new Error('Failed to read name: ' + e);
     } finally {
-      await this.disconnect();
+      await debug.disconnect();
     }
-    if (!result) {
-      return Promise.reject(err);
-    }
-    return Promise.resolve(result);
   }
 
   /**
@@ -104,9 +104,11 @@ class MicrobitUSB extends CortexM {
    * @param {(progress: number) => void} progressCallback A callback for progress.
    */
   public async flashHex(
-    hex: string,
+    hexType: HexType,
     progressCallback: (progress: number) => void,
   ): Promise<void> {
+    const version = this.getModelNumber();
+    const hex = getHexFileUrl(version, hexType);
     const hexFile: Response = await fetch(hex);
     const buffer: ArrayBuffer = await hexFile.arrayBuffer();
 
@@ -120,25 +122,32 @@ class MicrobitUSB extends CortexM {
       await target.connect();
       await target.flash(buffer);
       await target.disconnect();
-    } catch (error) {
-      console.log(error);
-      return Promise.reject(error);
+    } catch (e) {
+      logError('Failed to flash hex', e);
+      throw e;
     }
-    return Promise.resolve();
   }
 
-  public async startSerial(callback: (data: string) => void) {
+  public async startSerial(
+    dataCallback: (data: string) => void,
+    errorCallback: (e: unknown) => void,
+  ) {
     await this.transport.open();
 
-    this.serialCallback = callback;
+    this.serialCallbacks = { data: dataCallback, error: errorCallback };
     this.serialDAPLink = new DAPLink(this.transport);
     const initialBaudRate = await this.serialDAPLink.getSerialBaudrate();
-    this.serialDAPLink.addListener(DAPLink.EVENT_SERIAL_DATA, callback);
+    this.serialDAPLink.addListener(DAPLink.EVENT_SERIAL_DATA, dataCallback);
     await this.serialDAPLink.connect();
     if (initialBaudRate !== baudRate) {
       await this.serialDAPLink.setSerialBaudrate(baudRate);
     }
-    this.serialPromise = this.serialDAPLink.startSerialRead(serialDelay, false);
+    this.serialPromise = this.serialDAPLink
+      .startSerialRead(serialDelay, false)
+      .catch(e => {
+        // Indirect so we can remove the callback as part of disconnect
+        this.serialCallbacks?.error(e);
+      });
   }
 
   public async serialWrite(data: string): Promise<void> {
@@ -151,13 +160,26 @@ class MicrobitUSB extends CortexM {
 
   public async stopSerial() {
     if (this.serialDAPLink) {
-      if (this.serialCallback) {
-        this.serialDAPLink.removeListener(DAPLink.EVENT_SERIAL_DATA, this.serialCallback);
+      if (this.serialCallbacks) {
+        this.serialDAPLink.removeListener(
+          DAPLink.EVENT_SERIAL_DATA,
+          this.serialCallbacks.data,
+        );
+        this.serialCallbacks = undefined;
       }
       this.serialDAPLink.stopSerialRead();
-      await this.serialPromise;
+      try {
+        await this.serialPromise;
+      } catch (e) {
+        // Errors from here will be handled by the error callback
+        // in normal operation or can be ignored during disconnect.
+      }
       this.serialPromise = undefined;
-      await this.serialDAPLink.disconnect();
+      try {
+        await this.serialDAPLink.disconnect();
+      } catch (e) {
+        // If the micro:bit has gone away then this will fail.
+      }
       this.serialDAPLink = undefined;
     }
   }

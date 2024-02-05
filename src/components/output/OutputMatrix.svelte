@@ -52,19 +52,14 @@
 </style>
 
 <script lang="ts">
+  import Microbits from '../../script/microbit-interfacing/Microbits';
+
   // TODO: Shares a lot with 'PatternMatrix'. Extract 'Matrix' component and reuse
 
   import { type GestureData, updateGestureLEDOutput } from '../../script/stores/mlStore';
-  import microbits from '../../script/microbit-interfacing/Microbits';
-  import Microbits from '../../script/microbit-interfacing/Microbits';
 
-  // TODO: Generalize such that it becomes ConnectionBehaviour.setMatrixTo() instead
-  // TODO: Which is used. The function defined here. Or the one in 'OutputGesture.svelte'
-  //       If the one in 'OutputGesture.svelte' is used why do we have default value here?
   export const trigger = () => {
-    if (Microbits.isOutputReady()) {
-      microbits.setOutputMatrix(matrix);
-    }
+    Microbits.getOutputMicrobit()?.setLeds(matrix);
   };
 
   export let gesture: GestureData;

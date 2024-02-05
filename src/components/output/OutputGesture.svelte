@@ -4,11 +4,12 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import ConnectionBehaviours from '../../script/connection-behaviours/ConnectionBehaviours';
-  import Microbits from '../../script/microbit-interfacing/Microbits';
   import Gesture from '../../script/domain/Gesture';
   import OutputGestureStack from './OutputGestureStack.svelte';
   import OutputGestureTile from './OutputGestureTile.svelte';
+  import { state } from '../../script/stores/uiStore';
+  import Microbits from '../../script/microbit-interfacing/Microbits';
+  import { HexOrigin } from '../../StaticConfiguration';
 
   export let gesture: Gesture;
   let wasTriggered = false;
@@ -29,11 +30,8 @@
   }
   const wasTurnedOff = () => {};
   const wasTurnedOn = () => {
-    if (Microbits.isOutputMakecode()) {
-      ConnectionBehaviours.getOutputBehaviour().onGestureRecognized(
-        $gesture.ID,
-        $gesture.name,
-      );
+    if ($state.outputOrigin === HexOrigin.MAKECODE) {
+      Microbits.getOutputMicrobit()?.sendToOutputUart('g', $gesture.name);
       return;
     }
   };

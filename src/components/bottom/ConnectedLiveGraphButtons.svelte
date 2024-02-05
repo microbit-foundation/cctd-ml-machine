@@ -11,13 +11,26 @@
   import StandardButton from '../StandardButton.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { startConnectionProcess } from '../../script/stores/connectDialogStore';
+  import { DeviceRequestStates } from '../../script/microbit-interfacing/MicrobitConnection';
 
   const handleInputDisconnectClick = () => {
-    Microbits.expelInputAndOutput();
+    Microbits.disconnect(DeviceRequestStates.INPUT);
   };
 
   const handleOutputDisconnectClick = () => {
-    Microbits.expelOutput();
+    Microbits.disconnect(DeviceRequestStates.OUTPUT);
+  };
+
+  const handleInputConnect = async () => {
+    if ($state.offerReconnect || $state.isInputAssigned) {
+      try {
+        await Microbits.reconnect(DeviceRequestStates.INPUT);
+      } catch (e) {
+        startConnectionProcess();
+      }
+    } else {
+      startConnectionProcess();
+    }
   };
 </script>
 
@@ -40,9 +53,13 @@
     {/if}
   {/if}
   <div class="ml-2">
-    {#if !$state.isInputAssigned}
-      <StandardButton onClick={startConnectionProcess} type="primary" size="small"
-        >{$t('footer.connectButton')}</StandardButton>
+    {#if !$state.isInputConnected}
+      <StandardButton onClick={handleInputConnect} type="primary" size="small"
+        >{$t(
+          $state.offerReconnect || $state.isInputAssigned
+            ? 'actions.reconnect'
+            : 'footer.connectButton',
+        )}</StandardButton>
     {:else}
       <StandardButton
         onClick={handleInputDisconnectClick}

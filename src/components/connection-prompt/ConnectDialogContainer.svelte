@@ -14,6 +14,7 @@
   import Microbits, {
     FlashStage,
     HexType,
+    getHexFileUrl,
   } from '../../script/microbit-interfacing/Microbits';
   import {
     ConnectDialogStates,
@@ -40,6 +41,7 @@
   import DownloadingDialog from './usb/DownloadingDialog.svelte';
   import SelectMicrobitDialogUsb from './usb/SelectMicrobitDialogUsb.svelte';
   import ManualInstallTutorial from './usb/manual/ManualInstallTutorial.svelte';
+  import UnsupportedMicrobitWarningDialog from '../UnsupportedMicrobitWarningDialog.svelte';
 
   const { bluetooth, usb } = get(compatibility);
   let endOfFlow = false;
@@ -118,7 +120,13 @@
     try {
       const deviceId = await usb.getDeviceId();
       const hexForStage = stageToHex(flashStage);
-      await usb.flashHex(hexForStage, progress => {
+      const hexUrl = getHexFileUrl(usb.getModelNumber(), hexForStage);
+      if (hexUrl === undefined) {
+        $connectionDialogState.connectionState = ConnectDialogStates.MICROBIT_UNSUPPORTED;
+        return;
+      }
+
+      await usb.flashHex(hexUrl, progress => {
         // Flash hex
         // Send users to download screen
         if (
@@ -405,6 +413,12 @@
         onTryAgain={() => {
           $connectionDialogState.connectionState = ConnectDialogStates.BLUETOOTH;
         }} />
+    {:else if $connectionDialogState.connectionState === ConnectDialogStates.MICROBIT_UNSUPPORTED}
+      <UnsupportedMicrobitWarningDialog
+        onStartBluetoothClick={() => {
+          $connectionDialogState.connectionState = ConnectDialogStates.START_BLUETOOTH;
+        }}
+        onClose={endFlow} />
     {/if}
   </StandardDialog>
 </div>

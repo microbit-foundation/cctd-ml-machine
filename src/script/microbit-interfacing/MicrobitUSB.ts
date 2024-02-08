@@ -5,9 +5,8 @@
  */
 
 import { CortexM, DAPLink, WebUSB } from 'dapjs';
-import MBSpecs from './MBSpecs';
-import { HexType, getHexFileUrl } from './Microbits';
 import { logError } from '../utils/logging';
+import MBSpecs from './MBSpecs';
 import { CortexSpecialReg } from './constants';
 
 const baudRate = 115200;
@@ -112,18 +111,15 @@ class MicrobitUSB {
 
   /**
    * Flashes a .hex file to the micro:bit.
-   * @param {string} hex The hex file to flash. (As a link)
+   * @param {string} url The hex file to flash. (As a link)
    * @param {(progress: number) => void} progressCallback A callback for progress.
    */
   public async flashHex(
-    hexType: HexType,
+    url: string,
     progressCallback: (progress: number) => void,
   ): Promise<void> {
-    const version = this.getModelNumber();
-    const hex = getHexFileUrl(version, hexType);
-    const hexFile: Response = await fetch(hex);
-    const buffer: ArrayBuffer = await hexFile.arrayBuffer();
-
+    const hexFile = await fetch(url);
+    const buffer = await hexFile.arrayBuffer();
     const target = new DAPLink(this.transport);
 
     target.on(DAPLink.EVENT_PROGRESS, (progress: number) => {

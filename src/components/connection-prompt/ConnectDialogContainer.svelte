@@ -5,38 +5,41 @@
  -->
 
 <script lang="ts">
-  import StandardDialog from '../dialogs/StandardDialog.svelte';
-  import StartRadioDialog from './radio/StartRadioDialog.svelte';
-  import StartBluetoothDialog from './bluetooth/StartBluetoothDialog.svelte';
-  import ConnectCableDialog from './bluetooth/ConnectCableDialog.svelte';
-  import SelectMicrobitDialogUsb from './usb/SelectMicrobitDialogUsb.svelte';
-  import ConnectBatteryDialog from './bluetooth/ConnectBatteryDialog.svelte';
-  import BluetoothConnectDialog from './bluetooth/BluetoothConnectDialog.svelte';
-  import DownloadingDialog from './usb/DownloadingDialog.svelte';
-  import ManualInstallTutorial from './usb/manual/ManualInstallTutorial.svelte';
-  import {
-    ConnectDialogStates,
-    connectionDialogState,
-  } from '../../script/stores/connectDialogStore';
-  import { btPatternInput } from '../../script/stores/connectionStore';
-  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
-  import BluetoothConnectingDialog from './bluetooth/BluetoothConnectingDialog.svelte';
-  import SelectMicrobitDialogBluetooth from './bluetooth/SelectMicrobitDialogBluetooth.svelte';
-  import MicrobitWearingInstructionDialog from './MicrobitWearingInstructionDialog.svelte';
-  import WebUsbTryAgain, { USBTryAgainType } from './WebUsbTryAgain.svelte';
   import { onDestroy, onMount } from 'svelte';
-  import { get, Unsubscriber } from 'svelte/store';
-  import { compatibility, state } from '../../script/stores/uiStore';
+  import { Unsubscriber, get } from 'svelte/store';
   import { isDevMode } from '../../script/environment';
   import { flags } from '../../script/flags';
-  import ConnectingMicrobits from './radio/ConnectingMicrobits.svelte';
+  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
+  import MicrobitUSB from '../../script/microbit-interfacing/MicrobitUSB';
   import Microbits, {
     FlashStage,
     HexType,
   } from '../../script/microbit-interfacing/Microbits';
-  import MicrobitUSB from '../../script/microbit-interfacing/MicrobitUSB';
+  import {
+    ConnectDialogStates,
+    connectionDialogState,
+  } from '../../script/stores/connectDialogStore';
+  import {
+    btPatternInput,
+    radioBridgeRemoteDeviceId,
+  } from '../../script/stores/connectionStore';
+  import { compatibility, state } from '../../script/stores/uiStore';
+  import StandardDialog from '../dialogs/StandardDialog.svelte';
+  import MicrobitWearingInstructionDialog from './MicrobitWearingInstructionDialog.svelte';
   import WebBluetoothTryAgain from './WebBluetoothTryAgain.svelte';
+  import WebUsbTryAgain, { USBTryAgainType } from './WebUsbTryAgain.svelte';
+  import BluetoothConnectDialog from './bluetooth/BluetoothConnectDialog.svelte';
+  import BluetoothConnectingDialog from './bluetooth/BluetoothConnectingDialog.svelte';
+  import ConnectBatteryDialog from './bluetooth/ConnectBatteryDialog.svelte';
+  import ConnectCableDialog from './bluetooth/ConnectCableDialog.svelte';
+  import SelectMicrobitDialogBluetooth from './bluetooth/SelectMicrobitDialogBluetooth.svelte';
+  import StartBluetoothDialog from './bluetooth/StartBluetoothDialog.svelte';
+  import ConnectingMicrobits from './radio/ConnectingMicrobits.svelte';
+  import StartRadioDialog from './radio/StartRadioDialog.svelte';
+  import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
+  import DownloadingDialog from './usb/DownloadingDialog.svelte';
+  import SelectMicrobitDialogUsb from './usb/SelectMicrobitDialogUsb.svelte';
+  import ManualInstallTutorial from './usb/manual/ManualInstallTutorial.svelte';
 
   const { bluetooth, usb } = get(compatibility);
   let endOfFlow = false;
@@ -113,7 +116,7 @@
 
   async function flashMicrobit(usb: MicrobitUSB): Promise<void> {
     try {
-      const name = await usb.getFriendlyName();
+      const deviceId = await usb.getDeviceId();
       const hexForStage = stageToHex(flashStage);
       await usb.flashHex(hexForStage, progress => {
         // Flash hex
@@ -125,11 +128,20 @@
         }
         flashProgress = progress;
       });
-      // Finished flashing successfully
+
+      // Store radio/bluetooth details. Radio is essential to pass to micro:bit 2.
+      // Bluetooth saves the user from entering the pattern.
+      if (flashStage === 'bluetooth') {
+        $btPatternInput = MBSpecs.Utility.nameToPattern(
+          MBSpecs.Utility.serialNumberToName(deviceId),
+        );
+      }
+      if (flashStage === 'radio-remote') {
+        $radioBridgeRemoteDeviceId = deviceId;
+      }
+
+      // Next UI state:
       if (flashStage === 'bluetooth' || flashStage === 'radio-remote') {
-        if (flashStage === 'bluetooth') {
-          $btPatternInput = MBSpecs.Utility.nameToPattern(name);
-        }
         $connectionDialogState.connectionState = ConnectDialogStates.CONNECT_BATTERY;
       } else if (flashStage === 'radio-bridge') {
         onConnectingSerial(usb);
@@ -157,7 +169,10 @@
 
   async function onConnectingSerial(usb: MicrobitUSB): Promise<void> {
     $connectionDialogState.connectionState = ConnectDialogStates.CONNECTING_MICROBITS;
-    await Microbits.assignSerialInput(usb);
+    if ($radioBridgeRemoteDeviceId === -1) {
+      throw new Error('Radio bridge device id not set');
+    }
+    await Microbits.assignSerialInput(usb, $radioBridgeRemoteDeviceId);
     endFlow();
   }
 

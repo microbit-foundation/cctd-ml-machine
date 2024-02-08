@@ -18,23 +18,31 @@ enum MessageTypes {
 export enum CommandTypes {
   Handshake = 'HS',
   RadioFrequency = 'RF',
+  RemoteMbId = 'RMBID',
   SoftwareVersion = 'SWVER',
   HardwareVersion = 'HWVER',
   Zstart = 'ZSTART',
   Stop = 'STOP',
 }
 
+enum ResponseExtraTypes {
+  Error = 'ERROR',
+}
+
+export type ResponseTypes = CommandTypes | ResponseExtraTypes;
+export const ResponseTypes = { ...CommandTypes, ...ResponseExtraTypes };
+
 export type MessageCmd = {
   message: string;
   messageId: number;
-  cmdType: CommandTypes;
+  type: CommandTypes;
   value: number | string;
 };
 
 export type MessageResponse = {
   message: string;
   messageId: number;
-  cmdType: CommandTypes;
+  type: ResponseTypes;
   value: number | string;
 };
 
@@ -101,30 +109,32 @@ export const processResponseMessage = (message: string): MessageResponse | undef
   if (isNaN(messageId)) {
     return undefined;
   }
-  const cmdType = responseMatch.groups['cmd'] as CommandTypes;
-  if (!Object.values(CommandTypes).includes(cmdType)) {
+  const responseType = responseMatch.groups['cmd'] as ResponseTypes;
+  if (!Object.values(ResponseTypes).includes(responseType)) {
     return undefined;
   }
   let value: string | number = responseMatch.groups['value'];
-  switch (cmdType) {
+  switch (responseType) {
     // Commands with numeric values
-    case CommandTypes.Handshake:
-    case CommandTypes.RadioFrequency:
-    case CommandTypes.HardwareVersion:
+    case ResponseTypes.Handshake:
+    case ResponseTypes.RadioFrequency:
+    case ResponseTypes.RemoteMbId:
+    case ResponseTypes.HardwareVersion:
+    case ResponseTypes.Error:
       value = Number(value);
-      if (isNaN(value)) {
+      if (isNaN(value) || value < 0 || value > 0xffffffff) {
         return undefined;
       }
       break;
     // Commands without values
-    case CommandTypes.Zstart:
-    case CommandTypes.Stop:
+    case ResponseTypes.Zstart:
+    case ResponseTypes.Stop:
       if (value !== '') {
         return undefined;
       }
       break;
     // Semver-ish values (valid range 00.00.00 to 99.99.99)
-    case CommandTypes.SoftwareVersion:
+    case ResponseTypes.SoftwareVersion:
       if (!/^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$/.test(value)) {
         return undefined;
       }
@@ -133,7 +143,7 @@ export const processResponseMessage = (message: string): MessageResponse | undef
   return {
     message,
     messageId,
-    cmdType,
+    type: responseType,
     value,
   };
 };
@@ -174,7 +184,7 @@ const generateCommand = (cmdType: CommandTypes, cmdData: string = ''): MessageCm
   return {
     message: `C[${msgID.toString(16).toUpperCase()}]${cmdType}[${cmdData}]\n`,
     messageId: msgID,
-    cmdType: cmdType,
+    type: cmdType,
     value: cmdData,
   };
 };
@@ -199,7 +209,17 @@ export const generateCmdStop = (): MessageCmd => {
 };
 
 export const generateCmdRadioFrequency = (frequency: number): MessageCmd => {
+  if (frequency < 0 || frequency > 83) {
+    throw new Error('Radio frequency out of range');
+  }
   return generateCommand(CommandTypes.RadioFrequency, frequency.toString());
+};
+
+export const generateCmdRemoteMbId = (remoteMicrobitId: number): MessageCmd => {
+  if (remoteMicrobitId < 0 || remoteMicrobitId > 0xffffffff) {
+    throw new Error('Remote micro:bit ID out of range');
+  }
+  return generateCommand(CommandTypes.RemoteMbId, remoteMicrobitId.toString());
 };
 
 export const generateRandomRadioFrequency = (): number => {

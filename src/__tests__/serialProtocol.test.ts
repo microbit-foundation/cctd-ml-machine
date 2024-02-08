@@ -184,29 +184,21 @@ describe('processResponseMessage', () => {
   it('processes valid Handshake responses', () => {
     const message1 = 'R[0]HS[1]';
     const message2 = 'R[1122aabb]HS[255]';
-    const message3 = 'R[FFFFFFFF]HS[-1000]';
 
     const got1 = processResponseMessage(message1);
     const got2 = processResponseMessage(message2);
-    const got3 = processResponseMessage(message3);
 
     expect(got1).toEqual({
       message: message1,
       messageId: 0,
-      cmdType: 'HS',
+      type: 'HS',
       value: 1,
     });
     expect(got2).toEqual({
       message: message2,
       messageId: 0x1122aabb,
-      cmdType: 'HS',
+      type: 'HS',
       value: 255,
-    });
-    expect(got3).toEqual({
-      message: message3,
-      messageId: 0xffffffff,
-      cmdType: 'HS',
-      value: -1000,
     });
   });
 
@@ -218,8 +210,21 @@ describe('processResponseMessage', () => {
     expect(got).toEqual({
       message: message,
       messageId: 0x1234,
-      cmdType: 'RF',
+      type: 'RF',
       value: 42,
+    });
+  });
+
+  it('processes valid Remote micro:bit ID response', () => {
+    const message = 'R[1234]RMBID[4294967295]';
+
+    const got = processResponseMessage(message);
+
+    expect(got).toEqual({
+      message: message,
+      messageId: 0x1234,
+      type: 'RMBID',
+      value: 4294967295,
     });
   });
 
@@ -235,19 +240,19 @@ describe('processResponseMessage', () => {
     expect(got1).toEqual({
       message: message1,
       messageId: 0x1234,
-      cmdType: 'SWVER',
+      type: 'SWVER',
       value: '0.0.0',
     });
     expect(got2).toEqual({
       message: message2,
       messageId: 0x1234,
-      cmdType: 'SWVER',
+      type: 'SWVER',
       value: '99.99.99',
     });
     expect(got3).toEqual({
       message: message3,
       messageId: 0x1234,
-      cmdType: 'SWVER',
+      type: 'SWVER',
       value: '1.2.3',
     });
   });
@@ -262,13 +267,13 @@ describe('processResponseMessage', () => {
     expect(got1).toEqual({
       message: message1,
       messageId: 0x1234,
-      cmdType: 'HWVER',
+      type: 'HWVER',
       value: 0,
     });
     expect(got2).toEqual({
       message: message2,
       messageId: 0x1234,
-      cmdType: 'HWVER',
+      type: 'HWVER',
       value: 9999,
     });
   });
@@ -281,7 +286,7 @@ describe('processResponseMessage', () => {
     expect(got).toEqual({
       message: message,
       messageId: 0x1234,
-      cmdType: 'ZSTART',
+      type: 'ZSTART',
       value: '',
     });
   });
@@ -294,8 +299,21 @@ describe('processResponseMessage', () => {
     expect(got).toEqual({
       message: message,
       messageId: 0x1234,
-      cmdType: 'STOP',
+      type: 'STOP',
       value: '',
+    });
+  });
+
+  it('processes valid Error response', () => {
+    const message = 'R[1234]ERROR[1]';
+
+    const got = processResponseMessage(message);
+
+    expect(got).toEqual({
+      message: message,
+      messageId: 0x1234,
+      type: 'ERROR',
+      value: 1,
     });
   });
 
@@ -326,8 +344,10 @@ describe('processResponseMessage', () => {
   it('throws away response messages with invalid number values', () => {
     // First valid messages to stablish a baseline
     expect(processResponseMessage('R[0]RF[10000]')).not.toBeUndefined();
-    expect(processResponseMessage('R[0]RF[-1]')).not.toBeUndefined();
+    expect(processResponseMessage('R[0]RMBID[4294967295]')).not.toBeUndefined();
     // Now invalid values
+    expect(processResponseMessage('R[0]RMBID[4294967296]')).toBeUndefined();
+    expect(processResponseMessage('R[0]RF[-1]')).toBeUndefined();
     expect(processResponseMessage('R[0]RF[1-2]')).toBeUndefined();
     expect(processResponseMessage('R[0]RF[1,2]')).toBeUndefined();
     expect(processResponseMessage('R[0]RF[1F]')).toBeUndefined();

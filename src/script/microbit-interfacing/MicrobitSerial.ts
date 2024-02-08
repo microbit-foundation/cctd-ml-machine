@@ -29,19 +29,14 @@ export class MicrobitSerial implements MicrobitConnection {
   // To avoid concurrent connect attempts
   private isConnecting: boolean = false;
 
-  // TODO: The radio frequency should be randomly generated once per session.
-  //       If we want a session to be restored (e.g. from local storage) and
-  //       the previously flashed micro:bits to continue working without
-  //       reflashing we need to store and retrieve this value somehow.
-  // FIXME: Setting this to the hex files default value for now, as we need
-  //        to configure the radio frequency for both micro:bits after they
-  //        are flashed, not just the radio bridge.
-  private sessionRadioFrequency = 42;
   private connectionCheckIntervalId: ReturnType<typeof setInterval> | undefined;
   private lastReceivedMessageTimestamp: number | undefined;
   private isReconnect: boolean = false;
 
-  constructor(private usb: MicrobitUSB) {}
+  constructor(
+    private usb: MicrobitUSB,
+    private remoteDeviceId: number,
+  ) {}
 
   async connect(...states: DeviceRequestStates[]): Promise<void> {
     logMessage('Serial connect', states);
@@ -55,7 +50,7 @@ export class MicrobitSerial implements MicrobitConnection {
     let onPeriodicMessageRecieved: (() => void) | undefined;
 
     const handleError = (e: unknown) => {
-      console.error(e);
+      logError('Serial error', e);
       void this.disconnectInternal(false, 'bridge');
     };
     const processMessage = (data: string) => {
@@ -122,14 +117,15 @@ export class MicrobitSerial implements MicrobitConnection {
         }, 1000);
       }
 
-      // Set the radio frequency to a value unique to this session
-      const radioFreqCommand = protocol.generateCmdRadioFrequency(
-        this.sessionRadioFrequency,
-      );
-      const radioFreqResponse = await this.sendCmdWaitResponse(radioFreqCommand);
-      if (radioFreqResponse.value !== this.sessionRadioFrequency) {
+      logMessage(`Serial: using remote device id ${this.remoteDeviceId}`);
+      const remoteMbIdCommand = protocol.generateCmdRemoteMbId(this.remoteDeviceId);
+      const remoteMbIdResponse = await this.sendCmdWaitResponse(remoteMbIdCommand);
+      if (
+        remoteMbIdResponse.type === protocol.ResponseTypes.Error ||
+        remoteMbIdResponse.value !== this.remoteDeviceId
+      ) {
         throw new Error(
-          `Failed to set radio frequency. Expected ${this.sessionRadioFrequency}, got ${radioFreqResponse.value}`,
+          `Failed to set remote micro:bit ID. Expected ${this.remoteDeviceId}, got ${remoteMbIdResponse.value}`,
         );
       }
 
@@ -140,7 +136,6 @@ export class MicrobitSerial implements MicrobitConnection {
           accelerometer: true,
           buttons: true,
         });
-        await this.usb.serialWrite(startCmd.message);
         const periodicMessagePromise = new Promise<void>((resolve, reject) => {
           onPeriodicMessageRecieved = resolve;
           setTimeout(() => {
@@ -148,7 +143,14 @@ export class MicrobitSerial implements MicrobitConnection {
             reject(new Error('Failed to receive data from remote micro:bit'));
           }, 500);
         });
-        await this.sendCmdWaitResponse(startCmd);
+
+        const startCmdResponse = await this.sendCmdWaitResponse(startCmd);
+        if (startCmdResponse.type === protocol.ResponseTypes.Error) {
+          throw new Error(
+            `Failed to start streaming sensors data. Error response received: ${startCmdResponse.message}`,
+          );
+        }
+
         if (this.isReconnect) {
           await periodicMessagePromise;
         } else {
@@ -246,6 +248,7 @@ export class MicrobitSerial implements MicrobitConnection {
     // As a workaround we can spam the micro:bit with handshake messages until
     // enough responses have been queued in the buffer to fill it and the data
     // starts to flow.
+    logMessage('Serial handshake');
     const handshakeResult = await new Promise<protocol.MessageResponse>(
       async (resolve, reject) => {
         const attempts = 20;
@@ -284,9 +287,10 @@ export class MicrobitSerial implements MicrobitConnection {
 export const startSerialConnection = async (
   usb: MicrobitUSB,
   requestState: DeviceRequestStates,
+  remoteDeviceId: number,
 ): Promise<MicrobitSerial | undefined> => {
   try {
-    const serial = new MicrobitSerial(usb);
+    const serial = new MicrobitSerial(usb, remoteDeviceId);
     await serial.connect(requestState);
     return serial;
   } catch (e) {

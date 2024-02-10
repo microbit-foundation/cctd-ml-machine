@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import Bowser from 'bowser';
 import StaticConfiguration from '../../StaticConfiguration';
 import { outputting } from '../stores/uiStore';
 import { logError, logMessage } from '../utils/logging';
@@ -22,6 +23,10 @@ import {
   stateOnReady,
   stateOnReconnectionAttempt,
 } from './state-updaters';
+import { btSelectMicrobitDialogOnLoad } from '../stores/connectionStore';
+
+const browser = Bowser.getParser(window.navigator.userAgent);
+const isWindowsOS = browser.getOSName() === 'Windows';
 
 /**
  * UART data target. For fixing type compatibility issues.
@@ -57,6 +62,8 @@ export class MicrobitBluetooth implements MicrobitConnection {
   private gattConnectPromise: Promise<MBSpecs.MBVersion | undefined> | undefined;
   private disconnectPromise: Promise<unknown> | undefined;
   private connecting = false;
+  private isReconnect = false;
+  private reconnectReadyPromise: Promise<void> | undefined;
 
   private outputWriteQueue: {
     busy: boolean;
@@ -77,6 +84,10 @@ export class MicrobitBluetooth implements MicrobitConnection {
     logMessage('Bluetooth connect', states);
     if (this.duringExplicitConnectDisconnect) {
       logMessage('Skipping connect attempt when one is already in progress');
+      // Wait for the gattConnectPromise while showing a "connecting" dialog.
+      // If the user clicks disconnect while the automatic reconnect is in progress,
+      // then clicks reconnect, we need to wait rather than return immediately.
+      await this.gattConnectPromise;
       return;
     }
     this.duringExplicitConnectDisconnect++;
@@ -188,16 +199,29 @@ export class MicrobitBluetooth implements MicrobitConnection {
     } finally {
       this.duringExplicitConnectDisconnect--;
     }
+    this.reconnectReadyPromise = new Promise(resolve => setTimeout(resolve, 3_500));
     if (updateState) {
       this.inUseAs.forEach(value =>
-        stateOnDisconnected(value, userTriggered, 'bluetooth'),
+        stateOnDisconnected(
+          value,
+          userTriggered ? false : this.isReconnect ? 'autoReconnect' : 'connect',
+          'bluetooth',
+        ),
       );
     }
   }
 
   async reconnect(): Promise<void> {
     logMessage('Bluetooth reconnect');
+    this.isReconnect = true;
     const as = Array.from(this.inUseAs);
+    if (isWindowsOS) {
+      // On Windows, the micro:bit can take around 3 seconds to respond to gatt.disconnect().
+      // Attempting to reconnect before the micro:bit has responded results in another
+      // gattserverdisconnected event being fired. We then fail to get primaryService on a
+      // disconnected GATT server.
+      await this.reconnectReadyPromise;
+    }
     await this.connect(...as);
   }
 
@@ -214,7 +238,7 @@ export class MicrobitBluetooth implements MicrobitConnection {
       }
     } catch (e) {
       logError('Bluetooth connect triggered by disconnect listener failed', e);
-      this.inUseAs.forEach(s => stateOnDisconnected(s, false, 'bluetooth'));
+      this.inUseAs.forEach(s => stateOnDisconnected(s, 'autoReconnect', 'bluetooth'));
     }
   };
 
@@ -486,17 +510,32 @@ export const startBluetoothConnection = async (
 
 const requestDevice = async (name: string): Promise<BluetoothDevice | undefined> => {
   try {
-    return navigator.bluetooth.requestDevice({
-      filters: [{ namePrefix: `BBC micro:bit [${name}]` }],
-      optionalServices: [
-        MBSpecs.Services.UART_SERVICE,
-        MBSpecs.Services.ACCEL_SERVICE,
-        MBSpecs.Services.DEVICE_INFO_SERVICE,
-        MBSpecs.Services.LED_SERVICE,
-        MBSpecs.Services.IO_SERVICE,
-        MBSpecs.Services.BUTTON_SERVICE,
-      ],
-    });
+    // In some situations the Chrome device prompt simply doesn't appear so we time this out after 30 seconds and reload the page
+    const result = await Promise.race([
+      navigator.bluetooth.requestDevice({
+        filters: [{ namePrefix: `BBC micro:bit [${name}]` }],
+        optionalServices: [
+          MBSpecs.Services.UART_SERVICE,
+          MBSpecs.Services.ACCEL_SERVICE,
+          MBSpecs.Services.DEVICE_INFO_SERVICE,
+          MBSpecs.Services.LED_SERVICE,
+          MBSpecs.Services.IO_SERVICE,
+          MBSpecs.Services.BUTTON_SERVICE,
+        ],
+      }),
+      new Promise<'timeout'>(resolve =>
+        setTimeout(
+          () => resolve('timeout'),
+          StaticConfiguration.requestDeviceTimeoutDuration,
+        ),
+      ),
+    ]);
+    if (result === 'timeout') {
+      btSelectMicrobitDialogOnLoad.set(true);
+      window.location.reload();
+      return undefined;
+    }
+    return result;
   } catch (e) {
     logError('Bluetooth request device failed/cancelled', e);
     return undefined;

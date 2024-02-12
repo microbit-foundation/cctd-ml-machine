@@ -9,7 +9,7 @@
   import TypingUtils from '../../script/TypingUtils';
   import { classifier } from '../../script/stores/Stores';
   import { state } from '../../script/stores/uiStore';
-  import StandardButton from '../StandardButton.svelte';
+  import StandardButton from '../buttons/StandardButton.svelte';
 
   export let onOutputDisconnectButtonClicked: () => void;
   export let onOutputConnectButtonClicked: () => void;

@@ -13,7 +13,7 @@
   import { onMount } from 'svelte';
   import BaseDialog from '../dialogs/BaseDialog.svelte';
   import CookieDescriptionOverlay from './CookieDescriptionOverlay.svelte';
-  import StandardButton from '../StandardButton.svelte';
+  import StandardButton from '../buttons/StandardButton.svelte';
 
   let isCookieDialogOpen: boolean;
   let isDescriptionDialogOpen = false;

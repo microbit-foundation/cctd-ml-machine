@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { horizontalSlide } from '../script/transitions';
-  import StandardButton from '../components/StandardButton.svelte';
+  import StandardButton from '../components/buttons/StandardButton.svelte';
   import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
   import { btPatternInput, btPatternOutput } from '../script/stores/connectionStore';

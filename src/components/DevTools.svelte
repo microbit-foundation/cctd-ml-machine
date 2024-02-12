@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import { Paths, navigate } from '../router/paths';
-  import StandardButton from './StandardButton.svelte';
+  import StandardButton from './buttons/StandardButton.svelte';
 </script>
 
 <StandardButton

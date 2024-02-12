@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { horizontalSlide } from '../script/transitions';
-  import StandardButton from './StandardButton.svelte';
+  import StandardButton from './buttons/StandardButton.svelte';
   import { t } from '../i18n';
   import Microbits, { HexOrigin } from '../script/microbit-interfacing/Microbits';
   import {

@@ -10,7 +10,7 @@
   import { t } from '../../i18n';
   import ConnectDialogContainer from '../connection-prompt/ConnectDialogContainer.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
-  import StandardButton from '../StandardButton.svelte';
+  import StandardButton from '../buttons/StandardButton.svelte';
   import { startConnectionProcess } from '../../script/stores/connectDialogStore';
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';

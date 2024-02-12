@@ -17,7 +17,7 @@
   } from '../script/stores/uiStore';
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
-  import StandardButton from './StandardButton.svelte';
+  import StandardButton from './buttons/StandardButton.svelte';
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';

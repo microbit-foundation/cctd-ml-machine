@@ -12,7 +12,7 @@
   import StandardDialog from '../components/dialogs/StandardDialog.svelte';
   import MainConnectDialog from '../components/connection-prompt/ConnectDialogContainer.svelte';
   import NewGestureButton from '../components/NewGestureButton.svelte';
-  import StandardButton from '../components/StandardButton.svelte';
+  import StandardButton from '../components/buttons/StandardButton.svelte';
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
   import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';

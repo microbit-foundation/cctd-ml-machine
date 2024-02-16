@@ -14,6 +14,7 @@
   import TrainModelButton from './TrainModelButton.svelte';
   import { classifier, gestures } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
+  import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
 
   const model = classifier.getModel();
 
@@ -39,6 +40,7 @@
     </StandardButton>
   </ControlBar>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
+    <KnnModelGraph />
     {#if !sufficientData}
       <div class="w-full text-primarytext">
         <h1 class="w-3/4 text-3xl bold m-auto">

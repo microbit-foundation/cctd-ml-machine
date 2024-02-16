@@ -16,4 +16,18 @@ const TypingUtils = {
   },
 };
 
+export type Point3D = {
+  x: number;
+  y: number;
+  z: number;
+};
+/**
+ * Type help for d3-3d package
+ */
+export type Point3DTransformed = Point3D & {
+  rotated: { x: number; y: number; z: number };
+  centroid: { x: number; y: number; z: number };
+  projected: { x: number; y: number };
+};
+
 export default TypingUtils;

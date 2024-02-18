@@ -26,7 +26,6 @@ export type Point3D = {
  */
 export type Point3DTransformed = Point3D & {
   rotated: { x: number; y: number; z: number };
-  centroid: { x: number; y: number; z: number };
   projected: { x: number; y: number };
 };
 

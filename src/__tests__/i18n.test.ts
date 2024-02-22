@@ -32,11 +32,11 @@ describe('Initialization tests', () => {
         search: '',
       },
     }));
-    const i18n = await import('../i18n');
-    const getText = get(i18n.t);
+    const { t, waitLocale } = await import('../i18n');
+    await waitLocale();
+    const getText = get(t);
 
     const translatedText = getText('alert.isRecording');
-
     expect(translatedText).toBe("Rydych chi'n recordio ar hyn o bryd!");
   });
 
@@ -49,11 +49,11 @@ describe('Initialization tests', () => {
         search: '',
       },
     }));
-    const i18n = await import('../i18n');
-    const getText = get(i18n.t);
+    const { t, waitLocale } = await import('../i18n');
+    await waitLocale();
+    const getText = get(t);
 
     const translatedText = getText('alert.isRecording');
-
     expect(translatedText).toBe('You are currently recording!');
   });
 
@@ -66,11 +66,11 @@ describe('Initialization tests', () => {
         search: '?l=cy',
       },
     }));
-    const i18n = await import('../i18n');
-    const getText = get(i18n.t);
+    const { t, waitLocale } = await import('../i18n');
+    await waitLocale();
+    const getText = get(t);
 
     const translatedText = getText('alert.isRecording');
-
     expect(translatedText).toBe("Rydych chi'n recordio ar hyn o bryd!");
   });
 });

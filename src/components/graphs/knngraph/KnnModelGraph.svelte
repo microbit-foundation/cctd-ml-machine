@@ -9,7 +9,6 @@
   let controller: KNNModelGraphController | undefined;
 
   onMount(() => {
-    console.log(controller === undefined)
     const svg = d3.selectAll('.d3-3d');
     classifier.getFilters().clear();
     classifier.getFilters().add(FilterType.MAX);
@@ -23,6 +22,13 @@
       );
     });
   });
+
+  const zoom = (amount: number) => {
+    if (!controller) {
+      return;
+    }
+    controller.multiplyScale(amount);
+  };
 
   let isDragging = false;
   const dragStart = () => {
@@ -66,13 +72,17 @@
   };
 </script>
 
-<svg
-  class="d3-3d"
-  width="500"
-  height="500"
-  on:mousedown={dragStart}
-  on:mouseup={dragEnd}
-  on:mousemove={drag}
-  on:mouseout={dragEnd}
-  on:mouseleave={dragEnd}
-  on:blur={dragEnd} />
+<div class="pt-2">
+  <button class="border-primary border-1 px-3" on:click={() => zoom(1.25)}>+</button>
+  <button class="border-primary border-1 px-3" on:click={() => zoom(0.75)}>-</button>
+  <svg
+    class="d3-3d"
+    width="500"
+    height="500"
+    on:mousedown={dragStart}
+    on:mouseup={dragEnd}
+    on:mousemove={drag}
+    on:mouseout={dragEnd}
+    on:mouseleave={dragEnd}
+    on:blur={dragEnd} />
+</div>

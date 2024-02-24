@@ -8,6 +8,7 @@ import {
   lineStrips3D,
   lines3D,
 } from 'd3-3d';
+import { gestures } from '../../../script/stores/Stores';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -24,8 +25,7 @@ export type GrahpDrawData = {
 const colors = ['red', 'green', 'blue', 'orange'];
 
 class KNNModelGraphDrawer {
-  constructor(private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) {
-  }
+  constructor(private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) {}
 
   public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][][]) {
     this.svg.selectAll('*').remove(); // clear svg for redraw
@@ -40,37 +40,42 @@ class KNNModelGraphDrawer {
 
     // Add points
     drawData.forEach((clazz, classIndex) => {
-      clazz.forEach((example, exampleIndex) => {
-        example.forEach((sample, sampleIndex) => {
+      clazz.forEach((sample, exampleIndex) => {
+        sample.forEach((axisValue, axisIndex) => {
           this.addPoint(
-            sample,
+            axisValue,
             drawConfig,
-            `${classIndex}-${exampleIndex}-${sampleIndex}`,
-            colors[classIndex],
+            `${classIndex}-${exampleIndex}-${axisIndex}`,
+            colors[axisIndex],
+            this.getLabel(classIndex)
           );
         });
       });
     });
   }
 
+  /**
+   * Adds a single 3D point projected onto the svg.
+   */
   private addPoint(
     point: Point3D,
     drawConfig: GraphDrawConfig,
     key: string,
     color: string,
+    label?: string
   ) {
     const radius = 3;
     const pointTransformer = this.getPointTransformer(drawConfig);
     const transformedPoint: Point3DTransformed = pointTransformer(point);
-    const samplePoints = this.svg
+    const samplePoint = this.svg
       .selectAll(`circle.points-class-${key}`)
       .data([transformedPoint]);
-    samplePoints
+    samplePoint
       .enter()
       .append('circle')
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      .merge(samplePoints)
+      .merge(samplePoint)
       .attr('class', `d3-3d points-class-${key}`)
       .attr('fill', color)
       .attr('cx', d => {
@@ -78,6 +83,21 @@ class KNNModelGraphDrawer {
       })
       .attr('cy', d => d.projected.y)
       .attr('r', radius);
+
+      if (!label) {
+        return;
+      }
+      const pointLabel = this.svg.selectAll(`span.points-class-${key}`).data([transformedPoint]);
+      pointLabel
+        .enter()
+        .append("text")
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        .merge(samplePoint)
+        .attr("class",`d3-3d points-class-${key} text-xs`)
+        .attr("x", (p) => p.projected.x)
+        .attr("y", (p) => p.projected.y)
+        .text(label)
   }
 
   private addAxis(
@@ -117,35 +137,48 @@ class KNNModelGraphDrawer {
       .attr('stroke-width', 1);
   }
 
+  /**
+   * Returns the label by using index to find element in list of gestures
+   */
+  private getLabel(dataIndex: number) {
+    try {
+        const gestureList = gestures.getGestures();
+        return gestureList[dataIndex].getName()    
+    } catch (error) {
+        // Index out of bounds indicates either an error or live data.
+        return "Live"
+    }
+}
+
   private addGrid(drawConfig: GraphDrawConfig) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
-        const grid3d = this.getGridTransformer(drawConfig);
-        const xGrid = [];
-        const j = 10;
-        for (let z = -j; z < j; z++) {
-            for (let x = -j; x < j; x++) {
-              xGrid.push({ x: x, y: 0, z: z});
-            }
-          }
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-            const gridData = grid3d(xGrid)
-    
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-          const xGridE = this.svg.selectAll("path.grid").data(gridData, (d: any)=>d.id);
-    
-          xGridE
-          .enter()
-          .append("path")
-          .attr("class", "d3-3d grid")
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          .merge(xGridE)
-          .attr("stroke", "black")
-          .attr("stroke-width", 0.3)
-          .attr("fill", (d) => "#eee")
-          .attr("fill-opacity", 0.9)
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-          .attr("d", grid3d.draw);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+    const grid3d = this.getGridTransformer(drawConfig);
+    const xGrid = [];
+    const j = 10;
+    for (let z = -j; z < j; z++) {
+      for (let x = -j; x < j; x++) {
+        xGrid.push({ x: x, y: 0, z: z });
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+    const gridData = grid3d(xGrid);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    const xGridE = this.svg.selectAll('path.grid').data(gridData, (d: any) => d.id);
+
+    xGridE
+      .enter()
+      .append('path')
+      .attr('class', 'd3-3d grid')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      .merge(xGridE)
+      .attr('stroke', 'black')
+      .attr('stroke-width', 0.3)
+      .attr('fill', d => '#eee')
+      .attr('fill-opacity', 0.9)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      .attr('d', grid3d.draw);
   }
 
   private getPointTransformer(

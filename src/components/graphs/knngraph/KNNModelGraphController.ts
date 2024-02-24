@@ -15,6 +15,7 @@ import { classifier, liveAccelerometerData } from '../../../script/stores/Stores
 import StaticConfiguration from '../../../StaticConfiguration';
 import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
+import SmoothedLiveData from '../../../script/livedata/SmoothedLiveData';
 
 type SampleData = {
   value: number[];
@@ -46,6 +47,7 @@ class KNNModelGraphController {
         const zRot = stores[2];
         const scale = stores[3];
         let liveData: TimestampedData<MicrobitAccelerometerData>[] = [];
+
         try {
           liveData = liveAccelerometerData
             .getBuffer()
@@ -98,23 +100,6 @@ class KNNModelGraphController {
     });
   }
 
-  private getPointTransformer(): (point: Point3D[][]) => Point3DTransformed[] {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-    return this.getBaseTransformer(points3D()) as (
-      point: Point3D[][],
-    ) => Point3DTransformed[];
-  }
-
-  private getBaseTransformer(transformer: any): any {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-    return transformer
-      .rotateX(get(this.rotationX))
-      .rotateY(get(this.rotationY))
-      .rotateZ(get(this.rotationZ))
-      .origin(this.origin)
-      .scale(this.scale);
-  }
-
   public addRotation(rotation: Point3D) {
     this.rotationX.update(oldRot => {
       return oldRot + rotation.x;
@@ -125,6 +110,10 @@ class KNNModelGraphController {
     this.rotationZ.update(oldRot => {
       return oldRot + rotation.z;
     });
+  }
+
+  public multiplyScale(amount: number) {
+    this.scale.update(newScale => newScale * amount);
   }
 
   private trainingDataToPoints(): Point3D[][][] {
@@ -164,11 +153,6 @@ class KNNModelGraphController {
       points.push(point);
     }
     return points;
-  }
-
-  private transformPoints(points: Point3D[]): Point3DTransformed[] {
-    const transformer = this.getPointTransformer();
-    return transformer([points]);
   }
 }
 export default KNNModelGraphController;

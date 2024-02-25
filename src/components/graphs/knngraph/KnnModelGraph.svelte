@@ -5,84 +5,77 @@
   import { classifier, gestures } from '../../../script/stores/Stores';
   import ClassifierFactory from '../../../script/domain/ClassifierFactory';
   import { FilterType } from '../../../script/domain/FilterTypes';
+  import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
+  import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
+  import Axes from '../../../script/domain/Axes';
+  import { TrainingData } from '../../../script/domain/ModelTrainer';
 
-  let controller: KNNModelGraphController | undefined;
+  let controllerX: KNNModelGraphController | undefined;
+  let controllerY: KNNModelGraphController | undefined;
+  let controllerZ: KNNModelGraphController | undefined;
+
+  const classifierFactory = new ClassifierFactory();
+
+  const dataGetter = (axis: Axes): TrainingData => {
+    const allData = classifierFactory.buildTrainingData(
+      gestures.getGestures(),
+      classifier.getFilters(),
+    );
+
+    if (axis === Axes.X) {
+      return extractAxisFromTrainingData(allData, 0, 3);
+    }
+
+    if (axis === Axes.Y) {
+      return extractAxisFromTrainingData(allData, 1, 3);
+    }
+    if (axis === Axes.Z) {
+      return extractAxisFromTrainingData(allData, 2, 3);
+    }
+    throw new Error('Should happen');
+  };
 
   onMount(() => {
-    const svg = d3.selectAll('.d3-3d');
+    const svgx = d3.selectAll('.d3-3d-x');
+    const svgy = d3.selectAll('.d3-3d-y');
+    const svgz = d3.selectAll('.d3-3d-z');
+    console.log(svgx, svgy);
     classifier.getFilters().clear();
     classifier.getFilters().add(FilterType.MAX);
     classifier.getFilters().add(FilterType.MIN);
     classifier.getFilters().add(FilterType.MEAN);
-    controller = new KNNModelGraphController(svg, () => {
-      const classifierFactory = new ClassifierFactory();
-      return classifierFactory.buildTrainingData(
-        gestures.getGestures(),
-        classifier.getFilters(),
-      );
-    });
+    controllerX = new KNNModelGraphController(svgx, () => dataGetter(Axes.X), 'd3-3d-x', Axes.X);
+    controllerY = new KNNModelGraphController(svgy, () => dataGetter(Axes.Y), 'd3-3d-y', Axes.Y);
+    controllerZ = new KNNModelGraphController(svgz, () => dataGetter(Axes.Z), 'd3-3d-z', Axes.Z);
+    controllerX.setOrigin(150, 150);
+    controllerY.setOrigin(150, 150);
+    controllerZ.setOrigin(150, 150);
   });
-
-  const zoom = (amount: number) => {
-    if (!controller) {
-      return;
-    }
-    controller.multiplyScale(amount);
-  };
-
-  let isDragging = false;
-  const dragStart = () => {
-    isDragging = true;
-  };
-
-  const dragEnd = (event: any) => {
-    if (!isDragging) return;
-    if (event.type !== 'mouseup') {
-      if (!event.relatedTarget.className) return;
-      if (typeof event.relatedTarget.className === 'string') {
-        if (event.relatedTarget.className.includes('d3-3d')) {
-          return;
-        }
-      } else {
-        if (event.relatedTarget.className.baseVal.includes('d3-3d')) {
-          return;
-        }
-      }
-    }
-
-    isDragging = false;
-  };
-
-  const drag = (event: any) => {
-    if (!isDragging) return;
-
-    const delta = {
-      x: event.movementX,
-      y: event.movementY,
-    };
-
-    if (!controller) {
-      return;
-    }
-    controller.addRotation({
-      x: (delta.y * 0.05) / Math.PI,
-      y: (delta.x * -0.05) / Math.PI,
-      z: 0,
-    });
-  };
 </script>
 
-<div class="pt-2">
-  <button class="border-primary border-1 px-3" on:click={() => zoom(1.25)}>+</button>
-  <button class="border-primary border-1 px-3" on:click={() => zoom(0.75)}>-</button>
-  <svg
-    class="d3-3d"
-    width="500"
-    height="500"
-    on:mousedown={dragStart}
-    on:mouseup={dragEnd}
-    on:mousemove={drag}
-    on:mouseout={dragEnd}
-    on:mouseleave={dragEnd}
-    on:blur={dragEnd} />
+<div class="flex flex-row gap-3">
+  <div>
+    <p>X axis</p>
+    <KnnModelGraphSvgWithControls
+      height={300}
+      width={300}
+      classID={'d3-3d-x'}
+      controller={controllerX} />
+  </div>
+  <div>
+    <p>Y axis</p>
+    <KnnModelGraphSvgWithControls
+      height={300}
+      width={300}
+      classID={'d3-3d-y'}
+      controller={controllerY} />
+  </div>
+  <div>
+    <p>Z axis</p>
+    <KnnModelGraphSvgWithControls
+      height={300}
+      width={300}
+      classID={'d3-3d-z'}
+      controller={controllerZ} />
+  </div>
 </div>

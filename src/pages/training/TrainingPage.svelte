@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { state } from '../../script/stores/uiStore';
+  import { ModelEntry, availableModels, state } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
@@ -15,12 +15,32 @@
   import { classifier, gestures } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
+    import { Feature, hasFeature } from '../../script/FeatureToggles';
+    import { DropdownOption } from '../../components/buttons/Buttons';
+    import PersistantWritable from '../../script/repository/PersistantWritable';
+    import { get } from 'svelte/store';
 
   const model = classifier.getModel();
 
   const filters = classifier.getFilters();
 
   const sufficientData = gestures.hasSufficientData();
+
+  const defaultModel: ModelEntry | undefined = availableModels.find(
+    model => model.id === 'NN',
+  );
+
+  if (!defaultModel) {
+    throw new Error('Default model not found!');
+  }
+
+  const selectedModelOption = new PersistantWritable<DropdownOption>(
+    {
+      id: defaultModel.id,
+      label: defaultModel.label,
+    },
+    'prefferedModel',
+  );
 </script>
 
 <TrainingFailedDialog />
@@ -40,7 +60,9 @@
     </StandardButton>
   </ControlBar>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
-    <KnnModelGraph />
+    {#if hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id}
+      <KnnModelGraph />
+    {/if}
     {#if !sufficientData}
       <div class="w-full text-primarytext">
         <h1 class="w-3/4 text-3xl bold m-auto">
@@ -76,12 +98,12 @@
           </p>
         {:else}
           <div class="w-full pt-5 text-white pb-5">
-            <TrainModelButton />
+            <TrainModelButton selectedOption={selectedModelOption} />
           </div>
         {/if}
       </div>
     {/if}
-    {#if !$state.isInputConnected}
+    {#if !$state.isInputConnected && !hasFeature(Feature.KNN_MODEL)}
       <div class="mt-10">
         <PleaseConnectFirst />
       </div>

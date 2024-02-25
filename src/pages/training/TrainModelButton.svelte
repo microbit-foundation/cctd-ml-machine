@@ -19,29 +19,10 @@
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { FilterType } from '../../script/domain/FilterTypes';
   import Filters from '../../script/domain/Filters';
+    import { ModelEntry, availableModels } from '../../script/stores/uiStore';
 
-  type ModelEntry = {
-    id: string;
-    title: string;
-    label: string;
-    trainer: () => ModelTrainer<MLModel>;
-  };
 
-  export const availableModels: ModelEntry[] = [
-    {
-      id: 'NN',
-      title: 'Neural network',
-      label: 'neural network',
-      trainer: () =>
-        new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings),
-    },
-    {
-      id: 'KNN',
-      title: 'KNN',
-      label: 'KNN',
-      trainer: () => new KNNModelTrainer(StaticConfiguration.knnNeighbourCount),
-    },
-  ];
+  export let selectedOption: PersistantWritable<DropdownOption>;
 
   const model = classifier.getModel();
 
@@ -53,13 +34,6 @@
     ? 'menu.trainer.trainModelButtonSimple'
     : 'menu.trainer.trainNewModelButtonSimple';
 
-  const defaultModel: ModelEntry | undefined = availableModels.find(
-    model => model.id === 'NN',
-  );
-  if (!defaultModel) {
-    throw new Error('Default model not found!');
-  }
-
   const getModelFromOption = (dropdownOption: DropdownOption) => {
     const modelFound: ModelEntry | undefined = availableModels.find(
       model => model.id === dropdownOption.id,
@@ -69,14 +43,6 @@
     }
     return modelFound;
   };
-
-  const selectedOption = new PersistantWritable<DropdownOption>(
-    {
-      id: defaultModel.id,
-      label: defaultModel.label,
-    },
-    'prefferedModel',
-  );
 
   const onClick = () => {
     const selectedModel = availableModels.find(model => model.id === $selectedOption.id);

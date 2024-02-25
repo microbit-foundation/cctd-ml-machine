@@ -15,6 +15,11 @@ import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import { classifier } from './Stores';
 import Gesture from '../domain/stores/gesture/Gesture';
+import LayersModelTrainer from '../mlmodels/LayersModelTrainer';
+import StaticConfiguration from '../../StaticConfiguration';
+import KNNModelTrainer from '../mlmodels/KNNModelTrainer';
+import ModelTrainer from '../domain/ModelTrainer';
+import MLModel from '../domain/MLModel';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -126,6 +131,29 @@ export const microbitInteraction = writable<MicrobitInteractions>(
   initialMicrobitInteraction,
 );
 
+export type ModelEntry = {
+  id: string;
+  title: string;
+  label: string;
+  trainer: () => ModelTrainer<MLModel>;
+};
+
+export const availableModels: ModelEntry[] = [
+  {
+    id: 'NN',
+    title: 'Neural network',
+    label: 'neural network',
+    trainer: () =>
+      new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings),
+  },
+  {
+    id: 'KNN',
+    title: 'KNN',
+    label: 'KNN',
+    trainer: () => new KNNModelTrainer(StaticConfiguration.knnNeighbourCount),
+  },
+];
+
 /**
  * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
  * Refresh the page is the only known solution
@@ -137,3 +165,5 @@ export const onCatastrophicError = () => {
   }
   location.reload();
 };
+
+

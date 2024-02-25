@@ -22,10 +22,16 @@ export type GrahpDrawData = {
   points: Point3D[];
 };
 
-const colors = ['red', 'green', 'blue', 'orange'];
+const colors = ['red', 'green', 'blue', 'orange', 'teal', 'purple', 'pink'];
 
 class KNNModelGraphDrawer {
-  constructor(private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>) {}
+  private labeled: boolean;
+  constructor(
+    private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
+    private classId: string,
+  ) {
+    this.labeled = false;
+  }
 
   public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][][]) {
     this.svg.selectAll('*').remove(); // clear svg for redraw
@@ -46,8 +52,8 @@ class KNNModelGraphDrawer {
             axisValue,
             drawConfig,
             `${classIndex}-${exampleIndex}-${axisIndex}`,
-            colors[axisIndex],
-            this.getLabel(classIndex)
+            colors[classIndex],
+            this.labeled ? this.getLabel(classIndex) : '',
           );
         });
       });
@@ -62,7 +68,7 @@ class KNNModelGraphDrawer {
     drawConfig: GraphDrawConfig,
     key: string,
     color: string,
-    label?: string
+    label?: string,
   ) {
     const radius = 3;
     const pointTransformer = this.getPointTransformer(drawConfig);
@@ -76,28 +82,28 @@ class KNNModelGraphDrawer {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       .merge(samplePoint)
-      .attr('class', `d3-3d points-class-${key}`)
+      .attr('class', `${this.classId} points-class-${key}`)
       .attr('fill', color)
-      .attr('cx', d => {
-        return d.projected.x;
-      })
-      .attr('cy', d => d.projected.y)
+      .attr('cx', d => isNaN(d.projected.x) ? 0 : d.projected.x)
+      .attr('cy', d => isNaN(d.projected.y) ? 0 : d.projected.y)
       .attr('r', radius);
 
-      if (!label) {
-        return;
-      }
-      const pointLabel = this.svg.selectAll(`span.points-class-${key}`).data([transformedPoint]);
-      pointLabel
-        .enter()
-        .append("text")
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        .merge(samplePoint)
-        .attr("class",`d3-3d points-class-${key} text-xs`)
-        .attr("x", (p) => p.projected.x)
-        .attr("y", (p) => p.projected.y)
-        .text(label)
+    if (!label) {
+      return;
+    }
+    const pointLabel = this.svg
+      .selectAll(`span.points-class-${key}`)
+      .data([transformedPoint]);
+    pointLabel
+      .enter()
+      .append('text')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      .merge(samplePoint)
+      .attr('class', `${this.classId} points-class-${key} text-xs`)
+      .attr('x', p => p.projected.x)
+      .attr('y', p => p.projected.y)
+      .text(label);
   }
 
   private addAxis(
@@ -128,7 +134,7 @@ class KNNModelGraphDrawer {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       .merge(xScale)
-      .attr('class', 'd3-3d ' + className)
+      .attr('class', `${this.classId} ` + className)
       .attr('x1', (data: Point3DTransformed[]) => data[0].projected.x)
       .attr('y1', (data: Point3DTransformed[]) => data[0].projected.y)
       .attr('x2', (data: Point3DTransformed[]) => data[1].projected.x)
@@ -142,13 +148,13 @@ class KNNModelGraphDrawer {
    */
   private getLabel(dataIndex: number) {
     try {
-        const gestureList = gestures.getGestures();
-        return gestureList[dataIndex].getName()    
+      const gestureList = gestures.getGestures();
+      return gestureList[dataIndex].getName();
     } catch (error) {
-        // Index out of bounds indicates either an error or live data.
-        return "Live"
+      // Index out of bounds indicates either an error or live data.
+      return 'Live';
     }
-}
+  }
 
   private addGrid(drawConfig: GraphDrawConfig) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
@@ -169,7 +175,7 @@ class KNNModelGraphDrawer {
     xGridE
       .enter()
       .append('path')
-      .attr('class', 'd3-3d grid')
+      .attr('class', `${this.classId} grid`)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       .merge(xGridE)

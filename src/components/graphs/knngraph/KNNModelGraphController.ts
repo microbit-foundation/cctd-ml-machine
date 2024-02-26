@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import * as d3 from 'd3';
 import { Point3D } from '../../../script/TypingUtils';
 import { TrainingData } from '../../../script/domain/ModelTrainer';

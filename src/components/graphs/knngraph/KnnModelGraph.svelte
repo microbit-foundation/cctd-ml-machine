@@ -1,4 +1,9 @@
-<script lang="ts">
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+ <script lang="ts">
   import { onMount } from 'svelte';
   import KNNModelGraphController from './KNNModelGraphController';
   import * as d3 from 'd3';

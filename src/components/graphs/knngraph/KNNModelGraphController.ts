@@ -23,7 +23,7 @@ class KNNModelGraphController {
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private trainingDataGetter: () => TrainingData,
     classId: string,
-    axis: Axes,
+    axis?: Axes,
   ) {
     const graphDrawer = new KNNModelGraphDrawer(svg, classId);
     this.rotationX = writable(0.5);
@@ -51,12 +51,7 @@ class KNNModelGraphController {
         let liveData: TimestampedData<MicrobitAccelerometerData>[] = [];
 
         try {
-          liveData = liveAccelerometerData
-            .getBuffer()
-            .getSeries(
-              1000,
-              10,
-            );
+          liveData = liveAccelerometerData.getBuffer().getSeries(1000, 10);
         } catch (error) {
           liveData = [];
         }
@@ -93,7 +88,9 @@ class KNNModelGraphController {
         return { x: nums[0], y: nums[1], z: nums[2] };
       };
 
-      // const liveData = [[toPoint(filteredXs), toPoint(filteredYs), toPoint(filteredZs)]];
+      const liveDataCombined = [
+        [toPoint(filteredXs), toPoint(filteredYs), toPoint(filteredZs)],
+      ];
 
       const liveData = [
         [
@@ -105,7 +102,7 @@ class KNNModelGraphController {
 
       const drawData = this.trainingDataToPoints(); // Training data
       if (!filteredXs.includes(NaN)) {
-        drawData.push(liveData);
+        drawData.push(axis ? liveData : liveDataCombined);
       }
       graphDrawer.draw(draw.config, drawData);
     });

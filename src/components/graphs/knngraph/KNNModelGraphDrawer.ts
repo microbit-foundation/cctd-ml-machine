@@ -23,6 +23,13 @@ export type GrahpDrawData = {
 };
 
 const colors = ['red', 'green', 'blue', 'orange', 'teal', 'purple', 'pink'];
+const colorShades = {
+  red: ['#d0312d', '#b90e0a', '#e30b5d'],
+  green: ['#006400', '#90ee90', '#50c878'],
+  blue: ['#007fff', '#007bb8', '#4682b4'],
+  orange: ['#f28500', '#ff7f50', '#ff7900'],
+  teal: ['#40e0d0', '#40826d', '#48d1cc'],
+};
 
 class KNNModelGraphDrawer {
   private labeled: boolean;
@@ -48,11 +55,17 @@ class KNNModelGraphDrawer {
     drawData.forEach((clazz, classIndex) => {
       clazz.forEach((sample, exampleIndex) => {
         sample.forEach((axisValue, axisIndex) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+          const color = colorShades[colors[classIndex]][axisIndex];
           this.addPoint(
             axisValue,
             drawConfig,
             `${classIndex}-${exampleIndex}-${axisIndex}`,
-            colors[classIndex],
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            color,
+            //colors[classIndex],
             this.labeled ? this.getLabel(classIndex) : '',
           );
         });
@@ -84,8 +97,8 @@ class KNNModelGraphDrawer {
       .merge(samplePoint)
       .attr('class', `${this.classId} points-class-${key}`)
       .attr('fill', color)
-      .attr('cx', d => isNaN(d.projected.x) ? 0 : d.projected.x)
-      .attr('cy', d => isNaN(d.projected.y) ? 0 : d.projected.y)
+      .attr('cx', d => (isNaN(d.projected.x) ? 0 : d.projected.x))
+      .attr('cy', d => (isNaN(d.projected.y) ? 0 : d.projected.y))
       .attr('r', radius);
 
     if (!label) {

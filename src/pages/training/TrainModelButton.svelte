@@ -19,8 +19,7 @@
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { FilterType } from '../../script/domain/FilterTypes';
   import Filters from '../../script/domain/Filters';
-    import { ModelEntry, availableModels } from '../../script/stores/uiStore';
-
+  import { ModelEntry, availableModels } from '../../script/stores/uiStore';
 
   export let selectedOption: PersistantWritable<DropdownOption>;
 

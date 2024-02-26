@@ -15,10 +15,9 @@
   import { classifier, gestures } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
-    import { Feature, hasFeature } from '../../script/FeatureToggles';
-    import { DropdownOption } from '../../components/buttons/Buttons';
-    import PersistantWritable from '../../script/repository/PersistantWritable';
-    import { get } from 'svelte/store';
+  import { Feature, hasFeature } from '../../script/FeatureToggles';
+  import { DropdownOption } from '../../components/buttons/Buttons';
+  import PersistantWritable from '../../script/repository/PersistantWritable';
 
   const model = classifier.getModel();
 
@@ -41,6 +40,8 @@
     },
     'prefferedModel',
   );
+
+  $: isUsingKNNModel = hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id;
 </script>
 
 <TrainingFailedDialog />
@@ -60,7 +61,7 @@
     </StandardButton>
   </ControlBar>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
-    {#if hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id}
+    {#if isUsingKNNModel}
       <KnnModelGraph />
     {/if}
     {#if !sufficientData}
@@ -103,7 +104,7 @@
         {/if}
       </div>
     {/if}
-    {#if !$state.isInputConnected && !hasFeature(Feature.KNN_MODEL)}
+    {#if !$state.isInputConnected && !isUsingKNNModel}
       <div class="mt-10">
         <PleaseConnectFirst />
       </div>

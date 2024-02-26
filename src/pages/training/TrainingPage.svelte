@@ -18,6 +18,7 @@
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import { DropdownOption } from '../../components/buttons/Buttons';
   import PersistantWritable from '../../script/repository/PersistantWritable';
+    import { writable } from 'svelte/store';
 
   const model = classifier.getModel();
 
@@ -33,13 +34,13 @@
     throw new Error('Default model not found!');
   }
 
-  const selectedModelOption = new PersistantWritable<DropdownOption>(
+  const selectedModelOption = hasFeature(Feature.KNN_MODEL) ? new PersistantWritable<DropdownOption>(
     {
       id: defaultModel.id,
       label: defaultModel.label,
     },
     'prefferedModel',
-  );
+  ) : writable(availableModels[0]);
 
   $: isUsingKNNModel = hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id;
 </script>

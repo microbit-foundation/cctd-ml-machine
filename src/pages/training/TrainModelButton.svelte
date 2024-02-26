@@ -20,8 +20,9 @@
   import { FilterType } from '../../script/domain/FilterTypes';
   import Filters from '../../script/domain/Filters';
   import { ModelEntry, availableModels } from '../../script/stores/uiStore';
+    import { Writable } from 'svelte/store';
 
-  export let selectedOption: PersistantWritable<DropdownOption>;
+  export let selectedOption: Writable<DropdownOption>;
 
   const model = classifier.getModel();
 

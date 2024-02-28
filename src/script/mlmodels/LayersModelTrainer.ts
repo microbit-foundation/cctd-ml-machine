@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
 import ModelTrainer, { TrainingData } from '../domain/ModelTrainer';
 import LayersMLModel from './LayersMLModel';
 import * as tf from '@tensorflow/tfjs';
@@ -13,8 +14,12 @@ export type LayersModelTrainingSettings = {
   learningRate: number;
   batchSize: number;
 };
+
 class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
-  constructor(private settings: LayersModelTrainingSettings) {}
+  constructor(
+    private settings: LayersModelTrainingSettings,
+    private onFitIteration: (h: LossTrainingIteration) => void,
+  ) {}
   public async trainModel(trainingData: TrainingData): Promise<LayersMLModel> {
     // Fetch data
     const features: Array<number[]> = [];
@@ -55,16 +60,22 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
       metrics: ['accuracy'],
     });
 
-    await model
-      .fit(tensorFeatures, tensorLabels, {
-        epochs: this.settings.noOfEpochs,
-        batchSize: this.settings.batchSize,
-        validationSplit: this.settings.validationSplit,
-      })
-      .catch(err => {
-        console.error('tensorflow training process failed:', err);
-        return Promise.reject(err);
+    for (let i = 0; i < this.settings.noOfEpochs; i++) {
+      const h = await model
+        .fit(tensorFeatures, tensorLabels, {
+          epochs: 1,
+          batchSize: this.settings.batchSize,
+          validationSplit: this.settings.validationSplit,
+        })
+        .catch(err => {
+          console.error('tensorflow training process failed:', err);
+          return Promise.reject(err);
+        });
+      this.onFitIteration({
+        epoch: i,
+        loss: h.history.loss[0] as number,
       });
+    }
     return Promise.resolve(new LayersMLModel(model));
   }
 }

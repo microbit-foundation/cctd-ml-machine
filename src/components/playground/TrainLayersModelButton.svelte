@@ -14,7 +14,9 @@
   const trainModelButtonClicked = () => {
     playgroundContext.addMessage('training model...');
     model
-      .train(new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings))
+      .train(
+        new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, () => {}),
+      )
       .then(() => {
         playgroundContext.addMessage('Finished training!');
       });

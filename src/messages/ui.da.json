@@ -63,6 +63,8 @@
   "content.trainer.failure.todo": "Gå tilbage til datasiden og ændr i din data.",
   "content.trainer.controlbar.filters": "Filtre",
 
+  "content.trianer.lossGraph.title": "Loss over tid",
+
   "content.filters.NoDataHeader": "Der er ikke noget data",
   "content.filters.NoDataBody": "Gå til Data-siden for at indsamle data.",
   "content.filters.max.title": "Maksværdier",

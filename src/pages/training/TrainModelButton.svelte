@@ -28,7 +28,7 @@
   export let onClick: () => void;
 
   const getModelTrainer = (modelEntry: ModelEntry): ModelTrainer<MLModel> => {
-    if (modelEntry.id === 'NN') {
+    if (modelEntry.id === 'KNN') {
       return new KNNModelTrainer(StaticConfiguration.knnNeighbourCount);
     }
 

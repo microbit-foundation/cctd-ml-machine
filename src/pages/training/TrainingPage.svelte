@@ -94,6 +94,21 @@
       </div>
     {:else}
       <div class="w-3/4 text-primarytext">
+        {#if !$model.isTraining}
+          {#if $filters.length == 0}
+            <p class="bold text-xl bold mt-10">
+              {$t('menu.trainer.noFilters')}
+            </p>
+          {:else}
+            <div class="w-full pt-5 text-white pb-5">
+              <TrainModelButton
+                selectedOption={selectedModelOption}
+                onClick={resetLoss}
+                onTrainingIteration={trainingIterationHandler} />
+            </div>
+          {/if}
+        {/if}
+
         {#if $model.isTrained}
           <p class="bold text-3xl bold mt-5">
             {$t('menu.trainer.TrainingFinished')}
@@ -131,20 +146,6 @@
             <LossGraph
               {loss}
               maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />
-          {/if}
-        {/if}
-        {#if !$model.isTraining}
-          {#if $filters.length == 0}
-            <p class="bold text-xl bold mt-10">
-              {$t('menu.trainer.noFilters')}
-            </p>
-          {:else}
-            <div class="w-full pt-5 text-white pb-5">
-              <TrainModelButton
-                selectedOption={selectedModelOption}
-                onClick={resetLoss}
-                onTrainingIteration={trainingIterationHandler} />
-            </div>
           {/if}
         {/if}
       </div>

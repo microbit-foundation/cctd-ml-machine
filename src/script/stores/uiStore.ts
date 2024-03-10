@@ -15,11 +15,6 @@ import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import { classifier } from './Stores';
 import Gesture from '../domain/stores/gesture/Gesture';
-import LayersModelTrainer from '../mlmodels/LayersModelTrainer';
-import StaticConfiguration from '../../StaticConfiguration';
-import KNNModelTrainer from '../mlmodels/KNNModelTrainer';
-import ModelTrainer from '../domain/ModelTrainer';
-import MLModel from '../domain/MLModel';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));

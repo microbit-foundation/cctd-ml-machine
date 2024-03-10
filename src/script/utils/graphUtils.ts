@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
+import Axes from '../domain/Axes';
 import { TrainingData } from '../domain/ModelTrainer';
+import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
 /**
  * Smoothes values by interpolating between old value and new value
@@ -83,4 +85,18 @@ export const extractFilterFromTrainingData = (
       };
     }),
   };
+};
+
+export const extractAxisFromAccelerometerData = (
+  data: MicrobitAccelerometerData[],
+  axis: Axes,
+) => {
+  switch (axis) {
+    case Axes.X:
+      return data.map(val => val.x);
+    case Axes.Y:
+      return data.map(val => val.y);
+    case Axes.Z:
+      return data.map(val => val.z);
+  }
 };

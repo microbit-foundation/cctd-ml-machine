@@ -13,7 +13,7 @@ class AccelerometerClassifierInput implements ClassifierInput {
     private zs: number[],
   ) {}
 
-  getInput(filters: Filters): number[] {
+  public getInput(filters: Filters): number[] {
     return [
       ...filters.compute(this.xs),
       ...filters.compute(this.ys),

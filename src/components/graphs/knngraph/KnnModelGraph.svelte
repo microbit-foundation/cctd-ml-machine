@@ -11,19 +11,14 @@
   import ClassifierFactory from '../../../script/domain/ClassifierFactory';
   import { FilterType } from '../../../script/domain/FilterTypes';
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
-  import {
-    extractAxisFromTrainingData,
-    extractFilterFromTrainingData,
-  } from '../../../script/utils/graphUtils';
+  import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
   import Axes from '../../../script/domain/Axes';
   import { TrainingData } from '../../../script/domain/ModelTrainer';
-  import StandardButton from '../../buttons/StandardButton.svelte';
+  import StandardDropdownButton from '../../buttons/StandardDropdownButton.svelte';
+  import { DropdownOption } from '../../buttons/Buttons';
+  import AxesFilterVector from './AxesFilterVector.svelte';
 
-  let controllerX: KNNModelGraphController | undefined;
-  let controllerY: KNNModelGraphController | undefined;
-  let controllerZ: KNNModelGraphController | undefined;
-
-  let controllerCombined: KNNModelGraphController | undefined;
+  let controllerSingle: KNNModelGraphController | undefined;
 
   const classifierFactory = new ClassifierFactory();
 
@@ -34,130 +29,49 @@
     );
 
     if (axis === Axes.X) {
-      //return extractAxisFromTrainingData(allData, 0, 3);
-      return extractFilterFromTrainingData(allData, 0, 3);
+      return extractAxisFromTrainingData(allData, 0, 3);
+      // return extractFilterFromTrainingData(allData, 0, 3);
     }
     if (axis === Axes.Y) {
-      //return extractAxisFromTrainingData(allData, 1, 3);
-      return extractFilterFromTrainingData(allData, 1, 3);
+      return extractAxisFromTrainingData(allData, 1, 3);
+      // return extractFilterFromTrainingData(allData, 1, 3);
     }
     if (axis === Axes.Z) {
-      // return extractAxisFromTrainingData(allData, 2, 3);
-      return extractFilterFromTrainingData(allData, 2, 3);
+      return extractAxisFromTrainingData(allData, 2, 3);
+      // return extractFilterFromTrainingData(allData, 2, 3);
     }
-    throw new Error('Should happen');
+    throw new Error('Should not happen');
   };
 
-  const dataGetterCombined = (): TrainingData => {
-    const allData = classifierFactory.buildTrainingData(
-      gestures.getGestures(),
-      classifier.getFilters(),
-    );
-    return allData;
-  };
-
-  const initSeparated = () => {
-    const svgx = d3.selectAll('.d3-3d-x');
-    const svgy = d3.selectAll('.d3-3d-y');
-    const svgz = d3.selectAll('.d3-3d-z');
-
-    // WIP: We are not filtering based on axes, but on filters instead
-    controllerX = new KNNModelGraphController(
-      svgx,
+  const initSingle = () => {
+    const svgSingle = d3.selectAll('.d3-3d-single');
+    controllerSingle = new KNNModelGraphController(
+      svgSingle,
       () => dataGetter(Axes.X),
-      'd3-3d-x',
+      'd3-3d-single',
       Axes.X,
     );
-    controllerY = new KNNModelGraphController(
-      svgy,
-      () => dataGetter(Axes.Y),
-      'd3-3d-y',
-      Axes.Y,
-    );
-    controllerZ = new KNNModelGraphController(
-      svgz,
-      () => dataGetter(Axes.Z),
-      'd3-3d-z',
-      Axes.Z,
-    );
-    controllerX.setOrigin(150, 350 / 2);
-    controllerY.setOrigin(150, 350 / 2);
-    controllerZ.setOrigin(150, 350 / 2);
+    controllerSingle.setOrigin(650 / 2, 350 / 2);
   };
-
-  const initCombined = () => {
-    const svgCombined = d3.selectAll('.d3-3d-combined');
-    controllerCombined = new KNNModelGraphController(
-      svgCombined,
-      dataGetterCombined,
-      'd3-3d-combined',
-      undefined,
-    );
-    controllerCombined.setOrigin(900 / 2, 350 / 2);
-  };
-  let separateByFilter = true;
 
   onMount(() => {
     classifier.getFilters().clear();
     classifier.getFilters().add(FilterType.MAX);
     classifier.getFilters().add(FilterType.MIN);
     classifier.getFilters().add(FilterType.MEAN);
-    if (separateByFilter) {
-      initSeparated();
-    } else {
-      initCombined();
-    }
+    initSingle();
   });
-
-  const setSeparateByFilter = (separate: boolean) => {
-    separateByFilter = separate;
-    setTimeout(() => {
-      if (separate) {
-        initSeparated();
-      } else {
-        initCombined();
-      }
-    }, 200);
-  };
 </script>
 
-<StandardButton outlined={!separateByFilter} onClick={() => setSeparateByFilter(true)}
-  >View by filter</StandardButton>
-<StandardButton outlined={separateByFilter} onClick={() => setSeparateByFilter(false)}
-  >View all</StandardButton>
-{#if separateByFilter}
-  <div class="flex flex-row gap-3">
-    <div>
-      <p>MAX Filter</p>
-      <KnnModelGraphSvgWithControls
-        height={350}
-        width={300}
-        classID={'d3-3d-x'}
-        controller={controllerX} />
-    </div>
-    <div>
-      <p>MIN Filter</p>
-      <KnnModelGraphSvgWithControls
-        height={350}
-        width={300}
-        classID={'d3-3d-y'}
-        controller={controllerY} />
-    </div>
-    <div>
-      <p>MEAN Filter</p>
-      <KnnModelGraphSvgWithControls
-        height={350}
-        width={300}
-        classID={'d3-3d-z'}
-        controller={controllerZ} />
-    </div>
+<div class="flex flex-row">
+  <div class="flex flex-col justify-center mr-6">
+    <AxesFilterVector />
   </div>
-{:else}
   <div>
     <KnnModelGraphSvgWithControls
       height={350}
-      width={900}
-      classID={'d3-3d-combined'}
-      controller={controllerCombined} />
+      width={650}
+      classID={'d3-3d-single'}
+      controller={controllerSingle} />
   </div>
-{/if}
+</div>

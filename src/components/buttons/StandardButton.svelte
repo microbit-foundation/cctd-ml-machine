@@ -19,6 +19,8 @@
   }
   .filled {
     background-color: var(--color);
+    border-width: var(--border-width);
+    border-color: transparent;
     opacity: 1;
     color: white;
   }

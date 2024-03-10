@@ -13,10 +13,10 @@ export enum Feature {
 
 export const hasFeature = (feature: Feature): boolean => {
   if (CookieManager.hasFeatureFlag('FEATURE-TOGGLE-ALWAYS-TRUE')) {
-    console.warn("FEATURE-TOGGLE-ALWAYS-TRUE is set! hasFeature is always true")
+    console.warn('FEATURE-TOGGLE-ALWAYS-TRUE is set! hasFeature is always true');
     return true;
   } else {
-    console.log("Asd")
+    console.log('Asd');
   }
   const featuresListedInJson = Object.getOwnPropertyNames(features);
   if (!featuresListedInJson.includes(feature.toString())) {

@@ -12,17 +12,30 @@
   import StandardDropdownButton from '../../components/buttons/StandardDropdownButton.svelte';
   import KNNModelTrainer from '../../script/mlmodels/KNNModelTrainer';
   import { DropdownOption } from '../../components/buttons/Buttons';
-  import PersistantWritable from '../../script/repository/PersistantWritable';
   import ModelTrainer from '../../script/domain/ModelTrainer';
   import MLModel from '../../script/domain/MLModel';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { FilterType } from '../../script/domain/FilterTypes';
   import Filters from '../../script/domain/Filters';
-  import { ModelEntry, availableModels } from '../../script/stores/uiStore';
-    import { Writable } from 'svelte/store';
+  import { Writable } from 'svelte/store';
 
   export let selectedOption: Writable<DropdownOption>;
+  import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
+  import { ModelEntry, availableModels } from '../../script/stores/uiStore';
+
+  export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
+  export let onClick: () => void;
+
+  const getModelTrainer = (modelEntry: ModelEntry): ModelTrainer<MLModel> => {
+    if (modelEntry.id === 'NN') {
+      return new KNNModelTrainer(StaticConfiguration.knnNeighbourCount);
+    }
+
+    return new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, h => {
+      onTrainingIteration(h);
+    });
+  };
 
   const model = classifier.getModel();
 
@@ -44,7 +57,7 @@
     return modelFound;
   };
 
-  const onClick = () => {
+  const clickHandler = () => {
     const selectedModel = availableModels.find(model => model.id === $selectedOption.id);
 
     if (selectedModel?.id === 'KNN') {
@@ -57,7 +70,8 @@
     }
 
     if (selectedModel) {
-      model.train(selectedModel.trainer());
+      onClick();
+      model.train(getModelTrainer(selectedModel));
     }
   };
 
@@ -75,7 +89,7 @@
 
 {#if hasFeature(Feature.KNN_MODEL)}
   <StandardDropdownButton
-    {onClick}
+    onClick={clickHandler}
     {onSelect}
     buttonText={$t(trainButtonLabel, {
       values: { model: getModelFromOption($selectedOption).label },
@@ -83,7 +97,7 @@
     defaultOptionSelected={$selectedOption}
     {options} />
 {:else}
-  <StandardButton {onClick}>
+  <StandardButton onClick={clickHandler}>
     {$t(trainButtonSimpleLabel)}
   </StandardButton>
 {/if}

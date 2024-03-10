@@ -135,7 +135,6 @@ export type ModelEntry = {
   id: string;
   title: string;
   label: string;
-  trainer: () => ModelTrainer<MLModel>;
 };
 
 export const availableModels: ModelEntry[] = [
@@ -143,14 +142,11 @@ export const availableModels: ModelEntry[] = [
     id: 'NN',
     title: 'Neural network',
     label: 'neural network',
-    trainer: () =>
-      new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings),
   },
   {
     id: 'KNN',
     title: 'KNN',
     label: 'KNN',
-    trainer: () => new KNNModelTrainer(StaticConfiguration.knnNeighbourCount),
   },
 ];
 

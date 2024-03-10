@@ -3,7 +3,7 @@
  
   SPDX-License-Identifier: MIT
  -->
- <script lang="ts">
+<script lang="ts">
   import { onMount } from 'svelte';
   import KNNModelGraphController from './KNNModelGraphController';
   import * as d3 from 'd3';
@@ -80,9 +80,9 @@
       'd3-3d-z',
       Axes.Z,
     );
-    controllerX.setOrigin(150, 350/2);
-    controllerY.setOrigin(150, 350/2);
-    controllerZ.setOrigin(150, 350/2);
+    controllerX.setOrigin(150, 350 / 2);
+    controllerY.setOrigin(150, 350 / 2);
+    controllerZ.setOrigin(150, 350 / 2);
   };
 
   const initCombined = () => {
@@ -93,7 +93,7 @@
       'd3-3d-combined',
       undefined,
     );
-    controllerCombined.setOrigin(900/2, 350/2);
+    controllerCombined.setOrigin(900 / 2, 350 / 2);
   };
   let separateByFilter = true;
 

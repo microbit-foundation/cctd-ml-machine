@@ -18,7 +18,11 @@
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import { DropdownOption } from '../../components/buttons/Buttons';
   import PersistantWritable from '../../script/repository/PersistantWritable';
-    import { writable } from 'svelte/store';
+  import LossGraph from '../../components/graphs/LossGraph.svelte';
+  import { writable } from 'svelte/store';
+  import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
+  import StaticConfiguration from '../../StaticConfiguration';
+  import CookieManager from '../../script/CookieManager';
 
   const model = classifier.getModel();
 
@@ -34,15 +38,29 @@
     throw new Error('Default model not found!');
   }
 
-  const selectedModelOption = hasFeature(Feature.KNN_MODEL) ? new PersistantWritable<DropdownOption>(
-    {
-      id: defaultModel.id,
-      label: defaultModel.label,
-    },
-    'prefferedModel',
-  ) : writable(availableModels[0]);
+  const selectedModelOption = hasFeature(Feature.KNN_MODEL)
+    ? new PersistantWritable<DropdownOption>(
+        {
+          id: defaultModel.id,
+          label: defaultModel.label,
+        },
+        'prefferedModel',
+      )
+    : writable(availableModels[0]);
 
-  $: isUsingKNNModel = hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id;
+  $: isUsingKNNModel =
+    hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id;
+
+  const loss = writable<LossTrainingIteration[]>([]);
+
+  const resetLoss = () => loss.set([]);
+
+  const trainingIterationHandler = (h: LossTrainingIteration) => {
+    loss.update(newLoss => {
+      newLoss.push(h);
+      return newLoss;
+    });
+  };
 </script>
 
 <TrainingFailedDialog />
@@ -74,23 +92,13 @@
           {$t('menu.trainer.notEnoughDataInfoBody')}
         </p>
       </div>
-    {:else if $model.isTraining}
-      <div class="w-3/4 text-primarytext">
-        <div class="ml-auto mr-auto flex center-items justify-center">
-          <i
-            class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
-        </div>
-        <p class="bold text-3xl bold mt-10">
-          {$t('menu.trainer.isTrainingModelButton')}
-        </p>
-      </div>
     {:else}
       <div class="w-3/4 text-primarytext">
         {#if $model.isTrained}
-          <p class="bold text-3xl bold mt-10">
+          <p class="bold text-3xl bold mt-5">
             {$t('menu.trainer.TrainingFinished')}
           </p>
-          <p class="bold text-xl bold mt-10">
+          <p class="bold text-xl bold mt-5">
             {$t('menu.trainer.TrainingFinished.body')}
           </p>
         {/if}
@@ -98,15 +106,51 @@
           <p class="bold text-xl bold mt-10">
             {$t('menu.trainer.noFilters')}
           </p>
-        {:else}
-          <div class="w-full pt-5 text-white pb-5">
-            <TrainModelButton selectedOption={selectedModelOption} />
-          </div>
         {/if}
       </div>
     {/if}
     {#if !$state.isInputConnected && !isUsingKNNModel}
       <div class="mt-10">
+        {#if $loss.length > 0 || $model.isTraining}
+          {#if !CookieManager.hasFeatureFlag('loss-graph')}
+            {#if $model.isTraining}
+              <div
+                class="flex flex-col flex-grow justify-center items-center text-center">
+                <div class="w-3/4 text-primarytext">
+                  <div class="ml-auto mr-auto flex center-items justify-center">
+                    <i
+                      class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
+                  </div>
+                  <p class="bold text-3xl bold mt-10">
+                    {$t('menu.trainer.isTrainingModelButton')}
+                  </p>
+                </div>
+              </div>
+            {/if}
+          {:else}
+            <LossGraph
+              {loss}
+              maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />
+          {/if}
+        {/if}
+        {#if !$model.isTraining}
+          {#if $filters.length == 0}
+            <p class="bold text-xl bold mt-10">
+              {$t('menu.trainer.noFilters')}
+            </p>
+          {:else}
+            <div class="w-full pt-5 text-white pb-5">
+              <TrainModelButton
+                selectedOption={selectedModelOption}
+                onClick={resetLoss}
+                onTrainingIteration={trainingIterationHandler} />
+            </div>
+          {/if}
+        {/if}
+      </div>
+    {/if}
+    {#if !$state.isInputConnected}
+      <div class="mt-5">
         <PleaseConnectFirst />
       </div>
     {/if}

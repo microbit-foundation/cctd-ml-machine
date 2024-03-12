@@ -6,6 +6,7 @@
 #include "MicroBit.h"
 #include "MicroBitUARTService.h"
 #include "MicroBitAccelerometerService.h"
+#include "MicroBitMagnetometerService.h"
 #include "MicroBitIOPinService.h"
 #include "MicroBitLEDService.h"
 #include "MicroBitButtonService.h"
@@ -13,6 +14,7 @@
 MicroBit uBit;
 
 MicroBitAccelerometerService *accel;
+MicroBitMagnetometerService *magnet;
 MicroBitUARTService *uart;
 MicroBitLEDService *led;
 MicroBitIOPinService *io;
@@ -118,6 +120,7 @@ int main()
     io = new MicroBitIOPinService(*uBit.ble, uBit.io);
     btn = new MicroBitButtonService(*uBit.ble);
     accel = new MicroBitAccelerometerService(*uBit.ble, uBit.accelerometer);
+    magnet = new MicroBitMagnetometerService(*uBit.ble, uBit.compass);
 
     pairPtn = getPairPattern();
 

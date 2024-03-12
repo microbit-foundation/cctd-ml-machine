@@ -3,11 +3,14 @@
  *
  * SPDX-License-Identifier: MIT
  */
+#include "CoordinateSystem.h"
 #include "MicroBit.h"
+#include "MicroBitCompass.h"
 #include "MicroBitUARTService.h"
 #include "MicroBitAccelerometerService.h"
 #include "MicroBitIOPinService.h"
 #include "MicroBitLEDService.h"
+#include "MicroBitMagnetometerService.h"
 #include "MicroBitButtonService.h"
 #include "utilities.h"
 #include "smileys.h"
@@ -20,6 +23,7 @@ typedef __uint8_t uint8_t ;
 MicroBitAccelerometerService *accel;
 MicroBitUARTService *uart;
 MicroBitLEDService *led;
+MicroBitMagnetometerService *magnet;
 MicroBitIOPinService *io;
 MicroBitButtonService *btn;
 
@@ -101,6 +105,7 @@ int main()
     io = new MicroBitIOPinService(*uBit.ble, uBit.io);
     btn = new MicroBitButtonService(*uBit.ble);
     accel = new MicroBitAccelerometerService(*uBit.ble, uBit.accelerometer);
+    magnet = new MicroBitMagnetometerService(*uBit.ble, uBit.compass);
 
     uart->eventOn("#");
 

@@ -119,6 +119,13 @@ export class MicrobitBluetooth {
   }
 
   /**
+   * @returns {Promise<BluetoothRemoteGATTService>} The magnetometer service of the micro:bit.
+   */
+  public async getMagnetometerService(): Promise<BluetoothRemoteGATTService> {
+    return await this.getService(MBSpecs.Services.MAGNET_SERVICE);
+  }
+
+  /**
    * Whether the connection is currently established.
    * @return {boolean} True if the connection is established, false otherwise.
    */
@@ -259,6 +266,32 @@ export class MicrobitBluetooth {
   }
 
   /**
+   * @param {(number, number, number) => void} onMagnetometerChanged Callback to be executed when the accelerometer changes.
+   */
+  public async listenToMagnetometer(
+    onMagnetometerChanged: (x: number, y: number, z: number) => void,
+  ): Promise<void> {
+    const magnetometerService: BluetoothRemoteGATTService =
+      await this.getMagnetometerService();
+    const magnetometerCharacteristic: BluetoothRemoteGATTCharacteristic =
+      await magnetometerService.getCharacteristic(MBSpecs.Characteristics.MAGNET_DATA);
+
+    await magnetometerCharacteristic.startNotifications();
+
+    magnetometerCharacteristic.addEventListener(
+      'characteristicvaluechanged',
+      (event: Event) => {
+        const target: CharacteristicDataTarget = event.target as CharacteristicDataTarget;
+        const x = target.value.getInt16(0, true);
+        const y = target.value.getInt16(2, true);
+        const z = target.value.getInt16(4, true);
+
+        onMagnetometerChanged(x, y, z);
+      },
+    );
+  }
+
+  /**
    * Display the 5x5 matrix on the micro:bit.
    *
    * @param {number[][]} matrix The matrix to display.
@@ -355,6 +388,7 @@ export class MicrobitBluetooth {
               MBSpecs.Services.LED_SERVICE,
               MBSpecs.Services.IO_SERVICE,
               MBSpecs.Services.BUTTON_SERVICE,
+              MBSpecs.Services.MAGNET_SERVICE,
             ],
           })
           .then(btDevice => {

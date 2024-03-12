@@ -18,7 +18,7 @@ import LoggingDecorator from './LoggingDecorator';
 import TypingUtils from '../../TypingUtils';
 import { DeviceRequestStates } from '../../stores/connectDialogStore';
 import StaticConfiguration from '../../../StaticConfiguration';
-import { liveAccelerometerData } from '../../stores/Stores';
+import { liveAccelerometerData, liveMagnetometerData } from '../../stores/Stores';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -148,6 +148,20 @@ class InputBehaviour extends LoggingDecorator {
     const accelZ = z / 1000.0;
 
     liveAccelerometerData.put({
+      x: accelX,
+      y: accelY,
+      z: accelZ,
+    });
+  }
+
+  magnetometerChange(x: number, y: number, z: number): void {
+    super.magnetometerChange(x, y, z);
+
+    const accelX = x / 1000.0;
+    const accelY = y / 1000.0;
+    const accelZ = z / 1000.0;
+
+    liveMagnetometerData.put({
       x: accelX,
       y: accelY,
       z: accelZ,

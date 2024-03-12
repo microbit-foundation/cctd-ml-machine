@@ -298,6 +298,7 @@ class Microbits {
    */
   private static async disconnectInputSafely(microbit: MicrobitBluetooth): Promise<void> {
     await microbit.listenToAccelerometer(TypingUtils.emptyFunction);
+    await microbit.listenToMagnetometer(TypingUtils.emptyFunction);
     await microbit.listenToButton(MBSpecs.Button.A, TypingUtils.emptyFunction);
     await microbit.listenToButton(MBSpecs.Button.B, TypingUtils.emptyFunction);
     microbit.disconnect();
@@ -310,6 +311,9 @@ class Microbits {
     }
     await this.getInput().listenToAccelerometer(
       connectionBehaviour.accelerometerChange.bind(connectionBehaviour),
+    );
+    await this.getInput().listenToMagnetometer(
+      connectionBehaviour.magnetometerChange.bind(connectionBehaviour),
     );
     await this.getInput().listenToButton(
       MBSpecs.Button.A,

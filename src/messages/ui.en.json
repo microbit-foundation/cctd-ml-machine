@@ -64,6 +64,8 @@
   "content.trainer.failure.todo": "Return to the data page and change your data.",
   "content.trainer.controlbar.filters": "Filters",
 
+  "content.trianer.lossGraph.title": "Loss over time",
+
   "content.filters.NoDataHeader": "No available data",
   "content.filters.NoDataBody": "Go to the Data page to collect data samples.",
   "content.filters.max.title": "Max values",

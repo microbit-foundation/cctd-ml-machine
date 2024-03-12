@@ -6,6 +6,7 @@
 #include "MicroBit.h"
 #include "MicroBitUARTService.h"
 #include "MicroBitAccelerometerService.h"
+#include "MicroBitMagnetometerService.h"
 #include "MicroBitIOPinService.h"
 #include "MicroBitLEDService.h"
 #include "MicroBitButtonService.h"
@@ -13,6 +14,7 @@
 MicroBit uBit;
 
 MicroBitAccelerometerService *accel;
+MicroBitMagnetometerService *magnet;
 MicroBitUARTService *uart;
 MicroBitLEDService *led;
 MicroBitIOPinService *io;
@@ -46,10 +48,6 @@ void sendString(ManagedString s)
 void onConnected(MicroBitEvent)
 {
     connected = 1; // Set the connected flag
-    uBit.sleep(3000);
-    uart->send(ManagedString("id_prop")); // MUST be sent before vi_ message
-    uart->send(ManagedString("vi_") + ManagedString(buildNumber));
-
     const uint8_t smiley[] {
                           0, 0, 0, 0, 0,
                           0, 1, 0, 1, 0,
@@ -59,6 +57,16 @@ void onConnected(MicroBitEvent)
 
     MicroBitImage happy(5,5,smiley);
     uBit.display.print(happy);
+
+    for (size_t i = 0; i < 12; i++)
+    {
+        if (!connected) {
+            break;
+        }
+        uBit.sleep(1000);
+        uart->send(ManagedString("id_prop")); // MUST be sent before vi_ message
+        uart->send(ManagedString("vi_") + ManagedString(buildNumber));
+    }
 }
 
 /**
@@ -112,6 +120,7 @@ int main()
     io = new MicroBitIOPinService(*uBit.ble, uBit.io);
     btn = new MicroBitButtonService(*uBit.ble);
     accel = new MicroBitAccelerometerService(*uBit.ble, uBit.accelerometer);
+    magnet = new MicroBitMagnetometerService(*uBit.ble, uBit.compass);
 
     pairPtn = getPairPattern();
 

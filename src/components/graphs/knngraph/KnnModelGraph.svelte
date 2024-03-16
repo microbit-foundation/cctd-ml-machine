@@ -14,11 +14,12 @@
   import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
   import Axes from '../../../script/domain/Axes';
   import { TrainingData } from '../../../script/domain/ModelTrainer';
-  import StandardDropdownButton from '../../buttons/StandardDropdownButton.svelte';
-  import { DropdownOption } from '../../buttons/Buttons';
   import AxesFilterVector from './AxesFilterVector.svelte';
+  import { highlightedAxis } from '../../../script/stores/uiStore';
 
-  let controllerSingle: KNNModelGraphController | undefined;
+  let controllerSingleX: KNNModelGraphController | undefined;
+  let controllerSingleY: KNNModelGraphController | undefined;
+  let controllerSingleZ: KNNModelGraphController | undefined;
 
   const classifierFactory = new ClassifierFactory();
 
@@ -43,15 +44,16 @@
     throw new Error('Should not happen');
   };
 
-  const initSingle = () => {
-    const svgSingle = d3.selectAll('.d3-3d-single');
-    controllerSingle = new KNNModelGraphController(
+  const initSingle = (axis: Axes, label: string) => {
+    const svgSingle = d3.selectAll('.d3-3d-single-' + label);
+    const controller = new KNNModelGraphController(
       svgSingle,
-      () => dataGetter(Axes.X),
-      'd3-3d-single',
-      Axes.X,
+      () => dataGetter(axis),
+      'd3-3d-single-' + label,
+      axis,
     );
-    controllerSingle.setOrigin(650 / 2, 350 / 2);
+    controller.setOrigin(650 / 2, 350 / 2);
+    return controller;
   };
 
   onMount(() => {
@@ -59,7 +61,9 @@
     classifier.getFilters().add(FilterType.MAX);
     classifier.getFilters().add(FilterType.MIN);
     classifier.getFilters().add(FilterType.MEAN);
-    initSingle();
+    controllerSingleX = initSingle(Axes.X, 'x');
+    controllerSingleY = initSingle(Axes.Y, 'y');
+    controllerSingleZ = initSingle(Axes.Z, 'z');
   });
 </script>
 
@@ -69,9 +73,22 @@
   </div>
   <div>
     <KnnModelGraphSvgWithControls
+      hidden={$highlightedAxis !== Axes.X}
       height={350}
       width={650}
-      classID={'d3-3d-single'}
-      controller={controllerSingle} />
+      classID={'d3-3d-single-x'}
+      controller={controllerSingleX} />
+    <KnnModelGraphSvgWithControls
+      hidden={$highlightedAxis !== Axes.Y}
+      height={350}
+      width={650}
+      classID={'d3-3d-single-y'}
+      controller={controllerSingleY} />
+    <KnnModelGraphSvgWithControls
+      hidden={$highlightedAxis !== Axes.Z}
+      height={350}
+      width={650}
+      classID={'d3-3d-single-z'}
+      controller={controllerSingleZ} />
   </div>
 </div>

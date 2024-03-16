@@ -115,7 +115,6 @@ class KNNModelGraphController {
 
   public setOrigin(x: number, y: number) {
     this.origin.set({ x, y });
-    console.log('origin set');
   }
 
   public addRotation(rotation: Point3D) {

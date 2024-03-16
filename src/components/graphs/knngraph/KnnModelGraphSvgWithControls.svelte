@@ -15,6 +15,7 @@
   export let classID: string;
   export let width: number;
   export let height: number;
+  export let hidden: boolean;
 
   const zoom = (amount: number) => {
     if (!controller) {
@@ -65,15 +66,17 @@
   };
 </script>
 
-<button class="border-primary border-1 px-3" on:click={() => zoom(1.25)}>+</button>
-<button class="border-primary border-1 px-3" on:click={() => zoom(0.75)}>-</button>
-<svg
-  class={classID}
-  {width}
-  {height}
-  on:mousedown={dragStart}
-  on:mouseup={dragEnd}
-  on:mousemove={drag}
-  on:mouseout={dragEnd}
-  on:mouseleave={dragEnd}
-  on:blur={dragEnd} />
+<div class:hidden>
+  <button class="border-primary border-1 px-3" on:click={() => zoom(1.25)}>+</button>
+  <button class="border-primary border-1 px-3" on:click={() => zoom(0.75)}>-</button>
+  <svg
+    class={classID}
+    {width}
+    {height}
+    on:mousedown={dragStart}
+    on:mouseup={dragEnd}
+    on:mousemove={drag}
+    on:mouseout={dragEnd}
+    on:mouseleave={dragEnd}
+    on:blur={dragEnd} />
+</div>

@@ -11,7 +11,7 @@
   import Axes from '../../../script/domain/Axes';
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';
-    import { highlightedAxis } from '../../../script/stores/uiStore';
+  import { highlightedAxis } from '../../../script/stores/uiStore';
 
   const liveFilteredAxesData: Readable<number[]> = derived(
     [liveAccelerometerData, highlightedAxis],
@@ -34,7 +34,6 @@
       }
     },
   );
-
 </script>
 
 <div>
@@ -61,10 +60,19 @@
         </div>
       </div>
       <div class="flex flex-col justify-around">
-        <img src={'imgs/vector_lines_x.png'} class:hidden={$highlightedAxis !== Axes.X} alt="x vector line"/>
-        <img src={'imgs/vector_lines_y.png'} class:hidden={$highlightedAxis !== Axes.Y} alt="y vector line"/>
-        <img src={'imgs/vector_lines_z.png'} class:hidden={$highlightedAxis !== Axes.Z} alt="z vector line"/>
-        </div>
+        <img
+          src={'imgs/vector_lines_x.png'}
+          class:hidden={$highlightedAxis !== Axes.X}
+          alt="x vector line" />
+        <img
+          src={'imgs/vector_lines_y.png'}
+          class:hidden={$highlightedAxis !== Axes.Y}
+          alt="y vector line" />
+        <img
+          src={'imgs/vector_lines_z.png'}
+          class:hidden={$highlightedAxis !== Axes.Z}
+          alt="z vector line" />
+      </div>
       <div class="flex flex-col justify-around">
         <p>MAX</p>
         <p>MIN</p>
@@ -77,7 +85,7 @@
       </div>
       <div class="flex flex-col justify-around">
         <img src={'imgs/left_bracket_blue.png'} alt="left bracket" />
-    </div>
+      </div>
       <div class="flex flex-col justify-around w-12">
         {#each $liveFilteredAxesData as val}
           <p>{val.toFixed(3)}</p>
@@ -85,7 +93,7 @@
       </div>
       <div class="flex flex-col justify-around">
         <img src={'imgs/right_bracket_blue.png'} alt="left bracket" />
-    </div>
+      </div>
     </div>
   </div>
 </div>

@@ -15,6 +15,7 @@ import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import { classifier } from './Stores';
 import Gesture from '../domain/stores/gesture/Gesture';
+import Axes from '../domain/Axes';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -119,6 +120,8 @@ export enum MicrobitInteractions {
   B,
   AB,
 }
+
+export const highlightedAxis = writable(Axes.X);
 
 const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;
 

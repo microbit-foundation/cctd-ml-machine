@@ -11,11 +11,10 @@
   import Axes from '../../../script/domain/Axes';
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';
-
-  const selectedAxis = writable(Axes.X);
+    import { highlightedAxis } from '../../../script/stores/uiStore';
 
   const liveFilteredAxesData: Readable<number[]> = derived(
-    [liveAccelerometerData, selectedAxis],
+    [liveAccelerometerData, highlightedAxis],
     stores => {
       const axis = stores[1];
       try {
@@ -45,26 +44,26 @@
         <div class="flex flex-row space-x-2">
           <StandardButton
             small
-            outlined={$selectedAxis !== Axes.X}
-            onClick={() => ($selectedAxis = Axes.X)}>X</StandardButton>
+            outlined={$highlightedAxis !== Axes.X}
+            onClick={() => ($highlightedAxis = Axes.X)}>X</StandardButton>
         </div>
         <div class="flex flex-row space-x-2">
           <StandardButton
             small
-            outlined={$selectedAxis !== Axes.Y}
-            onClick={() => ($selectedAxis = Axes.Y)}>Y</StandardButton>
+            outlined={$highlightedAxis !== Axes.Y}
+            onClick={() => ($highlightedAxis = Axes.Y)}>Y</StandardButton>
         </div>
         <div class="flex flex-row space-x-2">
           <StandardButton
             small
-            outlined={$selectedAxis !== Axes.Z}
-            onClick={() => ($selectedAxis = Axes.Z)}>Z</StandardButton>
+            outlined={$highlightedAxis !== Axes.Z}
+            onClick={() => ($highlightedAxis = Axes.Z)}>Z</StandardButton>
         </div>
       </div>
       <div class="flex flex-col justify-around">
-        <img src={'imgs/vector_lines_x.png'} class:hidden={$selectedAxis !== Axes.X} alt="x vector line"/>
-        <img src={'imgs/vector_lines_y.png'} class:hidden={$selectedAxis !== Axes.Y} alt="y vector line"/>
-        <img src={'imgs/vector_lines_z.png'} class:hidden={$selectedAxis !== Axes.Z} alt="z vector line"/>
+        <img src={'imgs/vector_lines_x.png'} class:hidden={$highlightedAxis !== Axes.X} alt="x vector line"/>
+        <img src={'imgs/vector_lines_y.png'} class:hidden={$highlightedAxis !== Axes.Y} alt="y vector line"/>
+        <img src={'imgs/vector_lines_z.png'} class:hidden={$highlightedAxis !== Axes.Z} alt="z vector line"/>
         </div>
       <div class="flex flex-col justify-around">
         <p>MAX</p>

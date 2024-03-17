@@ -81,9 +81,7 @@ class PollingPredictorEngine implements Engine {
         .getSeries(StaticConfiguration.pollingPredictionSampleDuration, sampleSize);
     } catch (_e) {
       if (sampleSize < 8) {
-        throw new Error(
-          'Was unable to correct buffer data. Less than 8 points were applicable.',
-        );
+        return [] // The minimum number of points is 8, otherwise the filters will throw an exception
       } else {
         return this.getRawDataFromBuffer(
           sampleSize - StaticConfiguration.pollingPredictionSampleSizeSearchStepSize,

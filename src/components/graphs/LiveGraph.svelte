@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { state } from '../../script/stores/uiStore';
+  import { preferredModel, state } from '../../script/stores/uiStore';
   import { onMount } from 'svelte';
   import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
@@ -28,6 +28,8 @@
   export let maxValue: number;
   export let minValue: number;
 
+  let axisColors = StaticConfiguration.liveGraphColors;
+
   // Smoothes real-time data by using the 3 most recent data points
   const smoothedLiveData = new SmoothedLiveData(liveData, 3);
 
@@ -38,11 +40,11 @@
   for (let i = 0; i < smoothedLiveData.getSeriesSize(); i++) {
     lines.push(new TimeSeries() as TimeSeriesWithData);
   }
+
   let recordLines = new TimeSeries();
   const lineWidth = 2;
 
-  // On mount draw smoothieChart
-  onMount(() => {
+  const init = () => {
     chart = new SmoothieChart({
       maxValue,
       minValue,
@@ -60,7 +62,7 @@
     for (const line of lines) {
       chart.addTimeSeries(line, {
         lineWidth,
-        strokeStyle: StaticConfiguration.liveGraphColors[i],
+        strokeStyle: axisColors[i],
       });
       i++;
     }
@@ -72,6 +74,11 @@
     });
     chart.streamTo(<HTMLCanvasElement>canvas, 0);
     chart.stop();
+  }
+
+  // On mount draw smoothieChart
+  onMount(() => {
+    init();
   });
 
   // Start and stop chart when microbit connect/disconnect

@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { ModelEntry, availableModels, state } from '../../script/stores/uiStore';
+  import { ModelEntry, availableModels, preferredModel, state } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
@@ -30,23 +30,7 @@
 
   const sufficientData = gestures.hasSufficientData();
 
-  const defaultModel: ModelEntry | undefined = availableModels.find(
-    model => model.id === 'NN',
-  );
-
-  if (!defaultModel) {
-    throw new Error('Default model not found!');
-  }
-
-  const selectedModelOption = hasFeature(Feature.KNN_MODEL)
-    ? new PersistantWritable<DropdownOption>(
-        {
-          id: defaultModel.id,
-          label: defaultModel.label,
-        },
-        'prefferedModel',
-      )
-    : writable(availableModels[0]);
+  const selectedModelOption = hasFeature(Feature.KNN_MODEL) ? preferredModel : writable(availableModels[0]);
 
   $: isUsingKNNModel =
     hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id;

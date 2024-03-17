@@ -67,7 +67,7 @@
   });
 </script>
 
-<div class="flex flex-row">
+<div class="flex flex-row" class:hidden={!$classifier.model.isTrained}>
   <div class="flex flex-col justify-center mr-6">
     <AxesFilterVector />
   </div>

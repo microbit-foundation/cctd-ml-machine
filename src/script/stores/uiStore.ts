@@ -158,7 +158,7 @@ export const preferredModel = new PersistantWritable<DropdownOption>(
   },
   'prefferedModel',
 )
-export const highlightedAxis = writable(Axes.X);
+export const highlightedAxis = writable<Axes | undefined>(undefined);
 
 const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;
 

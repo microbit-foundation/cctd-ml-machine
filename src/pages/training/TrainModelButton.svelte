@@ -22,13 +22,19 @@
 
   export let selectedOption: Writable<DropdownOption>;
   import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
-  import { ModelEntry, availableModels } from '../../script/stores/uiStore';
+  import {
+    ModelEntry,
+    availableModels,
+    highlightedAxis,
+  } from '../../script/stores/uiStore';
+  import Axes from '../../script/domain/Axes';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
 
   const getModelTrainer = (modelEntry: ModelEntry): ModelTrainer<MLModel> => {
     if (modelEntry.id === 'KNN') {
+      highlightedAxis.set(Axes.X);
       return new KNNModelTrainer(StaticConfiguration.knnNeighbourCount);
     }
 

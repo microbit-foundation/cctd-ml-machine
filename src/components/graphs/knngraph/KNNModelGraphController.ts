@@ -12,7 +12,6 @@ import { classifier, liveAccelerometerData } from '../../../script/stores/Stores
 import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Axes from '../../../script/domain/Axes';
-import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
 
 type SampleData = {
   value: number[];

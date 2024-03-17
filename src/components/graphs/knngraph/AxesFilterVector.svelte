@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { Readable, derived, writable } from 'svelte/store';
+  import { Readable, derived } from 'svelte/store';
   import { classifier, liveAccelerometerData } from '../../../script/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Axes from '../../../script/domain/Axes';
@@ -25,11 +25,13 @@
             StaticConfiguration.pollingPredictionSampleSize,
           );
         const series = seriesTimestamped.map(s => s.value);
-        return classifier
+        const filteredSeries = classifier
           .getFilters()
           .compute(extractAxisFromAccelerometerData(series, axis));
+
+        return filteredSeries;
       } catch (e) {
-        console.log(e);
+        console.log('failed to derive livedata for vector', e);
         return Array(classifier.getFilters().count()).fill(0);
       }
     },

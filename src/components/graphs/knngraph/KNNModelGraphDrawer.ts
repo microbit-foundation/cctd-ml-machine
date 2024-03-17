@@ -14,6 +14,7 @@ import {
   lines3D,
 } from 'd3-3d';
 import { gestures } from '../../../script/stores/Stores';
+import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -37,15 +38,21 @@ const colorShades = {
 };
 
 class KNNModelGraphDrawer {
+  private drawLimitTimeout = 50; // milliseconds between each draw
+  private drawLimitTimer: number;
   private labeled: boolean;
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
   ) {
     this.labeled = false;
+    this.drawLimitTimer = new Date().getTime() - 200;
   }
 
   public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][][]) {
+    if (!this.allowRedraw()) {
+      return;
+    }
     this.svg.selectAll('*').remove(); // clear svg for redraw
 
     // Add grid
@@ -76,6 +83,12 @@ class KNNModelGraphDrawer {
         });
       });
     });
+    this.drawLimitTimer = new Date().getTime();
+  }
+
+  private allowRedraw() {
+    // We limit how often the graph can be redrawn to avoid overwhelming the browser with DOM updates.
+    return new Date().getTime() - this.drawLimitTimer > this.drawLimitTimeout;
   }
 
   /**

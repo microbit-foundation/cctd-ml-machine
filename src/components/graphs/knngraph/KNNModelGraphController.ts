@@ -12,6 +12,7 @@ import { classifier, liveAccelerometerData } from '../../../script/stores/Stores
 import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Axes from '../../../script/domain/Axes';
+import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
 
 type SampleData = {
   value: number[];
@@ -27,6 +28,7 @@ class KNNModelGraphController {
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private trainingDataGetter: () => TrainingData,
+    origin: { x: number, y: number },
     classId: string,
     axis?: Axes,
   ) {
@@ -35,7 +37,7 @@ class KNNModelGraphController {
     this.rotationY = writable(0.5);
     this.rotationZ = writable(0);
     this.scale = writable(100);
-    this.origin = writable({ x: 250, y: 250 });
+    this.origin = writable(origin);
 
     // Derived store ensures, if any of the inputs are updated, the draw call will be called again
     derived(

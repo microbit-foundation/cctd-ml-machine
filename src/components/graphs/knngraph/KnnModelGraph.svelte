@@ -16,6 +16,7 @@
   import { TrainingData } from '../../../script/domain/ModelTrainer';
   import AxesFilterVector from './AxesFilterVector.svelte';
   import { highlightedAxis } from '../../../script/stores/uiStore';
+  import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
 
   let controllerSingleX: KNNModelGraphController | undefined;
   let controllerSingleY: KNNModelGraphController | undefined;
@@ -23,23 +24,26 @@
 
   const classifierFactory = new ClassifierFactory();
 
-  const dataGetter = (axis: Axes): TrainingData => {
-    const allData = classifierFactory.buildTrainingData(
-      gestures.getGestures(),
-      classifier.getFilters(),
-    );
+  // Cache training data to avoid fetching them again and again
+  PerformanceProfileTimer.start('cache data');
+  const allData = classifierFactory.buildTrainingData(
+    gestures.getGestures(),
+    classifier.getFilters(),
+  );
+  const xData = extractAxisFromTrainingData(allData, 0, 3);
+  const yData = extractAxisFromTrainingData(allData, 1, 3);
+  const zData = extractAxisFromTrainingData(allData, 2, 3);
+  PerformanceProfileTimer.stop('cache data');
 
+  const dataGetter = (axis: Axes): TrainingData => {
     if (axis === Axes.X) {
-      return extractAxisFromTrainingData(allData, 0, 3);
-      // return extractFilterFromTrainingData(allData, 0, 3);
+      return xData;
     }
     if (axis === Axes.Y) {
-      return extractAxisFromTrainingData(allData, 1, 3);
-      // return extractFilterFromTrainingData(allData, 1, 3);
+      return yData;
     }
     if (axis === Axes.Z) {
-      return extractAxisFromTrainingData(allData, 2, 3);
-      // return extractFilterFromTrainingData(allData, 2, 3);
+      return zData;
     }
     throw new Error('Should not happen');
   };
@@ -49,10 +53,10 @@
     const controller = new KNNModelGraphController(
       svgSingle,
       () => dataGetter(axis),
+      { x: 650 / 2, y: 350 / 2 },
       'd3-3d-single-' + label,
       axis,
     );
-    controller.setOrigin(650 / 2, 350 / 2);
     return controller;
   };
 
@@ -78,12 +82,14 @@
       width={650}
       classID={'d3-3d-single-x'}
       controller={controllerSingleX} />
+
     <KnnModelGraphSvgWithControls
       hidden={$highlightedAxis !== Axes.Y}
       height={350}
       width={650}
       classID={'d3-3d-single-y'}
       controller={controllerSingleY} />
+
     <KnnModelGraphSvgWithControls
       hidden={$highlightedAxis !== Axes.Z}
       height={350}

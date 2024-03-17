@@ -5,7 +5,12 @@
  -->
 
 <script lang="ts">
-  import { ModelEntry, availableModels, preferredModel, state } from '../../script/stores/uiStore';
+  import {
+    ModelEntry,
+    availableModels,
+    preferredModel,
+    state,
+  } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
@@ -16,8 +21,6 @@
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
-  import { DropdownOption } from '../../components/buttons/Buttons';
-  import PersistantWritable from '../../script/repository/PersistantWritable';
   import LossGraph from '../../components/graphs/LossGraph.svelte';
   import { writable } from 'svelte/store';
   import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
@@ -30,7 +33,9 @@
 
   const sufficientData = gestures.hasSufficientData();
 
-  const selectedModelOption = hasFeature(Feature.KNN_MODEL) ? preferredModel : writable(availableModels[0]);
+  const selectedModelOption = hasFeature(Feature.KNN_MODEL)
+    ? preferredModel
+    : writable(availableModels[0]);
 
   $: isUsingKNNModel =
     hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id;

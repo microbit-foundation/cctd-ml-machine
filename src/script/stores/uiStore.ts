@@ -123,7 +123,6 @@ export enum MicrobitInteractions {
   AB,
 }
 
-
 export type ModelEntry = {
   id: string;
   title: string;
@@ -157,7 +156,7 @@ export const preferredModel = new PersistantWritable<DropdownOption>(
     label: defaultModel.label,
   },
   'prefferedModel',
-)
+);
 export const highlightedAxis = writable<Axes | undefined>(undefined);
 
 const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;

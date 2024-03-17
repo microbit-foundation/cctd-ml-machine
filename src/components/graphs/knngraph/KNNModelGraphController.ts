@@ -27,7 +27,7 @@ class KNNModelGraphController {
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private trainingDataGetter: () => TrainingData,
-    origin: { x: number, y: number },
+    origin: { x: number; y: number },
     classId: string,
     axis?: Axes,
   ) {
@@ -38,7 +38,7 @@ class KNNModelGraphController {
     this.scale = writable(100);
     this.origin = writable(origin);
 
-    // Derived store ensures, if any of the inputs are updated, the draw call will be called again
+    // Derived store ensures if any of the inputs are updated, the draw call will be called again
     derived(
       [
         this.rotationX,

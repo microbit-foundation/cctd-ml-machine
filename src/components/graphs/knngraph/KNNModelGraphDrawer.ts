@@ -3,18 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Writable } from 'svelte/store';
 import { Point3D, Point3DTransformed } from '../../../script/TypingUtils';
-import {
-  triangles3D,
-  cubes3D,
-  gridPlanes3D,
-  points3D,
-  lineStrips3D,
-  lines3D,
-} from 'd3-3d';
+import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import { gestures } from '../../../script/stores/Stores';
-import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -117,7 +108,27 @@ class KNNModelGraphDrawer {
       .attr('fill', color)
       .attr('cx', d => (isNaN(d.projected.x) ? 0 : d.projected.x))
       .attr('cy', d => (isNaN(d.projected.y) ? 0 : d.projected.y))
-      .attr('r', radius);
+      .attr('r', radius)
+      .on('mouseenter', (x, y) => {
+        const tooltip = document.getElementById(this.classId);
+        if (tooltip) {
+          tooltip.style.left = y.projected.x + 5 + 'px';
+          tooltip.style.top = y.projected.y + 10 + 'px';
+          tooltip.innerHTML = `
+            <div class="bg-secondary text-secondarytext z-1 p-1 font-bold">
+              <p>${y.x.toFixed(2)}</p>
+              <p>${y.y.toFixed(2)}</p>
+              <p>${y.z.toFixed(2)}</p>
+            </div>
+          `;
+        }
+      })
+      .on('mouseleave', () => {
+        const tooltip = document.getElementById(this.classId);
+        if (tooltip) {
+          tooltip.innerHTML = ``;
+        }
+      });
 
     if (!label) {
       return;

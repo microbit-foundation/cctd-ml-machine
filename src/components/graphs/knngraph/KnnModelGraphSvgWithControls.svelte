@@ -69,6 +69,9 @@
 <div class:hidden>
   <button class="border-primary border-1 px-3" on:click={() => zoom(1.25)}>+</button>
   <button class="border-primary border-1 px-3" on:click={() => zoom(0.75)}>-</button>
+  <div class="relative">
+    <div class="absolute" id={classID} />
+  </div>
   <svg
     class={classID}
     {width}

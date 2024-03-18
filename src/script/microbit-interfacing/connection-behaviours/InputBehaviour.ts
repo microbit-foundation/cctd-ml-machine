@@ -157,9 +157,10 @@ class InputBehaviour extends LoggingDecorator {
   magnetometerChange(x: number, y: number, z: number): void {
     super.magnetometerChange(x, y, z);
 
-    const accelX = x / 1000.0;
-    const accelY = y / 1000.0;
-    const accelZ = z / 1000.0;
+    // Each value has absolute value <= 2^15, so we rescale to get all values in [-2.5,2.5]
+    const accelX = Math.sign(x) * Math.log2(Math.abs(x)) / 6;
+    const accelY = Math.sign(y) * Math.log2(Math.abs(y)) / 6;
+    const accelZ = Math.sign(z) * Math.log2(Math.abs(z)) / 6;
 
     liveMagnetometerData.put({
       x: accelX,

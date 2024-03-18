@@ -81,7 +81,7 @@ class SmoothedLiveData<T> implements LiveData<T> {
         return referenceData;
       }
 
-      const newObject: T = { ...referenceData };
+      const newObject: T = { ...referenceData }; // transpose
       for (const property in newObject) {
         const values = oldValues.map(val => val![property] as number);
         newObject[property] = smoothNewValue(...values) as never;

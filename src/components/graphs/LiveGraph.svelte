@@ -25,8 +25,13 @@
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
   export let liveData: LiveData<any>;
+  //export let liveAccData: LiveData<any>;
+  //export let liveMagnetData: LiveData<any>;
   export let maxValue: number;
   export let minValue: number;
+
+  //const smoothedLiveAccData = new SmoothedLiveData(liveAccData, 3);
+  //const smoothedLiveMagnetData = new SmoothedLiveData(liveMagnetData, 3);
 
   // Smoothes real-time data by using the 3 most recent data points
   const smoothedLiveData = new SmoothedLiveData(liveData, 3);

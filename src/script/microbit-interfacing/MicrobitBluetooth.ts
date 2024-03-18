@@ -37,7 +37,7 @@ export class MicrobitBluetooth {
    * @param {boolean => void} onDisconnect
    *      Fired when the micro:bit disconnects.
    * @param onReconnect
-   * 		What happens when the microbit reconnects after lost connection (leave undefined to turn off reconnect)
+   *      What happens when the microbit reconnects after lost connection (leave undefined to turn off reconnect)
    * @param onReconnectFailed What should happen when the microbit fails to reconnect?
    */
   protected constructor(
@@ -266,7 +266,7 @@ export class MicrobitBluetooth {
   }
 
   /**
-   * @param {(number, number, number) => void} onMagnetometerChanged Callback to be executed when the accelerometer changes.
+   * @param {(number, number, number) => void} onMagnetometerChanged Callback to be executed when the magnetometer changes.
    */
   public async listenToMagnetometer(
     onMagnetometerChanged: (x: number, y: number, z: number) => void,

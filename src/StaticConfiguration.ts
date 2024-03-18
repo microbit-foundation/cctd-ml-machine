@@ -58,12 +58,12 @@ class StaticConfiguration {
   };
 
   // Line colors are picked in the order of this array.
-  public static readonly liveGraphColors = ['#f9808e', '#80f98e', '#808ef9'];
+  public static readonly liveGraphColors = ['#f9808e', '#80f98e', '#808ef9', '#fad16c', '#4cfaee', '#fa4cfa'];
 
   // What will the min and max y-values on the livegraph be?
   public static readonly liveGraphValueBounds = {
-    min: -2,
-    max: 2.3,
+    min: -2.5,
+    max: 2.5,
   };
 
   // How long should we wait in between each prediction? (in milliseconds) Higher is more performant, lower is smoother UI
@@ -88,7 +88,7 @@ class StaticConfiguration {
   public static readonly accelerometerLiveDataBufferSize = 600;
 
   /**
-   * The size of the accelerometer livedata buffer. Larger means more memory is consumed.
+   * The size of the magnetometer livedata buffer. Larger means more memory is consumed.
    * Insertions are O(1) and fetching is O(n) where n is the number of items fetched.
    */
   public static readonly magnetometerLiveDataBufferSize = 600;
@@ -104,7 +104,7 @@ class StaticConfiguration {
   public static readonly pollingPredictionSampleSizeSearchStepSize = 3;
 
   /**
-   * The minimum number of gesture to indicate sufficient data.
+   * The minimum number of gestures to indicate sufficient data.
    */
   public static readonly minNoOfGestures = 2;
 

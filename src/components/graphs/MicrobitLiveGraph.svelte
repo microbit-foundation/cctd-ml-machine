@@ -6,8 +6,12 @@
 
 <script lang="ts">
   import StaticConfiguration from '../../StaticConfiguration';
-  import { liveAccelerometerData } from '../../script/stores/Stores';
+  import { liveAccelerometerData, liveMagnetometerData } from '../../script/stores/Stores';
   import LiveGraph from './LiveGraph.svelte';
+  import LiveData from '../../script/domain/stores/LiveData'
+
+ // TODO: Construct new LiveData object from liveAccelerometerData and liveMagnetometerData, which can then be passed onwards
+ let mergedLiveData: LiveData<any>
 
   export let width: number;
 </script>

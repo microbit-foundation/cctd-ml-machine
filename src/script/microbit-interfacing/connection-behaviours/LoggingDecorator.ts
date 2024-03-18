@@ -54,11 +54,11 @@ abstract class LoggingDecorator implements ConnectionBehaviour {
   }
 
   accelerometerChange(x: number, y: number, z: number): void {
-    // this.enableLogging && this.logTimed("X:", x, "Y:", y,"Z:",z)
+    this.enableLogging && this.logTimed("Accelerometer X:", x, "Y:", y,"Z:",z)
   }
 
   magnetometerChange(x: number, y: number, z: number): void {
-    this.enableLogging && this.logTimed("X:", x, "Y:", y,"Z:",z)
+    this.enableLogging && this.logTimed("Magnetometer X:", x, "Y:", y,"Z:",z)
   }
 
   buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {

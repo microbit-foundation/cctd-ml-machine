@@ -150,7 +150,7 @@ class InputBehaviour extends LoggingDecorator {
     liveAccelerometerData.put({
       x: accelX,
       y: accelY,
-      z: accelZ,
+      z: accelZ
     });
   }
 
@@ -165,7 +165,7 @@ class InputBehaviour extends LoggingDecorator {
     liveMagnetometerData.put({
       x: accelX,
       y: accelY,
-      z: accelZ,
+      z: accelZ
     });
   }
 

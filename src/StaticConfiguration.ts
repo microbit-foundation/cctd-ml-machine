@@ -82,7 +82,7 @@ class StaticConfiguration {
   public static readonly pollingPredictionSampleDuration = 1800;
 
   /**
-   * The size od the accelerometer livedata buffer. Larger means more memory is consumed.
+   * The size of the accelerometer livedata buffer. Larger means more memory is consumed.
    * Insertions are O(1) and fetching is O(n) where n is the number of items fetched.
    */
   public static readonly accelerometerLiveDataBufferSize = 600;

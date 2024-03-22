@@ -32,7 +32,7 @@ class KNNModelGraphController {
     axis?: Axes,
   ) {
     const graphDrawer = new KNNModelGraphDrawer(svg, classId);
-    this.rotationX = writable(0.5);
+    this.rotationX = writable(3);
     this.rotationY = writable(0.5);
     this.rotationZ = writable(0);
     this.scale = writable(100);
@@ -56,6 +56,7 @@ class KNNModelGraphController {
         const origin = stores[5];
         let liveData: TimestampedData<MicrobitAccelerometerData>[] = [];
 
+        console.log(xRot, yRot)
         try {
           liveData = liveAccelerometerData.getBuffer().getSeries(1000, 10);
         } catch (error) {

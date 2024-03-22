@@ -61,10 +61,6 @@
   };
 
   onMount(() => {
-    classifier.getFilters().clear();
-    classifier.getFilters().add(FilterType.MAX);
-    classifier.getFilters().add(FilterType.MIN);
-    classifier.getFilters().add(FilterType.MEAN);
     controllerSingleX = initSingle(Axes.X, 'x');
     controllerSingleY = initSingle(Axes.Y, 'y');
     controllerSingleZ = initSingle(Axes.Z, 'z');

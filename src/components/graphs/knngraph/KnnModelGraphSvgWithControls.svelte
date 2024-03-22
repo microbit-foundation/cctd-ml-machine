@@ -59,8 +59,8 @@
       return;
     }
     controller.addRotation({
-      x: (delta.y * 0.05) / Math.PI,
-      y: (delta.x * -0.05) / Math.PI,
+      x: (delta.y * -0.04) / Math.PI,
+      y: (delta.x * -0.04) / Math.PI,
       z: 0,
     });
   };

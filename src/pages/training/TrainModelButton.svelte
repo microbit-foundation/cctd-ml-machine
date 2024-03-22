@@ -67,7 +67,7 @@
     const selectedModel = availableModels.find(model => model.id === $selectedOption.id);
 
     if (selectedModel?.id === 'KNN') {
-      const knnFilters = [FilterType.MAX, FilterType.MIN, FilterType.STD];
+      const knnFilters = [FilterType.MAX, FilterType.MIN, FilterType.MEAN];
       const filters: Filters = classifier.getFilters();
       filters.clear();
       for (const filter of knnFilters) {

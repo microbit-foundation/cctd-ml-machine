@@ -115,10 +115,10 @@ class KNNModelGraphDrawer {
           tooltip.style.left = y.projected.x + 5 + 'px';
           tooltip.style.top = y.projected.y + 10 + 'px';
           tooltip.innerHTML = `
-            <div class="bg-secondary text-secondarytext z-1 p-1 font-bold">
-              <p>${y.x.toFixed(2)}</p>
-              <p>${y.y.toFixed(2)}</p>
-              <p>${y.z.toFixed(2)}</p>
+            <div class="bg-secondary z-1 p-1 font-bold">
+              <p class="text-red-400">${y.x.toFixed(2)}</p>
+              <p class="text-green-400">${y.y.toFixed(2)}</p>
+              <p class="text-blue-400">${y.z.toFixed(2)}</p>
             </div>
           `;
         }

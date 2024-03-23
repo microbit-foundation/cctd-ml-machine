@@ -56,7 +56,6 @@ class KNNModelGraphController {
         const origin = stores[5];
         let liveData: TimestampedData<MicrobitAccelerometerData>[] = [];
 
-        console.log(xRot, yRot)
         try {
           liveData = liveAccelerometerData.getBuffer().getSeries(1000, 10);
         } catch (error) {
@@ -145,6 +144,7 @@ class KNNModelGraphController {
   }
 
   private sampleToPoints(sample: SampleData): Point3D[] {
+    /*console.log(sample)
     const xs = [];
     const ys = [];
     const zs = [];
@@ -172,6 +172,10 @@ class KNNModelGraphController {
       points.push(point);
     }
     return points;
+    */
+    // The above code works the same, but is useful for multiple axes and filters. 
+    // Below is the code for just for a single axis. But the outcome should be exactly the same
+    return [{ x: sample.value[0], y: sample.value[1], z: sample.value[2] }]
   }
 }
 export default KNNModelGraphController;

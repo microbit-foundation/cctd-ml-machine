@@ -34,7 +34,6 @@
 
         return filteredSeries;
       } catch (e) {
-        console.log('failed to derive livedata for vector', e);
         return Array(classifier.getFilters().count()).fill(0);
       }
     },

@@ -13,7 +13,7 @@ import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
  */
 class SpyConnectionBehaviour implements ConnectionBehaviour {
   onIdentifiedAsOutdated(): void {
-    throw new Error('Method not implemented.');
+    // Empty
   }
   onVersionIdentified(versionNumber: number): void {
     throw new Error('Method not implemented.');

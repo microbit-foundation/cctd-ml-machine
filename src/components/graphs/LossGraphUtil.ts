@@ -6,6 +6,7 @@
 
 // TODO: Where to place this? It is used in the LayersModelTrainer, and maybe in other trainers in the future.
 //       It is primarily used by graph <LossGraph/> at the moment (28. feb 24)
+//       - Move to graphUtils.ts 10 march 24
 export type LossTrainingIteration = {
   loss: number;
   epoch: number;

@@ -5,3 +5,5 @@
  */
 
 /// <reference types="svelte" />
+
+declare module 'd3-3d';

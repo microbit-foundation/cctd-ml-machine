@@ -9,7 +9,6 @@
   import * as d3 from 'd3';
   import { classifier, gestures } from '../../../script/stores/Stores';
   import ClassifierFactory from '../../../script/domain/ClassifierFactory';
-  import { FilterType } from '../../../script/domain/FilterTypes';
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
   import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
   import Axes from '../../../script/domain/Axes';
@@ -17,6 +16,7 @@
   import AxesFilterVector from './AxesFilterVector.svelte';
   import { highlightedAxis } from '../../../script/stores/uiStore';
   import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
+  import { classColors, classColorShades } from './KNNModelGraphDrawer';
 
   let controllerSingleX: KNNModelGraphController | undefined;
   let controllerSingleY: KNNModelGraphController | undefined;
@@ -92,5 +92,19 @@
       width={650}
       classID={'d3-3d-single-z'}
       controller={controllerSingleZ} />
+  </div>
+  <div class="flex flex-col ml-2 justify-center">
+    {#each $gestures as gesture, index}
+      <div class="flex flex-row justify-start">
+        <div class="flex flex-row justify-center">
+          <div class="flex flex-col justify-center mr-1">
+            <div
+              class="rounded-full w-3 h-3"
+              style={'background-color:' + classColorShades[classColors[index]][0]} />
+          </div>
+          <p>{gesture.name}</p>
+        </div>
+      </div>
+    {/each}
   </div>
 </div>

@@ -14,7 +14,10 @@ export enum Feature {
 
 export const hasFeature = (feature: Feature): boolean => {
   if (CookieManager.hasFeatureFlag('FEATURE-TOGGLE-ALWAYS-TRUE')) {
-    Logger.log('FEATURE-TOGGLE-ALWAYS-TRUE is set! hasFeature is always true');
+    Logger.log(
+      'FeatureToggle',
+      'FEATURE-TOGGLE-ALWAYS-TRUE is set! hasFeature is always true',
+    );
     return true;
   }
   const featuresListedInJson = Object.getOwnPropertyNames(features);

@@ -173,9 +173,9 @@ class KNNModelGraphController {
     }
     return points;
     */
-    // The above code works the same, but is useful for multiple axes and filters. 
+    // The above code works the same, but is useful for multiple axes and filters.
     // Below is the code for just for a single axis. But the outcome should be exactly the same
-    return [{ x: sample.value[0], y: sample.value[1], z: sample.value[2] }]
+    return [{ x: sample.value[0], y: sample.value[1], z: sample.value[2] }];
   }
 }
 export default KNNModelGraphController;

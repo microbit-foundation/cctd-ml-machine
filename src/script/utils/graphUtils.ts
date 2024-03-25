@@ -35,7 +35,7 @@ export const extractAxisFromTrainingData = (
     classes: trainingData.classes.map(clazz => {
       return {
         samples: clazz.samples.map(sample => {
-          const startIndex = noOfAxes * axisOffset
+          const startIndex = noOfAxes * axisOffset;
           const stopIndex = startIndex + noOfAxes;
           return {
             value: sample.value.filter(

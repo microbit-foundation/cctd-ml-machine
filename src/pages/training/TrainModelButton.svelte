@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import { classifier } from '../../script/stores/Stores';
+  import { classifier, gestures } from '../../script/stores/Stores';
   import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
   import StaticConfiguration from '../../StaticConfiguration';
   import StandardDropdownButton from '../../components/buttons/StandardDropdownButton.svelte';
@@ -28,6 +28,7 @@
     highlightedAxis,
   } from '../../script/stores/uiStore';
   import Axes from '../../script/domain/Axes';
+  import Logger from '../../script/utils/Logger';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
@@ -35,6 +36,20 @@
   const getModelTrainer = (modelEntry: ModelEntry): ModelTrainer<MLModel> => {
     if (modelEntry.id === 'KNN') {
       highlightedAxis.set(Axes.X);
+      const noOfRecordings = gestures
+        .getGestures()
+        .map(gesture => gesture.getRecordings().length)
+        .reduce((prev, cur) => cur + prev, 0);
+
+      if (noOfRecordings / 2 < StaticConfiguration.knnNeighbourCount) {
+        Logger.log(
+          'TrainModelButton',
+          'The number of recordings is probably too low for an effective KNN model if using ' +
+            StaticConfiguration.knnNeighbourCount +
+            ' neighbours ',
+        );
+      }
+
       return new KNNModelTrainer(StaticConfiguration.knnNeighbourCount);
     }
 

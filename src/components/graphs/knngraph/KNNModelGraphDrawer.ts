@@ -121,6 +121,7 @@ class KNNModelGraphDrawer {
       .attr('cy', d => (isNaN(d.projected.y) ? 0 : d.projected.y))
       .attr('r', radius)
       .on('mouseenter', (x, y) => {
+        // TODO - Could be contained inside another file, using a store to place it, theres no need to share the tooltip between graphs
         const tooltip = document.getElementById(this.classId);
         if (tooltip) {
           tooltip.style.left = y.projected.x + 5 + 'px';

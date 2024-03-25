@@ -10,6 +10,7 @@
   import { classifier, gestures } from '../../../script/stores/Stores';
   import ClassifierFactory from '../../../script/domain/ClassifierFactory';
   import { FilterType } from '../../../script/domain/FilterTypes';
+  import { runInThisContext } from 'vm';
 
   export let controller: KNNModelGraphController | undefined;
   export let classID: string;
@@ -69,8 +70,18 @@
 <div class:hidden>
   <button class="border-primary border-1 px-3" on:click={() => zoom(1.25)}>+</button>
   <button class="border-primary border-1 px-3" on:click={() => zoom(0.75)}>-</button>
+  <!-- CONTAINER FOR TOOLTIP. IS MOVED BY GRAPHDRAWER -->
   <div class="relative">
-    <div class="absolute" id={classID} />
+    <div
+      class="absolute"
+      on:mouseleave={() => {
+        // This is a hack to easily close the tooltip, which otherwise has some odd behaviour
+        const thisElement = document.getElementById(classID);
+        if (thisElement) {
+          thisElement.innerHTML = '';
+        }
+      }}
+      id={classID} />
   </div>
   <svg
     class={classID}

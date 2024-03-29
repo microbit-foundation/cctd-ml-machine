@@ -6,7 +6,7 @@
 import * as d3 from 'd3';
 import { Point3D } from '../../../script/TypingUtils';
 import { TrainingData } from '../../../script/domain/ModelTrainer';
-import { Writable, derived, get, writable } from 'svelte/store';
+import { Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { GraphDrawConfig } from './KNNModelGraphDrawer';
 import { classifier, liveAccelerometerData } from '../../../script/stores/Stores';
 import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
@@ -23,6 +23,7 @@ class KNNModelGraphController {
   private rotationZ: Writable<number>;
   private origin: Writable<{ x: number; y: number }>;
   private scale: Writable<number>;
+  private unsubscribeDerived: Unsubscriber;
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -39,7 +40,7 @@ class KNNModelGraphController {
     this.origin = writable(origin);
 
     // Derived store ensures if any of the inputs are updated, the draw call will be called again
-    derived(
+    this.unsubscribeDerived = derived(
       [
         this.rotationX,
         this.rotationY,
@@ -141,6 +142,10 @@ class KNNModelGraphController {
 
   private classToPoints(clazz: { samples: SampleData[] }): Point3D[][] {
     return clazz.samples.map(sample => this.sampleToPoints(sample));
+  }
+
+  public destroy() {
+    this.unsubscribeDerived();
   }
 
   private sampleToPoints(sample: SampleData): Point3D[] {

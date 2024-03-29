@@ -64,6 +64,11 @@
     controllerSingleX = initSingle(Axes.X, 'x');
     controllerSingleY = initSingle(Axes.Y, 'y');
     controllerSingleZ = initSingle(Axes.Z, 'z');
+    return () => {
+      controllerSingleX?.destroy();
+      controllerSingleY?.destroy();
+      controllerSingleZ?.destroy();
+    }
   });
 </script>
 

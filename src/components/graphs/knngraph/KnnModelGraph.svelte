@@ -75,6 +75,20 @@
 <div class="flex flex-row" class:hidden={!$classifier.model.isTrained}>
   <div class="flex flex-col justify-center mr-6">
     <AxesFilterVector />
+    <div class="flex flex-col ml-2 justify-center mt-2">
+      {#each $gestures as gesture, index}
+        <div class="flex flex-row justify-start">
+          <div class="flex flex-row justify-center">
+            <div class="flex flex-col justify-center mr-1">
+              <div
+                class="rounded-full w-3 h-3"
+                style={'background-color:' + classColorShades[classColors[index]][0]} />
+            </div>
+            <p>{gesture.name}</p>
+          </div>
+        </div>
+      {/each}
+    </div>
   </div>
   <div>
     <KnnModelGraphSvgWithControls
@@ -97,19 +111,5 @@
       width={650}
       classID={'d3-3d-single-z'}
       controller={controllerSingleZ} />
-  </div>
-  <div class="flex flex-col ml-2 justify-center">
-    {#each $gestures as gesture, index}
-      <div class="flex flex-row justify-start">
-        <div class="flex flex-row justify-center">
-          <div class="flex flex-col justify-center mr-1">
-            <div
-              class="rounded-full w-3 h-3"
-              style={'background-color:' + classColorShades[classColors[index]][0]} />
-          </div>
-          <p>{gesture.name}</p>
-        </div>
-      </div>
-    {/each}
   </div>
 </div>

@@ -55,6 +55,7 @@
 <TrainingFailedDialog />
 <div class="flex flex-col h-full">
   <ControlBar>
+    <div class="min-h-12"/> 
     <StandardButton
       fillOnHover
       small

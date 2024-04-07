@@ -92,8 +92,10 @@
           <img src={'imgs/left_bracket_blue.png'} alt="left bracket" />
         </div>
         <div class="flex flex-col justify-around w-12">
-          {#each $liveFilteredAxesData as val}
-            <p>{val.toFixed(3)}</p>
+          {#each $liveFilteredAxesData as val, index}
+            <p style={`color:${['red', 'green', 'blue'][index]}`}>
+              {val.toFixed(3)}
+            </p>
           {/each}
         </div>
         <div class="flex flex-col justify-around">

@@ -12,6 +12,61 @@
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';
   import { highlightedAxis } from '../../../script/stores/uiStore';
+  import arrowCreate from 'arrows-svg';
+  // @ts-ignore
+  import type { IArrow } from 'arrows-svg/types/interfaces/IArrow.d.ts';
+  import { afterUpdate, onMount } from 'svelte';
+
+  let arrows: IArrow[] = [];
+  const drawArrows = (fromId: string) => {
+    arrows.forEach(arr => arr.clear());
+    const from = document.getElementById(fromId)!;
+    const toX = document.getElementById('arrowTo1');
+    const toY = document.getElementById('arrowTo2');
+    const toZ = document.getElementById('arrowTo3');
+    if (!from || !toX || !toY || !toZ) {
+      return;
+    }
+    arrows.push(
+      arrowCreate({
+        from,
+        to: toX,
+      }),
+    );
+    arrows.push(
+      arrowCreate({
+        from,
+        to: toY,
+      }),
+    );
+    arrows.push(
+      arrowCreate({
+        from,
+        to: toZ,
+      }),
+    );
+    arrows.forEach(arr => {
+      document.body.appendChild(arr.node);
+    });
+  };
+
+  const updateArrows = (axis: Axes | undefined) => {
+    if (axis) {
+      const getId = (): string => {
+        if ($highlightedAxis === Axes.X) {
+          return 'fromX';
+        }
+        if ($highlightedAxis === Axes.Y) {
+          return 'fromY';
+        }
+        if ($highlightedAxis === Axes.Z) {
+          return 'fromZ';
+        }
+        throw Error('This shouldnt happen');
+      };
+      drawArrows(getId());
+    }
+  };
 
   const liveFilteredAxesData: Readable<number[]> = derived(
     [liveAccelerometerData, highlightedAxis],
@@ -38,6 +93,16 @@
       }
     },
   );
+
+  onMount(() => {
+    setTimeout(() => {
+      // We set a timeout to fix a graphical issue, that relates to the resizing of DOM elements
+      updateArrows($highlightedAxis);
+    }, 600);
+  });
+  afterUpdate(() => {
+    updateArrows($highlightedAxis);
+  });
 </script>
 
 <div>
@@ -45,43 +110,29 @@
     {#if $highlightedAxis}
       <div class="flex flex-row space-x-1">
         <div class="flex flex-col">
-          <div class="flex flex-row space-x-2">
+          <div class="flex flex-row space-x-2" id="fromX">
             <StandardButton
               small
               outlined={$highlightedAxis !== Axes.X}
               onClick={() => ($highlightedAxis = Axes.X)}>X</StandardButton>
           </div>
-          <div class="flex flex-row space-x-2">
+          <div class="flex flex-row space-x-2" id="fromY">
             <StandardButton
               small
               outlined={$highlightedAxis !== Axes.Y}
               onClick={() => ($highlightedAxis = Axes.Y)}>Y</StandardButton>
           </div>
-          <div class="flex flex-row space-x-2">
+          <div class="flex flex-row space-x-2" id="fromZ">
             <StandardButton
               small
               outlined={$highlightedAxis !== Axes.Z}
               onClick={() => ($highlightedAxis = Axes.Z)}>Z</StandardButton>
           </div>
         </div>
-        <div class="flex flex-col justify-around">
-          <img
-            src={'imgs/vector_lines_x.png'}
-            class:hidden={$highlightedAxis !== Axes.X}
-            alt="x vector line" />
-          <img
-            src={'imgs/vector_lines_y.png'}
-            class:hidden={$highlightedAxis !== Axes.Y}
-            alt="y vector line" />
-          <img
-            src={'imgs/vector_lines_z.png'}
-            class:hidden={$highlightedAxis !== Axes.Z}
-            alt="z vector line" />
-        </div>
-        <div class="flex flex-col justify-around">
-          <p>MAX</p>
-          <p>MIN</p>
-          <p>MEAN</p>
+        <div class="pl-20 flex flex-col justify-around">
+          <p id="arrowTo1">MAX</p>
+          <p id="arrowTo2">MIN</p>
+          <p id="arrowTo3">MEAN</p>
         </div>
         <div class="flex flex-col justify-around">
           <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />

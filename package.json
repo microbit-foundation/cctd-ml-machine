@@ -48,6 +48,7 @@
     "@microsoft/applicationinsights-web": "^3.0.0",
     "@tensorflow-models/knn-classifier": "^1.2.6",
     "@tensorflow/tfjs": "^4.4.0",
+    "arrows-svg": "^1.7.1",
     "bowser": "^2.11.0",
     "browser-lang": "^0.2.1",
     "chart.js": "^4.2.1",

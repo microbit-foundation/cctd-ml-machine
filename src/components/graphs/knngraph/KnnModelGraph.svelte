@@ -75,7 +75,9 @@
 
 <div class="flex flex-row" class:hidden={!$classifier.model.isTrained}>
   <div class="flex flex-col justify-center mr-6">
-    <AxesFilterVector />
+    {#if $classifier.model.isTrained}
+      <AxesFilterVector />
+    {/if}
     <div class="flex flex-col ml-2 justify-center mt-2">
       {#each $gestures as gesture, index}
         <div class="flex flex-row justify-between">

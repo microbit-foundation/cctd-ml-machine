@@ -7,7 +7,7 @@
   import { onMount } from 'svelte';
   import KNNModelGraphController from './KNNModelGraphController';
   import * as d3 from 'd3';
-  import { classifier, gestures } from '../../../script/stores/Stores';
+  import { classifier, gestures, confidences } from '../../../script/stores/Stores';
   import ClassifierFactory from '../../../script/domain/ClassifierFactory';
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
   import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
@@ -18,6 +18,7 @@
   import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
   import { classColors, classColorShades } from './KNNModelGraphDrawer';
   import StaticConfiguration from '../../../StaticConfiguration';
+  import { derived } from 'svelte/store';
 
   let controllerSingleX: KNNModelGraphController | undefined;
   let controllerSingleY: KNNModelGraphController | undefined;
@@ -78,8 +79,8 @@
     <AxesFilterVector />
     <div class="flex flex-col ml-2 justify-center mt-2">
       {#each $gestures as gesture, index}
-        <div class="flex flex-row justify-start">
-          <div class="flex flex-row justify-center">
+        <div class="flex flex-row justify-between">
+          <div class="flex flex-row">
             <div class="flex flex-col justify-center mr-1">
               <div
                 class="rounded-full w-3 h-3"
@@ -87,6 +88,7 @@
             </div>
             <p>{gesture.name}</p>
           </div>
+          <p>{$confidences.get(gesture.ID).currentConfidence.toFixed(3) * 100}%</p>
         </div>
       {/each}
     </div>

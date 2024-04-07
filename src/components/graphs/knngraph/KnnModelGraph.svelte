@@ -14,9 +14,8 @@
   import Axes from '../../../script/domain/Axes';
   import { TrainingData } from '../../../script/domain/ModelTrainer';
   import AxesFilterVector from './AxesFilterVector.svelte';
-  import { highlightedAxis } from '../../../script/stores/uiStore';
+  import { highlightedAxis, state } from '../../../script/stores/uiStore';
   import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
-  import { classColors, classColorShades } from './KNNModelGraphDrawer';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { derived } from 'svelte/store';
 
@@ -88,7 +87,9 @@
             </div>
             <p>{gesture.name}</p>
           </div>
-          <p>{$confidences.get(gesture.ID).currentConfidence.toFixed(3) * 100}%</p>
+          {#if $state.isInputReady}
+            <p>{$confidences.get(gesture.ID).currentConfidence.toFixed(3) * 100}%</p>
+          {/if}
         </div>
       {/each}
     </div>

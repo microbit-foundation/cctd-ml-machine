@@ -20,26 +20,6 @@ export type GrahpDrawData = {
   points: Point3D[];
 };
 
-type AssignableColors = 'red' | 'green' | 'blue' | 'orange' | 'teal' | 'purple' | 'pink';
-export const classColors: AssignableColors[] = [
-  'red',
-  'green',
-  'blue',
-  'orange',
-  'teal',
-  'purple',
-  'pink',
-];
-export const classColorShades = {
-  red: ['#d0312d', '#b90e0a', '#e30b5d'],
-  green: ['#006400', '#90ee90', '#50c878'],
-  blue: ['#007fff', '#007bb8', '#4682b4'],
-  orange: ['#f28500', '#ff7f50', '#ff7900'],
-  teal: ['#40e0d0', '#40826d', '#48d1cc'],
-  purple: [],
-  pink: [],
-};
-
 class KNNModelGraphDrawer {
   private drawLimitTimeout = 50; // milliseconds between each draw
   private drawLimitTimer: number;

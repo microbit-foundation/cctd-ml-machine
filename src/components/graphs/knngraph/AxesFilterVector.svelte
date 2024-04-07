@@ -12,9 +12,7 @@
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';
   import { highlightedAxis } from '../../../script/stores/uiStore';
-  import arrowCreate from 'arrows-svg';
-  // @ts-ignore
-  import type { IArrow } from 'arrows-svg/types/interfaces/IArrow.d.ts';
+  import arrowCreate, { IArrow } from 'arrows-svg';
   import { afterUpdate, onMount } from 'svelte';
 
   let arrows: IArrow[] = [];

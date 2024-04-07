@@ -14,6 +14,7 @@
   import FilterGraphLimits from '../../script/utils/FilterLimits';
   import { GestureData } from '../../script/domain/stores/gesture/Gesture';
   import { RecordingData } from '../../script/domain/stores/gesture/Gestures';
+  import StaticConfiguration from '../../StaticConfiguration';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
@@ -140,7 +141,13 @@
   }
 
   function createLiveData() {
-    const liveData = liveAccelerometerData.getBuffer().getNewestValues(10);
+    const liveData = liveAccelerometerData
+      .getBuffer()
+      .getSeries(
+        StaticConfiguration.recordingDuration,
+        StaticConfiguration.pollingPredictionSampleSize,
+      )
+      .map(d => d.value);
 
     const xs = liveData.map(d => d!.x);
     const ys = liveData.map(d => d!.y);

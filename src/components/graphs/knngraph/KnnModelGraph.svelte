@@ -17,6 +17,7 @@
   import { highlightedAxis } from '../../../script/stores/uiStore';
   import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
   import { classColors, classColorShades } from './KNNModelGraphDrawer';
+  import StaticConfiguration from '../../../StaticConfiguration';
 
   let controllerSingleX: KNNModelGraphController | undefined;
   let controllerSingleY: KNNModelGraphController | undefined;
@@ -68,7 +69,7 @@
       controllerSingleX?.destroy();
       controllerSingleY?.destroy();
       controllerSingleZ?.destroy();
-    }
+    };
   });
 </script>
 
@@ -82,7 +83,7 @@
             <div class="flex flex-col justify-center mr-1">
               <div
                 class="rounded-full w-3 h-3"
-                style={'background-color:' + classColorShades[classColors[index]][0]} />
+                style={'background-color:' + StaticConfiguration.gestureColors[index]} />
             </div>
             <p>{gesture.name}</p>
           </div>

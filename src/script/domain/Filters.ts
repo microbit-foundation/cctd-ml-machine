@@ -9,7 +9,7 @@ import FilterTypes, { FilterType } from './FilterTypes';
 import Logger from '../utils/Logger';
 
 class Filters implements Readable<Filter[]> {
-  constructor(private filters: Writable<Filter[]>) {}
+  constructor(private filters: Writable<Filter[]>) { }
   public subscribe(
     run: Subscriber<Filter[]>,
     invalidate?: ((value?: Filter[] | undefined) => void) | undefined,
@@ -39,7 +39,7 @@ class Filters implements Readable<Filter[]> {
     const filter = FilterTypes.createFilter(filterType);
     const oldFilterArray = [...get(this.filters)];
     this.filters.set([...oldFilterArray, filter]);
-    Logger.log('added filter ', filter);
+    Logger.log("Filters", 'added filter ', filter);
   }
 
   public has(filterType: FilterType): boolean {

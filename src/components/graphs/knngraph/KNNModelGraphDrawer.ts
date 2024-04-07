@@ -6,6 +6,7 @@
 import { Point3D, Point3DTransformed } from '../../../script/TypingUtils';
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import { gestures } from '../../../script/stores/Stores';
+import StaticConfiguration from '../../../StaticConfiguration';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -61,9 +62,9 @@ class KNNModelGraphDrawer {
     this.addGrid(drawConfig);
 
     // Add axes
-    this.addAxis({ x: 1, y: 0, z: 0 }, 'xScale', drawConfig, 'red');
-    this.addAxis({ x: 0, y: 1, z: 0 }, 'yScale', drawConfig, 'green');
-    this.addAxis({ x: 0, y: 0, z: 1 }, 'zScale', drawConfig, 'blue');
+    this.addAxis({ x: 1, y: 0, z: 0 }, 'xScale', drawConfig, StaticConfiguration.liveGraphColors[0]);
+    this.addAxis({ x: 0, y: 1, z: 0 }, 'yScale', drawConfig, StaticConfiguration.liveGraphColors[1]);
+    this.addAxis({ x: 0, y: 0, z: 1 }, 'zScale', drawConfig, StaticConfiguration.liveGraphColors[2]);
 
     // Add points
     drawData.forEach((clazz, classIndex) => {
@@ -72,7 +73,8 @@ class KNNModelGraphDrawer {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          const color = classColorShades[classColors[classIndex]][axisIndex];
+          // const color = classColorShades[classColors[classIndex]][axisIndex];
+          const color = StaticConfiguration.gestureColors[classIndex]
           this.addPoint(
             axisValue,
             drawConfig,

@@ -12,6 +12,9 @@ import Engine, { EngineData } from '../domain/stores/Engine';
 import Classifier from '../domain/stores/Classifier';
 import LiveData from '../domain/stores/LiveData';
 
+/**
+ * The PollingPredictorEngine will predict on the current input with consistent intervals.
+ */
 class PollingPredictorEngine implements Engine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;
   private isRunning: Writable<boolean>;
@@ -23,6 +26,7 @@ class PollingPredictorEngine implements Engine {
     this.isRunning = writable(true);
     this.startPolling();
   }
+
   public subscribe(
     run: Subscriber<EngineData>,
     invalidate?: ((value?: EngineData | undefined) => void) | undefined,

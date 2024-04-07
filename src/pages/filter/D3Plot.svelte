@@ -140,15 +140,20 @@
   }
 
   function createLiveData() {
-    const liveData = liveAccelerometerData.getBuffer().getNewestValues(1)[0];
+    const liveData = liveAccelerometerData.getBuffer().getNewestValues(10);
+
+    const xs = liveData.map(d => d!.x);
+    const ys = liveData.map(d => d!.y);
+    const zs = liveData.map(d => d!.z);
+
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {
       ID: uniqueLiveDataID,
       gestureClassName: 'live',
       gestureClassID: uniqueLiveDataID,
-      x: filterFunction([liveData!.x]),
-      y: filterFunction([liveData!.y]),
-      z: filterFunction([liveData!.z]),
+      x: filterFunction(xs),
+      y: filterFunction(ys),
+      z: filterFunction(zs),
     };
     return filteredData;
   }

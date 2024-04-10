@@ -38,7 +38,6 @@
   import BluetoothIncompatibilityWarningDialog from './components/BluetoothIncompatibilityWarningDialog.svelte';
   import CookieManager from './script/CookieManager';
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
-  import Environment from './script/Environment';
   import Router from './router/Router.svelte';
   import { Feature, getFeature } from './script/FeatureToggles';
 

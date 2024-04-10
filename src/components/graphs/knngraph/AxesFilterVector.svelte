@@ -101,6 +101,10 @@
   afterUpdate(() => {
     updateArrows($highlightedAxis);
   });
+
+  document.addEventListener('load', () => {
+    console.log('Loaded');
+  });
 </script>
 
 <div>

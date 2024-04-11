@@ -17,6 +17,11 @@ type SampleData = {
   value: number[];
 };
 
+type UpdateCall = {
+  config: GraphDrawConfig;
+  data: TimestampedData<MicrobitAccelerometerData>[];
+}
+
 class KNNModelGraphController {
   private rotationX: Writable<number>;
   private rotationY: Writable<number>;
@@ -24,6 +29,7 @@ class KNNModelGraphController {
   private origin: Writable<{ x: number; y: number }>;
   private scale: Writable<number>;
   private unsubscribeDerived: Unsubscriber;
+  private graphDrawer: KNNModelGraphDrawer;
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -32,7 +38,7 @@ class KNNModelGraphController {
     classId: string,
     axis?: Axes,
   ) {
-    const graphDrawer = new KNNModelGraphDrawer(svg, classId);
+    this.graphDrawer = new KNNModelGraphDrawer(svg, classId);
     this.rotationX = writable(3);
     this.rotationY = writable(0.5);
     this.rotationZ = writable(0);
@@ -40,7 +46,48 @@ class KNNModelGraphController {
     this.origin = writable(origin);
 
     // Derived store ensures if any of the inputs are updated, the draw call will be called again
-    this.unsubscribeDerived = derived(
+    this.unsubscribeDerived = this.deriveControllerStore().subscribe(draw => this.onUpdate(draw, axis));
+  }
+
+  public setOrigin(x: number, y: number) {
+    this.origin.set({ x, y });
+  }
+
+  public addRotation(rotation: Point3D) {
+    this.rotationX.update(oldRot => {
+      return oldRot + rotation.x;
+    });
+    this.rotationY.update(oldRot => {
+      return oldRot + rotation.y;
+    });
+    this.rotationZ.update(oldRot => {
+      return oldRot + rotation.z;
+    });
+  }
+
+  public multiplyScale(amount: number) {
+    this.scale.update(newScale => newScale * amount);
+  }
+
+  public destroy() {
+    this.unsubscribeDerived();
+  }
+
+  private trainingDataToPoints(): Point3D[][][] {
+    const data = this.trainingDataGetter();
+    return data.classes.map(clazz => this.classToPoints(clazz));
+  }
+
+  private classToPoints(clazz: { samples: SampleData[] }): Point3D[][] {
+    return clazz.samples.map(sample => this.sampleToPoints(sample));
+  }
+
+  private sampleToPoints(sample: SampleData): Point3D[] {
+    return [{ x: sample.value[0], y: sample.value[1], z: sample.value[2] }];
+  }
+
+  private deriveControllerStore() {
+    return derived(
       [
         this.rotationX,
         this.rotationY,
@@ -74,113 +121,48 @@ class KNNModelGraphController {
           data: liveData,
         };
       },
-    ).subscribe(draw => {
-      const data = draw.data;
+    )
+  }
 
-      // Add live data
-      const liveXs: number[] = [];
-      const liveYs: number[] = [];
-      const liveZs: number[] = [];
-      data.forEach(d => {
-        liveXs.push(d.value.x);
-        liveYs.push(d.value.y);
-        liveZs.push(d.value.z);
-      });
-      const filters = classifier.getFilters();
-      const filteredXs = filters.compute(liveXs);
-      const filteredYs = filters.compute(liveYs);
-      const filteredZs = filters.compute(liveZs);
+  // Called whenever any subscribed store is altered
+  private onUpdate(draw: UpdateCall, axis?: Axes) {
+    const data = draw.data;
 
-      const toPoint = (nums: number[]): Point3D => {
-        return { x: nums[0], y: nums[1], z: nums[2] };
-      };
-
-      const liveDataCombined = [
-        [toPoint(filteredXs), toPoint(filteredYs), toPoint(filteredZs)],
-      ];
-
-      const liveData = [
-        [
-          toPoint(
-            axis === Axes.X ? filteredXs : axis === Axes.Y ? filteredYs : filteredZs,
-          ),
-        ],
-      ];
-
-      const drawData = this.trainingDataToPoints(); // Training data
-      if (!filteredXs.includes(NaN)) {
-        drawData.push(axis ? liveData : liveDataCombined);
-      }
-      graphDrawer.draw(draw.config, drawData);
+    // Add live data
+    const liveXs: number[] = [];
+    const liveYs: number[] = [];
+    const liveZs: number[] = [];
+    data.forEach(d => {
+      liveXs.push(d.value.x);
+      liveYs.push(d.value.y);
+      liveZs.push(d.value.z);
     });
-  }
+    const filters = classifier.getFilters();
+    const filteredXs = filters.compute(liveXs);
+    const filteredYs = filters.compute(liveYs);
+    const filteredZs = filters.compute(liveZs);
 
-  public setOrigin(x: number, y: number) {
-    this.origin.set({ x, y });
-  }
+    const toPoint = (nums: number[]): Point3D => {
+      return { x: nums[0], y: nums[1], z: nums[2] };
+    };
 
-  public addRotation(rotation: Point3D) {
-    this.rotationX.update(oldRot => {
-      return oldRot + rotation.x;
-    });
-    this.rotationY.update(oldRot => {
-      return oldRot + rotation.y;
-    });
-    this.rotationZ.update(oldRot => {
-      return oldRot + rotation.z;
-    });
-  }
+    const liveDataCombined = [
+      [toPoint(filteredXs), toPoint(filteredYs), toPoint(filteredZs)],
+    ];
 
-  public multiplyScale(amount: number) {
-    this.scale.update(newScale => newScale * amount);
-  }
+    const liveData = [
+      [
+        toPoint(
+          axis === Axes.X ? filteredXs : axis === Axes.Y ? filteredYs : filteredZs,
+        ),
+      ],
+    ];
 
-  private trainingDataToPoints(): Point3D[][][] {
-    const data = this.trainingDataGetter();
-    return data.classes.map(clazz => this.classToPoints(clazz));
-  }
-
-  private classToPoints(clazz: { samples: SampleData[] }): Point3D[][] {
-    return clazz.samples.map(sample => this.sampleToPoints(sample));
-  }
-
-  public destroy() {
-    this.unsubscribeDerived();
-  }
-
-  private sampleToPoints(sample: SampleData): Point3D[] {
-    /*console.log(sample)
-    const xs = [];
-    const ys = [];
-    const zs = [];
-    for (let i = 0; i < sample.value.length; i += 3) {
-      const element = sample.value[i];
-      xs.push(element);
+    const drawData = this.trainingDataToPoints(); // Training data
+    if (!filteredXs.includes(NaN)) {
+      drawData.push(axis ? liveData : liveDataCombined);
     }
-    for (let i = 1; i < sample.value.length; i += 3) {
-      const element = sample.value[i];
-      ys.push(element);
-    }
-    for (let i = 2; i < sample.value.length; i += 3) {
-      const element = sample.value[i];
-      zs.push(element);
-    }
-
-    const points = [];
-
-    for (let i = 0; i < 3; i++) {
-      const point: Point3D = {
-        x: xs[i],
-        y: ys[i],
-        z: zs[i],
-      };
-      points.push(point);
-    }
-    return points;
-    */
-    // The above code works the same, but is useful for multiple axes and filters.
-    // Below is the code for just for a single axis. But the outcome should be exactly the same
-    return [{ x: sample.value[0], y: sample.value[1], z: sample.value[2] }];
+    this.graphDrawer.draw(draw.config, drawData);
   }
 }
 export default KNNModelGraphController;

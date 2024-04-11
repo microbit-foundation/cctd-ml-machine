@@ -4,13 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { onMount } from 'svelte';
   import KNNModelGraphController from './KNNModelGraphController';
-  import * as d3 from 'd3';
-  import { classifier, gestures } from '../../../script/stores/Stores';
-  import ClassifierFactory from '../../../script/domain/ClassifierFactory';
-  import { FilterType } from '../../../script/domain/FilterTypes';
-  import { runInThisContext } from 'vm';
 
   export let controller: KNNModelGraphController | undefined;
   export let classID: string;
@@ -25,7 +19,13 @@
     controller.multiplyScale(amount);
   };
 
+  let mouseDragDelta = {
+    x: 0,
+    y: 0,
+  };
+
   let isDragging = false;
+
   const dragStart = () => {
     isDragging = true;
   };
@@ -50,18 +50,17 @@
 
   const drag = (event: any) => {
     if (!isDragging) return;
-
-    const delta = {
+    if (!controller) {
+      return;
+    }
+    mouseDragDelta = {
       x: event.movementX,
       y: event.movementY,
     };
 
-    if (!controller) {
-      return;
-    }
     controller.addRotation({
-      x: (delta.y * -0.04) / Math.PI,
-      y: (delta.x * -0.04) / Math.PI,
+      x: (mouseDragDelta.y * -0.04) / Math.PI,
+      y: (mouseDragDelta.x * -0.04) / Math.PI,
       z: 0,
     });
   };

@@ -17,7 +17,6 @@
   import { highlightedAxis, state } from '../../../script/stores/uiStore';
   import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { derived } from 'svelte/store';
 
   let controllerSingleX: KNNModelGraphController | undefined;
   let controllerSingleY: KNNModelGraphController | undefined;

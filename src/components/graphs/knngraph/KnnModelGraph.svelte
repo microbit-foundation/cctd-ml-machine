@@ -25,7 +25,6 @@
   const classifierFactory = new ClassifierFactory();
 
   // Cache training data to avoid fetching them again and again
-  PerformanceProfileTimer.start('cache data');
   const allData = classifierFactory.buildTrainingData(
     gestures.getGestures(),
     classifier.getFilters(),
@@ -33,7 +32,6 @@
   const xData = extractAxisFromTrainingData(allData, 0, 3);
   const yData = extractAxisFromTrainingData(allData, 1, 3);
   const zData = extractAxisFromTrainingData(allData, 2, 3);
-  PerformanceProfileTimer.stop('cache data');
 
   const dataGetter = (axis: Axes): TrainingData => {
     if (axis === Axes.X) {

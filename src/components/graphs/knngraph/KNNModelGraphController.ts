@@ -13,6 +13,7 @@ import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAcce
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Axes from '../../../script/domain/Axes';
 import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
+import Filters from '../../../script/domain/Filters';
 
 type SampleData = {
   value: number[];
@@ -32,6 +33,7 @@ class KNNModelGraphController {
   private unsubscribeDerived: Unsubscriber;
   private graphDrawer: KNNModelGraphDrawer;
   private trainingData: Point3D[][][];
+  private filters: Filters;
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -41,6 +43,7 @@ class KNNModelGraphController {
     axis?: Axes,
   ) {
     this.trainingData = this.trainingDataToPoints();
+    this.filters = classifier.getFilters();
     this.graphDrawer = new KNNModelGraphDrawer(svg, classId);
     this.rotationX = writable(3);
     this.rotationY = writable(0.5);
@@ -129,45 +132,33 @@ class KNNModelGraphController {
 
   // Called whenever any subscribed store is altered
   private onUpdate(draw: UpdateCall, axis?: Axes) {
+
     const data = draw.data;
 
-    // Add live data
-    const liveXs: number[] = [];
-    const liveYs: number[] = [];
-    const liveZs: number[] = [];
-    data.forEach(d => {
-      liveXs.push(d.value.x);
-      liveYs.push(d.value.y);
-      liveZs.push(d.value.z);
-    });
-    const filters = classifier.getFilters();
-    const filteredXs = filters.compute(liveXs);
-    const filteredYs = filters.compute(liveYs);
-    const filteredZs = filters.compute(liveZs);
+    const getLiveFilteredData = () => {
+      switch (axis) {
+        case Axes.X:
+          return this.filters.compute(data.map(d => d.value.x))
+        case Axes.Y:
+          return this.filters.compute(data.map(d => d.value.y))
+        case Axes.Z:
+          return this.filters.compute(data.map(d => d.value.z))
+        default: throw new Error("Shouldn't happen")
+      }
+    }
 
-    const toPoint = (nums: number[]): Point3D => {
-      return { x: nums[0], y: nums[1], z: nums[2] };
-    };
-
-    /* 
-    const liveDataCombined = [
-      [toPoint(filteredXs), toPoint(filteredYs), toPoint(filteredZs)],
-    ];
-*/
-    const liveData = [
-      [
-        toPoint(
-          axis === Axes.X ? filteredXs : axis === Axes.Y ? filteredYs : filteredZs,
-        ),
-      ],
-    ];
+    const liveData = getLiveFilteredData();
 
     const drawData = [...this.trainingData];
-    if (!filteredXs.includes(NaN)) {
-      axis && drawData.push(liveData);
+    if (!liveData.includes(NaN)) {
+      axis && drawData.push([[this.arrayToPoint(liveData)]]);
     }
 
     this.graphDrawer.draw(draw.config, drawData);
+  }
+
+  private arrayToPoint(nums: number[]): Point3D {
+    return { x: nums[0], y: nums[1], z: nums[2] }
   }
 }
 export default KNNModelGraphController;

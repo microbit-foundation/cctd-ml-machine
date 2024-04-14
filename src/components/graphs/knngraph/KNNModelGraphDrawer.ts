@@ -61,8 +61,7 @@ class KNNModelGraphDrawer {
             `${classIndex}-${exampleIndex}-${axisIndex}`,
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             color,
-            //colors[classIndex],
-            this.labeled ? this.getLabel(classIndex) : '',
+            // this.labeled ? this.getLabel(classIndex) : '',
           );
         });
       });

@@ -166,6 +166,7 @@ class KNNModelGraphController {
     if (!filteredXs.includes(NaN)) {
       axis && drawData.push(liveData);
     }
+
     this.graphDrawer.draw(draw.config, drawData);
   }
 }

@@ -36,8 +36,7 @@ class KNNModelGraphDrawer {
     if (!this.allowRedraw()) {
       return;
     }
-    this.svg.selectAll('*').remove(); // clear svg for redraw
-
+    // this.svg.selectAll('*').remove(); // clear svg for redraw
     // Add grid
     this.addGrid(drawConfig);
 
@@ -45,6 +44,7 @@ class KNNModelGraphDrawer {
     this.addAxis({ x: 1, y: 0, z: 0 }, 'xScale', drawConfig, StaticConfiguration.liveGraphColors[0]);
     this.addAxis({ x: 0, y: 1, z: 0 }, 'yScale', drawConfig, StaticConfiguration.liveGraphColors[1]);
     this.addAxis({ x: 0, y: 0, z: 1 }, 'zScale', drawConfig, StaticConfiguration.liveGraphColors[2]);
+
 
     // Add points
     drawData.forEach((clazz, classIndex) => {
@@ -206,11 +206,12 @@ class KNNModelGraphDrawer {
     const gridData = grid3d(xGrid);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    const xGridE = this.svg.selectAll('path.grid').data(gridData, (d: any) => d.id);
+    const xGridE = this.svg.selectAll('path.grid').remove().data(gridData, (d: any) => d.id);
 
     xGridE
       .enter()
       .append('path')
+      .lower()
       .attr('class', `${this.classId} grid`)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

@@ -12,6 +12,7 @@ import { classifier, liveAccelerometerData } from '../../../script/stores/Stores
 import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Axes from '../../../script/domain/Axes';
+import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
 
 type SampleData = {
   value: number[];
@@ -30,6 +31,7 @@ class KNNModelGraphController {
   private scale: Writable<number>;
   private unsubscribeDerived: Unsubscriber;
   private graphDrawer: KNNModelGraphDrawer;
+  private trainingData: Point3D[][][];
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -38,6 +40,7 @@ class KNNModelGraphController {
     classId: string,
     axis?: Axes,
   ) {
+    this.trainingData = this.trainingDataToPoints();
     this.graphDrawer = new KNNModelGraphDrawer(svg, classId);
     this.rotationX = writable(3);
     this.rotationY = writable(0.5);
@@ -146,10 +149,11 @@ class KNNModelGraphController {
       return { x: nums[0], y: nums[1], z: nums[2] };
     };
 
+    /* 
     const liveDataCombined = [
       [toPoint(filteredXs), toPoint(filteredYs), toPoint(filteredZs)],
     ];
-
+*/
     const liveData = [
       [
         toPoint(
@@ -158,9 +162,9 @@ class KNNModelGraphController {
       ],
     ];
 
-    const drawData = this.trainingDataToPoints(); // Training data
+    const drawData = [...this.trainingData];
     if (!filteredXs.includes(NaN)) {
-      drawData.push(axis ? liveData : liveDataCombined);
+      axis && drawData.push(liveData);
     }
     this.graphDrawer.draw(draw.config, drawData);
   }

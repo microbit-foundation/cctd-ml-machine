@@ -15,7 +15,7 @@
   export let height: number;
   export let dataPoint: Vector3;
 
-  const webGlCompatible = compatibility.webGL;
+  const webGlCompatible = $compatibility.webGL;
 </script>
 
 {#if webGlCompatible}

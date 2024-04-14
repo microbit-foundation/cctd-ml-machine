@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { get, writable } from 'svelte/store';
+import { Writable, derived, get, writable } from 'svelte/store';
 import {
   type CompatibilityStatus,
   checkCompatibility,
@@ -22,11 +22,11 @@ import { DropdownOption } from '../../components/buttons/Buttons';
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
-export const compatibility: CompatibilityStatus = checkCompatibility();
+export const compatibility: Writable<CompatibilityStatus> = writable(checkCompatibility());
 
 export const chosenGesture = writable<Gesture | null>(null);
 
-export const isBluetoothWarningDialogOpen = writable<boolean>(!compatibility.bluetooth);
+export const isBluetoothWarningDialogOpen = derived(compatibility, stores => !stores.bluetooth);
 
 export enum ModelView {
   TILE,

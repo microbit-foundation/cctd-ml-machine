@@ -122,6 +122,7 @@ class KNNModelGraphDrawer {
           tooltip.innerHTML = ``;
         }
       });
+    samplePoint.exit().remove();
 
     if (!label) {
       return;
@@ -147,7 +148,7 @@ class KNNModelGraphDrawer {
     drawConfig: GraphDrawConfig,
     color: string,
   ) {
-    const lineLength = 1000;
+    const lineLength = 100;
     const point1: Point3D = {
       x: (-direction.x * lineLength) / 2,
       y: (-direction.y * lineLength) / 2,
@@ -162,13 +163,13 @@ class KNNModelGraphDrawer {
 
     const lineTranformer = this.getLineTransformer(drawConfig);
     const lineProjected: Point3DTransformed[] = lineTranformer([[point1, point2]]).points;
-    const xScale = this.svg.selectAll('line.' + className).data([lineProjected]);
-    xScale
+    const axis = this.svg.selectAll('line.' + className).data([lineProjected]);
+    axis
       .enter()
       .append('line')
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      .merge(xScale)
+      .merge(axis)
       .attr('class', `${this.classId} ` + className)
       .attr('x1', (data: Point3DTransformed[]) => data[0].projected.x)
       .attr('y1', (data: Point3DTransformed[]) => data[0].projected.y)
@@ -176,6 +177,8 @@ class KNNModelGraphDrawer {
       .attr('y2', (data: Point3DTransformed[]) => data[1].projected.y)
       .attr('stroke', color)
       .attr('stroke-width', 1);
+
+    axis.exit().remove();
   }
 
   /**
@@ -205,22 +208,24 @@ class KNNModelGraphDrawer {
     const gridData = grid3d(xGrid);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    const xGridE = this.svg.selectAll('path.grid').remove().data(gridData, (d: any) => d.id);
+    const grid = this.svg.selectAll('path.grid').data(gridData, (d: any) => d.id);
 
-    xGridE
+    grid
       .enter()
       .append('path')
       .lower()
       .attr('class', `${this.classId} grid`)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      .merge(xGridE)
+      .merge(grid)
       .attr('stroke', 'black')
       .attr('stroke-width', 0.3)
       .attr('fill', d => '#eee')
       .attr('fill-opacity', 0.9)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       .attr('d', grid3d.draw);
+
+    grid.exit().remove();
   }
 
   private getPointTransformer(

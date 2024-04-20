@@ -15,12 +15,9 @@
   import { TrainingData } from '../../../script/domain/ModelTrainer';
   import AxesFilterVector from './AxesFilterVector.svelte';
   import { highlightedAxis, state } from '../../../script/stores/uiStore';
-  import PerformanceProfileTimer from '../../../script/utils/PerformanceProfileTimer';
   import StaticConfiguration from '../../../StaticConfiguration';
 
-  let controllerSingleX: KNNModelGraphController | undefined;
-  let controllerSingleY: KNNModelGraphController | undefined;
-  let controllerSingleZ: KNNModelGraphController | undefined;
+  let controller: KNNModelGraphController | undefined;
 
   const classifierFactory = new ClassifierFactory();
 
@@ -46,26 +43,31 @@
     throw new Error('Should not happen');
   };
 
-  const initSingle = (axis: Axes, label: string) => {
-    const svgSingle = d3.select('.d3-3d-single-' + label);
+  const initSingle = (axis: Axes) => {
+    const svgSingle = d3.select('.d3-3d-single');
     const controller = new KNNModelGraphController(
       svgSingle,
       () => dataGetter(axis),
       { x: 650 / 2, y: 350 / 2 },
-      'd3-3d-single-' + label,
+      'd3-3d-single-',
       axis,
     );
     return controller;
   };
 
+  $: {
+    if ($highlightedAxis) {
+      if (controller) {
+        controller.destroy();
+      }
+      controller = initSingle($highlightedAxis);
+    }
+  }
+
   onMount(() => {
-    controllerSingleX = initSingle(Axes.X, 'x');
-    controllerSingleY = initSingle(Axes.Y, 'y');
-    controllerSingleZ = initSingle(Axes.Z, 'z');
+    controller = initSingle(Axes.X);
     return () => {
-      controllerSingleX?.destroy();
-      controllerSingleY?.destroy();
-      controllerSingleZ?.destroy();
+      controller?.destroy();
     };
   });
 </script>
@@ -95,24 +97,10 @@
   </div>
   <div>
     <KnnModelGraphSvgWithControls
-      hidden={$highlightedAxis !== Axes.X}
+      hidden={false}
       height={350}
       width={650}
-      classID={'d3-3d-single-x'}
-      controller={controllerSingleX} />
-
-    <KnnModelGraphSvgWithControls
-      hidden={$highlightedAxis !== Axes.Y}
-      height={350}
-      width={650}
-      classID={'d3-3d-single-y'}
-      controller={controllerSingleY} />
-
-    <KnnModelGraphSvgWithControls
-      hidden={$highlightedAxis !== Axes.Z}
-      height={350}
-      width={650}
-      classID={'d3-3d-single-z'}
-      controller={controllerSingleZ} />
+      classID={'d3-3d-single'}
+      {controller} />
   </div>
 </div>

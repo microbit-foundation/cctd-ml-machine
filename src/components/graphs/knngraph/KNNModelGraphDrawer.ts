@@ -132,8 +132,10 @@ class KNNModelGraphDrawer {
     key: string,
   ) {
     const radius = 3;
+
+    this.svg.select(`circle.points-class-${key}`).remove();
     const samplePoint = this.svg
-      .selectAll(`circle.points-class-${key}`)
+      .selectAll(`circle.points-class-`)
       .data([point]);
     samplePoint
       .enter()

@@ -145,8 +145,7 @@ class KNNModelGraphController {
     this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
 
     if (this.redrawTrainingData) {
-      let drawData: Point3D[][][] = [];
-      drawData = [...this.trainingData]
+      const drawData: Point3D[][][] = [...this.trainingData];
       this.redrawTrainingData = false;
       this.graphDrawer.draw(draw.config, drawData)
     }

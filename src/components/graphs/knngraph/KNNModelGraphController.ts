@@ -29,10 +29,12 @@ class KNNModelGraphController {
   private rotationZ: Writable<number>;
   private origin: Writable<{ x: number; y: number }>;
   private scale: Writable<number>;
-  private unsubscribeDerived: Unsubscriber;
   private graphDrawer: KNNModelGraphDrawer;
   private trainingData: Point3D[][][];
   private filters: Filters;
+  private drawInterval;
+  private redrawTrainingData = false; // Only draw training data when rotation/scale/origin changes
+  private unsubscriber;
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -50,8 +52,13 @@ class KNNModelGraphController {
     this.scale = writable(100);
     this.origin = writable(origin);
 
-    // Derived store ensures if any of the inputs are updated, the draw call will be called again
-    this.unsubscribeDerived = this.deriveControllerStore().subscribe(draw => this.onUpdate(draw, axis));
+    this.unsubscriber = derived([this.rotationX, this.rotationY, this.rotationZ, this.scale, this.origin], () => {
+      return {};
+    }).subscribe(() => (this.redrawTrainingData = true))
+    this.drawInterval = setInterval(() => {
+      const controllerData = this.getControllerData();
+      this.onUpdate(controllerData, axis)
+    }, 25)
   }
 
   public setOrigin(x: number, y: number) {
@@ -75,7 +82,8 @@ class KNNModelGraphController {
   }
 
   public destroy() {
-    this.unsubscribeDerived();
+    clearTimeout(this.drawInterval);
+    this.unsubscriber();
   }
 
   private trainingDataToPoints(): Point3D[][][] {
@@ -91,48 +99,35 @@ class KNNModelGraphController {
     return [{ x: sample.value[0], y: sample.value[1], z: sample.value[2] }];
   }
 
-  private deriveControllerStore() {
-    return derived(
-      [
-        this.rotationX,
-        this.rotationY,
-        this.rotationZ,
-        this.scale,
-        liveAccelerometerData,
-        this.origin,
-      ],
-      stores => {
-        const xRot = stores[0];
-        const yRot = stores[1];
-        const zRot = stores[2];
-        const scale = stores[3];
-        const origin = stores[5];
-        let liveData: TimestampedData<MicrobitAccelerometerData>[] = [];
+  private getControllerData() {
+    const xRot = get(this.rotationX);
+    const yRot = get(this.rotationY);
+    const zRot = get(this.rotationZ);
+    const scale = get(this.scale);
+    const origin = get(this.origin);
+    let liveData: TimestampedData<MicrobitAccelerometerData>[] = [];
 
-        try {
-          liveData = liveAccelerometerData.getBuffer().getSeries(1000, 10);
-        } catch (error) {
-          liveData = [];
-        }
-        // Given as input to the draw function
-        return {
-          config: {
-            xRot,
-            yRot,
-            zRot,
-            origin,
-            scale,
-          } as GraphDrawConfig,
-          data: liveData,
-        };
-      },
-    )
+    try {
+      liveData = liveAccelerometerData.getBuffer().getSeries(1000, 10);
+    } catch (error) {
+      liveData = [];
+    }
+    // Given as input to the draw function
+    return {
+      config: {
+        xRot,
+        yRot,
+        zRot,
+        origin,
+        scale,
+      } as GraphDrawConfig,
+      data: liveData,
+    }
   }
 
   // Called whenever any subscribed store is altered
   private onUpdate(draw: UpdateCall, axis?: Axes) {
-
-    const data = draw.data;
+    let data: TimestampedData<MicrobitAccelerometerData>[] = draw.data;
 
     const getLiveFilteredData = () => {
       switch (axis) {
@@ -147,13 +142,14 @@ class KNNModelGraphController {
     }
 
     const liveData = getLiveFilteredData();
+    this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
 
-    const drawData = [...this.trainingData];
-    if (!liveData.includes(NaN)) {
-      axis && drawData.push([[this.arrayToPoint(liveData)]]);
+    if (this.redrawTrainingData) {
+      let drawData: Point3D[][][] = [];
+      drawData = [...this.trainingData]
+      this.redrawTrainingData = false;
+      this.graphDrawer.draw(draw.config, drawData)
     }
-
-    this.graphDrawer.draw(draw.config, drawData);
   }
 
   private arrayToPoint(nums: number[]): Point3D {

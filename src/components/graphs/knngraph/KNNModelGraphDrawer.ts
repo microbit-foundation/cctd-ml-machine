@@ -27,21 +27,27 @@ type DrawablePoint = {
 }
 
 class KNNModelGraphDrawer {
-  private drawLimitTimeout = 100; // milliseconds between each draw
-  private drawLimitTimer: number;
   private labeled: boolean;
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
   ) {
     this.labeled = false;
-    this.drawLimitTimer = new Date().getTime() - 200;
+  }
+
+  public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
+    const pointTransformer = this.getPointTransformer(drawConfig);
+    const color = StaticConfiguration.gestureColors[gestures.getNumberOfGestures()]
+    const transformedPoint: DrawablePoint = ({
+      pointTransformed: pointTransformer(drawData),
+      color,
+      id: `live`
+    })
+
+    this.addPoint(transformedPoint, "live")
   }
 
   public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][][]) {
-    if (!this.allowRedraw()) {
-      return;
-    }
     // this.svg.selectAll('*').remove(); // clear svg for redraw
     // Add grid
     this.addGrid(drawConfig);
@@ -60,61 +66,16 @@ class KNNModelGraphDrawer {
       clazz.forEach((sample, exampleIndex) => {
         sample.forEach((axisValue, axisIndex) => {
           const color = StaticConfiguration.gestureColors[classIndex]
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          // const color = classColorShades[classColors[classIndex]][axisIndex];
           const transformedPoint: Point3DTransformed = pointTransformer(axisValue);
           drawablePoints.push({
             pointTransformed: transformedPoint,
             color,
             id: `${classIndex}-${exampleIndex}-${axisIndex}`
           })
-
-          /*
-                    this.addPoint(
-                      axisValue,
-                      drawConfig,
-                      `${classIndex}-${exampleIndex}-${axisIndex}`,
-                      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                      color,
-                      // this.labeled ? this.getLabel(classIndex) : '',
-                    );
-          */
         });
       });
     });
     this.addPoints(drawablePoints, drawConfig)
-    /*
-        const points3d = points3D()
-          .origin(drawConfig.origin)
-          .rotateY(drawConfig.yRot)
-          .rotateX(drawConfig.xRot)
-          .rotateZ(drawConfig.zRot)
-          .scale(drawConfig.scale)
-    
-        const pointsData = points3d(drawablePoints.map(d => ({ x: d.pointTransformed.x, y: d.pointTransformed.y, z: d.pointTransformed.z, id: d.id, color: d.color })))
-    
-        this.svg.selectAll("circle").remove();
-        const points = this.svg.selectAll("circle").data(pointsData, (pnt) => (pnt as unknown as Point3D & { id: string }).id)
-    
-        points
-          .enter()
-          .append("circle")
-          .attr("class", "d3-3d")
-          .attr("opacity", 1)
-          .attr("cx", d => (isNaN(d.projected.x) ? 0 : d.projected.x))
-          .attr("cy", d => (isNaN(d.projected.y) ? 0 : d.projected.y))
-          .attr("r", 3)
-          .attr("stroke", "#1a1a1a")
-          .attr("fill", pnt => pnt.color)
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          .merge(points)
-    
-        points.exit().remove();
-        */
-    this.drawLimitTimer = new Date().getTime();
   }
 
   /**
@@ -163,27 +124,17 @@ class KNNModelGraphDrawer {
     gPoints.exit().remove();
   }
 
-  private allowRedraw() {
-    // We limit how often the graph can be redrawn to avoid overwhelming the browser with DOM updates.
-    return new Date().getTime() - this.drawLimitTimer > this.drawLimitTimeout;
-  }
-
   /**
    * Adds a single 3D point projected onto the svg.
    */
   private addPoint(
-    point: Point3D,
-    drawConfig: GraphDrawConfig,
+    point: DrawablePoint,
     key: string,
-    color: string,
-    label?: string,
   ) {
     const radius = 3;
-    const pointTransformer = this.getPointTransformer(drawConfig);
-    const transformedPoint: Point3DTransformed = pointTransformer(point);
     const samplePoint = this.svg
       .selectAll(`circle.points-class-${key}`)
-      .data([transformedPoint]);
+      .data([point]);
     samplePoint
       .enter()
       .append('circle')
@@ -191,22 +142,22 @@ class KNNModelGraphDrawer {
       // @ts-ignore
       .merge(samplePoint)
       .attr('class', `${this.classId} points-class-${key}`)
-      .attr('fill', color)
+      .attr('fill', p => p.color)
       .attr('stroke', "#1a1a1a")
-      .attr('cx', d => (isNaN(d.projected.x) ? 0 : d.projected.x))
-      .attr('cy', d => (isNaN(d.projected.y) ? 0 : d.projected.y))
+      .attr('cx', d => (isNaN(d.pointTransformed.projected.x) ? 0 : d.pointTransformed.projected.x))
+      .attr('cy', d => (isNaN(d.pointTransformed.projected.y) ? 0 : d.pointTransformed.projected.y))
       .attr('r', radius)
       .on('mouseenter', (event, projectedPoint) => {
         // TODO - Could be contained inside another file, using a store to place it, theres no need to share the tooltip between graphs
         const tooltip = document.getElementById(this.classId);
         if (tooltip) {
-          tooltip.style.left = projectedPoint.projected.x + 5 + 'px';
-          tooltip.style.top = projectedPoint.projected.y + 10 + 'px';
+          tooltip.style.left = projectedPoint.pointTransformed.projected.x + 5 + 'px';
+          tooltip.style.top = projectedPoint.pointTransformed.projected.y + 10 + 'px';
           tooltip.innerHTML = `
           <div class="bg-white z-1 py-1 px-2 border-solid border-secondary border-1 rounded font-bold">
-            <p class="text-red-400">${projectedPoint.x.toFixed(2)}</p>
-            <p class="text-green-400">${projectedPoint.y.toFixed(2)}</p>
-            <p class="text-blue-400">${projectedPoint.z.toFixed(2)}</p>
+            <p class="text-red-400">${projectedPoint.pointTransformed.x.toFixed(2)}</p>
+            <p class="text-green-400">${projectedPoint.pointTransformed.y.toFixed(2)}</p>
+            <p class="text-blue-400">${projectedPoint.pointTransformed.z.toFixed(2)}</p>
           </div>
         `;
         }
@@ -218,23 +169,6 @@ class KNNModelGraphDrawer {
         }
       });
     samplePoint.exit().remove();
-
-    if (!label) {
-      return;
-    }
-    const pointLabel = this.svg
-      .selectAll(`span.points-class-${key}`)
-      .data([transformedPoint]);
-    pointLabel
-      .enter()
-      .append('text')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      .merge(samplePoint)
-      .attr('class', `${this.classId} points-class-${key} text-xs`)
-      .attr('x', p => p.projected.x)
-      .attr('y', p => p.projected.y)
-      .text(label);
   }
 
   private addAxis(

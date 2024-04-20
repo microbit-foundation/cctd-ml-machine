@@ -47,7 +47,7 @@
   };
 
   const initSingle = (axis: Axes, label: string) => {
-    const svgSingle = d3.selectAll('.d3-3d-single-' + label);
+    const svgSingle = d3.select('.d3-3d-single-' + label);
     const controller = new KNNModelGraphController(
       svgSingle,
       () => dataGetter(axis),

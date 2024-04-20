@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { Readable, derived } from 'svelte/store';
+  import { Readable, derived, get } from 'svelte/store';
   import { classifier, liveAccelerometerData } from '../../../script/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Axes from '../../../script/domain/Axes';
@@ -66,37 +66,42 @@
     }
   };
 
-  const liveFilteredAxesData: Readable<number[]> = derived(
-    [liveAccelerometerData, highlightedAxis],
-    stores => {
-      const axis = stores[1];
-      if (!axis) {
-        return Array(classifier.getFilters().count()).fill(0);
-      }
-      try {
-        const seriesTimestamped = liveAccelerometerData
-          .getBuffer()
-          .getSeries(
-            StaticConfiguration.pollingPredictionSampleDuration,
-            StaticConfiguration.pollingPredictionSampleSize,
-          );
-        const series = seriesTimestamped.map(s => s.value);
-        const filteredSeries = classifier
-          .getFilters()
-          .compute(extractAxisFromAccelerometerData(series, axis));
+  const getVectorValue = () => {
+    if (!get(highlightedAxis)) {
+      return Array(classifier.getFilters().count()).fill(0);
+    }
+    try {
+      const seriesTimestamped = liveAccelerometerData
+        .getBuffer()
+        .getSeries(
+          StaticConfiguration.pollingPredictionSampleDuration,
+          StaticConfiguration.pollingPredictionSampleSize,
+        );
+      const series = seriesTimestamped.map(s => s.value);
+      const filteredSeries = classifier
+        .getFilters()
+        .compute(extractAxisFromAccelerometerData(series, get(highlightedAxis)!));
 
-        return filteredSeries;
-      } catch (e) {
-        return Array(classifier.getFilters().count()).fill(0);
-      }
-    },
-  );
+      return filteredSeries;
+    } catch (e) {
+      return Array(classifier.getFilters().count()).fill(0);
+    }
+  };
+
+  let liveFilteredAxesData: number[] = getVectorValue();
 
   onMount(() => {
+    const valueInterval = setInterval(() => {
+      liveFilteredAxesData = getVectorValue();
+    }, 100);
     setTimeout(() => {
       // We set a timeout to fix a graphical issue, that relates to the resizing of DOM elements
       updateArrows($highlightedAxis);
     }, 600);
+
+    return () => {
+      clearInterval(valueInterval);
+    };
   });
   afterUpdate(() => {
     updateArrows($highlightedAxis);
@@ -145,7 +150,7 @@
           <img src={'imgs/left_bracket_blue.png'} alt="left bracket" />
         </div>
         <div class="flex flex-col justify-around w-12">
-          {#each $liveFilteredAxesData as val, index}
+          {#each liveFilteredAxesData as val, index}
             <p style={`color:${['red', 'green', 'blue'][index]}`}>
               {val.toFixed(3)}
             </p>

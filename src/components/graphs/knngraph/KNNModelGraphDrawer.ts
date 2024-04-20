@@ -20,8 +20,14 @@ export type GrahpDrawData = {
   points: Point3D[];
 };
 
+type DrawablePoint = {
+  pointTransformed: Point3DTransformed
+  color: string;
+  id: string;
+}
+
 class KNNModelGraphDrawer {
-  private drawLimitTimeout = 50; // milliseconds between each draw
+  private drawLimitTimeout = 100; // milliseconds between each draw
   private drawLimitTimer: number;
   private labeled: boolean;
   constructor(
@@ -45,28 +51,116 @@ class KNNModelGraphDrawer {
     this.addAxis({ x: 0, y: 1, z: 0 }, 'yScale', drawConfig, StaticConfiguration.liveGraphColors[1]);
     this.addAxis({ x: 0, y: 0, z: 1 }, 'zScale', drawConfig, StaticConfiguration.liveGraphColors[2]);
 
+    const drawablePoints: DrawablePoint[] = []
+
+    const pointTransformer = this.getPointTransformer(drawConfig);
 
     // Add points
     drawData.forEach((clazz, classIndex) => {
       clazz.forEach((sample, exampleIndex) => {
         sample.forEach((axisValue, axisIndex) => {
+          const color = StaticConfiguration.gestureColors[classIndex]
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           // const color = classColorShades[classColors[classIndex]][axisIndex];
-          const color = StaticConfiguration.gestureColors[classIndex]
-          this.addPoint(
-            axisValue,
-            drawConfig,
-            `${classIndex}-${exampleIndex}-${axisIndex}`,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          const transformedPoint: Point3DTransformed = pointTransformer(axisValue);
+          drawablePoints.push({
+            pointTransformed: transformedPoint,
             color,
-            // this.labeled ? this.getLabel(classIndex) : '',
-          );
+            id: `${classIndex}-${exampleIndex}-${axisIndex}`
+          })
+
+          /*
+                    this.addPoint(
+                      axisValue,
+                      drawConfig,
+                      `${classIndex}-${exampleIndex}-${axisIndex}`,
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                      color,
+                      // this.labeled ? this.getLabel(classIndex) : '',
+                    );
+          */
         });
       });
     });
+    this.addPoints(drawablePoints, drawConfig)
+    /*
+        const points3d = points3D()
+          .origin(drawConfig.origin)
+          .rotateY(drawConfig.yRot)
+          .rotateX(drawConfig.xRot)
+          .rotateZ(drawConfig.zRot)
+          .scale(drawConfig.scale)
+    
+        const pointsData = points3d(drawablePoints.map(d => ({ x: d.pointTransformed.x, y: d.pointTransformed.y, z: d.pointTransformed.z, id: d.id, color: d.color })))
+    
+        this.svg.selectAll("circle").remove();
+        const points = this.svg.selectAll("circle").data(pointsData, (pnt) => (pnt as unknown as Point3D & { id: string }).id)
+    
+        points
+          .enter()
+          .append("circle")
+          .attr("class", "d3-3d")
+          .attr("opacity", 1)
+          .attr("cx", d => (isNaN(d.projected.x) ? 0 : d.projected.x))
+          .attr("cy", d => (isNaN(d.projected.y) ? 0 : d.projected.y))
+          .attr("r", 3)
+          .attr("stroke", "#1a1a1a")
+          .attr("fill", pnt => pnt.color)
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          .merge(points)
+    
+        points.exit().remove();
+        */
     this.drawLimitTimer = new Date().getTime();
+  }
+
+  /**
+   * Adds an array of points to the svg
+   */
+  private addPoints(
+    points: DrawablePoint[],
+    drawConfig: GraphDrawConfig,
+  ) {
+    const gPoints = this.svg
+      .selectAll(`circle.points-class`)
+      .data(points);
+    gPoints
+      .enter()
+      .append('circle')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      .merge(gPoints)
+      .attr('class', `${this.classId} points-class`)
+      .attr('fill', el => el.color)
+      .attr('stroke', "#1a1a1a")
+      .attr('cx', d => (isNaN(d.pointTransformed.projected.x) ? 0 : d.pointTransformed.projected.x))
+      .attr('cy', d => (isNaN(d.pointTransformed.projected.y) ? 0 : d.pointTransformed.projected.y))
+      .attr('r', 3)
+      .on('mouseenter', (event, projectedPoint) => {
+        // TODO - Could be contained inside another file, using a store to place it, theres no need to share the tooltip between graphs
+        const tooltip = document.getElementById(this.classId);
+        if (tooltip) {
+          tooltip.style.left = projectedPoint.pointTransformed.projected.x + 5 + 'px';
+          tooltip.style.top = projectedPoint.pointTransformed.projected.y + 10 + 'px';
+          tooltip.innerHTML = `
+          <div class="bg-white z-1 py-1 px-2 border-solid border-secondary border-1 rounded font-bold">
+            <p class="text-red-400">${projectedPoint.pointTransformed.x.toFixed(2)}</p>
+            <p class="text-green-400">${projectedPoint.pointTransformed.y.toFixed(2)}</p>
+            <p class="text-blue-400">${projectedPoint.pointTransformed.z.toFixed(2)}</p>
+          </div>
+        `;
+        }
+      })
+      .on('mouseleave', () => {
+        const tooltip = document.getElementById(this.classId);
+        if (tooltip) {
+          tooltip.innerHTML = ``;
+        }
+      });
+    gPoints.exit().remove();
   }
 
   private allowRedraw() {
@@ -98,20 +192,21 @@ class KNNModelGraphDrawer {
       .merge(samplePoint)
       .attr('class', `${this.classId} points-class-${key}`)
       .attr('fill', color)
+      .attr('stroke', "#1a1a1a")
       .attr('cx', d => (isNaN(d.projected.x) ? 0 : d.projected.x))
       .attr('cy', d => (isNaN(d.projected.y) ? 0 : d.projected.y))
       .attr('r', radius)
-      .on('mouseenter', (x, y) => {
+      .on('mouseenter', (event, projectedPoint) => {
         // TODO - Could be contained inside another file, using a store to place it, theres no need to share the tooltip between graphs
         const tooltip = document.getElementById(this.classId);
         if (tooltip) {
-          tooltip.style.left = y.projected.x + 5 + 'px';
-          tooltip.style.top = y.projected.y + 10 + 'px';
+          tooltip.style.left = projectedPoint.projected.x + 5 + 'px';
+          tooltip.style.top = projectedPoint.projected.y + 10 + 'px';
           tooltip.innerHTML = `
           <div class="bg-white z-1 py-1 px-2 border-solid border-secondary border-1 rounded font-bold">
-            <p class="text-red-400">${y.x.toFixed(2)}</p>
-            <p class="text-green-400">${y.y.toFixed(2)}</p>
-            <p class="text-blue-400">${y.z.toFixed(2)}</p>
+            <p class="text-red-400">${projectedPoint.x.toFixed(2)}</p>
+            <p class="text-green-400">${projectedPoint.y.toFixed(2)}</p>
+            <p class="text-blue-400">${projectedPoint.z.toFixed(2)}</p>
           </div>
         `;
         }

@@ -21,7 +21,7 @@ type SampleData = {
 type UpdateCall = {
   config: GraphDrawConfig;
   data: TimestampedData<MicrobitAccelerometerData>[];
-}
+};
 
 class KNNModelGraphController {
   private rotationX: Writable<number>;
@@ -52,13 +52,21 @@ class KNNModelGraphController {
     this.scale = writable(100);
     this.origin = writable(origin);
 
-    this.unsubscriber = derived([this.rotationX, this.rotationY, this.rotationZ, this.scale, this.origin], () => {
-      return {};
-    }).subscribe(() => (this.redrawTrainingData = true))
+    const noOfPoints = this.trainingData
+      .map(el => el.length)
+      .reduce((prev, cur) => prev + cur);
+    const updateRate = 50 + noOfPoints / 2;
+
+    this.unsubscriber = derived(
+      [this.rotationX, this.rotationY, this.rotationZ, this.scale, this.origin],
+      () => {
+        return {};
+      },
+    ).subscribe(() => (this.redrawTrainingData = true));
     this.drawInterval = setInterval(() => {
       const controllerData = this.getControllerData();
-      this.onUpdate(controllerData, axis)
-    }, 75)
+      this.onUpdate(controllerData, axis);
+    }, updateRate);
   }
 
   public setOrigin(x: number, y: number) {
@@ -122,7 +130,7 @@ class KNNModelGraphController {
         scale,
       } as GraphDrawConfig,
       data: liveData,
-    }
+    };
   }
 
   // Called whenever any subscribed store is altered
@@ -132,14 +140,15 @@ class KNNModelGraphController {
     const getLiveFilteredData = () => {
       switch (axis) {
         case Axes.X:
-          return this.filters.compute(data.map(d => d.value.x))
+          return this.filters.compute(data.map(d => d.value.x));
         case Axes.Y:
-          return this.filters.compute(data.map(d => d.value.y))
+          return this.filters.compute(data.map(d => d.value.y));
         case Axes.Z:
-          return this.filters.compute(data.map(d => d.value.z))
-        default: throw new Error("Shouldn't happen")
+          return this.filters.compute(data.map(d => d.value.z));
+        default:
+          throw new Error("Shouldn't happen");
       }
-    }
+    };
 
     const liveData = getLiveFilteredData();
     this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
@@ -147,12 +156,12 @@ class KNNModelGraphController {
     if (this.redrawTrainingData) {
       const drawData: Point3D[][][] = [...this.trainingData];
       this.redrawTrainingData = false;
-      this.graphDrawer.draw(draw.config, drawData)
+      this.graphDrawer.draw(draw.config, drawData);
     }
   }
 
   private arrayToPoint(nums: number[]): Point3D {
-    return { x: nums[0], y: nums[1], z: nums[2] }
+    return { x: nums[0], y: nums[1], z: nums[2] };
   }
 }
 export default KNNModelGraphController;

@@ -22,10 +22,10 @@ export type GrahpDrawData = {
 };
 
 export type DrawablePoint = {
-  pointTransformed: Point3DTransformed
+  pointTransformed: Point3DTransformed;
   color: string;
   id: string;
-}
+};
 
 class KNNModelGraphDrawer {
   private labeled: boolean;
@@ -38,15 +38,15 @@ class KNNModelGraphDrawer {
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     const pointTransformer = this.getPointTransformer(drawConfig);
-    const color = StaticConfiguration.gestureColors[gestures.getNumberOfGestures()]
-    const transformedPoint: DrawablePoint = ({
+    const color = StaticConfiguration.gestureColors[gestures.getNumberOfGestures()];
+    const transformedPoint: DrawablePoint = {
       pointTransformed: pointTransformer(drawData),
       color,
-      id: `live`
-    })
+      id: `live`,
+    };
 
-    this.addPoint(transformedPoint, "live")
-  }
+    this.addPoint(transformedPoint, 'live');
+  };
 
   public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][][]) {
     // this.svg.selectAll('*').remove(); // clear svg for redraw
@@ -54,11 +54,26 @@ class KNNModelGraphDrawer {
     this.addGrid(drawConfig);
 
     // Add axes
-    this.addAxis({ x: 1, y: 0, z: 0 }, 'xScale', drawConfig, StaticConfiguration.liveGraphColors[0]);
-    this.addAxis({ x: 0, y: 1, z: 0 }, 'yScale', drawConfig, StaticConfiguration.liveGraphColors[1]);
-    this.addAxis({ x: 0, y: 0, z: 1 }, 'zScale', drawConfig, StaticConfiguration.liveGraphColors[2]);
+    this.addAxis(
+      { x: 1, y: 0, z: 0 },
+      'xScale',
+      drawConfig,
+      StaticConfiguration.liveGraphColors[0],
+    );
+    this.addAxis(
+      { x: 0, y: 1, z: 0 },
+      'yScale',
+      drawConfig,
+      StaticConfiguration.liveGraphColors[1],
+    );
+    this.addAxis(
+      { x: 0, y: 0, z: 1 },
+      'zScale',
+      drawConfig,
+      StaticConfiguration.liveGraphColors[2],
+    );
 
-    const drawablePoints: DrawablePoint[] = []
+    const drawablePoints: DrawablePoint[] = [];
 
     const pointTransformer = this.getPointTransformer(drawConfig);
 
@@ -66,29 +81,24 @@ class KNNModelGraphDrawer {
     drawData.forEach((clazz, classIndex) => {
       clazz.forEach((sample, exampleIndex) => {
         sample.forEach((axisValue, axisIndex) => {
-          const color = StaticConfiguration.gestureColors[classIndex]
+          const color = StaticConfiguration.gestureColors[classIndex];
           const transformedPoint: Point3DTransformed = pointTransformer(axisValue);
           drawablePoints.push({
             pointTransformed: transformedPoint,
             color,
-            id: `${classIndex}-${exampleIndex}-${axisIndex}`
-          })
+            id: `${classIndex}-${exampleIndex}-${axisIndex}`,
+          });
         });
       });
     });
-    this.addPoints(drawablePoints, drawConfig)
+    this.addPoints(drawablePoints, drawConfig);
   }
 
   /**
    * Adds an array of points to the svg
    */
-  private addPoints(
-    points: DrawablePoint[],
-    drawConfig: GraphDrawConfig,
-  ) {
-    const gPoints = this.svg
-      .selectAll(`circle.points-class`)
-      .data(points);
+  private addPoints(points: DrawablePoint[], drawConfig: GraphDrawConfig) {
+    const gPoints = this.svg.selectAll(`circle.points-class`).data(points);
     gPoints
       .enter()
       .append('circle')
@@ -97,9 +107,13 @@ class KNNModelGraphDrawer {
       .merge(gPoints)
       .attr('class', `${this.classId} points-class`)
       .attr('fill', el => el.color)
-      .attr('stroke', "#1a1a1a")
-      .attr('cx', d => (isNaN(d.pointTransformed.projected.x) ? 0 : d.pointTransformed.projected.x))
-      .attr('cy', d => (isNaN(d.pointTransformed.projected.y) ? 0 : d.pointTransformed.projected.y))
+      .attr('stroke', '#1a1a1a')
+      .attr('cx', d =>
+        isNaN(d.pointTransformed.projected.x) ? 0 : d.pointTransformed.projected.x,
+      )
+      .attr('cy', d =>
+        isNaN(d.pointTransformed.projected.y) ? 0 : d.pointTransformed.projected.y,
+      )
       .attr('r', 3)
       .on('mouseenter', (event, projectedPoint) => {
         knnHighlightedPoint.set(projectedPoint);
@@ -113,16 +127,11 @@ class KNNModelGraphDrawer {
   /**
    * Adds a single 3D point projected onto the svg.
    */
-  private addPoint(
-    point: DrawablePoint,
-    key: string,
-  ) {
+  private addPoint(point: DrawablePoint, key: string) {
     const radius = 3;
 
     this.svg.select(`circle.points-class-${key}`).remove();
-    const samplePoint = this.svg
-      .selectAll(`circle.points-class-`)
-      .data([point]);
+    const samplePoint = this.svg.selectAll(`circle.points-class-`).data([point]);
     samplePoint
       .enter()
       .append('circle')
@@ -131,9 +140,13 @@ class KNNModelGraphDrawer {
       .merge(samplePoint)
       .attr('class', `${this.classId} points-class-${key}`)
       .attr('fill', p => p.color)
-      .attr('stroke', "#1a1a1a")
-      .attr('cx', d => (isNaN(d.pointTransformed.projected.x) ? 0 : d.pointTransformed.projected.x))
-      .attr('cy', d => (isNaN(d.pointTransformed.projected.y) ? 0 : d.pointTransformed.projected.y))
+      .attr('stroke', '#1a1a1a')
+      .attr('cx', d =>
+        isNaN(d.pointTransformed.projected.x) ? 0 : d.pointTransformed.projected.x,
+      )
+      .attr('cy', d =>
+        isNaN(d.pointTransformed.projected.y) ? 0 : d.pointTransformed.projected.y,
+      )
       .attr('r', radius)
       .on('mouseenter', (event, projectedPoint) => {
         knnHighlightedPoint.set(projectedPoint);

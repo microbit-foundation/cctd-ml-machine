@@ -30,11 +30,11 @@ const liveAccelerometerData: LiveData<MicrobitAccelerometerData> =
 
 const engine: Engine = new PollingPredictorEngine(classifier, liveAccelerometerData);
 
-// I'm not sure if this one should be 
+// I'm not sure if this one should be
 const confidences = derived([gestures, ...gestures.getGestures()], stores => {
   const confidenceMap = new Map();
 
-  const [gestures, ...gestureStores] = stores
+  const [gestures, ...gestureStores] = stores;
   gestureStores.forEach(store => {
     confidenceMap.set(store.ID, store.confidence);
   });

@@ -22,11 +22,15 @@ import { DropdownOption } from '../../components/buttons/Buttons';
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
-export const compatibility: Writable<CompatibilityStatus> = writable(checkCompatibility());
+export const compatibility: Writable<CompatibilityStatus> =
+  writable(checkCompatibility());
 
 export const chosenGesture = writable<Gesture | null>(null);
 
-export const isBluetoothWarningDialogOpen = derived(compatibility, stores => !stores.bluetooth);
+export const isBluetoothWarningDialogOpen = derived(
+  compatibility,
+  stores => !stores.bluetooth,
+);
 
 export enum ModelView {
   TILE,

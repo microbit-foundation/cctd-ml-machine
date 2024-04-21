@@ -96,7 +96,7 @@
   onMount(() => {
     const valueInterval = setInterval(() => {
       liveFilteredAxesData = getVectorValue();
-    }, 100);
+    }, 250);
     setTimeout(() => {
       // We set a timeout to fix a graphical issue, that relates to the resizing of DOM elements
       updateArrows($highlightedAxis);
@@ -111,10 +111,6 @@
   $: {
     updateArrows($highlightedAxis);
   }
-
-  document.addEventListener('load', () => {
-    console.log('Loaded');
-  });
 </script>
 
 <div>

@@ -12,7 +12,8 @@
     "start": "vite dist --host",
     "check": "svelte-check --fail-on-warnings --tsconfig ./tsconfig.json --compiler-warnings 'a11y-aria-attributes:ignore,a11y-click-events-have-key-events:ignore,a11y-media-has-caption:ignore,a11y-structure:ignore,a11y-role-supports-aria-props:ignore,a11y-role-has-required-aria-props:ignore,a11y-media-has-caption:ignore,a11y-no-static-element-interactions:ignore,a11y-no-noninteractive-element-interactions:ignore,a11y-missing-content:ignore'",
     "test": "vitest",
-    "prettier": "prettier --write src/."
+    "prettier": "prettier --write src/.",
+    "checkFormat": "prettier --check src/."
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.4",

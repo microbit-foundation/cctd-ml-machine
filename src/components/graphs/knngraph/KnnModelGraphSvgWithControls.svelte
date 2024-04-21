@@ -70,18 +70,6 @@
   <button class="border-primary border-1 px-3" on:click={() => zoom(1.25)}>+</button>
   <button class="border-primary border-1 px-3" on:click={() => zoom(0.75)}>-</button>
   <!-- CONTAINER FOR TOOLTIP. IS MOVED BY GRAPHDRAWER -->
-  <div class="relative">
-    <div
-      class="absolute"
-      on:mouseleave={() => {
-        // This is a hack to easily close the tooltip, which otherwise has some odd behaviour
-        const thisElement = document.getElementById(classID);
-        if (thisElement) {
-          thisElement.innerHTML = '';
-        }
-      }}
-      id={classID} />
-  </div>
   <svg
     class={classID}
     {width}

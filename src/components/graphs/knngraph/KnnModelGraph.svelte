@@ -13,9 +13,10 @@
   import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
   import Axes from '../../../script/domain/Axes';
   import { TrainingData } from '../../../script/domain/ModelTrainer';
-  import AxesFilterVector from './AxesFilterVector.svelte';
   import { highlightedAxis, state } from '../../../script/stores/uiStore';
   import StaticConfiguration from '../../../StaticConfiguration';
+  import KnnPointToolTipView from './KnnPointToolTipView.svelte';
+  import AxesFilterVectorView from './AxesFilterVectorView.svelte';
 
   let controller: KNNModelGraphController | undefined;
 
@@ -75,7 +76,7 @@
 <div class="flex flex-row" class:hidden={!$classifier.model.isTrained}>
   <div class="flex flex-col justify-center mr-6">
     {#if $classifier.model.isTrained}
-      <AxesFilterVector />
+      <AxesFilterVectorView />
     {/if}
     <div class="flex flex-col ml-2 justify-center mt-2">
       {#each $gestures as gesture, index}
@@ -95,12 +96,14 @@
       {/each}
     </div>
   </div>
-  <div>
+  <div class="relative">
     <KnnModelGraphSvgWithControls
       hidden={false}
       height={350}
       width={650}
       classID={'d3-3d-single'}
       {controller} />
+
+    <KnnPointToolTipView />
   </div>
 </div>

@@ -58,7 +58,7 @@ class KNNModelGraphController {
     this.drawInterval = setInterval(() => {
       const controllerData = this.getControllerData();
       this.onUpdate(controllerData, axis)
-    }, 25)
+    }, 75)
   }
 
   public setOrigin(x: number, y: number) {

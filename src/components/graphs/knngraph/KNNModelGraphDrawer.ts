@@ -7,6 +7,7 @@ import { Point3D, Point3DTransformed } from '../../../script/TypingUtils';
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import { gestures } from '../../../script/stores/Stores';
 import StaticConfiguration from '../../../StaticConfiguration';
+import { knnHighlightedPoint } from './KnnPointToolTip';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -20,7 +21,7 @@ export type GrahpDrawData = {
   points: Point3D[];
 };
 
-type DrawablePoint = {
+export type DrawablePoint = {
   pointTransformed: Point3DTransformed
   color: string;
   id: string;
@@ -101,25 +102,10 @@ class KNNModelGraphDrawer {
       .attr('cy', d => (isNaN(d.pointTransformed.projected.y) ? 0 : d.pointTransformed.projected.y))
       .attr('r', 3)
       .on('mouseenter', (event, projectedPoint) => {
-        // TODO - Could be contained inside another file, using a store to place it, theres no need to share the tooltip between graphs
-        const tooltip = document.getElementById(this.classId);
-        if (tooltip) {
-          tooltip.style.left = projectedPoint.pointTransformed.projected.x + 5 + 'px';
-          tooltip.style.top = projectedPoint.pointTransformed.projected.y + 10 + 'px';
-          tooltip.innerHTML = `
-          <div class="bg-white z-1 py-1 px-2 border-solid border-secondary border-1 rounded font-bold">
-            <p class="text-red-400">${projectedPoint.pointTransformed.x.toFixed(2)}</p>
-            <p class="text-green-400">${projectedPoint.pointTransformed.y.toFixed(2)}</p>
-            <p class="text-blue-400">${projectedPoint.pointTransformed.z.toFixed(2)}</p>
-          </div>
-        `;
-        }
+        knnHighlightedPoint.set(projectedPoint);
       })
       .on('mouseleave', () => {
-        const tooltip = document.getElementById(this.classId);
-        if (tooltip) {
-          tooltip.innerHTML = ``;
-        }
+        knnHighlightedPoint.set(undefined);
       });
     gPoints.exit().remove();
   }
@@ -150,25 +136,10 @@ class KNNModelGraphDrawer {
       .attr('cy', d => (isNaN(d.pointTransformed.projected.y) ? 0 : d.pointTransformed.projected.y))
       .attr('r', radius)
       .on('mouseenter', (event, projectedPoint) => {
-        // TODO - Could be contained inside another file, using a store to place it, theres no need to share the tooltip between graphs
-        const tooltip = document.getElementById(this.classId);
-        if (tooltip) {
-          tooltip.style.left = projectedPoint.pointTransformed.projected.x + 5 + 'px';
-          tooltip.style.top = projectedPoint.pointTransformed.projected.y + 10 + 'px';
-          tooltip.innerHTML = `
-          <div class="bg-white z-1 py-1 px-2 border-solid border-secondary border-1 rounded font-bold">
-            <p class="text-red-400">${projectedPoint.pointTransformed.x.toFixed(2)}</p>
-            <p class="text-green-400">${projectedPoint.pointTransformed.y.toFixed(2)}</p>
-            <p class="text-blue-400">${projectedPoint.pointTransformed.z.toFixed(2)}</p>
-          </div>
-        `;
-        }
+        knnHighlightedPoint.set(projectedPoint);
       })
       .on('mouseleave', () => {
-        const tooltip = document.getElementById(this.classId);
-        if (tooltip) {
-          tooltip.innerHTML = ``;
-        }
+        knnHighlightedPoint.set(undefined);
       });
     samplePoint.exit().remove();
   }

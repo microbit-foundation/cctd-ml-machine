@@ -14,10 +14,10 @@
   import { highlightedAxis } from '../../../script/stores/uiStore';
   import arrowCreate, { IArrow } from 'arrows-svg';
   import { afterUpdate, onMount } from 'svelte';
+  import { vectorArrows } from './AxesFilterVector';
 
-  let arrows: IArrow[] = [];
   const drawArrows = (fromId: string) => {
-    arrows.forEach(arr => arr.clear());
+    get(vectorArrows).forEach(arr => arr.clear());
     const from = document.getElementById(fromId)!;
     const toX = document.getElementById('arrowTo1');
     const toY = document.getElementById('arrowTo2');
@@ -25,25 +25,28 @@
     if (!from || !toX || !toY || !toZ) {
       return;
     }
-    arrows.push(
-      arrowCreate({
-        from,
-        to: toX,
-      }),
-    );
-    arrows.push(
-      arrowCreate({
-        from,
-        to: toY,
-      }),
-    );
-    arrows.push(
-      arrowCreate({
-        from,
-        to: toZ,
-      }),
-    );
-    arrows.forEach(arr => {
+    vectorArrows.update(newVal => {
+      newVal.push(
+        arrowCreate({
+          from,
+          to: toX,
+        }),
+      );
+      newVal.push(
+        arrowCreate({
+          from,
+          to: toY,
+        }),
+      );
+      newVal.push(
+        arrowCreate({
+          from,
+          to: toZ,
+        }),
+      );
+      return newVal;
+    });
+    get(vectorArrows).forEach(arr => {
       document.body.appendChild(arr.node);
     });
   };
@@ -97,15 +100,17 @@
     setTimeout(() => {
       // We set a timeout to fix a graphical issue, that relates to the resizing of DOM elements
       updateArrows($highlightedAxis);
-    }, 600);
+    }, 200);
 
     return () => {
+      $vectorArrows.forEach(arr => arr.clear());
       clearInterval(valueInterval);
     };
   });
-  afterUpdate(() => {
+
+  $: {
     updateArrows($highlightedAxis);
-  });
+  }
 
   document.addEventListener('load', () => {
     console.log('Loaded');

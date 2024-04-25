@@ -161,6 +161,9 @@ export const preferredModel = new PersistantWritable<DropdownOption>(
   },
   'prefferedModel',
 );
+
+// TODO: Should probably be elsewhere
+export const prevHighlightedAxis = writable<Axes | undefined>(undefined);
 export const highlightedAxis = writable<Axes | undefined>(undefined);
 
 const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;

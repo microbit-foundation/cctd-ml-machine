@@ -26,6 +26,7 @@
     ModelEntry,
     availableModels,
     highlightedAxis,
+    prevHighlightedAxis,
   } from '../../script/stores/uiStore';
   import Axes from '../../script/domain/Axes';
   import Logger from '../../script/utils/Logger';
@@ -35,7 +36,9 @@
 
   const getModelTrainer = (modelEntry: ModelEntry): ModelTrainer<MLModel> => {
     if (modelEntry.id === 'KNN') {
-      highlightedAxis.set(Axes.X);
+      if ($highlightedAxis === undefined) {
+        highlightedAxis.set(Axes.X);
+      }
       const noOfRecordings = gestures
         .getGestures()
         .map(gesture => gesture.getRecordings().length)
@@ -106,6 +109,19 @@
       id: model.id,
       label: model.title,
     };
+  });
+
+  highlightedAxis.subscribe(axis => {
+    if (!axis) {
+      return;
+    }
+    if ($prevHighlightedAxis === axis) {
+      return;
+    }
+    if ($selectedOption.id === 'KNN') {
+      model.train(getModelTrainer(getModelFromOption($selectedOption)));
+    }
+    prevHighlightedAxis.set(axis);
   });
 </script>
 

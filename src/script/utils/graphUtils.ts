@@ -35,8 +35,9 @@ export const extractAxisFromTrainingData = (
     classes: trainingData.classes.map(clazz => {
       return {
         samples: clazz.samples.map(sample => {
-          const startIndex = noOfAxes * axisOffset;
-          const stopIndex = startIndex + noOfAxes;
+          const noOfFilters = sample.value.length / noOfAxes;
+          const startIndex = noOfFilters * axisOffset;
+          const stopIndex = startIndex + noOfFilters;
           return {
             value: sample.value.filter(
               (_val, index) => index >= startIndex && index < stopIndex,
@@ -74,8 +75,8 @@ export const extractFilterFromTrainingData = (
           const filterValues = [];
           for (
             let i = noOfAxes * filterIndex;
-            i < noOfAxes * filterIndex + noOfAxes;
-            i++
+            i < sample.value.length;
+            i += noOfAxes
           ) {
             const element = sample.value[i];
             filterValues.push(element);

@@ -5,7 +5,7 @@
  */
 import { Point3D, Point3DTransformed } from '../../../script/TypingUtils';
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
-import { gestures } from '../../../script/stores/Stores';
+import { classifier, gestures } from '../../../script/stores/Stores';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
 
@@ -66,13 +66,15 @@ class KNNModelGraphDrawer {
       drawConfig,
       StaticConfiguration.liveGraphColors[1],
     );
-    this.addAxis(
-      { x: 0, y: 0, z: 1 },
-      'zScale',
-      drawConfig,
-      StaticConfiguration.liveGraphColors[2],
-    );
-
+    if (classifier.getFilters().count() === 3) {
+      // 3d, draw z-axis (forward/backward)
+      this.addAxis(
+        { x: 0, y: 0, z: 1 },
+        'zScale',
+        drawConfig,
+        StaticConfiguration.liveGraphColors[2],
+      );
+    }
     const drawablePoints: DrawablePoint[] = [];
 
     const pointTransformer = this.getPointTransformer(drawConfig);
@@ -163,7 +165,7 @@ class KNNModelGraphDrawer {
     drawConfig: GraphDrawConfig,
     color: string,
   ) {
-    const lineLength = 100;
+    const lineLength = 20;
     const point1: Point3D = {
       x: (-direction.x * lineLength) / 2,
       y: (-direction.y * lineLength) / 2,
@@ -171,9 +173,9 @@ class KNNModelGraphDrawer {
     };
 
     const point2: Point3D = {
-      x: (direction.x * lineLength) / 2,
-      y: (direction.y * lineLength) / 2,
-      z: (direction.z * lineLength) / 2,
+      x: (direction.x * (lineLength - 2)) / 2,
+      y: (direction.y * (lineLength - 2)) / 2,
+      z: (direction.z * (lineLength - 2)) / 2,
     };
 
     const lineTranformer = this.getLineTransformer(drawConfig);
@@ -216,7 +218,11 @@ class KNNModelGraphDrawer {
     const j = 10;
     for (let z = -j; z < j; z++) {
       for (let x = -j; x < j; x++) {
-        xGrid.push({ x: x, y: 0, z: z });
+        if (classifier.getFilters().count() === 2) {
+          xGrid.push({ x: x, y: z, z: 0 }); // Draw grid vertically (2d)
+        } else {
+          xGrid.push({ x: x, y: 0, z: z }); // Draw grid horizontally (3d)
+        }
       }
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call

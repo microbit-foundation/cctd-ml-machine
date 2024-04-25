@@ -19,31 +19,23 @@
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
     const from = document.getElementById(fromId)!;
-    const toX = document.getElementById('arrowTo1');
-    const toY = document.getElementById('arrowTo2');
-    const toZ = document.getElementById('arrowTo3');
-    if (!from || !toX || !toY || !toZ) {
+    if (!from) {
       return;
     }
+
     vectorArrows.update(newVal => {
-      newVal.push(
-        arrowCreate({
-          from,
-          to: toX,
-        }),
-      );
-      newVal.push(
-        arrowCreate({
-          from,
-          to: toY,
-        }),
-      );
-      newVal.push(
-        arrowCreate({
-          from,
-          to: toZ,
-        }),
-      );
+      for (let i = 0; i < filters.count(); i++) {
+        const to = document.getElementById('arrowTo' + i.toString());
+        if (!to) {
+          throw new Error("Cant draw arrow, no destination 'arrowTo" + i + "'");
+        }
+        newVal.push(
+          arrowCreate({
+            from,
+            to,
+          }),
+        );
+      }
       return newVal;
     });
     get(vectorArrows).forEach(arr => {
@@ -111,6 +103,8 @@
   $: {
     updateArrows($highlightedAxis);
   }
+
+  const filters = classifier.getFilters();
 </script>
 
 <div>
@@ -138,14 +132,14 @@
           </div>
         </div>
         <div class="pl-20 flex flex-col justify-around">
-          <p id="arrowTo1">MAX</p>
-          <p id="arrowTo2">MIN</p>
-          <p id="arrowTo3">MEAN</p>
+          {#each $filters as filter, index}
+            <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
+          {/each}
         </div>
         <div class="flex flex-col justify-around">
-          <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />
-          <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />
-          <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />
+          {#each $filters as _}
+            <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />
+          {/each}
         </div>
         <div class="flex flex-col justify-around">
           <img src={'imgs/left_bracket_blue.png'} alt="left bracket" />

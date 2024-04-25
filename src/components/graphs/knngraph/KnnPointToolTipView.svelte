@@ -6,6 +6,7 @@
 
 <script lang="ts">
   import StaticConfiguration from '../../../StaticConfiguration';
+  import { classifier } from '../../../script/stores/Stores';
   import { knnHighlightedPoint } from './KnnPointToolTip';
 
   const offsetX = 7;
@@ -19,7 +20,9 @@
     values: [
       $knnHighlightedPoint?.pointTransformed.x,
       $knnHighlightedPoint?.pointTransformed.y,
-      $knnHighlightedPoint?.pointTransformed.z,
+      classifier.getFilters().count() === 3
+        ? $knnHighlightedPoint?.pointTransformed.z
+        : undefined,
     ],
   };
 
@@ -32,6 +35,10 @@
   class="absolute bg-white py-1 px-1 border-solid border-2 rounded font-bold"
   style={`top:${position.y}px; left:${position.x}px;border-color:${borderColor}`}>
   {#each content.values as val, index}
-    <p style={`color:${StaticConfiguration.liveGraphColors[index]}`}>{val?.toFixed(2)}</p>
+    {#if val}<!--val may be undefined for 2d knn graph-->
+      <p style={`color:${StaticConfiguration.liveGraphColors[index]}`}>
+        {val?.toFixed(2)}
+      </p>
+    {/if}
   {/each}
 </div>

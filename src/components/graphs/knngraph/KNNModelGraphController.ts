@@ -41,10 +41,10 @@ class KNNModelGraphController {
     private trainingDataGetter: () => TrainingData,
     origin: { x: number; y: number },
     classId: string,
-    axis?: Axes,
+    axis?: Axes
   ) {
-    this.trainingData = this.trainingDataToPoints();
     this.filters = classifier.getFilters();
+    this.trainingData = this.trainingDataToPoints();
     this.graphDrawer = new KNNModelGraphDrawer(svg, classId);
     this.rotationX = writable(3);
     this.rotationY = writable(0.5);
@@ -57,12 +57,12 @@ class KNNModelGraphController {
       .reduce((prev, cur) => prev + cur);
     const updateRate = 50 + noOfPoints / 2;
 
+    // To avoid redrawing data, only flag the training data to be drawn if any of these stores are altered
     this.unsubscriber = derived(
       [this.rotationX, this.rotationY, this.rotationZ, this.scale, this.origin],
-      () => {
-        return {};
-      },
+      () => ({}), // We don't need to use the values to anything. We just do this instead of subscribing to each store individually
     ).subscribe(() => (this.redrawTrainingData = true));
+
     this.drawInterval = setInterval(() => {
       const controllerData = this.getControllerData();
       this.onUpdate(controllerData, axis);
@@ -104,7 +104,7 @@ class KNNModelGraphController {
   }
 
   private sampleToPoints(sample: SampleData): Point3D[] {
-    return [{ x: sample.value[0], y: sample.value[1], z: sample.value[2] }];
+    return [this.arrayToPoint(sample.value)];
   }
 
   private getControllerData() {
@@ -123,8 +123,8 @@ class KNNModelGraphController {
     // Given as input to the draw function
     return {
       config: {
-        xRot,
-        yRot,
+        xRot: classifier.getFilters().count() === 3 ? xRot : Math.PI,
+        yRot: classifier.getFilters().count() === 3 ? yRot : 0,
         zRot,
         origin,
         scale,
@@ -161,7 +161,8 @@ class KNNModelGraphController {
   }
 
   private arrayToPoint(nums: number[]): Point3D {
-    return { x: nums[0], y: nums[1], z: nums[2] };
+    const zVal = this.filters.count() === 3 ? nums[2] : 0
+    return { x: nums[0], y: nums[1], z: zVal };
   }
 }
 export default KNNModelGraphController;

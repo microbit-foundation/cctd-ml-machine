@@ -17,6 +17,7 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
   import AxesFilterVectorView from './AxesFilterVectorView.svelte';
+  import { get } from 'svelte/store';
 
   let controller: KNNModelGraphController | undefined;
 
@@ -27,19 +28,20 @@
     gestures.getGestures(),
     classifier.getFilters(),
   );
-  const xData = extractAxisFromTrainingData(allData, 0, 3);
-  const yData = extractAxisFromTrainingData(allData, 1, 3);
-  const zData = extractAxisFromTrainingData(allData, 2, 3);
+
+  const accelXData = extractAxisFromTrainingData(allData, 0, 3);
+  const accelYData = extractAxisFromTrainingData(allData, 1, 3);
+  const accelZData = extractAxisFromTrainingData(allData, 2, 3);
 
   const dataGetter = (axis: Axes): TrainingData => {
     if (axis === Axes.X) {
-      return xData;
+      return accelXData;
     }
     if (axis === Axes.Y) {
-      return yData;
+      return accelYData;
     }
     if (axis === Axes.Z) {
-      return zData;
+      return accelZData;
     }
     throw new Error('Should not happen');
   };

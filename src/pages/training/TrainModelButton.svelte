@@ -82,7 +82,8 @@
     const selectedModel = availableModels.find(model => model.id === $selectedOption.id);
 
     if (selectedModel?.id === 'KNN') {
-      const knnFilters = [FilterType.MAX, FilterType.MIN, FilterType.MEAN];
+      // TODO: We set the filters to 2 different filters giving us a 2d graph
+      const knnFilters = [FilterType.MAX, FilterType.MEAN];
       const filters: Filters = classifier.getFilters();
       filters.clear();
       for (const filter of knnFilters) {

@@ -85,29 +85,42 @@
 
   let liveFilteredAxesData: number[] = getVectorValue();
 
-  onMount(() => {
-    const valueInterval = setInterval(() => {
+  let valueInterval: NodeJS.Timeout = setInterval(() => {}, 100);
+
+  const init = () => {
+    denit();
+    valueInterval = setInterval(() => {
       liveFilteredAxesData = getVectorValue();
     }, 250);
-    setTimeout(() => {
-      // We set a timeout to fix a graphical issue, that relates to the resizing of DOM elements
-      updateArrows($highlightedAxis);
-    }, 200);
 
-    return () => {
-      $vectorArrows.forEach(arr => arr.clear());
-      clearInterval(valueInterval);
-    };
+    setTimeout(
+      () => {
+        // We set a timeout to fix a graphical issue, that relates to the resizing of DOM elements
+        updateArrows($highlightedAxis);
+      },
+      // We vary the timeout, because if no arrows exist, it must be the first render cycle which requres a bit more time (to avoid artifacts)
+      $vectorArrows.length === 0 ? 200 : 0,
+    );
+  };
+
+  const denit = () => {
+    $vectorArrows.forEach(arr => arr.clear());
+    clearInterval(valueInterval);
+  };
+
+  onMount(() => {
+    init();
+    return denit;
   });
 
-  $: {
-    updateArrows($highlightedAxis);
-  }
+  derived([highlightedAxis, classifier], s => s).subscribe(s => {
+    init();
+  });
 
   const filters = classifier.getFilters();
 </script>
 
-<div>
+<div class:hidden={!$classifier.model.isTrained && !$classifier.model.isTraining}>
   <div>
     {#if $highlightedAxis}
       <div class="flex flex-row space-x-1">

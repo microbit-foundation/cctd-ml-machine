@@ -30,6 +30,7 @@
   } from '../../script/stores/uiStore';
   import Axes from '../../script/domain/Axes';
   import Logger from '../../script/utils/Logger';
+  import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
@@ -53,7 +54,12 @@
         );
       }
 
-      return new KNNModelTrainer(StaticConfiguration.knnNeighbourCount);
+      const offset =
+        $highlightedAxis === Axes.X ? 0 : $highlightedAxis === Axes.Y ? 1 : 2;
+
+      return new KNNModelTrainer(StaticConfiguration.knnNeighbourCount, data =>
+        extractAxisFromTrainingData(data, offset, 3),
+      );
     }
 
     return new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, h => {

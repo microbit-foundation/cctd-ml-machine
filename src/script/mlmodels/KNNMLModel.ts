@@ -11,9 +11,10 @@ class KNNMLModel implements MLModel {
   constructor(
     private model: knnClassifier.KNNClassifier,
     private k: number,
-  ) {}
+  ) { }
   public async predict(filteredData: number[]): Promise<number[]> {
-    const inputTensor = tensor([filteredData]);
+    console.log(filteredData)
+    const inputTensor = tensor(filteredData);
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call

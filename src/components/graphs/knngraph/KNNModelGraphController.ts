@@ -160,9 +160,23 @@ class KNNModelGraphController {
     }
   }
 
-  private arrayToPoint(nums: number[]): Point3D {
-    const zVal = this.filters.count() === 3 ? nums[2] : 0
-    return { x: nums[0], y: nums[1], z: zVal };
+  private arrayToPoint(numsIn: number[]): Point3D {
+    const nums = [...numsIn]
+    if (this.filters.count() === 2) {
+      nums[2] = 0 // Set z-value to 0
+    }
+
+    let [x, y, z] = this.normalizeVector(nums);
+
+    return { x, y, z };
+  }
+
+  private normalizeVector(nums: number[]): number[] {
+    const magnitude = Math.sqrt(nums.reduce((prev, cur) => prev + Math.pow(cur, 2), 0));
+    if (magnitude === 0) {
+      throw new Error("Cannot normalize vector, magnitude is 0!")
+    }
+    return nums.map(el => el / magnitude)
   }
 }
 export default KNNModelGraphController;

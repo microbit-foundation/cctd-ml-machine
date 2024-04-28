@@ -123,6 +123,6 @@ class StaticConfiguration {
     noOfUnits: 16, // size of hidden layer
   };
 
-  public static readonly knnNeighbourCount = 10;
+  public static readonly knnNeighbourCount = 2;
 }
 export default StaticConfiguration;

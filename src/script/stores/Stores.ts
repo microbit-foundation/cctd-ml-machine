@@ -34,7 +34,7 @@ const engine: Engine = new PollingPredictorEngine(classifier, liveAccelerometerD
 const confidences = derived([gestures, ...gestures.getGestures()], stores => {
   const confidenceMap = new Map();
 
-  const [gestures, ...gestureStores] = stores;
+  const [_, ...gestureStores] = stores;
   gestureStores.forEach(store => {
     confidenceMap.set(store.ID, store.confidence);
   });

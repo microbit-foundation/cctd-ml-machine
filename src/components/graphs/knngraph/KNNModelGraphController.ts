@@ -41,7 +41,7 @@ class KNNModelGraphController {
     private trainingDataGetter: () => TrainingData,
     origin: { x: number; y: number },
     classId: string,
-    axis?: Axes
+    axis?: Axes,
   ) {
     this.filters = classifier.getFilters();
     this.trainingData = this.trainingDataToPoints();
@@ -161,12 +161,12 @@ class KNNModelGraphController {
   }
 
   private arrayToPoint(numsIn: number[]): Point3D {
-    const nums = [...numsIn]
+    const nums = [...numsIn];
     if (this.filters.count() === 2) {
-      nums[2] = 0 // Set z-value to 0
+      nums[2] = 0; // Set z-value to 0
     }
 
-    let [x, y, z] = nums //this.normalizeVector(nums);
+    let [x, y, z] = nums; //this.normalizeVector(nums);
 
     return { x, y, z };
   }
@@ -174,9 +174,9 @@ class KNNModelGraphController {
   private normalizeVector(nums: number[]): number[] {
     const magnitude = Math.sqrt(nums.reduce((prev, cur) => prev + Math.pow(cur, 2), 0));
     if (magnitude === 0) {
-      throw new Error("Cannot normalize vector, magnitude is 0!")
+      throw new Error('Cannot normalize vector, magnitude is 0!');
     }
-    return nums.map(el => el / magnitude)
+    return nums.map(el => el / magnitude);
   }
 }
 export default KNNModelGraphController;

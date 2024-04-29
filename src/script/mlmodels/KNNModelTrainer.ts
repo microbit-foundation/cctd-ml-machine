@@ -13,7 +13,10 @@ import * as knnClassifier from '@tensorflow-models/knn-classifier';
  */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
   // TODO: dataFilterer is mostly for the highlighted axis use-case, should it be more generic, or stay here?
-  constructor(private k: number, private dataFilterer?: (allData: TrainingData) => TrainingData) { }
+  constructor(
+    private k: number,
+    private dataFilterer?: (allData: TrainingData) => TrainingData,
+  ) {}
   public trainModel(trainingData: TrainingData): Promise<KNNMLModel> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     const knn: knnClassifier.KNNClassifier = knnClassifier.create();

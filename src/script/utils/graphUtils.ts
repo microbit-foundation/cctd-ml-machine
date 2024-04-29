@@ -86,11 +86,7 @@ export const extractFilterFromTrainingData = (
       return {
         samples: clazz.samples.map(sample => {
           const filterValues = [];
-          for (
-            let i = noOfAxes * filterIndex;
-            i < sample.value.length;
-            i += noOfAxes
-          ) {
+          for (let i = noOfAxes * filterIndex; i < sample.value.length; i += noOfAxes) {
             const element = sample.value[i];
             filterValues.push(element);
           }
@@ -116,4 +112,3 @@ export const extractAxisFromAccelerometerData = (
       return data.map(val => val.z);
   }
 };
-

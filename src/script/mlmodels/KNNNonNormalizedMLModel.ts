@@ -5,7 +5,7 @@
  */
 
 import MLModel from '../domain/MLModel';
-import { Point3D } from '../utils/graphUtils';
+import { Point3D, distanceBetween } from '../utils/graphUtils';
 
 export type LabelledPoint = {
     classIndex: number;
@@ -28,8 +28,8 @@ class KNNNonNormalizedMLModel implements MLModel {
         // Sort points by distance to live-data point
         const orderedPoints = [...this.points];
         orderedPoints.sort((a, b) => {
-            const aDist = this.distanceBetween(predictedPoint, a);
-            const bDist = this.distanceBetween(predictedPoint, b);
+            const aDist = distanceBetween(predictedPoint, a);
+            const bDist = distanceBetween(predictedPoint, b);
             return aDist - bDist;
         });
 
@@ -55,17 +55,6 @@ class KNNNonNormalizedMLModel implements MLModel {
             y: filteredData[1],
             z: filteredData.length > 2 ? filteredData[2] : 0,
         };
-    }
-
-    private distanceBetween(point1: Point3D, point2: Point3D) {
-        const { x: x1, y: y1, z: z1 } = point1;
-        const { x: x2, y: y2, z: z2 } = point2;
-
-        const [dx, dy, dz] = [x2 - x1, y2 - y1, z2 - z1];
-
-        const squaredDistance = dx ** 2 + dy ** 2 + dz ** 2;
-
-        return Math.sqrt(squaredDistance);
     }
 }
 

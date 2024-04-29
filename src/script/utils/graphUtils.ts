@@ -112,3 +112,14 @@ export const extractAxisFromAccelerometerData = (
       return data.map(val => val.z);
   }
 };
+
+export const distanceBetween = (point1: Point3D, point2: Point3D): number => {
+  const { x: x1, y: y1, z: z1 } = point1;
+  const { x: x2, y: y2, z: z2 } = point2;
+
+  const [dx, dy, dz] = [x2 - x1, y2 - y1, z2 - z1];
+
+  const squaredDistance = dx ** 2 + dy ** 2 + dz ** 2;
+
+  return Math.sqrt(squaredDistance);
+}

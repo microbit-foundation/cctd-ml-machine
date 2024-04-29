@@ -8,6 +8,19 @@ import Axes from '../domain/Axes';
 import { TrainingData } from '../domain/ModelTrainer';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
+export type Point3D = {
+  x: number;
+  y: number;
+  z: number;
+};
+/**
+ * Type help for d3-3d package
+ */
+export type Point3DTransformed = Point3D & {
+  rotated: { x: number; y: number; z: number };
+  projected: { x: number; y: number };
+};
+
 /**
  * Smoothes values by interpolating between old value and new value
  */
@@ -103,3 +116,4 @@ export const extractAxisFromAccelerometerData = (
       return data.map(val => val.z);
   }
 };
+

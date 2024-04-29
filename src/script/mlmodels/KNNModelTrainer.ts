@@ -18,11 +18,11 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     const knn: knnClassifier.KNNClassifier = knnClassifier.create();
 
-    console.log(trainingData);
     if (this.dataFilterer) {
       trainingData = this.dataFilterer(trainingData);
     }
 
+    console.log(trainingData);
     trainingData.classes.forEach((gestureClass, index) => {
       gestureClass.samples.forEach(sample => {
         const example: tf.Tensor = tf.tensor(sample.value);

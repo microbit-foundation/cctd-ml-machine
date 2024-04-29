@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 import * as d3 from 'd3';
-import { Point3D } from '../../../script/TypingUtils';
 import { TrainingData } from '../../../script/domain/ModelTrainer';
 import { Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { GraphDrawConfig } from './KNNModelGraphDrawer';
@@ -13,6 +12,7 @@ import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAcce
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Axes from '../../../script/domain/Axes';
 import Filters from '../../../script/domain/Filters';
+import { Point3D } from '../../../script/utils/graphUtils';
 
 type SampleData = {
   value: number[];
@@ -166,7 +166,7 @@ class KNNModelGraphController {
       nums[2] = 0 // Set z-value to 0
     }
 
-    let [x, y, z] = this.normalizeVector(nums);
+    let [x, y, z] = nums //this.normalizeVector(nums);
 
     return { x, y, z };
   }

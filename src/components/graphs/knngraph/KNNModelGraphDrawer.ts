@@ -3,11 +3,11 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Point3D, Point3DTransformed } from '../../../script/TypingUtils';
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import { classifier, gestures } from '../../../script/stores/Stores';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
+import { Point3D, Point3DTransformed } from '../../../script/utils/graphUtils';
 
 export type GraphDrawConfig = {
   xRot: number;

@@ -13,7 +13,6 @@ class KNNMLModel implements MLModel {
     private k: number,
   ) { }
   public async predict(filteredData: number[]): Promise<number[]> {
-    console.log(filteredData)
     const inputTensor = tensor(filteredData);
 
     try {

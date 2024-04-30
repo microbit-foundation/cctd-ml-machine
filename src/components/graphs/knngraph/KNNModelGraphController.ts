@@ -13,6 +13,7 @@ import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Axes from '../../../script/domain/Axes';
 import Filters from '../../../script/domain/Filters';
 import { Point3D } from '../../../script/utils/graphUtils';
+import StaticConfiguration from '../../../StaticConfiguration';
 
 type SampleData = {
   value: number[];
@@ -35,6 +36,8 @@ class KNNModelGraphController {
   private drawInterval;
   private redrawTrainingData = false; // Only draw training data when rotation/scale/origin changes
   private unsubscriber;
+  private liveDataRecordsSize = 3;
+  private liveDataRecords: TimestampedData<MicrobitAccelerometerData>[][] = [] // Used to 'smoothe' live data point. Expected to contain a few points(liveDataRecordsSize), and points are replaced at each update
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -116,7 +119,15 @@ class KNNModelGraphController {
     let liveData: TimestampedData<MicrobitAccelerometerData>[] = [];
 
     try {
-      liveData = liveAccelerometerData.getBuffer().getSeries(1000, 10);
+      const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
+      const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
+      liveData = liveAccelerometerData.getBuffer()
+        .getSeries(sampleDuration, sampleSize);
+      this.liveDataRecords.push(liveData);
+      if (this.liveDataRecords.length > this.liveDataRecordsSize) {
+        this.liveDataRecords.shift()
+      }
+      liveData = this.calculateLiveDataRecordsAverage();
     } catch (error) {
       liveData = [];
     }
@@ -131,6 +142,43 @@ class KNNModelGraphController {
       } as GraphDrawConfig,
       data: liveData,
     };
+  }
+
+  private calculateLiveDataRecordsAverage(): TimestampedData<MicrobitAccelerometerData>[] {
+    const noOfRecords = this.liveDataRecords.length;
+    const vals = this.liveDataRecords.map(e => e.map(e => e.value))
+    const samples1 = vals[0]
+    const samples2 = vals[1]
+    const samples3 = vals[2]
+
+    const combined = samples1.map((sample, index) => this.divAccelData(this.sumAccelData([sample, samples2[index], samples3[index]]), noOfRecords))
+
+    return combined.map(e => ({
+      timestamp: 0, // ignored
+      value: e
+    }));
+  }
+
+  private divAccelData(data: MicrobitAccelerometerData, div: number): MicrobitAccelerometerData {
+    if (div === 0) {
+      throw new Error("Cannot divide by 0")
+    }
+
+    return {
+      x: data.x / div,
+      y: data.y / div,
+      z: data.z / div
+    }
+  }
+
+  private sumAccelData(data: MicrobitAccelerometerData[]): MicrobitAccelerometerData {
+    const sum = (nums: number[]): number => nums.reduce((pre, cur) => cur + pre, 0);
+
+    return {
+      x: sum(data.map(e => e.x)),
+      y: sum(data.map(e => e.y)),
+      z: sum(data.map(e => e.z)),
+    }
   }
 
   // Called whenever any subscribed store is altered

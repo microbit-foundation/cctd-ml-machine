@@ -17,6 +17,7 @@
   import { state } from '../../script/stores/uiStore';
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
+  import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
 
   type LabelData = {
     id: number;
@@ -28,7 +29,7 @@
   // The height of character is used to fix overlapping line labels
   const CHARACTER_HEIGHT = 16;
 
-  export let liveData: SmoothedLiveData<any>;
+  export let liveData: SmoothedLiveData<LiveDataVector>;
   export let maxValue: number;
   export let minValue: number;
   export let graphHeight: number;
@@ -39,8 +40,8 @@
   onMount(() => {
     unsubscribeFromLiveData = liveData.subscribe(data => {
       const dataInArray = [];
-      for (const property in data) {
-        dataInArray.push(data[property]);
+      for (const num of data.getVector()) {
+        dataInArray.push(num);
       }
       updateDimensionLabels(dataInArray);
     });

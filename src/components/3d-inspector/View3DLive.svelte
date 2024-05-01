@@ -21,7 +21,11 @@
 
   $: {
     if (!freeze) {
-      liveDataPoint = $smoothedLiveData;
+      liveDataPoint = {
+        x: $smoothedLiveData.getVector()[0],
+        y: $smoothedLiveData.getVector()[1],
+        z: $smoothedLiveData.getVector()[2],
+      };
     }
   }
 </script>

@@ -7,13 +7,15 @@ import { Readable, Subscriber, Unsubscriber, derived } from 'svelte/store';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
 import LiveData from '../domain/stores/LiveData';
+import { LiveDataVector } from '../domain/stores/LiveDataVector';
+import PureVector from './PureVector';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.
  *
  * Each entry in the SmoothedLiveData will be interpolated with previous values seen. I.e `y_i = 0.75x_(i-1) + 0.25x_i`
  */
-class SmoothedLiveData<T> implements LiveData<T> {
+class SmoothedLiveData<T extends LiveDataVector> implements LiveData<T> {
   private smoothedStore: Readable<T>;
 
   /**
@@ -81,12 +83,13 @@ class SmoothedLiveData<T> implements LiveData<T> {
         return referenceData;
       }
 
-      const newObject: T = { ...referenceData };
-      for (const property in newObject) {
-        const values = oldValues.map(val => val![property] as number);
-        newObject[property] = smoothNewValue(...values) as never;
+      const newVector: LiveDataVector = new PureVector(referenceData.getVector());
+
+      for (let i = 0; i < newVector.getVector().length; i++) {
+        const values = oldValues.map(val => val!.getVector()[i]);
+        newVector.getVector()[i] = smoothNewValue(...values);
       }
-      return newObject;
+      return newVector;
     });
   }
 }

@@ -14,6 +14,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { classifier } from '../../script/stores/Stores';
+  import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
 
   /**
    * TimesSeries, but with the data array added.
@@ -24,12 +25,12 @@
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
-  export let liveData: LiveData<any>;
+  export let liveData: LiveData<LiveDataVector>;
   export let maxValue: number;
   export let minValue: number;
 
   // Smoothes real-time data by using the 3 most recent data points
-  const smoothedLiveData = new SmoothedLiveData(liveData, 3);
+  const smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
@@ -139,15 +140,15 @@
     }
   }
 
-  const addDataToGraphLines = (data: any) => {
+  const addDataToGraphLines = (data: LiveDataVector) => {
     const t = new Date().getTime();
     let i = 0;
-    for (const property in data) {
+    for (const num of data.getVector()) {
       const line: TimeSeriesWithData = lines[i];
       if (!line) {
         break;
       }
-      const newValue = data[property];
+      const newValue = num;
       line.append(t, newValue, false);
       i++;
     }

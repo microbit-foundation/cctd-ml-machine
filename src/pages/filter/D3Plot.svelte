@@ -146,9 +146,9 @@
       ID: uniqueLiveDataID,
       gestureClassName: 'live',
       gestureClassID: uniqueLiveDataID,
-      x: filterFunction([liveData!.x]),
-      y: filterFunction([liveData!.y]),
-      z: filterFunction([liveData!.z]),
+      x: filterFunction([liveData!.getVector()[0]]),
+      y: filterFunction([liveData!.getVector()[1]]),
+      z: filterFunction([liveData!.getVector()[2]]),
     };
     return filteredData;
   }

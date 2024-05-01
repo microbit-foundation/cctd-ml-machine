@@ -74,9 +74,9 @@
 
     // Set timeout to allow recording in 1s
     const unsubscribe = liveAccelerometerData.subscribe(data => {
-      newData.x.push(data.x);
-      newData.y.push(data.y);
-      newData.z.push(data.z);
+      newData.x.push(data.getVector()[0]);
+      newData.y.push(data.getVector()[1]);
+      newData.z.push(data.getVector()[2]);
     });
 
     // Once duration is over (1000ms default), stop recording

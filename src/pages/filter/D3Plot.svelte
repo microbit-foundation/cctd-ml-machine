@@ -14,6 +14,7 @@
   import FilterGraphLimits from '../../script/utils/FilterLimits';
   import { GestureData } from '../../script/domain/stores/gesture/Gesture';
   import { RecordingData } from '../../script/domain/stores/gesture/Gestures';
+  import StaticConfiguration from '../../StaticConfiguration';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
@@ -140,15 +141,26 @@
   }
 
   function createLiveData() {
-    const liveData = liveAccelerometerData.getBuffer().getNewestValues(1)[0];
+    const liveData = liveAccelerometerData
+      .getBuffer()
+      .getSeries(
+        StaticConfiguration.recordingDuration,
+        StaticConfiguration.pollingPredictionSampleSize,
+      )
+      .map(d => d.value);
+
+    const xs = liveData.map(d => d!.getVector()[0]);
+    const ys = liveData.map(d => d!.getVector()[1]);
+    const zs = liveData.map(d => d!.getVector()[2]);
+
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {
       ID: uniqueLiveDataID,
       gestureClassName: 'live',
       gestureClassID: uniqueLiveDataID,
-      x: filterFunction([liveData!.getVector()[0]]),
-      y: filterFunction([liveData!.getVector()[1]]),
-      z: filterFunction([liveData!.getVector()[2]]),
+      x: filterFunction(xs),
+      y: filterFunction(ys),
+      z: filterFunction(zs),
     };
     return filteredData;
   }

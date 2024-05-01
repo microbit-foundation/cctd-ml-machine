@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import { IArrow } from 'arrows-svg';
+import { writable } from 'svelte/store';
 
-/// <reference types="svelte" />
-
-declare module 'd3-3d';
+export const vectorArrows = writable<IArrow[]>([]);

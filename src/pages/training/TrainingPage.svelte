@@ -5,7 +5,12 @@
  -->
 
 <script lang="ts">
-  import { state } from '../../script/stores/uiStore';
+  import {
+    ModelEntry,
+    availableModels,
+    preferredModel,
+    state,
+  } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
@@ -14,6 +19,8 @@
   import TrainModelButton from './TrainModelButton.svelte';
   import { classifier, gestures } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
+  import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
+  import { Feature, hasFeature } from '../../script/FeatureToggles';
   import LossGraph from '../../components/graphs/LossGraph.svelte';
   import { writable } from 'svelte/store';
   import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
@@ -25,6 +32,13 @@
   const filters = classifier.getFilters();
 
   const sufficientData = gestures.hasSufficientData();
+
+  const selectedModelOption = hasFeature(Feature.KNN_MODEL)
+    ? preferredModel
+    : writable(availableModels[0]);
+
+  $: isUsingKNNModel =
+    hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id;
 
   const loss = writable<LossTrainingIteration[]>([]);
 
@@ -41,6 +55,7 @@
 <TrainingFailedDialog />
 <div class="flex flex-col h-full">
   <ControlBar>
+    <div class="min-h-12" />
     <StandardButton
       fillOnHover
       small
@@ -55,6 +70,9 @@
     </StandardButton>
   </ControlBar>
   <div class="flex flex-col flex-grow justify-center items-center text-center">
+    {#if isUsingKNNModel}
+      <KnnModelGraph />
+    {/if}
     {#if !sufficientData}
       <div class="w-full text-primarytext">
         <h1 class="w-3/4 text-3xl bold m-auto">
@@ -66,6 +84,21 @@
       </div>
     {:else}
       <div class="w-3/4 text-primarytext">
+        {#if !$model.isTraining}
+          {#if $filters.length == 0}
+            <p class="bold text-xl bold mt-10">
+              {$t('menu.trainer.noFilters')}
+            </p>
+          {:else}
+            <div class="w-full pt-5 text-white pb-5">
+              <TrainModelButton
+                selectedOption={selectedModelOption}
+                onClick={resetLoss}
+                onTrainingIteration={trainingIterationHandler} />
+            </div>
+          {/if}
+        {/if}
+
         {#if $model.isTrained}
           <p class="bold text-3xl bold mt-5">
             {$t('menu.trainer.TrainingFinished')}
@@ -74,6 +107,15 @@
             {$t('menu.trainer.TrainingFinished.body')}
           </p>
         {/if}
+        {#if $filters.length == 0}
+          <p class="bold text-xl bold mt-10">
+            {$t('menu.trainer.noFilters')}
+          </p>
+        {/if}
+      </div>
+    {/if}
+    {#if !$state.isInputConnected && !isUsingKNNModel}
+      <div class="mt-10">
         {#if $loss.length > 0 || $model.isTraining}
           {#if !CookieManager.hasFeatureFlag('loss-graph')}
             {#if $model.isTraining}
@@ -94,19 +136,6 @@
             <LossGraph
               {loss}
               maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />
-          {/if}
-        {/if}
-        {#if !$model.isTraining}
-          {#if $filters.length == 0}
-            <p class="bold text-xl bold mt-10">
-              {$t('menu.trainer.noFilters')}
-            </p>
-          {:else}
-            <div class="w-full pt-5 text-white pb-5">
-              <TrainModelButton
-                onClick={resetLoss}
-                onTrainingIteration={trainingIterationHandler} />
-            </div>
           {/if}
         {/if}
       </div>

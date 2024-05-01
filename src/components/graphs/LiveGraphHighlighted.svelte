@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { preferredModel, state } from '../../script/stores/uiStore';
+  import { state } from '../../script/stores/uiStore';
   import { onMount } from 'svelte';
   import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
@@ -14,7 +14,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { classifier } from '../../script/stores/Stores';
-  import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
+  import Axes from '../../script/domain/Axes';
 
   /**
    * TimesSeries, but with the data array added.
@@ -25,14 +25,15 @@
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
-  export let liveData: LiveData<LiveDataVector>;
+  export let liveData: LiveData<any>;
   export let maxValue: number;
   export let minValue: number;
+  export let axis: Axes;
 
   let axisColors = StaticConfiguration.liveGraphColors;
 
   // Smoothes real-time data by using the 3 most recent data points
-  const smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
+  const smoothedLiveData = new SmoothedLiveData(liveData, 3);
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
@@ -61,9 +62,21 @@
 
     let i = 0;
     for (const line of lines) {
+      const getOpacity = () => {
+        if (i === 0 && axis === Axes.X) {
+          return 'ff';
+        }
+        if (i === 1 && axis === Axes.Y) {
+          return 'ff';
+        }
+        if (i === 2 && axis === Axes.Z) {
+          return 'ff';
+        }
+        return '30';
+      };
       chart.addTimeSeries(line, {
         lineWidth,
-        strokeStyle: axisColors[i],
+        strokeStyle: axisColors[i] + getOpacity(),
       });
       i++;
     }
@@ -147,15 +160,15 @@
     }
   }
 
-  const addDataToGraphLines = (data: LiveDataVector) => {
+  const addDataToGraphLines = (data: any) => {
     const t = new Date().getTime();
     let i = 0;
-    for (const num of data.getVector()) {
+    for (const property in data) {
       const line: TimeSeriesWithData = lines[i];
       if (!line) {
         break;
       }
-      const newValue = num;
+      const newValue = data[property];
       line.append(t, newValue, false);
       i++;
     }

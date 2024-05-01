@@ -25,7 +25,7 @@ abstract class FilterWithMaths implements Filter {
   }
 
   protected mean(inValues: number[]): number {
-    return inValues.reduce((acc, val) => acc + val) / inValues.length;
+    return inValues.reduce((acc, val) => acc + val, 0) / inValues.length;
   }
 }
 

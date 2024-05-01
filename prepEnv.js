@@ -34,7 +34,9 @@ const fileMoveTargets = {
 const availableTargets = Object.getOwnPropertyNames(fileMoveTargets);
 const buildVariantTarget = args[2];
 if (!availableTargets.includes(buildVariantTarget)) {
-    throw new Error("Invalid build variant target!")
+    const listTargets = availableTargets.map(target => `  node prepEnv.js ${target}`).join("\n") + "\n";
+    const errorMessage = `Invalid build variant target!\nUse on of the following build targets: \n${listTargets}`;
+    throw new Error(errorMessage);
 }
 
 // The actual work

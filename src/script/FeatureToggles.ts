@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 import features from '../../features.json';
+import CookieManager from './CookieManager';
+import Logger from './utils/Logger';
 
 export enum Feature {
   KNN_MODEL = 'knnModel',
@@ -11,6 +13,13 @@ export enum Feature {
 }
 
 export const hasFeature = (feature: Feature): boolean => {
+  if (CookieManager.hasFeatureFlag('FEATURE-TOGGLE-ALWAYS-TRUE')) {
+    Logger.log(
+      'Feature Toggle',
+      'FEATURE-TOGGLE-ALWAYS-TRUE is set! hasFeature is always true',
+    );
+    return true;
+  }
   const featuresListedInJson = Object.getOwnPropertyNames(features);
   if (!featuresListedInJson.includes(feature.toString())) {
     throw new Error(

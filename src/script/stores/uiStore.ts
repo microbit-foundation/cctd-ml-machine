@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { get, writable } from 'svelte/store';
+import { Writable, derived, get, writable } from 'svelte/store';
 import {
   type CompatibilityStatus,
   checkCompatibility,
@@ -15,15 +15,22 @@ import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import { classifier } from './Stores';
 import Gesture from '../domain/stores/gesture/Gesture';
+import Axes from '../domain/Axes';
+import PersistantWritable from '../repository/PersistantWritable';
+import { DropdownOption } from '../../components/buttons/Buttons';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
-export const compatibility: CompatibilityStatus = checkCompatibility();
+export const compatibility: Writable<CompatibilityStatus> =
+  writable(checkCompatibility());
 
 export const chosenGesture = writable<Gesture | null>(null);
 
-export const isBluetoothWarningDialogOpen = writable<boolean>(!compatibility.bluetooth);
+export const isBluetoothWarningDialogOpen = derived(
+  compatibility,
+  stores => !stores.bluetooth,
+);
 
 export enum ModelView {
   TILE,
@@ -119,6 +126,45 @@ export enum MicrobitInteractions {
   B,
   AB,
 }
+
+export type ModelEntry = {
+  id: string;
+  title: string;
+  label: string;
+};
+
+export const availableModels: ModelEntry[] = [
+  {
+    id: 'NN',
+    title: 'Neural network',
+    label: 'neural network',
+  },
+  {
+    id: 'KNN',
+    title: 'KNN',
+    label: 'KNN',
+  },
+];
+
+const defaultModel: ModelEntry | undefined = availableModels.find(
+  model => model.id === 'NN',
+);
+
+if (!defaultModel) {
+  throw new Error('Default model not found!');
+}
+// TODO: Should just be model id instead of dropdown option
+export const preferredModel = new PersistantWritable<DropdownOption>(
+  {
+    id: defaultModel.id,
+    label: defaultModel.label,
+  },
+  'prefferedModel',
+);
+
+// TODO: Should probably be elsewhere
+export const prevHighlightedAxis = writable<Axes | undefined>(undefined);
+export const highlightedAxis = writable<Axes | undefined>(undefined);
 
 const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;
 

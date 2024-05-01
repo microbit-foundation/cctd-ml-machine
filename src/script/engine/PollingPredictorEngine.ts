@@ -12,6 +12,9 @@ import Engine, { EngineData } from '../domain/stores/Engine';
 import Classifier from '../domain/stores/Classifier';
 import LiveData from '../domain/stores/LiveData';
 
+/**
+ * The PollingPredictorEngine will predict on the current input with consistent intervals.
+ */
 class PollingPredictorEngine implements Engine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;
   private isRunning: Writable<boolean>;
@@ -23,6 +26,7 @@ class PollingPredictorEngine implements Engine {
     this.isRunning = writable(true);
     this.startPolling();
   }
+
   public subscribe(
     run: Subscriber<EngineData>,
     invalidate?: ((value?: EngineData | undefined) => void) | undefined,
@@ -81,9 +85,7 @@ class PollingPredictorEngine implements Engine {
         .getSeries(StaticConfiguration.pollingPredictionSampleDuration, sampleSize);
     } catch (_e) {
       if (sampleSize < 8) {
-        throw new Error(
-          'Was unable to correct buffer data. Less than 8 points were applicable.',
-        );
+        return []; // The minimum number of points is 8, otherwise the filters will throw an exception
       } else {
         return this.getRawDataFromBuffer(
           sampleSize - StaticConfiguration.pollingPredictionSampleSizeSearchStepSize,

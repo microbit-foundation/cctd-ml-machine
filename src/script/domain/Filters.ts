@@ -6,6 +6,7 @@
 import { Readable, Subscriber, Unsubscriber, Writable, get } from 'svelte/store';
 import Filter from './Filter';
 import FilterTypes, { FilterType } from './FilterTypes';
+import Logger from '../utils/Logger';
 
 class Filters implements Readable<Filter[]> {
   constructor(private filters: Writable<Filter[]>) {}
@@ -26,6 +27,7 @@ class Filters implements Readable<Filter[]> {
     const newFilters = filterTypes.map(filterType =>
       FilterTypes.createFilter(filterType),
     );
+    Logger.log('Setting filter ', newFilters);
     this.filters.set(newFilters);
   }
 
@@ -37,6 +39,7 @@ class Filters implements Readable<Filter[]> {
     const filter = FilterTypes.createFilter(filterType);
     const oldFilterArray = [...get(this.filters)];
     this.filters.set([...oldFilterArray, filter]);
+    Logger.log('Filters', 'added filter ', filter);
   }
 
   public has(filterType: FilterType): boolean {
@@ -47,6 +50,10 @@ class Filters implements Readable<Filter[]> {
     this.filters.set([
       ...get(this.filters).filter(filter => filter.getType() != filterType),
     ]);
+  }
+
+  public clear() {
+    this.filters.set([]);
   }
 
   public count(): number {

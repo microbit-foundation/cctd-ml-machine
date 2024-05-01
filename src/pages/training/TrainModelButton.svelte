@@ -6,46 +6,68 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import { classifier } from '../../script/stores/Stores';
+  import { classifier, gestures } from '../../script/stores/Stores';
   import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
   import StaticConfiguration from '../../StaticConfiguration';
   import StandardDropdownButton from '../../components/buttons/StandardDropdownButton.svelte';
   import KNNModelTrainer from '../../script/mlmodels/KNNModelTrainer';
   import { DropdownOption } from '../../components/buttons/Buttons';
-  import PersistantWritable from '../../script/repository/PersistantWritable';
   import ModelTrainer from '../../script/domain/ModelTrainer';
   import MLModel from '../../script/domain/MLModel';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
+  import { FilterType } from '../../script/domain/FilterTypes';
+  import Filters from '../../script/domain/Filters';
+  import { Writable } from 'svelte/store';
+
+  export let selectedOption: Writable<DropdownOption>;
   import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
+  import {
+    ModelEntry,
+    availableModels,
+    highlightedAxis,
+    prevHighlightedAxis,
+  } from '../../script/stores/uiStore';
+  import Axes from '../../script/domain/Axes';
+  import Logger from '../../script/utils/Logger';
+  import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
+  import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
 
-  type ModelEntry = {
-    id: string;
-    title: string;
-    label: string;
-    trainer: () => ModelTrainer<MLModel>;
-  };
+  const getModelTrainer = (modelEntry: ModelEntry): ModelTrainer<MLModel> => {
+    if (modelEntry.id === 'KNN') {
+      if ($highlightedAxis === undefined) {
+        highlightedAxis.set(Axes.X);
+      }
+      const noOfRecordings = gestures
+        .getGestures()
+        .map(gesture => gesture.getRecordings().length)
+        .reduce((prev, cur) => cur + prev, 0);
 
-  export const availableModels: ModelEntry[] = [
-    {
-      id: 'NN',
-      title: 'Neural network',
-      label: 'neural network',
-      trainer: () =>
-        new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, h => {
-          onTrainingIteration(h);
-        }),
-    },
-    {
-      id: 'KNN',
-      title: 'KNN',
-      label: 'KNN',
-      trainer: () => new KNNModelTrainer(StaticConfiguration.knnNeighbourCount),
-    },
-  ];
+      if (noOfRecordings / 2 < StaticConfiguration.knnNeighbourCount) {
+        Logger.log(
+          'TrainModelButton',
+          'The number of recordings is probably too low for an effective KNN model if using ' +
+            StaticConfiguration.knnNeighbourCount +
+            ' neighbours ',
+        );
+      }
+
+      const offset =
+        $highlightedAxis === Axes.X ? 0 : $highlightedAxis === Axes.Y ? 1 : 2;
+
+      return new KNNNonNormalizedModelTrainer(
+        StaticConfiguration.knnNeighbourCount,
+        data => extractAxisFromTrainingData(data, offset, 3),
+      );
+    }
+
+    return new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, h => {
+      onTrainingIteration(h);
+    });
+  };
 
   const model = classifier.getModel();
 
@@ -57,13 +79,6 @@
     ? 'menu.trainer.trainModelButtonSimple'
     : 'menu.trainer.trainNewModelButtonSimple';
 
-  const defaultModel: ModelEntry | undefined = availableModels.find(
-    model => model.id === 'NN',
-  );
-  if (!defaultModel) {
-    throw new Error('Default model not found!');
-  }
-
   const getModelFromOption = (dropdownOption: DropdownOption) => {
     const modelFound: ModelEntry | undefined = availableModels.find(
       model => model.id === dropdownOption.id,
@@ -74,20 +89,22 @@
     return modelFound;
   };
 
-  const selectedOption = new PersistantWritable<DropdownOption>(
-    {
-      id: defaultModel.id,
-      label: defaultModel.label,
-    },
-    'prefferedModel',
-  );
-
   const clickHandler = () => {
     const selectedModel = availableModels.find(model => model.id === $selectedOption.id);
 
+    if (selectedModel?.id === 'KNN') {
+      // TODO: We set the filters to 2 different filters giving us a 2d graph
+      const knnFilters = [FilterType.MAX, FilterType.MEAN];
+      const filters: Filters = classifier.getFilters();
+      filters.clear();
+      for (const filter of knnFilters) {
+        filters.add(filter);
+      }
+    }
+
     if (selectedModel) {
       onClick();
-      model.train(selectedModel.trainer());
+      model.train(getModelTrainer(selectedModel));
     }
   };
 
@@ -100,6 +117,19 @@
       id: model.id,
       label: model.title,
     };
+  });
+
+  highlightedAxis.subscribe(axis => {
+    if (!axis) {
+      return;
+    }
+    if ($prevHighlightedAxis === axis) {
+      return;
+    }
+    if ($selectedOption.id === 'KNN') {
+      model.train(getModelTrainer(getModelFromOption($selectedOption)));
+    }
+    prevHighlightedAxis.set(axis);
   });
 </script>
 

@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { preferredModel, state } from '../../script/stores/uiStore';
+  import { state } from '../../script/stores/uiStore';
   import { onMount } from 'svelte';
   import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
@@ -14,6 +14,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { classifier } from '../../script/stores/Stores';
+  import Axes from '../../script/domain/Axes';
 
   /**
    * TimesSeries, but with the data array added.
@@ -27,6 +28,7 @@
   export let liveData: LiveData<any>;
   export let maxValue: number;
   export let minValue: number;
+  export let axis: Axes;
 
   let axisColors = StaticConfiguration.liveGraphColors;
 
@@ -60,9 +62,21 @@
 
     let i = 0;
     for (const line of lines) {
+      const getOpacity = () => {
+        if (i === 0 && axis === Axes.X) {
+          return 'ff';
+        }
+        if (i === 1 && axis === Axes.Y) {
+          return 'ff';
+        }
+        if (i === 2 && axis === Axes.Z) {
+          return 'ff';
+        }
+        return '30';
+      };
       chart.addTimeSeries(line, {
         lineWidth,
-        strokeStyle: axisColors[i],
+        strokeStyle: axisColors[i] + getOpacity(),
       });
       i++;
     }

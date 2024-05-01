@@ -3,8 +3,11 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import { get } from 'svelte/store';
 import ClassifierInput from '../domain/ClassifierInput';
 import Filters from '../domain/Filters';
+import { highlightedAxis } from '../stores/uiStore';
+import Axes from '../domain/Axes';
 
 class AccelerometerClassifierInput implements ClassifierInput {
   constructor(
@@ -13,7 +16,21 @@ class AccelerometerClassifierInput implements ClassifierInput {
     private zs: number[],
   ) {}
 
-  getInput(filters: Filters): number[] {
+  public getInput(filters: Filters): number[] {
+    // TODO: Bad! How should we go about deciding what axes are provided for prediction when axes are highlighted?
+    const axis = get(highlightedAxis);
+    if (axis) {
+      if (axis === Axes.X) {
+        return [...filters.compute(this.xs)];
+      }
+      if (axis === Axes.Y) {
+        return [...filters.compute(this.ys)];
+      }
+      if (axis === Axes.Z) {
+        return [...filters.compute(this.zs)];
+      }
+    }
+
     return [
       ...filters.compute(this.xs),
       ...filters.compute(this.ys),

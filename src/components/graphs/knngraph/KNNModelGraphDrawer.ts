@@ -7,7 +7,11 @@ import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import { classifier, gestures } from '../../../script/stores/Stores';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
-import { Point3D, Point3DTransformed, distanceBetween } from '../../../script/utils/graphUtils';
+import {
+  Point3D,
+  Point3DTransformed,
+  distanceBetween,
+} from '../../../script/utils/graphUtils';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -28,14 +32,12 @@ export type DrawablePoint = {
 };
 
 class KNNModelGraphDrawer {
-
-  private drawnTrainingPoints: Point3DTransformed[] = []
+  private drawnTrainingPoints: Point3DTransformed[] = [];
 
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) {
-  }
+  ) {}
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {
@@ -52,11 +54,13 @@ class KNNModelGraphDrawer {
     this.addPoint(drawableLivePoint, 'live');
 
     // Draw lines from live point to the nearest neighbours
-    const predictedPoints = [...this.drawnTrainingPoints].sort((a, b) => {
-      const aDist = distanceBetween(drawableLivePoint.pointTransformed, a)
-      const bDist = distanceBetween(drawableLivePoint.pointTransformed, b)
-      return aDist - bDist
-    }).slice(0, StaticConfiguration.knnNeighbourCount)
+    const predictedPoints = [...this.drawnTrainingPoints]
+      .sort((a, b) => {
+        const aDist = distanceBetween(drawableLivePoint.pointTransformed, a);
+        const bDist = distanceBetween(drawableLivePoint.pointTransformed, b);
+        return aDist - bDist;
+      })
+      .slice(0, StaticConfiguration.knnNeighbourCount);
 
     const lines = this.svg.selectAll(`line.points-class`).data(predictedPoints);
     lines
@@ -65,12 +69,12 @@ class KNNModelGraphDrawer {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       .merge(lines)
-      .attr("x1", d => drawableLivePoint.pointTransformed.projected.x)
-      .attr("y1", d => drawableLivePoint.pointTransformed.projected.y)
-      .attr("x2", d => d.projected.x)
-      .attr("y2", d => d.projected.y)
+      .attr('x1', d => drawableLivePoint.pointTransformed.projected.x)
+      .attr('y1', d => drawableLivePoint.pointTransformed.projected.y)
+      .attr('x2', d => d.projected.x)
+      .attr('y2', d => d.projected.y)
       .attr('class', `${this.classId} points-class`)
-      .attr('stroke', '#1a1a1a')
+      .attr('stroke', '#1a1a1a');
     lines.exit().remove();
   };
 

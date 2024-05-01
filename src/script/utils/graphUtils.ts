@@ -122,4 +122,4 @@ export const distanceBetween = (point1: Point3D, point2: Point3D): number => {
   const squaredDistance = dx ** 2 + dy ** 2 + dz ** 2;
 
   return Math.sqrt(squaredDistance);
-}
+};

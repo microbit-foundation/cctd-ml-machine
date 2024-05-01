@@ -37,7 +37,7 @@ class KNNModelGraphController {
   private redrawTrainingData = false; // Only draw training data when rotation/scale/origin changes
   private unsubscriber;
   private liveDataRecordsSize = 3;
-  private liveDataRecords: TimestampedData<MicrobitAccelerometerData>[][] = [] // Used to 'smoothe' live data point. Expected to contain a few points(liveDataRecordsSize), and points are replaced at each update
+  private liveDataRecords: TimestampedData<MicrobitAccelerometerData>[][] = []; // Used to 'smoothe' live data point. Expected to contain a few points(liveDataRecordsSize), and points are replaced at each update
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -121,11 +121,10 @@ class KNNModelGraphController {
     try {
       const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
       const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      liveData = liveAccelerometerData.getBuffer()
-        .getSeries(sampleDuration, sampleSize);
+      liveData = liveAccelerometerData.getBuffer().getSeries(sampleDuration, sampleSize);
       this.liveDataRecords.push(liveData);
       if (this.liveDataRecords.length > this.liveDataRecordsSize) {
-        this.liveDataRecords.shift()
+        this.liveDataRecords.shift();
       }
       liveData = this.calculateLiveDataRecordsAverage();
     } catch (error) {
@@ -146,29 +145,37 @@ class KNNModelGraphController {
 
   private calculateLiveDataRecordsAverage(): TimestampedData<MicrobitAccelerometerData>[] {
     const noOfRecords = this.liveDataRecords.length;
-    const vals = this.liveDataRecords.map(e => e.map(e => e.value))
-    const samples1 = vals[0]
-    const samples2 = vals[1]
-    const samples3 = vals[2]
+    const vals = this.liveDataRecords.map(e => e.map(e => e.value));
+    const samples1 = vals[0];
+    const samples2 = vals[1];
+    const samples3 = vals[2];
 
-    const combined = samples1.map((sample, index) => this.divAccelData(this.sumAccelData([sample, samples2[index], samples3[index]]), noOfRecords))
+    const combined = samples1.map((sample, index) =>
+      this.divAccelData(
+        this.sumAccelData([sample, samples2[index], samples3[index]]),
+        noOfRecords,
+      ),
+    );
 
     return combined.map(e => ({
       timestamp: 0, // ignored
-      value: e
+      value: e,
     }));
   }
 
-  private divAccelData(data: MicrobitAccelerometerData, div: number): MicrobitAccelerometerData {
+  private divAccelData(
+    data: MicrobitAccelerometerData,
+    div: number,
+  ): MicrobitAccelerometerData {
     if (div === 0) {
-      throw new Error("Cannot divide by 0")
+      throw new Error('Cannot divide by 0');
     }
 
     return {
       x: data.x / div,
       y: data.y / div,
-      z: data.z / div
-    }
+      z: data.z / div,
+    };
   }
 
   private sumAccelData(data: MicrobitAccelerometerData[]): MicrobitAccelerometerData {
@@ -178,7 +185,7 @@ class KNNModelGraphController {
       x: sum(data.map(e => e.x)),
       y: sum(data.map(e => e.y)),
       z: sum(data.map(e => e.z)),
-    }
+    };
   }
 
   // Called whenever any subscribed store is altered

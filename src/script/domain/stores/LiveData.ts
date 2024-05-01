@@ -5,11 +5,12 @@
  */
 import { Readable } from 'svelte/store';
 import LiveDataBuffer from '../LiveDataBuffer';
+import { LiveDataVector } from './LiveDataVector';
 
 /**
  * A container for real-time data. Uses a LiveDataBuffer to store data points.
  */
-interface LiveData<T> extends Readable<T> {
+interface LiveData<T extends LiveDataVector> extends Readable<T> {
   /**
    * Inserts a new data point to the LiveData object
    */

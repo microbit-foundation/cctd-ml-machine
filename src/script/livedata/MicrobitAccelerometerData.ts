@@ -6,6 +6,7 @@
 import { Subscriber, Unsubscriber, Writable, get, writable } from 'svelte/store';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import LiveData from '../domain/stores/LiveData';
+import { LiveDataVector } from '../domain/stores/LiveDataVector';
 
 export type MicrobitAccelerometerData = {
   x: number;
@@ -13,21 +14,31 @@ export type MicrobitAccelerometerData = {
   z: number;
 };
 
-class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerData> {
-  private store: Writable<MicrobitAccelerometerData>;
-  constructor(private dataBuffer: LiveDataBuffer<MicrobitAccelerometerData>) {
-    this.store = writable({
+export class MicrobitAccelerometerDataVector implements LiveDataVector {
+
+  public constructor(private data: MicrobitAccelerometerData) {
+  }
+
+  getVector(): number[] {
+    return [this.data.x, this.data.y, this.data.z]
+  }
+}
+
+class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDataVector> {
+  private store: Writable<MicrobitAccelerometerDataVector>;
+  constructor(private dataBuffer: LiveDataBuffer<MicrobitAccelerometerDataVector>) {
+    this.store = writable(new MicrobitAccelerometerDataVector({
       x: 0,
       y: 0,
       z: 0,
-    });
+    }));
   }
 
-  public getBuffer(): LiveDataBuffer<MicrobitAccelerometerData> {
+  public getBuffer(): LiveDataBuffer<MicrobitAccelerometerDataVector> {
     return this.dataBuffer;
   }
 
-  public put(data: MicrobitAccelerometerData): void {
+  public put(data: MicrobitAccelerometerDataVector): void {
     this.store.set(data);
     this.dataBuffer.addValue(data);
   }
@@ -45,8 +56,8 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
   }
 
   public subscribe(
-    run: Subscriber<MicrobitAccelerometerData>,
-    invalidate?: ((value?: MicrobitAccelerometerData | undefined) => void) | undefined,
+    run: Subscriber<MicrobitAccelerometerDataVector>,
+    invalidate?: ((value?: MicrobitAccelerometerDataVector | undefined) => void) | undefined,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

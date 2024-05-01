@@ -5,12 +5,12 @@
  */
 import { Subscriber, Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
 import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
-import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 import StaticConfiguration from '../../StaticConfiguration';
 import { TimestampedData } from '../domain/LiveDataBuffer';
 import Engine, { EngineData } from '../domain/stores/Engine';
 import Classifier from '../domain/stores/Classifier';
 import LiveData from '../domain/stores/LiveData';
+import { LiveDataVector } from '../domain/stores/LiveDataVector';
 
 class PollingPredictorEngine implements Engine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;
@@ -18,7 +18,7 @@ class PollingPredictorEngine implements Engine {
 
   constructor(
     private classifier: Classifier,
-    private liveData: LiveData<MicrobitAccelerometerData>,
+    private liveData: LiveData<LiveDataVector>,
   ) {
     this.isRunning = writable(true);
     this.startPolling();
@@ -63,9 +63,10 @@ class PollingPredictorEngine implements Engine {
     const bufferedData = this.getRawDataFromBuffer(
       StaticConfiguration.pollingPredictionSampleSize,
     );
-    const xs = bufferedData.map(data => data.value.x);
-    const ys = bufferedData.map(data => data.value.y);
-    const zs = bufferedData.map(data => data.value.z);
+    const xs = bufferedData.map(data => data.value.getVector()[0]);
+    const ys = bufferedData.map(data => data.value.getVector()[1]);
+    const zs = bufferedData.map(data => data.value.getVector()[2]);
+    // TODO: Generalize
     return new AccelerometerClassifierInput(xs, ys, zs);
   }
 
@@ -74,7 +75,7 @@ class PollingPredictorEngine implements Engine {
    */
   private getRawDataFromBuffer(
     sampleSize: number,
-  ): TimestampedData<MicrobitAccelerometerData>[] {
+  ): TimestampedData<LiveDataVector>[] {
     try {
       return this.liveData
         .getBuffer()

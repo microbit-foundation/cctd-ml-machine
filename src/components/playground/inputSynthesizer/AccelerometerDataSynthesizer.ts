@@ -12,8 +12,9 @@ import {
   writable,
 } from 'svelte/store';
 import { liveAccelerometerData } from '../../../script/stores/Stores';
-import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
+import MicrobitAccelerometerLiveData, { MicrobitAccelerometerData, MicrobitAccelerometerDataVector } from '../../../script/livedata/MicrobitAccelerometerData';
 import LiveData from '../../../script/domain/stores/LiveData';
+import { LiveDataVector } from '../../../script/domain/stores/LiveDataVector';
 
 type AccelerometerSynthesizerData = {
   intervalSpeed: number;
@@ -27,7 +28,7 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
   private interval: NodeJS.Timeout | undefined = undefined;
   private store: Writable<AccelerometerSynthesizerData>;
 
-  constructor(private liveData: LiveData<MicrobitAccelerometerData>) {
+  constructor(private liveData: LiveData<LiveDataVector>) {
     this.store = writable({
       intervalSpeed: this.getInitialIntervalValue(),
       xSpeed: this.getInitialSineSpeed(),
@@ -79,11 +80,11 @@ class AccelerometerSynthesizer implements Readable<AccelerometerSynthesizerData>
 
   public generateData() {
     const val = new Date().getTime();
-    this.liveData.put({
+    this.liveData.put(new MicrobitAccelerometerDataVector({
       x: Math.sin(val * get(this.store).xSpeed),
       y: Math.sin(val * get(this.store).ySpeed),
       z: Math.sin(val * get(this.store).zSpeed),
-    });
+    }));
   }
 
   public setXSpeed(value: number) {

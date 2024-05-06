@@ -26,6 +26,7 @@
   import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
   import StaticConfiguration from '../../StaticConfiguration';
   import CookieManager from '../../script/CookieManager';
+  import { appInsights } from '../../appInsights';
 
   const model = classifier.getModel();
 
@@ -49,6 +50,17 @@
       newLoss.push(h);
       return newLoss;
     });
+  };
+
+  const trackModelEvent = () => {
+    if (CookieManager.getComplianceChoices().analytics) {
+      appInsights.trackEvent({
+        name: 'ModelTrained',
+        properties: {
+          modelType: $selectedModelOption.id,
+        },
+      });
+    }
   };
 </script>
 
@@ -93,7 +105,7 @@
             <div class="w-full pt-5 text-white pb-5">
               <TrainModelButton
                 selectedOption={selectedModelOption}
-                onClick={resetLoss}
+                onClick={() => {resetLoss(); trackModelEvent();}}
                 onTrainingIteration={trainingIterationHandler} />
             </div>
           {/if}

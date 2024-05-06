@@ -1,4 +1,5 @@
 {
+  "hostname": "ml-machine.org",
   "title": "Learning tool",
   "knnModel": true
 }

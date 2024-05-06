@@ -9,8 +9,10 @@ import CookieManager from './script/CookieManager';
 
 const load = () => {
   if (CookieManager.getComplianceChoices().analytics) {
+    console.log("Track data")
     appInsights.loadAppInsights();
     appInsights.trackPageView(); // Manually call trackPageView to establish the current user/session/pageview
+    appInsights.trackEvent({name: 'Test event'});
   }
 };
 const appInsights = new ApplicationInsights({

@@ -9,7 +9,6 @@ import Logger from './utils/Logger';
 
 export enum Feature {
   KNN_MODEL = 'knnModel',
-  HOSTNAME = 'hostname',
   TITLE = 'title',
 }
 

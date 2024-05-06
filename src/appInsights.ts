@@ -8,10 +8,7 @@ import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import CookieManager from './script/CookieManager';
 
 const load = () => {
-  if (
-    location.hostname === 'localhost' ||
-    location.hostname !== "ml-machine.org"
-  ) {
+  if (location.hostname !== "ml-machine.org") {
     return;
   }
   if (CookieManager.getComplianceChoices().analytics) {

@@ -6,12 +6,11 @@
 
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import CookieManager from './script/CookieManager';
-import { Feature, getFeature } from './script/FeatureToggles';
 
 const load = () => {
   if (
     location.hostname === 'localhost' ||
-    location.hostname !== getFeature(Feature.HOSTNAME)
+    location.hostname !== "ml-machine.org"
   ) {
     return;
   }

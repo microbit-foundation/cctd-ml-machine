@@ -107,7 +107,7 @@
   import { LiveDataVector } from '../../../script/domain/stores/LiveDataVector';
   import StaticConfiguration from '../../../StaticConfiguration';
   import SmoothedLiveData from '../../../script/livedata/SmoothedLiveData';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { Unsubscriber } from 'svelte/motion';
   import DimensionLabels from '../../graphs/DimensionLabels.svelte';
   import liveDataSynthesizer from './AccelerometerDataSynthesizer';
@@ -132,10 +132,6 @@
 
   // Smoothes real-time data by using the 3 most recent data points
   const smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
-
-  smoothedLiveData.subscribe(e => {
-    //console.log(e.getVector());
-  });
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
@@ -208,6 +204,10 @@
   }
 
   let unsubscribeFromData: Unsubscriber | undefined;
+
+  onDestroy(() => {
+    unsubscribeFromData && unsubscribeFromData();
+  });
 
   // If state is connected. Start updating the graph whenever there is new data
   // From the Micro:Bit

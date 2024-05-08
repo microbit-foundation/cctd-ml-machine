@@ -10,7 +10,10 @@
   import SynthesizerGraph from './SynthesizerGraph.svelte';
   import SynthesizerToggleButton from './SynthesizerToggleButton.svelte';
   import SpeedSliders from './SpeedSliders.svelte';
+  import NoOfAxesCounter from './NoOfAxesCounter.svelte';
   import { stores } from '../../../script/stores/Stores';
+  let keycnt = 0;
+  stores.subscribe(e => keycnt++);
 </script>
 
 <div class="flex flex-col">
@@ -19,13 +22,15 @@
   <p class="text-sm">Uses sine-waves to produce LiveData</p>
   <div class="grid grid-cols-2">
     <IntervalSlider />
-
+    <NoOfAxesCounter />
     <SpeedSliders />
   </div>
-  <SynthesizerGraph
-    liveData={stores.getLiveData()}
-    minValue={-1.1}
-    maxValue={1.1}
-    width={850} />
+  {#key keycnt}
+    <SynthesizerGraph
+      liveData={$stores.liveData}
+      minValue={-1.1}
+      maxValue={1.1}
+      width={850} />
+  {/key}
   <p class="whitespace-pre">{JSON.stringify($liveDataSynthesizer, null, 2)}</p>
 </div>

@@ -3,35 +3,20 @@ import LiveDataBuffer from "../../../script/domain/LiveDataBuffer";
 import LiveData from "../../../script/domain/stores/LiveData";
 import { LiveDataVector } from "../../../script/domain/stores/LiveDataVector";
 import BaseVector from "../../../script/livedata/BaseVector";
+import { lab } from "d3";
 
-export class Synthetic5AxisData implements LiveDataVector {
-    public constructor(private base: BaseVector) {
-    }
-
-    getVector(): number[] {
-        return this.base.getVector();
-    }
-    getSize(): number {
-        return this.base.getSize();
-    }
-    getLabels(): string[] {
-        return this.base.getLabels();
-    }
-
-}
-
-export class SyntheticLiveData implements LiveData<Synthetic5AxisData> {
-    private store: Writable<Synthetic5AxisData>;
-    private buffer: LiveDataBuffer<Synthetic5AxisData>
-    public constructor() {
-        this.store = writable(new Synthetic5AxisData(new BaseVector([0, 0, 0, 0, 0], ["A", "B", "C", "D", "F"])))
+export class SyntheticLiveData implements LiveData<BaseVector> {
+    private store: Writable<BaseVector>;
+    private buffer: LiveDataBuffer<BaseVector>
+    public constructor(labels: string[]) {
+        this.store = writable(new BaseVector(new Array(labels.length).fill(0), labels))
         this.buffer = new LiveDataBuffer(200);
     }
-    put(data: Synthetic5AxisData): void {
+    put(data: BaseVector): void {
         this.store.set(data);
         this.buffer.addValue(data);
     }
-    getBuffer(): LiveDataBuffer<Synthetic5AxisData> {
+    getBuffer(): LiveDataBuffer<BaseVector> {
         return this.buffer;
     }
     getSeriesSize(): number {
@@ -40,7 +25,7 @@ export class SyntheticLiveData implements LiveData<Synthetic5AxisData> {
     getLabels(): string[] {
         return get(this.store).getLabels();
     }
-    subscribe(run: Subscriber<Synthetic5AxisData>, invalidate?: Invalidator<Synthetic5AxisData> | undefined): Unsubscriber {
+    subscribe(run: Subscriber<BaseVector>, invalidate?: Invalidator<BaseVector> | undefined): Unsubscriber {
         return this.store.subscribe(run, invalidate);
     }
 

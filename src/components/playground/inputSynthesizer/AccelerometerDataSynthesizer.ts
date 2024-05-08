@@ -11,33 +11,32 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { MicrobitAccelerometerDataVector } from '../../../script/livedata/MicrobitAccelerometerData';
-import LiveData from '../../../script/domain/stores/LiveData';
-import { LiveDataVector } from '../../../script/domain/stores/LiveDataVector';
 import { stores } from '../../../script/stores/Stores';
-import { Synthetic5AxisData, SyntheticLiveData } from './SyntheticLiveData ';
+import { SyntheticLiveData } from './SyntheticLiveData ';
 import BaseVector from '../../../script/livedata/BaseVector';
 
 type LiveDataSynthesizerOptions = {
   intervalSpeed: number;
-  xSpeed: number;
-  ySpeed: number;
-  zSpeed: number;
+  speeds: number[]
   isActive: boolean;
+  noOfAxes: number
 };
+const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "O", "P"]
 
 class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
   private interval: NodeJS.Timeout | undefined = undefined;
   private store: Writable<LiveDataSynthesizerOptions>;
+  private referenceStoreGetter: () => SyntheticLiveData;
 
-  constructor(private referenceStore: SyntheticLiveData) {
+  constructor() {
     this.store = writable({
       intervalSpeed: this.getInitialIntervalValue(),
-      xSpeed: this.getInitialSineSpeed(),
-      ySpeed: this.getInitialSineSpeed() + 1 / 1000,
-      zSpeed: this.getInitialSineSpeed() + 2 / 1000,
+      speeds: [this.getInitialSineSpeed()],
       isActive: false,
-    });
+      noOfAxes: 1
+    } as LiveDataSynthesizerOptions);
+    stores.setLiveData(new SyntheticLiveData([letters[0]]))
+    this.referenceStoreGetter = () => stores.getLiveData() as SyntheticLiveData
   }
 
   public subscribe(
@@ -69,49 +68,49 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
   }
 
   public getInitialSineSpeed() {
-    return this.getMinSineSpeed();
+    return this.getMinSineSpeed() / 3000;
   }
 
   public getMinSineSpeed() {
-    return 0;
+    return 0.0;
   }
 
   public getMaxSineSpeed() {
     return 100;
   }
 
+  public setNoOfAxes(axes: number) {
+    this.store.update(e => {
+      if (e.noOfAxes !== axes) {
+        console.log("changed liveDatra")
+        stores.setLiveData(new SyntheticLiveData(letters.slice(0, axes)))
+      }
+      e.noOfAxes = axes;
+      if (axes > e.speeds.length) {
+        e.speeds = [...e.speeds, ...new Array(axes - e.speeds.length).fill(0)]
+      } else {
+        e.speeds = e.speeds.slice(0, axes);
+      }
+      return e;
+    })
+  }
+
   public generateData() {
     const val = new Date().getTime();
-    const newValue = new BaseVector([
-      Math.sin(val * get(this.store).xSpeed),
-      Math.sin(val * get(this.store).ySpeed),
-      Math.sin(val * get(this.store).zSpeed),
-      Math.sin(val * get(this.store).zSpeed) * Math.sin(val * get(this.store).xSpeed),
-      Math.sin(val * get(this.store).ySpeed) * Math.sin(val * get(this.store).xSpeed),
-    ],
-      ["A", "B", "C", "D", "E"])
-    this.referenceStore.put(new Synthetic5AxisData(newValue));
+
+    let newVector = new Array(get(this.store).noOfAxes).fill(0);
+    newVector = newVector.map((x, i) => Math.sin(val * get(this.store).speeds[i]))
+    const vectorLetters = letters.slice(0, newVector.length)
+    const newValue = new BaseVector(newVector, vectorLetters)
+
+    this.referenceStoreGetter().put(newValue);
   }
 
-  public setXSpeed(value: number) {
-    this.store.update(updater => {
-      updater.xSpeed = value / 1000;
-      return updater;
-    });
-  }
-
-  public setYSpeed(value: number) {
-    this.store.update(updater => {
-      updater.ySpeed = value / 1000;
-      return updater;
-    });
-  }
-
-  public setZSpeed(value: number) {
-    this.store.update(updater => {
-      updater.zSpeed = value / 1000;
-      return updater;
-    });
+  public setSpeed(index: number, speed: number) {
+    this.store.update(s => {
+      s.speeds[index] = speed / 3000;
+      return s
+    })
   }
 
   public setIntervalSpeed(value: number) {
@@ -143,8 +142,7 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
   }
 }
 
-const liveData = stores.setLiveData(new SyntheticLiveData())
-const liveDataSynthesizer = new LiveDataSynthesizer(liveData);
+const liveDataSynthesizer = new LiveDataSynthesizer();
 
 
 export default liveDataSynthesizer;

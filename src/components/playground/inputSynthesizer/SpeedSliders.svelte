@@ -6,36 +6,14 @@
 <script lang="ts">
   import liveDataSynthesizer from './AccelerometerDataSynthesizer';
   import Range from './../../Range.svelte';
-  import { onMount } from 'svelte';
-
-  const initialValues = {
-    x: 0,
-    y: 0,
-    z: 0,
-  };
-
-  initialValues.x = $liveDataSynthesizer.xSpeed * 1000;
-  initialValues.y = $liveDataSynthesizer.ySpeed * 1000;
-  initialValues.z = $liveDataSynthesizer.zSpeed * 1000;
+  $: values = $liveDataSynthesizer.speeds;
 </script>
 
-<p>x Speed (Frequency)</p>
-<Range
-  min={liveDataSynthesizer.getMinSineSpeed()}
-  max={liveDataSynthesizer.getMaxSineSpeed()}
-  initialValue={initialValues.x}
-  on:change={e => liveDataSynthesizer.setXSpeed(e.detail.value)} />
-
-<p>y Speed (Frequency)</p>
-<Range
-  min={liveDataSynthesizer.getMinSineSpeed()}
-  max={liveDataSynthesizer.getMaxSineSpeed()}
-  initialValue={initialValues.y}
-  on:change={e => liveDataSynthesizer.setYSpeed(e.detail.value)} />
-
-<p>z Speed (Frequency)</p>
-<Range
-  min={liveDataSynthesizer.getMinSineSpeed()}
-  max={liveDataSynthesizer.getMaxSineSpeed()}
-  initialValue={initialValues.z}
-  on:change={e => liveDataSynthesizer.setZSpeed(e.detail.value)} />
+{#each values as val, index}
+  <p>Speed {index}</p>
+  <Range
+    min={liveDataSynthesizer.getMinSineSpeed()}
+    max={liveDataSynthesizer.getMaxSineSpeed()}
+    initialValue={liveDataSynthesizer.getInitialSineSpeed() * 1000}
+    on:change={e => liveDataSynthesizer.setSpeed(index, e.detail.value)} />
+{/each}

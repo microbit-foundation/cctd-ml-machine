@@ -4,14 +4,13 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import {
-    classifier,
-    liveAccelerometerData,
-    gestures,
-    engine,
-  } from '../../script/stores/Stores';
+  import { stores } from '../../script/stores/Stores';
   import PlaygroundGestureView from './PlaygroundGestureView.svelte';
 
+  const classifier = stores.getClassifier();
+  const gestures = stores.getGestures();
+  const engine = stores.getEngine();
+  const liveDataStore = stores.getLiveData();
   const model = classifier.getModel();
 </script>
 
@@ -46,9 +45,9 @@
   <div>
     <p class="text-2xl mt-2">LiveData store</p>
     <p class="whitespace-pre">
-      {JSON.stringify($liveAccelerometerData, null, 2).substring(
+      {JSON.stringify($liveDataStore, null, 2).substring(
         2,
-        JSON.stringify($liveAccelerometerData, null, 2).length - 1,
+        JSON.stringify($liveDataStore, null, 2).length - 1,
       )}
     </p>
   </div>

@@ -5,16 +5,18 @@
  -->
 
 <script lang="ts">
-  import { Readable, derived, get } from 'svelte/store';
-  import { classifier, liveAccelerometerData } from '../../../script/stores/Stores';
+  import { derived, get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Axes from '../../../script/domain/Axes';
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';
   import { highlightedAxis } from '../../../script/stores/uiStore';
-  import arrowCreate, { IArrow } from 'arrows-svg';
-  import { afterUpdate, onMount } from 'svelte';
+  import arrowCreate from 'arrows-svg';
+  import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
+  import { stores } from '../../../script/stores/Stores';
+
+  const classifier = stores.getClassifier();
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -66,17 +68,18 @@
       return Array(classifier.getFilters().count()).fill(0);
     }
     try {
-      const seriesTimestamped = liveAccelerometerData
+      const seriesTimestamped = stores
+        .getLiveData()
         .getBuffer()
         .getSeries(
           StaticConfiguration.pollingPredictionSampleDuration,
           StaticConfiguration.pollingPredictionSampleSize,
         );
       const series = seriesTimestamped.map(s => s.value);
-      const filteredSeries = classifier
+      const filteredSeries = stores
+        .getClassifier()
         .getFilters()
         .compute(extractAxisFromAccelerometerData(series, get(highlightedAxis)!));
-
       return filteredSeries;
     } catch (e) {
       return Array(classifier.getFilters().count()).fill(0);

@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { classifier, gestures } from '../script/stores/Stores';
+import { classifier, gestures } from '../script/stores/availableStores';
 import TestMLModelTrainer from './mocks/mlmodel/TestMLModelTrainer';
 
 describe('Classifier tests', () => {

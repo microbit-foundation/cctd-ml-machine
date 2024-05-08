@@ -7,7 +7,6 @@
   import { onMount } from 'svelte';
   import KNNModelGraphController from './KNNModelGraphController';
   import * as d3 from 'd3';
-  import { classifier, gestures, confidences } from '../../../script/stores/Stores';
   import ClassifierFactory from '../../../script/domain/ClassifierFactory';
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
   import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
@@ -17,11 +16,15 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
   import AxesFilterVectorView from './AxesFilterVectorView.svelte';
-  import { get } from 'svelte/store';
+  import { stores } from '../../../script/stores/Stores';
 
   let controller: KNNModelGraphController | undefined;
 
   const classifierFactory = new ClassifierFactory();
+
+  const classifier = stores.getClassifier();
+  const gestures = stores.getGestures();
+  const confidences = gestures.getConfidences();
 
   // Cache training data to avoid fetching them again and again
   const allData = classifierFactory.buildTrainingData(

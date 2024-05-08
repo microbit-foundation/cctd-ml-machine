@@ -12,7 +12,7 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import Gesture, { GestureData, GestureID, GestureOutput } from './Gesture';
+import Gesture, { Confidence, GestureData, GestureID, GestureOutput } from './Gesture';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import GestureRepository from '../../GestureRepository';
 
@@ -35,12 +35,22 @@ export type RecordingData = {
 class Gestures implements Readable<GestureData[]> {
   private static subscribableGestures: Writable<Gesture[]>;
   private repository: GestureRepository;
+  private confidenceStore: Readable<Map<number, Confidence>>
 
   constructor(repository: GestureRepository) {
     this.repository = repository;
     Gestures.subscribableGestures = writable();
     this.repository.subscribe(storeArray => {
       Gestures.subscribableGestures.set(storeArray);
+    });
+    this.confidenceStore = derived([this, ...this.getGestures()], stores => {
+      const confidenceMap: Map<number, Confidence> = new Map();
+
+      const [_, ...gestureStores] = stores;
+      gestureStores.forEach(store => {
+        confidenceMap.set(store.ID, store.confidence);
+      });
+      return confidenceMap;
     });
   }
 
@@ -73,6 +83,7 @@ class Gestures implements Readable<GestureData[]> {
     return this.repository.getGesture(gestureID);
   }
 
+  // TODO: Change to getCurrent() or something else maybe
   public getGestures(): Gesture[] {
     return get(Gestures.subscribableGestures);
   }
@@ -121,6 +132,10 @@ class Gestures implements Readable<GestureData[]> {
         return get(Gestures.subscribableGestures)[sorted[0].index];
       },
     );
+  }
+
+  public getConfidences(): Readable<Map<number, Confidence>> {
+    return this.confidenceStore;
   }
 
   private addGestureFromPersistedData(gestureData: PersistantGestureData): Gesture {

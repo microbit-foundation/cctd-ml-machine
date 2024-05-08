@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import accelerometerSynthesizer from './AccelerometerDataSynthesizer';
+  import liveDataSynthesizer from './AccelerometerDataSynthesizer';
   import Range from './../../Range.svelte';
   import { onMount } from 'svelte';
 
@@ -14,28 +14,28 @@
     z: 0,
   };
 
-  initialValues.x = $accelerometerSynthesizer.xSpeed * 1000;
-  initialValues.y = $accelerometerSynthesizer.ySpeed * 1000;
-  initialValues.z = $accelerometerSynthesizer.zSpeed * 1000;
+  initialValues.x = $liveDataSynthesizer.xSpeed * 1000;
+  initialValues.y = $liveDataSynthesizer.ySpeed * 1000;
+  initialValues.z = $liveDataSynthesizer.zSpeed * 1000;
 </script>
 
 <p>x Speed (Frequency)</p>
 <Range
-  min={accelerometerSynthesizer.getMinSineSpeed()}
-  max={accelerometerSynthesizer.getMaxSineSpeed()}
+  min={liveDataSynthesizer.getMinSineSpeed()}
+  max={liveDataSynthesizer.getMaxSineSpeed()}
   initialValue={initialValues.x}
-  on:change={e => accelerometerSynthesizer.setXSpeed(e.detail.value)} />
+  on:change={e => liveDataSynthesizer.setXSpeed(e.detail.value)} />
 
 <p>y Speed (Frequency)</p>
 <Range
-  min={accelerometerSynthesizer.getMinSineSpeed()}
-  max={accelerometerSynthesizer.getMaxSineSpeed()}
+  min={liveDataSynthesizer.getMinSineSpeed()}
+  max={liveDataSynthesizer.getMaxSineSpeed()}
   initialValue={initialValues.y}
-  on:change={e => accelerometerSynthesizer.setYSpeed(e.detail.value)} />
+  on:change={e => liveDataSynthesizer.setYSpeed(e.detail.value)} />
 
 <p>z Speed (Frequency)</p>
 <Range
-  min={accelerometerSynthesizer.getMinSineSpeed()}
-  max={accelerometerSynthesizer.getMaxSineSpeed()}
+  min={liveDataSynthesizer.getMinSineSpeed()}
+  max={liveDataSynthesizer.getMaxSineSpeed()}
   initialValue={initialValues.z}
-  on:change={e => accelerometerSynthesizer.setZSpeed(e.detail.value)} />
+  on:change={e => liveDataSynthesizer.setZSpeed(e.detail.value)} />

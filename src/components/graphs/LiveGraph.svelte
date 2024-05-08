@@ -13,8 +13,8 @@
   import LiveData from '../../script/domain/stores/LiveData';
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-  import { classifier } from '../../script/stores/Stores';
   import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
+  import { stores } from '../../script/stores/Stores';
 
   /**
    * TimesSeries, but with the data array added.
@@ -22,6 +22,7 @@
    * `data[i][1]` is the value,
    */
   type TimeSeriesWithData = TimeSeries & { data: number[][] };
+  const classifier = stores.getClassifier();
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;

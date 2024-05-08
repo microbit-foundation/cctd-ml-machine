@@ -18,8 +18,8 @@ import LoggingDecorator from './LoggingDecorator';
 import TypingUtils from '../../TypingUtils';
 import { DeviceRequestStates } from '../../stores/connectDialogStore';
 import StaticConfiguration from '../../../StaticConfiguration';
-import { liveAccelerometerData } from '../../stores/Stores';
 import { MicrobitAccelerometerDataVector } from '../../livedata/MicrobitAccelerometerData';
+import { stores } from '../../stores/Stores';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -148,7 +148,7 @@ class InputBehaviour extends LoggingDecorator {
     const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
 
-    liveAccelerometerData.put(new MicrobitAccelerometerDataVector({
+    stores.getLiveData().put(new MicrobitAccelerometerDataVector({
       x: accelX,
       y: accelY,
       z: accelZ,

@@ -6,11 +6,9 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import { classifier, gestures } from '../../script/stores/Stores';
   import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
   import StaticConfiguration from '../../StaticConfiguration';
   import StandardDropdownButton from '../../components/buttons/StandardDropdownButton.svelte';
-  import KNNModelTrainer from '../../script/mlmodels/KNNModelTrainer';
   import { DropdownOption } from '../../components/buttons/Buttons';
   import ModelTrainer from '../../script/domain/ModelTrainer';
   import MLModel from '../../script/domain/MLModel';
@@ -32,9 +30,13 @@
   import Logger from '../../script/utils/Logger';
   import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
   import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
+  import { stores } from '../../script/stores/Stores';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
+
+  const gestures = stores.getGestures();
+  const classifier = stores.getClassifier();
 
   const getModelTrainer = (modelEntry: ModelEntry): ModelTrainer<MLModel> => {
     if (modelEntry.id === 'KNN') {

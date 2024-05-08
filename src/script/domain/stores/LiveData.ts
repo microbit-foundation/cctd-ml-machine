@@ -32,10 +32,6 @@ interface LiveData<T extends LiveDataVector> extends Readable<T> {
    */
   getLabels(): string[];
 
-  /**
-   * Returns the property names of generic type T. Useful for iterating over individual data points for a single sample point.
-   */
-  getPropertyNames(): string[];
 }
 
 export default LiveData;

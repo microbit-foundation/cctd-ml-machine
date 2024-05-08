@@ -17,7 +17,6 @@
   import { Paths, navigate } from '../../router/paths';
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
   import TrainModelButton from './TrainModelButton.svelte';
-  import { classifier, gestures } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
@@ -26,9 +25,11 @@
   import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
   import StaticConfiguration from '../../StaticConfiguration';
   import CookieManager from '../../script/CookieManager';
+  import { stores } from '../../script/stores/Stores';
 
+  const classifier = stores.getClassifier();
+  const gestures = stores.getGestures();
   const model = classifier.getModel();
-
   const filters = classifier.getFilters();
 
   const sufficientData = gestures.hasSufficientData();

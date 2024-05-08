@@ -13,8 +13,8 @@
   import LiveData from '../../script/domain/stores/LiveData';
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-  import { classifier } from '../../script/stores/Stores';
   import Axes from '../../script/domain/Axes';
+  import { stores } from '../../script/stores/Stores';
 
   /**
    * TimesSeries, but with the data array added.
@@ -29,6 +29,7 @@
   export let maxValue: number;
   export let minValue: number;
   export let axis: Axes;
+  const classifier = stores.getClassifier();
 
   let axisColors = StaticConfiguration.liveGraphColors;
 

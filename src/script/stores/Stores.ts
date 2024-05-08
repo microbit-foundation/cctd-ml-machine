@@ -3,42 +3,64 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import LocalStorageRepositories from '../repository/LocalStorageRepositories';
-import PollingPredictorEngine from '../engine/PollingPredictorEngine';
-import MicrobitAccelerometerLiveData, { MicrobitAccelerometerDataVector } from '../livedata/MicrobitAccelerometerData';
-import LiveDataBuffer from '../domain/LiveDataBuffer';
-import StaticConfiguration from '../../StaticConfiguration';
-import Repositories from '../domain/Repositories';
-import Gestures from '../domain/stores/gesture/Gestures';
-import Classifier from '../domain/stores/Classifier';
-import Engine from '../domain/stores/Engine';
-import LiveData from '../domain/stores/LiveData';
-import { LiveDataVector } from '../domain/stores/LiveDataVector';
-import { derived } from 'svelte/store';
 
-const repositories: Repositories = new LocalStorageRepositories();
+import Repositories from "../domain/Repositories";
+import Classifier from "../domain/stores/Classifier";
+import Engine from "../domain/stores/Engine";
+import LiveData from "../domain/stores/LiveData";
+import { LiveDataVector } from "../domain/stores/LiveDataVector";
+import Gestures from "../domain/stores/gesture/Gestures";
+import PollingPredictorEngine from "../engine/PollingPredictorEngine";
+import LocalStorageRepositories from "../repository/LocalStorageRepositories";
 
-const gestures: Gestures = new Gestures(repositories.getGestureRepository());
-const classifier: Classifier = repositories.getClassifierRepository().getClassifier();
+/**
+ * Stores is a container object, that allows for management of global stores.
+ */
+class Stores {
 
-const accelerometerDataBuffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(
-  StaticConfiguration.accelerometerLiveDataBufferSize,
-);
-const liveData: LiveData<LiveDataVector> =
-  new MicrobitAccelerometerLiveData(accelerometerDataBuffer);
+    private liveData: LiveData<LiveDataVector> | undefined;
+    private engine: Engine | undefined;
+    private classifier: Classifier;
+    private gestures: Gestures;
 
-const engine: Engine = new PollingPredictorEngine(classifier, liveData);
+    public constructor() {
+        this.liveData = undefined;
+        this.engine = undefined;
+        const repositories: Repositories = new LocalStorageRepositories();
+        this.classifier = repositories.getClassifierRepository().getClassifier();
+        this.gestures = new Gestures(repositories.getGestureRepository());
+    }
 
-// I'm not sure if this one should be
-const confidences = derived([gestures, ...gestures.getGestures()], stores => {
-  const confidenceMap = new Map();
+    public getLiveData(): LiveData<LiveDataVector> {
+        if (!this.liveData) {
+            throw new Error("Cannot get liveData store. You must initialize it using setLiveData(...)")
+        }
+        return this.liveData;
+    }
 
-  const [_, ...gestureStores] = stores;
-  gestureStores.forEach(store => {
-    confidenceMap.set(store.ID, store.confidence);
-  });
-  return confidenceMap;
-});
-// Export the stores here. Please be mindful when exporting stores, avoid whenever possible.
-// This helps us avoid leaking too many objects, that aren't meant to be interacted with
-export { engine, gestures, classifier, liveData as liveAccelerometerData, confidences };
+    public setLiveData<T extends LiveData<LiveDataVector>>(liveDataStore: T): T {
+        if (!liveDataStore) {
+            throw new Error("Cannot set live data store to undefined/null");
+        }
+        this.liveData = liveDataStore;
+        this.engine = new PollingPredictorEngine(this.classifier, this.liveData);
+        return this.liveData as T;
+    }
+
+    public getClassifier(): Classifier {
+        return this.classifier;
+    }
+
+    public getGestures(): Gestures {
+        return this.gestures;
+    }
+
+    public getEngine(): Engine {
+        if (!this.engine) {
+            throw new Error("Cannot get engine store, the liveData store has not been set. You must set it using setLiveData(...)")
+        }
+        return this.engine;
+    }
+}
+
+export const stores = new Stores();

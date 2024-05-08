@@ -8,12 +8,13 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import Axes from '../../script/domain/Axes';
-  import { liveAccelerometerData } from '../../script/stores/Stores';
+  import { stores } from '../../script/stores/Stores';
   import { highlightedAxis } from '../../script/stores/uiStore';
   import LiveGraph from './LiveGraph.svelte';
   import LiveGraphHighlighted from './LiveGraphHighlighted.svelte';
 
   export let width: number;
+  const liveData = stores.getLiveData();
 
   $: showhighlit = hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined;
 </script>
@@ -23,7 +24,7 @@
     <LiveGraphHighlighted
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      liveData={liveAccelerometerData}
+      {liveData}
       axis={Axes.X}
       {width} />
   {/if}
@@ -31,7 +32,7 @@
     <LiveGraphHighlighted
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      liveData={liveAccelerometerData}
+      {liveData}
       axis={Axes.Y}
       {width} />
   {/if}
@@ -39,7 +40,7 @@
     <LiveGraphHighlighted
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      liveData={liveAccelerometerData}
+      {liveData}
       axis={Axes.Z}
       {width} />
   {/if}
@@ -47,6 +48,6 @@
   <LiveGraph
     minValue={StaticConfiguration.liveGraphValueBounds.min}
     maxValue={StaticConfiguration.liveGraphValueBounds.max}
-    liveData={liveAccelerometerData}
+    {liveData}
     {width} />
 {/if}

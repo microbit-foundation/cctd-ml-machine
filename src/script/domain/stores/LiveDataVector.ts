@@ -8,4 +8,8 @@ export interface LiveDataVector {
 
     getVector(): number[]
 
+    getSize(): number
+
+    getLabels(): string[]
+
 }

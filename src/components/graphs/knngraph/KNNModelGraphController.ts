@@ -7,13 +7,13 @@ import * as d3 from 'd3';
 import { TrainingData } from '../../../script/domain/ModelTrainer';
 import { Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { GraphDrawConfig } from './KNNModelGraphDrawer';
-import { classifier, liveAccelerometerData } from '../../../script/stores/Stores';
 import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Axes from '../../../script/domain/Axes';
 import Filters from '../../../script/domain/Filters';
 import { Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
+import { stores } from '../../../script/stores/Stores';
 
 type SampleData = {
   value: number[];
@@ -46,7 +46,7 @@ class KNNModelGraphController {
     classId: string,
     axis?: Axes,
   ) {
-    this.filters = classifier.getFilters();
+    this.filters = stores.getClassifier().getFilters();
     this.trainingData = this.trainingDataToPoints();
     this.graphDrawer = new KNNModelGraphDrawer(svg, classId);
     this.rotationX = writable(3);
@@ -121,7 +121,7 @@ class KNNModelGraphController {
     try {
       const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
       const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      liveData = liveAccelerometerData.getBuffer().getSeries(sampleDuration, sampleSize);
+      liveData = stores.getLiveData().getBuffer().getSeries(sampleDuration, sampleSize);
       this.liveDataRecords.push(liveData);
       if (this.liveDataRecords.length > this.liveDataRecordsSize) {
         this.liveDataRecords.shift();

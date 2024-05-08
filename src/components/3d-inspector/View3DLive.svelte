@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-  import { liveAccelerometerData } from '../../script/stores/Stores';
+  import { stores } from '../../script/stores/Stores';
   import View3D from './View3D.svelte';
   import { Vector3 } from './View3DUtility';
 
@@ -17,7 +17,7 @@
 
   let liveDataPoint: Vector3 = { x: 0, y: 0, z: 0 };
 
-  const smoothedLiveData = new SmoothedLiveData(liveAccelerometerData, 3);
+  const smoothedLiveData = new SmoothedLiveData(stores.getLiveData(), 3);
 
   $: {
     if (!freeze) {

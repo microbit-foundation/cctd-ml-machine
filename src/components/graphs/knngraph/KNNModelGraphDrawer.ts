@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
-import { classifier, gestures } from '../../../script/stores/Stores';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
 import {
@@ -12,6 +11,7 @@ import {
   Point3DTransformed,
   distanceBetween,
 } from '../../../script/utils/graphUtils';
+import { stores } from '../../../script/stores/Stores';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -37,14 +37,14 @@ class KNNModelGraphDrawer {
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) {}
+  ) { }
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {
       return;
     }
     const pointTransformer = this.getPointTransformer(drawConfig);
-    const color = StaticConfiguration.gestureColors[gestures.getNumberOfGestures()];
+    const color = StaticConfiguration.gestureColors[stores.getGestures().getNumberOfGestures()];
     const drawableLivePoint: DrawablePoint = {
       pointTransformed: pointTransformer(drawData),
       color,
@@ -96,7 +96,7 @@ class KNNModelGraphDrawer {
       drawConfig,
       StaticConfiguration.liveGraphColors[1],
     );
-    if (classifier.getFilters().count() === 3) {
+    if (stores.getClassifier().getFilters().count() === 3) {
       // 3d, draw z-axis (forward/backward)
       this.addAxis(
         { x: 0, y: 0, z: 1 },
@@ -234,7 +234,7 @@ class KNNModelGraphDrawer {
    */
   private getLabel(dataIndex: number) {
     try {
-      const gestureList = gestures.getGestures();
+      const gestureList = stores.getGestures().getGestures();
       return gestureList[dataIndex].getName();
     } catch (error) {
       // Index out of bounds indicates either an error or live data.
@@ -249,7 +249,7 @@ class KNNModelGraphDrawer {
     const j = 10;
     for (let z = -j; z < j; z++) {
       for (let x = -j; x < j; x++) {
-        if (classifier.getFilters().count() === 2) {
+        if (stores.getClassifier().getFilters().count() === 2) {
           xGrid.push({ x: x, y: z, z: 0 }); // Draw grid vertically (2d)
         } else {
           xGrid.push({ x: x, y: 0, z: z }); // Draw grid horizontally (3d)

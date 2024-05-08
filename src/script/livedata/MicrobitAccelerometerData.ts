@@ -19,6 +19,13 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
   public constructor(private data: MicrobitAccelerometerData) {
   }
 
+  public getLabels(): string[] {
+    return ["X", "Y", "Z"]
+  }
+  public getSize(): number {
+    return this.getVector().length;
+  }
+
   getVector(): number[] {
     return [this.data.x, this.data.y, this.data.z]
   }
@@ -44,15 +51,13 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
   }
 
   public getSeriesSize(): number {
-    return 3;
+    // TODO: Could be replaced with the version in the store, as it is initialized in constructor
+    return new MicrobitAccelerometerDataVector({ x: 0, y: 0, z: 0 }).getSize();
   }
 
   public getLabels(): string[] {
-    return ['X', 'Y', 'Z'];
-  }
-
-  public getPropertyNames(): string[] {
-    return Object.getOwnPropertyNames(get(this.store));
+    // TODO: Could be replaced with the version in the store, as it is initialized in constructor
+    return new MicrobitAccelerometerDataVector({ x: 0, y: 0, z: 0 }).getLabels();
   }
 
   public subscribe(

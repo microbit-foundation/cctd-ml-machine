@@ -14,7 +14,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
-  import { state } from '../../script/stores/uiStore';
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
@@ -75,8 +74,6 @@
       const normalMax = maxValue - minValue;
       const normalValue = axes[labels[i].id] - minValue;
       const newValue = (normalValue / normalMax) * graphHeight;
-      if (labels[i].label === 'Z') {
-      }
       labels[i].arrowHeight = newValue + 4; // We add 4 to align the arrow to the graph line
       // labelHeight will be overridden in fixOverlappingLabels if necessary
       labels[i].textHeight = newValue - CHARACTER_HEIGHT + 2; // Subract height to align with arrow

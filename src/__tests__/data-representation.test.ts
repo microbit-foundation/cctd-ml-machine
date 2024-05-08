@@ -7,14 +7,14 @@
  * SPDX-License-Identifier: MIT
  */
 
-import exp from 'constants';
 import LiveDataBuffer from '../script/domain/LiveDataBuffer';
 import LiveData from '../script/domain/stores/LiveData';
 import MicrobitAccelerometerLiveData, { MicrobitAccelerometerDataVector } from '../script/livedata/MicrobitAccelerometerData';
-import { gestures } from '../script/stores/Stores';
 import { repeat } from './testUtils';
 import { get } from 'svelte/store';
 import { LiveDataVector } from '../script/domain/stores/LiveDataVector';
+import SmoothedLiveData from '../script/livedata/SmoothedLiveData';
+import { smoothNewValue } from '../script/utils/graphUtils';
 
 describe('Data representation tests', () => {
     test('Creating accelerometer live data does not throw', () => {
@@ -43,6 +43,21 @@ describe('Data representation tests', () => {
 
         expect(() => get(liveData).getVector()).not.toThrow();
         expect(get(liveData).getVector()).toEqual([1, 2, 3])
+    })
+
+    test("Test smoothed values", () => {
+        const liveData: LiveData<MicrobitAccelerometerDataVector> = new MicrobitAccelerometerLiveData(new LiveDataBuffer(20));
+        const smoothLiveData = new SmoothedLiveData(liveData, 2);
+
+        const point1 = new MicrobitAccelerometerDataVector({ x: 3, y: 2, z: 1 });
+        const point2 = new MicrobitAccelerometerDataVector({ x: 1, y: 2, z: 3 });
+
+        liveData.put(point1)
+        liveData.put(point2)
+
+        expect(get(smoothLiveData).getVector()[0]).toBeCloseTo(smoothNewValue(point2.getVector()[0], point1.getVector()[0]), 10)
+        expect(get(smoothLiveData).getVector()[1]).toBeCloseTo(smoothNewValue(point2.getVector()[1], point1.getVector()[1]), 10)
+        expect(get(smoothLiveData).getVector()[2]).toBeCloseTo(smoothNewValue(point2.getVector()[2], point1.getVector()[2]), 10)
     })
 });
 

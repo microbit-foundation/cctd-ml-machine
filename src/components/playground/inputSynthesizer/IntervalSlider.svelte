@@ -6,16 +6,16 @@
 
 <script>
   import Range from '../../Range.svelte';
-  import accelerometerSynthesizer from './AccelerometerDataSynthesizer';
+  import liveDataSynthesizer from './AccelerometerDataSynthesizer';
 
   const setIntervalValue = newValue => {
-    accelerometerSynthesizer.setIntervalSpeed(newValue);
+    liveDataSynthesizer.setIntervalSpeed(newValue);
   };
 </script>
 
-<p>Synthesis interval ({$accelerometerSynthesizer.intervalSpeed}), lower is faster</p>
+<p>Synthesis interval ({$liveDataSynthesizer.intervalSpeed}), lower is faster</p>
 <Range
-  min={accelerometerSynthesizer.getMinIntervalValue()}
-  max={accelerometerSynthesizer.getMaxIntervalValue()}
-  initialValue={accelerometerSynthesizer.getInitialIntervalValue()}
+  min={liveDataSynthesizer.getMinIntervalValue()}
+  max={liveDataSynthesizer.getMaxIntervalValue()}
+  initialValue={liveDataSynthesizer.getInitialIntervalValue()}
   on:change={e => setIntervalValue(e.detail.value)} />

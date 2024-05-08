@@ -15,9 +15,10 @@
   import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
   import PleaseConnectFirst from '../../../components/PleaseConnectFirst.svelte';
-  import { classifier } from '../../../script/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
+  import { stores } from '../../../script/stores/Stores';
 
+  const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
 

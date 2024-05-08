@@ -21,13 +21,15 @@
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
-  import { gestures, liveAccelerometerData } from '../script/stores/Stores';
   import Gesture from '../script/domain/stores/gesture/Gesture';
   import { RecordingData } from '../script/domain/stores/gesture/Gestures';
+  import { stores } from '../script/stores/Stores';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
+  const gestures = stores.getGestures();
+  const liveData = stores.getLiveData();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = StaticConfiguration.recordingDuration;
@@ -73,7 +75,7 @@
     let newData: { x: number[]; y: number[]; z: number[] } = { x: [], y: [], z: [] };
 
     // Set timeout to allow recording in 1s
-    const unsubscribe = liveAccelerometerData.subscribe(data => {
+    const unsubscribe = liveData.subscribe(data => {
       newData.x.push(data.getVector()[0]);
       newData.y.push(data.getVector()[1]);
       newData.z.push(data.getVector()[2]);

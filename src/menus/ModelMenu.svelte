@@ -7,8 +7,8 @@
 <script lang="ts">
   import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
-  import { classifier, gestures } from '../script/stores/Stores';
   import Gesture from '../script/domain/stores/gesture/Gesture';
+  import { stores } from '../script/stores/Stores';
 
   const bestPrediction = gestures.getBestPrediction();
 
@@ -31,7 +31,7 @@
     return bestPrediction.getName();
   };
 
-  const model = classifier.getModel();
+  const model = stores.getClassifier().getModel();
 
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
   $: predictionLabel = getPredictionLabel($state.isInputReady, $bestPrediction);

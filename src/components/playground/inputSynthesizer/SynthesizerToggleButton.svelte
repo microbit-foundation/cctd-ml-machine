@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import { get } from 'svelte/store';
-  import liveDataSynthesizer from './AccelerometerDataSynthesizer';
+  import liveDataSynthesizer from './LiveDataSynthesizer';
 
   const toggleSynthesizer = () => {
     if (liveDataSynthesizer.isActive()) {

@@ -110,7 +110,7 @@
   import { onDestroy, onMount } from 'svelte';
   import { Unsubscriber } from 'svelte/motion';
   import DimensionLabels from '../../graphs/DimensionLabels.svelte';
-  import liveDataSynthesizer from './AccelerometerDataSynthesizer';
+  import liveDataSynthesizer from './LiveDataSynthesizer';
   import { stores } from '../../../script/stores/Stores';
 
   const classifier = stores.getClassifier();

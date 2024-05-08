@@ -6,7 +6,7 @@
 
 <script>
   import IntervalSlider from './IntervalSlider.svelte';
-  import liveDataSynthesizer from './AccelerometerDataSynthesizer';
+  import liveDataSynthesizer from './LiveDataSynthesizer';
   import SynthesizerGraph from './SynthesizerGraph.svelte';
   import SynthesizerToggleButton from './SynthesizerToggleButton.svelte';
   import SpeedSliders from './SpeedSliders.svelte';

@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import liveDataSynthesizer from './AccelerometerDataSynthesizer';
+  import liveDataSynthesizer from './LiveDataSynthesizer';
   import Range from './../../Range.svelte';
   $: values = $liveDataSynthesizer.speeds;
 </script>

@@ -6,7 +6,7 @@
 
 <script>
   import Range from '../../Range.svelte';
-  import liveDataSynthesizer from './AccelerometerDataSynthesizer';
+  import liveDataSynthesizer from './LiveDataSynthesizer';
 
   const setIntervalValue = newValue => {
     liveDataSynthesizer.setIntervalSpeed(newValue);

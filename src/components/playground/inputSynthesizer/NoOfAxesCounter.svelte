@@ -1,6 +1,6 @@
 <script lang="ts">
   import Range from '../../Range.svelte';
-  import liveDataSynthesizer from './AccelerometerDataSynthesizer';
+  import liveDataSynthesizer from './LiveDataSynthesizer';
 
   const setNoOfAxes = (number: number) => {
     liveDataSynthesizer.setNoOfAxes(number);

@@ -1,9 +1,12 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import { Subscriber, Invalidator, Unsubscriber, Writable, writable, get } from "svelte/store";
 import LiveDataBuffer from "../../../script/domain/LiveDataBuffer";
 import LiveData from "../../../script/domain/stores/LiveData";
-import { LiveDataVector } from "../../../script/domain/stores/LiveDataVector";
 import BaseVector from "../../../script/livedata/BaseVector";
-import { lab } from "d3";
 
 export class SyntheticLiveData implements LiveData<BaseVector> {
     private store: Writable<BaseVector>;

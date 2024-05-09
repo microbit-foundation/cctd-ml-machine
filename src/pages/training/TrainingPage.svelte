@@ -5,12 +5,7 @@
  -->
 
 <script lang="ts">
-  import {
-    ModelEntry,
-    availableModels,
-    preferredModel,
-    state,
-  } from '../../script/stores/uiStore';
+  import { availableModels, preferredModel, state } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';

@@ -26,8 +26,12 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
     return this.getVector().length;
   }
 
-  getVector(): number[] {
+  public getVector(): number[] {
     return [this.data.x, this.data.y, this.data.z]
+  }
+
+  public getAccelerometerData(): MicrobitAccelerometerData {
+    return this.data;
   }
 }
 

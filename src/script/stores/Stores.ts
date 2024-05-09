@@ -13,6 +13,8 @@ import { LiveDataVector } from "../domain/stores/LiveDataVector";
 import Gestures from "../domain/stores/gesture/Gestures";
 import PollingPredictorEngine from "../engine/PollingPredictorEngine";
 import LocalStorageRepositories from "../repository/LocalStorageRepositories";
+import Environment from "../Environment";
+import Logger from "../utils/Logger";
 
 type StoresType = {
     liveData: LiveData<LiveDataVector>
@@ -54,6 +56,7 @@ class Stores implements Readable<StoresType>{
     }
 
     public setLiveData<T extends LiveData<LiveDataVector>>(liveDataStore: T): T {
+        Logger.log("stores", "setting live data")
         if (!liveDataStore) {
             throw new Error("Cannot set live data store to undefined/null");
         }

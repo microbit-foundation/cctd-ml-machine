@@ -4,7 +4,6 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { get } from 'svelte/store';
   import liveDataSynthesizer from './LiveDataSynthesizer';
 
   const toggleSynthesizer = () => {

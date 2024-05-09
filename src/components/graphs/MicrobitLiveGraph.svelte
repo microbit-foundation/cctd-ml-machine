@@ -14,8 +14,6 @@
   import LiveGraphHighlighted from './LiveGraphHighlighted.svelte';
 
   export let width: number;
-  const liveData = stores.getLiveData();
-
   $: showhighlit = hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined;
 </script>
 
@@ -24,7 +22,7 @@
     <LiveGraphHighlighted
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      {liveData}
+      liveData={$stores.liveData}
       axis={Axes.X}
       {width} />
   {/if}
@@ -32,7 +30,7 @@
     <LiveGraphHighlighted
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      {liveData}
+      liveData={$stores.liveData}
       axis={Axes.Y}
       {width} />
   {/if}
@@ -40,7 +38,7 @@
     <LiveGraphHighlighted
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      {liveData}
+      liveData={$stores.liveData}
       axis={Axes.Z}
       {width} />
   {/if}
@@ -48,6 +46,6 @@
   <LiveGraph
     minValue={StaticConfiguration.liveGraphValueBounds.min}
     maxValue={StaticConfiguration.liveGraphValueBounds.max}
-    {liveData}
+    liveData={$stores.liveData}
     {width} />
 {/if}

@@ -7,13 +7,14 @@ import * as d3 from 'd3';
 import { TrainingData } from '../../../script/domain/ModelTrainer';
 import { Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { GraphDrawConfig } from './KNNModelGraphDrawer';
-import { MicrobitAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
+import { MicrobitAccelerometerData, MicrobitAccelerometerDataVector } from '../../../script/livedata/MicrobitAccelerometerData';
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Axes from '../../../script/domain/Axes';
 import Filters from '../../../script/domain/Filters';
 import { Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { stores } from '../../../script/stores/Stores';
+import { LiveDataVector } from '../../../script/domain/stores/LiveDataVector';
 
 type SampleData = {
   value: number[];
@@ -21,7 +22,7 @@ type SampleData = {
 
 type UpdateCall = {
   config: GraphDrawConfig;
-  data: TimestampedData<MicrobitAccelerometerData>[];
+  data: TimestampedData<MicrobitAccelerometerDataVector>[];
 };
 
 class KNNModelGraphController {
@@ -37,7 +38,7 @@ class KNNModelGraphController {
   private redrawTrainingData = false; // Only draw training data when rotation/scale/origin changes
   private unsubscriber;
   private liveDataRecordsSize = 3;
-  private liveDataRecords: TimestampedData<MicrobitAccelerometerData>[][] = []; // Used to 'smoothe' live data point. Expected to contain a few points(liveDataRecordsSize), and points are replaced at each update
+  private liveDataRecords: TimestampedData<MicrobitAccelerometerDataVector>[][] = []; // Used to 'smoothe' live data point. Expected to contain a few points(liveDataRecordsSize), and points are replaced at each update
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -111,17 +112,30 @@ class KNNModelGraphController {
   }
 
   private getControllerData() {
+    const classifier = stores.getClassifier();
     const xRot = get(this.rotationX);
     const yRot = get(this.rotationY);
     const zRot = get(this.rotationZ);
     const scale = get(this.scale);
     const origin = get(this.origin);
-    let liveData: TimestampedData<MicrobitAccelerometerData>[] = [];
+    let liveData: TimestampedData<MicrobitAccelerometerDataVector>[] = [];
 
     try {
       const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
       const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      liveData = stores.getLiveData().getBuffer().getSeries(sampleDuration, sampleSize);
+      liveData = stores.getLiveData().getBuffer().getSeries(sampleDuration, sampleSize).map(el => {
+        if (el.value.getSize() != 3) {
+          throw new Error("Couldn't convert vector to accelerometer data vector")
+        }
+        return {
+          ...el,
+          value: new MicrobitAccelerometerDataVector({
+            x: el.value.getVector()[0],
+            y: el.value.getVector()[1],
+            z: el.value.getVector()[2]
+          })
+        }
+      });
       this.liveDataRecords.push(liveData);
       if (this.liveDataRecords.length > this.liveDataRecordsSize) {
         this.liveDataRecords.shift();
@@ -143,7 +157,7 @@ class KNNModelGraphController {
     };
   }
 
-  private calculateLiveDataRecordsAverage(): TimestampedData<MicrobitAccelerometerData>[] {
+  private calculateLiveDataRecordsAverage(): TimestampedData<MicrobitAccelerometerDataVector>[] {
     const noOfRecords = this.liveDataRecords.length;
     const vals = this.liveDataRecords.map(e => e.map(e => e.value));
     const samples1 = vals[0];
@@ -159,7 +173,7 @@ class KNNModelGraphController {
 
     return combined.map(e => ({
       timestamp: 0, // ignored
-      value: e,
+      value: new MicrobitAccelerometerDataVector(e),
     }));
   }
 
@@ -178,28 +192,28 @@ class KNNModelGraphController {
     };
   }
 
-  private sumAccelData(data: MicrobitAccelerometerData[]): MicrobitAccelerometerData {
+  private sumAccelData(data: MicrobitAccelerometerDataVector[]): MicrobitAccelerometerData {
     const sum = (nums: number[]): number => nums.reduce((pre, cur) => cur + pre, 0);
 
     return {
-      x: sum(data.map(e => e.x)),
-      y: sum(data.map(e => e.y)),
-      z: sum(data.map(e => e.z)),
+      x: sum(data.map(e => e.getVector()[0])),
+      y: sum(data.map(e => e.getVector()[1])),
+      z: sum(data.map(e => e.getVector()[2])),
     };
   }
 
   // Called whenever any subscribed store is altered
   private onUpdate(draw: UpdateCall, axis?: Axes) {
-    let data: TimestampedData<MicrobitAccelerometerData>[] = draw.data;
+    let data: TimestampedData<MicrobitAccelerometerDataVector>[] = draw.data;
 
     const getLiveFilteredData = () => {
       switch (axis) {
         case Axes.X:
-          return this.filters.compute(data.map(d => d.value.x));
+          return this.filters.compute(data.map(d => d.value.getAccelerometerData().x));
         case Axes.Y:
-          return this.filters.compute(data.map(d => d.value.y));
+          return this.filters.compute(data.map(d => d.value.getAccelerometerData().y));
         case Axes.Z:
-          return this.filters.compute(data.map(d => d.value.z));
+          return this.filters.compute(data.map(d => d.value.getAccelerometerData().z));
         default:
           throw new Error("Shouldn't happen");
       }

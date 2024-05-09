@@ -6,6 +6,7 @@
 
 import Environment from '../Environment';
 import TypingUtils from '../TypingUtils';
+import Logger from '../utils/Logger';
 import MBSpecs from './MBSpecs';
 
 /**
@@ -314,7 +315,7 @@ export class MicrobitBluetooth {
           this.onReconnect?.(this);
         })
         .catch(e => {
-          Environment.isInDevelopment && console.error(e);
+          Logger.log("MicrobitBluetooth", e);
           void this.onReconnectFailed();
         });
     } else {

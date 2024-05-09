@@ -13,17 +13,19 @@
   import LiveGraph from './LiveGraph.svelte';
   import LiveGraphHighlighted from './LiveGraphHighlighted.svelte';
 
+  //axis={Axes.X}
   export let width: number;
   $: showhighlit = hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined;
+  console.log(hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined);
 </script>
 
 {#if showhighlit}
   {#if $highlightedAxis === Axes.X}
-    <LiveGraphHighlighted
+    <LiveGraph
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
       liveData={$stores.liveData}
-      axis={Axes.X}
+      highlightVectorIndex={0}
       {width} />
   {/if}
   {#if $highlightedAxis === Axes.Y}

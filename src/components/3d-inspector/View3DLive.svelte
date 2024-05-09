@@ -17,7 +17,7 @@
 
   let liveDataPoint: Vector3 = { x: 0, y: 0, z: 0 };
 
-  const smoothedLiveData = new SmoothedLiveData(stores.getLiveData(), 3);
+  $: smoothedLiveData = new SmoothedLiveData($stores.liveData, 3);
 
   $: {
     if (!freeze) {

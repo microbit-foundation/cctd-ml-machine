@@ -36,7 +36,7 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
       noOfAxes: 1
     } as LiveDataSynthesizerOptions);
     stores.setLiveData(new SyntheticLiveData([letters[0]]))
-    this.referenceStoreGetter = () => stores.getLiveData() as SyntheticLiveData
+    this.referenceStoreGetter = () => get(stores).liveData as SyntheticLiveData
   }
 
   public subscribe(

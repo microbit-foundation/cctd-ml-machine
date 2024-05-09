@@ -7,8 +7,7 @@
 <script lang="ts">
   import { stores } from '../../script/stores/Stores';
 
-  const liveDataStore = stores.getLiveData();
-
+  $: liveDataStore = $stores.liveData;
   let utilization = 0;
   setInterval(() => {
     utilization = liveDataStore.getBuffer().getBufferUtilization();

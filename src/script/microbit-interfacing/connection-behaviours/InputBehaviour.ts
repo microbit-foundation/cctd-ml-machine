@@ -152,7 +152,7 @@ class InputBehaviour extends LoggingDecorator {
     const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
 
-    stores.getLiveData().put(new MicrobitAccelerometerDataVector({
+    get(stores).liveData.put(new MicrobitAccelerometerDataVector({
       x: accelX,
       y: accelY,
       z: accelZ,

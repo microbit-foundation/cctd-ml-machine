@@ -10,7 +10,7 @@
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
   const engine = stores.getEngine();
-  const liveDataStore = stores.getLiveData();
+  $: liveDataStore = $stores.liveData;
   const model = classifier.getModel();
 </script>
 

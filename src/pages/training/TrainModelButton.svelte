@@ -41,6 +41,7 @@
   const getModelTrainer = (modelEntry: ModelEntry): ModelTrainer<MLModel> => {
     if (modelEntry.id === 'KNN') {
       if ($highlightedAxis === undefined) {
+        Logger.log('TrainModelButton', 'training knn, setting highlighted axis to X');
         highlightedAxis.set(Axes.X);
       }
       const noOfRecordings = gestures

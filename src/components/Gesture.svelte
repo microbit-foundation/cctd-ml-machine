@@ -29,7 +29,7 @@
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
   const gestures = stores.getGestures();
-  const liveData = stores.getLiveData();
+  $: liveData = $stores.liveData;
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = StaticConfiguration.recordingDuration;

@@ -15,6 +15,7 @@
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import Axes from '../../script/domain/Axes';
   import { stores } from '../../script/stores/Stores';
+  import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
 
   /**
    * TimesSeries, but with the data array added.
@@ -34,7 +35,15 @@
   let axisColors = StaticConfiguration.liveGraphColors;
 
   // Smoothes real-time data by using the 3 most recent data points
-  const smoothedLiveData = new SmoothedLiveData(liveData, 3);
+  let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
+  let cnt = 0;
+
+  // Subscribing to the stores object, allows us to detect changes in the LiveData store
+  // Without it, reconnecting would cause the component to use an outdated reference of the liveData store.
+  stores.subscribe(e => {
+    cnt++; // The cnt variable is the key that will force the dimension labels to update
+    smoothedLiveData = new SmoothedLiveData(e.liveData, 3);
+  });
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
@@ -148,7 +157,7 @@
   // If state is connected. Start updating the graph whenever there is new data
   // From the Micro:Bit
   function updateCanvas(isConnected: boolean) {
-    if (isConnected) {
+    if (isConnected || !unsubscribeFromData) {
       unsubscribeFromData = smoothedLiveData.subscribe(data => {
         addDataToGraphLines(data);
       });
@@ -178,10 +187,12 @@
 
 <main class="flex">
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
-  <DimensionLabels
-    hidden={!$state.isInputConnected}
-    {minValue}
-    graphHeight={160}
-    {maxValue}
-    liveData={smoothedLiveData} />
+  {#key cnt}
+    <DimensionLabels
+      hidden={!$state.isInputConnected}
+      {minValue}
+      graphHeight={160}
+      {maxValue}
+      liveData={smoothedLiveData} />
+  {/key}
 </main>

@@ -106,7 +106,6 @@
       width={650}
       classID={'d3-3d-single'}
       {controller} />
-
     <KnnPointToolTipView />
   </div>
 </div>

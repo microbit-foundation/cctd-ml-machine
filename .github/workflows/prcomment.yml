@@ -1,5 +1,7 @@
-on: pull_request
-
+on:
+  pull_request:
+    types: [opened, reopened]
+    
 jobs:
   comment:
     runs-on: ubuntu-latest

@@ -7,7 +7,8 @@
 import Environment from '../Environment';
 class Logger {
 
-  constructor(private origin: any) { }
+  constructor(private origin: any) {
+  }
 
   public log(message: any, ...params: any[]) {
     Logger.log(this.origin, message, params);

@@ -42,7 +42,6 @@
   import { welcomeLog } from './script/utils/Logger';
   welcomeLog();
 
-  console.log('test');
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
 

@@ -29,7 +29,7 @@ class Logger {
   }
 }
 export const welcomeLog = () => {
-  if (Environment.isInDevelopment || (window as typeof window & { hasLogged: boolean }).hasLogged) {
+  if (!Environment.isInDevelopment || (window as typeof window & { hasLogged: boolean }).hasLogged) {
     return
   }
   console.log(`⚙️ Development Mode :

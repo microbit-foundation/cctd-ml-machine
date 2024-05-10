@@ -42,6 +42,7 @@ if (!availableTargets.includes(buildVariantTarget)) {
 
 // The actual work
 const copyFiles = fileMoveTargets[buildVariantTarget];
+
 copyFiles.forEach(element => {
     const source = element[0];
     const destination = element[1];

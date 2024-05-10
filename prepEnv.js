@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // This script is used to setup different build configurations
 // run by ` node prepEnv.js branded ` for ml-machine-branded config
-import { copyFile } from 'node:fs/promises';
+import { copyFile } from 'fs';
 
 // Validate input
 const args = process.argv;
@@ -45,10 +45,11 @@ const copyFiles = fileMoveTargets[buildVariantTarget];
 copyFiles.forEach(element => {
     const source = element[0];
     const destination = element[1];
-    copyFile(source, destination).then(() => {
+    copyFile(source, destination, (err) => {
         console.log("Copied ", element[0], " -> ", element[1])
-    }).catch((err) => {
-        console.error("Failed to move ", source, " to ", destination)
-        throw new Error(err)
+        if (err) {
+            console.error("Failed to move ", source, " to ", destination)
+            throw new Error(err)
+        }
     })
 });

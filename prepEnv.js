@@ -31,6 +31,7 @@ const fileMoveTargets = {
         ['./src/__viteBuildVariants__/ml-machine-simple/features.json', './features.json']
     ]
 }
+
 const availableTargets = Object.getOwnPropertyNames(fileMoveTargets);
 const buildVariantTarget = args[2];
 if (!availableTargets.includes(buildVariantTarget)) {

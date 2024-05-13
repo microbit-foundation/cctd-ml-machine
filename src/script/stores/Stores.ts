@@ -47,20 +47,17 @@ class Stores implements Readable<StoresType>{
         }).subscribe(run, invalidate);
     }
 
-    /*public getLiveData(): LiveData<LiveDataVector> {
-        Logger.log("stores", "getting live data, maybe use $stores.liveData instead")
-        if (!get(this.liveData)) {
-            throw new Error("Cannot get liveData store. You must initialize it using setLiveData(...)")
-        }
-        return get(this.liveData)!;
-    }*/
-
     public setLiveData<T extends LiveData<LiveDataVector>>(liveDataStore: T): T {
         Logger.log("stores", "setting live data")
         if (!liveDataStore) {
             throw new Error("Cannot set live data store to undefined/null");
         }
         this.liveData.set(liveDataStore);
+
+        // We stop the previous engine from making predictions
+        if (this.engine) {
+            this.engine.stop();
+        }
         this.engine = new PollingPredictorEngine(this.classifier, liveDataStore);
         return get(this.liveData) as T;
     }

@@ -14,6 +14,24 @@ export type MicrobitAccelerometerData = {
   z: number;
 };
 
+export const asAccelerometerData = (input: LiveDataVector) => {
+  if (input.getSize() != 3) {
+    throw new Error("Cannot cast input as accelerometer data, size is not 3")
+  }
+  const data = new MicrobitAccelerometerDataVector({
+    x: input.getVector()[0],
+    y: input.getVector()[1],
+    z: input.getVector()[2]
+  })
+
+  input.getLabels().forEach((label, index) => {
+    if (data.getLabels()[index] !== label) {
+      throw new Error("Cannot cast input as accelerometer data, labels do not match")
+    }
+  })
+  return data;
+}
+
 export class MicrobitAccelerometerDataVector implements LiveDataVector {
 
   public constructor(private data: MicrobitAccelerometerData) {

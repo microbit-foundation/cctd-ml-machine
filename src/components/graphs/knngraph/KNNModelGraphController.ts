@@ -123,7 +123,7 @@ class KNNModelGraphController {
     try {
       const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
       const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      liveData = stores.getLiveData().getBuffer().getSeries(sampleDuration, sampleSize).map(el => {
+      liveData = get(stores).liveData.getBuffer().getSeries(sampleDuration, sampleSize).map(el => {
         if (el.value.getSize() != 3) {
           throw new Error("Couldn't convert vector to accelerometer data vector")
         }

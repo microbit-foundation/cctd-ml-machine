@@ -15,8 +15,11 @@
   import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
   import { stores } from '../../../script/stores/Stores';
+  import { asAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
 
   const classifier = stores.getClassifier();
+
+  $: liveData = $stores.liveData;
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -68,14 +71,15 @@
       return Array(classifier.getFilters().count()).fill(0);
     }
     try {
-      const seriesTimestamped = stores
-        .getLiveData()
+      const seriesTimestamped = liveData
         .getBuffer()
         .getSeries(
           StaticConfiguration.pollingPredictionSampleDuration,
           StaticConfiguration.pollingPredictionSampleSize,
         );
-      const series = seriesTimestamped.map(s => s.value);
+      const series = seriesTimestamped.map(s =>
+        asAccelerometerData(s.value).getAccelerometerData(),
+      );
       const filteredSeries = stores
         .getClassifier()
         .getFilters()

@@ -79,7 +79,6 @@
         }
       }
       const color = axisColors[index] + (opaque ? 'ff' : '30');
-      console.log(color);
       chart!.addTimeSeries(line, {
         lineWidth,
         strokeStyle: color,

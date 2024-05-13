@@ -20,6 +20,7 @@
   export let fullScreen: boolean = false;
 
   $: showLive = $state.isInputConnected;
+  $: liveData = $stores.liveData;
 
   type RecordingRepresentation = {
     ID: number;
@@ -141,8 +142,7 @@
   }
 
   function createLiveData() {
-    const liveD = stores
-      .getLiveData()
+    const liveD = liveData
       .getBuffer()
       .getSeries(
         StaticConfiguration.recordingDuration,
@@ -154,7 +154,7 @@
     const ys = liveD.map(d => d!.getVector()[1]);
     const zs = liveD.map(d => d!.getVector()[2]);
 
-    if (stores.getLiveData() === undefined) return undefined;
+    if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {
       ID: uniqueLiveDataID,
       gestureClassName: 'live',

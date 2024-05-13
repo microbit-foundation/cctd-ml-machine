@@ -93,7 +93,9 @@
             <p>{gesture.name}</p>
           </div>
           {#if $state.isInputReady}
-            <p>{($confidences.get(gesture.ID).currentConfidence * 100).toFixed(2)}%</p>
+            <p>
+              {(($confidences.get(gesture.ID)?.currentConfidence ?? 0) * 100).toFixed(2)}%
+            </p>
           {/if}
         </div>
       {/each}

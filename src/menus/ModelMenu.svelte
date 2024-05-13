@@ -10,6 +10,7 @@
   import Gesture from '../script/domain/stores/gesture/Gesture';
   import { stores } from '../script/stores/Stores';
 
+  const gestures = stores.getGestures();
   const bestPrediction = gestures.getBestPrediction();
 
   $: confidence =

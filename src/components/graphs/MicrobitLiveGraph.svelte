@@ -17,33 +17,19 @@
   export let width: number;
   $: showhighlit = hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined;
   console.log(hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined);
+  $: highlightedVectorIndex =
+    $highlightedAxis === Axes.X ? 0 : $highlightedAxis === Axes.Y ? 1 : 2;
 </script>
 
 {#if showhighlit}
-  {#if $highlightedAxis === Axes.X}
+  {#key highlightedVectorIndex}
     <LiveGraph
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
       liveData={$stores.liveData}
-      highlightVectorIndex={0}
+      highlightVectorIndex={highlightedVectorIndex}
       {width} />
-  {/if}
-  {#if $highlightedAxis === Axes.Y}
-    <LiveGraphHighlighted
-      minValue={StaticConfiguration.liveGraphValueBounds.min}
-      maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      liveData={$stores.liveData}
-      axis={Axes.Y}
-      {width} />
-  {/if}
-  {#if $highlightedAxis === Axes.Z}
-    <LiveGraphHighlighted
-      minValue={StaticConfiguration.liveGraphValueBounds.min}
-      maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      liveData={$stores.liveData}
-      axis={Axes.Z}
-      {width} />
-  {/if}
+  {/key}
 {:else}
   <LiveGraph
     minValue={StaticConfiguration.liveGraphValueBounds.min}

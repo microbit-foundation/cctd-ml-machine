@@ -57,13 +57,11 @@ class Microbits {
   private static outputOrigin = HexOrigin.UNKNOWN;
   private static inputOrigin = HexOrigin.UNKNOWN;
 
-  private static inputBuildVersion: number | undefined = undefined;
-  private static outputBuildVersion: number | undefined = undefined;
+  private static inputBuildVersion: number | undefined;
+  private static outputBuildVersion: number | undefined;
 
-  private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined =
-    undefined;
-  private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined =
-    undefined;
+  private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined;
+  private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined;
 
   /**
    * Maps pin to the number of times, it has been asked to turn on.

@@ -11,7 +11,6 @@
   import { stores } from '../../script/stores/Stores';
   import { highlightedAxis } from '../../script/stores/uiStore';
   import LiveGraph from './LiveGraph.svelte';
-  import LiveGraphHighlighted from './LiveGraphHighlighted.svelte';
 
   //axis={Axes.X}
   export let width: number;

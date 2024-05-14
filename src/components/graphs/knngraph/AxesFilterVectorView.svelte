@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { derived, get } from 'svelte/store';
+  import { Unsubscriber, derived, get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Axes from '../../../script/domain/Axes';
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
@@ -110,6 +110,7 @@
     );
   };
 
+  let unsubscribe: undefined | Unsubscriber = undefined;
   const denit = () => {
     $vectorArrows.forEach(arr => arr.clear());
     clearInterval(valueInterval);
@@ -117,10 +118,15 @@
 
   onMount(() => {
     init();
-    return denit;
+    return () => {
+      denit();
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   });
 
-  derived([highlightedAxis, classifier], s => s).subscribe(s => {
+  unsubscribe = derived([highlightedAxis, classifier], s => s).subscribe(s => {
     init();
   });
 

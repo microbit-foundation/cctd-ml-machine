@@ -31,6 +31,7 @@
   import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
   import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
   import { stores } from '../../script/stores/Stores';
+  import { onMount } from 'svelte';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
@@ -122,17 +123,21 @@
     };
   });
 
-  highlightedAxis.subscribe(axis => {
-    if (!axis) {
-      return;
-    }
-    if ($prevHighlightedAxis === axis) {
-      return;
-    }
-    if ($selectedOption.id === 'KNN') {
-      model.train(getModelTrainer(getModelFromOption($selectedOption)));
-    }
-    prevHighlightedAxis.set(axis);
+  onMount(() => {
+    const unsubscribe = highlightedAxis.subscribe(axis => {
+      Logger.log('TrainModelButton', 'Highlighted axis changed', axis);
+      if (!axis) {
+        return;
+      }
+      if ($prevHighlightedAxis === axis) {
+        return;
+      }
+      if ($selectedOption.id === 'KNN') {
+        model.train(getModelTrainer(getModelFromOption($selectedOption)));
+      }
+      prevHighlightedAxis.set(axis);
+    });
+    return unsubscribe;
   });
 </script>
 

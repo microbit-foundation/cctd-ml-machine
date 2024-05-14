@@ -125,7 +125,6 @@
 
   onMount(() => {
     const unsubscribe = highlightedAxis.subscribe(axis => {
-      Logger.log('TrainModelButton', 'Highlighted axis changed', axis);
       if (!axis) {
         return;
       }

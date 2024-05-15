@@ -22,6 +22,7 @@
   import { DeviceRequestStates } from '../../../script/stores/connectDialogStore';
   import Environment from '../../../script/Environment';
   import StaticConfiguration from '../../../StaticConfiguration';
+  import Logger from '../../../script/utils/Logger';
 
   // callbacks
   export let deviceState: DeviceRequestStates;
@@ -70,7 +71,7 @@
     };
 
     const connectTimeout = setTimeout(() => {
-      Environment.isInDevelopment && console.log('Connection timed out');
+      Logger.log('BluetoothConnectDialog', 'Connection timed-out');
       timeouted.set(true);
     }, StaticConfiguration.connectTimeoutDuration);
 
@@ -78,7 +79,7 @@
       .then(didSucceed => {
         clearTimeout(connectTimeout);
         timeouted.set(false);
-        Environment.isInDevelopment && console.log('Connection result ', didSucceed);
+        Logger.log('BluetoothConnectDialog', 'Connection result:', didSucceed);
         if (didSucceed) {
           onBluetoothConnected();
         } else {

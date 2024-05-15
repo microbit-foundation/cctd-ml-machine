@@ -127,11 +127,11 @@
   {#if $state.requestDeviceWasCancelled && !isConnecting}
     <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
     <p class="text-warning mb-1">
-      Couldn't find your microbit on the list?
+      {$t('popup.connectMB.bluetooth.cancelledConnection.noNameDescription')}
       <span
         class="underline text-link cursor-pointer select-none"
         on:click={handleSearchWithoutName}>
-        Search for all nearby micro:bits
+        {$t('popup.connectMB.bluetooth.cancelledConnection.noNameLink')}
       </span>
     </p>
   {/if}

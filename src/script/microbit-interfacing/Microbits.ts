@@ -11,7 +11,7 @@ import ConnectionBehaviours from './connection-behaviours/ConnectionBehaviours';
 import { get, writable } from 'svelte/store';
 import MBSpecs from './MBSpecs';
 import MicrobitBluetooth from './MicrobitBluetooth';
-import { onCatastrophicError, outputting } from '../stores/uiStore';
+import { outputting } from '../stores/uiStore';
 import MicrobitUSB from './MicrobitUSB';
 import type ConnectionBehaviour from './connection-behaviours/ConnectionBehaviour';
 import TypingUtils from '../TypingUtils';
@@ -176,6 +176,117 @@ class Microbits {
    * @param name The expected name of the microbit.
    * @return Returns true if the connection was successful, else false.
    */
+  public static async assignInputNoName(): Promise<boolean> {
+    // This function is long, and ought to be split up to make it easier to understand, but this is the short explanation
+    // The goal is to save a MicrobitBluetooth instance to the field this.assignedInputMicrobit.
+    // To do this we create a bluetooth connection, `MicrobitBluetooth.createMicrobitBluetooth`
+    // This function needs a lot of callbacks to handle behaviours for connection, reconnection, disconnection, etc.
+    //    These callbacks are what makes this function so long, as they are dependent on the state of the application
+    const connectionBehaviour = ConnectionBehaviours.getInputBehaviour();
+
+    const onInitialInputConnect = (microbit: MicrobitBluetooth) => {
+      this.assignedInputMicrobit = microbit;
+
+      connectionBehaviour.onConnected();
+      Microbits.listenToInputServices()
+        .then(() => {
+          connectionBehaviour.onReady();
+        })
+        .catch(reason => {
+          console.log(reason);
+        });
+    };
+
+    const onInputDisconnect = (manual?: boolean) => {
+      this.inputBuildVersion = undefined;
+      if (this.isInputOutputTheSame()) {
+        ConnectionBehaviours.getOutputBehaviour().onDisconnected();
+      }
+      if (manual) {
+        if (this.isInputAssigned()) {
+          ConnectionBehaviours.getInputBehaviour().onExpelled(manual, true);
+          ConnectionBehaviours.getOutputBehaviour().onExpelled(manual, true);
+          this.clearAssignedOutputReference();
+          this.clearAssignedInputReference();
+        }
+      } else {
+        connectionBehaviour.onDisconnected();
+        // this.isInputReconnecting = true; // We dont offer reconnect, because dont have a name
+      }
+      this.clearBluetoothServiceActionQueue();
+    };
+
+    const onInputReconnect = (microbit: MicrobitBluetooth) => {
+      this.isInputReconnecting = false;
+      if (this.inputFlaggedForDisconnect) {
+        // User has disconnected during the reconnect process,
+        // and the connection was reestablished, disconnect safely
+        void this.disconnectInputSafely(microbit);
+        this.inputFlaggedForDisconnect = false;
+        return;
+      }
+      this.assignedInputMicrobit = microbit;
+      if (this.isInputOutputTheSame()) {
+        ConnectionBehaviours.getOutputBehaviour().onConnected();
+      }
+      connectionBehaviour.onConnected();
+      Microbits.listenToInputServices()
+        .then(() => {
+          clearTimeout(this.inputVersionIdentificationTimeout);
+          if (this.isInputOutputTheSame()) {
+            this.assignedOutputMicrobit = microbit;
+            Microbits.listenToOutputServices()
+              .then(() => {
+                clearTimeout(this.outputVersionIdentificationTimeout);
+                connectionBehaviour.onReady();
+                ConnectionBehaviours.getOutputBehaviour().onReady();
+              })
+              .catch(reason => {
+                console.error(reason);
+              });
+          } else {
+            connectionBehaviour.onReady();
+          }
+        })
+        .catch(reason => {
+          console.error(reason);
+        });
+    };
+
+    const onInputReconnectFailed = () => {
+      ConnectionBehaviours.getInputBehaviour().onExpelled(false, true);
+      ConnectionBehaviours.getOutputBehaviour().onExpelled(false, true);
+      this.clearAssignedOutputReference();
+    };
+
+    try {
+      const request = await MicrobitBluetooth.requestDevice(
+        this.onFailedConnection(connectionBehaviour),
+      );
+      await MicrobitBluetooth.createMicrobitBluetooth(
+        request,
+        onInitialInputConnect,
+        onInputDisconnect,
+        this.onFailedConnection(connectionBehaviour),
+        onInputReconnect,
+        onInputReconnectFailed,
+      );
+
+      connectionBehaviour.onAssigned(this.getInput());
+      this.inputVersion = this.getInput().getVersion();
+      return true;
+    } catch (e) {
+      console.error(e);
+      this.onFailedConnection(connectionBehaviour)(e as Error);
+    }
+    return false;
+  }
+
+  /**
+   * Attempts to assign and connect via bluetooth.
+   * @param name The expected name of the microbit.
+   * @return Returns true if the connection was successful, else false.
+   */
   public static async assignInput(name: string): Promise<boolean> {
     // This function is long, and ought to be split up to make it easier to understand, but this is the short explanation
     // The goal is to save a MicrobitBluetooth instance to the field this.assignedInputMicrobit.
@@ -267,8 +378,8 @@ class Microbits {
 
     try {
       const request = await MicrobitBluetooth.requestDevice(
-        name,
         this.onFailedConnection(connectionBehaviour),
+        name,
       );
       await MicrobitBluetooth.createMicrobitBluetooth(
         request,
@@ -356,6 +467,84 @@ class Microbits {
    * @param name The expected name of the microbit.
    * @return Returns true if the connection was successful, else false.
    */
+  public static async assignOutputNoName(): Promise<boolean> {
+    const connectionBehaviour: ConnectionBehaviour =
+      ConnectionBehaviours.getOutputBehaviour();
+
+    const onInitialOutputConnect = (microbit: MicrobitBluetooth) => {
+      this.assignedOutputMicrobit = microbit;
+      connectionBehaviour.onConnected();
+      this.listenToOutputServices()
+        .then(() => {
+          connectionBehaviour.onReady();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+
+    const onOutputDisconnect = (manual?: boolean) => {
+      this.outputBuildVersion = undefined;
+      if (manual) {
+        if (this.isOutputAssigned()) {
+          ConnectionBehaviours.getOutputBehaviour().onExpelled(manual);
+          this.clearAssignedOutputReference();
+        }
+      } else {
+        // this.isOutputReconnecting = true; // We dont offer reconnection for no-named connections
+        ConnectionBehaviours.getOutputBehaviour().onDisconnected();
+      }
+      this.clearBluetoothServiceActionQueue();
+    };
+
+    const onOutputReconnect = (microbit: MicrobitBluetooth) => {
+      this.isOutputReconnecting = false;
+      if (this.outputFlaggedForDisconnect) {
+        this.outputFlaggedForDisconnect = false;
+        void this.disconnectOutputSafely(microbit);
+        return;
+      }
+      this.assignedOutputMicrobit = microbit;
+      connectionBehaviour.onConnected();
+      this.listenToOutputServices()
+        .then(() => {
+          connectionBehaviour.onReady();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+
+    const onOutputReconnectFailed = () => {
+      connectionBehaviour.onExpelled(false, false);
+    };
+
+    try {
+      const bluetoothDevice = await MicrobitBluetooth.requestDevice(
+        this.onFailedConnection(connectionBehaviour),
+      );
+      await MicrobitBluetooth.createMicrobitBluetooth(
+        bluetoothDevice,
+        onInitialOutputConnect,
+        onOutputDisconnect,
+        this.onFailedConnection(connectionBehaviour),
+        onOutputReconnect,
+        onOutputReconnectFailed,
+      );
+      connectionBehaviour.onAssigned(this.getOutput());
+      this.outputVersion = this.getOutput().getVersion();
+      return true;
+    } catch (e) {
+      this.onFailedConnection(connectionBehaviour)(e as Error);
+    }
+    return false;
+  }
+
+  /**
+   * Attempts to assign and connect via bluetooth.
+   * @param name The expected name of the microbit.
+   * @return Returns true if the connection was successful, else false.
+   */
   public static async assignOutput(name: string): Promise<boolean> {
     console.assert(name.length == 5);
 
@@ -412,8 +601,8 @@ class Microbits {
 
     try {
       const bluetoothDevice = await MicrobitBluetooth.requestDevice(
-        name,
         this.onFailedConnection(connectionBehaviour),
+        name,
       );
       await MicrobitBluetooth.createMicrobitBluetooth(
         bluetoothDevice,

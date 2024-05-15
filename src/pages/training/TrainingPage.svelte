@@ -105,7 +105,10 @@
             <div class="w-full pt-5 text-white pb-5">
               <TrainModelButton
                 selectedOption={selectedModelOption}
-                onClick={() => {resetLoss(); trackModelEvent();}}
+                onClick={() => {
+                  resetLoss();
+                  trackModelEvent();
+                }}
                 onTrainingIteration={trainingIterationHandler} />
             </div>
           {/if}

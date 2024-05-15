@@ -38,23 +38,34 @@
 
   let timeouted = writable<boolean>(false);
 
-  const connectButtonClicked = () => {
+  const connectUsingPatternName = () => {
     if (!isInputPatternValid()) {
       attemptedToPairWithInvalidPattern = true;
       return;
     }
+
+    const name = MBSpecs.Utility.patternToName($patternMatrixState);
+    attemptToConnect(name);
+  };
+
+  const attemptToConnect = (name?: string) => {
     timeoutProgress.set(0);
     if (isConnecting) {
       // Safeguard to prevent trying to connect multiple times at once
       return;
     }
     isConnecting = true;
-    let name = MBSpecs.Utility.patternToName($patternMatrixState);
     const connectionResult = () => {
       if (deviceState == DeviceRequestStates.INPUT) {
-        return Microbits.assignInput(name);
+        if (name) {
+          return Microbits.assignInput(name);
+        }
+        return Microbits.assignInputNoName();
       } else {
-        return Microbits.assignOutput(name);
+        if (name) {
+          return Microbits.assignOutput(name);
+        }
+        return Microbits.assignOutputNoName();
       }
     };
 
@@ -83,7 +94,7 @@
     if (event.code !== 'Enter') {
       return;
     }
-    void connectButtonClicked();
+    void connectUsingPatternName();
   }
 
   function updateMatrix(matrix: boolean[]): void {
@@ -102,6 +113,10 @@
     // Resets the bluetooth connection prompt for cancelled device requests
     $state.requestDeviceWasCancelled = false;
   });
+
+  const handleSearchWithoutName = () => {
+    attemptToConnect();
+  };
 </script>
 
 <main>
@@ -111,6 +126,14 @@
 
   {#if $state.requestDeviceWasCancelled && !isConnecting}
     <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
+    <p class="text-warning mb-1">
+      Couldn't find your microbit on the list?
+      <span
+        class="underline text-link cursor-pointer select-none"
+        on:click={handleSearchWithoutName}>
+        Search for all nearby micro:bits
+      </span>
+    </p>
   {/if}
   {#if attemptedToPairWithInvalidPattern}
     <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.invalidPattern')}</p>
@@ -138,7 +161,7 @@
         <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
       </div>
     </div>
-    <StandardButton onClick={connectButtonClicked}
+    <StandardButton onClick={connectUsingPatternName}
       >{$t('popup.connectMB.bluetooth.connect')}</StandardButton>
   {/if}
   <!-- </div> -->

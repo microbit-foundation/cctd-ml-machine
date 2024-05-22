@@ -46,22 +46,9 @@ jobs:
         run: |
           npm install
           npm run checkFormat 
-        continue-on-error: false
-      - name: Missing format report
-        shell: bash
-        if: ${{ failure() }}
-        run: | 
-          echo "Missing prettier formatting. Please format files using 'npm run prettier' and resubmit!"
-          exit 1
       - name: Svelte check
         shell: bash
         run: npm run check
-      - name: Svelte check report
-        shell: bash
-        if: ${{ failure() }}
-        run: | 
-          echo "Running npm run check found warnings, please resolve them before merging!"
-          exit 1
 
   build_and_deploy:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')

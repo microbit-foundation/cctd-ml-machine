@@ -21,6 +21,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import CookieManager from '../../script/CookieManager';
   import { stores } from '../../script/stores/Stores';
+  import { appInsights } from '../../appInsights';
 
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
@@ -45,6 +46,17 @@
       newLoss.push(h);
       return newLoss;
     });
+  };
+
+  const trackModelEvent = () => {
+    if (CookieManager.getComplianceChoices().analytics) {
+      appInsights.trackEvent({
+        name: 'ModelTrained',
+        properties: {
+          modelType: $selectedModelOption.id,
+        },
+      });
+    }
   };
 </script>
 
@@ -89,7 +101,10 @@
             <div class="w-full pt-5 text-white pb-5">
               <TrainModelButton
                 selectedOption={selectedModelOption}
-                onClick={resetLoss}
+                onClick={() => {
+                  resetLoss();
+                  trackModelEvent();
+                }}
                 onTrainingIteration={trainingIterationHandler} />
             </div>
           {/if}

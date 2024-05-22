@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import { Writable, get } from "svelte/store";
 import { DropdownOption } from "../../components/buttons/Buttons";
 import { ModelEntry, availableModels, highlightedAxis } from "../../script/stores/uiStore";

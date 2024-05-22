@@ -110,7 +110,7 @@
         {/if}
       </div>
     {/if}
-    {#if !$state.isInputConnected && !isUsingKNNModel}
+    {#if !isUsingKNNModel}
       <div class="mt-10">
         {#if $loss.length > 0 || $model.isTraining}
           {#if !CookieManager.hasFeatureFlag('loss-graph')}

@@ -71,7 +71,7 @@
             },
           },
           y: {
-            type: 'logarithmic',
+            type: 'linear',
             min: 0,
             max: 1,
             grid: {

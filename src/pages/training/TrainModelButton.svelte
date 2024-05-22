@@ -18,7 +18,6 @@
   import Filters from '../../script/domain/Filters';
   import { Writable } from 'svelte/store';
 
-  export let selectedOption: Writable<DropdownOption>;
   import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
   import {
     ModelEntry,
@@ -26,52 +25,17 @@
     highlightedAxis,
     prevHighlightedAxis,
   } from '../../script/stores/uiStore';
-  import Axes from '../../script/domain/Axes';
-  import Logger from '../../script/utils/Logger';
-  import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
-  import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
   import { stores } from '../../script/stores/Stores';
   import { onMount } from 'svelte';
+  import { getModelTrainer, options, trainModel } from './TrainModelButton';
+  import Axes from '../../script/domain/Axes';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
 
-  const gestures = stores.getGestures();
+  export let selectedOption: Writable<DropdownOption>;
+
   const classifier = stores.getClassifier();
-
-  const getModelTrainer = (modelEntry: ModelEntry): ModelTrainer<MLModel> => {
-    if (modelEntry.id === 'KNN') {
-      if ($highlightedAxis === undefined) {
-        Logger.log('TrainModelButton', 'training knn, setting highlighted axis to X');
-        highlightedAxis.set(Axes.X);
-      }
-      const noOfRecordings = gestures
-        .getGestures()
-        .map(gesture => gesture.getRecordings().length)
-        .reduce((prev, cur) => cur + prev, 0);
-
-      if (noOfRecordings / 2 < StaticConfiguration.knnNeighbourCount) {
-        Logger.log(
-          'TrainModelButton',
-          'The number of recordings is probably too low for an effective KNN model if using ' +
-            StaticConfiguration.knnNeighbourCount +
-            ' neighbours ',
-        );
-      }
-
-      const offset =
-        $highlightedAxis === Axes.X ? 0 : $highlightedAxis === Axes.Y ? 1 : 2;
-
-      return new KNNNonNormalizedModelTrainer(
-        StaticConfiguration.knnNeighbourCount,
-        data => extractAxisFromTrainingData(data, offset, 3),
-      );
-    }
-
-    return new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, h => {
-      onTrainingIteration(h);
-    });
-  };
 
   const model = classifier.getModel();
 
@@ -94,34 +58,24 @@
   };
 
   const clickHandler = () => {
-    const selectedModel = availableModels.find(model => model.id === $selectedOption.id);
-
-    if (selectedModel?.id === 'KNN') {
-      // TODO: We set the filters to 2 different filters giving us a 2d graph
-      const knnFilters = [FilterType.MAX, FilterType.MEAN];
-      const filters: Filters = classifier.getFilters();
-      filters.clear();
-      for (const filter of knnFilters) {
-        filters.add(filter);
-      }
-    }
-
-    if (selectedModel) {
-      onClick();
-      model.train(getModelTrainer(selectedModel));
-    }
+    stores.getEngine().stop();
+    trainModel(selectedOption, onTrainingIteration);
+    stores.getEngine().start();
+    onClick();
   };
 
   const onSelect = (option: DropdownOption) => {
     selectedOption.set(option);
   };
 
-  const options: DropdownOption[] = availableModels.map(model => {
-    return {
-      id: model.id,
-      label: model.title,
-    };
-  });
+  $: {
+    if ($selectedOption.id === 'KNN' && !$highlightedAxis) {
+      highlightedAxis.set(Axes.X);
+    }
+    if ($selectedOption.id === 'NN' && $highlightedAxis) {
+      highlightedAxis.set(undefined);
+    }
+  }
 
   onMount(() => {
     const unsubscribe = highlightedAxis.subscribe(axis => {
@@ -132,7 +86,9 @@
         return;
       }
       if ($selectedOption.id === 'KNN') {
-        model.train(getModelTrainer(getModelFromOption($selectedOption)));
+        model.train(
+          getModelTrainer(getModelFromOption($selectedOption), onTrainingIteration),
+        );
       }
       prevHighlightedAxis.set(axis);
     });

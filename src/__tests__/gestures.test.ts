@@ -7,38 +7,38 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { gestures } from '../script/stores/Stores';
+import { stores } from "../script/stores/Stores";
 
 describe('Tests of Gestures', () => {
   beforeEach(() => {
-    gestures.clearGestures();
+    stores.getGestures().clearGestures();
   });
   test('Creating gesture does not throw', () => {
     expect(() => {
-      gestures.createGesture('test');
+      stores.getGestures().createGesture('test');
     }).not.toThrow();
   });
 
   test('Creating 2 gestures makes total number of gesture 2', () => {
-    gestures.createGesture('Gesture1');
-    gestures.createGesture('Gesture2');
+    stores.getGestures().createGesture('Gesture1');
+    stores.getGestures().createGesture('Gesture2');
 
-    expect(gestures.getGestures().length).toBe(2);
+    expect(stores.getGestures().getGestures().length).toBe(2);
   });
 
   test('Can get gesture after creation', () => {
     const gestureName = 'test1234';
-    const gesture = gestures.createGesture(gestureName);
-    const fetchedGesture = gestures.getGesture(gesture.getId());
+    const gesture = stores.getGestures().createGesture(gestureName);
+    const fetchedGesture = stores.getGestures().getGesture(gesture.getId());
     expect(fetchedGesture.getName()).toBe(gestureName);
   });
 
   test('Clearing gestures clears gestures', () => {
-    gestures.createGesture('gestureName');
-    gestures.createGesture('gestureName');
+    stores.getGestures().createGesture('gestureName');
+    stores.getGestures().createGesture('gestureName');
 
-    gestures.clearGestures();
+    stores.getGestures().clearGestures();
 
-    expect(gestures.getGestures().length).toBe(0);
+    expect(stores.getGestures().getGestures().length).toBe(0);
   });
 });

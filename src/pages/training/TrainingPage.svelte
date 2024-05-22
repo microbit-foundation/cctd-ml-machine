@@ -5,19 +5,13 @@
  -->
 
 <script lang="ts">
-  import {
-    ModelEntry,
-    availableModels,
-    preferredModel,
-    state,
-  } from '../../script/stores/uiStore';
+  import { availableModels, preferredModel, state } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import { Paths, navigate } from '../../router/paths';
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
   import TrainModelButton from './TrainModelButton.svelte';
-  import { classifier, gestures } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
@@ -26,10 +20,12 @@
   import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
   import StaticConfiguration from '../../StaticConfiguration';
   import CookieManager from '../../script/CookieManager';
+  import { stores } from '../../script/stores/Stores';
   import { appInsights } from '../../appInsights';
 
+  const classifier = stores.getClassifier();
+  const gestures = stores.getGestures();
   const model = classifier.getModel();
-
   const filters = classifier.getFilters();
 
   const sufficientData = gestures.hasSufficientData();
@@ -105,7 +101,10 @@
             <div class="w-full pt-5 text-white pb-5">
               <TrainModelButton
                 selectedOption={selectedModelOption}
-                onClick={() => {resetLoss(); trackModelEvent();}}
+                onClick={() => {
+                  resetLoss();
+                  trackModelEvent();
+                }}
                 onTrainingIteration={trainingIterationHandler} />
             </div>
           {/if}
@@ -126,7 +125,7 @@
         {/if}
       </div>
     {/if}
-    {#if !$state.isInputConnected && !isUsingKNNModel}
+    {#if !isUsingKNNModel}
       <div class="mt-10">
         {#if $loss.length > 0 || $model.isTraining}
           {#if !CookieManager.hasFeatureFlag('loss-graph')}

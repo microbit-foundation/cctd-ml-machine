@@ -58,7 +58,7 @@ class StaticConfiguration {
   };
 
   // Line colors are picked in the order of this array.
-  public static readonly liveGraphColors = ['#f9808e', '#80f98e', '#808ef9'];
+  public static readonly liveGraphColors = ['#f9808e', '#80f98e', '#808ef9', "#58355E", "#E0FF4F", "#FF2ECC", "#F28F3B", "#C8553D"];
 
   // Colors to assign to gestures, useful for identifying gestures on graphs.
   public static readonly gestureColors = [

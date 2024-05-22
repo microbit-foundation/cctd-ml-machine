@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import PlaygroundLog from '../components/playground/PlaygroundLog.svelte';
-  import MicrobitAccelerometerDataSynthesizer from '../components/playground/inputSynthesizer/MicrobitAccelerometerDataSynthesizer.svelte';
+  import MicrobitAccelerometerDataSynthesizer from '../components/playground/inputSynthesizer/LiveDataSynthesizer.svelte';
   import LiveDataBufferUtilizationPercentage from '../components/playground/LiveDataBufferUtilizationPercentage.svelte';
   import StoresDisplay from '../components/playground/StoresDisplay.svelte';
   import EngineInteractionButtons from '../components/playground/EngineInteractionButtons.svelte';

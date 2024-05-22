@@ -9,12 +9,12 @@
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
 
-  import { classifier } from '../../script/stores/Stores';
   import { TrainingStatus } from '../../script/domain/stores/Model';
+  import { stores } from '../../script/stores/Stores';
 
   let isFailedTrainingDialogOpen = false;
 
-  const model = classifier.getModel();
+  const model = stores.getClassifier().getModel();
 
   $: {
     if ($model.trainingStatus === TrainingStatus.Failure) {

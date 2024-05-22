@@ -31,7 +31,7 @@ export enum HexOrigin {
 type UARTMessageType = 'g' | 's';
 
 /**
- * Entry point for microbit interfaces / Facade pattern
+ * Entry point for microbit interfaces
  */
 class Microbits {
   public static hexFiles: { 1: string; 2: string; universal: string } = {
@@ -39,13 +39,13 @@ class Microbits {
     2: 'firmware/MICROBIT.hex',
     universal: 'firmware/universal-hex.hex',
   };
-  private static assignedInputMicrobit: MicrobitBluetooth | undefined = undefined;
-  private static assignedOutputMicrobit: MicrobitBluetooth | undefined = undefined;
-  private static inputName: string | undefined = undefined;
-  private static outputName: string | undefined = undefined;
+  private static assignedInputMicrobit: MicrobitBluetooth | undefined;
+  private static assignedOutputMicrobit: MicrobitBluetooth | undefined;
+  private static inputName: string | undefined;
+  private static outputName: string | undefined;
   private static inputVersion: MBSpecs.MBVersion | undefined;
   private static outputVersion: MBSpecs.MBVersion | undefined;
-  private static linkedMicrobit: MicrobitUSB | undefined = undefined;
+  private static linkedMicrobit: MicrobitUSB | undefined;
 
   private static outputIO: BluetoothRemoteGATTCharacteristic | undefined;
   private static outputMatrix: BluetoothRemoteGATTCharacteristic | undefined;
@@ -57,13 +57,11 @@ class Microbits {
   private static outputOrigin = HexOrigin.UNKNOWN;
   private static inputOrigin = HexOrigin.UNKNOWN;
 
-  private static inputBuildVersion: number | undefined = undefined;
-  private static outputBuildVersion: number | undefined = undefined;
+  private static inputBuildVersion: number | undefined;
+  private static outputBuildVersion: number | undefined;
 
-  private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined =
-    undefined;
-  private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined =
-    undefined;
+  private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined;
+  private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined;
 
   /**
    * Maps pin to the number of times, it has been asked to turn on.

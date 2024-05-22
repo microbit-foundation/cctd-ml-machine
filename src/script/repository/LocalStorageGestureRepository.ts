@@ -6,10 +6,10 @@
 import ControlledStorage from '../ControlledStorage';
 import { Subscriber, Unsubscriber, Writable, get, writable } from 'svelte/store';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
-import { classifier } from '../stores/Stores';
 import GestureRepository from '../domain/GestureRepository';
 import Gesture from '../domain/stores/gesture/Gesture';
 import { PersistantGestureData } from '../domain/stores/gesture/Gestures';
+import { stores } from '../stores/Stores';
 
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
@@ -100,7 +100,7 @@ class LocalStorageGestureRepository implements GestureRepository {
   private buildGesture(persistedData: PersistantGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
     // TODO: The classifier object should be accessed through the repository, not the store. This cannot be done until the classifier is cached.
-    const onRecordingsChanged = () => classifier.getModel().markAsUntrained();
+    const onRecordingsChanged = () => stores.getClassifier().getModel().markAsUntrained();
     return new Gesture(
       store,
       this.modelRepository.getGestureConfidence(get(store).ID),

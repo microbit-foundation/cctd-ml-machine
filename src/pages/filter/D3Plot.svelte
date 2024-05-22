@@ -9,17 +9,18 @@
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
   import { state } from '../../script/stores/uiStore';
-  import { gestures, liveAccelerometerData } from '../../script/stores/Stores';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import FilterGraphLimits from '../../script/utils/FilterLimits';
   import { GestureData } from '../../script/domain/stores/gesture/Gesture';
   import { RecordingData } from '../../script/domain/stores/gesture/Gestures';
   import StaticConfiguration from '../../StaticConfiguration';
+  import { stores } from '../../script/stores/Stores';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
 
   $: showLive = $state.isInputConnected;
+  $: liveData = $stores.liveData;
 
   type RecordingRepresentation = {
     ID: number;
@@ -141,7 +142,7 @@
   }
 
   function createLiveData() {
-    const liveData = liveAccelerometerData
+    const liveD = liveData
       .getBuffer()
       .getSeries(
         StaticConfiguration.recordingDuration,
@@ -149,9 +150,9 @@
       )
       .map(d => d.value);
 
-    const xs = liveData.map(d => d!.x);
-    const ys = liveData.map(d => d!.y);
-    const zs = liveData.map(d => d!.z);
+    const xs = liveD.map(d => d!.getVector()[0]);
+    const ys = liveD.map(d => d!.getVector()[1]);
+    const zs = liveD.map(d => d!.getVector()[2]);
 
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {
@@ -168,7 +169,7 @@
   // Side effect: updates classList and color
   function createDataRepresentation() {
     const classes: { name: string; id: number }[] = [];
-    const data: GestureData[] = get(gestures);
+    const data: GestureData[] = get(stores.getGestures());
     const recordings: RecordingRepresentation[] = [];
     data.map(gestureClassObject => {
       const gestureClassName: string = gestureClassObject.name;

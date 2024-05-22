@@ -18,7 +18,9 @@ import LoggingDecorator from './LoggingDecorator';
 import TypingUtils from '../../TypingUtils';
 import { DeviceRequestStates } from '../../stores/connectDialogStore';
 import StaticConfiguration from '../../../StaticConfiguration';
-import { liveAccelerometerData } from '../../stores/Stores';
+import MicrobitAccelerometerLiveData, { MicrobitAccelerometerDataVector } from '../../livedata/MicrobitAccelerometerData';
+import { stores } from '../../stores/Stores';
+import LiveDataBuffer from '../../domain/LiveDataBuffer';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -72,6 +74,7 @@ class InputBehaviour extends LoggingDecorator {
 
   onReady() {
     super.onReady();
+
     clearTimeout(this.reconnectTimeout);
     state.update(s => {
       s.isInputReady = true;
@@ -123,6 +126,8 @@ class InputBehaviour extends LoggingDecorator {
 
   onConnected(name: string): void {
     super.onConnected(name);
+    const buffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(StaticConfiguration.accelerometerLiveDataBufferSize)
+    stores.setLiveData(new MicrobitAccelerometerLiveData(buffer))
 
     state.update(s => {
       s.isInputConnected = true;
@@ -147,11 +152,11 @@ class InputBehaviour extends LoggingDecorator {
     const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
 
-    liveAccelerometerData.put({
+    get(stores).liveData.put(new MicrobitAccelerometerDataVector({
       x: accelX,
       y: accelY,
       z: accelZ,
-    });
+    }));
   }
 
   buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {

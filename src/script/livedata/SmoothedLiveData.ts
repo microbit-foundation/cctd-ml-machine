@@ -7,14 +7,16 @@ import { Readable, Subscriber, Unsubscriber, derived } from 'svelte/store';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
 import LiveData from '../domain/stores/LiveData';
+import { LiveDataVector } from '../domain/stores/LiveDataVector';
+import BaseVector from './BaseVector';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.
  *
  * Each entry in the SmoothedLiveData will be interpolated with previous values seen. I.e `y_i = 0.75x_(i-1) + 0.25x_i`
  */
-class SmoothedLiveData<T> implements LiveData<T> {
-  private smoothedStore: Readable<T>;
+class SmoothedLiveData<T extends LiveDataVector> implements LiveData<LiveDataVector> {
+  private smoothedStore: Readable<LiveDataVector>;
 
   /**
    * Creates a new SmoothedLiveData store, using the provided LiveData store as data reference.
@@ -51,8 +53,8 @@ class SmoothedLiveData<T> implements LiveData<T> {
   }
 
   public subscribe(
-    run: Subscriber<T>,
-    invalidate?: ((value?: T | undefined) => void) | undefined,
+    run: Subscriber<LiveDataVector>,
+    invalidate?: ((value?: LiveDataVector | undefined) => void) | undefined,
   ): Unsubscriber {
     return this.smoothedStore.subscribe(run, invalidate);
   }
@@ -64,14 +66,10 @@ class SmoothedLiveData<T> implements LiveData<T> {
     return this.referenceStore.getLabels();
   }
 
-  public getPropertyNames(): string[] {
-    return this.referenceStore.getPropertyNames();
-  }
-
   /**
    * Uses the buffer of the original store to derive a store with smoothed values when subscribing
    */
-  private deriveStore() {
+  private deriveStore(): Readable<LiveDataVector> {
     return derived([this.referenceStore], stores => {
       const referenceData = stores[0];
 
@@ -81,12 +79,13 @@ class SmoothedLiveData<T> implements LiveData<T> {
         return referenceData;
       }
 
-      const newObject: T = { ...referenceData };
-      for (const property in newObject) {
-        const values = oldValues.map(val => val![property] as number);
-        newObject[property] = smoothNewValue(...values) as never;
+      const newVector: LiveDataVector = new BaseVector([...referenceData.getVector()], referenceData.getLabels());
+
+      for (let i = 0; i < newVector.getVector().length; i++) {
+        const values = oldValues.map(val => val!.getVector()[i]);
+        newVector.getVector()[i] = smoothNewValue(...values);
       }
-      return newObject;
+      return newVector;
     });
   }
 }

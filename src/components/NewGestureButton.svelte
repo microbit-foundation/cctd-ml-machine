@@ -13,7 +13,9 @@
 <script lang="ts">
   import { areActionsAllowed } from '../script/stores/uiStore';
   import { t } from '../i18n';
-  import { gestures } from '../script/stores/Stores';
+  import { stores } from '../script/stores/Stores';
+
+  const gestures = stores.getGestures();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
 

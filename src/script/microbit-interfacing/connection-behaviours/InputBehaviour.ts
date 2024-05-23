@@ -84,7 +84,7 @@ class InputBehaviour extends LoggingDecorator {
     });
   }
 
-  onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
+  onAssigned(microbitBluetooth: MicrobitBluetooth, name?: string) {
     super.onAssigned(microbitBluetooth, name);
     state.update(s => {
       s.isInputAssigned = true;
@@ -126,7 +126,7 @@ class InputBehaviour extends LoggingDecorator {
     });
   }
 
-  onConnected(name: string): void {
+  onConnected(name?: string): void {
     super.onConnected(name);
     const buffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(
       StaticConfiguration.accelerometerLiveDataBufferSize,
@@ -143,7 +143,7 @@ class InputBehaviour extends LoggingDecorator {
     // Works like this: If the MB manages to connect, wait `reconnectTimeoutDuration` milliseconds
     // if MB does not call onReady before that expires, refresh the page
     clearTimeout(this.reconnectTimeout);
-    const onTimeout = () => onCatastrophicError();
+    const onTimeout = () => onCatastrophicError(!!name);
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, StaticConfiguration.reconnectTimeoutDuration);

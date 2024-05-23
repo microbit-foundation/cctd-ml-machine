@@ -8,6 +8,9 @@ import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import CookieManager from './script/CookieManager';
 
 const load = () => {
+  if (location.hostname !== "ml-machine.org") {
+    return;
+  }
   if (CookieManager.getComplianceChoices().analytics) {
     appInsights.loadAppInsights();
     appInsights.trackPageView(); // Manually call trackPageView to establish the current user/session/pageview

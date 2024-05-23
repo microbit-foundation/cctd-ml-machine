@@ -35,13 +35,13 @@ interface ConnectionBehaviour {
    * @param {string} name
    *      The name of the micro:bit.
    */
-  onAssigned(microbit: MicrobitBluetooth, name: string): void;
+  onAssigned(microbit: MicrobitBluetooth, name?: string): void;
 
   /**
    * What should happen when the micro:bit gets connected via Bluetooth
    * @param name Name of the micro:bit
    */
-  onConnected(name: string): void;
+  onConnected(name?: string): void;
 
   /**
    * What should happen when the microbit is ready?

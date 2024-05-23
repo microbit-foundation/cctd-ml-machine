@@ -79,7 +79,10 @@ class SmoothedLiveData<T extends LiveDataVector> implements LiveData<LiveDataVec
         return referenceData;
       }
 
-      const newVector: LiveDataVector = new BaseVector([...referenceData.getVector()], referenceData.getLabels());
+      const newVector: LiveDataVector = new BaseVector(
+        [...referenceData.getVector()],
+        referenceData.getLabels(),
+      );
 
       for (let i = 0; i < newVector.getVector().length; i++) {
         const values = oldValues.map(val => val!.getVector()[i]);

@@ -35,7 +35,7 @@ export type RecordingData = {
 class Gestures implements Readable<GestureData[]> {
   private static subscribableGestures: Writable<Gesture[]>;
   private repository: GestureRepository;
-  private confidenceStore: Readable<Map<number, Confidence>>
+  private confidenceStore: Readable<Map<number, Confidence>>;
 
   constructor(repository: GestureRepository) {
     this.repository = repository;

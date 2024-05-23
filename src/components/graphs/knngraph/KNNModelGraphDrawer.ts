@@ -37,14 +37,15 @@ class KNNModelGraphDrawer {
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) { }
+  ) {}
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {
       return;
     }
     const pointTransformer = this.getPointTransformer(drawConfig);
-    const color = StaticConfiguration.gestureColors[stores.getGestures().getNumberOfGestures()];
+    const color =
+      StaticConfiguration.gestureColors[stores.getGestures().getNumberOfGestures()];
     const drawableLivePoint: DrawablePoint = {
       pointTransformed: pointTransformer(drawData),
       color,

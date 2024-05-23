@@ -5,11 +5,9 @@
  */
 
 export interface LiveDataVector {
+  getVector(): number[];
 
-    getVector(): number[]
+  getSize(): number;
 
-    getSize(): number
-
-    getLabels(): string[]
-
+  getLabels(): string[];
 }

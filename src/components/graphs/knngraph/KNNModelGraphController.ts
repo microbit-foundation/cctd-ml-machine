@@ -7,7 +7,10 @@ import * as d3 from 'd3';
 import { TrainingData } from '../../../script/domain/ModelTrainer';
 import { Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { GraphDrawConfig } from './KNNModelGraphDrawer';
-import { MicrobitAccelerometerData, MicrobitAccelerometerDataVector } from '../../../script/livedata/MicrobitAccelerometerData';
+import {
+  MicrobitAccelerometerData,
+  MicrobitAccelerometerDataVector,
+} from '../../../script/livedata/MicrobitAccelerometerData';
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Axes from '../../../script/domain/Axes';
 import Filters from '../../../script/domain/Filters';
@@ -123,19 +126,22 @@ class KNNModelGraphController {
     try {
       const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
       const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      liveData = get(stores).liveData.getBuffer().getSeries(sampleDuration, sampleSize).map(el => {
-        if (el.value.getSize() != 3) {
-          throw new Error("Couldn't convert vector to accelerometer data vector")
-        }
-        return {
-          ...el,
-          value: new MicrobitAccelerometerDataVector({
-            x: el.value.getVector()[0],
-            y: el.value.getVector()[1],
-            z: el.value.getVector()[2]
-          })
-        }
-      });
+      liveData = get(stores)
+        .liveData.getBuffer()
+        .getSeries(sampleDuration, sampleSize)
+        .map(el => {
+          if (el.value.getSize() != 3) {
+            throw new Error("Couldn't convert vector to accelerometer data vector");
+          }
+          return {
+            ...el,
+            value: new MicrobitAccelerometerDataVector({
+              x: el.value.getVector()[0],
+              y: el.value.getVector()[1],
+              z: el.value.getVector()[2],
+            }),
+          };
+        });
       this.liveDataRecords.push(liveData);
       if (this.liveDataRecords.length > this.liveDataRecordsSize) {
         this.liveDataRecords.shift();
@@ -192,7 +198,9 @@ class KNNModelGraphController {
     };
   }
 
-  private sumAccelData(data: MicrobitAccelerometerDataVector[]): MicrobitAccelerometerData {
+  private sumAccelData(
+    data: MicrobitAccelerometerDataVector[],
+  ): MicrobitAccelerometerData {
     const sum = (nums: number[]): number => nums.reduce((pre, cur) => cur + pre, 0);
 
     return {

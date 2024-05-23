@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 export const repeat = (func: (a?: any) => any, n: number) => {
-    for (let i = 0; i < n; i++) {
-        func();
-    }
-}
+  for (let i = 0; i < n; i++) {
+    func();
+  }
+};

@@ -315,7 +315,7 @@ export class MicrobitBluetooth {
           this.onReconnect?.(this);
         })
         .catch(e => {
-          Logger.log("MicrobitBluetooth", e);
+          Logger.log('MicrobitBluetooth', e);
           void this.onReconnectFailed();
         });
     } else {

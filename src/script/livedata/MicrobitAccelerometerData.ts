@@ -16,36 +16,34 @@ export type MicrobitAccelerometerData = {
 
 export const asAccelerometerData = (input: LiveDataVector) => {
   if (input.getSize() != 3) {
-    throw new Error("Cannot cast input as accelerometer data, size is not 3")
+    throw new Error('Cannot cast input as accelerometer data, size is not 3');
   }
   const data = new MicrobitAccelerometerDataVector({
     x: input.getVector()[0],
     y: input.getVector()[1],
-    z: input.getVector()[2]
-  })
+    z: input.getVector()[2],
+  });
 
   input.getLabels().forEach((label, index) => {
     if (data.getLabels()[index] !== label) {
-      throw new Error("Cannot cast input as accelerometer data, labels do not match")
+      throw new Error('Cannot cast input as accelerometer data, labels do not match');
     }
-  })
+  });
   return data;
-}
+};
 
 export class MicrobitAccelerometerDataVector implements LiveDataVector {
-
-  public constructor(private data: MicrobitAccelerometerData) {
-  }
+  public constructor(private data: MicrobitAccelerometerData) {}
 
   public getLabels(): string[] {
-    return ["X", "Y", "Z"]
+    return ['X', 'Y', 'Z'];
   }
   public getSize(): number {
     return this.getVector().length;
   }
 
   public getVector(): number[] {
-    return [this.data.x, this.data.y, this.data.z]
+    return [this.data.x, this.data.y, this.data.z];
   }
 
   public getAccelerometerData(): MicrobitAccelerometerData {
@@ -56,11 +54,13 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
 class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDataVector> {
   private store: Writable<MicrobitAccelerometerDataVector>;
   constructor(private dataBuffer: LiveDataBuffer<MicrobitAccelerometerDataVector>) {
-    this.store = writable(new MicrobitAccelerometerDataVector({
-      x: 0,
-      y: 0,
-      z: 0,
-    }));
+    this.store = writable(
+      new MicrobitAccelerometerDataVector({
+        x: 0,
+        y: 0,
+        z: 0,
+      }),
+    );
   }
 
   public getBuffer(): LiveDataBuffer<MicrobitAccelerometerDataVector> {
@@ -84,7 +84,9 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
 
   public subscribe(
     run: Subscriber<MicrobitAccelerometerDataVector>,
-    invalidate?: ((value?: MicrobitAccelerometerDataVector | undefined) => void) | undefined,
+    invalidate?:
+      | ((value?: MicrobitAccelerometerDataVector | undefined) => void)
+      | undefined,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

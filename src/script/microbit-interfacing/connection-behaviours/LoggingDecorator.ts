@@ -61,7 +61,7 @@ abstract class LoggingDecorator implements ConnectionBehaviour {
     this.enableLogging && console.log('Button change', buttonState, button);
   }
 
-  onAssigned(microbit: MicrobitBluetooth, name: string): void {
+  onAssigned(microbit: MicrobitBluetooth, name?: string): void {
     this.enableLogging && console.log(name, ' was assigned ');
     this.enableLogging && console.log(microbit);
   }
@@ -70,7 +70,7 @@ abstract class LoggingDecorator implements ConnectionBehaviour {
     this.enableLogging && console.log('Device request was cancelled');
   }
 
-  onConnected(name: string): void {
+  onConnected(name?: string): void {
     this.enableLogging && console.log(name, ' got connected via bluetooth');
   }
 

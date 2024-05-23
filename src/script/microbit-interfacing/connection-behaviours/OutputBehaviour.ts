@@ -92,7 +92,7 @@ class OutputBehaviour extends LoggingDecorator {
     clearTimeout(this.reconnectTimeout);
   }
 
-  onAssigned(microbitBluetooth: MicrobitBluetooth, name: string) {
+  onAssigned(microbitBluetooth: MicrobitBluetooth, name?: string) {
     super.onAssigned(microbitBluetooth, name);
     state.update(s => {
       s.isOutputAssigned = true;
@@ -132,7 +132,7 @@ class OutputBehaviour extends LoggingDecorator {
     return;
   }
 
-  onConnected(name: string): void {
+  onConnected(name?: string): void {
     super.onConnected(name);
 
     state.update(s => {
@@ -144,7 +144,7 @@ class OutputBehaviour extends LoggingDecorator {
 
     // Reset connection reconnectTimeoutTime
     clearTimeout(this.reconnectTimeout);
-    const onTimeout = () => onCatastrophicError();
+    const onTimeout = () => onCatastrophicError(!!name);
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, StaticConfiguration.reconnectTimeoutDuration);

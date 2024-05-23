@@ -340,14 +340,17 @@ export class MicrobitBluetooth {
    *      Fired if the request failed.
    */
   public static async requestDevice(
-    name: string,
     onRequestFailed: (e: Error) => void,
+    name?: string,
   ): Promise<BluetoothDevice> {
     return new Promise<BluetoothDevice>((resolve, reject) => {
+      const filters = name
+        ? [{ namePrefix: `BBC micro:bit [${name}]` }]
+        : [{ namePrefix: `BBC micro:bit` }];
       try {
         navigator.bluetooth
           .requestDevice({
-            filters: [{ namePrefix: `BBC micro:bit [${name}]` }],
+            filters: filters,
             optionalServices: [
               MBSpecs.Services.UART_SERVICE,
               MBSpecs.Services.ACCEL_SERVICE,

@@ -17,11 +17,27 @@ import BaseVector from '../../../script/livedata/BaseVector';
 
 type LiveDataSynthesizerOptions = {
   intervalSpeed: number;
-  speeds: number[]
+  speeds: number[];
   isActive: boolean;
-  noOfAxes: number
+  noOfAxes: number;
 };
-const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "O", "P"]
+const letters = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+];
 
 class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
   private interval: NodeJS.Timeout | undefined = undefined;
@@ -33,10 +49,10 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
       intervalSpeed: this.getInitialIntervalValue(),
       speeds: [this.getInitialSineSpeed()],
       isActive: false,
-      noOfAxes: 1
+      noOfAxes: 1,
     } as LiveDataSynthesizerOptions);
-    stores.setLiveData(new SyntheticLiveData([letters[0]]))
-    this.referenceStoreGetter = () => get(stores).liveData as SyntheticLiveData
+    stores.setLiveData(new SyntheticLiveData([letters[0]]));
+    this.referenceStoreGetter = () => get(stores).liveData as SyntheticLiveData;
   }
 
   public subscribe(
@@ -82,26 +98,26 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
   public setNoOfAxes(axes: number) {
     this.store.update(e => {
       if (e.noOfAxes !== axes) {
-        console.log("changed liveDatra")
-        stores.setLiveData(new SyntheticLiveData(letters.slice(0, axes)))
+        console.log('changed liveDatra');
+        stores.setLiveData(new SyntheticLiveData(letters.slice(0, axes)));
       }
       e.noOfAxes = axes;
       if (axes > e.speeds.length) {
-        e.speeds = [...e.speeds, ...new Array(axes - e.speeds.length).fill(0)]
+        e.speeds = [...e.speeds, ...new Array(axes - e.speeds.length).fill(0)];
       } else {
         e.speeds = e.speeds.slice(0, axes);
       }
       return e;
-    })
+    });
   }
 
   public generateData() {
     const val = new Date().getTime();
 
     let newVector = new Array(get(this.store).noOfAxes).fill(0);
-    newVector = newVector.map((x, i) => Math.sin(val * get(this.store).speeds[i]))
-    const vectorLetters = letters.slice(0, newVector.length)
-    const newValue = new BaseVector(newVector, vectorLetters)
+    newVector = newVector.map((x, i) => Math.sin(val * get(this.store).speeds[i]));
+    const vectorLetters = letters.slice(0, newVector.length);
+    const newValue = new BaseVector(newVector, vectorLetters);
 
     this.referenceStoreGetter().put(newValue);
   }
@@ -109,8 +125,8 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
   public setSpeed(index: number, speed: number) {
     this.store.update(s => {
       s.speeds[index] = speed / 3000;
-      return s
-    })
+      return s;
+    });
   }
 
   public setIntervalSpeed(value: number) {
@@ -143,6 +159,5 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
 }
 
 const liveDataSynthesizer = new LiveDataSynthesizer();
-
 
 export default liveDataSynthesizer;

@@ -31,7 +31,6 @@ interface LiveData<T extends LiveDataVector> extends Readable<T> {
    * Returns labels accociated with each data point (Such as for the LiveGraph)
    */
   getLabels(): string[];
-
 }
 
 export default LiveData;

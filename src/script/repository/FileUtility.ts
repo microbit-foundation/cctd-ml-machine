@@ -27,7 +27,7 @@ class FileUtility {
     element.setAttribute(
       'href',
       'data:application/json;charset=utf-8,' +
-      encodeURIComponent(JSON.stringify(gestureData, null, 2)),
+        encodeURIComponent(JSON.stringify(gestureData, null, 2)),
     );
     element.setAttribute('download', 'dataset');
 

@@ -16,9 +16,9 @@ export type Confidence = {
   currentConfidence: number;
   requiredConfidence: number;
   isConfident: boolean;
-}
+};
 
-export type GestureData = PersistantGestureData & { confidence: Confidence }
+export type GestureData = PersistantGestureData & { confidence: Confidence };
 
 export type GestureOutput = {
   matrix?: boolean[];

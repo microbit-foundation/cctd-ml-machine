@@ -18,7 +18,9 @@ import LoggingDecorator from './LoggingDecorator';
 import TypingUtils from '../../TypingUtils';
 import { DeviceRequestStates } from '../../stores/connectDialogStore';
 import StaticConfiguration from '../../../StaticConfiguration';
-import MicrobitAccelerometerLiveData, { MicrobitAccelerometerDataVector } from '../../livedata/MicrobitAccelerometerData';
+import MicrobitAccelerometerLiveData, {
+  MicrobitAccelerometerDataVector,
+} from '../../livedata/MicrobitAccelerometerData';
 import { stores } from '../../stores/Stores';
 import LiveDataBuffer from '../../domain/LiveDataBuffer';
 
@@ -126,8 +128,10 @@ class InputBehaviour extends LoggingDecorator {
 
   onConnected(name: string): void {
     super.onConnected(name);
-    const buffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(StaticConfiguration.accelerometerLiveDataBufferSize)
-    stores.setLiveData(new MicrobitAccelerometerLiveData(buffer))
+    const buffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(
+      StaticConfiguration.accelerometerLiveDataBufferSize,
+    );
+    stores.setLiveData(new MicrobitAccelerometerLiveData(buffer));
 
     state.update(s => {
       s.isInputConnected = true;
@@ -152,11 +156,13 @@ class InputBehaviour extends LoggingDecorator {
     const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
 
-    get(stores).liveData.put(new MicrobitAccelerometerDataVector({
-      x: accelX,
-      y: accelY,
-      z: accelZ,
-    }));
+    get(stores).liveData.put(
+      new MicrobitAccelerometerDataVector({
+        x: accelX,
+        y: accelY,
+        z: accelZ,
+      }),
+    );
   }
 
   buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {

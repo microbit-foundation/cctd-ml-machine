@@ -170,16 +170,16 @@ describe('Microbit Bluetooth interface tests', () => {
 
   test('Request device yields device', async () => {
     const device = await MicrobitBluetooth.requestDevice(
-      'vatav',
       TypingUtils.emptyFunction,
+      'vatav',
     );
     expect(device).toBeDefined();
   });
 
   test('Can connect to requested device', async () => {
     const device = await MicrobitBluetooth.requestDevice(
-      'vatav',
       TypingUtils.emptyFunction,
+      'vatav',
     );
 
     const con = await MicrobitBluetooth.createMicrobitBluetooth(

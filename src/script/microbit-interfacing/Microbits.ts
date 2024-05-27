@@ -887,11 +887,6 @@ class Microbits {
         'No input microbit has be defined! Please check that it is connected before using it',
       );
     }
-    if (!this.inputName) {
-      throw new Error(
-        'Something went wrong. Input microbit was specified, but without name!',
-      );
-    }
     this.assignedOutputMicrobit = this.getInput();
     this.outputName = this.inputName;
     this.outputVersion = this.inputVersion;

@@ -30,11 +30,27 @@
           on:click={toggleFilterCheckmarkClickHandler(filterType)}
           {checked}
           class="w-5 h-5 self-center" />
-        <label class="self-center ml-2 text-sm" for={`filter-${filter.getName()}`}>
+        <label
+          class="self-center ml-2 text-sm max-w-32 truncate whitespace-nowrap"
+          for={`filter-${filter.getName()}`}>
           {filter.getName()}
         </label>
       </div>
-      <div class="ml-3 border-l-2">
+      <div class="min-w-6">
+        <img
+          on:mouseenter={() => {
+            highlightedFilter.set(filterType);
+            showHighlighted.set(true);
+          }}
+          on:mouseleave={() => {
+            showHighlighted.set(false);
+          }}
+          src="imgs/parallel.svg"
+          alt="data representation icon"
+          class="w-6 hover:opacity-60 mr-0.5" />
+      </div>
+      <!-- old icon
+      <div class="min-w-6 border-l-2">
         <img
           on:mouseenter={() => {
             highlightedFilter.set(filterType);
@@ -47,6 +63,7 @@
           alt="data representation icon"
           class="w-6 hover:opacity-60 cursor-pointer" />
       </div>
+-->
     </div>
   </div>
 {/key}

@@ -5,12 +5,17 @@
  -->
 <script lang="ts">
   import FilterTypes from '../../script/domain/FilterTypes';
+  import { anchorElement } from './FilterList';
   import FilterListRow from './FilterListRow.svelte';
 
   const availableFilters = FilterTypes.toIterable();
+  let filterElement: HTMLElement;
+  $: anchorElement.set(filterElement);
 </script>
 
-<div class="flex flex-col border-solid border-2 border-secondary rounded-md shadow-md">
+<div
+  class="flex flex-col border-solid border-2 border-secondary rounded-md shadow-md"
+  bind:this={filterElement}>
   {#each availableFilters as filterType}
     <FilterListRow {filterType} />
   {/each}

@@ -6,7 +6,11 @@
 <script lang="ts">
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import { stores } from '../../script/stores/Stores';
-  import { toggleFilterCheckmarkClickHandler } from './FilterList';
+  import {
+    highlightedFilter,
+    showHighlighted,
+    toggleFilterCheckmarkClickHandler,
+  } from './FilterList';
 
   export let filterType: FilterType;
   const filter = FilterTypes.createFilter(filterType);
@@ -32,8 +36,13 @@
       </div>
       <div class="ml-3 border-l-2">
         <img
-          on:mouseenter={() => {}}
-          on:mouseleave={() => {}}
+          on:mouseenter={() => {
+            highlightedFilter.set(filterType);
+            showHighlighted.set(true);
+          }}
+          on:mouseleave={() => {
+            showHighlighted.set(false);
+          }}
           src="imgs/ML_predict.svg"
           alt="data representation icon"
           class="w-6 hover:opacity-60 cursor-pointer" />

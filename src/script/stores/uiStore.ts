@@ -91,7 +91,6 @@ export function alertUser(text: string): void {
   });
 }
 
-
 // Assess whether an action is allowed. Alert user if not
 export function areActionsAllowed(actionAllowed = true, alertIfNotReady = true): boolean {
   const status = assessStateStatus(actionAllowed);
@@ -147,9 +146,7 @@ export const availableModels: ModelEntry[] = [
   },
 ];
 
-const defaultModel: ModelEntry = availableModels.find(
-  model => model.id === 'NN',
-)!;
+const defaultModel: ModelEntry = availableModels.find(model => model.id === 'NN')!;
 if (!defaultModel) {
   throw new Error('Default model not found!');
 }

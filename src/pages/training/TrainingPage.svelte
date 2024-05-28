@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { availableModels, preferredModel, state } from '../../script/stores/uiStore';
+  import { availableModels, selectedModel, state } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
@@ -23,6 +23,7 @@
   import { stores } from '../../script/stores/Stores';
   import { appInsights } from '../../appInsights';
   import FiltersList from '../../components/filters/FiltersList.svelte';
+  import TrainingPageTabs from './TrainingPageTabs.svelte';
 
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
@@ -32,7 +33,7 @@
   const sufficientData = gestures.hasSufficientData();
 
   const selectedModelOption = hasFeature(Feature.KNN_MODEL)
-    ? preferredModel
+    ? selectedModel
     : writable(availableModels[0]);
 
   $: isUsingKNNModel =
@@ -63,21 +64,7 @@
 
 <TrainingFailedDialog />
 <div class="flex flex-col h-full">
-  <ControlBar>
-    <div class="min-h-12" />
-    <StandardButton
-      fillOnHover
-      small
-      outlined
-      bold={false}
-      shadows={false}
-      color={'primary'}
-      onClick={() => {
-        navigate(Paths.FILTERS);
-      }}>
-      {$t('content.trainer.controlbar.filters')}
-    </StandardButton>
-  </ControlBar>
+  <TrainingPageTabs />
   <div class="flex flex-row">
     <div class="m-2">
       <FiltersList />

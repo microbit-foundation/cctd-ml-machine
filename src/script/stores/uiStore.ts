@@ -91,6 +91,7 @@ export function alertUser(text: string): void {
   });
 }
 
+
 // Assess whether an action is allowed. Alert user if not
 export function areActionsAllowed(actionAllowed = true, alertIfNotReady = true): boolean {
   const status = assessStateStatus(actionAllowed);
@@ -146,20 +147,17 @@ export const availableModels: ModelEntry[] = [
   },
 ];
 
-const defaultModel: ModelEntry | undefined = availableModels.find(
+const defaultModel: ModelEntry = availableModels.find(
   model => model.id === 'NN',
-);
-
+)!;
 if (!defaultModel) {
   throw new Error('Default model not found!');
 }
+
 // TODO: Should just be model id instead of dropdown option
-export const preferredModel = new PersistantWritable<DropdownOption>(
-  {
-    id: defaultModel.id,
-    label: defaultModel.label,
-  },
-  'prefferedModel',
+export const selectedModel = new PersistantWritable<ModelEntry>(
+  defaultModel,
+  'selectedModel',
 );
 
 // TODO: Should probably be elsewhere

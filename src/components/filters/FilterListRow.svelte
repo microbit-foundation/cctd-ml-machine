@@ -4,6 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+  import { Paths, navigate } from '../../router/paths';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import { stores } from '../../script/stores/Stores';
   import {
@@ -45,9 +46,14 @@
           on:mouseleave={() => {
             showHighlighted.set(false);
           }}
+          on:click={() => {
+            navigate(Paths.FILTERS);
+            showHighlighted.set(false);
+            highlightedFilter.set(filterType);
+          }}
           src="imgs/parallel.svg"
           alt="data representation icon"
-          class="w-6 hover:opacity-60 mr-0.5" />
+          class="w-6 hover:opacity-60 mr-0.5 cursor-pointer" />
       </div>
       <!-- old icon
       <div class="min-w-6 border-l-2">

@@ -256,4 +256,5 @@ class KNNModelGraphController {
     return nums.map(el => el / magnitude);
   }
 }
+export const controller = writable<KNNModelGraphController | undefined>(undefined);
 export default KNNModelGraphController;

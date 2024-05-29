@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import { onMount } from 'svelte';
-  import KNNModelGraphController from './KNNModelGraphController';
+  import KNNModelGraphController, { controller } from './KNNModelGraphController';
   import * as d3 from 'd3';
   import ClassifierFactory from '../../../script/domain/ClassifierFactory';
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
@@ -17,8 +17,7 @@
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
   import AxesFilterVectorView from './AxesFilterVectorView.svelte';
   import { stores } from '../../../script/stores/Stores';
-
-  let controller: KNNModelGraphController | undefined;
+  import { get } from 'svelte/store';
 
   const classifierFactory = new ClassifierFactory();
 
@@ -63,17 +62,17 @@
 
   $: {
     if ($highlightedAxis) {
-      if (controller) {
-        controller.destroy();
+      if (get(controller)) {
+        get(controller)!.destroy();
       }
-      controller = initSingle($highlightedAxis);
+      controller.set(initSingle($highlightedAxis));
     }
   }
 
   onMount(() => {
-    controller = initSingle(Axes.X);
+    controller.set(initSingle(Axes.X));
     return () => {
-      controller?.destroy();
+      get(controller)?.destroy();
     };
   });
 </script>
@@ -107,7 +106,7 @@
       height={350}
       width={650}
       classID={'d3-3d-single'}
-      {controller} />
+      controller={$controller} />
     <KnnPointToolTipView />
   </div>
 </div>

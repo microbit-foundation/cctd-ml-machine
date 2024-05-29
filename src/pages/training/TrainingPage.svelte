@@ -5,7 +5,13 @@
  -->
 
 <script lang="ts">
-  import { availableModels, selectedModel, state } from '../../script/stores/uiStore';
+  import {
+    availableModels,
+    highlightedAxis,
+    prevHighlightedAxis,
+    selectedModel,
+    state,
+  } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import PleaseConnectFirst from '../../components/PleaseConnectFirst.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
@@ -24,6 +30,13 @@
   import { appInsights } from '../../appInsights';
   import FiltersList from '../../components/filters/FiltersList.svelte';
   import TrainingPageTabs from './TrainingPageTabs.svelte';
+  import {
+    loss,
+    resetLoss,
+    trainKNNModel,
+    trainingIterationHandler,
+  } from './TrainingPage';
+  import { onMount } from 'svelte';
 
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
@@ -39,17 +52,6 @@
   $: isUsingKNNModel =
     hasFeature(Feature.KNN_MODEL) && $selectedModelOption.id === availableModels[1].id;
 
-  const loss = writable<LossTrainingIteration[]>([]);
-
-  const resetLoss = () => loss.set([]);
-
-  const trainingIterationHandler = (h: LossTrainingIteration) => {
-    loss.update(newLoss => {
-      newLoss.push(h);
-      return newLoss;
-    });
-  };
-
   const trackModelEvent = () => {
     if (CookieManager.getComplianceChoices().analytics) {
       appInsights.trackEvent({
@@ -60,6 +62,23 @@
       });
     }
   };
+
+  // Should be in KNNModelGraph instead
+  onMount(() => {
+    const unsubscribe = highlightedAxis.subscribe(axis => {
+      if ($selectedModel.id === 'KNN') {
+        if (!axis) {
+          return;
+        }
+        if ($prevHighlightedAxis === axis) {
+          return;
+        }
+        trainKNNModel();
+        prevHighlightedAxis.set(axis);
+      }
+    });
+    return unsubscribe;
+  });
 </script>
 
 <TrainingFailedDialog />

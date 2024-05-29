@@ -69,7 +69,6 @@
 <div class:hidden>
   <button class="border-primary border-1 px-3" on:click={() => zoom(1.25)}>+</button>
   <button class="border-primary border-1 px-3" on:click={() => zoom(0.75)}>-</button>
-  <!-- CONTAINER FOR TOOLTIP. IS MOVED BY GRAPHDRAWER -->
   <svg
     class={classID}
     {width}

@@ -76,24 +76,6 @@
       highlightedAxis.set(undefined);
     }
   }
-
-  onMount(() => {
-    const unsubscribe = highlightedAxis.subscribe(axis => {
-      if (!axis) {
-        return;
-      }
-      if ($prevHighlightedAxis === axis) {
-        return;
-      }
-      if ($selectedOption.id === 'KNN') {
-        model.train(
-          getModelTrainer(getModelFromOption($selectedOption), onTrainingIteration),
-        );
-      }
-      prevHighlightedAxis.set(axis);
-    });
-    return unsubscribe;
-  });
 </script>
 
 {#if hasFeature(Feature.KNN_MODEL)}

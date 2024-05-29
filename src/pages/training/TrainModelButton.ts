@@ -39,22 +39,7 @@ export const getModelTrainer = (
 ): ModelTrainer<MLModel> => {
   const currentAxis = get(highlightedAxis);
   if (modelEntry.id === 'KNN') {
-    const noOfRecordings = gestures
-      .getGestures()
-      .map(gesture => gesture.getRecordings().length)
-      .reduce((prev, cur) => cur + prev, 0);
-
-    if (noOfRecordings / 2 < StaticConfiguration.knnNeighbourCount) {
-      Logger.log(
-        'TrainModelButton',
-        'The number of recordings is probably too low for an effective KNN model if using ' +
-          StaticConfiguration.knnNeighbourCount +
-          ' neighbours ',
-      );
-    }
-
     const offset = currentAxis === Axes.X ? 0 : currentAxis === Axes.Y ? 1 : 2;
-
     return new KNNNonNormalizedModelTrainer(StaticConfiguration.knnNeighbourCount, data =>
       extractAxisFromTrainingData(data, offset, 3),
     );

@@ -35,7 +35,8 @@
   const accelYData = extractAxisFromTrainingData(allData, 1, 3);
   const accelZData = extractAxisFromTrainingData(allData, 2, 3);
 
-  const dataGetter = (axis: Axes): TrainingData => {
+  const dataGetter = (): TrainingData => {
+    const axis = get(highlightedAxis);
     if (axis === Axes.X) {
       return accelXData;
     }
@@ -52,7 +53,7 @@
     const svgSingle = d3.select('.d3-3d-single');
     const controller = new KNNModelGraphController(
       svgSingle,
-      () => dataGetter(axis),
+      () => dataGetter(),
       { x: 650 / 2, y: 350 / 2 },
       'd3-3d-single-',
       axis,

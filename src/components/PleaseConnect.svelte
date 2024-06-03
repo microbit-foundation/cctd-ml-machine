@@ -16,10 +16,10 @@
 </script>
 
 <div>
-  <p class="text-center text-2xl bold m-auto">
+  <p class="text-center text-xl bold m-auto">
     {$t('menu.trainer.notConnected1')}
   </p>
-  <p class="text-center text-2xl bold m-auto">
+  <p class="text-center text-xl bold m-auto">
     {$t('menu.trainer.notConnected2')}
   </p>
   <div class="text-center ml-auto mr-auto mb-2 mt-2">
@@ -27,6 +27,6 @@
       class="m-auto arrow-filter-color"
       src="/imgs/down_arrow.svg"
       alt="down arrow icon"
-      width="50px" />
+      width="35px" />
   </div>
 </div>

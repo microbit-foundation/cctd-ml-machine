@@ -18,6 +18,7 @@ import Axes from '../domain/Axes';
 import PersistantWritable from '../repository/PersistantWritable';
 import { DropdownOption } from '../../components/buttons/Buttons';
 import { stores } from './Stores';
+import ModelRegistry, { ModelInfo } from '../domain/ModelRegistry';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -127,12 +128,18 @@ export enum MicrobitInteractions {
   AB,
 }
 
+/**
+ * @deprecated
+ */
 export type ModelEntry = {
   id: string;
   title: string;
   label: string;
 };
 
+/**
+ * @deprecated
+ */
 export const availableModels: ModelEntry[] = [
   {
     id: 'NN',
@@ -146,13 +153,9 @@ export const availableModels: ModelEntry[] = [
   },
 ];
 
-const defaultModel: ModelEntry = availableModels.find(model => model.id === 'NN')!;
-if (!defaultModel) {
-  throw new Error('Default model not found!');
-}
+const defaultModel: ModelInfo = ModelRegistry.NeuralNetwork;
 
-// TODO: Should just be model id instead of dropdown option
-export const selectedModel = new PersistantWritable<ModelEntry>(
+export const selectedModel = new PersistantWritable<ModelInfo>(
   defaultModel,
   'selectedModel',
 );

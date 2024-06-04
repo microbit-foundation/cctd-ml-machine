@@ -13,5 +13,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'A deployment is being made to https://ml-machine-${{github.event.pull_request.number}}.r59q.com/. This site will be continuously updated as changes are made to this PR.'
+              body: 'A deployment is being made to https://ml-machine-${{github.event.pull_request.number}}.r59q.com/. This site will be continuously updated as changes are made to this PR. Deployment should only take a few minutes'
             })

@@ -3,9 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import * as d3 from 'd3';
 import { TrainingData } from '../../../script/domain/ModelTrainer';
-import { Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
+import { Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { GraphDrawConfig } from './KNNModelGraphDrawer';
 import {
   MicrobitAccelerometerData,
@@ -17,7 +16,6 @@ import Filters from '../../../script/domain/Filters';
 import { Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { stores } from '../../../script/stores/Stores';
-import { LiveDataVector } from '../../../script/domain/stores/LiveDataVector';
 
 type SampleData = {
   value: number[];
@@ -256,4 +254,5 @@ class KNNModelGraphController {
     return nums.map(el => el / magnitude);
   }
 }
+export const controller = writable<KNNModelGraphController | undefined>(undefined);
 export default KNNModelGraphController;

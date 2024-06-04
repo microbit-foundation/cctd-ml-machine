@@ -5,9 +5,7 @@
  */
 import { Writable, get } from 'svelte/store';
 import { DropdownOption } from '../../components/buttons/Buttons';
-import {
-  highlightedAxis,
-} from '../../script/stores/uiStore';
+import { highlightedAxis } from '../../script/stores/uiStore';
 import ModelTrainer from '../../script/domain/ModelTrainer';
 import MLModel from '../../script/domain/MLModel';
 import Axes from '../../script/domain/Axes';

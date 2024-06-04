@@ -19,47 +19,51 @@ import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
 export const loss = writable<LossTrainingIteration[]>([]);
 
 const trainingIterationHandler = (h: LossTrainingIteration) => {
-    loss.update(newLoss => {
-        newLoss.push(h);
-        return newLoss;
-    });
+  loss.update(newLoss => {
+    newLoss.push(h);
+    return newLoss;
+  });
 };
 
 const trainNNModel = async () => {
-    loss.set([]);
-    const modelTrainer = new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, trainingIterationHandler);
-    await stores.getClassifier().getModel().train(modelTrainer);
-}
+  loss.set([]);
+  const modelTrainer = new LayersModelTrainer(
+    StaticConfiguration.layersModelTrainingSettings,
+    trainingIterationHandler,
+  );
+  await stores.getClassifier().getModel().train(modelTrainer);
+};
 
 const trainKNNModel = async () => {
-    if (get(highlightedAxis) === undefined) {
-        highlightedAxis.set(Axes.X);
-    }
-    const currentAxis = get(highlightedAxis);
-    const offset = currentAxis === Axes.X ? 0 : currentAxis === Axes.Y ? 1 : 2;
-    const modelTrainer = new KNNNonNormalizedModelTrainer(StaticConfiguration.knnNeighbourCount, data =>
-        extractAxisFromTrainingData(data, offset, 3) // 3 assumes 3 axis
-    )
-    await stores.getClassifier().getModel().train(modelTrainer);
-}
+  if (get(highlightedAxis) === undefined) {
+    highlightedAxis.set(Axes.X);
+  }
+  const currentAxis = get(highlightedAxis);
+  const offset = currentAxis === Axes.X ? 0 : currentAxis === Axes.Y ? 1 : 2;
+  const modelTrainer = new KNNNonNormalizedModelTrainer(
+    StaticConfiguration.knnNeighbourCount,
+    data => extractAxisFromTrainingData(data, offset, 3), // 3 assumes 3 axis
+  );
+  await stores.getClassifier().getModel().train(modelTrainer);
+};
 
 export const trainModel = async (model: ModelInfo) => {
-    highlightedAxis.set(undefined);
-    if (ModelRegistry.KNN.id === model.id) {
-        await trainKNNModel();
-    } else if (ModelRegistry.NeuralNetwork.id === model.id) {
-        await trainNNModel();
-    }
-    trackModelEvent();
-}
+  highlightedAxis.set(undefined);
+  if (ModelRegistry.KNN.id === model.id) {
+    await trainKNNModel();
+  } else if (ModelRegistry.NeuralNetwork.id === model.id) {
+    await trainNNModel();
+  }
+  trackModelEvent();
+};
 
 const trackModelEvent = () => {
-    if (CookieManager.getComplianceChoices().analytics) {
-        appInsights.trackEvent({
-            name: 'ModelTrained',
-            properties: {
-                modelType: get(selectedModel).id,
-            },
-        });
-    }
+  if (CookieManager.getComplianceChoices().analytics) {
+    appInsights.trackEvent({
+      name: 'ModelTrained',
+      properties: {
+        modelType: get(selectedModel).id,
+      },
+    });
+  }
 };

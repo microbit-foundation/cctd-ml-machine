@@ -39,7 +39,7 @@ class KNNModelGraphDrawer {
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) { }
+  ) {}
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {

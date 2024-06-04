@@ -19,7 +19,7 @@
   const gestures = stores.getGestures();
   const confidences = gestures.getConfidences();
   const filters = classifier.getFilters();
-  // Should be in KNNModelGraph instead
+
   onMount(() => {
     trainModel(ModelRegistry.KNN);
   });

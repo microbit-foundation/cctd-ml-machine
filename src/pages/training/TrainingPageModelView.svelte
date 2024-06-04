@@ -13,10 +13,8 @@
 </script>
 
 <div class="flex flex-col h-full justify-center">
-  <div class="flex flex-row">
-    <div class="m-2">
-      <FiltersList />
-    </div>
+  <div class="flex flex-row p-2">
+    <FiltersList />
     {#if $selectedModel.id === ModelRegistry.KNN.id}
       <KnnModelTrainingPageView />
     {:else if $selectedModel.id === ModelRegistry.NeuralNetwork.id}

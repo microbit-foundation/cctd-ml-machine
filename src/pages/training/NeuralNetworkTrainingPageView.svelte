@@ -28,27 +28,16 @@
 </script>
 
 <div class="flex flex-col flex-grow justify-center items-center text-center">
-  <div class="mt-10">
-    {#if $model.isTraining}
-      <div class="ml-auto mr-auto flex center-items justify-center">
-        <i
-          class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
-      </div>
-    {:else}
-      <StandardButton onClick={trainModelClickHandler}
-        >{$t(trainButtonSimpleLabel)}</StandardButton>
-    {/if}
-    {#if $loss.length > 0}
-      <div class="flex flex-col flex-grow justify-center items-center text-center">
-        <div class="w-3/4 text-primarytext">
-          <p class="bold text-3xl bold mt-10">
-            {$t('menu.trainer.isTrainingModelButton')}
-          </p>
-        </div>
-      </div>
-      <LossGraph
-        {loss}
-        maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />
-    {/if}
-  </div>
+  {#if $model.isTraining}
+    <div class="ml-auto mr-auto flex center-items justify-center">
+      <i
+        class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
+    </div>
+  {:else}
+    <StandardButton onClick={trainModelClickHandler}
+      >{$t(trainButtonSimpleLabel)}</StandardButton>
+  {/if}
+  {#if $loss.length > 0}
+    <LossGraph {loss} maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />
+  {/if}
 </div>

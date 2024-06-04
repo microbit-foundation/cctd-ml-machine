@@ -12,10 +12,8 @@
   import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
   import Axes from '../../../script/domain/Axes';
   import { TrainingData } from '../../../script/domain/ModelTrainer';
-  import { highlightedAxis, state } from '../../../script/stores/uiStore';
-  import StaticConfiguration from '../../../StaticConfiguration';
+  import { highlightedAxis } from '../../../script/stores/uiStore';
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
-  import AxesFilterVectorView from './AxesFilterVectorView.svelte';
   import { stores } from '../../../script/stores/Stores';
   import { get } from 'svelte/store';
 
@@ -23,7 +21,9 @@
 
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
-  const confidences = gestures.getConfidences();
+
+  const canvasWidth = 450;
+  const canvasHeight = 300;
 
   // Cache training data to avoid fetching them again and again
   const allData = classifierFactory.buildTrainingData(
@@ -54,7 +54,7 @@
     const controller = new KNNModelGraphController(
       svgSingle,
       () => dataGetter(),
-      { x: 650 / 2, y: 350 / 2 },
+      { x: canvasWidth / 2, y: canvasHeight / 2 },
       'd3-3d-single-',
       axis,
     );
@@ -78,36 +78,12 @@
   });
 </script>
 
-<div class="flex flex-row" class:hidden={!$classifier.model.isTrained}>
-  <div class="flex flex-col justify-center mr-6">
-    <AxesFilterVectorView />
-    <div class="flex flex-col ml-2 justify-center mt-2">
-      {#each $gestures as gesture, index}
-        <div class="flex flex-row justify-between">
-          <div class="flex flex-row">
-            <div class="flex flex-col justify-center mr-1">
-              <div
-                class="rounded-full w-3 h-3"
-                style={'background-color:' + StaticConfiguration.gestureColors[index]} />
-            </div>
-            <p>{gesture.name}</p>
-          </div>
-          {#if $state.isInputReady}
-            <p>
-              {(($confidences.get(gesture.ID)?.currentConfidence ?? 0) * 100).toFixed(2)}%
-            </p>
-          {/if}
-        </div>
-      {/each}
-    </div>
-  </div>
-  <div class="relative">
-    <KnnModelGraphSvgWithControls
-      hidden={false}
-      height={350}
-      width={650}
-      classID={'d3-3d-single'}
-      controller={$controller} />
-    <KnnPointToolTipView />
-  </div>
+<div class="relative">
+  <KnnModelGraphSvgWithControls
+    hidden={false}
+    height={canvasHeight}
+    width={canvasWidth}
+    classID={'d3-3d-single'}
+    controller={$controller} />
+  <KnnPointToolTipView />
 </div>

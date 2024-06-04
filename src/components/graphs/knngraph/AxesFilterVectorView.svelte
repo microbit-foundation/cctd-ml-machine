@@ -137,7 +137,7 @@
   <div>
     {#if $highlightedAxis}
       <div class="flex flex-row space-x-1">
-        <div class="flex flex-col">
+        <div class="flex flex-col justify-evenly">
           <div class="flex flex-row space-x-2" id="fromX">
             <StandardButton
               small
@@ -167,18 +167,12 @@
             <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />
           {/each}
         </div>
-        <div class="flex flex-col justify-around">
-          <img src={'imgs/left_bracket_blue.png'} alt="left bracket" />
-        </div>
         <div class="flex flex-col justify-around w-12">
           {#each liveFilteredAxesData as val, index}
-            <p style={`color:${['red', 'green', 'blue'][index]}`}>
+            <p style={`color:${StaticConfiguration.liveGraphColors[index]}`}>
               {val.toFixed(3)}
             </p>
           {/each}
-        </div>
-        <div class="flex flex-col justify-around">
-          <img src={'imgs/right_bracket_blue.png'} alt="left bracket" />
         </div>
       </div>
     {/if}

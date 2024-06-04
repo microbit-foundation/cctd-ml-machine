@@ -5,13 +5,14 @@
  -->
 <script lang="ts">
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
-  import { availableModels, selectedModel } from '../../script/stores/uiStore';
+  import ModelRegistry from '../../script/domain/ModelRegistry';
+  import { selectedModel } from '../../script/stores/uiStore';
 
   const onSelectNeuralNetwork = () => {
-    $selectedModel = availableModels.find(model => model.id === 'NN')!;
+    $selectedModel = ModelRegistry.NeuralNetwork;
   };
   const onSelectKnn = () => {
-    $selectedModel = availableModels.find(model => model.id === 'KNN')!;
+    $selectedModel = ModelRegistry.KNN;
   };
   $: isSelected = (id: string) => {
     return $selectedModel.id === id;

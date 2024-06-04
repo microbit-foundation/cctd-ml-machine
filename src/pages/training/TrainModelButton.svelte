@@ -6,29 +6,18 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
-  import StaticConfiguration from '../../StaticConfiguration';
   import StandardDropdownButton from '../../components/buttons/StandardDropdownButton.svelte';
   import { DropdownOption } from '../../components/buttons/Buttons';
-  import ModelTrainer from '../../script/domain/ModelTrainer';
-  import MLModel from '../../script/domain/MLModel';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import { FilterType } from '../../script/domain/FilterTypes';
-  import Filters from '../../script/domain/Filters';
   import { Writable } from 'svelte/store';
 
   import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
-  import {
-    ModelEntry,
-    availableModels,
-    highlightedAxis,
-    prevHighlightedAxis,
-  } from '../../script/stores/uiStore';
+  import { highlightedAxis } from '../../script/stores/uiStore';
   import { stores } from '../../script/stores/Stores';
-  import { onMount } from 'svelte';
-  import { getModelTrainer, options, trainModel } from './TrainModelButton';
+  import { options, trainModel } from './TrainModelButton';
   import Axes from '../../script/domain/Axes';
+  import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
@@ -48,7 +37,7 @@
     : 'menu.trainer.trainNewModelButtonSimple';
 
   const getModelFromOption = (dropdownOption: DropdownOption) => {
-    const modelFound: ModelEntry | undefined = availableModels.find(
+    const modelFound: ModelInfo | undefined = ModelRegistry.getModels().find(
       model => model.id === dropdownOption.id,
     );
     if (!modelFound) {

@@ -128,33 +128,7 @@ export enum MicrobitInteractions {
   AB,
 }
 
-/**
- * @deprecated
- */
-export type ModelEntry = {
-  id: string;
-  title: string;
-  label: string;
-};
-
-/**
- * @deprecated
- */
-export const availableModels: ModelEntry[] = [
-  {
-    id: 'NN',
-    title: 'Neural network',
-    label: 'neural network',
-  },
-  {
-    id: 'KNN',
-    title: 'KNN',
-    label: 'KNN',
-  },
-];
-
 const defaultModel: ModelInfo = ModelRegistry.NeuralNetwork;
-
 export const selectedModel = new PersistantWritable<ModelInfo>(
   defaultModel,
   'selectedModel',

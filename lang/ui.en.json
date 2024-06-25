@@ -1,0 +1,978 @@
+{
+  "about.developedInPartnership": {
+    "defaultMessage": "Developed in partnership with <link>Center for Computational Thinking and Design, Aarhus University</link>",
+    "description": ""
+  },
+  "about.microbitHeartImageAlt": {
+    "defaultMessage": "micro:bit board with the 5 by 5 LED grid showing a heart",
+    "description": ""
+  },
+  "about.softwareVersions": {
+    "defaultMessage": "Software versions",
+    "description": ""
+  },
+  "actions.cancel": {
+    "defaultMessage": "Cancel",
+    "description": ""
+  },
+  "actions.close": {
+    "defaultMessage": "Close",
+    "description": ""
+  },
+  "actions.reconnect": {
+    "defaultMessage": "Reconnect",
+    "description": ""
+  },
+  "alert.data.classNameLengthAlert": {
+    "defaultMessage": "Action names cannot be longer than {maxLen} characters.",
+    "description": ""
+  },
+  "alert.deleteGestureConfirm": {
+    "defaultMessage": "Are you sure you want to delete the action \"{action}\"?",
+    "description": ""
+  },
+  "alert.isNotConnected": {
+    "defaultMessage": "Your micro:bit should be connected!",
+    "description": ""
+  },
+  "alert.isRecording": {
+    "defaultMessage": "You are currently recording!",
+    "description": ""
+  },
+  "alert.isTesting": {
+    "defaultMessage": "You are currently recording!",
+    "description": ""
+  },
+  "alert.isTraining": {
+    "defaultMessage": "You are currently training a model!",
+    "description": ""
+  },
+  "alert.oneDataRepresentation": {
+    "defaultMessage": "You need at least one data representation",
+    "description": ""
+  },
+  "alert.recording.disconnectedDuringRecording": {
+    "defaultMessage": "micro:bit disconnected during recording",
+    "description": ""
+  },
+  "alert.recordingsPerGesture": {
+    "defaultMessage": "You need at least three examples per action",
+    "description": ""
+  },
+  "alert.twoGestures": {
+    "defaultMessage": "You need at least two actions",
+    "description": ""
+  },
+  "arrowIconDown.altText": {
+    "defaultMessage": "arrow pointing down",
+    "description": ""
+  },
+  "arrowIconRight.altText": {
+    "defaultMessage": "arrow pointing right",
+    "description": ""
+  },
+  "compatibility.platform.notSupported": {
+    "defaultMessage": "The tool is not supported on your current platform.",
+    "description": ""
+  },
+  "compatibility.platform.notSupported.joinDesktop": {
+    "defaultMessage": "Please use Google Chrome or Microsoft Edge on a computer.",
+    "description": ""
+  },
+  "compatibility.webgl.notSupported": {
+    "defaultMessage": "WebGL not available. Enable WebGL to see 3D data view.",
+    "description": ""
+  },
+  "connectFailed.bluetooth1": {
+    "defaultMessage": "The connection to the micro:bit could not be established.",
+    "description": ""
+  },
+  "connectFailed.bluetoothHeading": {
+    "defaultMessage": "Failed to connect to micro:bit",
+    "description": ""
+  },
+  "connectFailed.bridge1": {
+    "defaultMessage": "The connection to the micro:bit connected to your computer could not be established.",
+    "description": ""
+  },
+  "connectFailed.bridgeHeading": {
+    "defaultMessage": "Failed to connect to micro:bit 2",
+    "description": ""
+  },
+  "connectFailed.remote1": {
+    "defaultMessage": "The connection to the wireless micro:bit could not be established.",
+    "description": ""
+  },
+  "connectFailed.remoteHeading": {
+    "defaultMessage": "Failed to connect to micro:bit 1",
+    "description": ""
+  },
+  "connectMB.backButton": {
+    "defaultMessage": "Back",
+    "description": ""
+  },
+  "connectMB.bluetooth.cancelledConnection": {
+    "defaultMessage": "You didn't choose a micro:bit. Do you want to try again?",
+    "description": ""
+  },
+  "connectMB.bluetooth.heading": {
+    "defaultMessage": "Connect using Web Bluetooth",
+    "description": ""
+  },
+  "connectMB.bluetooth.invalidPattern": {
+    "defaultMessage": "The pattern you have drawn is invalid.",
+    "description": ""
+  },
+  "connectMB.bluetoothStart.heading": {
+    "defaultMessage": "What you need to connect using Web Bluetooth",
+    "description": ""
+  },
+  "connectMB.bluetoothStart.requirements1": {
+    "defaultMessage": "1 micro:bit",
+    "description": ""
+  },
+  "connectMB.bluetoothStart.requirements2": {
+    "defaultMessage": "Computer",
+    "description": ""
+  },
+  "connectMB.bluetoothStart.requirements2.subtitle": {
+    "defaultMessage": "with Internet, a USB port & Web Bluetooth",
+    "description": ""
+  },
+  "connectMB.bluetoothStart.requirements3": {
+    "defaultMessage": "Micro USB cable",
+    "description": ""
+  },
+  "connectMB.bluetoothStart.requirements4": {
+    "defaultMessage": "Battery holder",
+    "description": ""
+  },
+  "connectMB.bluetoothStart.requirements4.subtitle": {
+    "defaultMessage": "with batteries",
+    "description": ""
+  },
+  "connectMB.bluetoothStart.switchRadio": {
+    "defaultMessage": "Connect using micro:bit radio instead",
+    "description": ""
+  },
+  "connectMB.connectBattery.heading": {
+    "defaultMessage": "Connect battery pack and disconnect USB",
+    "description": ""
+  },
+  "connectMB.connectBattery.link": {
+    "defaultMessage": "You can attach the micro:bit to your wrist or an object",
+    "description": ""
+  },
+  "connectMB.connectBattery.subtitle": {
+    "defaultMessage": "Disconnect the micro:bit from the computer and connect the battery pack.",
+    "description": ""
+  },
+  "connectMB.connectCable.altText": {
+    "defaultMessage": "animation showing a USB cable being connected to the top of a micro:bit",
+    "description": ""
+  },
+  "connectMB.connectCable.heading": {
+    "defaultMessage": "Connect USB cable to micro:bit",
+    "description": ""
+  },
+  "connectMB.connectCable.skip": {
+    "defaultMessage": "Skip: program already downloaded?",
+    "description": ""
+  },
+  "connectMB.connectCable.subtitle": {
+    "defaultMessage": "Connect the micro:bit to this computer with a USB cable so that the machine learning tool program can be downloaded to it.",
+    "description": ""
+  },
+  "connectMB.connectCableMB1.heading": {
+    "defaultMessage": "Connect USB cable to micro:bit 1",
+    "description": ""
+  },
+  "connectMB.connectCableMB1.subtitle": {
+    "defaultMessage": "Connect micro:bit 1 to this computer with a USB cable so that the machine learning tool program can be downloaded to it. This is the micro:bit you will use to collect data samples.",
+    "description": ""
+  },
+  "connectMB.connectCableMB2.heading": {
+    "defaultMessage": "Connect USB cable to micro:bit 2",
+    "description": ""
+  },
+  "connectMB.connectCableMB2.subtitle": {
+    "defaultMessage": "Connect a second micro:bit to this computer with a USB cable.",
+    "description": ""
+  },
+  "connectMB.connecting": {
+    "defaultMessage": "Connecting…",
+    "description": ""
+  },
+  "connectMB.nextButton": {
+    "defaultMessage": "Next",
+    "description": ""
+  },
+  "connectMB.output.header": {
+    "defaultMessage": "A micro:bit is already connected",
+    "description": ""
+  },
+  "connectMB.outputMB.different": {
+    "defaultMessage": "Connect another micro:bit",
+    "description": ""
+  },
+  "connectMB.outputMB.otherButton": {
+    "defaultMessage": "Other",
+    "description": ""
+  },
+  "connectMB.outputMB.same": {
+    "defaultMessage": "Use the same micro:bit",
+    "description": ""
+  },
+  "connectMB.outputMB.sameButton": {
+    "defaultMessage": "Same",
+    "description": ""
+  },
+  "connectMB.pattern.heading": {
+    "defaultMessage": "Copy pattern",
+    "description": ""
+  },
+  "connectMB.pattern.inputLabel": {
+    "defaultMessage": "Number of LEDs lit in column {colNum} on the micro:bit display",
+    "description": ""
+  },
+  "connectMB.pattern.subtitle": {
+    "defaultMessage": "Copy the pattern displayed on the micro:bit.",
+    "description": ""
+  },
+  "connectMB.radio.heading": {
+    "defaultMessage": "Connecting micro:bits",
+    "description": ""
+  },
+  "connectMB.radioStart.heading": {
+    "defaultMessage": "What you need to connect using micro:bit radio",
+    "description": ""
+  },
+  "connectMB.radioStart.requirements1": {
+    "defaultMessage": "2 micro:bits",
+    "description": ""
+  },
+  "connectMB.radioStart.requirements2": {
+    "defaultMessage": "Computer",
+    "description": ""
+  },
+  "connectMB.radioStart.requirements2.subtitle": {
+    "defaultMessage": "with Internet & a USB port",
+    "description": ""
+  },
+  "connectMB.radioStart.requirements3": {
+    "defaultMessage": "Micro USB cable",
+    "description": ""
+  },
+  "connectMB.radioStart.requirements4": {
+    "defaultMessage": "Battery holder",
+    "description": ""
+  },
+  "connectMB.radioStart.requirements4.subtitle": {
+    "defaultMessage": "with batteries",
+    "description": ""
+  },
+  "connectMB.radioStart.switchBluetooth": {
+    "defaultMessage": "Connect using Web Bluetooth instead",
+    "description": ""
+  },
+  "connectMB.reconnecting": {
+    "defaultMessage": "Reconnecting…",
+    "description": ""
+  },
+  "connectMB.transferHex.altText": {
+    "defaultMessage": "animation of dragging a hex file from the downloads folder onto the micro:bit drive or device listed in the file explorer",
+    "description": ""
+  },
+  "connectMB.transferHex.heading": {
+    "defaultMessage": "Transfer saved hex file to micro:bit",
+    "description": ""
+  },
+  "connectMB.transferHex.manualDownload": {
+    "defaultMessage": "If the file did not automatically download then <link>please download the file here</link>.",
+    "description": ""
+  },
+  "connectMB.transferHex.message": {
+    "defaultMessage": "Drag the hex file from your Downloads folder to the MICROBIT drive.",
+    "description": ""
+  },
+  "connectMB.troubleshoot": {
+    "defaultMessage": "Troubleshoot problems with connecting to your micro:bit",
+    "description": ""
+  },
+  "connectMB.troubleshooting": {
+    "defaultMessage": "Troubleshooting",
+    "description": ""
+  },
+  "connectMB.tryAgain": {
+    "defaultMessage": "Try again",
+    "description": ""
+  },
+  "connectMB.unsupportedMicrobit.ctaWithBluetooth": {
+    "defaultMessage": "Connect with Web Bluetooth",
+    "description": ""
+  },
+  "connectMB.unsupportedMicrobit.explain": {
+    "defaultMessage": "Unfortunately, we only support using micro:bit V2 when connecting two micro:bits. You have connected a <link>micro:bit V1</link>.",
+    "description": ""
+  },
+  "connectMB.unsupportedMicrobit.header": {
+    "defaultMessage": "micro:bit V1 is not supported for connecting two micro:bits",
+    "description": ""
+  },
+  "connectMB.unsupportedMicrobit.withBluetooth": {
+    "defaultMessage": "Please use Web Bluetooth to connect to your micro:bit V1 instead.",
+    "description": ""
+  },
+  "connectMB.unsupportedMicrobit.withoutBluetooth": {
+    "defaultMessage": "You can connect to micro:bit V1 using Web Bluetooth, however, this browser or device does not have Bluetooth enabled. <link>How to enable Bluetooth</link>.",
+    "description": ""
+  },
+  "connectMB.usb.firmwareBroken.content1": {
+    "defaultMessage": "Connecting to the micro:bit failed because the firmware on your micro:bit is too old.",
+    "description": ""
+  },
+  "connectMB.usb.firmwareBroken.content2": {
+    "defaultMessage": "You must <link>update your firmware</link> before you can connect to this micro:bit.",
+    "description": ""
+  },
+  "connectMB.usb.firmwareBroken.content3": {
+    "defaultMessage": "Troubleshoot problems with connecting to your micro:bit",
+    "description": ""
+  },
+  "connectMB.usb.firmwareBroken.heading": {
+    "defaultMessage": "Firmware update required",
+    "description": ""
+  },
+  "connectMB.usb.firmwareBroken.skip": {
+    "defaultMessage": "Skip and transfer manually",
+    "description": ""
+  },
+  "connectMB.usbDownloading.header": {
+    "defaultMessage": "Downloading program to micro:bit",
+    "description": ""
+  },
+  "connectMB.usbDownloading.subtitle": {
+    "defaultMessage": "Please wait. Downloading program to micro:bit.",
+    "description": ""
+  },
+  "connectMB.usbDownloadingMB1.header": {
+    "defaultMessage": "Downloading program to micro:bit 1",
+    "description": ""
+  },
+  "connectMB.usbDownloadingMB2.header": {
+    "defaultMessage": "Downloading program to micro:bit 2",
+    "description": ""
+  },
+  "connectMB.usbTryAgain.closeTabs1": {
+    "defaultMessage": "Another process is connected to this device.",
+    "description": ""
+  },
+  "connectMB.usbTryAgain.closeTabs2": {
+    "defaultMessage": "Close any other tabs that may be using WebUSB (e.g. MakeCode, Python Editor, machine learning tool), or unplug and replug the micro:bit before trying again.",
+    "description": ""
+  },
+  "connectMB.usbTryAgain.heading": {
+    "defaultMessage": "Connect using WebUSB",
+    "description": ""
+  },
+  "connectMB.usbTryAgain.replugMicrobit1": {
+    "defaultMessage": "A WebUSB error occurred.",
+    "description": ""
+  },
+  "connectMB.usbTryAgain.replugMicrobit2": {
+    "defaultMessage": "Please:",
+    "description": ""
+  },
+  "connectMB.usbTryAgain.replugMicrobit3": {
+    "defaultMessage": "check that this micro:bit does not have a battery pack connected",
+    "description": ""
+  },
+  "connectMB.usbTryAgain.replugMicrobit4": {
+    "defaultMessage": "unplug and replug the USB cable",
+    "description": ""
+  },
+  "connectMB.usbTryAgain.selectMicrobit": {
+    "defaultMessage": "You didn't select a micro:bit. Do you want to try again?",
+    "description": ""
+  },
+  "connectMB.webPopup": {
+    "defaultMessage": "Select micro:bit",
+    "description": ""
+  },
+  "connectMB.webPopup.instruction.heading": {
+    "defaultMessage": "In the next popup",
+    "description": ""
+  },
+  "connectMB.webPopup.instruction1": {
+    "defaultMessage": "Choose your micro:bit",
+    "description": ""
+  },
+  "connectMB.webPopup.webBluetooth.altText": {
+    "defaultMessage": "Web Bluetooth connection dialog with BBC micro:bit entry labelled 1 and Pair button labelled 2",
+    "description": ""
+  },
+  "connectMB.webPopup.webBluetooth.instruction2": {
+    "defaultMessage": "Select 'Pair'",
+    "description": ""
+  },
+  "connectMB.webPopup.webUsb.altText": {
+    "defaultMessage": "WebUSB connection dialog with BBC micro:bit entry labelled 1 and Connect button labelled 2",
+    "description": ""
+  },
+  "connectMB.webPopup.webUsb.instruction2": {
+    "defaultMessage": "Select 'Connect'",
+    "description": ""
+  },
+  "content.data.addAction": {
+    "defaultMessage": "Add action",
+    "description": ""
+  },
+  "content.data.addAction.inputLabel": {
+    "defaultMessage": "Name of action field",
+    "description": ""
+  },
+  "content.data.addActionWalkThrough": {
+    "defaultMessage": "Name an action you want the micro:bit to recognise",
+    "description": ""
+  },
+  "content.data.addRecordingWalkThrough": {
+    "defaultMessage": "Press to record a data sample or press button B on your micro:bit.",
+    "description": ""
+  },
+  "content.data.classHelpBody": {
+    "defaultMessage": "The type of movement you want the machine learning tool to recognise e.g. 'wave' or 'clap'. ",
+    "description": ""
+  },
+  "content.data.classHelpHeader": {
+    "defaultMessage": "Action",
+    "description": ""
+  },
+  "content.data.classPlaceholderNewClass": {
+    "defaultMessage": "Name of action",
+    "description": ""
+  },
+  "content.data.classification": {
+    "defaultMessage": "Action",
+    "description": ""
+  },
+  "content.data.controlbar.button.clearData": {
+    "defaultMessage": "Delete all data samples",
+    "description": ""
+  },
+  "content.data.controlbar.button.clearData.confirm": {
+    "defaultMessage": "Are you sure you wish to delete all data samples?\nThis cannot be undone.",
+    "description": ""
+  },
+  "content.data.controlbar.button.downloadData": {
+    "defaultMessage": "Download all data samples",
+    "description": ""
+  },
+  "content.data.controlbar.button.menu": {
+    "defaultMessage": "Data actions",
+    "description": ""
+  },
+  "content.data.controlbar.button.uploadData": {
+    "defaultMessage": "Import data samples",
+    "description": ""
+  },
+  "content.data.data": {
+    "defaultMessage": "Data samples",
+    "description": ""
+  },
+  "content.data.dataDescription": {
+    "defaultMessage": "Multiple samples of movement data collected in approximately 2 second bursts.",
+    "description": ""
+  },
+  "content.data.deleteAction": {
+    "defaultMessage": "Delete action \"{action}\"",
+    "description": ""
+  },
+  "content.data.deleteRecording": {
+    "defaultMessage": "Delete recording",
+    "description": ""
+  },
+  "content.data.recordAction": {
+    "defaultMessage": "Record data for action \"{action}\"",
+    "description": ""
+  },
+  "content.data.recording.button.cancel": {
+    "defaultMessage": "Cancel recording",
+    "description": ""
+  },
+  "content.data.recordingDialog.go": {
+    "defaultMessage": "Go",
+    "description": ""
+  },
+  "content.data.recordingDialog.recording": {
+    "defaultMessage": "Recording",
+    "description": ""
+  },
+  "content.data.recordingDialog.title": {
+    "defaultMessage": "Record data for action \"{action}\"",
+    "description": ""
+  },
+  "content.data.selectAndRecordAction": {
+    "defaultMessage": "Select action \"{action}\" and record data",
+    "description": ""
+  },
+  "content.index.dataWarning.subtitleOne": {
+    "defaultMessage": "You have existing data that will be lost when you start a new session.",
+    "description": ""
+  },
+  "content.index.dataWarning.subtitleTwo": {
+    "defaultMessage": "To save your data, <link>download all data samples</link> before continuing.",
+    "description": ""
+  },
+  "content.index.dataWarning.title": {
+    "defaultMessage": "Existing data samples will be lost",
+    "description": ""
+  },
+  "content.index.title": {
+    "defaultMessage": "machine learning tool",
+    "description": ""
+  },
+  "content.index.toolProcessCards.data.description": {
+    "defaultMessage": "Add samples of the actions you would like your model to recognise (e.g. waving and clapping).",
+    "description": ""
+  },
+  "content.index.toolProcessCards.data.title": {
+    "defaultMessage": "Add data",
+    "description": ""
+  },
+  "content.index.toolProcessCards.model.description": {
+    "defaultMessage": "Find out if it correctly recognises each action. Add more data to improve the model.",
+    "description": ""
+  },
+  "content.index.toolProcessCards.model.title": {
+    "defaultMessage": "Test model",
+    "description": ""
+  },
+  "content.index.toolProcessCards.train.description": {
+    "defaultMessage": "Ask the computer to use your training samples to train the machine learning model to recognise different actions.",
+    "description": ""
+  },
+  "content.index.toolProcessCards.train.title": {
+    "defaultMessage": "Train model",
+    "description": ""
+  },
+  "content.model.addData": {
+    "defaultMessage": "Add data",
+    "description": ""
+  },
+  "content.model.notEnoughDataInfoBody1": {
+    "defaultMessage": "You cannot test the model until it has been trained.",
+    "description": ""
+  },
+  "content.model.notEnoughDataInfoBody2": {
+    "defaultMessage": "You need at least 3 data samples for 2 actions to train a model.",
+    "description": ""
+  },
+  "content.model.output.action.descriptionBody": {
+    "defaultMessage": "The type of movement you want the machine learning tool to recognise e.g. ‘wave’ or ‘clap’.",
+    "description": ""
+  },
+  "content.model.output.action.descriptionTitle": {
+    "defaultMessage": "Action",
+    "description": ""
+  },
+  "content.model.output.action.iconTitle": {
+    "defaultMessage": "Action",
+    "description": ""
+  },
+  "content.model.output.certainty.descriptionBody": {
+    "defaultMessage": "How confident the model is that you are currently doing each action.",
+    "description": ""
+  },
+  "content.model.output.certainty.descriptionTitle": {
+    "defaultMessage": "Certainty",
+    "description": ""
+  },
+  "content.model.output.certainty.iconTitle": {
+    "defaultMessage": "Certainty",
+    "description": ""
+  },
+  "content.model.output.estimatedGesture.descriptionBody": {
+    "defaultMessage": "This is the action the model thinks you are currently doing.",
+    "description": ""
+  },
+  "content.model.output.estimatedGesture.descriptionTitle": {
+    "defaultMessage": "Estimated action",
+    "description": ""
+  },
+  "content.model.output.estimatedGesture.iconTitle": {
+    "defaultMessage": "Estimated action:",
+    "description": ""
+  },
+  "content.model.output.estimatedGesture.label": {
+    "defaultMessage": "Estimated action: \"{action}\"",
+    "description": ""
+  },
+  "content.model.output.estimatedGesture.none": {
+    "defaultMessage": "None",
+    "description": ""
+  },
+  "content.model.output.recognitionPoint": {
+    "defaultMessage": "Recognition Point:",
+    "description": ""
+  },
+  "content.model.retrainModelBody": {
+    "defaultMessage": "You need to train your model with the current set of data samples before you can test it.",
+    "description": ""
+  },
+  "content.model.trainModelBody": {
+    "defaultMessage": "You need to train your model before you can test it.",
+    "description": ""
+  },
+  "content.model.trainModelFirstHeading": {
+    "defaultMessage": "Test model",
+    "description": ""
+  },
+  "content.trainer.description": {
+    "defaultMessage": "The computer program spots patterns or differences in your data samples, and uses these to build a mathematical model that allows the micro:bit machine learning tool to recognise different actions when you move your micro:bit.",
+    "description": ""
+  },
+  "content.trainer.enoughdata.title": {
+    "defaultMessage": "Status: You've collected enough data to train the model.",
+    "description": ""
+  },
+  "content.trainer.failure.body": {
+    "defaultMessage": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data samples for different actions are too similar, this can result in issues in the training process.",
+    "description": ""
+  },
+  "content.trainer.failure.header": {
+    "defaultMessage": "Training failed",
+    "description": ""
+  },
+  "content.trainer.failure.todo": {
+    "defaultMessage": "Return to the Add data page and change your data.",
+    "description": ""
+  },
+  "content.trainer.header": {
+    "defaultMessage": "Training a model",
+    "description": ""
+  },
+  "content.trainer.retrain.title": {
+    "defaultMessage": "Status: Your data samples have changed. You can retrain the model.",
+    "description": ""
+  },
+  "content.trainer.training.title": {
+    "defaultMessage": "Status: Training the model in progress.",
+    "description": ""
+  },
+  "disconnectedWarning.bluetooth1": {
+    "defaultMessage": "The connection to the micro:bit has been lost.",
+    "description": ""
+  },
+  "disconnectedWarning.bluetooth2": {
+    "defaultMessage": "Please check that the micro:bit:",
+    "description": ""
+  },
+  "disconnectedWarning.bluetooth3": {
+    "defaultMessage": "is powered on (the red light on the back of the micro:bit should be on)",
+    "description": ""
+  },
+  "disconnectedWarning.bluetooth4": {
+    "defaultMessage": "is close to the computer",
+    "description": ""
+  },
+  "disconnectedWarning.bluetoothHeading": {
+    "defaultMessage": "micro:bit connection lost",
+    "description": ""
+  },
+  "disconnectedWarning.bridge1": {
+    "defaultMessage": "The connection to the micro:bit connected to your computer has been lost.",
+    "description": ""
+  },
+  "disconnectedWarning.bridgeHeading": {
+    "defaultMessage": "micro:bit 2 connection lost",
+    "description": ""
+  },
+  "disconnectedWarning.remote1": {
+    "defaultMessage": "The connection to the wireless micro:bit has been lost.",
+    "description": ""
+  },
+  "disconnectedWarning.remoteHeading": {
+    "defaultMessage": "micro:bit 1 connection lost",
+    "description": ""
+  },
+  "footer.connectButton": {
+    "defaultMessage": "Connect",
+    "description": ""
+  },
+  "footer.disconnectButton": {
+    "defaultMessage": "Disconnect",
+    "description": ""
+  },
+  "footer.helpContent": {
+    "defaultMessage": "This graph shows movement data from the microbit’s accelerometer in real time. Try moving your connected micro:bit to see the X, Y and Z axes change.",
+    "description": ""
+  },
+  "footer.helpHeader": {
+    "defaultMessage": "Live graph",
+    "description": ""
+  },
+  "footer.resume": {
+    "defaultMessage": "Resume session",
+    "description": ""
+  },
+  "footer.start": {
+    "defaultMessage": "Start new session",
+    "description": ""
+  },
+  "helpMenu.about": {
+    "defaultMessage": "About",
+    "description": ""
+  },
+  "helpMenu.cookies": {
+    "defaultMessage": "Cookies",
+    "description": ""
+  },
+  "helpMenu.helpAndSupport": {
+    "defaultMessage": "Help & support",
+    "description": ""
+  },
+  "helpMenu.label": {
+    "defaultMessage": "Help",
+    "description": ""
+  },
+  "helpMenu.privacyPolicy": {
+    "defaultMessage": "Privacy policy",
+    "description": ""
+  },
+  "helpMenu.termsOfUse": {
+    "defaultMessage": "Terms of use",
+    "description": ""
+  },
+  "homepage.Link": {
+    "defaultMessage": "Home page",
+    "description": ""
+  },
+  "info.label": {
+    "defaultMessage": "More information about \"{item}\"",
+    "description": ""
+  },
+  "languageDialog.title": {
+    "defaultMessage": "Language",
+    "description": ""
+  },
+  "loading": {
+    "defaultMessage": "loading",
+    "description": ""
+  },
+  "menu.data.helpHeading": {
+    "defaultMessage": "1. Add data",
+    "description": ""
+  },
+  "menu.model.connectInputMicrobit": {
+    "defaultMessage": "Connect micro:bit",
+    "description": ""
+  },
+  "menu.model.disconnect": {
+    "defaultMessage": "Disconnect output micro:bit",
+    "description": ""
+  },
+  "menu.model.helpHeading": {
+    "defaultMessage": "3. Test model",
+    "description": ""
+  },
+  "menu.model.noModel": {
+    "defaultMessage": "No model",
+    "description": ""
+  },
+  "menu.trainer.TrainingFinished": {
+    "defaultMessage": "Status: Your model is trained.",
+    "description": ""
+  },
+  "menu.trainer.addDataButton": {
+    "defaultMessage": "Add data",
+    "description": ""
+  },
+  "menu.trainer.addMoreDataButton": {
+    "defaultMessage": "Add more data",
+    "description": ""
+  },
+  "menu.trainer.helpHeading": {
+    "defaultMessage": "2. Train model",
+    "description": ""
+  },
+  "menu.trainer.notConnected1": {
+    "defaultMessage": "You do not have a micro:bit connected",
+    "description": ""
+  },
+  "menu.trainer.notConnected2": {
+    "defaultMessage": " Select the ‘Connect’ button to connect a micro:bit.",
+    "description": ""
+  },
+  "menu.trainer.notEnoughDataHeader1": {
+    "defaultMessage": "Status: You don't have enough data.",
+    "description": ""
+  },
+  "menu.trainer.notEnoughDataInfoBody": {
+    "defaultMessage": "You need at least 3 data samples for 2 actions to train the model.",
+    "description": ""
+  },
+  "menu.trainer.testModelButton": {
+    "defaultMessage": "Test model",
+    "description": ""
+  },
+  "menu.trainer.trainModelButton": {
+    "defaultMessage": "Train model",
+    "description": ""
+  },
+  "performanceWarning.content1": {
+    "defaultMessage": "The quality of data being received from your micro:bit is low. This could be due to a connection issue.",
+    "description": ""
+  },
+  "performanceWarning.content2": {
+    "defaultMessage": "Do you want to restart the connection process to try to improve performance?",
+    "description": ""
+  },
+  "performanceWarning.heading": {
+    "defaultMessage": "Low quality connection",
+    "description": ""
+  },
+  "performanceWarning.ignore": {
+    "defaultMessage": "Don't show this again",
+    "description": ""
+  },
+  "performanceWarning.nextButton": {
+    "defaultMessage": "Next",
+    "description": ""
+  },
+  "performanceWarning.troubleshoot": {
+    "defaultMessage": "Troubleshoot problems with connection quality",
+    "description": ""
+  },
+  "popup.appVersionRedirect.button.redirect": {
+    "defaultMessage": "I'm a UK primary school teacher",
+    "description": ""
+  },
+  "popup.appVersionRedirect.button.stay": {
+    "defaultMessage": "I'm not a UK primary school teacher",
+    "description": ""
+  },
+  "popup.appVersionRedirect.explain": {
+    "defaultMessage": "If you are a UK* primary school teacher, you will be redirected to the version of this tool designed for the UK's BBC micro:bit playground survey.",
+    "description": ""
+  },
+  "popup.appVersionRedirect.header": {
+    "defaultMessage": "Are you a UK* primary school teacher?",
+    "description": ""
+  },
+  "popup.appVersionRedirect.uk": {
+    "defaultMessage": "*includes crown dependencies Jersey, Guernsey and the Isle of Man",
+    "description": ""
+  },
+  "popup.compatibility.advice": {
+    "defaultMessage": "We recommend Google Chrome or Microsoft Edge so you can connect directly to your micro:bit.",
+    "description": ""
+  },
+  "popup.compatibility.explain": {
+    "defaultMessage": "Unfortunately, WebUSB and Web Bluetooth are not supported by this browser. This means you cannot connect to a micro:bit to record the data samples needed to train a machine learning model.",
+    "description": ""
+  },
+  "popup.compatibility.header": {
+    "defaultMessage": "This browser is not supported",
+    "description": ""
+  },
+  "popup.outdatedmicrobit.button.later": {
+    "defaultMessage": "Later",
+    "description": ""
+  },
+  "popup.outdatedmicrobit.button.update": {
+    "defaultMessage": "Update now",
+    "description": ""
+  },
+  "popup.outdatedmicrobit.button.update.mkcd": {
+    "defaultMessage": "Open MakeCode",
+    "description": ""
+  },
+  "popup.outdatedmicrobit.header": {
+    "defaultMessage": "Your micro:bit has an outdated machine learning tool program",
+    "description": ""
+  },
+  "popup.outdatedmicrobit.text": {
+    "defaultMessage": "We strongly recommend that you update it now, as some features may not work as expected.",
+    "description": ""
+  },
+  "popup.outdatedmicrobit.text.mkcd": {
+    "defaultMessage": "Open the newest MakeCode template to use the updated extension.",
+    "description": ""
+  },
+  "prototype.warning": {
+    "defaultMessage": "This is a prototype version and is subject to change without notice",
+    "description": ""
+  },
+  "reconnectFailed.bluetooth1": {
+    "defaultMessage": "The connection to the micro:bit could not be re-established.",
+    "description": ""
+  },
+  "reconnectFailed.bluetoothHeading": {
+    "defaultMessage": "Failed to reconnect to micro:bit",
+    "description": ""
+  },
+  "reconnectFailed.bridge1": {
+    "defaultMessage": "The connection to the micro:bit connected to your computer could not be re-established.",
+    "description": ""
+  },
+  "reconnectFailed.bridgeHeading": {
+    "defaultMessage": "Failed to reconnect to micro:bit 2",
+    "description": ""
+  },
+  "reconnectFailed.radioHeading": {
+    "defaultMessage": "Failed to reconnect to micro:bits",
+    "description": ""
+  },
+  "reconnectFailed.remote1": {
+    "defaultMessage": "The connection to the wireless micro:bit could not be re-established.",
+    "description": ""
+  },
+  "reconnectFailed.remoteHeading": {
+    "defaultMessage": "Failed to reconnect to micro:bit 1",
+    "description": ""
+  },
+  "reconnectFailed.subtitle": {
+    "defaultMessage": "Follow these instructions to restart the connection process.",
+    "description": ""
+  },
+  "resources.getStarted.video": {
+    "defaultMessage": "get started video",
+    "description": ""
+  },
+  "resources.introduction.video": {
+    "defaultMessage": "introduction video",
+    "description": ""
+  },
+  "settings.label": {
+    "defaultMessage": "Settings",
+    "description": ""
+  },
+  "sign-up.content": {
+    "defaultMessage": "Welcome to our prototype of the micro:bit machine learning tool. We’d love you to try it out and give us your feedback. Please enter your email so we can keep you updated as it evolves.",
+    "description": ""
+  },
+  "sign-up.email-label": {
+    "defaultMessage": "Email",
+    "description": ""
+  },
+  "sign-up.error": {
+    "defaultMessage": "Something went wrong. Please try again or <link>contact us</link>.",
+    "description": ""
+  },
+  "sign-up.invalid": {
+    "defaultMessage": "Please enter a valid email address",
+    "description": ""
+  },
+  "sign-up.sign-up-action": {
+    "defaultMessage": "Sign up",
+    "description": ""
+  },
+  "sign-up.skip-action": {
+    "defaultMessage": "Skip",
+    "description": ""
+  },
+  "sign-up.title": {
+    "defaultMessage": "Join our testing community",
+    "description": ""
+  }
+}

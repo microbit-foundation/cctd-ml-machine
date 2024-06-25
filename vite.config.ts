@@ -4,31 +4,32 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
+import svgr from "vite-plugin-svgr";
 
 export default defineConfig(({ mode }) => {
-  const commonEnv = loadEnv(mode, process.cwd(), '');
+  const commonEnv = loadEnv(mode, process.cwd(), "");
 
   return {
-    base: process.env.BASE_URL ?? '/',
-    plugins: [
-      react()
-    ],
+    base: process.env.BASE_URL ?? "/",
+    plugins: [react(), svgr()],
     define: {
-      'import.meta.env.VITE_APP_VERSION': JSON.stringify(process.env.npm_package_version),
+      "import.meta.env.VITE_APP_VERSION": JSON.stringify(
+        process.env.npm_package_version
+      ),
     },
     build: {
-      target: 'es2017',
+      target: "es2017",
       rollupOptions: {
-        input: 'index.html',
+        input: "index.html",
       },
     },
     server: commonEnv.API_PROXY
       ? {
           port: 5173,
           proxy: {
-            '/api/v1': {
+            "/api/v1": {
               target: commonEnv.API_PROXY,
               changeOrigin: true,
             },

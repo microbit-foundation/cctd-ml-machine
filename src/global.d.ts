@@ -3,5 +3,3 @@
  *
  * SPDX-License-Identifier: MIT
  */
-
-/// <reference types="svelte" />

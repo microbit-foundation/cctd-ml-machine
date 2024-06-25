@@ -1,46 +1,25 @@
-/**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
- *
- * SPDX-License-Identifier: MIT
- */
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
-  "include": [
-    "src/**/*",
-    "src/node_modules/**/*"
-  ],
-  "exclude": [
-    "node_modules/*",
-    "__sapper__/*",
-    "public/*",
-  ],
   "compilerOptions": {
-    "allowJs": true,
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "lib": [
-      "DOM",
-      "ESNext",
-      "WebWorker"
-    ],
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "noImplicitAny": true,
-    "noEmit": true,
-    "esModuleInterop": true,
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "importsNotUsedAsValues": "remove",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
     "strict": true,
-    "verbatimModuleSyntax": false,
-    "ignoreDeprecations": "5.0",
-    "noFallthroughCasesInSwitch": true,
-    "types": [
-      "node",
-      "svelte",
-      "vitest/globals",
-      "w3c-web-serial"
-    ],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "files": [
-    "./windi.config.js"
-  ]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

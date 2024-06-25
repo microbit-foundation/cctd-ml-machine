@@ -7,12 +7,8 @@ module.exports = {
   arrowParens: 'avoid',
   singleQuote: true,
   printWidth: 90,
-  plugins: ['prettier-plugin-svelte'],
+  plugins: [],
   semi: true,
-  svelteSortOrder: 'options-styles-scripts-markup',
-  svelteStrictMode: false,
   bracketSameLine: true,
-  svelteAllowShorthand: true,
-  svelteIndentScriptAndStyle: true,
   trailingComma: 'all',
 };

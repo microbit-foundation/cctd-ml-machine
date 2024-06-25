@@ -9,7 +9,7 @@ import CookieManager from './script/CookieManager';
 
 const load = () => {
   // Do not load if the connection string is not set. E.g. in local development
-  if (process.env.APPINSIGHTS_CONNECT === undefined || process.env.APPINSIGHTS_CONNECT === '') {
+  if (process.env.APP_INSIGHTS_INSTRUMENTATION_KEY === undefined || process.env.APP_INSIGHTS_INSTRUMENTATION_KEY === '') {
     return;
   }
   if (CookieManager.getComplianceChoices().analytics) {
@@ -20,7 +20,7 @@ const load = () => {
 export const appInsights = new ApplicationInsights({
   config: {
     connectionString:
-      process.env.APPINSIGHTS_CONNECT, // Add this environment variable to enable AppInsights 
+    process.env.APP_INSIGHTS_INSTRUMENTATION_KEY, // Add this environment variable to enable AppInsights 
     },
 });
 

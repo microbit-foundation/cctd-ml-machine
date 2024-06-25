@@ -5,6 +5,13 @@
 // This script is used to setup different build configurations
 // run by ` node prepEnv.js branded ` for ml-machine-branded config
 import { copyFile } from 'node:fs/promises';
+import * as fs from 'fs';
+
+const appInsightsKey = process.env.APP_INSIGHTS_INSTRUMENTATION_KEY;
+if (appInsightsKey) {
+    const envText = "APP_INSIGHTS_INSTRUMENTATION_KEY=" + appInsightsKey;
+    fs.writeFileSync(".env", envText);
+}
 
 // Validate input
 const args = process.argv;

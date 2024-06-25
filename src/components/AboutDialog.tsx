@@ -75,7 +75,7 @@ const AboutDialog = ({
               </Center>
               <Text fontSize="xl" fontFamily="GT Walsheim">
                 <FormattedMessage
-                  id="about-dialog-title"
+                  id="about.developedInPartnership"
                   values={{
                     link: (chunks: ReactNode) => (
                       <Link

@@ -1,22 +1,18 @@
 {
+  "about": {
+    "defaultMessage": "About",
+    "description": "Menu item link to view information about app"
+  },
+  "about-dialog-alt": {
+    "defaultMessage": "micro:bit board showing a heart on the LED display",
+    "description": "Alt text for image in about dialog"
+  },
   "about.developedInPartnership": {
     "defaultMessage": "Developed in partnership with <link>Center for Computational Thinking and Design, Aarhus University</link>",
     "description": ""
   },
-  "about.microbitHeartImageAlt": {
-    "defaultMessage": "micro:bit board with the 5 by 5 LED grid showing a heart",
-    "description": ""
-  },
-  "about.softwareVersions": {
-    "defaultMessage": "Software versions",
-    "description": ""
-  },
   "actions.cancel": {
     "defaultMessage": "Cancel",
-    "description": ""
-  },
-  "actions.close": {
-    "defaultMessage": "Close",
     "description": ""
   },
   "actions.reconnect": {
@@ -70,6 +66,10 @@
   "arrowIconRight.altText": {
     "defaultMessage": "arrow pointing right",
     "description": ""
+  },
+  "close-action": {
+    "defaultMessage": "Close",
+    "description": "Close button text or label"
   },
   "compatibility.platform.notSupported": {
     "defaultMessage": "The tool is not supported on your current platform.",
@@ -659,6 +659,18 @@
     "defaultMessage": "Status: Training the model in progress.",
     "description": ""
   },
+  "cookies-action": {
+    "defaultMessage": "Cookies",
+    "description": "Action to show dialog to choose website cookie preferences"
+  },
+  "copied": {
+    "defaultMessage": "Copied",
+    "description": "Displayed as copy button text briefly after successful copy action"
+  },
+  "copy-action": {
+    "defaultMessage": "Copy",
+    "description": "Copy button text"
+  },
   "disconnectedWarning.bluetooth1": {
     "defaultMessage": "The connection to the micro:bit has been lost.",
     "description": ""
@@ -719,28 +731,16 @@
     "defaultMessage": "Start new session",
     "description": ""
   },
-  "helpMenu.about": {
-    "defaultMessage": "About",
-    "description": ""
+  "help-label": {
+    "defaultMessage": "Help",
+    "description": "Help icon aria label"
+  },
+  "help-support": {
+    "defaultMessage": "Help & support",
+    "description": "Link or menu item link to support site"
   },
   "helpMenu.cookies": {
     "defaultMessage": "Cookies",
-    "description": ""
-  },
-  "helpMenu.helpAndSupport": {
-    "defaultMessage": "Help & support",
-    "description": ""
-  },
-  "helpMenu.label": {
-    "defaultMessage": "Help",
-    "description": ""
-  },
-  "helpMenu.privacyPolicy": {
-    "defaultMessage": "Privacy policy",
-    "description": ""
-  },
-  "helpMenu.termsOfUse": {
-    "defaultMessage": "Terms of use",
     "description": ""
   },
   "homepage.Link": {
@@ -751,9 +751,9 @@
     "defaultMessage": "More information about \"{item}\"",
     "description": ""
   },
-  "languageDialog.title": {
+  "language": {
     "defaultMessage": "Language",
-    "description": ""
+    "description": "Language option text"
   },
   "loading": {
     "defaultMessage": "loading",
@@ -899,6 +899,10 @@
     "defaultMessage": "Open the newest MakeCode template to use the updated extension.",
     "description": ""
   },
+  "privacy": {
+    "defaultMessage": "Privacy policy",
+    "description": "Link to view privacy policy"
+  },
   "prototype.warning": {
     "defaultMessage": "This is a prototype version and is subject to change without notice",
     "description": ""
@@ -943,9 +947,9 @@
     "defaultMessage": "introduction video",
     "description": ""
   },
-  "settings.label": {
-    "defaultMessage": "Settings",
-    "description": ""
+  "settings-menu-action": {
+    "defaultMessage": "Settings actions menu",
+    "description": "Label for settings actions menu button"
   },
   "sign-up.content": {
     "defaultMessage": "Welcome to our prototype of the micro:bit machine learning tool. We’d love you to try it out and give us your feedback. Please enter your email so we can keep you updated as it evolves.",
@@ -974,5 +978,17 @@
   "sign-up.title": {
     "defaultMessage": "Join our testing community",
     "description": ""
+  },
+  "software-versions": {
+    "defaultMessage": "Software versions",
+    "description": "Software versions text"
+  },
+  "support-request": {
+    "defaultMessage": "Please consider <link>raising a support request</link>.",
+    "description": "Support request link text"
+  },
+  "terms": {
+    "defaultMessage": "Terms of use",
+    "description": "Link or menu item link to view terms of use"
   }
 }

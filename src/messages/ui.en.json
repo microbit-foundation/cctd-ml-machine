@@ -1,4 +1,16 @@
 {
+  "about": [
+    {
+      "type": 0,
+      "value": "About"
+    }
+  ],
+  "about-dialog-alt": [
+    {
+      "type": 0,
+      "value": "micro:bit board showing a heart on the LED display"
+    }
+  ],
   "about.developedInPartnership": [
     {
       "type": 0,
@@ -15,28 +27,10 @@
       "value": "link"
     }
   ],
-  "about.microbitHeartImageAlt": [
-    {
-      "type": 0,
-      "value": "micro:bit board with the 5 by 5 LED grid showing a heart"
-    }
-  ],
-  "about.softwareVersions": [
-    {
-      "type": 0,
-      "value": "Software versions"
-    }
-  ],
   "actions.cancel": [
     {
       "type": 0,
       "value": "Cancel"
-    }
-  ],
-  "actions.close": [
-    {
-      "type": 0,
-      "value": "Close"
     }
   ],
   "actions.reconnect": [
@@ -131,6 +125,12 @@
     {
       "type": 0,
       "value": "arrow pointing right"
+    }
+  ],
+  "close-action": [
+    {
+      "type": 0,
+      "value": "Close"
     }
   ],
   "compatibility.platform.notSupported": [
@@ -1133,6 +1133,24 @@
       "value": "Status: Training the model in progress."
     }
   ],
+  "cookies-action": [
+    {
+      "type": 0,
+      "value": "Cookies"
+    }
+  ],
+  "copied": [
+    {
+      "type": 0,
+      "value": "Copied"
+    }
+  ],
+  "copy-action": [
+    {
+      "type": 0,
+      "value": "Copy"
+    }
+  ],
   "disconnectedWarning.bluetooth1": [
     {
       "type": 0,
@@ -1223,40 +1241,22 @@
       "value": "Start new session"
     }
   ],
-  "helpMenu.about": [
+  "help-label": [
     {
       "type": 0,
-      "value": "About"
+      "value": "Help"
+    }
+  ],
+  "help-support": [
+    {
+      "type": 0,
+      "value": "Help & support"
     }
   ],
   "helpMenu.cookies": [
     {
       "type": 0,
       "value": "Cookies"
-    }
-  ],
-  "helpMenu.helpAndSupport": [
-    {
-      "type": 0,
-      "value": "Help & support"
-    }
-  ],
-  "helpMenu.label": [
-    {
-      "type": 0,
-      "value": "Help"
-    }
-  ],
-  "helpMenu.privacyPolicy": [
-    {
-      "type": 0,
-      "value": "Privacy policy"
-    }
-  ],
-  "helpMenu.termsOfUse": [
-    {
-      "type": 0,
-      "value": "Terms of use"
     }
   ],
   "homepage.Link": [
@@ -1279,7 +1279,7 @@
       "value": "\""
     }
   ],
-  "languageDialog.title": [
+  "language": [
     {
       "type": 0,
       "value": "Language"
@@ -1501,6 +1501,12 @@
       "value": "Open the newest MakeCode template to use the updated extension."
     }
   ],
+  "privacy": [
+    {
+      "type": 0,
+      "value": "Privacy policy"
+    }
+  ],
   "prototype.warning": [
     {
       "type": 0,
@@ -1567,10 +1573,10 @@
       "value": "introduction video"
     }
   ],
-  "settings.label": [
+  "settings-menu-action": [
     {
       "type": 0,
-      "value": "Settings"
+      "value": "Settings actions menu"
     }
   ],
   "sign-up.content": [
@@ -1627,6 +1633,38 @@
     {
       "type": 0,
       "value": "Join our testing community"
+    }
+  ],
+  "software-versions": [
+    {
+      "type": 0,
+      "value": "Software versions"
+    }
+  ],
+  "support-request": [
+    {
+      "type": 0,
+      "value": "Please consider "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": "raising a support request"
+        }
+      ],
+      "type": 8,
+      "value": "link"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "terms": [
+    {
+      "type": 0,
+      "value": "Terms of use"
     }
   ]
 }

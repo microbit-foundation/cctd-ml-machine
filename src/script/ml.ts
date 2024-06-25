@@ -120,6 +120,7 @@ export async function trainModel(): Promise<tf.LayersModel | void> {
         },
       },
     });
+    model.set(nn);
   } catch (err) {
     trainingStatus.set(TrainingStatus.Failure);
     console.error('tensorflow training process failed:', err);
@@ -201,6 +202,8 @@ function onTrainEnd() {
     obj.trainingProgress = 0;
     return obj;
   });
+  trainingStatus.set(TrainingStatus.Success);
+  logEvent({ type: 'Data', action: 'Train model', ...getNumberOfActionsAndRecordings() });
   setupPredictionInterval();
 }
 

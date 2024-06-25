@@ -1,6 +1,6 @@
 import { Icon, MenuItem, useDisclosure } from "@chakra-ui/react";
 import { FormattedMessage } from "react-intl";
-import { LanguageIcon } from "../icons";
+import { IoMdGlobe } from "react-icons/io";
 import { LanguageDialog } from "./LanguageDialog";
 
 interface LanguageMenuItemProps {
@@ -18,7 +18,7 @@ const LanguageMenuItem = ({ finalFocusRef }: LanguageMenuItemProps) => {
         finalFocusRef={finalFocusRef}
       />
       <MenuItem
-        icon={<Icon h={5} w={5} as={LanguageIcon} />}
+        icon={<Icon h={5} w={5} as={IoMdGlobe} />}
         onClick={languageDisclosure.onOpen}
       >
         <FormattedMessage id="language" />

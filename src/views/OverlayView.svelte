@@ -11,6 +11,7 @@
   import ReconnectPrompt from '../components/ReconnectPrompt.svelte';
   import OutdatedMicrobitWarning from '../components/OutdatedMicrobitWarning.svelte';
   import { isInputPatternValid } from '../script/stores/connectionStore';
+  import FilterListFilterPreview from '../components/filters/FilterListFilterPreview.svelte';
 
   // Helps show error messages on top of page
   let latestMessage = '';
@@ -55,4 +56,5 @@
   {#if $state.isInputOutdated || $state.isOutputOutdated}
     <OutdatedMicrobitWarning targetRole={$state.isInputOutdated ? 'INPUT' : 'OUTPUT'} />
   {/if}
+  <FilterListFilterPreview />
 </div>

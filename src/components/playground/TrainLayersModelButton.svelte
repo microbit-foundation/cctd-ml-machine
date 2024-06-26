@@ -7,10 +7,12 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import Model from '../../script/domain/stores/Model';
   import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
-  import { classifier } from '../../script/stores/Stores';
+  import { stores } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';
 
+  const classifier = stores.getClassifier();
   const model: Model = classifier.getModel();
+
   const trainModelButtonClicked = () => {
     playgroundContext.addMessage('training model...');
     model

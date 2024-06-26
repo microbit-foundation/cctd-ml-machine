@@ -7,7 +7,7 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import TypingUtils from '../../script/TypingUtils';
-  import { classifier } from '../../script/stores/Stores';
+  import { stores } from '../../script/stores/Stores';
   import { state } from '../../script/stores/uiStore';
   import StandardButton from '../buttons/StandardButton.svelte';
 
@@ -15,7 +15,7 @@
   export let onOutputConnectButtonClicked: () => void;
   export let onInputDisconnectButtonClicked: () => void;
 
-  const model = classifier.getModel();
+  const model = stores.getClassifier().getModel();
 </script>
 
 <!-- These are the buttons that are present while the input micro:bit is connected-->

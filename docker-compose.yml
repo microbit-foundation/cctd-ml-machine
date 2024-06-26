@@ -1,0 +1,5 @@
+services:
+  ml:
+    build: .
+    ports:
+      - "5174:8080"

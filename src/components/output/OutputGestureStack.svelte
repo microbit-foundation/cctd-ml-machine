@@ -28,9 +28,10 @@
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import { gestures } from '../../script/stores/Stores';
   import Gesture, { SoundData } from '../../script/domain/stores/gesture/Gesture';
+  import { stores } from '../../script/stores/Stores';
 
+  const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component

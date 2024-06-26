@@ -6,10 +6,14 @@
 <script lang="ts">
   import Gesture from '../../script/domain/stores/gesture/Gesture';
   import AccelerometerClassifierInput from '../../script/mlmodels/AccelerometerClassifierInput';
-  import { classifier, engine, gestures } from '../../script/stores/Stores';
+  import { stores } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';
   import TrainKnnModelButton from './TrainKNNModelButton.svelte';
   import TrainLayersModelButton from './TrainLayersModelButton.svelte';
+
+  const classifier = stores.getClassifier();
+  const gestures = stores.getGestures();
+  const engine = stores.getEngine();
 
   const getRandomGesture = (): Gesture => {
     return gestures.getGestures()[

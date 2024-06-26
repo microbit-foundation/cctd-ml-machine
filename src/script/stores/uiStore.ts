@@ -13,11 +13,12 @@ import { t } from '../../i18n';
 import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
-import { classifier } from './Stores';
 import Gesture from '../domain/stores/gesture/Gesture';
 import Axes from '../domain/Axes';
 import PersistantWritable from '../repository/PersistantWritable';
 import { DropdownOption } from '../../components/buttons/Buttons';
+import { stores } from './Stores';
+import ModelRegistry, { ModelInfo } from '../domain/ModelRegistry';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -106,7 +107,7 @@ export function areActionsAllowed(actionAllowed = true, alertIfNotReady = true):
 function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: string } {
   const currentState = get(state);
 
-  const model = classifier.getModel();
+  const model = stores.getClassifier().getModel();
 
   if (currentState.isRecording) return { isReady: false, msg: text('alert.isRecording') };
   if (model.isTraining()) return { isReady: false, msg: text('alert.isTraining') };
@@ -127,39 +128,10 @@ export enum MicrobitInteractions {
   AB,
 }
 
-export type ModelEntry = {
-  id: string;
-  title: string;
-  label: string;
-};
-
-export const availableModels: ModelEntry[] = [
-  {
-    id: 'NN',
-    title: 'Neural network',
-    label: 'neural network',
-  },
-  {
-    id: 'KNN',
-    title: 'KNN',
-    label: 'KNN',
-  },
-];
-
-const defaultModel: ModelEntry | undefined = availableModels.find(
-  model => model.id === 'NN',
-);
-
-if (!defaultModel) {
-  throw new Error('Default model not found!');
-}
-// TODO: Should just be model id instead of dropdown option
-export const preferredModel = new PersistantWritable<DropdownOption>(
-  {
-    id: defaultModel.id,
-    label: defaultModel.label,
-  },
-  'prefferedModel',
+const defaultModel: ModelInfo = ModelRegistry.NeuralNetwork;
+export const selectedModel = new PersistantWritable<ModelInfo>(
+  defaultModel,
+  'selectedModel',
 );
 
 // TODO: Should probably be elsewhere

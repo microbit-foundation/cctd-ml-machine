@@ -45,7 +45,7 @@ class StaticConfiguration {
 
   // Link to the MakeCode firmware template
   public static readonly makecodeFirmwareUrl =
-    'https://makecode.microbit.org/#pub:54705-16835-80762-83855';
+    'https://makecode.microbit.org/#pub:52042-28239-00563-08630';
 
   public static readonly isMicrobitOutdated = (origin: HexOrigin, version: number) => {
     // Current versions, remember to update these, whenever changes to firmware are made!
@@ -58,7 +58,16 @@ class StaticConfiguration {
   };
 
   // Line colors are picked in the order of this array.
-  public static readonly liveGraphColors = ['#f9808e', '#80f98e', '#808ef9'];
+  public static readonly liveGraphColors = [
+    '#ff606e',
+    '#30f09e',
+    '#3030ff',
+    '#58355E',
+    '#E0FF4F',
+    '#FF2ECC',
+    '#F28F3B',
+    '#C8553D',
+  ];
 
   // Colors to assign to gestures, useful for identifying gestures on graphs.
   public static readonly gestureColors = [

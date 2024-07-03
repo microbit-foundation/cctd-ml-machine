@@ -16,6 +16,7 @@
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
   import { stores } from '../../../script/stores/Stores';
   import { get } from 'svelte/store';
+  import StaticConfiguration from '../../../StaticConfiguration';
 
   const classifierFactory = new ClassifierFactory();
 
@@ -51,11 +52,19 @@
 
   const initSingle = (axis: Axes) => {
     const svgSingle = d3.select('.d3-3d-single');
+    const graphColors = [
+      ...$gestures.map(data => data.color),
+      StaticConfiguration.gestureColors[$gestures.length],
+    ];
+    if (graphColors.length <= $gestures.length) {
+      throw new Error('Not enough colors');
+    }
     const controller = new KNNModelGraphController(
       svgSingle,
       () => dataGetter(),
       { x: canvasWidth / 2, y: canvasHeight / 2 },
       'd3-3d-single-',
+      graphColors,
       axis,
     );
     return controller;

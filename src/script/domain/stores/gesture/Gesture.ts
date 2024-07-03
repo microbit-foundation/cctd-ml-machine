@@ -73,6 +73,23 @@ class Gesture implements Readable<GestureData> {
     return get(this.store).name;
   }
 
+  /**
+   * Get the HEX color assigned to this gesture.
+   */
+  public getColor(): string {
+    return get(this.store).color;
+  }
+
+  /**
+   * Set the HEX color assigned to this gesture.
+   */
+  public setColor(color: string): void {
+    this.persistedData.update(val => {
+      val.color = color;
+      return val;
+    });
+  }
+
   public addRecording(recording: RecordingData) {
     this.onRecordingsChanged();
     this.persistedData.update(newVal => {
@@ -131,13 +148,14 @@ class Gesture implements Readable<GestureData> {
 
   private deriveStore(): Readable<GestureData> {
     return derived([this.persistedData, this.gestureConfidence], stores => {
-      const peristantData = stores[0];
+      const persistantData = stores[0];
       const confidenceData = stores[1];
       const derivedData: GestureData = {
-        ID: peristantData.ID,
-        name: peristantData.name,
-        recordings: peristantData.recordings,
-        output: peristantData.output,
+        ID: persistantData.ID,
+        name: persistantData.name,
+        recordings: persistantData.recordings,
+        output: persistantData.output,
+        color: persistantData.color,
         confidence: {
           currentConfidence: confidenceData.confidence,
           requiredConfidence: confidenceData.requiredConfidence,

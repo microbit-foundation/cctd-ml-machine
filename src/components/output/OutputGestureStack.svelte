@@ -194,6 +194,10 @@
 <main class="mb-4 items-center flex flex-row">
   <!-- NAMES AND CONFIDENCE METER -->
   <GestureTilePart>
+    <div
+      class="absolute rounded-full w-3 h-3 m-3"
+      style={`background-color:${gesture.getColor()}`}>
+    </div>
     <div class="items-center flex p-2">
       <div
         class="w-36 text-center font-semibold rounded-xl

@@ -21,6 +21,7 @@ export type PersistantGestureData = {
   ID: GestureID;
   recordings: RecordingData[];
   output: GestureOutput;
+  color: string;
 };
 
 export type RecordingData = {
@@ -90,11 +91,13 @@ class Gestures implements Readable<GestureData[]> {
 
   public createGesture(name = ''): Gesture {
     const newId = Date.now();
+    const color = StaticConfiguration.gestureColors[this.getNumberOfGestures() % StaticConfiguration.gestureColors.length];
     return this.addGestureFromPersistedData({
       ID: newId,
       recordings: [],
       output: {}, //TODO: ADD DEFAULT VALUES HERE
       name: name,
+      color
     });
   }
 
@@ -148,6 +151,7 @@ class Gestures implements Readable<GestureData[]> {
       name: gesture.getName(),
       recordings: gesture.getRecordings(),
       output: gesture.getOutput(),
+      color: gesture.getColor(),
       confidence: {
         currentConfidence: gesture.getConfidence().getCurrentConfidence(),
         requiredConfidence: gesture.getConfidence().getRequiredConfidence(),

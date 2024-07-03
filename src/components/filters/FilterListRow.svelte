@@ -55,21 +55,6 @@
           alt="data representation icon"
           class="w-6 hover:opacity-60 mr-0.5 cursor-pointer" />
       </div>
-      <!-- old icon
-      <div class="min-w-6 border-l-2">
-        <img
-          on:mouseenter={() => {
-            highlightedFilter.set(filterType);
-            showHighlighted.set(true);
-          }}
-          on:mouseleave={() => {
-            showHighlighted.set(false);
-          }}
-          src="imgs/ML_predict.svg"
-          alt="data representation icon"
-          class="w-6 hover:opacity-60 cursor-pointer" />
-      </div>
--->
     </div>
   </div>
 {/key}

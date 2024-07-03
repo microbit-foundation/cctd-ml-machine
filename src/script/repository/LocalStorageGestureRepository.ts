@@ -88,6 +88,7 @@ class LocalStorageGestureRepository implements GestureRepository {
       ID: gesture.getId(),
       name: gesture.getName(),
       recordings: gesture.getRecordings(),
+      color: gesture.getColor(),
       output: gesture.getOutput(),
     };
   }

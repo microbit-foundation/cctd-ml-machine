@@ -30,6 +30,7 @@ class KNNModelGraphController {
   private rotationX: Writable<number>;
   private rotationY: Writable<number>;
   private rotationZ: Writable<number>;
+  private graphColors: string[];
   private origin: Writable<{ x: number; y: number }>;
   private scale: Writable<number>;
   private graphDrawer: KNNModelGraphDrawer;
@@ -46,6 +47,7 @@ class KNNModelGraphController {
     private trainingDataGetter: () => TrainingData,
     origin: { x: number; y: number },
     classId: string,
+    colors: string[],
     axis?: Axes,
   ) {
     this.filters = stores.getClassifier().getFilters();
@@ -56,6 +58,7 @@ class KNNModelGraphController {
     this.rotationZ = writable(0);
     this.scale = writable(100);
     this.origin = writable(origin);
+    this.graphColors = colors;
 
     const noOfPoints = this.trainingData
       .map(el => el.length)
@@ -112,7 +115,7 @@ class KNNModelGraphController {
     return [this.arrayToPoint(sample.value)];
   }
 
-  private getControllerData() {
+  private getControllerData(): { config: GraphDrawConfig, data: TimestampedData<MicrobitAccelerometerDataVector>[] } {
     const classifier = stores.getClassifier();
     const xRot = get(this.rotationX);
     const yRot = get(this.rotationY);
@@ -156,7 +159,8 @@ class KNNModelGraphController {
         zRot,
         origin,
         scale,
-      } as GraphDrawConfig,
+        colors: this.graphColors
+      },
       data: liveData,
     };
   }

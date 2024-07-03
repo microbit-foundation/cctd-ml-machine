@@ -133,6 +133,5 @@ class StaticConfiguration {
   };
 
   public static readonly knnNeighbourCount = 3;
-
 }
 export default StaticConfiguration;

@@ -115,7 +115,10 @@ class KNNModelGraphController {
     return [this.arrayToPoint(sample.value)];
   }
 
-  private getControllerData(): { config: GraphDrawConfig, data: TimestampedData<MicrobitAccelerometerDataVector>[] } {
+  private getControllerData(): {
+    config: GraphDrawConfig;
+    data: TimestampedData<MicrobitAccelerometerDataVector>[];
+  } {
     const classifier = stores.getClassifier();
     const xRot = get(this.rotationX);
     const yRot = get(this.rotationY);
@@ -159,7 +162,7 @@ class KNNModelGraphController {
         zRot,
         origin,
         scale,
-        colors: this.graphColors
+        colors: this.graphColors,
       },
       data: liveData,
     };

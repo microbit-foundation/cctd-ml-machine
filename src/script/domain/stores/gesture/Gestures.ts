@@ -91,13 +91,16 @@ class Gestures implements Readable<GestureData[]> {
 
   public createGesture(name = ''): Gesture {
     const newId = Date.now();
-    const color = StaticConfiguration.gestureColors[this.getNumberOfGestures() % StaticConfiguration.gestureColors.length];
+    const color =
+      StaticConfiguration.gestureColors[
+        this.getNumberOfGestures() % StaticConfiguration.gestureColors.length
+      ];
     return this.addGestureFromPersistedData({
       ID: newId,
       recordings: [],
       output: {}, //TODO: ADD DEFAULT VALUES HERE
       name: name,
-      color
+      color,
     });
   }
 

@@ -1,4 +1,4 @@
-import StaticConfiguration from "../StaticConfiguration";
+import StaticConfiguration from '../StaticConfiguration';
 
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
@@ -11,7 +11,6 @@ type StoredValue<T> = {
 };
 
 class ControlledStorage {
-
   public static readonly localStorageVersion = 2;
 
   public static get<T>(key: string): T {
@@ -20,7 +19,10 @@ class ControlledStorage {
       const parsedValue = this.parseItem<T>(storedValue);
       return parsedValue.value;
     } catch (error) {
-      console.log(`An error occurred while parsing the stored value with key ${key}. The stored value will be deleted`, error)
+      console.log(
+        `An error occurred while parsing the stored value with key ${key}. The stored value will be deleted`,
+        error,
+      );
       localStorage.removeItem(key);
     }
     throw new Error(`Could not parse value '${storedValue}'`);
@@ -36,7 +38,10 @@ class ControlledStorage {
     try {
       this.parseItem(this.getStoredItem(key));
     } catch (error) {
-      console.log(`An error occurred while parsing the stored value with key ${key}. The stored value will be deleted`, error)
+      console.log(
+        `An error occurred while parsing the stored value with key ${key}. The stored value will be deleted`,
+        error,
+      );
       localStorage.removeItem(key);
       return false;
     }

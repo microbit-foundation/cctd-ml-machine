@@ -40,14 +40,14 @@ class KNNModelGraphDrawer {
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) { }
+  ) {}
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {
       return;
     }
     const pointTransformer = this.getPointTransformer(drawConfig);
-    const color = drawConfig.colors.slice(-1)[0] // Fetch the last element of the colors array
+    const color = drawConfig.colors.slice(-1)[0]; // Fetch the last element of the colors array
     if (!color) {
       throw new Error('No color available for live data');
     }

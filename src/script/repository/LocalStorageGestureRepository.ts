@@ -95,7 +95,10 @@ class LocalStorageGestureRepository implements GestureRepository {
 
   private getPersistedGestures(): Gesture[] {
     const resultFromFetch: PersistantGestureData[] = this.getPersistedData();
-    return resultFromFetch.map(persistedData => this.buildGesture(persistedData));
+    return resultFromFetch.map((persistedData, index) => {
+      const gesture = this.buildGesture(persistedData);
+      return gesture;
+    });
   }
 
   private buildGesture(persistedData: PersistantGestureData) {
@@ -110,11 +113,11 @@ class LocalStorageGestureRepository implements GestureRepository {
   }
 
   private getPersistedData(): PersistantGestureData[] {
-    const result = localStorage.getItem(this.LOCAL_STORAGE_KEY);
-    if (!result) {
+    if (!ControlledStorage.hasValid(this.LOCAL_STORAGE_KEY)) {
       return [];
     }
-    return ControlledStorage.get(this.LOCAL_STORAGE_KEY);
+    const storedData = ControlledStorage.get<PersistantGestureData[]>(this.LOCAL_STORAGE_KEY)
+    return storedData;
   }
 }
 

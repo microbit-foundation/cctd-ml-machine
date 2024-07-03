@@ -21,7 +21,7 @@ class PersistantWritable<T> implements Writable<T> {
     initialValue: T,
     private key: string,
   ) {
-    if (ControlledStorage.has(key)) {
+    if (ControlledStorage.hasValid(key)) {
       const storedValue = ControlledStorage.get<T>(key);
       this.store = writable(storedValue);
     } else {

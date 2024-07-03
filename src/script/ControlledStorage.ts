@@ -1,3 +1,5 @@
+import StaticConfiguration from "../StaticConfiguration";
+
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
  *
@@ -9,10 +11,19 @@ type StoredValue<T> = {
 };
 
 class ControlledStorage {
+
+  public static readonly localStorageVersion = 2;
+
   public static get<T>(key: string): T {
     const storedValue = this.getStoredItem(key);
-    const parsedValue = this.parseItem<T>(storedValue);
-    return parsedValue.value;
+    try {
+      const parsedValue = this.parseItem<T>(storedValue);
+      return parsedValue.value;
+    } catch (error) {
+      console.log(`An error occurred while parsing the stored value with key ${key}. The stored value will be deleted`, error)
+      localStorage.removeItem(key);
+    }
+    throw new Error(`Could not parse value '${storedValue}'`);
   }
 
   public static set<T>(key: string, value: T): void {
@@ -21,7 +32,14 @@ class ControlledStorage {
     localStorage.setItem(key, stringified);
   }
 
-  public static has(key: string): boolean {
+  public static hasValid(key: string): boolean {
+    try {
+      this.parseItem(this.getStoredItem(key));
+    } catch (error) {
+      console.log(`An error occurred while parsing the stored value with key ${key}. The stored value will be deleted`, error)
+      localStorage.removeItem(key);
+      return false;
+    }
     return !!localStorage.getItem(key);
   }
 
@@ -46,12 +64,17 @@ class ControlledStorage {
     if (!('value' in parsed)) {
       throw new Error(`Could not parse value '${storedValue}'. It did not contain value`);
     }
+    if (parsed.version !== ControlledStorage.localStorageVersion) {
+      throw new Error(
+        `Could not parse value '${storedValue}'. Version mismatch. Expected version ${ControlledStorage.localStorageVersion}, found version ${parsed.version}`,
+      );
+    }
     return parsed;
   }
 
   private static encapsulateItem<T>(value: T): StoredValue<T> {
     return {
-      version: 1, // todo move this magic constant
+      version: ControlledStorage.localStorageVersion,
       value,
     };
   }

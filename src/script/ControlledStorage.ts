@@ -11,6 +11,9 @@ type StoredValue<T> = {
 };
 
 class ControlledStorage {
+
+  public static readonly localStorageVersion = 2;
+
   public static get<T>(key: string): T {
     const storedValue = this.getStoredItem(key);
     try {
@@ -61,9 +64,9 @@ class ControlledStorage {
     if (!('value' in parsed)) {
       throw new Error(`Could not parse value '${storedValue}'. It did not contain value`);
     }
-    if (parsed.version !== StaticConfiguration.localStorageVersion) {
+    if (parsed.version !== ControlledStorage.localStorageVersion) {
       throw new Error(
-        `Could not parse value '${storedValue}'. Version mismatch. Expected version ${StaticConfiguration.localStorageVersion}, found version ${parsed.version}`,
+        `Could not parse value '${storedValue}'. Version mismatch. Expected version ${ControlledStorage.localStorageVersion}, found version ${parsed.version}`,
       );
     }
     return parsed;
@@ -71,7 +74,7 @@ class ControlledStorage {
 
   private static encapsulateItem<T>(value: T): StoredValue<T> {
     return {
-      version: StaticConfiguration.localStorageVersion,
+      version: ControlledStorage.localStorageVersion,
       value,
     };
   }

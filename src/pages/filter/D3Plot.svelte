@@ -22,6 +22,8 @@
   $: showLive = $state.isInputConnected;
   $: liveData = $stores.liveData;
 
+  const gestures = stores.getGestures();
+
   type RecordingRepresentation = {
     ID: number;
     gestureClassName: string;
@@ -37,7 +39,6 @@
   const uniqueLiveDataID = 983095438740;
   const filter = FilterTypes.createFilter(filterType);
   const filterFunction = (data: number[]) => filter.filter(data);
-  let color: d3.ScaleOrdinal<string, string> | undefined = undefined;
   let classList: { name: string; id: number }[] = [];
   const recordings = createDataRepresentation(); // side effect: updates classList and color
 
@@ -126,11 +127,12 @@
     });
   }
 
-  function getColorForClass(gestureID: string) {
-    if (color === undefined) {
-      throw new Error('Cannot get color for gesture, color function not defined');
+  function getColorForClass(gestureID: number): string {
+    if (gestureID === uniqueLiveDataID) {
+      return StaticConfiguration.liveGraphColors[gestures.getNumberOfGestures()];
     }
-    return color(gestureID);
+
+    return gestures.getGesture(gestureID).getColor();
   }
 
   function getStrokeColor(gesture: unknown) {
@@ -138,7 +140,7 @@
     if (!gestureID) {
       throw new Error('The given gesture did not contain a gestureClass');
     }
-    return getColorForClass(gestureID.toString());
+    return getColorForClass(gestureID);
   }
 
   function createLiveData() {
@@ -186,11 +188,6 @@
         recordings.push({ ID, gestureClassName, gestureClassID, x, y, z });
       });
     });
-    const classesIDs = [
-      ...classes.map(c => c.id.toString()),
-      uniqueLiveDataID.toString(),
-    ];
-    color = d3.scaleOrdinal<string>().domain(classesIDs).range(d3.schemeSet3);
     classList = classes;
     return recordings;
   }
@@ -216,7 +213,7 @@
         if (!id) {
           throw new Error('The given gesture did not contain a gestureClass');
         }
-        return getColorForClass(id.toString());
+        return getColorForClass(id);
       })
       .style('opacity', '1');
   }
@@ -242,10 +239,10 @@
       .attr('d', path)
       .style('fill', 'none')
       .style('stroke', function (gesture: RecordingRepresentation) {
-        return getColorForClass(gesture.gestureClassID.toString());
+        return getColorForClass(gesture.gestureClassID);
       })
       .style('opacity', function (gesture: RecordingRepresentation) {
-        return 0.8;
+        return 0.4;
       })
       .style('stroke-width', function (gesture: RecordingRepresentation) {
         return 4;
@@ -309,8 +306,8 @@
   <div class="flex flex-col justify-evenly mr-4">
     {#each classList as c}
       <div
-        class="py-1 px-4 rounded-md btn transition ease border select-none focusElement"
-        style="background-color: {getColorForClass(c.id.toString())};"
+        class="py-1 px-4 rounded-md btn transition ease border select-none focusElement opacity-95"
+        style="background-color: {getColorForClass(c.id)};"
         on:mouseenter={() => highlight(null, { gestureClassID: c.id })}
         on:mouseleave={doNotHighlight}>
         {c.name}

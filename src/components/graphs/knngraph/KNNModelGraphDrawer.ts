@@ -21,6 +21,7 @@ export type GraphDrawConfig = {
   zRot: number;
   origin: { x: number; y: number };
   scale: number;
+  colors: string[]; // The number of colors should be equal to the number of classes plus one for live data
 };
 
 export type GrahpDrawData = {
@@ -39,15 +40,17 @@ class KNNModelGraphDrawer {
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) {}
+  ) { }
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {
       return;
     }
     const pointTransformer = this.getPointTransformer(drawConfig);
-    const color =
-      StaticConfiguration.gestureColors[stores.getGestures().getNumberOfGestures()];
+    const color = drawConfig.colors.slice(-1)[0] // Fetch the last element of the colors array
+    if (!color) {
+      throw new Error('No color available for live data');
+    }
     const drawableLivePoint: DrawablePoint = {
       pointTransformed: pointTransformer(drawData),
       color,
@@ -118,7 +121,7 @@ class KNNModelGraphDrawer {
     drawData.forEach((clazz, classIndex) => {
       clazz.forEach((sample, exampleIndex) => {
         sample.forEach((axisValue, axisIndex) => {
-          const color = StaticConfiguration.gestureColors[classIndex];
+          const color = drawConfig.colors[classIndex];
           const transformedPoint: Point3DTransformed = pointTransformer(axisValue);
           this.drawnTrainingPoints.push(transformedPoint);
           drawablePoints.push({

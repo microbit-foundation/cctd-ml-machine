@@ -187,6 +187,10 @@
   <div class="items-center flex mb-1">
     <!-- Title of gesture-->
     <GestureTilePart mr small>
+      <div
+        class="absolute rounded-full w-3 h-3 m-3"
+        style={`background-color:${gesture.getColor()}`}>
+      </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
         <div
           class="w-40 col-start-2 col-end-5 text-center

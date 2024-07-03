@@ -133,5 +133,7 @@ class StaticConfiguration {
   };
 
   public static readonly knnNeighbourCount = 3;
+
+  public static readonly localStorageVersion = 2;
 }
 export default StaticConfiguration;

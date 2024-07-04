@@ -9,7 +9,8 @@ import {
   AspectRatio,
   Box,
   Button,
-  Center,
+  HStack,
+  Icon,
   Image,
   Link,
   ModalCloseButton,
@@ -20,14 +21,16 @@ import {
   Td,
   Text,
   Tr,
-  useClipboard,
   VStack,
+  VisuallyHidden,
+  useClipboard,
 } from "@chakra-ui/react";
-import { RiFileCopy2Line } from "react-icons/ri";
-import AppLogo from "./AppLogo";
-import microbitHeartImage from "../images/microbit-heart.png";
-import { FormattedMessage, useIntl } from "react-intl";
 import { ReactNode } from "react";
+import { RiFileCopy2Line, RiGithubFill } from "react-icons/ri";
+import { FormattedMessage, useIntl } from "react-intl";
+import aarhusLogo from "../images/aulogo_uk_var2_blue.png";
+import microbitHeartImage from "../images/microbit-heart.png";
+import MicrobitLogo from "./MicrobitLogo";
 
 interface AboutDialogProps {
   appName: string;
@@ -49,6 +52,7 @@ const AboutDialog = ({
     {
       name: `micro:bit ${appName}`,
       value: import.meta.env.VITE_VERSION,
+      href: "https://github.com/microbit-foundation/ml-trainer",
     },
   ];
 
@@ -70,12 +74,13 @@ const AboutDialog = ({
           <ModalBody>
             <ModalCloseButton />
             <VStack spacing={8} pl={5} pr={5} pt={5}>
-              <Center>
-                <AppLogo color="#000" as="h2" name={appName} />
-              </Center>
-              <Text fontSize="xl" fontFamily="GT Walsheim">
+              <HStack justifyContent="center" gap={8}>
+                <MicrobitLogo fill="#000" alt="micro:bit" height={55} />
+                <Image src={aarhusLogo} h="55px" />
+              </HStack>
+              <Text textAlign="center">
                 <FormattedMessage
-                  id="about.developedInPartnership"
+                  id="about-dialog-title"
                   values={{
                     link: (chunks: ReactNode) => (
                       <Link
@@ -111,14 +116,26 @@ const AboutDialog = ({
                         <Tr key={v.name}>
                           <Td>{v.name}</Td>
                           <Td>{v.value}</Td>
+                          <Td padding={0}>
+                            {/* Move padding so we get a reasonable click target. */}
+                            <Link
+                              display="block"
+                              pl={4}
+                              pr={4}
+                              pt={2}
+                              pb={2}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              href={v.href}
+                            >
+                              <Icon as={RiGithubFill} />
+                              <VisuallyHidden>GitHub</VisuallyHidden>
+                            </Link>
+                          </Td>
                         </Tr>
                       ))}
                     </Tbody>
-                    <TableCaption
-                      color="gray.800"
-                      placement="top"
-                      fontFamily="Helvetica Now"
-                    >
+                    <TableCaption color="gray.800" placement="top">
                       <FormattedMessage id="software-versions" />
                     </TableCaption>
                   </Table>

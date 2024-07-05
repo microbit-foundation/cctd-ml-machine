@@ -17,7 +17,6 @@ const LiveGraphPanel = () => {
         right={0}
         px={7}
         py={4}
-        zIndex={1}
       >
         <HStack gap={4}>
           <LiveIndicator />

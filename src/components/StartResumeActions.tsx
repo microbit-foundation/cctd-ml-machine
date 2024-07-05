@@ -12,10 +12,15 @@ const StartResumeActions = () => {
   const navigate = useNavigate();
   const { dispatch } = useConnectionFlow();
 
+  // TODO: check input connected
+  const isInputConnected = true
   const handleNewSession = useCallback(() => {
-    navigate(createStepPageUrl("add-data"));
-    dispatch(ConnEvent.Start);
-  }, [dispatch, navigate]);
+    if (isInputConnected) {
+      navigate(createStepPageUrl("add-data"));
+    } else {
+      dispatch(ConnEvent.Start);
+    }
+  }, [dispatch, isInputConnected, navigate]);
   return (
     <HStack w="100%" justifyContent="center" gap={5}>
       {hasExistingSession && (

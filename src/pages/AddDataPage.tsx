@@ -1,6 +1,5 @@
 import {
   Button,
-  Grid,
   HStack,
   Icon,
   IconButton,
@@ -18,6 +17,7 @@ import {
   RiUpload2Line,
 } from "react-icons/ri";
 import { FormattedMessage, useIntl } from "react-intl";
+import AddDataGridView from "../components/AddDataGridView";
 import ConnectFirstView from "../components/ConnectFirstView";
 import DefaultPageLayout from "../components/DefaultPageLayout";
 import LiveGraphPanel from "../components/LiveGraphPanel";
@@ -26,8 +26,8 @@ import { addDataConfig } from "../steps-config";
 
 const AddDataPage = () => {
   const intl = useIntl();
-  const noStoredData = true;
-  const isInputConnected = false;
+  const noStoredData = false;
+  const isInputConnected = true;
   return (
     <DefaultPageLayout titleId={`${addDataConfig.id}-title`}>
       <TabView activeStep={addDataConfig.id} />
@@ -35,7 +35,7 @@ const AddDataPage = () => {
         {noStoredData && !isInputConnected ? (
           <ConnectFirstView />
         ) : (
-          <Grid>TODO: Grid layout!</Grid>
+          <AddDataGridView />
         )}
       </VStack>
       <HStack

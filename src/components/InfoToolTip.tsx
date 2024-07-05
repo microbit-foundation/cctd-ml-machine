@@ -3,7 +3,7 @@ import { RiInformationLine } from "react-icons/ri";
 import { FormattedMessage } from "react-intl";
 import ClickableTooltip from "./ClickableTooltip";
 
-interface InfoToolTipProps {
+export interface InfoToolTipProps {
   titleId: string;
   descriptionId: string;
 }

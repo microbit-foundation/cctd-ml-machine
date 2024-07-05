@@ -13,7 +13,7 @@ const StartResumeActions = () => {
   const { dispatch } = useConnectionFlow();
 
   // TODO: check input connected
-  const isInputConnected = true
+  const isInputConnected = true;
   const handleNewSession = useCallback(() => {
     if (isInputConnected) {
       navigate(createStepPageUrl("add-data"));

@@ -68,6 +68,19 @@ const Button: StyleConfig = {
         bg: "brand.700",
       },
     }),
+    warning: () => ({
+      borderWidth: "2px",
+      borderColor: "red.500",
+      color: "red.500",
+      bg: "transparent",
+      _hover: {
+        borderColor: "red.600",
+      },
+      _active: {
+        bg: "red.50",
+        borderColor: "red.500",
+      },
+    }),
     toolbar: () => ({
       color: "black",
       bg: "white",

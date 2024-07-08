@@ -6,17 +6,25 @@ import {
   HStack,
   Icon,
   IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useIntl } from "react-intl";
 import { GestureData } from "../gestures";
 import RecordIcon from "../images/record-icon.svg?react";
 import GestureGridItem from "./GestureGridItem";
 import RecordingGraph from "./RecordingGraph";
+import RecordingDialog from "./RecordingDialog";
 
 const AddDataGridGestureRow = ({ gesture }: { gesture: GestureData }) => {
   const intl = useIntl();
+  const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <>
+      <RecordingDialog
+        isOpen={isOpen}
+        onClose={onClose}
+        actionName={gesture.name}
+      />
       <GestureGridItem name={gesture.name} onCloseClick={() => {}} />
       <GridItem>
         <Card p={2} h="120px" display="flex" flexDirection="row">
@@ -29,6 +37,7 @@ const AddDataGridGestureRow = ({ gesture }: { gesture: GestureData }) => {
           >
             <HStack w="8.25rem" justifyContent="center">
               <IconButton
+                onClick={onOpen}
                 variant="ghost"
                 _hover={{ backgroundColor: "transparent" }}
                 aria-label={intl.formatMessage(

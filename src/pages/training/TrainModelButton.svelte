@@ -12,12 +12,12 @@
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { Writable } from 'svelte/store';
 
-  import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
   import { highlightedAxis } from '../../script/stores/uiStore';
   import { stores } from '../../script/stores/Stores';
   import { options, trainModel } from './TrainModelButton';
   import Axes from '../../script/domain/Axes';
   import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
+  import { LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;

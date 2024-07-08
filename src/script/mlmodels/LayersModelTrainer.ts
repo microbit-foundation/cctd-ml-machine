@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
 import ModelTrainer, { TrainingData } from '../domain/ModelTrainer';
 import LayersMLModel from './LayersMLModel';
 import * as tf from '@tensorflow/tfjs';
@@ -15,11 +14,16 @@ export type LayersModelTrainingSettings = {
   batchSize: number;
 };
 
+export type LossTrainingIteration = {
+  loss: number;
+  epoch: number;
+};
+
 class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
   constructor(
     private settings: LayersModelTrainingSettings,
     private onFitIteration: (h: LossTrainingIteration) => void,
-  ) {}
+  ) { }
   public async trainModel(trainingData: TrainingData): Promise<LayersMLModel> {
     // Fetch data
     const features: Array<number[]> = [];

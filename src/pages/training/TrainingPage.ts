@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 import { get, writable } from 'svelte/store';
-import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
 import { highlightedAxis, selectedModel } from '../../script/stores/uiStore';
 import Axes from '../../script/domain/Axes';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
@@ -14,7 +13,7 @@ import { stores } from '../../script/stores/Stores';
 import CookieManager from '../../script/CookieManager';
 import { appInsights } from '../../appInsights';
 import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
-import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
+import LayersModelTrainer, { LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 

@@ -23,7 +23,7 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
   constructor(
     private settings: LayersModelTrainingSettings,
     private onFitIteration: (h: LossTrainingIteration) => void,
-  ) { }
+  ) {}
   public async trainModel(trainingData: TrainingData): Promise<LayersMLModel> {
     // Fetch data
     const features: Array<number[]> = [];

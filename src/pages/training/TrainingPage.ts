@@ -13,7 +13,9 @@ import { stores } from '../../script/stores/Stores';
 import CookieManager from '../../script/CookieManager';
 import { appInsights } from '../../appInsights';
 import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
-import LayersModelTrainer, { LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
+import LayersModelTrainer, {
+  LossTrainingIteration,
+} from '../../script/mlmodels/LayersModelTrainer';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 

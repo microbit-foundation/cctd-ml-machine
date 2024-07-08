@@ -13,7 +13,9 @@ import { stores } from '../../script/stores/Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
 import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
-import LayersModelTrainer, { LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
+import LayersModelTrainer, {
+  LossTrainingIteration,
+} from '../../script/mlmodels/LayersModelTrainer';
 import { FilterType } from '../../script/domain/FilterTypes';
 import Filters from '../../script/domain/Filters';
 import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';

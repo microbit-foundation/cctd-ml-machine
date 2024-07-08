@@ -12,6 +12,7 @@
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import Logger from '../../script/utils/Logger';
+  import { Feature, hasFeature } from '../../script/FeatureToggles';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
@@ -37,7 +38,7 @@
     <StandardButton onClick={trainModelClickHandler}
       >{$t(trainButtonSimpleLabel)}</StandardButton>
   {/if}
-  {#if $loss.length > 0}
+  {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH)}
     <LossGraph {loss} maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />
   {/if}
 </div>

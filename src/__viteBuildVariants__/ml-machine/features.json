@@ -1,4 +1,5 @@
 {
   "title": "ML-Machine",
-  "knnModel": true
+  "knnModel": true,
+  "lossGraph": true
 }

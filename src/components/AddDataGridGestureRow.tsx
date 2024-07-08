@@ -18,6 +18,8 @@ import RecordingDialog from "./RecordingDialog";
 const AddDataGridGestureRow = ({ gesture }: { gesture: GestureData }) => {
   const intl = useIntl();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  // TODO: Replace with checking if micro:bit is connected
+  const isConnected = false;
   return (
     <>
       <RecordingDialog
@@ -44,6 +46,7 @@ const AddDataGridGestureRow = ({ gesture }: { gesture: GestureData }) => {
                   { id: "content.data.recordAction" },
                   { action: gesture.name }
                 )}
+                isDisabled={!isConnected}
                 icon={
                   <Icon
                     as={RecordIcon}

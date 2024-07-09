@@ -6,10 +6,11 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { useGestureData } from "../gestures-hooks";
 import AddDataGridGestureRow from "./AddDataGridGestureRow";
 import InfoToolTip, { InfoToolTipProps } from "./InfoToolTip";
-import { useGestureData } from "../gestures-hooks";
 
 const gridCommonProps: Partial<GridProps> = {
   gridTemplateColumns: "200px 1fr",
@@ -20,6 +21,8 @@ const gridCommonProps: Partial<GridProps> = {
 
 const AddDataGridView = () => {
   const [gestures] = useGestureData();
+  const [selected, setSelected] = useState<number>(0);
+
   return (
     <VStack flexGrow={1} width="100%" alignItems="left">
       <Grid
@@ -41,8 +44,13 @@ const AddDataGridView = () => {
         />
       </Grid>
       <Grid {...gridCommonProps} w={0}>
-        {gestures.data.map((g) => (
-          <AddDataGridGestureRow key={g.name} gesture={g} />
+        {gestures.data.map((g, idx) => (
+          <AddDataGridGestureRow
+            key={g.name}
+            gesture={g}
+            selected={selected === idx}
+            onSelectRow={() => setSelected(idx)}
+          />
         ))}
       </Grid>
     </VStack>

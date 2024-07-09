@@ -28,7 +28,7 @@ const RecordingGraph = ({ data }: RecordingGraphProps) => {
     return () => {
       chart.destroy();
     };
-  });
+  }, [data]);
 
   return (
     <Box

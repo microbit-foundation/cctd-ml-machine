@@ -2,22 +2,29 @@ import {
   Card,
   CardBody,
   CardHeader,
+  CardProps,
   CloseButton,
   GridItem,
   Input,
 } from "@chakra-ui/react";
 import { useIntl } from "react-intl";
 
-interface GestureGridItemProps {
+interface GestureGridItemProps extends CardProps {
   name: string;
   onCloseClick: () => void;
+  onSelectRow: () => void;
 }
 
-const GestureGridItem = ({ name, onCloseClick }: GestureGridItemProps) => {
+const GestureGridItem = ({
+  name,
+  onCloseClick,
+  onSelectRow,
+  ...cardProps
+}: GestureGridItemProps) => {
   const intl = useIntl();
   return (
     <GridItem>
-      <Card p={2} h="120px" display="flex">
+      <Card p={2} h="120px" display="flex" {...cardProps} onClick={onSelectRow}>
         <CardHeader p={0} display="flex" justifyContent="end">
           <CloseButton
             onClick={onCloseClick}

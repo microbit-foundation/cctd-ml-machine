@@ -16,7 +16,17 @@ import RecordingGraph from "./RecordingGraph";
 import RecordingDialog from "./RecordingDialog";
 import { useCallback } from "react";
 
-const AddDataGridGestureRow = ({ gesture }: { gesture: GestureData }) => {
+interface AddDataGridGestureRowProps {
+  gesture: GestureData;
+  selected: boolean;
+  onSelectRow: () => void;
+}
+
+const AddDataGridGestureRow = ({
+  gesture,
+  selected,
+  onSelectRow,
+}: AddDataGridGestureRowProps) => {
   const intl = useIntl();
   const { isOpen, onClose, onOpen: onStartRecording } = useDisclosure();
   const actions = useGestureActions();
@@ -49,16 +59,25 @@ const AddDataGridGestureRow = ({ gesture }: { gesture: GestureData }) => {
         onClose={onClose}
         actionName={gesture.name}
       />
-      <GestureGridItem name={gesture.name} onCloseClick={handleDeleteGesture} />
+      <GestureGridItem
+        name={gesture.name}
+        onCloseClick={handleDeleteGesture}
+        onSelectRow={onSelectRow}
+        borderColor={selected ? "brand.500" : "transparent"}
+        borderWidth={1}
+      />
       <GridItem>
         <Card
+          onClick={onSelectRow}
           p={2}
           h="120px"
           display="flex"
           flexDirection="row"
           width="fit-content"
+          borderColor={selected ? "brand.500" : "transparent"}
+          borderWidth={1}
         >
-          <CardBody display="flex" flexDirection="row" p={2} gap={3}>
+          <CardBody display="flex" flexDirection="row" p={1} gap={3}>
             <HStack w="8.25rem" justifyContent="center">
               <IconButton
                 onClick={onStartRecording}

@@ -18,7 +18,7 @@ import { deployment, useDeployment } from "./deployment";
 import { stepsConfig } from "./steps-config";
 import { LoggingProvider } from "./logging/logging-hooks";
 import { ConnectionFlowProvider } from "./connections";
-import GesturesProvider from "./gestures";
+import { GesturesProvider } from "./gestures-hooks";
 
 export interface ProviderLayoutProps {
   children: ReactNode;

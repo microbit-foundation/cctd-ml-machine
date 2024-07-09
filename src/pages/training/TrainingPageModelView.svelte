@@ -10,11 +10,16 @@
   import KnnModelTrainingPageView from './KnnModelTrainingPageView.svelte';
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
+  import { Feature, hasFeature } from '../../script/FeatureToggles';
+
+  const showFilterList = hasFeature(Feature.KNN_MODEL);
 </script>
 
 <div class="flex flex-col h-full justify-center">
   <div class="flex flex-row p-2">
-    <FiltersList />
+    {#if showFilterList}
+      <FiltersList />
+    {/if}
     {#if $selectedModel.id === ModelRegistry.KNN.id}
       <KnnModelTrainingPageView />
     {:else if $selectedModel.id === ModelRegistry.NeuralNetwork.id}

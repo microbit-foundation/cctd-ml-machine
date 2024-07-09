@@ -10,24 +10,21 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { MdMoreVert } from "react-icons/md";
-import {
-  RiAddLine,
-  RiDeleteBin2Line,
-  RiDownload2Line,
-  RiUpload2Line,
-} from "react-icons/ri";
+import { RiAddLine, RiDeleteBin2Line, RiDownload2Line } from "react-icons/ri";
 import { FormattedMessage, useIntl } from "react-intl";
 import AddDataGridView from "../components/AddDataGridView";
 import ConnectFirstView from "../components/ConnectFirstView";
 import DefaultPageLayout from "../components/DefaultPageLayout";
 import LiveGraphPanel from "../components/LiveGraphPanel";
 import TabView from "../components/TabView";
+import UploadDataSamplesMenuItem from "../components/UploadDataSamplesMenuItem";
 import { addDataConfig } from "../steps-config";
 
 const AddDataPage = () => {
   const intl = useIntl();
   const noStoredData = false;
   const isInputConnected = true;
+
   return (
     <DefaultPageLayout titleId={`${addDataConfig.id}-title`}>
       <TabView activeStep={addDataConfig.id} />
@@ -65,9 +62,7 @@ const AddDataPage = () => {
               isRound
             />
             <MenuList>
-              <MenuItem icon={<RiUpload2Line />}>
-                <FormattedMessage id="content.data.controlbar.button.uploadData" />
-              </MenuItem>
+              <UploadDataSamplesMenuItem />
               <MenuItem icon={<RiDownload2Line />}>
                 <FormattedMessage id="content.data.controlbar.button.downloadData" />
               </MenuItem>

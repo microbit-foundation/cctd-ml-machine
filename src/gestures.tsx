@@ -1,5 +1,4 @@
 import { ReactNode, createContext, useContext } from "react";
-import { dummyGestureData } from "./dummy-gesture-data";
 import { useStorage } from "./hooks/use-storage";
 
 export interface XYZData {
@@ -60,7 +59,7 @@ const GesturesProvider = ({ children }: { children: ReactNode }) => {
   const gestures = useStorage<GestureData[]>(
     "local",
     "gestures",
-    dummyGestureData,
+    [],
     isValidGestureData
   );
   return (

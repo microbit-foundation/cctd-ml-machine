@@ -9,7 +9,7 @@ import {
 import { FormattedMessage } from "react-intl";
 import AddDataGridGestureRow from "./AddDataGridGestureRow";
 import InfoToolTip, { InfoToolTipProps } from "./InfoToolTip";
-import { dummyGestureData } from "../dummy-gesture-data";
+import { useGestureData } from "../gestures";
 
 const gridCommonProps: Partial<GridProps> = {
   gridTemplateColumns: "200px 1fr",
@@ -19,6 +19,7 @@ const gridCommonProps: Partial<GridProps> = {
 };
 
 const AddDataGridView = () => {
+  const [gestureData] = useGestureData();
   return (
     <VStack flexGrow={1} width="100%" alignItems="left">
       <Grid
@@ -40,7 +41,7 @@ const AddDataGridView = () => {
         />
       </Grid>
       <Grid {...gridCommonProps} w={0}>
-        {dummyGestureData.map((g) => (
+        {gestureData.map((g) => (
           <AddDataGridGestureRow key={g.name} gesture={g} />
         ))}
       </Grid>

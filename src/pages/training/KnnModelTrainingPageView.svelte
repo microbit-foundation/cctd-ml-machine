@@ -61,7 +61,7 @@
   {#if $filters.length == 2}
     <KnnModelGraph />
   {:else}
-    <div class="m-auto">
+    <div class="max-w-[450px] flex flex-col justify-center">
       <p class="max-w-80 text-md font-bold text-center">
         {$t('menu.trainer.knn.onlyTwoFilters')}
       </p>

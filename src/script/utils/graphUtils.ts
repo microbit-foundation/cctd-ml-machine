@@ -124,7 +124,4 @@ export const distanceBetween = (point1: Point3D, point2: Point3D): number => {
   return Math.sqrt(squaredDistance);
 };
 
-export type LossTrainingIteration = {
-  loss: number;
-  epoch: number;
-};
+

@@ -105,4 +105,21 @@ export class GestureActions {
   deleteGesture = (id: GestureData["ID"]) => {
     this.setGestures(this.state.data.filter((g) => g.ID !== id));
   };
+
+  deleteGestureRecording = (
+    gestureId: GestureData["ID"],
+    recordingIdx: number
+  ) => {
+    const newGestures = this.state.data
+      .map((g) => {
+        if (gestureId !== g.ID) {
+          return g;
+        }
+        const recordings = g.recordings.filter((_r, i) => i !== recordingIdx);
+        return { ...g, recordings };
+      })
+      // remove gestures without recordings
+      .filter((g) => g.recordings.length > 0);
+    this.setGestures(newGestures);
+  };
 }

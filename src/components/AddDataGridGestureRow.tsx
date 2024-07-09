@@ -35,6 +35,13 @@ const AddDataGridGestureRow = ({ gesture }: { gesture: GestureData }) => {
     actions.deleteGesture(gesture.ID);
   }, [actions, gesture.ID, gesture.name, intl]);
 
+  const handleDeleteGestureRecording = useCallback(
+    (idx: number) => {
+      actions.deleteGestureRecording(gesture.ID, idx);
+    },
+    [actions, gesture.ID]
+  );
+
   return (
     <>
       <RecordingDialog
@@ -44,14 +51,14 @@ const AddDataGridGestureRow = ({ gesture }: { gesture: GestureData }) => {
       />
       <GestureGridItem name={gesture.name} onCloseClick={handleDeleteGesture} />
       <GridItem>
-        <Card p={2} h="120px" display="flex" flexDirection="row">
-          <CardBody
-            display="flex"
-            flexDirection="row"
-            p={2}
-            gap={3}
-            alignContent="center"
-          >
+        <Card
+          p={2}
+          h="120px"
+          display="flex"
+          flexDirection="row"
+          width="fit-content"
+        >
+          <CardBody display="flex" flexDirection="row" p={2} gap={3}>
             <HStack w="8.25rem" justifyContent="center">
               <IconButton
                 onClick={onStartRecording}
@@ -82,6 +89,9 @@ const AddDataGridGestureRow = ({ gesture }: { gesture: GestureData }) => {
                   aria-label={intl.formatMessage({
                     id: "content.data.deleteRecording",
                   })}
+                  onClick={() => {
+                    handleDeleteGestureRecording(idx);
+                  }}
                 />
                 <RecordingGraph data={recording.data} />
               </HStack>

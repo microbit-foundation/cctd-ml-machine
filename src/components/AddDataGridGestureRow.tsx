@@ -38,7 +38,6 @@ const AddDataGridGestureRow = ({
       { id: "alert.deleteGestureConfirm" },
       { action: gesture.name }
     );
-    // Browser confirmation dialog
     if (!window.confirm(confirmationText)) {
       return;
     }
@@ -52,6 +51,13 @@ const AddDataGridGestureRow = ({
     [actions, gesture.ID]
   );
 
+  const handleGestureNameChange = useCallback(
+    (newName: string) => {
+      actions.setGestureName(gesture.ID, newName);
+    },
+    [actions, gesture.ID]
+  );
+
   return (
     <>
       <RecordingDialog
@@ -60,6 +66,7 @@ const AddDataGridGestureRow = ({
         actionName={gesture.name}
       />
       <GestureGridItem
+        onNameChange={handleGestureNameChange}
         name={gesture.name}
         onCloseClick={handleDeleteGesture}
         onSelectRow={onSelectRow}

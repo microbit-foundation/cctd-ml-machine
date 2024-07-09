@@ -106,6 +106,13 @@ export class GestureActions {
     this.setGestures(this.state.data.filter((g) => g.ID !== id));
   };
 
+  setGestureName = (id: GestureData["ID"], name: string) => {
+    const newGestures = this.state.data.map((g) => {
+      return id !== g.ID ? g : { ...g, name: name.trim() };
+    });
+    this.setGestures(newGestures);
+  };
+
   deleteGestureRecording = (
     gestureId: GestureData["ID"],
     recordingIdx: number

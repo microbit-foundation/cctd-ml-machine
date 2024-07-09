@@ -19,10 +19,19 @@ import LiveGraphPanel from "../components/LiveGraphPanel";
 import TabView from "../components/TabView";
 import UploadDataSamplesMenuItem from "../components/UploadDataSamplesMenuItem";
 import { addDataConfig } from "../steps-config";
+import { useGestureData } from "../gestures-hooks";
+import { useMemo } from "react";
 
 const AddDataPage = () => {
   const intl = useIntl();
-  const noStoredData = false;
+  const [gestures] = useGestureData();
+  const noStoredData = useMemo<boolean>(() => {
+    const gestureData = gestures.data;
+    return (
+      gestureData.length !== 0 &&
+      gestureData.some((g) => g.recordings.length > 0)
+    );
+  }, [gestures.data]);
   const isInputConnected = true;
 
   return (

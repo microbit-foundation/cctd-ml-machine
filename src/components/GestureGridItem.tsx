@@ -31,12 +31,9 @@ const GestureGridItem = ({
   const toast = useToast();
   const toastId = "name-too-long-toast";
 
-  const handleNameChange: React.FocusEventHandler<HTMLInputElement> =
-    useCallback((e) => onNameChange(e.target.value), [onNameChange]);
-
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
-      // Validate gesture name
+      // Validate gesture name length
       if (
         e.target.value.trim().length >= gestureNameMaxLength &&
         !toast.isActive(toastId)
@@ -52,9 +49,11 @@ const GestureGridItem = ({
           variant: "subtle",
           status: "error",
         });
+        return;
       }
+      onNameChange(e.target.value);
     },
-    [intl, toast]
+    [intl, onNameChange, toast]
   );
 
   return (
@@ -79,7 +78,6 @@ const GestureGridItem = ({
             placeholder={intl.formatMessage({
               id: "content.data.classPlaceholderNewClass",
             })}
-            onBlur={handleNameChange}
             onChange={onChange}
             size="sm"
           />

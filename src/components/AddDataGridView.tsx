@@ -46,7 +46,7 @@ const AddDataGridView = () => {
       <Grid {...gridCommonProps} w={0}>
         {gestures.data.map((g, idx) => (
           <AddDataGridGestureRow
-            key={g.name}
+            key={g.ID}
             gesture={g}
             selected={selected === idx}
             onSelectRow={() => setSelected(idx)}

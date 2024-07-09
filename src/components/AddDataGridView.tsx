@@ -6,11 +6,12 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useGestureData } from "../gestures-hooks";
 import AddDataGridGestureRow from "./AddDataGridGestureRow";
 import InfoToolTip, { InfoToolTipProps } from "./InfoToolTip";
+import AddDataGridWalkThrough from "./AddDataGridWalkThrough";
 
 const gridCommonProps: Partial<GridProps> = {
   gridTemplateColumns: "200px 1fr",
@@ -22,6 +23,12 @@ const gridCommonProps: Partial<GridProps> = {
 const AddDataGridView = () => {
   const [gestures] = useGestureData();
   const [selected, setSelected] = useState<number>(0);
+  const showWalkThrough = useMemo<boolean>(
+    () =>
+      gestures.data.length === 0 ||
+      (gestures.data.length === 1 && gestures.data[0].recordings.length === 0),
+    [gestures.data]
+  );
 
   return (
     <VStack flexGrow={1} width="100%" alignItems="left">
@@ -44,14 +51,18 @@ const AddDataGridView = () => {
         />
       </Grid>
       <Grid {...gridCommonProps} w={0}>
-        {gestures.data.map((g, idx) => (
-          <AddDataGridGestureRow
-            key={g.ID}
-            gesture={g}
-            selected={selected === idx}
-            onSelectRow={() => setSelected(idx)}
-          />
-        ))}
+        {showWalkThrough ? (
+          <AddDataGridWalkThrough gesture={gestures.data[0]} />
+        ) : (
+          gestures.data.map((g, idx) => (
+            <AddDataGridGestureRow
+              key={g.ID}
+              gesture={g}
+              selected={selected === idx}
+              onSelectRow={() => setSelected(idx)}
+            />
+          ))
+        )}
       </Grid>
     </VStack>
   );

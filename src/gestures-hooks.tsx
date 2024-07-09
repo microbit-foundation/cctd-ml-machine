@@ -67,7 +67,9 @@ export const useGestureData = (): GestureContextValue => {
   return gestureData;
 };
 
-const initialGestureContextState: GestureContextState = { data: [] };
+const initialGestureContextState: GestureContextState = {
+  data: [{ name: "", recordings: [], ID: 0 }],
+};
 
 export const GesturesProvider = ({ children }: { children: ReactNode }) => {
   const gestures = useStorage<GestureContextState>(
@@ -108,7 +110,7 @@ export class GestureActions {
 
   setGestureName = (id: GestureData["ID"], name: string) => {
     const newGestures = this.state.data.map((g) => {
-      return id !== g.ID ? g : { ...g, name: name.trim() };
+      return id !== g.ID ? g : { ...g, name };
     });
     this.setGestures(newGestures);
   };
@@ -117,16 +119,13 @@ export class GestureActions {
     gestureId: GestureData["ID"],
     recordingIdx: number
   ) => {
-    const newGestures = this.state.data
-      .map((g) => {
-        if (gestureId !== g.ID) {
-          return g;
-        }
-        const recordings = g.recordings.filter((_r, i) => i !== recordingIdx);
-        return { ...g, recordings };
-      })
-      // remove gestures without recordings
-      .filter((g) => g.recordings.length > 0);
+    const newGestures = this.state.data.map((g) => {
+      if (gestureId !== g.ID) {
+        return g;
+      }
+      const recordings = g.recordings.filter((_r, i) => i !== recordingIdx);
+      return { ...g, recordings };
+    });
     this.setGestures(newGestures);
   };
 }

@@ -88,7 +88,10 @@ const AddDataPage = () => {
               <MenuItem icon={<RiDownload2Line />}>
                 <FormattedMessage id="content.data.controlbar.button.downloadData" />
               </MenuItem>
-              <MenuItem icon={<RiDeleteBin2Line />}>
+              <MenuItem
+                icon={<RiDeleteBin2Line />}
+                onClick={actions.deleteAllGestures}
+              >
                 <FormattedMessage id="content.data.controlbar.button.clearData" />
               </MenuItem>
             </MenuList>

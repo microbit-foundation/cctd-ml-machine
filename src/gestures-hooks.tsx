@@ -149,4 +149,8 @@ export class GestureActions {
     });
     this.setGestures(newGestures);
   };
+
+  deleteAllGestures = () => {
+    this.setGestures([]);
+  };
 }

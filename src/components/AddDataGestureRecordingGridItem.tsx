@@ -13,7 +13,7 @@ import { GestureData, useGestureActions } from "../gestures-hooks";
 import RecordIcon from "../images/record-icon.svg?react";
 import RecordingGraph from "./RecordingGraph";
 import RecordingDialog from "./RecordingDialog";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 interface AddDataGestureRecordingGridItemProps {
   gesture: GestureData;
@@ -28,6 +28,7 @@ const AddDataGestureRecordingGridItem = ({
 }: AddDataGestureRecordingGridItemProps) => {
   const intl = useIntl();
   const { isOpen, onClose, onOpen: onStartRecording } = useDisclosure();
+  const closeRecordingDialogFocusRef = useRef(null);
   const actions = useGestureActions();
   // TODO: Replace with checking if micro:bit is connected
   const isConnected = true;
@@ -46,6 +47,7 @@ const AddDataGestureRecordingGridItem = ({
         isOpen={isOpen}
         onClose={onClose}
         actionName={gesture.name}
+        finalFocusRef={closeRecordingDialogFocusRef}
       />
       <GridItem>
         <Card
@@ -61,6 +63,10 @@ const AddDataGestureRecordingGridItem = ({
           <CardBody display="flex" flexDirection="row" p={1} gap={3}>
             <HStack w="8.25rem" justifyContent="center">
               <IconButton
+                ref={closeRecordingDialogFocusRef}
+                height="fit-content"
+                width="fit-content"
+                rounded="full"
                 onClick={onStartRecording}
                 variant="ghost"
                 _hover={{ backgroundColor: "transparent" }}

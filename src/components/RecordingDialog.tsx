@@ -29,6 +29,7 @@ export interface RecordingDialogProps {
   onClose: () => void;
   actionName: string;
   gestureId: GestureData["ID"];
+  finalFocusRef: React.MutableRefObject<null>;
 }
 
 enum RecordingStatus {
@@ -42,6 +43,7 @@ const RecordingDialog = ({
   actionName,
   onClose,
   gestureId,
+  finalFocusRef,
 }: RecordingDialogProps) => {
   const intl = useIntl();
   const actions = useGestureActions();
@@ -116,6 +118,7 @@ const RecordingDialog = ({
       onClose={handleOnClose}
       size="lg"
       isCentered
+      finalFocusRef={finalFocusRef}
     >
       <ModalOverlay>
         <ModalContent p={8}>

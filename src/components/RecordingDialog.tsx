@@ -46,7 +46,7 @@ const RecordingDialog = ({
   const intl = useIntl();
   const actions = useGestureActions();
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>(
-    RecordingStatus.Countdown
+    RecordingStatus.None
   );
   const [countdownIdx, setIsCountdownIdx] = useState<number>(0);
 

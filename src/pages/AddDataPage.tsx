@@ -19,12 +19,15 @@ import LiveGraphPanel from "../components/LiveGraphPanel";
 import TabView from "../components/TabView";
 import UploadDataSamplesMenuItem from "../components/UploadDataSamplesMenuItem";
 import { addDataConfig } from "../steps-config";
-import { useGestureData } from "../gestures-hooks";
-import { useMemo } from "react";
+import { useGestureActions, useGestureData } from "../gestures-hooks";
+import { useCallback, useMemo } from "react";
 
 const AddDataPage = () => {
   const intl = useIntl();
   const [gestures] = useGestureData();
+  const actions = useGestureActions();
+  const isInputConnected = true;
+
   const noStoredData = useMemo<boolean>(() => {
     const gestureData = gestures.data;
     return (
@@ -32,7 +35,10 @@ const AddDataPage = () => {
       gestureData.some((g) => g.recordings.length > 0)
     );
   }, [gestures.data]);
-  const isInputConnected = true;
+
+  const handleAddNewGesture = useCallback(() => {
+    actions.addNewGesture();
+  }, [actions]);
 
   return (
     <DefaultPageLayout titleId={`${addDataConfig.id}-title`}>
@@ -53,7 +59,14 @@ const AddDataPage = () => {
         borderColor="gray.200"
         alignItems="center"
       >
-        <Button variant="primary" leftIcon={<RiAddLine />}>
+        <Button
+          variant="primary"
+          leftIcon={<RiAddLine />}
+          onClick={handleAddNewGesture}
+          isDisabled={
+            !isInputConnected || gestures.data.some((g) => g.name.length === 0)
+          }
+        >
           <FormattedMessage id="content.data.addAction" />
         </Button>
         <HStack gap={2} alignItems="center">

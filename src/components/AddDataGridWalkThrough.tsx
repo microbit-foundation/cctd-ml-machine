@@ -31,7 +31,7 @@ const AddDataGridWalkThrough = ({ gesture }: AddDataGridWalkThrough) => {
         <>
           <AddDataGestureRecordingGridItem gesture={gesture} selected={true} />
           {/* Empty grid item to fill first column of grid */}
-          <GridItem></GridItem>
+          <GridItem />
           <GridItem h="120px">
             <HStack m={0} p={2} w={300} transform="translateX(65px)">
               <Image width="100px" src={upCurveArrowImage} alt="" />

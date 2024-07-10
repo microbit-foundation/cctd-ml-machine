@@ -1,6 +1,5 @@
 import { ReactNode, createContext, useContext, useMemo } from "react";
 import { useStorage } from "./hooks/use-storage";
-
 export interface XYZData {
   x: number[];
   y: number[];
@@ -67,8 +66,14 @@ export const useGestureData = (): GestureContextValue => {
   return gestureData;
 };
 
+const generateNewGesture = (): GestureData => ({
+  name: "",
+  recordings: [],
+  ID: Date.now(),
+});
+
 const initialGestureContextState: GestureContextState = {
-  data: [{ name: "", recordings: [], ID: 0 }],
+  data: [generateNewGesture()],
 };
 
 export const GesturesProvider = ({ children }: { children: ReactNode }) => {
@@ -99,6 +104,10 @@ export class GestureActions {
     private state: GestureContextState,
     private setState: (gestureData: GestureContextState) => void
   ) {}
+
+  addNewGesture = () => {
+    this.setGestures([...this.state.data, generateNewGesture()]);
+  };
 
   addGestureRecordings = (id: GestureData["ID"], recs: RecordingData[]) => {
     const newGestures = this.state.data.map((g) => {

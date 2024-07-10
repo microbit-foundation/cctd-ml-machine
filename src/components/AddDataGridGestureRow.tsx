@@ -3,6 +3,7 @@ import { useIntl } from "react-intl";
 import { GestureData, useGestureActions } from "../gestures-hooks";
 import AddDataGestureRecordingGridItem from "./AddDataGestureRecordingGridItem";
 import AddDataGestureNameGridItem from "./AddDataGestureNameGridItem";
+import { GridItem } from "@chakra-ui/react";
 
 interface AddDataGridGestureRowProps {
   gesture: GestureData;
@@ -38,11 +39,16 @@ const AddDataGridGestureRow = ({
         onSelectRow={onSelectRow}
         selected={selected}
       />
-      <AddDataGestureRecordingGridItem
-        gesture={gesture}
-        selected={selected}
-        onSelectRow={onSelectRow}
-      />
+      {gesture.name.length > 0 || gesture.recordings.length > 0 ? (
+        <AddDataGestureRecordingGridItem
+          gesture={gesture}
+          selected={selected}
+          onSelectRow={onSelectRow}
+        />
+      ) : (
+        // Empty grid item to fill column space
+        <GridItem />
+      )}
     </>
   );
 };

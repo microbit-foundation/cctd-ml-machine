@@ -25,9 +25,12 @@ import {
   useGestureData,
 } from "../gestures-hooks";
 import { useCallback, useMemo } from "react";
+import { createStepPageUrl } from "../urls";
+import { useNavigate } from "react-router";
 
 const AddDataPage = () => {
   const intl = useIntl();
+  const navigate = useNavigate();
   const [gestures] = useGestureData();
   const actions = useGestureActions();
   const isInputConnected = true;
@@ -47,6 +50,10 @@ const AddDataPage = () => {
   const handleDatasetDownload = useCallback(() => {
     downloadDataset(gestures.data);
   }, [gestures.data]);
+
+  const handleTrain = useCallback(() => {
+    navigate(createStepPageUrl("train-model"));
+  }, [navigate]);
 
   return (
     <DefaultPageLayout titleId={`${addDataConfig.id}-title`}>
@@ -79,7 +86,10 @@ const AddDataPage = () => {
             <FormattedMessage id="content.data.addAction" />
           </Button>
           <HStack gap={2} alignItems="center">
-            <Button>
+            <Button
+              onClick={handleTrain}
+              isDisabled={!actions.isSufficientForTraining()}
+            >
               <FormattedMessage id="menu.trainer.trainModelButton" />
             </Button>
             <Menu>

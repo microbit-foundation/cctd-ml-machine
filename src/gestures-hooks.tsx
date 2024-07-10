@@ -105,6 +105,14 @@ export class GestureActions {
     private setState: (gestureData: GestureContextState) => void
   ) {}
 
+  isSufficientForTraining = (): boolean => {
+    const gestures = this.state.data;
+    if (gestures.length < 2) {
+      return false;
+    }
+    return !gestures.some((g) => g.recordings.length < 3);
+  };
+
   addNewGesture = () => {
     this.setGestures([...this.state.data, generateNewGesture()]);
   };

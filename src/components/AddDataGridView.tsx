@@ -1,23 +1,17 @@
-import {
-  Grid,
-  GridItem,
-  GridProps,
-  HStack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Grid, GridItem, GridProps, HStack, Text } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useGestureData } from "../gestures-hooks";
 import AddDataGridGestureRow from "./AddDataGridGestureRow";
-import InfoToolTip, { InfoToolTipProps } from "./InfoToolTip";
 import AddDataGridWalkThrough from "./AddDataGridWalkThrough";
+import InfoToolTip, { InfoToolTipProps } from "./InfoToolTip";
 
 const gridCommonProps: Partial<GridProps> = {
   gridTemplateColumns: "200px 1fr",
   gap: 3,
-  alignItems: "center",
   px: 10,
+  py: 2,
+  w: "100%",
 };
 
 const AddDataGridView = () => {
@@ -31,10 +25,12 @@ const AddDataGridView = () => {
   );
 
   return (
-    <VStack flexGrow={1} width="100%" alignItems="left">
+    <>
       <Grid
         {...gridCommonProps}
-        w="100%"
+        flexShrink={0}
+        position="sticky"
+        top={0}
         h="3.25rem"
         alignItems="center"
         borderTopWidth={3}
@@ -50,7 +46,14 @@ const AddDataGridView = () => {
           descriptionId="content.data.dataDescription"
         />
       </Grid>
-      <Grid {...gridCommonProps} w={0}>
+      <Grid
+        {...gridCommonProps}
+        alignItems="start"
+        autoRows="max-content"
+        overflow="auto"
+        flexGrow={1}
+        h={0}
+      >
         {showWalkThrough ? (
           <AddDataGridWalkThrough gesture={gestures.data[0]} />
         ) : (
@@ -64,7 +67,7 @@ const AddDataGridView = () => {
           ))
         )}
       </Grid>
-    </VStack>
+    </>
   );
 };
 

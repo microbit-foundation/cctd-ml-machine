@@ -51,65 +51,67 @@ const AddDataPage = () => {
   return (
     <DefaultPageLayout titleId={`${addDataConfig.id}-title`}>
       <TabView activeStep={addDataConfig.id} />
-      <VStack flexGrow={1} bgColor="gray.25">
-        {noStoredData && !isInputConnected ? (
-          <ConnectFirstView />
-        ) : (
-          <AddDataGridView />
-        )}
-      </VStack>
-      <HStack
-        justifyContent="space-between"
-        px={10}
-        py={2}
-        borderBottomWidth={3}
-        borderTopWidth={3}
-        borderColor="gray.200"
-        alignItems="center"
-      >
-        <Button
-          variant="primary"
-          leftIcon={<RiAddLine />}
-          onClick={handleAddNewGesture}
-          isDisabled={
-            !isInputConnected || gestures.data.some((g) => g.name.length === 0)
-          }
+      {noStoredData && !isInputConnected ? (
+        <ConnectFirstView />
+      ) : (
+        <AddDataGridView />
+      )}
+      <VStack w="full" flexShrink={0} bottom={0} gap={0} bg="gray.25">
+        <HStack
+          justifyContent="space-between"
+          px={10}
+          py={2}
+          w="full"
+          borderBottomWidth={3}
+          borderTopWidth={3}
+          borderColor="gray.200"
+          alignItems="center"
         >
-          <FormattedMessage id="content.data.addAction" />
-        </Button>
-        <HStack gap={2} alignItems="center">
-          <Button>
-            <FormattedMessage id="menu.trainer.trainModelButton" />
+          <Button
+            variant="primary"
+            leftIcon={<RiAddLine />}
+            onClick={handleAddNewGesture}
+            isDisabled={
+              !isInputConnected ||
+              gestures.data.some((g) => g.name.length === 0)
+            }
+          >
+            <FormattedMessage id="content.data.addAction" />
           </Button>
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label={intl.formatMessage({
-                id: "content.data.controlbar.button.menu",
-              })}
-              variant="ghost"
-              icon={<Icon as={MdMoreVert} boxSize={10} color="brand.500" />}
-              isRound
-            />
-            <MenuList>
-              <UploadDataSamplesMenuItem />
-              <MenuItem
-                icon={<RiDownload2Line />}
-                onClick={handleDatasetDownload}
-              >
-                <FormattedMessage id="content.data.controlbar.button.downloadData" />
-              </MenuItem>
-              <MenuItem
-                icon={<RiDeleteBin2Line />}
-                onClick={actions.deleteAllGestures}
-              >
-                <FormattedMessage id="content.data.controlbar.button.clearData" />
-              </MenuItem>
-            </MenuList>
-          </Menu>
+          <HStack gap={2} alignItems="center">
+            <Button>
+              <FormattedMessage id="menu.trainer.trainModelButton" />
+            </Button>
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label={intl.formatMessage({
+                  id: "content.data.controlbar.button.menu",
+                })}
+                variant="ghost"
+                icon={<Icon as={MdMoreVert} boxSize={10} color="brand.500" />}
+                isRound
+              />
+              <MenuList>
+                <UploadDataSamplesMenuItem />
+                <MenuItem
+                  icon={<RiDownload2Line />}
+                  onClick={handleDatasetDownload}
+                >
+                  <FormattedMessage id="content.data.controlbar.button.downloadData" />
+                </MenuItem>
+                <MenuItem
+                  icon={<RiDeleteBin2Line />}
+                  onClick={actions.deleteAllGestures}
+                >
+                  <FormattedMessage id="content.data.controlbar.button.clearData" />
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </HStack>
         </HStack>
-      </HStack>
-      <LiveGraphPanel />
+        <LiveGraphPanel />
+      </VStack>
     </DefaultPageLayout>
   );
 };

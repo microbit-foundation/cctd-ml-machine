@@ -14,7 +14,13 @@ const ConnectFirstView = () => {
   }, [dispatch]);
 
   return (
-    <VStack flexGrow={1} justifyContent="center" alignItems="center" gap={10}>
+    <VStack
+      flexGrow={1}
+      justifyContent="center"
+      alignItems="center"
+      gap={10}
+      bgColor="gray.25"
+    >
       <VStack gap={0}>
         <Text textAlign="center" fontSize="2xl">
           <FormattedMessage id="menu.trainer.notConnected1" />

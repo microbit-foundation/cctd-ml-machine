@@ -100,8 +100,20 @@ export class GestureActions {
     private setState: (gestureData: GestureContextState) => void
   ) {}
 
-  setGestures = (gesture: GestureData[]) => {
-    this.setState({ ...this.state, data: gesture });
+  addGestureRecordings = (id: GestureData["ID"], recs: RecordingData[]) => {
+    const newGestures = this.state.data.map((g) => {
+      return id !== g.ID ? g : { ...g, recordings: [...recs, ...g.recordings] };
+    });
+    this.setGestures(newGestures);
+  };
+
+  setGestures = (gestures: GestureData[]) => {
+    if (gestures.length === 0) {
+      // Always have at least one gesture
+      this.setState({ ...this.state, ...initialGestureContextState });
+      return;
+    }
+    this.setState({ ...this.state, data: gestures });
   };
 
   deleteGesture = (id: GestureData["ID"]) => {

@@ -13,6 +13,8 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { FormattedMessage, useIntl } from "react-intl";
+import { GestureData, useGestureActions } from "../gestures-hooks";
+import { dummyGestureData } from "../dummy-gesture-data";
 
 const recordingDuration = 1800;
 
@@ -26,6 +28,7 @@ export interface RecordingDialogProps {
   isOpen: boolean;
   onClose: () => void;
   actionName: string;
+  gestureId: GestureData["ID"];
 }
 
 enum RecordingStatus {
@@ -38,8 +41,10 @@ const RecordingDialog = ({
   isOpen,
   actionName,
   onClose,
+  gestureId,
 }: RecordingDialogProps) => {
   const intl = useIntl();
+  const actions = useGestureActions();
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>(
     RecordingStatus.Countdown
   );
@@ -90,14 +95,18 @@ const RecordingDialog = ({
 
   useEffect(() => {
     if (recordingStatus === RecordingStatus.Recording) {
-      // TODO: Record samples
       setTimeout(() => {
         if (recordingStatus === RecordingStatus.Recording) {
+          // TODO: Record samples
+          // Stubbing of recording of gesture
+          actions.addGestureRecordings(gestureId, [
+            dummyGestureData[0].recordings[0],
+          ]);
           handleOnClose();
         }
       }, recordingDuration);
     }
-  }, [handleOnClose, recordingStatus]);
+  }, [actions, gestureId, handleOnClose, recordingStatus]);
 
   return (
     <Modal

@@ -42,6 +42,7 @@ const AddDataGestureRecordingGridItem = ({
   return (
     <>
       <RecordingDialog
+        gestureId={gesture.ID}
         isOpen={isOpen}
         onClose={onClose}
         actionName={gesture.name}

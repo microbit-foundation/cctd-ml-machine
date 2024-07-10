@@ -14,6 +14,7 @@ import {
 import { stores } from '../../../script/stores/Stores';
 import { state } from '../../../script/stores/uiStore';
 import { get } from 'svelte/store';
+import { knnConfig } from '../../../script/stores/knnConfig';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -40,7 +41,7 @@ class KNNModelGraphDrawer {
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) {}
+  ) { }
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {
@@ -56,6 +57,9 @@ class KNNModelGraphDrawer {
       color,
       id: `live`,
     };
+    if (isNaN(drawableLivePoint.pointTransformed.projected.x)) {
+      return; // May happen if the model has just been trained.
+    }
 
     if (get(state).isInputReady) {
       this.addPoint(drawableLivePoint, 'live');
@@ -67,7 +71,7 @@ class KNNModelGraphDrawer {
           const bDist = distanceBetween(drawableLivePoint.pointTransformed, b);
           return aDist - bDist;
         })
-        .slice(0, StaticConfiguration.knnNeighbourCount);
+        .slice(0, get(knnConfig).k);
 
       const lines = this.svg.selectAll(`line.points-class`).data(predictedPoints);
       lines

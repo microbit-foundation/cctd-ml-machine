@@ -14,11 +14,17 @@
   import Axes from '../../script/domain/Axes';
   import { t } from '../../i18n';
   import { onMount } from 'svelte';
-
+  import Range from '../../components/Range.svelte';
+  import { knnConfig } from '../../script/stores/knnConfig';
+  import { get } from 'svelte/store';
+  import StandardButton from '../../components/buttons/StandardButton.svelte';
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
   const confidences = gestures.getConfidences();
   const filters = classifier.getFilters();
+
+  console.log('GESTURES:', $gestures);
+  console.log('CONFIDENCES:', $confidences);
 
   onMount(() => {
     trainModel(ModelRegistry.KNN);
@@ -31,12 +37,47 @@
       trainModel(ModelRegistry.KNN);
     }
   }
+
+  const maxK = Math.min(
+    $gestures.length * StaticConfiguration.minNoOfRecordingsPerGesture,
+    10,
+  );
+  const changeK = (amount: number) => {
+    const newVal = Math.min(Math.max($knnConfig.k + amount, 1), 10);
+    knnConfig.set({ k: newVal });
+    trainModel(ModelRegistry.KNN);
+  };
+  $: {
+    if ($knnConfig.k > maxK) {
+      knnConfig.set({ k: maxK });
+    }
+  }
+
+  console.log($confidences);
 </script>
 
 <div
   class="flex flex-row flex-grow justify-evenly"
   class:hidden={!$classifier.model.isTrained}>
   <div class="flex flex-col justify-center mr-6">
+    <div class="flex space-x-2 flex-row mb-2">
+      <div class="flex flex-row">
+        <div
+          on:click={() => changeK(-1)}
+          class="bg-secondary font-bold text-secondarytext cursor-pointer select-none hover:bg-opacity-60 border-primary border-r-1 content-center px-2 rounded-l-xl">
+          -
+        </div>
+        <div
+          on:click={() => changeK(1)}
+          class="bg-secondary border-primary text-secondarytext cursor-pointer hover:bg-opacity-60 select-none content-center px-2 rounded-r-xl">
+          +
+        </div>
+      </div>
+      <p class="text-md content-center">
+        {$knnConfig.k}
+        {$t('content.trainer.knn.neighbours')}
+      </p>
+    </div>
     <AxesFilterVectorView />
     <div class="flex flex-col ml-2 justify-center mt-2">
       {#each $gestures as gesture, index}

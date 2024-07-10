@@ -19,6 +19,7 @@ import LayersModelTrainer, {
 import { FilterType } from '../../script/domain/FilterTypes';
 import Filters from '../../script/domain/Filters';
 import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
+import { knnConfig } from '../../script/stores/knnConfig';
 
 const classifier = stores.getClassifier();
 
@@ -36,7 +37,7 @@ export const getModelTrainer = (
   const currentAxis = get(highlightedAxis);
   if (model.id === ModelRegistry.KNN.id) {
     const offset = currentAxis === Axes.X ? 0 : currentAxis === Axes.Y ? 1 : 2;
-    return new KNNNonNormalizedModelTrainer(StaticConfiguration.knnNeighbourCount, data =>
+    return new KNNNonNormalizedModelTrainer(get(knnConfig).k, data =>
       extractAxisFromTrainingData(data, offset, 3),
     );
   }

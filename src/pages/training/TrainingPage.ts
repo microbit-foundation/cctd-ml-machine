@@ -16,6 +16,8 @@ import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
 import LayersModelTrainer, {
   LossTrainingIteration,
 } from '../../script/mlmodels/LayersModelTrainer';
+import { knnConfig } from '../../script/stores/knnConfig';
+import Logger from '../../script/utils/Logger';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 
@@ -42,13 +44,14 @@ const trainKNNModel = async () => {
   const currentAxis = get(highlightedAxis);
   const offset = currentAxis === Axes.X ? 0 : currentAxis === Axes.Y ? 1 : 2;
   const modelTrainer = new KNNNonNormalizedModelTrainer(
-    StaticConfiguration.knnNeighbourCount,
+    get(knnConfig).k,
     data => extractAxisFromTrainingData(data, offset, 3), // 3 assumes 3 axis
   );
   await stores.getClassifier().getModel().train(modelTrainer);
 };
 
 export const trainModel = async (model: ModelInfo) => {
+  Logger.log('TrainingPage', "Training new model: " + model.title);
   highlightedAxis.set(undefined);
   if (ModelRegistry.KNN.id === model.id) {
     await trainKNNModel();

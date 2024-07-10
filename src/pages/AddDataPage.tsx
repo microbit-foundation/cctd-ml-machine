@@ -19,7 +19,11 @@ import LiveGraphPanel from "../components/LiveGraphPanel";
 import TabView from "../components/TabView";
 import UploadDataSamplesMenuItem from "../components/UploadDataSamplesMenuItem";
 import { addDataConfig } from "../steps-config";
-import { useGestureActions, useGestureData } from "../gestures-hooks";
+import {
+  GestureData,
+  useGestureActions,
+  useGestureData,
+} from "../gestures-hooks";
 import { useCallback, useMemo } from "react";
 
 const AddDataPage = () => {
@@ -39,6 +43,10 @@ const AddDataPage = () => {
   const handleAddNewGesture = useCallback(() => {
     actions.addNewGesture();
   }, [actions]);
+
+  const handleDatasetDownload = useCallback(() => {
+    downloadDataset(gestures.data);
+  }, [gestures.data]);
 
   return (
     <DefaultPageLayout titleId={`${addDataConfig.id}-title`}>
@@ -85,7 +93,10 @@ const AddDataPage = () => {
             />
             <MenuList>
               <UploadDataSamplesMenuItem />
-              <MenuItem icon={<RiDownload2Line />}>
+              <MenuItem
+                icon={<RiDownload2Line />}
+                onClick={handleDatasetDownload}
+              >
                 <FormattedMessage id="content.data.controlbar.button.downloadData" />
               </MenuItem>
               <MenuItem
@@ -101,6 +112,18 @@ const AddDataPage = () => {
       <LiveGraphPanel />
     </DefaultPageLayout>
   );
+};
+
+const downloadDataset = (gestures: GestureData[]) => {
+  const a = document.createElement("a");
+  a.setAttribute(
+    "href",
+    "data:application/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(gestures, null, 2))
+  );
+  a.setAttribute("download", "dataset");
+  a.style.display = "none";
+  a.click();
 };
 
 export default AddDataPage;

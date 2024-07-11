@@ -8,27 +8,24 @@ import {
 } from "@chakra-ui/react";
 import { ReactNode, useCallback, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { useGestureActions, useGestureData } from "../gestures-hooks";
+import {
+  TrainingStatus,
+  useGestureActions,
+  useGestureData,
+  useTrainingStatus,
+} from "../gestures-hooks";
 import { useNavigate } from "react-router";
 import { createStepPageUrl } from "../urls";
 import TrainingButton from "./TrainingButton";
 import { trainModel } from "../ml";
 import TrainingErrorDialog from "./TrainingErrorDialog";
 
-enum TrainingStatus {
-  NotStarted,
-  InProgress,
-  Complete,
-}
-
 const TrainingStatusView = () => {
   const navigate = useNavigate();
   const [gestureData] = useGestureData();
   const actions = useGestureActions();
   const isSufficientData = actions.isSufficientForTraining();
-  const [trainStatus, setTrainStatus] = useState<TrainingStatus>(
-    TrainingStatus.NotStarted
-  );
+  const [trainStatus, setTrainStatus] = useTrainingStatus();
   const [trainProgress, setTrainProgress] = useState<number>(0);
   const trainErrorDialog = useDisclosure();
 
@@ -54,7 +51,7 @@ const TrainingStatusView = () => {
         setTrainStatus(TrainingStatus.NotStarted);
       },
     });
-  }, [gestureData.data]);
+  }, [gestureData.data, setTrainStatus]);
 
   if (!isSufficientData) {
     return (

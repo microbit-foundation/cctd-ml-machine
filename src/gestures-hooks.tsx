@@ -1,4 +1,10 @@
-import { ReactNode, createContext, useContext, useMemo } from "react";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+} from "react";
 import { useStorage } from "./hooks/use-storage";
 export interface XYZData {
   x: number[];
@@ -17,7 +23,14 @@ export interface GestureData {
   recordings: RecordingData[];
 }
 
+export enum TrainingStatus {
+  NotStarted,
+  InProgress,
+  Complete,
+}
+
 interface GestureContextState {
+  trainingStatus: TrainingStatus;
   data: GestureData[];
 }
 
@@ -73,6 +86,7 @@ const generateNewGesture = (): GestureData => ({
 });
 
 const initialGestureContextState: GestureContextState = {
+  trainingStatus: TrainingStatus.NotStarted,
   data: [generateNewGesture()],
 };
 
@@ -88,6 +102,21 @@ export const GesturesProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </GestureContext.Provider>
   );
+};
+
+export const useTrainingStatus = (): [
+  TrainingStatus,
+  (status: TrainingStatus) => void
+] => {
+  const [gestures, setGestures] = useGestureData();
+  const trainingStatus = gestures.trainingStatus;
+  const setTrainingStatus = useCallback(
+    (status: TrainingStatus) => {
+      setGestures({ ...gestures, trainingStatus: status });
+    },
+    [gestures, setGestures]
+  );
+  return [trainingStatus, setTrainingStatus];
 };
 
 export const useGestureActions = () => {

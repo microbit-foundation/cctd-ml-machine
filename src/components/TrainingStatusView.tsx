@@ -8,24 +8,18 @@ import {
 } from "@chakra-ui/react";
 import { ReactNode, useCallback, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import {
-  TrainingStatus,
-  useGestureActions,
-  useGestureData,
-  useTrainingStatus,
-} from "../gestures-hooks";
 import { useNavigate } from "react-router";
+import { useGestureData } from "../gestures-hooks";
+import { trainModel } from "../ml";
 import { createStepPageUrl } from "../urls";
 import TrainingButton from "./TrainingButton";
-import { trainModel } from "../ml";
 import TrainingErrorDialog from "./TrainingErrorDialog";
+import { TrainingStatus, useTrainingStatus } from "../training-hook";
 
 const TrainingStatusView = () => {
   const navigate = useNavigate();
-  const [gestureData] = useGestureData();
-  const actions = useGestureActions();
-  const isSufficientData = actions.isSufficientForTraining();
-  const [trainStatus, setTrainStatus] = useTrainingStatus();
+  const [{ data }] = useGestureData();
+  const [trainingStatus, setTrainingStatus] = useTrainingStatus();
   const [trainProgress, setTrainProgress] = useState<number>(0);
   const trainErrorDialog = useDisclosure();
 
@@ -38,35 +32,33 @@ const TrainingStatusView = () => {
   }, [navigate]);
 
   const handleTrain = useCallback(async () => {
-    setTrainStatus(TrainingStatus.InProgress);
+    setTrainingStatus(TrainingStatus.InProgress);
     await trainModel({
-      data: gestureData.data,
+      data,
       onTraining: (progress) => {
         setTrainProgress(progress);
       },
       onTrainEnd: () => {
-        setTrainStatus(TrainingStatus.Complete);
+        setTrainingStatus(TrainingStatus.Complete);
       },
       onError: () => {
-        setTrainStatus(TrainingStatus.NotStarted);
+        setTrainingStatus(TrainingStatus.NotStarted);
       },
     });
-  }, [gestureData.data, setTrainStatus]);
+  }, [data, setTrainingStatus]);
 
-  if (!isSufficientData) {
-    return (
-      <TrainingStatusSection
-        statusId="menu.trainer.notEnoughDataHeader1"
-        descriptionId="menu.trainer.notEnoughDataInfoBody"
-      >
-        <Button variant="primary" onClick={navigateToDataPage}>
-          <FormattedMessage id="menu.trainer.addDataButton" />
-        </Button>
-      </TrainingStatusSection>
-    );
-  }
-
-  switch (trainStatus) {
+  switch (trainingStatus) {
+    case TrainingStatus.InsufficientData:
+      return (
+        <TrainingStatusSection
+          statusId="menu.trainer.notEnoughDataHeader1"
+          descriptionId="menu.trainer.notEnoughDataInfoBody"
+        >
+          <Button variant="primary" onClick={navigateToDataPage}>
+            <FormattedMessage id="menu.trainer.addDataButton" />
+          </Button>
+        </TrainingStatusSection>
+      );
     case TrainingStatus.NotStarted:
       return (
         <>

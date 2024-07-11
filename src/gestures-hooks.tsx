@@ -1,11 +1,6 @@
-import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-} from "react";
+import { ReactNode, createContext, useContext, useMemo } from "react";
 import { useStorage } from "./hooks/use-storage";
+import { TrainingStatus, useTrainingStatus } from "./training-hook";
 export interface XYZData {
   x: number[];
   y: number[];
@@ -23,15 +18,7 @@ export interface GestureData {
   recordings: RecordingData[];
 }
 
-export enum TrainingStatus {
-  NotStarted,
-  InProgress,
-  Complete,
-  Retrain,
-}
-
 interface GestureContextState {
-  trainingStatus: TrainingStatus;
   data: GestureData[];
 }
 
@@ -87,7 +74,6 @@ const generateNewGesture = (): GestureData => ({
 });
 
 const initialGestureContextState: GestureContextState = {
-  trainingStatus: TrainingStatus.NotStarted,
   data: [generateNewGesture()],
 };
 
@@ -105,75 +91,72 @@ export const GesturesProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useTrainingStatus = (): [
-  TrainingStatus,
-  (status: TrainingStatus) => void
-] => {
-  const [gestures, setGestures] = useGestureData();
-  const trainingStatus = gestures.trainingStatus;
-  const setTrainingStatus = useCallback(
-    (status: TrainingStatus) => {
-      setGestures({ ...gestures, trainingStatus: status });
-    },
-    [gestures, setGestures]
-  );
-  return [trainingStatus, setTrainingStatus];
-};
-
 export const useGestureActions = () => {
   const [gestures, setGestures] = useGestureData();
+  const [trainingStatus, setTrainingStatus] = useTrainingStatus();
   const actions = useMemo<GestureActions>(
-    () => new GestureActions(gestures, setGestures),
-    [gestures, setGestures]
+    () =>
+      new GestureActions(
+        gestures,
+        setGestures,
+        trainingStatus,
+        setTrainingStatus
+      ),
+    [gestures, setGestures, setTrainingStatus, trainingStatus]
   );
   return actions;
 };
 
 export class GestureActions {
   constructor(
-    private state: GestureContextState,
-    private setState: (gestureData: GestureContextState) => void
+    private gestureState: GestureContextState,
+    private setGestureState: (gestureData: GestureContextState) => void,
+    private trainingStatus: TrainingStatus,
+    private setTrainingStatus: (status: TrainingStatus) => void
   ) {}
 
-  isSufficientForTraining = (): boolean => {
-    const gestures = this.state.data;
-    if (gestures.length < 2) {
-      return false;
-    }
-    return !gestures.some((g) => g.recordings.length < 3);
+  private hasSufficientDataForTraining = (): boolean => {
+    return (
+      this.gestureState.data.length > 2 &&
+      this.gestureState.data.every((g) => g.recordings.length >= 3)
+    );
+  };
+
+  setGestures = (gs: GestureData[], isRetrainNeeded: boolean = true) => {
+    this.setGestureState({
+      ...this.gestureState,
+      // Always have at least one gesture
+      data: gs.length === 0 ? initialGestureContextState.data : gs,
+    });
+
+    // Update training status to retrain if needed
+    const hasTrainedBefore = this.trainingStatus === TrainingStatus.Complete;
+    this.setTrainingStatus(
+      this.hasSufficientDataForTraining()
+        ? isRetrainNeeded && hasTrainedBefore
+          ? TrainingStatus.Retrain
+          : this.trainingStatus
+        : TrainingStatus.InsufficientData
+    );
   };
 
   addNewGesture = () => {
-    this.setGestures([...this.state.data, generateNewGesture()]);
+    this.setGestures([...this.gestureState.data, generateNewGesture()]);
   };
+
   addGestureRecordings = (id: GestureData["ID"], recs: RecordingData[]) => {
-    const newGestures = this.state.data.map((g) => {
+    const newGestures = this.gestureState.data.map((g) => {
       return id !== g.ID ? g : { ...g, recordings: [...recs, ...g.recordings] };
     });
     this.setGestures(newGestures);
   };
 
-  setGestures = (gestures: GestureData[], isRetrainNeeded: boolean = true) => {
-    this.setState({
-      ...this.state,
-      // Always have at least one gesture
-      ...(gestures.length === 0
-        ? initialGestureContextState
-        : { data: gestures }),
-      // Update training status to retrain if needed
-      trainingStatus:
-        isRetrainNeeded && this.state.trainingStatus === TrainingStatus.Complete
-          ? TrainingStatus.Retrain
-          : this.state.trainingStatus,
-    });
-  };
-
   deleteGesture = (id: GestureData["ID"]) => {
-    this.setGestures(this.state.data.filter((g) => g.ID !== id));
+    this.setGestures(this.gestureState.data.filter((g) => g.ID !== id));
   };
 
   setGestureName = (id: GestureData["ID"], name: string) => {
-    const newGestures = this.state.data.map((g) => {
+    const newGestures = this.gestureState.data.map((g) => {
       return id !== g.ID ? g : { ...g, name };
     });
     this.setGestures(newGestures, false);
@@ -183,7 +166,7 @@ export class GestureActions {
     gestureId: GestureData["ID"],
     recordingIdx: number
   ) => {
-    const newGestures = this.state.data.map((g) => {
+    const newGestures = this.gestureState.data.map((g) => {
       if (gestureId !== g.ID) {
         return g;
       }

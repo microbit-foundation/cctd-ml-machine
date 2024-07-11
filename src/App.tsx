@@ -19,6 +19,7 @@ import { stepsConfig } from "./steps-config";
 import { LoggingProvider } from "./logging/logging-hooks";
 import { ConnectionFlowProvider } from "./connections";
 import { GesturesProvider } from "./gestures-hooks";
+import { TrainingStatusProvider } from "./training-hook";
 
 export interface ProviderLayoutProps {
   children: ReactNode;
@@ -36,13 +37,15 @@ const Providers = ({ children }: ProviderLayoutProps) => {
         <LoggingProvider value={logging}>
           <ConsentProvider>
             <SettingsProvider>
-              <GesturesProvider>
-                <ConnectionFlowProvider>
-                  <TranslationProvider>
-                    <ErrorBoundary>{children}</ErrorBoundary>
-                  </TranslationProvider>
-                </ConnectionFlowProvider>
-              </GesturesProvider>
+              <TrainingStatusProvider>
+                <GesturesProvider>
+                  <ConnectionFlowProvider>
+                    <TranslationProvider>
+                      <ErrorBoundary>{children}</ErrorBoundary>
+                    </TranslationProvider>
+                  </ConnectionFlowProvider>
+                </GesturesProvider>
+              </TrainingStatusProvider>
             </SettingsProvider>
           </ConsentProvider>
         </LoggingProvider>

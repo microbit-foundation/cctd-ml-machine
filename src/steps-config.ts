@@ -2,7 +2,7 @@ import addDataImage from "./images/add_data.svg";
 import testModelImage from "./images/test_model_blue.svg";
 import trainModelImage from "./images/train_model_blue.svg";
 import AddDataPage from "./pages/AddDataPage";
-import TestDataPage from "./pages/TestDataPage";
+import TestModelPage from "./pages/TestModelPage";
 import TrainModelPage from "./pages/TrainModelPage";
 
 export type StepId = "add-data" | "train-model" | "test-model";
@@ -25,14 +25,14 @@ export const trainModelConfig: StepConfig = {
   pageElement: TrainModelPage,
 };
 
-export const testDataConfig: StepConfig = {
+export const testModelConfig: StepConfig = {
   id: "test-model",
   imgSrc: testModelImage,
-  pageElement: TestDataPage,
+  pageElement: TestModelPage,
 };
 
 export const stepsConfig: StepConfig[] = [
   addDataConfig,
   trainModelConfig,
-  testDataConfig,
+  testModelConfig,
 ];

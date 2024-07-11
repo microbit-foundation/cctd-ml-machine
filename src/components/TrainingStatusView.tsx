@@ -4,6 +4,7 @@ import {
   Heading,
   Progress,
   Text,
+  VStack,
   useDisclosure,
 } from "@chakra-ui/react";
 import { ReactNode, useCallback, useState } from "react";
@@ -50,10 +51,10 @@ const TrainingStatusView = () => {
   switch (trainingStatus) {
     case TrainingStatus.InsufficientData:
       return (
-        <TrainingStatusSection
-          statusId="menu.trainer.notEnoughDataHeader1"
-          descriptionId="menu.trainer.notEnoughDataInfoBody"
-        >
+        <TrainingStatusSection statusId="menu.trainer.notEnoughDataHeader1">
+          <Text>
+            <FormattedMessage id="menu.trainer.notEnoughDataInfoBody" />
+          </Text>
           <Button variant="primary" onClick={navigateToDataPage}>
             <FormattedMessage id="menu.trainer.addDataButton" />
           </Button>
@@ -106,27 +107,20 @@ const TrainingStatusView = () => {
 
 interface TrainingStatusSectionProps {
   statusId: string;
-  descriptionId?: string;
   children: ReactNode;
 }
 
 const TrainingStatusSection = ({
   statusId,
-  descriptionId,
   children,
 }: TrainingStatusSectionProps) => {
   return (
-    <>
+    <VStack gap={10}>
       <Heading as="h2" fontSize="lg" fontWeight="semibold">
         <FormattedMessage id={statusId} />
       </Heading>
-      {descriptionId && (
-        <Text>
-          <FormattedMessage id={descriptionId} />
-        </Text>
-      )}
       {children}
-    </>
+    </VStack>
   );
 };
 

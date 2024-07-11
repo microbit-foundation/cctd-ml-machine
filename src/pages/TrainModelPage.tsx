@@ -20,8 +20,8 @@ const TrainModelPage = () => {
             h="249px"
             alt=""
           />
-          <VStack gap={3}>
-            <Heading as="h1" fontSize="2xl">
+          <VStack gap={5}>
+            <Heading as="h1" fontSize="2xl" fontWeight="bold">
               <FormattedMessage id="content.trainer.header" />
             </Heading>
             <Text textAlign="center" w="39rem">

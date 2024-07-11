@@ -14,7 +14,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { FormattedMessage, useIntl } from "react-intl";
 import { GestureData, useGestureActions } from "../gestures-hooks";
-import { dummyGestureData } from "../dummy-gesture-data";
+import gestureData from "../test-fixtures/gesture-data.json";
 
 const recordingDuration = 1800;
 
@@ -102,7 +102,7 @@ const RecordingDialog = ({
           // TODO: Record samples
           // Stubbing of recording of gesture
           actions.addGestureRecordings(gestureId, [
-            dummyGestureData[0].recordings[0],
+            (gestureData as GestureData[])[0].recordings[0],
           ]);
           handleOnClose();
         }

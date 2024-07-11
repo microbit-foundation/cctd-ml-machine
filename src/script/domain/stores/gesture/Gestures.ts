@@ -44,7 +44,6 @@ class Gestures implements Readable<GestureData[]> {
     Gestures.subscribableGestures = writable();
     this.repository.subscribe(storeArray => {
       Gestures.subscribableGestures.set(storeArray);
-
     });
     this.confidenceStore = derived([this, ...this.getGestures()], stores => {
       const confidenceMap: Map<number, Confidence> = new Map();
@@ -53,8 +52,18 @@ class Gestures implements Readable<GestureData[]> {
       const thiz = stores[0] as GestureData[];
       thiz.forEach(gesture => {
         // TODO: The following ought to be fixed. See https://github.com/microbit-foundation/cctd-ml-machine/issues/508
-        const store = gestureStores.find(store => store.ID === gesture.ID)?.confidence || { currentConfidence: 0, requiredConfidence: 0, isConfident: false };
-        confidenceMap.set(gesture.ID, { ...store, currentConfidence: classifierRepository.getGestureConfidence(gesture.ID).getCurrentConfidence() });
+        const store = gestureStores.find(store => store.ID === gesture.ID)
+          ?.confidence || {
+          currentConfidence: 0,
+          requiredConfidence: 0,
+          isConfident: false,
+        };
+        confidenceMap.set(gesture.ID, {
+          ...store,
+          currentConfidence: classifierRepository
+            .getGestureConfidence(gesture.ID)
+            .getCurrentConfidence(),
+        });
       });
 
       /*gestureStores.forEach(store => {
@@ -102,7 +111,7 @@ class Gestures implements Readable<GestureData[]> {
     const newId = Date.now();
     const color =
       StaticConfiguration.gestureColors[
-      this.getNumberOfGestures() % StaticConfiguration.gestureColors.length
+        this.getNumberOfGestures() % StaticConfiguration.gestureColors.length
       ];
     return this.addGestureFromPersistedData({
       ID: newId,

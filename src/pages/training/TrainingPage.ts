@@ -51,7 +51,7 @@ const trainKNNModel = async () => {
 };
 
 export const trainModel = async (model: ModelInfo) => {
-  Logger.log('TrainingPage', "Training new model: " + model.title);
+  Logger.log('TrainingPage', 'Training new model: ' + model.title);
   highlightedAxis.set(undefined);
   if (ModelRegistry.KNN.id === model.id) {
     await trainKNNModel();

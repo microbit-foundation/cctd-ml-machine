@@ -12,7 +12,6 @@ interface Repositories {
   getGestureRepository(): GestureRepository;
 
   getClassifierRepository(): ClassifierRepository;
-
 }
 
 export default Repositories;

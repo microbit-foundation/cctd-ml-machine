@@ -8,6 +8,7 @@
  */
 
 import * as tf from "@tensorflow/tfjs";
+import { vi } from "vitest";
 import { GestureData } from "./gestures-hooks";
 import { prepareFeaturesAndLabels, trainModel } from "./ml";
 import gestureDataBadLabels from "./test-fixtures/gesture-data-bad-labels.json";
@@ -17,7 +18,7 @@ import testdataShakeStill from "./test-fixtures/test-data-shake-still.json";
 let tensorFlowModel: tf.LayersModel | void;
 beforeAll(async () => {
   // No webgl in tests running in node.
-  tf.setBackend("cpu");
+  await tf.setBackend("cpu");
 
   // This creates determinism in the model training step.
   const randomSpy = vi.spyOn(Math, "random");
@@ -51,7 +52,7 @@ const getModelResults = (data: GestureData[]) => {
 };
 
 describe("Model tests", () => {
-  test("returns acceptable results on training data", async () => {
+  test("returns acceptable results on training data", () => {
     const { tensorFlowResultAccuracy, tensorflowPredictionResult, labels } =
       getModelResults(gestureData);
     const d = labels[0].length; // dimensions
@@ -66,7 +67,7 @@ describe("Model tests", () => {
 
   // The action names don't matter, the order of the actions in the data.json file does.
   // Training data is shake, still, circle. This data is still, circle, shake.
-  test("returns incorrect results on wrongly labelled training data", async () => {
+  test("returns incorrect results on wrongly labelled training data", () => {
     const { tensorFlowResultAccuracy, tensorflowPredictionResult, labels } =
       getModelResults(gestureDataBadLabels);
     const d = labels[0].length; // dimensions
@@ -79,7 +80,7 @@ describe("Model tests", () => {
     expect(tensorFlowResultAccuracy).toBe("0.0000");
   });
 
-  test("returns correct results on testing data", async () => {
+  test("returns correct results on testing data", () => {
     const { tensorFlowResultAccuracy } = getModelResults(testdataShakeStill);
     // The model thinks two samples of still are circle.
     // 14 samples; 1.0 / 14 = 0.0714; 0.0714 * 12 correct inferences = 0.8571

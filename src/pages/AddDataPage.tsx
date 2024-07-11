@@ -27,6 +27,7 @@ import {
 import { useCallback, useMemo } from "react";
 import { createStepPageUrl } from "../urls";
 import { useNavigate } from "react-router";
+import TrainingButton from "../components/TrainingButton";
 
 const AddDataPage = () => {
   const intl = useIntl();
@@ -51,7 +52,7 @@ const AddDataPage = () => {
     downloadDataset(gestures.data);
   }, [gestures.data]);
 
-  const handleTrain = useCallback(() => {
+  const navigateToTrainModelPage = useCallback(() => {
     navigate(createStepPageUrl("train-model"));
   }, [navigate]);
 
@@ -75,7 +76,7 @@ const AddDataPage = () => {
           alignItems="center"
         >
           <Button
-            variant="primary"
+            variant="secondary"
             leftIcon={<RiAddLine />}
             onClick={handleAddNewGesture}
             isDisabled={
@@ -86,12 +87,7 @@ const AddDataPage = () => {
             <FormattedMessage id="content.data.addAction" />
           </Button>
           <HStack gap={2} alignItems="center">
-            <Button
-              onClick={handleTrain}
-              isDisabled={!actions.isSufficientForTraining()}
-            >
-              <FormattedMessage id="menu.trainer.trainModelButton" />
-            </Button>
+            <TrainingButton onClick={navigateToTrainModelPage} />
             <Menu>
               <MenuButton
                 as={IconButton}

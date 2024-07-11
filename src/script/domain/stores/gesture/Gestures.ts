@@ -15,6 +15,7 @@ import {
 import Gesture, { Confidence, GestureData, GestureID, GestureOutput } from './Gesture';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import GestureRepository from '../../GestureRepository';
+import ClassifierRepository from '../../ClassifierRepository';
 
 export type PersistantGestureData = {
   name: string;
@@ -38,7 +39,7 @@ class Gestures implements Readable<GestureData[]> {
   private repository: GestureRepository;
   private confidenceStore: Readable<Map<number, Confidence>>;
 
-  constructor(repository: GestureRepository) {
+  constructor(classifierRepository: ClassifierRepository, repository: GestureRepository) {
     this.repository = repository;
     Gestures.subscribableGestures = writable();
     this.repository.subscribe(storeArray => {
@@ -48,9 +49,26 @@ class Gestures implements Readable<GestureData[]> {
       const confidenceMap: Map<number, Confidence> = new Map();
 
       const [_, ...gestureStores] = stores;
-      gestureStores.forEach(store => {
-        confidenceMap.set(store.ID, store.confidence);
+      const thiz = stores[0] as GestureData[];
+      thiz.forEach(gesture => {
+        // TODO: The following ought to be fixed. See https://github.com/microbit-foundation/cctd-ml-machine/issues/508
+        const store = gestureStores.find(store => store.ID === gesture.ID)
+          ?.confidence || {
+          currentConfidence: 0,
+          requiredConfidence: 0,
+          isConfident: false,
+        };
+        confidenceMap.set(gesture.ID, {
+          ...store,
+          currentConfidence: classifierRepository
+            .getGestureConfidence(gesture.ID)
+            .getCurrentConfidence(),
+        });
       });
+
+      /*gestureStores.forEach(store => {
+        confidenceMap.set(store.ID, store.confidence);
+      });*/
       return confidenceMap;
     });
   }

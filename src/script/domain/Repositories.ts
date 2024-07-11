@@ -3,8 +3,10 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import { Writable } from 'svelte/store';
 import ClassifierRepository from './ClassifierRepository';
 import GestureRepository from './GestureRepository';
+import { GestureID } from './stores/gesture/Gesture';
 
 interface Repositories {
   getGestureRepository(): GestureRepository;

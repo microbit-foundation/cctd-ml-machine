@@ -128,6 +128,10 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
       derivedConfidence,
     );
   }
+
+  public getConfidences(): Writable<Map<GestureID, number>> {
+    return LocalStorageClassifierRepository.confidences;
+  }
 }
 
 export default LocalStorageClassifierRepository;

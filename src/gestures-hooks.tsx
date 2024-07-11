@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useMemo } from "react";
 import { useStorage } from "./hooks/use-storage";
-import { TrainingStatus, useTrainingStatus } from "./training-hook";
+import { TrainingStatus, useTrainingStatus } from "./training-status-hook";
 export interface XYZData {
   x: number[];
   y: number[];

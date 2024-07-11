@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from "@chakra-ui/react";
 import { FormattedMessage } from "react-intl";
-import { TrainingStatus, useTrainingStatus } from "../training-hook";
+import { TrainingStatus, useTrainingStatus } from "../training-status-hook";
 
 const TrainingButton = (props: ButtonProps) => {
   const [trainingStatus] = useTrainingStatus();

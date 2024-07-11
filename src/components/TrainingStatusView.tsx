@@ -14,7 +14,7 @@ import { trainModel } from "../ml";
 import { createStepPageUrl } from "../urls";
 import TrainingButton from "./TrainingButton";
 import TrainingErrorDialog from "./TrainingErrorDialog";
-import { TrainingStatus, useTrainingStatus } from "../training-hook";
+import { TrainingStatus, useTrainingStatus } from "../training-status-hook";
 
 const TrainingStatusView = () => {
   const navigate = useNavigate();

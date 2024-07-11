@@ -27,6 +27,7 @@ export enum TrainingStatus {
   NotStarted,
   InProgress,
   Complete,
+  Retrain,
 }
 
 interface GestureContextState {
@@ -145,7 +146,6 @@ export class GestureActions {
   addNewGesture = () => {
     this.setGestures([...this.state.data, generateNewGesture()]);
   };
-
   addGestureRecordings = (id: GestureData["ID"], recs: RecordingData[]) => {
     const newGestures = this.state.data.map((g) => {
       return id !== g.ID ? g : { ...g, recordings: [...recs, ...g.recordings] };
@@ -153,13 +153,19 @@ export class GestureActions {
     this.setGestures(newGestures);
   };
 
-  setGestures = (gestures: GestureData[]) => {
-    if (gestures.length === 0) {
+  setGestures = (gestures: GestureData[], isRetrainNeeded: boolean = true) => {
+    this.setState({
+      ...this.state,
       // Always have at least one gesture
-      this.setState({ ...this.state, ...initialGestureContextState });
-      return;
-    }
-    this.setState({ ...this.state, data: gestures });
+      ...(gestures.length === 0
+        ? initialGestureContextState
+        : { data: gestures }),
+      // Update training status to retrain if needed
+      trainingStatus:
+        isRetrainNeeded && this.state.trainingStatus === TrainingStatus.Complete
+          ? TrainingStatus.Retrain
+          : this.state.trainingStatus,
+    });
   };
 
   deleteGesture = (id: GestureData["ID"]) => {
@@ -170,7 +176,7 @@ export class GestureActions {
     const newGestures = this.state.data.map((g) => {
       return id !== g.ID ? g : { ...g, name };
     });
-    this.setGestures(newGestures);
+    this.setGestures(newGestures, false);
   };
 
   deleteGestureRecording = (

@@ -103,6 +103,12 @@ const TrainingStatusView = () => {
           </HStack>
         </TrainingStatusSection>
       );
+    case TrainingStatus.Retrain:
+      return (
+        <TrainingStatusSection statusId="content.trainer.retrain.title">
+          <TrainingButton onClick={handleTrain} />
+        </TrainingStatusSection>
+      );
   }
 };
 

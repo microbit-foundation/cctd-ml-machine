@@ -15,17 +15,17 @@ import RecordingGraph from "./RecordingGraph";
 import RecordingDialog from "./RecordingDialog";
 import { useCallback, useRef } from "react";
 
-interface AddDataGestureRecordingGridItemProps {
-  gesture: GestureData;
+interface DataRecordingGridItemProps {
+  data: GestureData;
   selected: boolean;
   onSelectRow?: () => void;
 }
 
-const AddDataGestureRecordingGridItem = ({
-  gesture,
+const DataRecordingGridItem = ({
+  data,
   selected,
   onSelectRow,
-}: AddDataGestureRecordingGridItemProps) => {
+}: DataRecordingGridItemProps) => {
   const intl = useIntl();
   const { isOpen, onClose, onOpen: onStartRecording } = useDisclosure();
   const closeRecordingDialogFocusRef = useRef(null);
@@ -33,20 +33,20 @@ const AddDataGestureRecordingGridItem = ({
   // TODO: Replace with checking if micro:bit is connected
   const isConnected = true;
 
-  const handleDeleteGestureRecording = useCallback(
+  const handleDeleteRecording = useCallback(
     (idx: number) => {
-      actions.deleteGestureRecording(gesture.ID, idx);
+      actions.deleteGestureRecording(data.ID, idx);
     },
-    [actions, gesture.ID]
+    [actions, data.ID]
   );
 
   return (
     <>
       <RecordingDialog
-        gestureId={gesture.ID}
+        gestureId={data.ID}
         isOpen={isOpen}
         onClose={onClose}
-        actionName={gesture.name}
+        actionName={data.name}
         finalFocusRef={closeRecordingDialogFocusRef}
       />
       <GridItem>
@@ -72,7 +72,7 @@ const AddDataGestureRecordingGridItem = ({
                 _hover={{ backgroundColor: "transparent" }}
                 aria-label={intl.formatMessage(
                   { id: "content.data.recordAction" },
-                  { action: gesture.name }
+                  { action: data.name }
                 )}
                 isDisabled={!isConnected}
                 icon={
@@ -85,7 +85,7 @@ const AddDataGestureRecordingGridItem = ({
                 }
               />
             </HStack>
-            {gesture.recordings.map((recording, idx) => (
+            {data.recordings.map((recording, idx) => (
               <HStack key={idx} w="158px" position="relative">
                 <CloseButton
                   position="absolute"
@@ -96,7 +96,7 @@ const AddDataGestureRecordingGridItem = ({
                     id: "content.data.deleteRecording",
                   })}
                   onClick={() => {
-                    handleDeleteGestureRecording(idx);
+                    handleDeleteRecording(idx);
                   }}
                 />
                 <RecordingGraph data={recording.data} />
@@ -109,4 +109,4 @@ const AddDataGestureRecordingGridItem = ({
   );
 };
 
-export default AddDataGestureRecordingGridItem;
+export default DataRecordingGridItem;

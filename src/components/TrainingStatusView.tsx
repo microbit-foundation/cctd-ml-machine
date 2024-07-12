@@ -7,20 +7,19 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { ReactNode, useCallback, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
-import { useGestureData } from "../gestures-hooks";
-import { trainModel } from "../ml";
+import { useMlActions } from "../ml-actions";
+import { TrainingStatus, useTrainingStatus } from "../training-status-hook";
 import { createStepPageUrl } from "../urls";
 import TrainingButton from "./TrainingButton";
 import TrainingErrorDialog from "./TrainingErrorDialog";
-import { TrainingStatus, useTrainingStatus } from "../training-status-hook";
 
 const TrainingStatusView = () => {
   const navigate = useNavigate();
-  const [{ data }] = useGestureData();
-  const [trainingStatus, setTrainingStatus] = useTrainingStatus();
+  const [trainingStatus] = useTrainingStatus();
+  const actions = useMlActions();
   const [trainProgress, setTrainProgress] = useState<number>(0);
   const trainErrorDialog = useDisclosure();
 
@@ -33,20 +32,14 @@ const TrainingStatusView = () => {
   }, [navigate]);
 
   const handleTrain = useCallback(async () => {
-    setTrainingStatus(TrainingStatus.InProgress);
-    await trainModel({
-      data,
-      onTraining: (progress) => {
-        setTrainProgress(progress);
-      },
-      onTrainEnd: () => {
-        setTrainingStatus(TrainingStatus.Complete);
-      },
-      onError: () => {
-        setTrainingStatus(TrainingStatus.NotTrained);
-      },
-    });
-  }, [data, setTrainingStatus]);
+    await actions.trainModel((progress) => setTrainProgress(progress));
+  }, [actions]);
+
+  useEffect(() => {
+    if (trainingStatus === TrainingStatus.Error) {
+      trainErrorDialog.onOpen();
+    }
+  }, [trainErrorDialog, trainingStatus]);
 
   switch (trainingStatus) {
     case TrainingStatus.InsufficientData:
@@ -60,6 +53,7 @@ const TrainingStatusView = () => {
           </Button>
         </TrainingStatusSection>
       );
+    case TrainingStatus.Error:
     case TrainingStatus.NotTrained:
       return (
         <>

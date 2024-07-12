@@ -2,8 +2,8 @@ import { GridItem, VStack, Image, Text, HStack } from "@chakra-ui/react";
 import { GestureData } from "../gestures-hooks";
 import greetingEmojiWithArrowImage from "../images/greeting-emoji-with-arrow.svg";
 import upCurveArrowImage from "../images/curve-arrow-up.svg";
-import AddDataGestureNameGridItem from "./AddDataGestureNameGridItem";
-import AddDataGestureRecordingGridItem from "./AddDataGestureRecordingGridItem";
+import GestureNameGridItem from "./GestureNameGridItem";
+import DataRecordingGridItem from "./DataRecordingGridItem";
 import { FormattedMessage } from "react-intl";
 
 interface AddDataGridWalkThrough {
@@ -13,10 +13,11 @@ interface AddDataGridWalkThrough {
 const AddDataGridWalkThrough = ({ gesture }: AddDataGridWalkThrough) => {
   return (
     <>
-      <AddDataGestureNameGridItem
-        gestureId={gesture.ID}
+      <GestureNameGridItem
+        id={gesture.ID}
         name={gesture.name}
         selected={true}
+        readOnly={false}
       />
       {gesture.name.length === 0 ? (
         <GridItem h="120px">
@@ -29,7 +30,7 @@ const AddDataGridWalkThrough = ({ gesture }: AddDataGridWalkThrough) => {
         </GridItem>
       ) : (
         <>
-          <AddDataGestureRecordingGridItem gesture={gesture} selected={true} />
+          <DataRecordingGridItem data={gesture} selected={true} />
           {/* Empty grid item to fill first column of grid */}
           <GridItem />
           <GridItem h="120px">

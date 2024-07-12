@@ -11,23 +11,25 @@ import { useCallback } from "react";
 import { useIntl } from "react-intl";
 import { useGestureActions } from "../gestures-hooks";
 
-interface AddDataGestureNameGridItemProps {
+interface GestureNameGridItemProps {
   name: string;
   onCloseClick?: () => void;
   onSelectRow?: () => void;
-  gestureId: number;
-  selected: boolean;
+  id: number;
+  selected?: boolean;
+  readOnly: boolean;
 }
 
 const gestureNameMaxLength = 18;
 
-const AddDataGestureNameGridItem = ({
+const GestureNameGridItem = ({
   name,
   onCloseClick,
   onSelectRow,
-  gestureId,
-  selected,
-}: AddDataGestureNameGridItemProps) => {
+  id,
+  selected = false,
+  readOnly = false,
+}: GestureNameGridItemProps) => {
   const intl = useIntl();
   const toast = useToast();
   const toastId = "name-too-long-toast";
@@ -51,9 +53,9 @@ const AddDataGestureNameGridItem = ({
         });
         return;
       }
-      actions.setGestureName(gestureId, name);
+      actions.setGestureName(id, name);
     },
-    [actions, gestureId, intl, toast]
+    [actions, id, intl, toast]
   );
 
   return (
@@ -66,29 +68,38 @@ const AddDataGestureNameGridItem = ({
         borderWidth={selected ? 1 : 0}
         onClick={onSelectRow}
       >
-        <CardHeader p={0} display="flex" justifyContent="end" h="24px">
-          {onCloseClick && (
-            <CloseButton
-              onClick={onCloseClick}
-              size="sm"
-              aria-label={intl.formatMessage(
-                { id: "content.data.deleteAction" },
-                { action: name }
-              )}
-            />
-          )}
-        </CardHeader>
-        <CardBody pt={0} pr={2} pl={2} alignContent="center">
+        {!readOnly && (
+          <CardHeader p={0} display="flex" justifyContent="end" h="24px">
+            {onCloseClick && (
+              <CloseButton
+                onClick={onCloseClick}
+                size="sm"
+                aria-label={intl.formatMessage(
+                  { id: "content.data.deleteAction" },
+                  { action: name }
+                )}
+              />
+            )}
+          </CardHeader>
+        )}
+        <CardBody
+          pt={readOnly ? undefined : 0}
+          pr={2}
+          pl={2}
+          alignContent="center"
+        >
           <Input
+            readOnly={readOnly}
             defaultValue={name}
             borderWidth={0}
-            bgColor="gray.25"
+            {...(readOnly
+              ? { bgColor: "transparent", size: "lg" }
+              : { bgColor: "gray.25", size: "sm" })}
             _placeholder={{ opacity: 0.8, color: "gray.900" }}
             placeholder={intl.formatMessage({
               id: "content.data.classPlaceholderNewClass",
             })}
             onChange={onChange}
-            size="sm"
           />
         </CardBody>
       </Card>
@@ -96,4 +107,4 @@ const AddDataGestureNameGridItem = ({
   );
 };
 
-export default AddDataGestureNameGridItem;
+export default GestureNameGridItem;

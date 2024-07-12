@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useMemo } from "react";
+import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 import { useStorage } from "./hooks/use-storage";
 import { TrainingStatus, useTrainingStatus } from "./training-status-hook";
 export interface XYZData {
@@ -12,13 +12,32 @@ interface RecordingData {
   data: XYZData;
 }
 
-export interface GestureData {
+interface StoredGestureData {
   name: string;
   ID: number;
   recordings: RecordingData[];
 }
+export interface GestureData extends StoredGestureData {
+  // Confidence is added after a successful training and predicting of data
+  confidence?: {
+    currentConfidence?: number; // from 0-1
+    requiredConfidence: number; // from 0-1
+  };
+}
 
-interface GestureContextState {
+// Used for getPredicted in MlActions hook
+export interface ConfidentGestureData extends StoredGestureData {
+  confidence: {
+    currentConfidence: number; // from 0-1
+    requiredConfidence: number; // from 0-1
+  };
+}
+
+interface StoredGestureContextState {
+  data: StoredGestureData[];
+}
+
+export interface GestureContextState {
   data: GestureData[];
 }
 
@@ -27,7 +46,7 @@ type GestureContextValue = [
   (gestureData: GestureContextState) => void
 ];
 
-const isValidGestureData = (v: unknown): v is GestureContextState => {
+const isValidStoredGestureData = (v: unknown): v is GestureContextState => {
   if (typeof v !== "object") {
     return false;
   }
@@ -78,14 +97,31 @@ const initialGestureContextState: GestureContextState = {
 };
 
 export const GesturesProvider = ({ children }: { children: ReactNode }) => {
-  const gestures = useStorage<GestureContextState>(
+  // Only name, ID, and recordings of gesture data are stored in local storage
+  // so two separate states (one stored and the other not) are used to store
+  // gesture data and are kept in sync by this provider.
+  const [storedState, setStoredState] = useStorage<StoredGestureContextState>(
     "local",
     "gestures",
     initialGestureContextState,
-    isValidGestureData
+    isValidStoredGestureData
   );
+  const [state, setState] = useState<GestureContextState>({
+    data: storedState.data as GestureData[],
+  });
+  const setStates = (newState: GestureContextState) => {
+    setStoredState({
+      ...newState,
+      data: newState.data.map(({ name, recordings, ID }) => ({
+        name,
+        recordings,
+        ID,
+      })),
+    });
+    setState(newState);
+  };
   return (
-    <GestureContext.Provider value={gestures}>
+    <GestureContext.Provider value={[state, setStates]}>
       {children}
     </GestureContext.Provider>
   );
@@ -107,7 +143,7 @@ export const useGestureActions = () => {
   return actions;
 };
 
-export class GestureActions {
+class GestureActions {
   constructor(
     private gestureState: GestureContextState,
     private setGestureState: (gestureData: GestureContextState) => void,

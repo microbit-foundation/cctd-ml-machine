@@ -1,25 +1,25 @@
 import { useCallback } from "react";
 import { useIntl } from "react-intl";
 import { GestureData, useGestureActions } from "../gestures-hooks";
-import AddDataGestureRecordingGridItem from "./AddDataGestureRecordingGridItem";
-import AddDataGestureNameGridItem from "./AddDataGestureNameGridItem";
+import DataRecordingGridItem from "./DataRecordingGridItem";
+import GestureNameGridItem from "./GestureNameGridItem";
 import { GridItem } from "@chakra-ui/react";
 
-interface AddDataGridGestureRowProps {
+interface AddDataGridRowProps {
   gesture: GestureData;
   selected: boolean;
   onSelectRow: () => void;
 }
 
-const AddDataGridGestureRow = ({
+const AddDataGridRow = ({
   gesture,
   selected,
   onSelectRow,
-}: AddDataGridGestureRowProps) => {
+}: AddDataGridRowProps) => {
   const intl = useIntl();
   const actions = useGestureActions();
 
-  const handleDeleteGesture = useCallback(() => {
+  const handleDeleteDataItem = useCallback(() => {
     const confirmationText = intl.formatMessage(
       { id: "alert.deleteGestureConfirm" },
       { action: gesture.name }
@@ -32,16 +32,17 @@ const AddDataGridGestureRow = ({
 
   return (
     <>
-      <AddDataGestureNameGridItem
-        gestureId={gesture.ID}
+      <GestureNameGridItem
+        id={gesture.ID}
         name={gesture.name}
-        onCloseClick={handleDeleteGesture}
+        onCloseClick={handleDeleteDataItem}
         onSelectRow={onSelectRow}
         selected={selected}
+        readOnly={false}
       />
       {gesture.name.length > 0 || gesture.recordings.length > 0 ? (
-        <AddDataGestureRecordingGridItem
-          gesture={gesture}
+        <DataRecordingGridItem
+          data={gesture}
           selected={selected}
           onSelectRow={onSelectRow}
         />
@@ -53,4 +54,4 @@ const AddDataGridGestureRow = ({
   );
 };
 
-export default AddDataGridGestureRow;
+export default AddDataGridRow;

@@ -12,6 +12,7 @@ export enum TrainingStatus {
   InProgress,
   Complete,
   Retrain,
+  Error,
 }
 
 interface TrainingState {

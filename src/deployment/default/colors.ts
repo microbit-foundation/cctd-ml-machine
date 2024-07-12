@@ -6,6 +6,8 @@ const gray = {
   ...theme.colors.gray,
   // Brand grey
   500: "#e5e5e5",
+  // windi css text color
+  600: "#6b7280",
 };
 
 const brand = {

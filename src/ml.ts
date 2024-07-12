@@ -9,11 +9,10 @@ export enum Axes {
   Z = "z",
 }
 
-const mlSettings = {
+export const mlSettings = {
   duration: 1800, // Duration of recording
   numSamples: 80, // number of samples in one recording (when recording samples)
   minSamples: 80, // minimum number of samples for reliable detection (when detecting gestures)
-  automaticClassification: true, // If true, automatically classify gestures
   updatesPrSecond: 4, // Times algorithm predicts data pr second
   numEpochs: 80, // Number of epochs for ML
   learningRate: 0.5,
@@ -30,7 +29,7 @@ const mlSettings = {
   ]),
 };
 
-interface TrainModelInput {
+export interface TrainModelInput {
   data: GestureData[];
   onTrainEnd?: () => void;
   onTraining?: (progress: number) => void;
@@ -90,7 +89,7 @@ export const prepareFeaturesAndLabels = (
   return { features, labels };
 };
 
-function createModel(gestureData: GestureData[]): tf.LayersModel {
+const createModel = (gestureData: GestureData[]): tf.LayersModel => {
   const numberOfClasses: number = gestureData.length;
   const inputShape = [
     mlSettings.includedFilters.size * mlSettings.includedAxes.length,
@@ -113,7 +112,7 @@ function createModel(gestureData: GestureData[]): tf.LayersModel {
   });
 
   return model;
-}
+};
 
 // Exported for testing
 // applyFilters reduces array of x, y and z inputs to a single number array with values.
@@ -122,4 +121,31 @@ export const applyFilters = ({ x, y, z }: XYZData): number[] => {
     const filterStrategy = mlFilters[filter];
     return [...acc, filterStrategy(x), filterStrategy(y), filterStrategy(z)];
   }, [] as number[]);
+};
+
+interface PredictInput {
+  model: tf.LayersModel;
+  data: XYZData;
+  classificationIds: number[];
+}
+
+export type Confidences = Record<GestureData["ID"], number>;
+
+// For predicting
+export const predict = async ({
+  model,
+  data,
+  classificationIds,
+}: PredictInput): Promise<Confidences | void> => {
+  const input = applyFilters(data);
+  const prediction = model.predict(tf.tensor([input])) as tf.Tensor;
+  try {
+    const confidences = (await prediction.data()) as Float32Array;
+    return classificationIds.reduce(
+      (acc, id, idx) => ({ ...acc, [id]: confidences[idx] }),
+      {}
+    );
+  } catch (e) {
+    console.error("Prediction error:", e);
+  }
 };

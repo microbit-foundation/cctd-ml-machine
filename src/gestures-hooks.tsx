@@ -115,29 +115,18 @@ export class GestureActions {
     private setTrainingStatus: (status: TrainingStatus) => void
   ) {}
 
-  private hasSufficientDataForTraining = (): boolean => {
-    return (
-      this.gestureState.data.length > 2 &&
-      this.gestureState.data.every((g) => g.recordings.length >= 3)
-    );
-  };
-
-  setGestures = (gs: GestureData[], isRetrainNeeded: boolean = true) => {
-    this.setGestureState({
-      ...this.gestureState,
+  setGestures = (gestures: GestureData[], isRetrainNeeded: boolean = true) => {
+    const data =
       // Always have at least one gesture
-      data: gs.length === 0 ? initialGestureContextState.data : gs,
-    });
+      gestures.length === 0 ? initialGestureContextState.data : gestures;
+    this.setGestureState({ ...this.gestureState, data });
 
-    // Update training status to retrain if needed
-    const hasTrainedBefore = this.trainingStatus === TrainingStatus.Complete;
-    this.setTrainingStatus(
-      this.hasSufficientDataForTraining()
-        ? isRetrainNeeded && hasTrainedBefore
-          ? TrainingStatus.Retrain
-          : this.trainingStatus
-        : TrainingStatus.InsufficientData
+    const newTrainingStatus = updateTrainingStatus(
+      data,
+      this.trainingStatus,
+      isRetrainNeeded
     );
+    this.setTrainingStatus(newTrainingStatus);
   };
 
   addNewGesture = () => {
@@ -180,3 +169,27 @@ export class GestureActions {
     this.setGestures([]);
   };
 }
+
+const hasSufficientDataForTraining = (gestures: GestureData[]): boolean => {
+  return (
+    gestures.length >= 2 && gestures.every((g) => g.recordings.length >= 3)
+  );
+};
+
+const updateTrainingStatus = (
+  data: GestureData[],
+  currTrainingStatus: TrainingStatus,
+  isTrainingNeeded: boolean
+) => {
+  if (!hasSufficientDataForTraining(data)) {
+    return TrainingStatus.InsufficientData;
+  }
+  if (
+    isTrainingNeeded ||
+    currTrainingStatus === TrainingStatus.InsufficientData
+  ) {
+    // Logic for updating status to retrain is in the training status hook
+    return TrainingStatus.NotTrained;
+  }
+  return currTrainingStatus;
+};

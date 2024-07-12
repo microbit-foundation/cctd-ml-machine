@@ -43,7 +43,7 @@ const TrainingStatusView = () => {
         setTrainingStatus(TrainingStatus.Complete);
       },
       onError: () => {
-        setTrainingStatus(TrainingStatus.NotStarted);
+        setTrainingStatus(TrainingStatus.NotTrained);
       },
     });
   }, [data, setTrainingStatus]);
@@ -60,7 +60,7 @@ const TrainingStatusView = () => {
           </Button>
         </TrainingStatusSection>
       );
-    case TrainingStatus.NotStarted:
+    case TrainingStatus.NotTrained:
       return (
         <>
           <TrainingErrorDialog

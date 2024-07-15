@@ -1,4 +1,5 @@
 import DefaultPageLayout from "../components/DefaultPageLayout";
+import LiveGraphPanel from "../components/LiveGraphPanel";
 import TabView from "../components/TabView";
 import TestModelGridView from "../components/TestModelGridView";
 import TrainModelFirstView from "../components/TrainModelFirstView";
@@ -12,7 +13,10 @@ const TestModelPage = () => {
     <DefaultPageLayout titleId={`${testModelConfig.id}-title`}>
       <TabView activeStep={testModelConfig.id} />
       {trainingStatus === TrainingStatus.Complete ? (
-        <TestModelGridView />
+        <>
+          <TestModelGridView />
+          <LiveGraphPanel />
+        </>
       ) : (
         <TrainModelFirstView />
       )}

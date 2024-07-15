@@ -102,7 +102,9 @@ const TestModelGridView = () => {
           <React.Fragment key={idx}>
             <GestureNameGridItem id={ID} name={name} readOnly={true} />
             <CertaintyThresholdGridItem
-              onThresholdChange={() => {}}
+              onThresholdChange={(val) =>
+                actions.updateGestureRequiredConfidence(ID, val)
+              }
               {...confidence}
               isTriggered={"ID" in predicted && predicted.ID === ID}
             />

@@ -13,6 +13,7 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import PercentageMeter from "./PercentageMeter";
 import PercentageDisplay from "./PercentageDisplay";
+import { useCallback } from "react";
 
 interface CertaintyThresholdGridItemProps {
   requiredConfidence?: number;
@@ -29,6 +30,11 @@ const CertaintyThresholdGridItem = ({
 }: CertaintyThresholdGridItemProps) => {
   const intl = useIntl();
   const barWidth = 240;
+
+  const handleThresholdChange = useCallback(
+    (val: number) => onThresholdChange(val * 0.01),
+    [onThresholdChange]
+  );
   return (
     <GridItem>
       <Card
@@ -64,7 +70,7 @@ const CertaintyThresholdGridItem = ({
               <FormattedMessage id="content.model.output.recognitionPoint" />
             </Text>
             <Slider
-              onChange={onThresholdChange}
+              onChange={handleThresholdChange}
               aria-label={intl.formatMessage({
                 id: "content.model.output.recognitionPoint",
               })}

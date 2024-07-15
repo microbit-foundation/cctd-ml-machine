@@ -141,4 +141,24 @@ class MlActions {
         : prevPredictedGesture;
     });
   };
+
+  updateGestureRequiredConfidence = (
+    gestureId: GestureData["ID"],
+    requiredConfidence: number
+  ) => {
+    this.setGestureState({
+      ...this.setGestureState,
+      data: this.gestureState.data.map((gesture) => {
+        return gesture.ID === gestureId
+          ? {
+              ...gesture,
+              confidence: {
+                ...(gesture.confidence || {}),
+                requiredConfidence,
+              },
+            }
+          : gesture;
+      }),
+    });
+  };
 }

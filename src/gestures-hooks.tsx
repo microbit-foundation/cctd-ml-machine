@@ -145,6 +145,14 @@ class GestureActions {
     private setStatus: (status: Status) => void
   ) {}
 
+  hasGestures = () => {
+    return (
+      this.gestureState.data.length > 0 &&
+      (this.gestureState.data[0].name.length > 0 ||
+        this.gestureState.data[0].recordings.length > 0)
+    );
+  };
+
   setGestures = (gestures: GestureData[], isRetrainNeeded: boolean = true) => {
     const data =
       // Always have at least one gesture

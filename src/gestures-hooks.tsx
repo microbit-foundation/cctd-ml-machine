@@ -169,7 +169,7 @@ class GestureActions {
 
   setGestures = (gestures: GestureData[], isRetrainNeeded: boolean = true) => {
     const data =
-      // Always have at least one gesture
+      // Always have at least one gesture for walk through
       gestures.length === 0 ? initialGestureContextState.data : gestures;
     this.setGestureState({ ...this.gestureState, data });
 

@@ -36,8 +36,8 @@ const PercentageMeter = ({
         justifyContent="space-between"
       >
         {
-          //  Adding 2 transparent ticks for each end
-          // so that it can be justified using space-between
+          // Adding 2 ticks with no background color for each end of the meter
+          // so that the ticks can be justified using space-between
           Array(numTicks + 2)
             .fill(0)
             .map((_, i) => (

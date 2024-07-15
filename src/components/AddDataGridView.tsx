@@ -13,6 +13,17 @@ const gridCommonProps: Partial<GridProps> = {
   w: "100%",
 };
 
+const headings = [
+  {
+    titleId: "content.data.classification",
+    descriptionId: "content.data.classHelpBody",
+  },
+  {
+    titleId: "content.data.data",
+    descriptionId: "content.data.dataDescription",
+  },
+];
+
 const AddDataGridView = () => {
   const [gestures] = useGestureData();
   const [selected, setSelected] = useState<number>(0);
@@ -29,16 +40,7 @@ const AddDataGridView = () => {
         position="sticky"
         top={0}
         {...gridCommonProps}
-        headings={[
-          {
-            titleId: "content.data.classification",
-            descriptionId: "content.data.classHelpBody",
-          },
-          {
-            titleId: "content.data.data",
-            descriptionId: "content.data.dataDescription",
-          },
-        ]}
+        headings={headings}
       />
       <Grid
         {...gridCommonProps}

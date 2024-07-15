@@ -25,6 +25,17 @@ const gridCommonProps: Partial<GridProps> = {
   w: "100%",
 };
 
+const headings = [
+  {
+    titleId: "content.model.output.action.descriptionTitle",
+    descriptionId: "content.model.output.action.descriptionBody",
+  },
+  {
+    titleId: "content.model.output.certainty.descriptionTitle",
+    descriptionId: "content.model.output.certainty.descriptionBody",
+  },
+];
+
 const TestModelGridView = () => {
   const intl = useIntl();
   const [gestures] = useGestureData();
@@ -79,16 +90,7 @@ const TestModelGridView = () => {
       <HeadingGrid
         {...gridCommonProps}
         borderTopWidth={0}
-        headings={[
-          {
-            titleId: "content.model.output.action.descriptionTitle",
-            descriptionId: "content.model.output.action.descriptionBody",
-          },
-          {
-            titleId: "content.model.output.certainty.descriptionTitle",
-            descriptionId: "content.model.output.certainty.descriptionBody",
-          },
-        ]}
+        headings={headings}
       />
       <Grid
         {...gridCommonProps}

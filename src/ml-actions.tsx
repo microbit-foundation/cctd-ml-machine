@@ -139,10 +139,7 @@ class MlActions {
         return gesture.ID === gestureId
           ? {
               ...gesture,
-              confidence: {
-                ...(gesture.confidence || {}),
-                requiredConfidence,
-              },
+              confidence: { ...(gesture.confidence || {}), requiredConfidence },
             }
           : gesture;
       }),

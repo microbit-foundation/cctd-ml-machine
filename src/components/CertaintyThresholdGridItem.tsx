@@ -13,7 +13,7 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import PercentageMeter from "./PercentageMeter";
 import PercentageDisplay from "./PercentageDisplay";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 interface CertaintyThresholdGridItemProps {
   requiredConfidence?: number;
@@ -30,6 +30,10 @@ const CertaintyThresholdGridItem = ({
 }: CertaintyThresholdGridItemProps) => {
   const intl = useIntl();
   const barWidth = 240;
+  const colorScheme = useMemo(
+    () => (isTriggered ? "green.500" : undefined),
+    [isTriggered]
+  );
 
   const handleThresholdChange = useCallback(
     (val: number) => onThresholdChange(val * 0.01),
@@ -58,11 +62,11 @@ const CertaintyThresholdGridItem = ({
             <PercentageMeter
               meterBarWidthPx={barWidth}
               value={currentConfidence}
-              colorScheme={isTriggered ? "green.500" : undefined}
+              colorScheme={colorScheme}
             />
             <PercentageDisplay
               value={currentConfidence}
-              colorScheme={isTriggered ? "green.500" : undefined}
+              colorScheme={colorScheme}
             />
           </HStack>
           <VStack alignItems="left" gap={1}>

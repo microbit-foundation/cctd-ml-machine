@@ -4,15 +4,15 @@ import TabView from "../components/TabView";
 import TestModelGridView from "../components/TestModelGridView";
 import TrainModelFirstView from "../components/TrainModelFirstView";
 import { testModelConfig } from "../steps-config";
-import { TrainingStatus, useTrainingStatus } from "../training-status-hook";
+import { Stage, useStatus } from "../status-hook";
 
 const TestModelPage = () => {
-  const [trainingStatus] = useTrainingStatus();
+  const [{ stage }] = useStatus();
 
   return (
     <DefaultPageLayout titleId={`${testModelConfig.id}-title`}>
       <TabView activeStep={testModelConfig.id} />
-      {trainingStatus === TrainingStatus.Complete ? (
+      {stage === Stage.TrainingComplete ? (
         <>
           <TestModelGridView />
           <LiveGraphPanel />

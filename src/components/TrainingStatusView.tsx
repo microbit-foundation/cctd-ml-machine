@@ -7,20 +7,19 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
 import { useMlActions } from "../ml-actions";
-import { TrainingStatus, useTrainingStatus } from "../training-status-hook";
+import { Stage, useStatus } from "../status-hook";
 import { createStepPageUrl } from "../urls";
 import TrainingButton from "./TrainingButton";
 import TrainingErrorDialog from "./TrainingErrorDialog";
 
 const TrainingStatusView = () => {
   const navigate = useNavigate();
-  const [trainingStatus] = useTrainingStatus();
+  const [status] = useStatus();
   const actions = useMlActions();
-  const [trainProgress, setTrainProgress] = useState<number>(0);
   const trainErrorDialog = useDisclosure();
 
   const navigateToDataPage = useCallback(() => {
@@ -32,17 +31,17 @@ const TrainingStatusView = () => {
   }, [navigate]);
 
   const handleTrain = useCallback(async () => {
-    await actions.trainModel((progress) => setTrainProgress(progress));
+    await actions.trainModel();
   }, [actions]);
 
   useEffect(() => {
-    if (trainingStatus === TrainingStatus.Error) {
+    if (status.stage === Stage.TrainingError) {
       trainErrorDialog.onOpen();
     }
-  }, [trainErrorDialog, trainingStatus]);
+  }, [trainErrorDialog, status.stage]);
 
-  switch (trainingStatus) {
-    case TrainingStatus.InsufficientData:
+  switch (status.stage) {
+    case Stage.InsufficientData:
       return (
         <TrainingStatusSection statusId="menu.trainer.notEnoughDataHeader1">
           <Text>
@@ -53,8 +52,8 @@ const TrainingStatusView = () => {
           </Button>
         </TrainingStatusSection>
       );
-    case TrainingStatus.Error:
-    case TrainingStatus.NotTrained:
+    case Stage.TrainingError:
+    case Stage.NotTrained:
       return (
         <>
           <TrainingErrorDialog
@@ -66,18 +65,18 @@ const TrainingStatusView = () => {
           </TrainingStatusSection>
         </>
       );
-    case TrainingStatus.InProgress:
+    case Stage.TrainingInProgress:
       return (
         <TrainingStatusSection statusId="content.trainer.training.title">
           <Progress
             colorScheme="green"
-            value={trainProgress * 100}
+            value={status.progressValue * 100}
             w="350px"
             rounded="full"
           />
         </TrainingStatusSection>
       );
-    case TrainingStatus.Complete:
+    case Stage.TrainingComplete:
       return (
         <TrainingStatusSection statusId="menu.trainer.TrainingFinished">
           <HStack gap={10}>
@@ -90,7 +89,7 @@ const TrainingStatusView = () => {
           </HStack>
         </TrainingStatusSection>
       );
-    case TrainingStatus.Retrain:
+    case Stage.RetrainingNeeded:
       return (
         <TrainingStatusSection statusId="content.trainer.retrain.title">
           <TrainingButton onClick={handleTrain} />

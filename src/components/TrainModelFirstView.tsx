@@ -4,7 +4,7 @@ import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
 import testModelImage from "../images/test_model_black.svg";
 import { StepId } from "../steps-config";
-import { TrainingStatus, useTrainingStatus } from "../training-status-hook";
+import { Stage, useStatus } from "../status-hook";
 import { createStepPageUrl } from "../urls";
 import TrainingButton from "./TrainingButton";
 
@@ -13,9 +13,9 @@ interface TrainModelFirstViewConfig {
   navigateToStep: StepId;
 }
 
-const getConfig = (status: TrainingStatus): TrainModelFirstViewConfig => {
+const getConfig = (status: Stage): TrainModelFirstViewConfig => {
   switch (status) {
-    case TrainingStatus.InsufficientData:
+    case Stage.InsufficientData:
       return {
         textIds: [
           "content.model.notEnoughDataInfoBody1",
@@ -23,7 +23,7 @@ const getConfig = (status: TrainingStatus): TrainModelFirstViewConfig => {
         ],
         navigateToStep: "add-data",
       };
-    case TrainingStatus.Retrain:
+    case Stage.RetrainingNeeded:
       return {
         textIds: ["content.model.retrainModelBody"],
         navigateToStep: "train-model",
@@ -38,7 +38,7 @@ const getConfig = (status: TrainingStatus): TrainModelFirstViewConfig => {
 
 const TrainModelFirstView = () => {
   const navigate = useNavigate();
-  const [trainingStatus] = useTrainingStatus();
+  const [{ stage }] = useStatus();
 
   const navigateToDataPage = useCallback(() => {
     navigate(createStepPageUrl("add-data"));
@@ -48,7 +48,7 @@ const TrainModelFirstView = () => {
     navigate(createStepPageUrl("train-model"));
   }, [navigate]);
 
-  const config = getConfig(trainingStatus);
+  const config = getConfig(stage);
   return (
     <VStack flexGrow={1} alignItems="center" gap={10} bgColor="gray.25">
       <VStack gap={0}>

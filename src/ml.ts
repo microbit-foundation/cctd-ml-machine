@@ -29,7 +29,7 @@ export const mlSettings = {
   ]),
 };
 
-export interface TrainModelInput {
+interface TrainModelInput {
   data: GestureData[];
   onTrainEnd?: () => void;
   onTraining?: (progress: number) => void;

@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 import { FormattedMessage, useIntl } from "react-intl";
 import { GestureData, useGestureActions } from "../gestures-hooks";
 import gestureData from "../test-fixtures/gesture-data.json";
+import { Stage, useStatus } from "../status-hook";
 
 const recordingDuration = 1800;
 
@@ -47,6 +48,7 @@ const RecordingDialog = ({
 }: RecordingDialogProps) => {
   const intl = useIntl();
   const actions = useGestureActions();
+  const [, setStatus] = useStatus();
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>(
     RecordingStatus.None
   );
@@ -68,9 +70,10 @@ const RecordingDialog = ({
 
   const handleOnClose = useCallback(() => {
     setRecordingStatus(RecordingStatus.None);
+    setStatus({ stage: Stage.NotTrained });
     setIsCountdownIdx(0);
     onClose();
-  }, [onClose]);
+  }, [onClose, setStatus]);
 
   useEffect(() => {
     if (isOpen) {
@@ -90,10 +93,11 @@ const RecordingDialog = ({
           return;
         } else {
           setRecordingStatus(RecordingStatus.Recording);
+          setStatus({ stage: Stage.RecordingData });
         }
       }, config.duration);
     }
-  }, [countdownConfigs, isOpen, recordingStatus, countdownIdx]);
+  }, [countdownConfigs, isOpen, recordingStatus, countdownIdx, setStatus]);
 
   useEffect(() => {
     if (recordingStatus === RecordingStatus.Recording) {

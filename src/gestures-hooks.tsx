@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 import { useStorage } from "./hooks/use-storage";
-import { TrainingStatus, useTrainingStatus } from "./training-status-hook";
+import { Stage, Status, useStatus } from "./status-hook";
 export interface XYZData {
   x: number[];
   y: number[];
@@ -129,16 +129,10 @@ export const GesturesProvider = ({ children }: { children: ReactNode }) => {
 
 export const useGestureActions = () => {
   const [gestures, setGestures] = useGestureData();
-  const [trainingStatus, setTrainingStatus] = useTrainingStatus();
+  const [status, setStatus] = useStatus();
   const actions = useMemo<GestureActions>(
-    () =>
-      new GestureActions(
-        gestures,
-        setGestures,
-        trainingStatus,
-        setTrainingStatus
-      ),
-    [gestures, setGestures, setTrainingStatus, trainingStatus]
+    () => new GestureActions(gestures, setGestures, status, setStatus),
+    [gestures, setGestures, setStatus, status]
   );
   return actions;
 };
@@ -147,8 +141,8 @@ class GestureActions {
   constructor(
     private gestureState: GestureContextState,
     private setGestureState: (gestureData: GestureContextState) => void,
-    private trainingStatus: TrainingStatus,
-    private setTrainingStatus: (status: TrainingStatus) => void
+    private status: Status,
+    private setStatus: (status: Status) => void
   ) {}
 
   setGestures = (gestures: GestureData[], isRetrainNeeded: boolean = true) => {
@@ -157,12 +151,8 @@ class GestureActions {
       gestures.length === 0 ? initialGestureContextState.data : gestures;
     this.setGestureState({ ...this.gestureState, data });
 
-    const newTrainingStatus = updateTrainingStatus(
-      data,
-      this.trainingStatus,
-      isRetrainNeeded
-    );
-    this.setTrainingStatus(newTrainingStatus);
+    const newTrainingStatus = updateStatus(data, this.status, isRetrainNeeded);
+    this.setStatus(newTrainingStatus);
   };
 
   addNewGesture = () => {
@@ -212,20 +202,17 @@ const hasSufficientDataForTraining = (gestures: GestureData[]): boolean => {
   );
 };
 
-const updateTrainingStatus = (
+const updateStatus = (
   data: GestureData[],
-  currTrainingStatus: TrainingStatus,
+  currStatus: Status,
   isTrainingNeeded: boolean
-) => {
+): Status => {
   if (!hasSufficientDataForTraining(data)) {
-    return TrainingStatus.InsufficientData;
+    return { stage: Stage.InsufficientData };
   }
-  if (
-    isTrainingNeeded ||
-    currTrainingStatus === TrainingStatus.InsufficientData
-  ) {
+  if (isTrainingNeeded || currStatus.stage === Stage.InsufficientData) {
     // Logic for updating status to retrain is in the training status hook
-    return TrainingStatus.NotTrained;
+    return { stage: Stage.NotTrained };
   }
-  return currTrainingStatus;
+  return currStatus;
 };

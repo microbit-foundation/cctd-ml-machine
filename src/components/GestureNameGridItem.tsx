@@ -89,6 +89,7 @@ const GestureNameGridItem = ({
           alignContent="center"
         >
           <Input
+            isTruncated
             readOnly={readOnly}
             defaultValue={name}
             borderWidth={0}

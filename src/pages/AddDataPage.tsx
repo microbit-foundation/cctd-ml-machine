@@ -18,7 +18,7 @@ import DefaultPageLayout from "../components/DefaultPageLayout";
 import LiveGraphPanel from "../components/LiveGraphPanel";
 import TabView from "../components/TabView";
 import UploadDataSamplesMenuItem from "../components/UploadDataSamplesMenuItem";
-import { addDataConfig } from "../steps-config";
+import { addDataConfig } from "../pages-config";
 import {
   GestureData,
   useGestureActions,

@@ -13,9 +13,13 @@ import NotFound from "./components/NotFound";
 import TranslationProvider from "./messages/TranslationProvider";
 import SettingsProvider from "./settings";
 import HomePage from "./pages/HomePage";
-import { createHomePageUrl, createStepPageUrl } from "./urls";
+import {
+  createHomePageUrl,
+  createResourcePageUrl,
+  createStepPageUrl,
+} from "./urls";
 import { deployment, useDeployment } from "./deployment";
-import { stepsConfig } from "./steps-config";
+import { resourcesConfig, stepsConfig } from "./pages-config";
 import { LoggingProvider } from "./logging/logging-hooks";
 import { ConnectionFlowProvider } from "./connections";
 import { GesturesProvider } from "./gestures-hooks";
@@ -82,6 +86,12 @@ const createRouter = () => {
           return {
             path: createStepPageUrl(step.id),
             element: <step.pageElement />,
+          };
+        }),
+        ...resourcesConfig.map((resource) => {
+          return {
+            path: createResourcePageUrl(resource.id),
+            element: <resource.pageElement />,
           };
         }),
         {

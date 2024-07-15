@@ -3,7 +3,7 @@ import LiveGraphPanel from "../components/LiveGraphPanel";
 import TabView from "../components/TabView";
 import TestModelGridView from "../components/TestModelGridView";
 import TrainModelFirstView from "../components/TrainModelFirstView";
-import { testModelConfig } from "../steps-config";
+import { testModelConfig } from "../pages-config";
 import { Stage, useStatus } from "../status-hook";
 
 const TestModelPage = () => {

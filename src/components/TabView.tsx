@@ -1,6 +1,6 @@
 import { Tab, TabIndicator, TabList, Tabs, VStack } from "@chakra-ui/react";
 import { useIntl } from "react-intl";
-import { StepId, stepsConfig } from "../steps-config";
+import { StepId, stepsConfig } from "../pages-config";
 import { createStepPageUrl } from "../urls";
 import { useNavigate } from "react-router";
 

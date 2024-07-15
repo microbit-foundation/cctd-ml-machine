@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
 import testModelImage from "../images/test_model_black.svg";
-import { StepId } from "../steps-config";
+import { StepId } from "../pages-config";
 import { Stage, useStatus } from "../status-hook";
 import { createStepPageUrl } from "../urls";
 import TrainingButton from "./TrainingButton";

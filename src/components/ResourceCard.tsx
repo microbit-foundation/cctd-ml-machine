@@ -9,14 +9,15 @@ import {
 } from "@chakra-ui/react";
 import { FormattedMessage } from "react-intl";
 import Link from "./Link";
+import { createResourcePageUrl } from "../urls";
+import { ResourceId } from "../pages-config";
 
 interface ResourceCardProps {
-  titleId: string;
-  path: string;
+  id: ResourceId;
   imgSrc: string;
 }
 
-const ResourceCard = ({ titleId, path, imgSrc }: ResourceCardProps) => {
+const ResourceCard = ({ id, imgSrc }: ResourceCardProps) => {
   return (
     <LinkBox
       display="flex"
@@ -34,8 +35,8 @@ const ResourceCard = ({ titleId, path, imgSrc }: ResourceCardProps) => {
       <VStack p={3} py={2} pb={3} flexGrow={1} spacing={3} alignItems="stretch">
         <HStack justifyContent="space-between" alignItems="flex-start">
           <Heading as="h3" fontSize="lg" fontWeight="bold" m={3}>
-            <LinkOverlay href={path} as={Link}>
-              <FormattedMessage id={titleId} />
+            <LinkOverlay href={createResourcePageUrl(id)} as={Link}>
+              <FormattedMessage id={`${id}-title`} />
             </LinkOverlay>
           </Heading>
         </HStack>

@@ -4,7 +4,7 @@ import DefaultPageLayout from "../components/DefaultPageLayout";
 import TabView from "../components/TabView";
 import TrainingStatusView from "../components/TrainingStatusView";
 import trainModelImage from "../images/train_model_black.svg";
-import { trainModelConfig } from "../steps-config";
+import { trainModelConfig } from "../pages-config";
 
 const TrainModelPage = () => {
   return (

@@ -1,4 +1,4 @@
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, HStack, StackProps } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
@@ -6,7 +6,7 @@ import { createStepPageUrl } from "../urls";
 import { useConnectionFlow } from "../connections";
 import { ConnEvent } from "../connection-flow";
 
-const StartResumeActions = () => {
+const StartResumeActions = ({ ...props }: Partial<StackProps>) => {
   // TODO hasExistingSession to check local storage
   const hasExistingSession = true;
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const StartResumeActions = () => {
     }
   }, [dispatch, isInputConnected, navigate]);
   return (
-    <HStack w="100%" justifyContent="center" gap={5}>
+    <HStack w="100%" justifyContent="center" gap={5} {...props}>
       {hasExistingSession && (
         <Button size="lg" variant="primary">
           <FormattedMessage id="footer.resume" />

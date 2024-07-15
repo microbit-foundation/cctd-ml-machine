@@ -2,6 +2,7 @@ import {
   Card,
   CardBody,
   GridItem,
+  HStack,
   Slider,
   SliderFilledTrack,
   SliderThumb,
@@ -11,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { FormattedMessage, useIntl } from "react-intl";
 import PercentageMeter from "./PercentageMeter";
+import PercentageDisplay from "./PercentageDisplay";
 
 interface CertaintyThresholdGridItemProps {
   requiredConfidence?: number;
@@ -46,12 +48,17 @@ const CertaintyThresholdGridItem = ({
           gap={1}
           justifyContent="center"
         >
-          <PercentageMeter
-            meterBarWidthPx={barWidth}
-            percentage={currentConfidence * 100}
-            w="100%"
-            colorScheme={isTriggered ? "green.500" : undefined}
-          />
+          <HStack w="100%" gap={5}>
+            <PercentageMeter
+              meterBarWidthPx={barWidth}
+              value={currentConfidence}
+              colorScheme={isTriggered ? "green.500" : undefined}
+            />
+            <PercentageDisplay
+              value={currentConfidence}
+              colorScheme={isTriggered ? "green.500" : undefined}
+            />
+          </HStack>
           <VStack alignItems="left" gap={1}>
             <Text fontSize="sm" textColor="gray.600">
               <FormattedMessage id="content.model.output.recognitionPoint" />

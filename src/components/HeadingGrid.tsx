@@ -11,13 +11,13 @@ interface HeadingGridProps extends Omit<GridProps, "children"> {
 const HeadingGrid = ({ headings, ...props }: HeadingGridProps) => {
   return (
     <Grid
-      {...props}
       flexShrink={0}
       h="3.25rem"
       alignItems="center"
       borderTopWidth={3}
       borderBottomWidth={3}
       borderColor="gray.200"
+      {...props}
     >
       {headings.map((props, idx) => (
         <GridColumnHeadingItem {...props} key={idx} />

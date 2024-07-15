@@ -5,7 +5,6 @@ import { Stage, useStatus } from "../status-hook";
 const TrainingButton = (props: ButtonProps) => {
   const [{ stage }] = useStatus();
 
-  // TODO: disable when isTraining
   return (
     <Button
       variant="primary"

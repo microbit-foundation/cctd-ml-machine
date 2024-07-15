@@ -25,7 +25,6 @@ export interface ProviderLayoutProps {
   children: ReactNode;
 }
 
-// TODO: Use for logging provider
 const logging = deployment.logging;
 
 const Providers = ({ children }: ProviderLayoutProps) => {

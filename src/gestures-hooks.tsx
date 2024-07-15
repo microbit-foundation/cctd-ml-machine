@@ -1,4 +1,11 @@
-import { ReactNode, createContext, useContext, useMemo, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useStorage } from "./hooks/use-storage";
 import { Stage, Status, useStatus } from "./status-hook";
 export interface XYZData {
@@ -134,6 +141,13 @@ export const useGestureActions = () => {
     () => new GestureActions(gestures, setGestures, status, setStatus),
     [gestures, setGestures, setStatus, status]
   );
+
+  useEffect(() => {
+    if (!hasSufficientDataForTraining(gestures.data)) {
+      setStatus({ stage: Stage.InsufficientData });
+    }
+  }, [gestures.data, setStatus]);
+
   return actions;
 };
 
@@ -159,7 +173,11 @@ class GestureActions {
       gestures.length === 0 ? initialGestureContextState.data : gestures;
     this.setGestureState({ ...this.gestureState, data });
 
-    const newTrainingStatus = updateStatus(data, this.status, isRetrainNeeded);
+    // Logic for updating status to retrain is in the training status hook
+    const newTrainingStatus =
+      isRetrainNeeded || this.status.stage === Stage.InsufficientData
+        ? ({ stage: Stage.NotTrained } as const)
+        : this.status;
     this.setStatus(newTrainingStatus);
   };
 
@@ -208,19 +226,4 @@ const hasSufficientDataForTraining = (gestures: GestureData[]): boolean => {
   return (
     gestures.length >= 2 && gestures.every((g) => g.recordings.length >= 3)
   );
-};
-
-const updateStatus = (
-  data: GestureData[],
-  currStatus: Status,
-  isTrainingNeeded: boolean
-): Status => {
-  if (!hasSufficientDataForTraining(data)) {
-    return { stage: Stage.InsufficientData };
-  }
-  if (isTrainingNeeded || currStatus.stage === Stage.InsufficientData) {
-    // Logic for updating status to retrain is in the training status hook
-    return { stage: Stage.NotTrained };
-  }
-  return currStatus;
 };

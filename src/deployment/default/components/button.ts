@@ -61,7 +61,6 @@ const Button: StyleConfig = {
         bg: "brand.600",
         _disabled: {
           bg: "brand.500",
-          opacity: 0.6,
         },
       },
       _active: {

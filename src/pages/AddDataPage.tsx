@@ -28,10 +28,16 @@ import { useCallback, useMemo } from "react";
 import { createStepPageUrl } from "../urls";
 import { useNavigate } from "react-router";
 import TrainingButton from "../components/TrainingButton";
+import { Stage, useStatus } from "../status-hook";
 
 const AddDataPage = () => {
   const intl = useIntl();
   const navigate = useNavigate();
+  const [{ stage }] = useStatus();
+  const hasInsufficientData = useMemo(
+    () => stage === Stage.InsufficientData,
+    [stage]
+  );
   const [gestures] = useGestureData();
   const actions = useGestureActions();
   const isInputConnected = true;
@@ -76,7 +82,7 @@ const AddDataPage = () => {
           alignItems="center"
         >
           <Button
-            variant="secondary"
+            variant={hasInsufficientData ? "primary" : "secondary"}
             leftIcon={<RiAddLine />}
             onClick={handleAddNewGesture}
             isDisabled={
@@ -87,7 +93,10 @@ const AddDataPage = () => {
             <FormattedMessage id="content.data.addAction" />
           </Button>
           <HStack gap={2} alignItems="center">
-            <TrainingButton onClick={navigateToTrainModelPage} />
+            <TrainingButton
+              onClick={navigateToTrainModelPage}
+              variant={hasInsufficientData ? "secondary" : "primary"}
+            />
             <Menu>
               <MenuButton
                 as={IconButton}

@@ -53,7 +53,12 @@ type GestureContextValue = [
   (gestureData: GestureContextState) => void
 ];
 
-const isValidStoredGestureData = (v: unknown): v is GestureContextState => {
+const isArray = (v: unknown) => typeof v === "object" && Array.isArray(v);
+
+// Exported for testing
+export const isValidStoredGestureData = (
+  v: unknown
+): v is GestureContextState => {
   if (typeof v !== "object") {
     return false;
   }
@@ -62,7 +67,7 @@ const isValidStoredGestureData = (v: unknown): v is GestureContextState => {
     return false;
   }
   const data = valueObject.data;
-  if (typeof data !== "object" && !Array.isArray(data)) {
+  if (!isArray(data)) {
     return false;
   }
   const array = data as unknown[];
@@ -70,13 +75,34 @@ const isValidStoredGestureData = (v: unknown): v is GestureContextState => {
     if (typeof item !== "object" || item === null) {
       return false;
     }
-    if (!("name" in item) || !("ID" in item) || !("recordings" in item)) {
+    if (
+      !("name" in item) ||
+      !("ID" in item) ||
+      !("recordings" in item) ||
+      !isArray(item.recordings)
+    ) {
       return false;
     }
-    if (typeof item.recordings !== "object") {
-      return false;
+    const recordings = item.recordings as unknown[];
+    for (const rec of recordings) {
+      if (typeof rec !== "object" || rec === null) {
+        return false;
+      }
+      if (!("data" in rec) || !("ID" in rec) || isArray(rec.data)) {
+        return false;
+      }
+      const xyzData = rec.data as object;
+      if (
+        !("x" in xyzData) ||
+        !("y" in xyzData) ||
+        !("z" in xyzData) ||
+        !isArray(xyzData.x) ||
+        !isArray(xyzData.y) ||
+        !isArray(xyzData.z)
+      ) {
+        return false;
+      }
     }
-    // TODO: Validate recordings
   }
   return true;
 };

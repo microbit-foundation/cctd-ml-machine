@@ -21,7 +21,7 @@ import {
 import { deployment, useDeployment } from "./deployment";
 import { resourcesConfig, stepsConfig } from "./pages-config";
 import { LoggingProvider } from "./logging/logging-hooks";
-import { ConnectionFlowProvider } from "./connections";
+import { ConnectionProvider } from "./connections";
 import { GesturesProvider } from "./gestures-hooks";
 import { StatusProvider } from "./status-hook";
 
@@ -42,11 +42,11 @@ const Providers = ({ children }: ProviderLayoutProps) => {
             <SettingsProvider>
               <GesturesProvider>
                 <StatusProvider>
-                  <ConnectionFlowProvider>
+                  <ConnectionProvider>
                     <TranslationProvider>
                       <ErrorBoundary>{children}</ErrorBoundary>
                     </TranslationProvider>
-                  </ConnectionFlowProvider>
+                  </ConnectionProvider>
                 </StatusProvider>
               </GesturesProvider>
             </SettingsProvider>

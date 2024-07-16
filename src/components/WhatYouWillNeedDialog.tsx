@@ -9,7 +9,7 @@ import twoMicrobitsImage from "../images/stylised-two-microbits-black.svg";
 import usbCableImage from "../images/stylised-usb-cable.svg";
 import computerImage from "../images/stylised_computer.svg";
 import computerBluetoothImage from "../images/stylised_computer_w_bluetooth.svg";
-import { ConnType } from "../connection-flow";
+import { ConnType } from "../connections";
 
 const whatYouWillNeedRadioConfig = {
   headingId: "connectMB.radioStart.heading",

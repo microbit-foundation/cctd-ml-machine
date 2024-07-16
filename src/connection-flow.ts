@@ -1,44 +1,4 @@
-import { Reducer } from "react";
-
-export enum ConnStage {
-  // Happy flow stages
-  None,
-  Start,
-  ConnectCable,
-  WebUsbFlashingTutorial,
-  ManualFlashingTutorial,
-  ConnectBattery,
-  EnterBluetoothPattern,
-  ConnectBluetoothTutorial,
-
-  // Stages that are not user-controlled
-  WebUsbChooseMicrobit,
-  ConnectingBluetooth,
-  ConnectingMicrobits,
-  FlashingInProgress,
-
-  // Failure stages
-  TryAgainReplugMicrobit,
-  TryAgainCloseTabs,
-  TryAgainSelectMicrobit,
-  TryAgainBluetoothConnect,
-  BadFirmware,
-  MicrobitUnsupported,
-  WebUsbBluetoothUnsupported,
-}
-
-export enum ConnType {
-  Bluetooth,
-  RadioBridge,
-  RadioRemote,
-}
-
-export type ConnState = {
-  stage: ConnStage;
-  type: ConnType;
-  isWebUsbSupported: boolean;
-  isWebBluetoothSupported: boolean;
-};
+import { ConnStage, ConnState, ConnType } from "./connections";
 
 export enum ConnEvent {
   // User triggered events
@@ -76,10 +36,18 @@ export enum ConnEvent {
 
 type StageAndType = Pick<ConnState, "stage" | "type">;
 
-export const connectionDialogReducer: Reducer<ConnState, ConnEvent> = (
-  state,
-  event
-) => {
+export class ConnectionActions {
+  constructor(
+    private connState: ConnState,
+    private setConnState: (state: ConnState) => void
+  ) {}
+
+  dispatchConnectFlowEvent = (event: ConnEvent) => {
+    this.setConnState(dispatchConnFlowEvent(this.connState, event));
+  };
+}
+
+export const dispatchConnFlowEvent = (state: ConnState, event: ConnEvent) => {
   switch (event) {
     case ConnEvent.Start:
       return {

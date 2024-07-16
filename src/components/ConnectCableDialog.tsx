@@ -4,7 +4,7 @@ import connectCableImage from "../images/connect-cable.gif";
 import ConnectContainerDialog, {
   ConnectContainerDialogProps,
 } from "./ConnectContainerDialog";
-import { ConnType } from "../connection-flow";
+import { ConnType } from "../connections";
 
 enum LinkType {
   Switch,

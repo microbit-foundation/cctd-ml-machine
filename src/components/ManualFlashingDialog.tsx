@@ -9,7 +9,7 @@ import ConnectContainerDialog, {
   ConnectContainerDialogProps,
 } from "./ConnectContainerDialog";
 import { getHexFileUrl } from "../device/get-hex-file";
-import { ConnType } from "../connection-flow";
+import { ConnType } from "../connections";
 
 interface ImageProps {
   src: string;

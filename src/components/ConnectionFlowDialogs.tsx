@@ -1,7 +1,6 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { ConnEvent, ConnStage, ConnType } from "../connection-flow";
-import { useConnectionFlow } from "../connections";
+import { ConnStage, ConnType, useConnectionFlow } from "../connections";
 import { getHexFileUrl } from "../device/get-hex-file";
 import MicrobitWebUSBConnection from "../device/microbit-usb";
 import { useLogging } from "../logging/logging-hooks";
@@ -18,6 +17,7 @@ import TryAgainDialog from "./TryAgainDialog";
 import UnsupportedMicrobitDialog from "./UnsupportedMicrobitDialog";
 import WhatYouWillNeedDialog from "./WhatYouWillNeedDialog";
 import WebUsbBluetoothUnsupportedDialog from "./WebUsbBluetoothUnsupportedDialog";
+import { ConnEvent } from "../connection-flow";
 
 const ConnectionDialogs = () => {
   // Check compatability

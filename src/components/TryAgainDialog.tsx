@@ -13,7 +13,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FormattedMessage } from "react-intl";
-import { ConnStage } from "../connection-flow";
+import { ConnStage } from "../connections";
 
 const OneLineContent = ({ textId }: { textId: string }) => {
   return (

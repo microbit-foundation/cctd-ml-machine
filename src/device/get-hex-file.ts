@@ -1,4 +1,4 @@
-import { ConnType } from "../connection-flow";
+import { ConnType } from "../connections";
 import { MicrobitVersion } from "./device";
 
 export const getHexFileUrl = (

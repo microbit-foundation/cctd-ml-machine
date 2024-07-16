@@ -1,48 +1,110 @@
-import { ReactNode, createContext, useContext, useReducer } from "react";
-import {
-  ConnEvent,
-  ConnStage,
-  ConnState,
-  ConnType,
-  connectionDialogReducer,
-} from "./connection-flow";
+import { ReactNode, createContext, useContext, useMemo, useState } from "react";
+import { ConnEvent, ConnectionActions } from "./connection-flow";
 
-type ConnectionFlowContextValue = {
-  state: ConnState;
-  dispatch: React.Dispatch<ConnEvent>;
+export enum ConnStage {
+  // Happy flow stages
+  None,
+  Start,
+  ConnectCable,
+  WebUsbFlashingTutorial,
+  ManualFlashingTutorial,
+  ConnectBattery,
+  EnterBluetoothPattern,
+  ConnectBluetoothTutorial,
+
+  // Stages that are not user-controlled
+  WebUsbChooseMicrobit,
+  ConnectingBluetooth,
+  ConnectingMicrobits,
+  FlashingInProgress,
+
+  // Failure stages
+  TryAgainReplugMicrobit,
+  TryAgainCloseTabs,
+  TryAgainSelectMicrobit,
+  TryAgainBluetoothConnect,
+  BadFirmware,
+  MicrobitUnsupported,
+  WebUsbBluetoothUnsupported,
+}
+
+export enum ConnType {
+  Bluetooth,
+  RadioBridge,
+  RadioRemote,
+}
+
+export enum ProgramType {
+  Input,
+  Output,
+}
+
+interface BluetoothConn {
+  type: ConnType.Bluetooth;
+  program: ProgramType;
+  microbitName: string; // Taken from bluetooth pattern
+}
+
+interface RadioConn {
+  type: Exclude<ConnType, ConnType.Bluetooth>;
+  program: ProgramType;
+}
+
+type Conn = BluetoothConn | RadioConn;
+
+export type ConnState = {
+  stage: ConnStage;
+  type: ConnType;
+  isWebUsbSupported: boolean;
+  isWebBluetoothSupported: boolean;
+  connections: Conn[];
 };
 
-export const ConnectionFlowContext =
-  createContext<ConnectionFlowContextValue | null>(null);
+type ConnContextValue = {
+  state: ConnState;
+  setState: (state: ConnState) => void;
+};
 
-interface ConnectionFlowProviderProps {
+export const ConnectionContext = createContext<ConnContextValue | null>(null);
+
+interface ConnectionProviderProps {
   children: ReactNode;
 }
 
-export const ConnectionFlowProvider = ({
-  children,
-}: ConnectionFlowProviderProps) => {
+export const ConnectionProvider = ({ children }: ConnectionProviderProps) => {
   // TODO: Check bt and usb compatibility
   const isWebBluetoothSupported = true;
   const isWebUsbSupported = true;
 
-  const [state, dispatch] = useReducer(connectionDialogReducer, {
+  const [state, setState] = useState<ConnState>({
     type: isWebBluetoothSupported ? ConnType.Bluetooth : ConnType.RadioRemote,
     stage: ConnStage.None,
     isWebUsbSupported,
     isWebBluetoothSupported,
+    connections: [],
   });
   return (
-    <ConnectionFlowContext.Provider value={{ state, dispatch }}>
+    <ConnectionContext.Provider value={{ state, setState }}>
       {children}
-    </ConnectionFlowContext.Provider>
+    </ConnectionContext.Provider>
   );
 };
 
-export const useConnectionFlow = (): ConnectionFlowContextValue => {
-  const connFlow = useContext(ConnectionFlowContext);
-  if (!connFlow) {
+export const useConnectionFlow = (): {
+  state: ConnState;
+  dispatch: (event: ConnEvent) => void;
+} => {
+  const connContextValue = useContext(ConnectionContext);
+  if (!connContextValue) {
     throw new Error("Missing provider");
   }
-  return connFlow;
+  const { state, setState } = connContextValue;
+  const actions = useMemo(
+    () => new ConnectionActions(state, setState),
+    [setState, state]
+  );
+  return {
+    state: connContextValue.state,
+    dispatch: actions.dispatchConnectFlowEvent,
+  };
 };

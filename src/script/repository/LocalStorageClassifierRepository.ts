@@ -78,7 +78,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
     return <T extends MLModel>(trainer: ModelTrainer<T>) => this.trainModel(trainer);
   }
 
-  private setGestureConfidence(gestureId: GestureID, confidence: number) {
+  public setGestureConfidence(gestureId: GestureID, confidence: number) {
     if (confidence < 0 || confidence > 1) {
       throw new Error('Cannot set gesture confidence. Must be in the range 0.0-1.0');
     }
@@ -120,13 +120,17 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
         if (confidenceStore.has(gestureId)) {
           return confidenceStore.get(gestureId) as number;
         }
-        return 0;
+        throw new Error("No confidence found for gesture with id '" + gestureId + "'");
       },
     );
     return new GestureConfidence(
       StaticConfiguration.defaultRequiredConfidence,
       derivedConfidence,
     );
+  }
+
+  public hasGestureConfidence(gestureId: number): boolean {
+    return get(LocalStorageClassifierRepository.confidences).has(gestureId);
   }
 
   public getConfidences(): Writable<Map<GestureID, number>> {

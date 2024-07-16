@@ -14,17 +14,11 @@
   import Axes from '../../script/domain/Axes';
   import { t } from '../../i18n';
   import { onMount } from 'svelte';
-  import Range from '../../components/Range.svelte';
   import { knnConfig } from '../../script/stores/knnConfig';
-  import { get } from 'svelte/store';
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
   const confidences = gestures.getConfidences();
   const filters = classifier.getFilters();
-
-  console.log('GESTURES:', $gestures);
-  console.log('CONFIDENCES:', $confidences);
 
   onMount(() => {
     trainModel(ModelRegistry.KNN);
@@ -38,12 +32,13 @@
     }
   }
 
-  const maxK = Math.min(
-    $gestures.length * StaticConfiguration.minNoOfRecordingsPerGesture,
-    10,
+  const noOfRecordings = $gestures.reduce(
+    (acc, gesture) => acc + gesture.recordings.length,
+    0,
   );
+  const maxK = noOfRecordings;
   const changeK = (amount: number) => {
-    const newVal = Math.min(Math.max($knnConfig.k + amount, 1), 10);
+    const newVal = Math.max($knnConfig.k + amount, 1);
     knnConfig.set({ k: newVal });
     trainModel(ModelRegistry.KNN);
   };
@@ -52,8 +47,6 @@
       knnConfig.set({ k: maxK });
     }
   }
-
-  console.log($confidences);
 </script>
 
 <div

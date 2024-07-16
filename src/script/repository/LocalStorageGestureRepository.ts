@@ -14,7 +14,7 @@ import { stores } from '../stores/Stores';
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private static gestureStore: Writable<Gesture[]>;
-  constructor(private modelRepository: LocalStorageClassifierRepository) {
+  constructor(private classifierRepository: LocalStorageClassifierRepository) {
     LocalStorageGestureRepository.gestureStore = writable([]);
     LocalStorageGestureRepository.gestureStore.set(this.getPersistedGestures());
   }
@@ -105,9 +105,15 @@ class LocalStorageGestureRepository implements GestureRepository {
     const store = this.buildPersistedGestureStore(persistedData);
     // TODO: The classifier object should be accessed through the repository, not the store. This cannot be done until the classifier is cached.
     const onRecordingsChanged = () => stores.getClassifier().getModel().markAsUntrained();
+
+    if (!this.classifierRepository.hasGestureConfidence(get(store).ID)) {
+      this.classifierRepository.setGestureConfidence(get(store).ID, 0);
+    }
+    const confidence = this.classifierRepository.getGestureConfidence(get(store).ID);
+
     return new Gesture(
       store,
-      this.modelRepository.getGestureConfidence(get(store).ID),
+      confidence,
       onRecordingsChanged,
     );
   }

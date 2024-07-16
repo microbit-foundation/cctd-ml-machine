@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 import { useStorage } from "./hooks/use-storage";
 import { Stage, Status, useStatus } from "./status-hook";
+import { isArray } from "./utils";
 export interface XYZData {
   x: number[];
   y: number[];
@@ -45,8 +46,6 @@ type GestureContextValue = [
   GestureContextState,
   (gestureData: GestureContextState) => void
 ];
-
-const isArray = (v: unknown) => typeof v === "object" && Array.isArray(v);
 
 // Exported for testing
 export const isValidStoredGestureData = (

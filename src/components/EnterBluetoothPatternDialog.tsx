@@ -5,6 +5,7 @@ import BluetoothPatternInput from "./BluetoothPatternInput";
 import ConnectContainerDialog, {
   ConnectContainerDialogProps,
 } from "./ConnectContainerDialog";
+import { useConnectionFlow } from "../connections";
 
 const isPatternValid = (pattern: boolean[]) => {
   for (let col = 0; col < 5; col++) {
@@ -28,9 +29,10 @@ const EnterBluetoothPatternDialog = ({
   onBackClick,
   ...props
 }: EnterBluetoothPatternDialogProps) => {
+  const { actions } = useConnectionFlow();
   const [showInvalid, setShowInvalid] = useState<boolean>(false);
   const [bluetoothPattern, setBluetoothPattern] = useState<boolean[]>(
-    Array(25).fill(false)
+    actions.getBluetoothPattern() ?? Array(25).fill(false)
   );
 
   const handleNextClick = useCallback(() => {
@@ -46,10 +48,14 @@ const EnterBluetoothPatternDialog = ({
     onBackClick && onBackClick();
   }, [onBackClick]);
 
-  const handlePatternChange = useCallback((newPattern: boolean[]) => {
-    setBluetoothPattern(newPattern);
-    setShowInvalid(false);
-  }, []);
+  const handlePatternChange = useCallback(
+    (newPattern: boolean[]) => {
+      setBluetoothPattern(newPattern);
+      setShowInvalid(false);
+      actions.setBluetoothConn({ bluetoothPattern: newPattern });
+    },
+    [actions]
+  );
 
   return (
     <ConnectContainerDialog

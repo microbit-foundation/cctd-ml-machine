@@ -1,4 +1,12 @@
-import { ConnStage, ConnState, ConnType } from "./connections";
+import {
+  BluetoothConn,
+  Conn,
+  ConnStage,
+  ConnState,
+  ConnStatus,
+  ConnType,
+  ProgramType,
+} from "./connections";
 
 export enum ConnEvent {
   // User triggered events
@@ -44,6 +52,44 @@ export class ConnectionActions {
 
   dispatchConnectFlowEvent = (event: ConnEvent) => {
     this.setConnState(dispatchConnFlowEvent(this.connState, event));
+  };
+
+  private setConn = (programType: ProgramType, conn: Conn) => {
+    const { connections } = this.connState;
+    // Replace existing conn or add as new conn depending on whether a conn
+    // with the same programType already exists
+    const connExists = !!connections.find((c) => c.program === programType);
+    const newConnState = {
+      ...this.connState,
+      connections: connExists
+        ? connections.map((c) => (c.program === programType ? conn : c))
+        : [...connections, conn],
+    };
+    this.setConnState(newConnState);
+  };
+
+  setBluetoothConn = (conn: {
+    status?: ConnStatus;
+    bluetoothPattern: boolean[] | undefined;
+  }) => {
+    const newConn = {
+      program: this.connState.program,
+      status: ConnStatus.Disconnected,
+      type: ConnType.Bluetooth,
+      ...conn,
+    };
+    if (newConn.bluetoothPattern === undefined) {
+      throw new Error("Bluetooth pattern missing");
+    }
+    this.setConn(this.connState.program, newConn as Conn);
+  };
+
+  getBluetoothPattern = () => {
+    const conn = this.connState.connections.find(
+      (c) =>
+        c.program === this.connState.program && c.type === ConnType.Bluetooth
+    ) as BluetoothConn | undefined;
+    return conn ? conn.bluetoothPattern : undefined;
   };
 }
 

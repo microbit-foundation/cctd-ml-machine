@@ -44,7 +44,7 @@ const TrainingStatusView = () => {
     case Stage.InsufficientData:
       return (
         <TrainingStatusSection statusId="menu.trainer.notEnoughDataHeader1">
-          <Text>
+          <Text mt={-5}>
             <FormattedMessage id="menu.trainer.notEnoughDataInfoBody" />
           </Text>
           <Button variant="primary" onClick={navigateToDataPage}>

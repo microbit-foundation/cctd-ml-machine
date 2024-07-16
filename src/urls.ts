@@ -11,4 +11,4 @@ export const createHomePageUrl = () => `${basepath}`;
 export const createStepPageUrl = (stepId: StepId) => `${basepath}${stepId}`;
 
 export const createResourcePageUrl = (resourceId: ResourceId) =>
-  `resources/${resourceId}`;
+  `${basepath}resources/${resourceId}`;

@@ -3,10 +3,20 @@ import { MdBolt } from "react-icons/md";
 import { FormattedMessage } from "react-intl";
 import InfoToolTip from "./InfoToolTip";
 import LiveGraph from "./LiveGraph";
+import { useCallback } from "react";
+import { useConnectionFlow } from "../connections";
+import { ConnEvent } from "../connection-flow";
 
 const LiveGraphPanel = () => {
+  const { dispatch } = useConnectionFlow();
+
   // TODO: replace with hook
   const isConnected = false;
+
+  const handleConnect = useCallback(() => {
+    // TODO: Handle incompatibility dialog and reconnection
+    dispatch(ConnEvent.Start);
+  }, [dispatch]);
   return (
     <HStack position="relative" h={160} width="100%" bgColor="white">
       <HStack
@@ -17,6 +27,7 @@ const LiveGraphPanel = () => {
         right={0}
         px={7}
         py={4}
+        zIndex={1}
       >
         <HStack gap={4}>
           <LiveIndicator />
@@ -25,7 +36,7 @@ const LiveGraphPanel = () => {
               <FormattedMessage id="footer.disconnectButton" />
             </Button>
           ) : (
-            <Button variant="primary" size="sm">
+            <Button variant="primary" size="sm" onClick={handleConnect}>
               <FormattedMessage id="footer.connectButton" />
             </Button>
           )}

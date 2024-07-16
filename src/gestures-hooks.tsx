@@ -1,11 +1,4 @@
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 import { useStorage } from "./hooks/use-storage";
 import { Stage, Status, useStatus } from "./status-hook";
 export interface XYZData {
@@ -168,12 +161,6 @@ export const useGestureActions = () => {
     [gestures, setGestures, setStatus, status]
   );
 
-  useEffect(() => {
-    if (!hasSufficientDataForTraining(gestures.data)) {
-      setStatus({ stage: Stage.InsufficientData });
-    }
-  }, [gestures.data, setStatus]);
-
   return actions;
 };
 
@@ -185,7 +172,7 @@ class GestureActions {
     private setStatus: (status: Status) => void
   ) {}
 
-  hasGestures = () => {
+  hasGestures = (): boolean => {
     return (
       this.gestureState.data.length > 0 &&
       (this.gestureState.data[0].name.length > 0 ||
@@ -199,11 +186,14 @@ class GestureActions {
       gestures.length === 0 ? initialGestureContextState.data : gestures;
     this.setGestureState({ ...this.gestureState, data });
 
-    // Logic for updating status to retrain is in the training status hook
-    const newTrainingStatus =
-      isRetrainNeeded || this.status.stage === Stage.InsufficientData
-        ? ({ stage: Stage.NotTrained } as const)
-        : this.status;
+    // Update training status
+    const newTrainingStatus = !hasSufficientDataForTraining(data)
+      ? { stage: Stage.InsufficientData as const }
+      : isRetrainNeeded || this.status.stage === Stage.InsufficientData
+      ? // Updating status to retrain status is in status hook
+        { stage: Stage.NotTrained as const }
+      : this.status;
+
     this.setStatus(newTrainingStatus);
   };
 
@@ -245,6 +235,18 @@ class GestureActions {
 
   deleteAllGestures = () => {
     this.setGestures([]);
+  };
+
+  downloadDataset = () => {
+    const a = document.createElement("a");
+    a.setAttribute(
+      "href",
+      "data:application/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(this.gestureState.data, null, 2))
+    );
+    a.setAttribute("download", "dataset");
+    a.style.display = "none";
+    a.click();
   };
 }
 

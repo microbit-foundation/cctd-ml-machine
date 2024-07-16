@@ -9,26 +9,22 @@ import {
   MenuList,
   VStack,
 } from "@chakra-ui/react";
+import { useCallback, useMemo } from "react";
 import { MdMoreVert } from "react-icons/md";
 import { RiAddLine, RiDeleteBin2Line, RiDownload2Line } from "react-icons/ri";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useNavigate } from "react-router";
 import AddDataGridView from "../components/AddDataGridView";
 import ConnectFirstView from "../components/ConnectFirstView";
 import DefaultPageLayout from "../components/DefaultPageLayout";
 import LiveGraphPanel from "../components/LiveGraphPanel";
 import TabView from "../components/TabView";
-import UploadDataSamplesMenuItem from "../components/UploadDataSamplesMenuItem";
-import { addDataConfig } from "../pages-config";
-import {
-  GestureData,
-  useGestureActions,
-  useGestureData,
-} from "../gestures-hooks";
-import { useCallback, useMemo } from "react";
-import { createStepPageUrl } from "../urls";
-import { useNavigate } from "react-router";
 import TrainingButton from "../components/TrainingButton";
+import UploadDataSamplesMenuItem from "../components/UploadDataSamplesMenuItem";
+import { useGestureActions, useGestureData } from "../gestures-hooks";
+import { addDataConfig } from "../pages-config";
 import { Stage, useStatus } from "../status-hook";
+import { createStepPageUrl } from "../urls";
 
 const AddDataPage = () => {
   const intl = useIntl();
@@ -55,8 +51,8 @@ const AddDataPage = () => {
   }, [actions]);
 
   const handleDatasetDownload = useCallback(() => {
-    downloadDataset(gestures.data);
-  }, [gestures.data]);
+    actions.downloadDataset();
+  }, [actions]);
 
   const navigateToTrainModelPage = useCallback(() => {
     navigate(createStepPageUrl("train-model"));
@@ -129,18 +125,6 @@ const AddDataPage = () => {
       </VStack>
     </DefaultPageLayout>
   );
-};
-
-const downloadDataset = (gestures: GestureData[]) => {
-  const a = document.createElement("a");
-  a.setAttribute(
-    "href",
-    "data:application/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(gestures, null, 2))
-  );
-  a.setAttribute("download", "dataset");
-  a.style.display = "none";
-  a.click();
 };
 
 export default AddDataPage;

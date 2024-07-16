@@ -5,6 +5,7 @@ import {
   useContext,
   useState,
 } from "react";
+import { hasSufficientDataForTraining, useGestureData } from "./gestures-hooks";
 
 export enum Stage {
   RecordingData,
@@ -34,13 +35,16 @@ type StatusContextValue = [StatusState, (status: StatusState) => void];
 
 const StatusContext = createContext<StatusContextValue | undefined>(undefined);
 
-const initialStatusState: StatusState = {
-  status: { stage: Stage.NotTrained },
-  hasTrainedBefore: false,
-};
-
 export const StatusProvider = ({ children }: { children: ReactNode }) => {
-  const statusContextValue = useState<StatusState>(initialStatusState);
+  const [gestureState] = useGestureData();
+  const statusContextValue = useState<StatusState>({
+    status: {
+      stage: hasSufficientDataForTraining(gestureState.data)
+        ? Stage.NotTrained
+        : Stage.InsufficientData,
+    },
+    hasTrainedBefore: false,
+  });
   return (
     <StatusContext.Provider value={statusContextValue}>
       {children}

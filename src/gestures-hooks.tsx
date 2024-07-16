@@ -250,7 +250,9 @@ class GestureActions {
   };
 }
 
-const hasSufficientDataForTraining = (gestures: GestureData[]): boolean => {
+export const hasSufficientDataForTraining = (
+  gestures: GestureData[]
+): boolean => {
   return (
     gestures.length >= 2 && gestures.every((g) => g.recordings.length >= 3)
   );

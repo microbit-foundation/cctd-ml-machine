@@ -40,15 +40,15 @@ const Providers = ({ children }: ProviderLayoutProps) => {
         <LoggingProvider value={logging}>
           <ConsentProvider>
             <SettingsProvider>
-              <StatusProvider>
-                <GesturesProvider>
+              <GesturesProvider>
+                <StatusProvider>
                   <ConnectionFlowProvider>
                     <TranslationProvider>
                       <ErrorBoundary>{children}</ErrorBoundary>
                     </TranslationProvider>
                   </ConnectionFlowProvider>
-                </GesturesProvider>
-              </StatusProvider>
+                </StatusProvider>
+              </GesturesProvider>
             </SettingsProvider>
           </ConsentProvider>
         </LoggingProvider>

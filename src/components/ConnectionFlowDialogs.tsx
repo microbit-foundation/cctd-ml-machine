@@ -17,18 +17,21 @@ import SelectMicrobitUsbDialog from "./SelectMicrobitUsbDialog";
 import TryAgainDialog from "./TryAgainDialog";
 import UnsupportedMicrobitDialog from "./UnsupportedMicrobitDialog";
 import WhatYouWillNeedDialog from "./WhatYouWillNeedDialog";
+import WebUsbBluetoothUnsupportedDialog from "./WebUsbBluetoothUnsupportedDialog";
 
 const ConnectionDialogs = () => {
   // Check compatability
   const logging = useLogging();
 
-  const [isBluetoothSupported, isUsbSupported] = [true, true];
   const { state, dispatch } = useConnectionFlow();
   const [flashProgress, setFlashProgress] = useState<number>(0);
   const { isOpen, onClose: onCloseDialog, onOpen } = useDisclosure();
 
   useEffect(() => {
-    if (state.stage === ConnStage.Start) {
+    if (
+      state.stage === ConnStage.Start ||
+      state.stage === ConnStage.WebUsbBluetoothUnsupported
+    ) {
       onOpen();
     }
   }, [onOpen, state]);
@@ -181,7 +184,7 @@ const ConnectionDialogs = () => {
           type={state.type}
           {...dialogCommonProps}
           onLinkClick={
-            isBluetoothSupported && isUsbSupported
+            state.isWebBluetoothSupported && state.isWebUsbSupported
               ? onSwitchTypeClick
               : undefined
           }
@@ -306,7 +309,14 @@ const ConnectionDialogs = () => {
           onClose={onClose}
           isOpen={isOpen}
           onStartBluetoothClick={onStartBluetooth}
+          isBluetoothSupported={state.isWebBluetoothSupported}
         />
+      );
+    }
+    case ConnStage.WebUsbBluetoothUnsupported: {
+      console.log("here");
+      return (
+        <WebUsbBluetoothUnsupportedDialog isOpen={isOpen} onClose={onClose} />
       );
     }
   }

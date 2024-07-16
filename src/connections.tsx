@@ -22,12 +22,15 @@ interface ConnectionFlowProviderProps {
 export const ConnectionFlowProvider = ({
   children,
 }: ConnectionFlowProviderProps) => {
-  const isBluetoothSupported = true;
+  // TODO: Check bt and usb compatibility
+  const isWebBluetoothSupported = true;
+  const isWebUsbSupported = true;
+
   const [state, dispatch] = useReducer(connectionDialogReducer, {
-    // TODO: Check bt and usb compatibility
-    type: isBluetoothSupported ? ConnType.Bluetooth : ConnType.RadioRemote,
+    type: isWebBluetoothSupported ? ConnType.Bluetooth : ConnType.RadioRemote,
     stage: ConnStage.None,
-    isUsbSupported: true,
+    isWebUsbSupported,
+    isWebBluetoothSupported,
   });
   return (
     <ConnectionFlowContext.Provider value={{ state, dispatch }}>

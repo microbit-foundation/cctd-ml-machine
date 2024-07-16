@@ -1,6 +1,7 @@
 import { Reducer } from "react";
 
 export enum ConnStage {
+  // Happy flow stages
   None,
   Start,
   ConnectCable,
@@ -23,6 +24,7 @@ export enum ConnStage {
   TryAgainBluetoothConnect,
   BadFirmware,
   MicrobitUnsupported,
+  WebUsbBluetoothUnsupported,
 }
 
 export enum ConnType {
@@ -34,7 +36,8 @@ export enum ConnType {
 export type ConnState = {
   stage: ConnStage;
   type: ConnType;
-  isUsbSupported: boolean;
+  isWebUsbSupported: boolean;
+  isWebBluetoothSupported: boolean;
 };
 
 export enum ConnEvent {
@@ -79,7 +82,13 @@ export const connectionDialogReducer: Reducer<ConnState, ConnEvent> = (
 ) => {
   switch (event) {
     case ConnEvent.Start:
-      return { ...state, stage: ConnStage.Start };
+      return {
+        ...state,
+        stage:
+          !state.isWebBluetoothSupported && !state.isWebUsbSupported
+            ? ConnStage.WebUsbBluetoothUnsupported
+            : ConnStage.Start,
+      };
     case ConnEvent.Close:
       return { ...state, stage: ConnStage.None };
     case ConnEvent.SkipFlashing:
@@ -140,7 +149,8 @@ const getStageAndTypeOrder = (state: ConnState): StageAndType[] => {
       { stage: ConnStage.Start, type: Bluetooth },
       { stage: ConnStage.ConnectCable, type: Bluetooth },
       // Only bluetooth mode has this fallback, the radio bridge mode requires working WebUSB.
-      !state.isUsbSupported || state.stage === ConnStage.ManualFlashingTutorial
+      !state.isWebUsbSupported ||
+      state.stage === ConnStage.ManualFlashingTutorial
         ? { stage: ConnStage.ManualFlashingTutorial, type: Bluetooth }
         : { stage: ConnStage.WebUsbFlashingTutorial, type: Bluetooth },
       { stage: ConnStage.ConnectBattery, type: Bluetooth },

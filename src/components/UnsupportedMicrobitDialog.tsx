@@ -18,15 +18,15 @@ interface UnsupportedMicrobitDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onStartBluetoothClick: () => void;
+  isBluetoothSupported: boolean;
 }
 
 const UnsupportedMicrobitDialog = ({
   isOpen,
   onClose,
   onStartBluetoothClick,
+  isBluetoothSupported,
 }: UnsupportedMicrobitDialogProps) => {
-  // TODO: Check if bluetooth is compatible
-  const isBluetoothSupported = true;
   return (
     <Modal
       closeOnOverlayClick={false}

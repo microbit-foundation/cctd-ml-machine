@@ -8,7 +8,9 @@ import BrokenFirmwareDialog from "./BrokenFirmwareDialog";
 import ConnectBatteryDialog from "./ConnectBatteryDialog";
 import ConnectCableDialog from "./ConnectCableDialog";
 import DownloadingDialog from "./DownloadingDialog";
-import EnterBluetoothPatternDialog from "./EnterBluetoothPatternDialog";
+import EnterBluetoothPatternDialog, {
+  BluetoothPattern,
+} from "./EnterBluetoothPatternDialog";
 import LoadingDialog from "./LoadingDialog";
 import ManualFlashingDialog from "./ManualFlashingDialog";
 import SelectMicrobitBluetoothDialog from "./SelectMicrobitBluetoothDialog";
@@ -26,6 +28,9 @@ const ConnectionDialogs = () => {
   const { state, dispatch } = useConnectionFlow();
   const [flashProgress, setFlashProgress] = useState<number>(0);
   const { isOpen, onClose: onCloseDialog, onOpen } = useDisclosure();
+  const [bluetoothPattern, setBluetoothPattern] = useState<BluetoothPattern>(
+    Array(25).fill(false)
+  );
 
   useEffect(() => {
     if (
@@ -237,6 +242,8 @@ const ConnectionDialogs = () => {
           {...dialogCommonProps}
           onBackClick={onBackClick}
           onNextClick={onNextClick}
+          bluetoothPattern={bluetoothPattern}
+          setBluetoothPattern={setBluetoothPattern}
         />
       );
     }

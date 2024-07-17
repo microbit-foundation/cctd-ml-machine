@@ -16,7 +16,7 @@ import {
   transformColumnsToMatrix,
   transformMatrixToColumns,
   updateMatrixColumns,
-} from "../patternMatrixTransforms";
+} from "../bluetooth-pattern";
 import React from "react";
 
 interface BluetoothPatternInputProps {

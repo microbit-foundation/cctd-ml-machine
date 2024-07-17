@@ -1,5 +1,4 @@
 import {
-  BluetoothConn,
   Conn,
   ConnStage,
   ConnState,
@@ -68,28 +67,13 @@ export class ConnectionActions {
     this.setConnState(newConnState);
   };
 
-  setBluetoothConn = (conn: {
-    status?: ConnStatus;
-    bluetoothPattern: boolean[] | undefined;
-  }) => {
+  setBluetoothConn = ({ status }: { status?: ConnStatus }) => {
     const newConn = {
       program: this.connState.program,
-      status: ConnStatus.Disconnected,
+      status: status ?? ConnStatus.Disconnected,
       type: ConnType.Bluetooth,
-      ...conn,
-    };
-    if (newConn.bluetoothPattern === undefined) {
-      throw new Error("Bluetooth pattern missing");
-    }
-    this.setConn(this.connState.program, newConn as Conn);
-  };
-
-  getBluetoothPattern = () => {
-    const conn = this.connState.connections.find(
-      (c) =>
-        c.program === this.connState.program && c.type === ConnType.Bluetooth
-    ) as BluetoothConn | undefined;
-    return conn ? conn.bluetoothPattern : undefined;
+    } as Conn;
+    this.setConn(this.connState.program, newConn);
   };
 }
 

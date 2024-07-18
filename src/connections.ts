@@ -55,6 +55,15 @@ export class Connections {
     });
   };
 
+  getRemoteDeviceId = (
+    programType: ProgramType
+  ): RadioConnection["remoteDeviceId"] | undefined => {
+    const inputConnection = this.connections[programType];
+    return inputConnection?.type === "radio"
+      ? inputConnection.remoteDeviceId
+      : undefined;
+  };
+
   isConnected = (programType: ProgramType): boolean => {
     return this.connections[programType]?.status === ConnStatus.Connected;
   };

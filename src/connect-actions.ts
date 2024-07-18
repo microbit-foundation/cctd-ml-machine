@@ -123,8 +123,16 @@ export class ConnectActions {
 
   // TODO: Replace with real connecting logic
   connectMicrobitsSerial = async (): Promise<RadioConnectResult> => {
+    const programType = ProgramType.Input;
+
+    // TODO: Use deviceId to assign to connect microbits
+    const deviceId = this.connections.getRemoteDeviceId(programType);
+    if (!deviceId) {
+      throw new Error("Radio bridge device id not set");
+    }
+
     await delay(5000);
-    this.connections.setConnection(ProgramType.Input, {
+    this.connections.setConnection(programType, {
       status: ConnStatus.Connected,
       type: "radio",
     });

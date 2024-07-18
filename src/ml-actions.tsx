@@ -11,6 +11,7 @@ import { useLogging } from "./logging/logging-hooks";
 import { Confidences, mlSettings, predict, trainModel } from "./ml";
 import { Stage, Status, useStatus } from "./status-hook";
 import gestureData from "./test-fixtures/gesture-data.json";
+import { useConnections } from "./connection-hooks";
 
 const defaultRequiredConfidence = 0.8;
 
@@ -18,10 +19,19 @@ export const useMlActions = () => {
   const [gestures, setGestures] = useGestureData();
   const [status, setStatus] = useStatus();
   const logger = useLogging();
+  const { isInputConnected } = useConnections();
 
   const actions = useMemo<MlActions>(
-    () => new MlActions(logger, gestures, setGestures, status, setStatus),
-    [gestures, logger, setGestures, setStatus, status]
+    () =>
+      new MlActions(
+        logger,
+        isInputConnected,
+        gestures,
+        setGestures,
+        status,
+        setStatus
+      ),
+    [gestures, isInputConnected, logger, setGestures, setStatus, status]
   );
   return actions;
 };
@@ -31,6 +41,7 @@ class MlActions {
   private model: LayersModel | undefined;
   constructor(
     private logger: Logging,
+    private keepTesting: boolean,
     private gestureState: GestureContextState,
     private setGestureState: (gestureData: GestureContextState) => void,
     private status: Status,
@@ -73,9 +84,7 @@ class MlActions {
       clearInterval(this.predictionInterval);
     }
 
-    // TODO: Hook for input connection
-    const inputIsConnected = true;
-    if (inputIsConnected) {
+    if (this.keepTesting) {
       const confidences = await predict({
         model: this.model as LayersModel,
         // TODO: Get data from accelerometer instead of using dummy data

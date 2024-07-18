@@ -1,0 +1,147 @@
+import { ConnStatus, ConnType, Connections, ProgramType } from "./connections";
+import { getHexFileUrl } from "./device/get-hex-file";
+import MicrobitWebUSBConnection from "./device/microbit-usb";
+import { Logging } from "./logging/logging";
+
+export enum ConnectAndFlashResult {
+  Success,
+  Failed,
+  ErrorMicrobitUnsupported,
+  ErrorBadFirmware,
+  ErrorNoDeviceSelected,
+  ErrorUnableToClaimInterface,
+}
+
+export enum BluetoothConnectResult {
+  Success,
+  Failed,
+}
+
+export enum RadioConnectResult {
+  Success,
+  Failed,
+}
+
+const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+export class ConnectActions {
+  public device: MicrobitWebUSBConnection | undefined;
+  constructor(private logging: Logging, private connections: Connections) {}
+
+  requestUSBConnectionAndFlash = async (
+    hexType: ConnType,
+    progressCallback: (progress: number) => void
+  ): Promise<ConnectAndFlashResult> => {
+    try {
+      this.device = new MicrobitWebUSBConnection(this.logging);
+      await this.device.connect();
+      const result = await this.flashMicrobit(hexType, progressCallback);
+
+      // Save remote micro:bit device id is stored for passing it to bridge micro:bit
+      const deviceId = this.device.getDeviceId();
+      if (
+        !!deviceId &&
+        result === ConnectAndFlashResult.Success &&
+        hexType === ConnType.RadioRemote
+      ) {
+        this.connections.setConnection(ProgramType.Input, {
+          status: ConnStatus.Disconnected,
+          type: "radio",
+          remoteDeviceId: deviceId,
+        });
+      }
+
+      return result;
+    } catch (e) {
+      this.logging.error(
+        `USB request device failed/cancelled: ${JSON.stringify(e)}`
+      );
+      return this.handleConnectAndFlashError(e);
+    }
+  };
+
+  flashMicrobit = async (
+    hexType: ConnType,
+    progressCallback: (progress: number) => void
+  ): Promise<ConnectAndFlashResult> => {
+    if (!this.device) {
+      return ConnectAndFlashResult.Failed;
+    }
+    const deviceVersion = this.device.getBoardVersion();
+    const hexUrl = deviceVersion
+      ? getHexFileUrl(deviceVersion, hexType)
+      : deviceVersion;
+
+    if (!hexUrl) {
+      return ConnectAndFlashResult.ErrorMicrobitUnsupported;
+    }
+    try {
+      await this.device.flashHex(hexUrl, progressCallback);
+      return ConnectAndFlashResult.Success;
+    } catch (e) {
+      this.logging.error(`Flashing failed: ${JSON.stringify(e)}`);
+      return ConnectAndFlashResult.Failed;
+    }
+  };
+
+  private handleConnectAndFlashError = (
+    err: unknown
+  ): ConnectAndFlashResult => {
+    // We might get Error objects as Promise rejection arguments
+    if (
+      typeof err === "object" &&
+      err !== null &&
+      !("message" in err) &&
+      "promise" in err &&
+      "reason" in err
+    ) {
+      err = err.reason;
+    }
+    if (
+      typeof err !== "object" ||
+      err === null ||
+      !(typeof err === "object" && "message" in err)
+    ) {
+      return ConnectAndFlashResult.Failed;
+    }
+
+    const errMessage = err.message as string;
+
+    // This is somewhat fragile but worth it for scenario specific errors.
+    // These messages changed to be prefixed in 2023 so we've relaxed the checks.
+    if (/No valid interfaces found/.test(errMessage)) {
+      // This comes from DAPjs's WebUSB open.
+      return ConnectAndFlashResult.ErrorBadFirmware;
+    } else if (/No device selected/.test(errMessage)) {
+      return ConnectAndFlashResult.ErrorNoDeviceSelected;
+    } else if (/Unable to claim interface/.test(errMessage)) {
+      return ConnectAndFlashResult.ErrorUnableToClaimInterface;
+    } else {
+      return ConnectAndFlashResult.Failed;
+    }
+  };
+
+  // TODO: Replace with real connecting logic
+  connectMicrobitsSerial = async (): Promise<RadioConnectResult> => {
+    await delay(5000);
+    this.connections.setConnection(ProgramType.Input, {
+      status: ConnStatus.Connected,
+      type: "radio",
+    });
+    return RadioConnectResult.Success;
+  };
+
+  // TODO: Replace with real connecting logic
+  connectBluetooth = async (): Promise<BluetoothConnectResult> => {
+    await delay(5000);
+    const isSuccess = true;
+    if (isSuccess) {
+      this.connections.setConnection(ProgramType.Input, {
+        status: ConnStatus.Connected,
+        type: "bluetooth",
+      });
+      return BluetoothConnectResult.Success;
+    }
+    return BluetoothConnectResult.Failed;
+  };
+}

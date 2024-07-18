@@ -1,11 +1,43 @@
 import {
-  Conn,
-  ConnStage,
-  ConnState,
-  ConnStatus,
-  ConnType,
-  ProgramType,
-} from "./connections";
+  BluetoothConnectResult,
+  ConnectActions,
+  ConnectAndFlashResult,
+} from "./connect-actions";
+import { ConnType } from "./connections";
+
+export interface ConnectionFlowState {
+  stage: ConnStage;
+  type: ConnType;
+  isWebUsbSupported: boolean;
+  isWebBluetoothSupported: boolean;
+}
+
+export enum ConnStage {
+  // Happy flow stages
+  None,
+  Start,
+  ConnectCable,
+  WebUsbFlashingTutorial,
+  ManualFlashingTutorial,
+  ConnectBattery,
+  EnterBluetoothPattern,
+  ConnectBluetoothTutorial,
+
+  // Stages that are not user-controlled
+  WebUsbChooseMicrobit,
+  ConnectingBluetooth,
+  ConnectingMicrobits,
+  FlashingInProgress,
+
+  // Failure stages
+  TryAgainReplugMicrobit,
+  TryAgainCloseTabs,
+  TryAgainSelectMicrobit,
+  TryAgainBluetoothConnect,
+  BadFirmware,
+  MicrobitUnsupported,
+  WebUsbBluetoothUnsupported,
+}
 
 export enum ConnEvent {
   // User triggered events
@@ -41,43 +73,77 @@ export enum ConnEvent {
   ConnectingMicrobits,
 }
 
-type StageAndType = Pick<ConnState, "stage" | "type">;
+type StageAndType = Pick<ConnectionFlowState, "stage" | "type">;
 
-export class ConnectionActions {
+export class ConnectionFlowActions {
   constructor(
-    private connState: ConnState,
-    private setConnState: (state: ConnState) => void
+    private actions: ConnectActions,
+    private connState: ConnectionFlowState,
+    private setConnState: (state: ConnectionFlowState) => void
   ) {}
 
-  dispatchConnectFlowEvent = (event: ConnEvent) => {
-    this.setConnState(dispatchConnFlowEvent(this.connState, event));
+  start = () => {
+    this.dispatchEvent(ConnEvent.Start);
   };
 
-  private setConn = (programType: ProgramType, conn: Conn) => {
-    const { connections } = this.connState;
-    // Replace existing conn or add as new conn depending on whether a conn
-    // with the same programType already exists
-    const connExists = !!connections.find((c) => c.program === programType);
-    const newConnState = {
-      ...this.connState,
-      connections: connExists
-        ? connections.map((c) => (c.program === programType ? conn : c))
-        : [...connections, conn],
-    };
-    this.setConnState(newConnState);
+  dispatchEvent = (event: ConnEvent) => {
+    this.setConnState(getUpdatedConnState(this.connState, event));
   };
 
-  setBluetoothConn = ({ status }: { status?: ConnStatus }) => {
-    const newConn = {
-      program: this.connState.program,
-      status: status ?? ConnStatus.Disconnected,
-      type: ConnType.Bluetooth,
-    } as Conn;
-    this.setConn(this.connState.program, newConn);
+  connectAndflashMicrobit = async (
+    progressCallback: (progress: number) => void
+  ) => {
+    this.dispatchEvent(ConnEvent.WebUsbChooseMicrobit);
+    const result = await this.actions.requestUSBConnectionAndFlash(
+      this.connState.type,
+      progressCallback
+    );
+    if (
+      this.connState.type === ConnType.Bluetooth &&
+      result !== ConnectAndFlashResult.Success
+    ) {
+      return this.dispatchEvent(ConnEvent.InstructManualFlashing);
+    }
+    switch (result) {
+      case ConnectAndFlashResult.ErrorMicrobitUnsupported:
+        return this.dispatchEvent(ConnEvent.MicrobitUnsupported);
+      case ConnectAndFlashResult.ErrorBadFirmware:
+        return this.dispatchEvent(ConnEvent.BadFirmware);
+      case ConnectAndFlashResult.ErrorNoDeviceSelected:
+        return this.dispatchEvent(ConnEvent.TryAgainSelectMicrobit);
+      case ConnectAndFlashResult.ErrorUnableToClaimInterface:
+        return this.dispatchEvent(ConnEvent.TryAgainCloseTabs);
+      case ConnectAndFlashResult.Failed:
+        return this.dispatchEvent(ConnEvent.TryAgainReplugMicrobit);
+      case ConnectAndFlashResult.Success:
+        this.dispatchEvent(ConnEvent.FlashingComplete);
+        break;
+    }
+    // TODO: not sure if connecting microbits should be triggered here
+    if (this.connState.type === ConnType.RadioBridge) {
+      await this.actions.connectMicrobitsSerial();
+    }
+  };
+
+  connectBluetooth = async (onSuccess: () => void) => {
+    this.dispatchEvent(ConnEvent.ConnectingBluetooth);
+    const result = await this.actions.connectBluetooth();
+    if (result === BluetoothConnectResult.Success) {
+      onSuccess();
+    } else {
+      this.dispatchEvent(ConnEvent.TryAgainBluetoothConnect);
+    }
+  };
+
+  getDeviceId = () => {
+    return this.actions.device?.getDeviceId();
   };
 }
 
-export const dispatchConnFlowEvent = (state: ConnState, event: ConnEvent) => {
+export const getUpdatedConnState = (
+  state: ConnectionFlowState,
+  event: ConnEvent
+) => {
   switch (event) {
     case ConnEvent.Start:
       return {
@@ -124,8 +190,8 @@ export const dispatchConnFlowEvent = (state: ConnState, event: ConnEvent) => {
         ...state,
         stage:
           state.type === ConnType.RadioRemote
-            ? ConnStage.ConnectBattery
-            : ConnStage.ConnectingMicrobits,
+            ? ConnStage.ConnectingMicrobits
+            : ConnStage.ConnectBattery,
       };
     case ConnEvent.TryAgain:
       return {
@@ -140,7 +206,7 @@ export const dispatchConnFlowEvent = (state: ConnState, event: ConnEvent) => {
   }
 };
 
-const getStageAndTypeOrder = (state: ConnState): StageAndType[] => {
+const getStageAndTypeOrder = (state: ConnectionFlowState): StageAndType[] => {
   const { RadioRemote, RadioBridge, Bluetooth } = ConnType;
   if (state.type === ConnType.Bluetooth) {
     return [
@@ -179,7 +245,10 @@ const getStageAndTypeIdx = (
   throw new Error("Should be able to match stage and type again order");
 };
 
-const getNextStageAndType = (state: ConnState, step: number): StageAndType => {
+const getNextStageAndType = (
+  state: ConnectionFlowState,
+  step: number
+): StageAndType => {
   const order = getStageAndTypeOrder(state);
   const curr = { stage: state.stage, type: state.type };
   const currIdx = getStageAndTypeIdx(curr, order);

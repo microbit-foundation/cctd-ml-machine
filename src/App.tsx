@@ -21,9 +21,9 @@ import {
 import { deployment, useDeployment } from "./deployment";
 import { resourcesConfig, stepsConfig } from "./pages-config";
 import { LoggingProvider } from "./logging/logging-hooks";
-import { ConnectionProvider } from "./connections";
 import { GesturesProvider } from "./gestures-hooks";
 import { StatusProvider } from "./status-hook";
+import { ConnectionProvider } from "./connection-hooks";
 
 export interface ProviderLayoutProps {
   children: ReactNode;

@@ -1,9 +1,9 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { ConnStage, ConnType, useConnectionFlow } from "../connections";
-import { getHexFileUrl } from "../device/get-hex-file";
-import MicrobitWebUSBConnection from "../device/microbit-usb";
-import { useLogging } from "../logging/logging-hooks";
+import { microbitNameToBluetoothPattern } from "../bt-pattern-utils";
+import { ConnEvent, ConnStage } from "../connection-flow";
+import { useConnectionFlow } from "../connection-hooks";
+import { ConnType } from "../connections";
 import BrokenFirmwareDialog from "./BrokenFirmwareDialog";
 import ConnectBatteryDialog from "./ConnectBatteryDialog";
 import ConnectCableDialog from "./ConnectCableDialog";
@@ -17,15 +17,12 @@ import SelectMicrobitBluetoothDialog from "./SelectMicrobitBluetoothDialog";
 import SelectMicrobitUsbDialog from "./SelectMicrobitUsbDialog";
 import TryAgainDialog from "./TryAgainDialog";
 import UnsupportedMicrobitDialog from "./UnsupportedMicrobitDialog";
-import WhatYouWillNeedDialog from "./WhatYouWillNeedDialog";
 import WebUsbBluetoothUnsupportedDialog from "./WebUsbBluetoothUnsupportedDialog";
-import { ConnEvent } from "../connection-flow";
+import WhatYouWillNeedDialog from "./WhatYouWillNeedDialog";
 
 const ConnectionDialogs = () => {
-  // Check compatability
-  const logging = useLogging();
-
-  const { state, dispatch } = useConnectionFlow();
+  const { state, actions } = useConnectionFlow();
+  const dispatch = actions.dispatchEvent;
   const [flashProgress, setFlashProgress] = useState<number>(0);
   const { isOpen, onClose: onCloseDialog, onOpen } = useDisclosure();
   const [bluetoothPattern, setBluetoothPattern] = useState<BluetoothPattern>(
@@ -41,116 +38,25 @@ const ConnectionDialogs = () => {
     }
   }, [onOpen, state]);
 
-  const handleWebUsbError = (err: unknown) => {
-    if (state.type === ConnType.Bluetooth) {
-      return dispatch(ConnEvent.InstructManualFlashing);
-    }
-    // We might get Error objects as Promise rejection arguments
-    if (
-      typeof err === "object" &&
-      err !== null &&
-      !("message" in err) &&
-      "promise" in err &&
-      "reason" in err
-    ) {
-      err = err.reason;
-    }
-    if (
-      typeof err !== "object" ||
-      err === null ||
-      !(typeof err === "object" && "message" in err)
-    ) {
-      return dispatch(ConnEvent.TryAgainReplugMicrobit);
-    }
-
-    const errMessage = err.message as string;
-
-    // This is somewhat fragile but worth it for scenario specific errors.
-    // These messages changed to be prefixed in 2023 so we've relaxed the checks.
-    if (/No valid interfaces found/.test(errMessage)) {
-      // This comes from DAPjs's WebUSB open.
-      return dispatch(ConnEvent.BadFirmware);
-    } else if (/No device selected/.test(errMessage)) {
-      return dispatch(ConnEvent.TryAgainSelectMicrobit);
-    } else if (/Unable to claim interface/.test(errMessage)) {
-      return dispatch(ConnEvent.TryAgainCloseTabs);
-    } else {
-      return dispatch(ConnEvent.TryAgainReplugMicrobit);
-    }
-  };
-
-  const requestUSBConnectionAndFlash = async () => {
-    dispatch(ConnEvent.WebUsbChooseMicrobit);
-    try {
-      const device = new MicrobitWebUSBConnection(logging);
-      await device.connect();
-      await flashMicrobit(device);
-      if (state.type === ConnType.RadioBridge) {
-        connectMicrobitsSerial();
-      }
-    } catch (e) {
-      logging.error(
-        `USB request device failed/cancelled: ${JSON.stringify(e)}`
-      );
-      handleWebUsbError(e);
-    }
-  };
-
-  async function flashMicrobit(usb: MicrobitWebUSBConnection): Promise<void> {
-    const deviceVersion = usb.getBoardVersion();
-    const hexUrl = deviceVersion
-      ? getHexFileUrl(deviceVersion, state.type)
-      : deviceVersion;
-
-    if (!hexUrl) {
-      dispatch(ConnEvent.MicrobitUnsupported);
-      return;
-    }
-
-    await usb.flashHex(hexUrl, (progress) => {
+  const progressCallback = useCallback(
+    (progress: number) => {
       if (state.stage !== ConnStage.FlashingInProgress) {
         dispatch(ConnEvent.FlashingInProgress);
       }
       setFlashProgress(progress * 100);
-    });
+    },
+    [dispatch, state.stage]
+  );
 
-    // TODO:
-    // Store radio/bluetooth details. Radio is essential to pass to micro:bit 2.
-    // Bluetooth saves the user from entering the pattern.
-    // const deviceId = usb.getDeviceId();
-    // if (flashStage === "bluetooth") {
-    //   $btPatternInput = MBSpecs.Utility.nameToPattern(
-    //     MBSpecs.Utility.serialNumberToName(deviceId)
-    //   );
-    // }
-    // if (flashStage === "radio-remote") {
-    //   $radioBridgeRemoteDeviceId = deviceId;
-    // }
+  async function connectAndFlash(): Promise<void> {
+    await actions.connectAndflashMicrobit(progressCallback);
 
-    // Next UI state:
-    dispatch(ConnEvent.FlashingComplete);
+    const deviceId = actions.getDeviceId();
+    if (!!deviceId && state.type === ConnType.Bluetooth) {
+      // Infer pattern from device id saves the user from entering the pattern
+      setBluetoothPattern(microbitNameToBluetoothPattern(""));
+    }
   }
-
-  const connectMicrobitsSerial = () => {
-    dispatch(ConnEvent.ConnectingMicrobits);
-    // TODO: Replace with real connecting logic
-    setTimeout(() => {
-      onClose();
-    }, 5000);
-  };
-
-  const connectBluetooth = () => {
-    dispatch(ConnEvent.ConnectingBluetooth);
-    // TODO: Replace with real connecting logic
-    const isSuccess = true;
-    setTimeout(() => {
-      if (isSuccess) {
-        onClose();
-      } else {
-        dispatch(ConnEvent.TryAgainBluetoothConnect);
-      }
-    }, 5000);
-  };
 
   // TODO: Flag reconnect failed
   const reconnectFailed = false;
@@ -214,7 +120,7 @@ const ConnectionDialogs = () => {
         <SelectMicrobitUsbDialog
           {...dialogCommonProps}
           onBackClick={onBackClick}
-          onNextClick={requestUSBConnectionAndFlash}
+          onNextClick={connectAndFlash}
         />
       );
     }
@@ -252,7 +158,7 @@ const ConnectionDialogs = () => {
         <SelectMicrobitBluetoothDialog
           {...dialogCommonProps}
           onBackClick={onBackClick}
-          onNextClick={connectBluetooth}
+          onNextClick={() => actions.connectBluetooth(onClose)}
         />
       );
     }

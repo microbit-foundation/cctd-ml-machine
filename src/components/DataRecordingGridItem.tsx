@@ -14,7 +14,7 @@ import RecordIcon from "../images/record-icon.svg?react";
 import RecordingGraph from "./RecordingGraph";
 import RecordingDialog from "./RecordingDialog";
 import { useCallback, useRef } from "react";
-import { useConnections } from "../connection-hooks";
+import { useConnections } from "../connections-hooks";
 
 interface DataRecordingGridItemProps {
   data: GestureData;

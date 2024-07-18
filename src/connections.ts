@@ -1,34 +1,10 @@
-export enum ConnType {
-  Bluetooth,
-  RadioBridge,
-  RadioRemote,
-}
-
-export enum ConnStatus {
-  Disconnected,
-  Connected,
-}
-
-export interface BluetoothConnection {
-  status: ConnStatus;
-  type: "bluetooth";
-}
-export interface RadioConnection {
-  status: ConnStatus;
-  type: "radio";
-  // Remote micro:bit device id is stored for passing it to bridge micro:bit
-  remoteDeviceId: string;
-}
-
-export type Connection = BluetoothConnection | RadioConnection;
-
-export enum ProgramType {
-  Input,
-}
-
-export interface ConnectionsState {
-  [ProgramType.Input]?: Connection;
-}
+import {
+  Connection,
+  ConnectionStatus,
+  ConnectionsState,
+  ProgramType,
+  RadioConnection,
+} from "./connections-hooks";
 
 export class Connections {
   constructor(
@@ -37,29 +13,31 @@ export class Connections {
   ) {}
 
   setConnection = (
-    programType: ProgramType,
+    program: ProgramType,
     conn: {
-      status?: ConnStatus;
+      status?: ConnectionStatus;
       type?: "bluetooth" | "radio";
       remoteDeviceId?: RadioConnection["remoteDeviceId"];
     }
   ) => {
     const newConnection = {
-      status: ConnStatus.Disconnected,
-      ...this.connections[programType],
+      status: ConnectionStatus.Disconnected,
+      ...this.connections[program],
       ...conn,
-    };
+    } as Connection;
     if (
       !("status" in newConnection) ||
       !("type" in newConnection) ||
-      !("program" in newConnection) ||
-      !(newConnection.type === "radio" && !!newConnection.remoteDeviceId)
+      !(
+        newConnection.type === "bluetooth" ||
+        (newConnection.type === "radio" && !!newConnection.remoteDeviceId)
+      )
     ) {
       throw new Error(
         `Invalid new connection state: ${JSON.stringify(newConnection)}`
       );
     }
-    this.setConnections({ [programType]: newConnection as Connection });
+    this.setConnections({ [program]: newConnection });
   };
 
   getRemoteDeviceId = (
@@ -72,6 +50,6 @@ export class Connections {
   };
 
   isConnected = (programType: ProgramType): boolean => {
-    return this.connections[programType]?.status === ConnStatus.Connected;
+    return this.connections[programType]?.status === ConnectionStatus.Connected;
   };
 }

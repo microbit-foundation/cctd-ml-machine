@@ -1,42 +1,17 @@
 import { LayersModel } from "@tensorflow/tfjs";
-import { useMemo } from "react";
 import {
   ConfidentGestureData,
   GestureContextState,
   GestureData,
-  useGestureData,
 } from "./gestures-hooks";
-import { Logging } from "./logging/logging";
-import { useLogging } from "./logging/logging-hooks";
-import { Confidences, mlSettings, predict, trainModel } from "./ml";
-import { Stage, Status, useStatus } from "./status-hook";
 import gestureData from "./test-fixtures/gesture-data.json";
-import { useConnections } from "./connection-hooks";
+import { Logging } from "./logging/logging";
+import { Confidences, mlSettings, predict, trainModel } from "./ml";
+import { MlStage, MlStatus } from "./ml-status-hooks";
 
 const defaultRequiredConfidence = 0.8;
 
-export const useMlActions = () => {
-  const [gestures, setGestures] = useGestureData();
-  const [status, setStatus] = useStatus();
-  const logger = useLogging();
-  const { isInputConnected } = useConnections();
-
-  const actions = useMemo<MlActions>(
-    () =>
-      new MlActions(
-        logger,
-        isInputConnected,
-        gestures,
-        setGestures,
-        status,
-        setStatus
-      ),
-    [gestures, isInputConnected, logger, setGestures, setStatus, status]
-  );
-  return actions;
-};
-
-class MlActions {
+export class MlActions {
   private predictionInterval: NodeJS.Timeout | undefined;
   private model: LayersModel | undefined;
   constructor(
@@ -44,19 +19,19 @@ class MlActions {
     private keepTesting: boolean,
     private gestureState: GestureContextState,
     private setGestureState: (gestureData: GestureContextState) => void,
-    private status: Status,
-    private setStatus: (status: Status) => void
+    private status: MlStatus,
+    private setStatus: (status: MlStatus) => void
   ) {}
 
   trainModel = async () => {
-    this.setStatus({ stage: Stage.TrainingInProgress, progressValue: 0 });
+    this.setStatus({ stage: MlStage.TrainingInProgress, progressValue: 0 });
     const { data } = this.gestureState;
     const model = await trainModel({
       data,
       onTraining: (progressValue) =>
-        this.setStatus({ stage: Stage.TrainingInProgress, progressValue }),
-      onTrainEnd: () => this.setStatus({ stage: Stage.TrainingComplete }),
-      onError: () => this.setStatus({ stage: Stage.TrainingError }),
+        this.setStatus({ stage: MlStage.TrainingInProgress, progressValue }),
+      onTrainEnd: () => this.setStatus({ stage: MlStage.TrainingComplete }),
+      onError: () => this.setStatus({ stage: MlStage.TrainingError }),
     });
 
     if (!model) {
@@ -100,7 +75,7 @@ class MlActions {
   };
 
   private checkIfInterrupted = () =>
-    this.status.stage !== Stage.TrainingComplete;
+    this.status.stage !== MlStage.TrainingComplete;
 
   private updateGestureDataConfidences = (confidences: Confidences) => {
     const updatedGestureData = this.gestureState.data.map(

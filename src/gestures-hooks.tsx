@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 import { useStorage } from "./hooks/use-storage";
-import { Stage, Status, useStatus } from "./status-hook";
+import { MlStage, MlStatus, useMlStatus } from "./ml-status-hooks";
 import { isArray } from "./utils";
 export interface XYZData {
   x: number[];
@@ -154,7 +154,7 @@ export const GesturesProvider = ({ children }: { children: ReactNode }) => {
 
 export const useGestureActions = () => {
   const [gestures, setGestures] = useGestureData();
-  const [status, setStatus] = useStatus();
+  const [status, setStatus] = useMlStatus();
   const actions = useMemo<GestureActions>(
     () => new GestureActions(gestures, setGestures, status, setStatus),
     [gestures, setGestures, setStatus, status]
@@ -167,8 +167,8 @@ class GestureActions {
   constructor(
     private gestureState: GestureContextState,
     private setGestureState: (gestureData: GestureContextState) => void,
-    private status: Status,
-    private setStatus: (status: Status) => void
+    private status: MlStatus,
+    private setStatus: (status: MlStatus) => void
   ) {}
 
   hasGestures = (): boolean => {
@@ -187,10 +187,10 @@ class GestureActions {
 
     // Update training status
     const newTrainingStatus = !hasSufficientDataForTraining(data)
-      ? { stage: Stage.InsufficientData as const }
-      : isRetrainNeeded || this.status.stage === Stage.InsufficientData
+      ? { stage: MlStage.InsufficientData as const }
+      : isRetrainNeeded || this.status.stage === MlStage.InsufficientData
       ? // Updating status to retrain status is in status hook
-        { stage: Stage.NotTrained as const }
+        { stage: MlStage.NotTrained as const }
       : this.status;
 
     this.setStatus(newTrainingStatus);

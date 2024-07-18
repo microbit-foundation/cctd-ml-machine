@@ -1,12 +1,12 @@
 import { Button, Text, VStack } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { FormattedMessage } from "react-intl";
-import { useConnectionFlow } from "../connection-hooks";
+import { useConnectionStage } from "../connection-stage-hooks";
 
 const ConnectFirstView = () => {
   const connecting = false;
   const isReconnect = false;
-  const { actions } = useConnectionFlow();
+  const { actions } = useConnectionStage();
 
   const handleConnect = useCallback(() => {
     actions.start();

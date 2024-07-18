@@ -22,8 +22,9 @@ import { deployment, useDeployment } from "./deployment";
 import { resourcesConfig, stepsConfig } from "./pages-config";
 import { LoggingProvider } from "./logging/logging-hooks";
 import { GesturesProvider } from "./gestures-hooks";
-import { StatusProvider } from "./status-hook";
-import { ConnectionProvider } from "./connection-hooks";
+import { MlStatusProvider } from "./ml-status-hooks";
+import { ConnectionsProvider } from "./connections-hooks";
+import { ConnectionStageProvider } from "./connection-stage-hooks";
 
 export interface ProviderLayoutProps {
   children: ReactNode;
@@ -41,13 +42,15 @@ const Providers = ({ children }: ProviderLayoutProps) => {
           <ConsentProvider>
             <SettingsProvider>
               <GesturesProvider>
-                <StatusProvider>
-                  <ConnectionProvider>
-                    <TranslationProvider>
-                      <ErrorBoundary>{children}</ErrorBoundary>
-                    </TranslationProvider>
-                  </ConnectionProvider>
-                </StatusProvider>
+                <MlStatusProvider>
+                  <ConnectionsProvider>
+                    <ConnectionStageProvider>
+                      <TranslationProvider>
+                        <ErrorBoundary>{children}</ErrorBoundary>
+                      </TranslationProvider>
+                    </ConnectionStageProvider>
+                  </ConnectionsProvider>
+                </MlStatusProvider>
               </GesturesProvider>
             </SettingsProvider>
           </ConsentProvider>

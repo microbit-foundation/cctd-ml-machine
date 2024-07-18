@@ -2,12 +2,13 @@ import { Button, HStack, Portal, Text } from "@chakra-ui/react";
 import { useCallback, useRef } from "react";
 import { MdBolt } from "react-icons/md";
 import { FormattedMessage } from "react-intl";
-import { useConnectionFlow, useConnections } from "../connection-hooks";
+import { useConnections } from "../connections-hooks";
 import InfoToolTip from "./InfoToolTip";
 import LiveGraph from "./LiveGraph";
+import { useConnectionStage } from "../connection-stage-hooks";
 
 const LiveGraphPanel = () => {
-  const { actions } = useConnectionFlow();
+  const { actions } = useConnectionStage();
   const { isInputConnected } = useConnections();
   const parentPortalRef = useRef(null);
 

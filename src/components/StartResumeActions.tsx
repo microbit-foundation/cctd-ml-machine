@@ -2,10 +2,11 @@ import { Button, HStack, StackProps, useDisclosure } from "@chakra-ui/react";
 import { useCallback, useMemo } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
-import { useConnectionFlow, useConnections } from "../connection-hooks";
+import { useConnections } from "../connections-hooks";
 import { useGestureActions } from "../gestures-hooks";
 import { createStepPageUrl } from "../urls";
 import StartOverWarningDialog from "./StartOverWarningDialog";
+import { useConnectionStage } from "../connection-stage-hooks";
 
 const StartResumeActions = ({ ...props }: Partial<StackProps>) => {
   const gestureActions = useGestureActions();
@@ -15,7 +16,7 @@ const StartResumeActions = ({ ...props }: Partial<StackProps>) => {
   );
   const startOverWarningDialogDisclosure = useDisclosure();
   const navigate = useNavigate();
-  const { actions: connectionActions } = useConnectionFlow();
+  const { actions: connectionStageActions } = useConnectionStage();
   const { isInputConnected } = useConnections();
 
   const handleNavigateToAddData = useCallback(() => {
@@ -27,11 +28,11 @@ const StartResumeActions = ({ ...props }: Partial<StackProps>) => {
     if (isInputConnected) {
       handleNavigateToAddData();
     } else {
-      connectionActions.start();
+      connectionStageActions.start();
     }
   }, [
     gestureActions,
-    connectionActions,
+    connectionStageActions,
     handleNavigateToAddData,
     isInputConnected,
   ]);

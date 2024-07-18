@@ -1,4 +1,6 @@
-import { ConnStatus, ConnType, Connections, ProgramType } from "./connections";
+import { ConnectionFlowType } from "./connection-stage-hooks";
+import { Connections } from "./connections";
+import { ConnectionStatus, ProgramType } from "./connections-hooks";
 import { getHexFileUrl } from "./device/get-hex-file";
 import MicrobitWebUSBConnection from "./device/microbit-usb";
 import { Logging } from "./logging/logging";
@@ -29,7 +31,7 @@ export class ConnectActions {
   constructor(private logging: Logging, private connections: Connections) {}
 
   requestUSBConnectionAndFlash = async (
-    hexType: ConnType,
+    hexType: ConnectionFlowType,
     progressCallback: (progress: number) => void
   ): Promise<ConnectAndFlashResult> => {
     try {
@@ -42,10 +44,10 @@ export class ConnectActions {
       if (
         !!deviceId &&
         result === ConnectAndFlashResult.Success &&
-        hexType === ConnType.RadioRemote
+        hexType === ConnectionFlowType.RadioRemote
       ) {
         this.connections.setConnection(ProgramType.Input, {
-          status: ConnStatus.Disconnected,
+          status: ConnectionStatus.Disconnected,
           type: "radio",
           remoteDeviceId: deviceId,
         });
@@ -61,7 +63,7 @@ export class ConnectActions {
   };
 
   flashMicrobit = async (
-    hexType: ConnType,
+    hexType: ConnectionFlowType,
     progressCallback: (progress: number) => void
   ): Promise<ConnectAndFlashResult> => {
     if (!this.device) {
@@ -133,7 +135,7 @@ export class ConnectActions {
 
     await delay(5000);
     this.connections.setConnection(programType, {
-      status: ConnStatus.Connected,
+      status: ConnectionStatus.Connected,
       type: "radio",
     });
     return RadioConnectResult.Success;
@@ -145,7 +147,7 @@ export class ConnectActions {
     const isSuccess = true;
     if (isSuccess) {
       this.connections.setConnection(ProgramType.Input, {
-        status: ConnStatus.Connected,
+        status: ConnectionStatus.Connected,
         type: "bluetooth",
       });
       return BluetoothConnectResult.Success;
@@ -156,7 +158,7 @@ export class ConnectActions {
   // TODO: Replace with real disconnect logic
   disconnect = () => {
     this.connections.setConnection(ProgramType.Input, {
-      status: ConnStatus.Disconnected,
+      status: ConnectionStatus.Disconnected,
     });
   };
 }

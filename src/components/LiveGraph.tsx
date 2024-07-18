@@ -2,7 +2,7 @@ import { HStack } from "@chakra-ui/react";
 import { useSize } from "@chakra-ui/react-use-size";
 import { useEffect, useRef, useState } from "react";
 import { SmoothieChart, TimeSeries } from "smoothie";
-import { useConnections } from "../connection-hooks";
+import { useConnections } from "../connections-hooks";
 
 const LiveGraph = () => {
   const { isInputConnected } = useConnections();

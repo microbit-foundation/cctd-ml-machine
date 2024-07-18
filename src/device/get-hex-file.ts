@@ -1,11 +1,11 @@
-import { ConnType } from "../connections";
+import { ConnectionFlowType } from "../connection-stage-hooks";
 import { MicrobitVersion } from "./device";
 
 export const getHexFileUrl = (
   version: MicrobitVersion | "universal",
-  type: ConnType | "radio-remote-dev" | "radio-local"
+  type: ConnectionFlowType | "radio-remote-dev" | "radio-local"
 ): string | undefined => {
-  if (type === ConnType.Bluetooth) {
+  if (type === ConnectionFlowType.Bluetooth) {
     return {
       1: "firmware/ml-microbit-cpp-version-combined.hex",
       2: "firmware/MICROBIT.hex",
@@ -17,8 +17,8 @@ export const getHexFileUrl = (
   }
   return {
     "radio-remote-dev": "firmware/radio-remote-v0.2.1-dev.hex",
-    [ConnType.RadioRemote]: "firmware/radio-remote-v0.2.1.hex",
-    [ConnType.RadioBridge]: "firmware/radio-bridge-v0.2.1.hex",
+    [ConnectionFlowType.RadioRemote]: "firmware/radio-remote-v0.2.1.hex",
+    [ConnectionFlowType.RadioBridge]: "firmware/radio-bridge-v0.2.1.hex",
     "radio-local": "firmware/local-sensors-v0.2.1.hex",
   }[type];
 };

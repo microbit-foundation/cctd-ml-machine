@@ -7,7 +7,7 @@ import {
 } from "react";
 import { hasSufficientDataForTraining, useGestureData } from "./gestures-hooks";
 
-export enum Stage {
+export enum MlStage {
   RecordingData,
   InsufficientData,
   NotTrained,
@@ -17,57 +17,59 @@ export enum Stage {
   RetrainingNeeded,
 }
 
-export type Status =
+export type MlStatus =
   | {
-      stage: Stage.TrainingInProgress;
+      stage: MlStage.TrainingInProgress;
       progressValue: number;
     }
   | {
-      stage: Exclude<Stage, Stage.TrainingInProgress>;
+      stage: Exclude<MlStage, MlStage.TrainingInProgress>;
     };
 
-interface StatusState {
-  status: Status;
+interface MlStatusState {
+  status: MlStatus;
   hasTrainedBefore: boolean;
 }
 
-type StatusContextValue = [StatusState, (status: StatusState) => void];
+type MlStatusContextValue = [MlStatusState, (status: MlStatusState) => void];
 
-const StatusContext = createContext<StatusContextValue | undefined>(undefined);
+const MlStatusContext = createContext<MlStatusContextValue | undefined>(
+  undefined
+);
 
-export const StatusProvider = ({ children }: { children: ReactNode }) => {
+export const MlStatusProvider = ({ children }: { children: ReactNode }) => {
   const [gestureState] = useGestureData();
-  const statusContextValue = useState<StatusState>({
+  const statusContextValue = useState<MlStatusState>({
     status: {
       stage: hasSufficientDataForTraining(gestureState.data)
-        ? Stage.NotTrained
-        : Stage.InsufficientData,
+        ? MlStage.NotTrained
+        : MlStage.InsufficientData,
     },
     hasTrainedBefore: false,
   });
   return (
-    <StatusContext.Provider value={statusContextValue}>
+    <MlStatusContext.Provider value={statusContextValue}>
       {children}
-    </StatusContext.Provider>
+    </MlStatusContext.Provider>
   );
 };
 
-export const useStatus = (): [Status, (status: Status) => void] => {
-  const statusContextValue = useContext(StatusContext);
+export const useMlStatus = (): [MlStatus, (status: MlStatus) => void] => {
+  const statusContextValue = useContext(MlStatusContext);
   if (!statusContextValue) {
     throw new Error("Missing provider");
   }
   const [state, setState] = statusContextValue;
 
   const setStatus = useCallback(
-    (s: Status) => {
+    (s: MlStatus) => {
       const hasTrainedBefore =
-        s.stage === Stage.TrainingComplete || state.hasTrainedBefore;
+        s.stage === MlStage.TrainingComplete || state.hasTrainedBefore;
 
       // Update to retrain instead of not trained if has trained before
       const status =
-        hasTrainedBefore && s.stage === Stage.NotTrained
-          ? ({ stage: Stage.RetrainingNeeded } as const)
+        hasTrainedBefore && s.stage === MlStage.NotTrained
+          ? ({ stage: MlStage.RetrainingNeeded } as const)
           : s;
 
       setState({ ...state, status, hasTrainedBefore });

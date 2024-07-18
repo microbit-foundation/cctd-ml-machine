@@ -132,6 +132,18 @@ export const getUpdatedConnState = (
             ? ConnectionFlowStep.ConnectingMicrobits
             : ConnectionFlowStep.ConnectBattery,
       };
+    case ConnEvent.TryAgainBluetoothConnect:
+      return { ...state, step: ConnectionFlowStep.TryAgainBluetoothConnect };
+    case ConnEvent.TryAgainReplugMicrobit:
+      return { ...state, step: ConnectionFlowStep.TryAgainReplugMicrobit };
+    case ConnEvent.TryAgainCloseTabs:
+      return { ...state, step: ConnectionFlowStep.TryAgainCloseTabs };
+    case ConnEvent.TryAgainSelectMicrobit:
+      return { ...state, step: ConnectionFlowStep.TryAgainSelectMicrobit };
+    case ConnEvent.BadFirmware:
+      return { ...state, step: ConnectionFlowStep.BadFirmware };
+    case ConnEvent.MicrobitUnsupported:
+      return { ...state, step: ConnectionFlowStep.MicrobitUnsupported };
     case ConnEvent.TryAgain:
       return {
         ...state,

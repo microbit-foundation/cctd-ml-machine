@@ -2,10 +2,13 @@ import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 import { Connections } from "./connections";
 
 export enum ConnectionStatus {
-  Disconnected,
+  None, // Have not been connected before
+  Connecting,
   Connected,
+  Disconnected,
+  Reconnecting,
 }
-
+export type ConnectionType = "bluetooth" | "radio";
 export interface BluetoothConnection {
   status: ConnectionStatus;
   type: "bluetooth";
@@ -20,11 +23,11 @@ export interface RadioConnection {
 export type Connection = BluetoothConnection | RadioConnection;
 
 export enum ProgramType {
-  Input,
+  Input = "input",
 }
 
 export interface ConnectionsState {
-  [ProgramType.Input]?: Connection;
+  [ProgramType.Input]: Connection;
 }
 
 type ConnectionsContextValue = [
@@ -40,8 +43,17 @@ interface ConnectionsProviderProps {
   children: ReactNode;
 }
 
+const initialConnectionsState: ConnectionsState = {
+  input: {
+    type: "bluetooth",
+    status: ConnectionStatus.None,
+  },
+};
+
 export const ConnectionsProvider = ({ children }: ConnectionsProviderProps) => {
-  const connectionsContextValue = useState<ConnectionsState>({});
+  const connectionsContextValue = useState<ConnectionsState>(
+    initialConnectionsState
+  );
   return (
     <ConnectionsContext.Provider value={connectionsContextValue}>
       {children}
@@ -50,7 +62,9 @@ export const ConnectionsProvider = ({ children }: ConnectionsProviderProps) => {
 };
 
 export const useConnections = (): {
+  state: ConnectionsState;
   connections: Connections;
+  inputConnection: Connection;
   isInputConnected: boolean;
 } => {
   const connectionsContextValue = useContext(ConnectionsContext);
@@ -66,5 +80,10 @@ export const useConnections = (): {
     () => conn.isConnected(ProgramType.Input),
     [conn]
   );
-  return { connections: conn, isInputConnected };
+  return {
+    state,
+    connections: conn,
+    inputConnection: state[ProgramType.Input],
+    isInputConnected,
+  };
 };

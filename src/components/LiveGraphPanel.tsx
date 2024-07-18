@@ -1,25 +1,32 @@
 import { Button, HStack, Portal, Text } from "@chakra-ui/react";
-import { useCallback, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { MdBolt } from "react-icons/md";
 import { FormattedMessage } from "react-intl";
-import { useConnections } from "../connections-hooks";
+import { useConnectionStage } from "../connection-stage-hooks";
+import { ConnectionStatus, useConnections } from "../connections-hooks";
 import InfoToolTip from "./InfoToolTip";
 import LiveGraph from "./LiveGraph";
-import { useConnectionStage } from "../connection-stage-hooks";
 
 const LiveGraphPanel = () => {
   const { actions } = useConnectionStage();
-  const { isInputConnected } = useConnections();
+  const { inputConnection } = useConnections();
   const parentPortalRef = useRef(null);
 
-  const handleDisconnect = useCallback(() => {
-    actions.disconnect();
-  }, [actions]);
+  const connectBtnConfig = useMemo(
+    () =>
+      inputConnection.status === ConnectionStatus.None ||
+      inputConnection.status === ConnectionStatus.Connecting
+        ? {
+            textId: "footer.connectButton",
+            onClick: actions.start,
+          }
+        : {
+            textId: "actions.reconnect",
+            onClick: actions.reconnect,
+          },
+    [actions.reconnect, actions.start, inputConnection]
+  );
 
-  const handleConnect = useCallback(() => {
-    // TODO: Handle incompatibility dialog and reconnection
-    actions.start();
-  }, [actions]);
   return (
     <HStack
       position="relative"
@@ -40,14 +47,27 @@ const LiveGraphPanel = () => {
         >
           <HStack gap={4}>
             <LiveIndicator />
-            {isInputConnected ? (
-              <Button variant="primary" size="sm" onClick={handleDisconnect}>
+            {inputConnection.status === ConnectionStatus.Connected ? (
+              <Button variant="primary" size="sm" onClick={actions.disconnect}>
                 <FormattedMessage id="footer.disconnectButton" />
               </Button>
             ) : (
-              <Button variant="primary" size="sm" onClick={handleConnect}>
-                <FormattedMessage id="footer.connectButton" />
+              <Button
+                variant="primary"
+                size="sm"
+                isDisabled={
+                  inputConnection.status === ConnectionStatus.Reconnecting ||
+                  inputConnection.status === ConnectionStatus.Connecting
+                }
+                onClick={connectBtnConfig.onClick}
+              >
+                <FormattedMessage id={connectBtnConfig.textId} />
               </Button>
+            )}
+            {inputConnection.status === ConnectionStatus.Reconnecting && (
+              <Text rounded="4xl" bg="white" py="1px" fontWeight="bold">
+                <FormattedMessage id="connectMB.reconnecting" />
+              </Text>
             )}
           </HStack>
           <InfoToolTip

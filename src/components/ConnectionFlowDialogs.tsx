@@ -31,15 +31,19 @@ const ConnectionDialogs = () => {
   const [bluetoothPattern, setBluetoothPattern] = useState<BluetoothPattern>(
     Array(25).fill(false)
   );
+  const onClose = useCallback(() => {
+    dispatch(ConnEvent.Close);
+    onCloseDialog();
+  }, [dispatch, onCloseDialog]);
 
   useEffect(() => {
-    if (
-      stage.step === ConnectionFlowStep.Start ||
-      stage.step === ConnectionFlowStep.WebUsbBluetoothUnsupported
-    ) {
+    if (stage.step !== ConnectionFlowStep.None && !isOpen) {
       onOpen();
     }
-  }, [onOpen, stage]);
+    if (stage.step === ConnectionFlowStep.None && isOpen) {
+      onClose();
+    }
+  }, [isOpen, onClose, onOpen, stage]);
 
   const progressCallback = useCallback(
     (progress: number) => {
@@ -85,10 +89,7 @@ const ConnectionDialogs = () => {
     () => dispatch(ConnEvent.InstructManualFlashing),
     [dispatch]
   );
-  const onClose = useCallback(() => {
-    dispatch(ConnEvent.Close);
-    onCloseDialog();
-  }, [dispatch, onCloseDialog]);
+
   const dialogCommonProps = { isOpen, onClose };
 
   switch (stage.step) {
@@ -161,7 +162,7 @@ const ConnectionDialogs = () => {
         <SelectMicrobitBluetoothDialog
           {...dialogCommonProps}
           onBackClick={onBackClick}
-          onNextClick={() => actions.connectBluetooth(onClose)}
+          onNextClick={actions.connectBluetooth}
         />
       );
     }

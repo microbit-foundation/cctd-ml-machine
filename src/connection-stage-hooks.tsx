@@ -124,13 +124,18 @@ export const useConnectionStage = (): {
   }
   const [stage, setStage] = connectionStageContextValue;
   const logging = useLogging();
-  const { connections } = useConnections();
+  const { connections, state: connectionsState } = useConnections();
 
   const actions = useMemo(() => {
     const connectActions = new ConnectActions(logging, connections);
 
-    return new ConnectionStageActions(connectActions, stage, setStage);
-  }, [logging, connections, stage, setStage]);
+    return new ConnectionStageActions(
+      connectActions,
+      stage,
+      setStage,
+      connectionsState
+    );
+  }, [logging, connections, stage, setStage, connectionsState]);
 
   return {
     stage,

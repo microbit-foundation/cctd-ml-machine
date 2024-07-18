@@ -47,7 +47,6 @@ export class ConnectActions {
         hexType === ConnectionFlowType.RadioRemote
       ) {
         this.connections.setConnection(ProgramType.Input, {
-          status: ConnectionStatus.Disconnected,
           type: "radio",
           remoteDeviceId: deviceId,
         });
@@ -125,31 +124,29 @@ export class ConnectActions {
 
   // TODO: Replace with real connecting logic
   connectMicrobitsSerial = async (): Promise<RadioConnectResult> => {
-    const programType = ProgramType.Input;
+    const program = ProgramType.Input;
+    this.connections.setConnectingOrReconnecting(program, "radio");
 
     // TODO: Use deviceId to assign to connect microbits
-    const deviceId = this.connections.getRemoteDeviceId(programType);
+    const deviceId = this.connections.getRemoteDeviceId(program);
     if (!deviceId) {
       throw new Error("Radio bridge device id not set");
     }
 
     await delay(5000);
-    this.connections.setConnection(programType, {
-      status: ConnectionStatus.Connected,
-      type: "radio",
-    });
+    this.connections.setConnected(program, "radio");
     return RadioConnectResult.Success;
   };
 
   // TODO: Replace with real connecting logic
   connectBluetooth = async (): Promise<BluetoothConnectResult> => {
+    const program = ProgramType.Input;
+    this.connections.setConnectingOrReconnecting(program, "bluetooth");
+
     await delay(5000);
     const isSuccess = true;
     if (isSuccess) {
-      this.connections.setConnection(ProgramType.Input, {
-        status: ConnectionStatus.Connected,
-        type: "bluetooth",
-      });
+      this.connections.setConnected(program, "bluetooth");
       return BluetoothConnectResult.Success;
     }
     return BluetoothConnectResult.Failed;

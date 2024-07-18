@@ -152,4 +152,11 @@ export class ConnectActions {
     }
     return BluetoothConnectResult.Failed;
   };
+
+  // TODO: Replace with real disconnect logic
+  disconnect = () => {
+    this.connections.setConnection(ProgramType.Input, {
+      status: ConnStatus.Disconnected,
+    });
+  };
 }

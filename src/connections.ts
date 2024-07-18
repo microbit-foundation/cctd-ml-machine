@@ -36,23 +36,30 @@ export class Connections {
     private setConnections: (state: ConnectionsState) => void
   ) {}
 
-  get = () => this.connections;
-
   setConnection = (
     programType: ProgramType,
     conn: {
       status?: ConnStatus;
-      type: "bluetooth" | "radio";
+      type?: "bluetooth" | "radio";
       remoteDeviceId?: RadioConnection["remoteDeviceId"];
     }
   ) => {
-    this.setConnections({
-      [programType]: {
-        status: ConnStatus.Disconnected,
-        ...this.connections[programType],
-        ...conn,
-      } as Connection,
-    });
+    const newConnection = {
+      status: ConnStatus.Disconnected,
+      ...this.connections[programType],
+      ...conn,
+    };
+    if (
+      !("status" in newConnection) ||
+      !("type" in newConnection) ||
+      !("program" in newConnection) ||
+      !(newConnection.type === "radio" && !!newConnection.remoteDeviceId)
+    ) {
+      throw new Error(
+        `Invalid new connection state: ${JSON.stringify(newConnection)}`
+      );
+    }
+    this.setConnections({ [programType]: newConnection as Connection });
   };
 
   getRemoteDeviceId = (

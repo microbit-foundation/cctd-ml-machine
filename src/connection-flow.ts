@@ -135,6 +135,8 @@ export class ConnectionFlowActions {
     }
   };
 
+  disconnect = () => this.actions.disconnect();
+
   getDeviceId = () => {
     return this.actions.device?.getDeviceId();
   };

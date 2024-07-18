@@ -11,6 +11,10 @@ const LiveGraphPanel = () => {
   const { isInputConnected } = useConnections();
   const parentPortalRef = useRef(null);
 
+  const handleDisconnect = useCallback(() => {
+    actions.disconnect();
+  }, [actions]);
+
   const handleConnect = useCallback(() => {
     // TODO: Handle incompatibility dialog and reconnection
     actions.start();
@@ -36,7 +40,7 @@ const LiveGraphPanel = () => {
           <HStack gap={4}>
             <LiveIndicator />
             {isInputConnected ? (
-              <Button variant="primary" size="sm">
+              <Button variant="primary" size="sm" onClick={handleDisconnect}>
                 <FormattedMessage id="footer.disconnectButton" />
               </Button>
             ) : (

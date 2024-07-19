@@ -124,7 +124,7 @@ export class ConnectionStageActions {
   disconnect = () => this.actions.disconnect();
 
   getDeviceId = () => {
-    return this.actions.device?.getDeviceId();
+    return this.actions.usb?.getDeviceId();
   };
 
   reconnect = async () => {

@@ -1,5 +1,7 @@
 import {
   DeviceError,
+  ConnectionStatus as DeviceConnectionStatus,
+  MicrobitWebBluetoothConnection,
   MicrobitWebUSBConnection,
 } from "@microbit/microbit-connection";
 import { ConnectionFlowType } from "./connection-stage-hooks";
@@ -7,6 +9,7 @@ import { Connections } from "./connections";
 import { ConnectionStatus, ProgramType } from "./connections-hooks";
 import { getFlashDataSource } from "./device/get-hex-file";
 import { Logging } from "./logging/logging";
+import { AccelerometerDataEvent } from "../../connection/build/accelerometer";
 
 export enum ConnectAndFlashResult {
   Success,
@@ -31,8 +34,16 @@ export enum ConnectResult {
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 export class ConnectActions {
-  public device: MicrobitWebUSBConnection | undefined;
-  constructor(private logging: Logging, private connections: Connections) {}
+  public usb: MicrobitWebUSBConnection;
+  public bluetooth: MicrobitWebBluetoothConnection;
+  private accelerometerListener = (e: AccelerometerDataEvent) => {
+    console.log(e.data);
+  };
+
+  constructor(private logging: Logging, private connections: Connections) {
+    this.usb = new MicrobitWebUSBConnection({ logging });
+    this.bluetooth = new MicrobitWebBluetoothConnection({ logging });
+  }
 
   requestUSBConnectionAndFlash = async (
     hexType: ConnectionFlowType,
@@ -42,11 +53,12 @@ export class ConnectActions {
     | { result: ConnectAndFlashFailResult; deviceId?: string }
   > => {
     try {
-      this.device = new MicrobitWebUSBConnection({ logging: this.logging });
-      await this.device.connect();
+      // TODO: move this to init point
+      await this.usb.initialize();
+      await this.usb.connect();
       const result = await this.flashMicrobit(hexType, progressCallback);
       // Save remote micro:bit device id is stored for passing it to bridge micro:bit
-      const deviceId = this.device.getDeviceId()?.toString();
+      const deviceId = this.usb.getDeviceId()?.toString();
       if (!deviceId) {
         return { result: ConnectAndFlashResult.Failed };
       }
@@ -63,7 +75,7 @@ export class ConnectActions {
     flowType: ConnectionFlowType,
     progress: (progress: number) => void
   ): Promise<ConnectAndFlashResult> => {
-    if (!this.device) {
+    if (!this.usb) {
       return ConnectAndFlashResult.Failed;
     }
     const data = getFlashDataSource(flowType);
@@ -72,7 +84,7 @@ export class ConnectActions {
       return ConnectAndFlashResult.ErrorMicrobitUnsupported;
     }
     try {
-      await this.device.flash(data, {
+      await this.usb.flash(data, {
         partial: true,
         progress: (v) => progress(v ?? 100),
       });
@@ -114,13 +126,19 @@ export class ConnectActions {
 
   // TODO: Replace with real connecting logic
   connectBluetooth = async (): Promise<ConnectResult> => {
-    await delay(5000);
-
-    const hasFailed = false;
-    if (hasFailed) {
-      return ConnectResult.ManualConnectFailed;
+    // TODO: move this to init point
+    await this.bluetooth.initialize();
+    this.bluetooth.addEventListener(
+      "accelerometerdatachanged",
+      this.accelerometerListener
+    );
+    await this.bluetooth.connect({
+      // TODO: name
+    });
+    if (this.bluetooth.status === DeviceConnectionStatus.CONNECTED) {
+      return ConnectResult.Success;
     }
-    return ConnectResult.Success;
+    return ConnectResult.ManualConnectFailed;
   };
 
   // TODO: Replace with real disconnect logic

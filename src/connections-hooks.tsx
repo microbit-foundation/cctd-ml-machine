@@ -9,12 +9,17 @@ export enum ConnectionStatus {
   Reconnecting,
 }
 export type ConnectionType = "bluetooth" | "radio";
-export interface BluetoothConnection {
+
+interface ConnectionBase {
   status: ConnectionStatus;
+  // Number of times there have been consecutive reconnect fails
+  // for determining which reconnection dialog to show
+  reconnectFailStreak: number;
+}
+export interface BluetoothConnection extends ConnectionBase {
   type: "bluetooth";
 }
-export interface RadioConnection {
-  status: ConnectionStatus;
+export interface RadioConnection extends ConnectionBase {
   type: "radio";
   // Remote micro:bit device id is stored for passing it to bridge micro:bit
   remoteDeviceId: string;
@@ -47,6 +52,7 @@ const initialConnectionsState: ConnectionsState = {
   input: {
     type: "bluetooth",
     status: ConnectionStatus.None,
+    reconnectFailStreak: 0,
   },
 };
 

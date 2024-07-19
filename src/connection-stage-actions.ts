@@ -1,5 +1,5 @@
 import {
-  BluetoothConnectResult,
+  ConnectResult,
   ConnectActions,
   ConnectAndFlashResult,
 } from "./connect-actions";
@@ -9,16 +9,20 @@ import {
   ConnectionFlowType,
   ConnectionStage,
 } from "./connection-stage-hooks";
+import { Connections } from "./connections";
 import { ConnectionsState, ProgramType } from "./connections-hooks";
 
 type Stage = Pick<ConnectionStage, "step" | "type">;
 
 export class ConnectionStageActions {
+  private program: ProgramType = ProgramType.Input;
+
   constructor(
     private actions: ConnectActions,
     private stage: ConnectionStage,
     private setStage: (stage: ConnectionStage) => void,
-    private connectionsState: ConnectionsState
+    private connectionsState: ConnectionsState,
+    private connections: Connections
   ) {}
 
   start = () => {
@@ -33,10 +37,12 @@ export class ConnectionStageActions {
     progressCallback: (progress: number) => void
   ) => {
     this.dispatchEvent(ConnEvent.WebUsbChooseMicrobit);
-    const result = await this.actions.requestUSBConnectionAndFlash(
-      this.stage.type,
-      progressCallback
-    );
+    const { result, deviceId } =
+      await this.actions.requestUSBConnectionAndFlash(
+        this.stage.type,
+        progressCallback
+      );
+
     if (
       this.stage.type === ConnectionFlowType.Bluetooth &&
       result !== ConnectAndFlashResult.Success
@@ -59,27 +65,60 @@ export class ConnectionStageActions {
       case ConnectAndFlashResult.Success:
         break;
     }
+
+    // Save remote micro:bit device id for passing it to bridge micro:bit
+    if (this.stage.type === ConnectionFlowType.RadioRemote) {
+      this.connections.setConnection(ProgramType.Input, {
+        type: "radio",
+        remoteDeviceId: deviceId,
+      });
+    }
+
     // TODO: not sure if connecting microbits should be triggered here
     if (this.stage.type === ConnectionFlowType.RadioBridge) {
       return await this.connectMicrobits();
     }
-    return this.dispatchEvent(ConnEvent.FlashingComplete);
+    return this.dispatchEvent(ConnEvent.ConnectBattery);
   };
 
   connectBluetooth = async () => {
     this.dispatchEvent(ConnEvent.ConnectingBluetooth);
+    this.connections.setConnectingOrReconnecting(this.program, "bluetooth");
     const result = await this.actions.connectBluetooth();
-    if (result === BluetoothConnectResult.Success) {
-      this.dispatchEvent(ConnEvent.Close);
-    } else {
-      this.dispatchEvent(ConnEvent.TryAgainBluetoothConnect);
-    }
+    this.handleConnectResult(result);
   };
 
   connectMicrobits = async () => {
     this.dispatchEvent(ConnEvent.ConnectingMicrobits);
-    await this.actions.connectMicrobitsSerial();
-    this.dispatchEvent(ConnEvent.Close);
+    this.connections.setConnectingOrReconnecting(this.program, "radio");
+    const deviceId = this.connections.getRemoteDeviceId(this.program);
+    if (deviceId) {
+      const result = await this.actions.connectMicrobitsSerial(deviceId);
+      this.handleConnectResult(result);
+    } else {
+      this.dispatchEvent(ConnEvent.TryAgainReplugMicrobit);
+    }
+  };
+
+  handleConnectResult = (result: ConnectResult) => {
+    if (result === ConnectResult.Success) {
+      this.connections.setConnected(this.program);
+      return this.dispatchEvent(ConnEvent.Close);
+    }
+    const reconnectFailStreak = this.connections.setConnectionFailedStreak(
+      this.program
+    );
+    if (reconnectFailStreak === 0) {
+      return this.dispatchEvent(ConnEvent.ConnectFailed);
+    }
+    if (reconnectFailStreak === 1) {
+      return this.dispatchEvent(
+        result === ConnectResult.ManualConnectFailed
+          ? ConnEvent.ReconnectManualFail
+          : ConnEvent.ReconnectAutoFail
+      );
+    }
+    return this.dispatchEvent(ConnEvent.ReconnectFailedTwice);
   };
 
   disconnect = () => this.actions.disconnect();
@@ -89,8 +128,7 @@ export class ConnectionStageActions {
   };
 
   reconnect = async () => {
-    const program = ProgramType.Input;
-    if (this.connectionsState[program]?.type === "bluetooth") {
+    if (this.connectionsState[this.program]?.type === "bluetooth") {
       await this.connectBluetooth();
     } else {
       await this.connectMicrobits();
@@ -113,7 +151,7 @@ export const getUpdatedConnState = (
       };
     case ConnEvent.Close:
       return { ...state, step: ConnectionFlowStep.None };
-    case ConnEvent.FlashingComplete:
+    case ConnEvent.ConnectBattery:
     case ConnEvent.SkipFlashing:
       return { ...state, step: ConnectionFlowStep.ConnectBattery };
     case ConnEvent.FlashingInProgress:
@@ -144,8 +182,14 @@ export const getUpdatedConnState = (
         step: ConnectionFlowStep.Start,
         type: ConnectionFlowType.Bluetooth,
       };
-    case ConnEvent.TryAgainBluetoothConnect:
-      return { ...state, step: ConnectionFlowStep.TryAgainBluetoothConnect };
+    case ConnEvent.ConnectFailed:
+      return {
+        ...state,
+        step:
+          state.type === ConnectionFlowType.Bluetooth
+            ? ConnectionFlowStep.TryAgainBluetoothConnect
+            : ConnectionFlowStep.TryAgainReplugMicrobit,
+      };
     case ConnEvent.TryAgainReplugMicrobit:
       return { ...state, step: ConnectionFlowStep.TryAgainReplugMicrobit };
     case ConnEvent.TryAgainCloseTabs:
@@ -164,6 +208,12 @@ export const getUpdatedConnState = (
             ? ConnectionFlowStep.ConnectBluetoothTutorial
             : ConnectionFlowStep.ConnectCable,
       };
+    case ConnEvent.ReconnectAutoFail:
+      return { ...state, step: ConnectionFlowStep.ReconnectAutoFail };
+    case ConnEvent.ReconnectManualFail:
+      return { ...state, step: ConnectionFlowStep.ReconnectManualFail };
+    case ConnEvent.ReconnectFailedTwice:
+      return { ...state, step: ConnectionFlowStep.ReconnectFailedTwice };
     default:
       return state;
   }

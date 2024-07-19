@@ -14,14 +14,15 @@ export enum ConnectAndFlashResult {
   ErrorUnableToClaimInterface,
 }
 
-export enum BluetoothConnectResult {
-  Success,
-  Failed,
-}
+type ConnectAndFlashFailResult = Exclude<
+  ConnectAndFlashResult,
+  ConnectAndFlashResult.Success
+>;
 
-export enum RadioConnectResult {
+export enum ConnectResult {
   Success,
-  Failed,
+  ManualConnectFailed,
+  AutomaticConnectFailed,
 }
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
@@ -33,31 +34,25 @@ export class ConnectActions {
   requestUSBConnectionAndFlash = async (
     hexType: ConnectionFlowType,
     progressCallback: (progress: number) => void
-  ): Promise<ConnectAndFlashResult> => {
+  ): Promise<
+    | { result: ConnectAndFlashResult.Success; deviceId: string }
+    | { result: ConnectAndFlashFailResult; deviceId?: string }
+  > => {
     try {
       this.device = new MicrobitWebUSBConnection({ logging: this.logging });
       await this.device.connect();
       const result = await this.flashMicrobit(hexType, progressCallback);
-
       // Save remote micro:bit device id is stored for passing it to bridge micro:bit
       const deviceId = this.device.getDeviceId()?.toString();
-      if (
-        !!deviceId &&
-        result === ConnectAndFlashResult.Success &&
-        hexType === ConnectionFlowType.RadioRemote
-      ) {
-        this.connections.setConnection(ProgramType.Input, {
-          type: "radio",
-          remoteDeviceId: deviceId,
-        });
+      if (!deviceId) {
+        return { result: ConnectAndFlashResult.Failed };
       }
-
-      return result;
+      return { result, deviceId };
     } catch (e) {
       this.logging.error(
         `USB request device failed/cancelled: ${JSON.stringify(e)}`
       );
-      return this.handleConnectAndFlashError(e);
+      return { result: this.handleConnectAndFlashError(e) };
     }
   };
 
@@ -87,7 +82,7 @@ export class ConnectActions {
 
   private handleConnectAndFlashError = (
     err: unknown
-  ): ConnectAndFlashResult => {
+  ): ConnectAndFlashFailResult => {
     // We might get Error objects as Promise rejection arguments
     if (
       typeof err === "object" &&
@@ -123,33 +118,25 @@ export class ConnectActions {
   };
 
   // TODO: Replace with real connecting logic
-  connectMicrobitsSerial = async (): Promise<RadioConnectResult> => {
-    const program = ProgramType.Input;
-    this.connections.setConnectingOrReconnecting(program, "radio");
+  connectMicrobitsSerial = async (deviceId: string): Promise<ConnectResult> => {
+    await delay(5000);
 
     // TODO: Use deviceId to assign to connect microbits
-    const deviceId = this.connections.getRemoteDeviceId(program);
     if (!deviceId) {
-      throw new Error("Radio bridge device id not set");
+      return ConnectResult.ManualConnectFailed;
     }
-
-    await delay(5000);
-    this.connections.setConnected(program, "radio");
-    return RadioConnectResult.Success;
+    return ConnectResult.ManualConnectFailed;
   };
 
   // TODO: Replace with real connecting logic
-  connectBluetooth = async (): Promise<BluetoothConnectResult> => {
-    const program = ProgramType.Input;
-    this.connections.setConnectingOrReconnecting(program, "bluetooth");
-
+  connectBluetooth = async (): Promise<ConnectResult> => {
     await delay(5000);
-    const isSuccess = true;
-    if (isSuccess) {
-      this.connections.setConnected(program, "bluetooth");
-      return BluetoothConnectResult.Success;
+
+    const hasFailed = false;
+    if (hasFailed) {
+      return ConnectResult.ManualConnectFailed;
     }
-    return BluetoothConnectResult.Failed;
+    return ConnectResult.Success;
   };
 
   // TODO: Replace with real disconnect logic

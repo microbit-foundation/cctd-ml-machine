@@ -231,10 +231,19 @@ const ConnectionDialogs = () => {
       );
     }
     case ConnectionFlowStep.WebUsbBluetoothUnsupported: {
-      console.log("here");
       return (
         <WebUsbBluetoothUnsupportedDialog isOpen={isOpen} onClose={onClose} />
       );
+    }
+    // TODO: Reconnect dialogs
+    case ConnectionFlowStep.ReconnectAutoFail: {
+      return <></>;
+    }
+    case ConnectionFlowStep.ReconnectManualFail: {
+      return <></>;
+    }
+    case ConnectionFlowStep.ReconnectFailedTwice: {
+      return <></>;
     }
   }
 };

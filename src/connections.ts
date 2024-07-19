@@ -21,6 +21,7 @@ export class Connections {
     if (
       !("status" in objValue) ||
       !("type" in objValue) ||
+      !("reconnectFailStreak" in objValue) ||
       !(
         objValue.type === "bluetooth" ||
         (objValue.type === "radio" && "remoteDeviceId" in objValue)
@@ -31,14 +32,7 @@ export class Connections {
     return true;
   };
 
-  setConnection = (
-    program: ProgramType,
-    conn: {
-      status?: ConnectionStatus;
-      type?: ConnectionType;
-      remoteDeviceId?: RadioConnection["remoteDeviceId"];
-    }
-  ) => {
+  setConnection = (program: ProgramType, conn: Partial<Connection>) => {
     const existingConn = this.connections[program];
     const newConnection = {
       ...existingConn,
@@ -67,8 +61,8 @@ export class Connections {
     });
   };
 
-  setConnected = (program: ProgramType, type: ConnectionType) => {
-    this.setConnection(program, { status: ConnectionStatus.Connected, type });
+  setConnected = (program: ProgramType) => {
+    this.setConnection(program, { status: ConnectionStatus.Connected });
   };
 
   getRemoteDeviceId = (
@@ -82,5 +76,18 @@ export class Connections {
 
   isConnected = (programType: ProgramType): boolean => {
     return this.connections[programType].status === ConnectionStatus.Connected;
+  };
+
+  setConnectionFailedStreak = (programType: ProgramType): number => {
+    const existingConn = this.connections[programType];
+    const reconnectFailStreak =
+      existingConn.status === ConnectionStatus.Reconnecting
+        ? existingConn.reconnectFailStreak + 1
+        : existingConn.reconnectFailStreak;
+    this.setConnection(programType, {
+      status: ConnectionStatus.Disconnected,
+      reconnectFailStreak,
+    });
+    return reconnectFailStreak;
   };
 }

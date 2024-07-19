@@ -44,6 +44,10 @@ export enum ConnectionFlowStep {
   BadFirmware,
   MicrobitUnsupported,
   WebUsbBluetoothUnsupported,
+
+  ReconnectAutoFail,
+  ReconnectManualFail,
+  ReconnectFailedTwice,
 }
 
 export enum ConnEvent {
@@ -60,7 +64,7 @@ export enum ConnEvent {
   // Web USB Flashing events
   WebUsbChooseMicrobit,
   FlashingInProgress,
-  FlashingComplete,
+  ConnectBattery,
 
   // Web USB Flashing failure events
   TryAgainReplugMicrobit,
@@ -73,11 +77,14 @@ export enum ConnEvent {
   // Bluetooth connection event
   ConnectingBluetooth,
 
-  // Bluetooth connection failure event
-  TryAgainBluetoothConnect,
-
   // Connecting microbits for radio connection
   ConnectingMicrobits,
+
+  // Connection failure event
+  ConnectFailed,
+  ReconnectAutoFail,
+  ReconnectManualFail,
+  ReconnectFailedTwice,
 }
 
 type ConnectionStageContextValue = [
@@ -133,7 +140,8 @@ export const useConnectionStage = (): {
       connectActions,
       stage,
       setStage,
-      connectionsState
+      connectionsState,
+      connections
     );
   }, [logging, connections, stage, setStage, connectionsState]);
 

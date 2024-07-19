@@ -44,6 +44,18 @@ const Button: StyleConfig = {
         borderColor: "brand.700",
       },
     }),
+    led: () => ({
+      borderWidth: "2px",
+      borderRadius: 5,
+      borderColor: "green.500",
+      color: "green.700",
+      bg: "transparent",
+      _hover: {
+        cursor: "pointer",
+        borderColor: "green.500",
+      },
+      _active: { bg: "green.500", borderColor: "green.500" },
+    }),
     ghost: () => ({
       color: "black",
       bg: "transparent",

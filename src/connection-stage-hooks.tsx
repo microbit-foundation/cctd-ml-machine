@@ -5,9 +5,9 @@ import { useConnections } from "./connections-hooks";
 import { ConnectActions } from "./connect-actions";
 
 export enum ConnectionFlowType {
-  Bluetooth,
-  RadioBridge,
-  RadioRemote,
+  Bluetooth = "bluetooth",
+  RadioBridge = "bridge",
+  RadioRemote = "remote",
 }
 
 export interface ConnectionStage {

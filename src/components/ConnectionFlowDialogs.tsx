@@ -22,6 +22,7 @@ import TryAgainDialog from "./TryAgainDialog";
 import UnsupportedMicrobitDialog from "./UnsupportedMicrobitDialog";
 import WebUsbBluetoothUnsupportedDialog from "./WebUsbBluetoothUnsupportedDialog";
 import WhatYouWillNeedDialog from "./WhatYouWillNeedDialog";
+import ReconnectErrorDialog from "./ReconnectErrorDialog";
 
 const ConnectionDialogs = () => {
   const { stage, actions } = useConnectionStage();
@@ -213,8 +214,7 @@ const ConnectionDialogs = () => {
     case ConnectionFlowStep.BadFirmware: {
       return (
         <BrokenFirmwareDialog
-          onClose={onClose}
-          isOpen={isOpen}
+          {...dialogCommonProps}
           onSkip={onInstructManualFlashing}
           onTryAgain={onTryAgain}
         />
@@ -223,24 +223,26 @@ const ConnectionDialogs = () => {
     case ConnectionFlowStep.MicrobitUnsupported: {
       return (
         <UnsupportedMicrobitDialog
-          onClose={onClose}
-          isOpen={isOpen}
+          {...dialogCommonProps}
           onStartBluetoothClick={onStartBluetooth}
           isBluetoothSupported={stage.isWebBluetoothSupported}
         />
       );
     }
     case ConnectionFlowStep.WebUsbBluetoothUnsupported: {
-      return (
-        <WebUsbBluetoothUnsupportedDialog isOpen={isOpen} onClose={onClose} />
-      );
+      return <WebUsbBluetoothUnsupportedDialog {...dialogCommonProps} />;
     }
     // TODO: Reconnect dialogs
+    case ConnectionFlowStep.ReconnectManualFail:
     case ConnectionFlowStep.ReconnectAutoFail: {
-      return <></>;
-    }
-    case ConnectionFlowStep.ReconnectManualFail: {
-      return <></>;
+      return (
+        <ReconnectErrorDialog
+          {...dialogCommonProps}
+          onReconnect={actions.start}
+          flowType={stage.type}
+          errorStep={stage.step}
+        />
+      );
     }
     case ConnectionFlowStep.ReconnectFailedTwice: {
       return <></>;

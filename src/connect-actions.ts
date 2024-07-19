@@ -1,4 +1,7 @@
-import { MicrobitWebUSBConnection } from "@microbit/microbit-connection";
+import {
+  DeviceError,
+  MicrobitWebUSBConnection,
+} from "@microbit/microbit-connection";
 import { ConnectionFlowType } from "./connection-stage-hooks";
 import { Connections } from "./connections";
 import { ConnectionStatus, ProgramType } from "./connections-hooks";
@@ -83,38 +86,19 @@ export class ConnectActions {
   private handleConnectAndFlashError = (
     err: unknown
   ): ConnectAndFlashFailResult => {
-    // We might get Error objects as Promise rejection arguments
-    if (
-      typeof err === "object" &&
-      err !== null &&
-      !("message" in err) &&
-      "promise" in err &&
-      "reason" in err
-    ) {
-      err = err.reason;
+    if (err instanceof DeviceError) {
+      switch (err.code) {
+        case "clear-connect":
+          return ConnectAndFlashResult.ErrorUnableToClaimInterface;
+        case "no-device-selected":
+          return ConnectAndFlashResult.ErrorNoDeviceSelected;
+        case "update-req":
+          return ConnectAndFlashResult.ErrorBadFirmware;
+        default:
+          return ConnectAndFlashResult.Failed;
+      }
     }
-    if (
-      typeof err !== "object" ||
-      err === null ||
-      !(typeof err === "object" && "message" in err)
-    ) {
-      return ConnectAndFlashResult.Failed;
-    }
-
-    const errMessage = err.message as string;
-
-    // This is somewhat fragile but worth it for scenario specific errors.
-    // These messages changed to be prefixed in 2023 so we've relaxed the checks.
-    if (/No valid interfaces found/.test(errMessage)) {
-      // This comes from DAPjs's WebUSB open.
-      return ConnectAndFlashResult.ErrorBadFirmware;
-    } else if (/No device selected/.test(errMessage)) {
-      return ConnectAndFlashResult.ErrorNoDeviceSelected;
-    } else if (/Unable to claim interface/.test(errMessage)) {
-      return ConnectAndFlashResult.ErrorUnableToClaimInterface;
-    } else {
-      return ConnectAndFlashResult.Failed;
-    }
+    return ConnectAndFlashResult.Failed;
   };
 
   // TODO: Replace with real connecting logic

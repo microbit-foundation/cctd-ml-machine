@@ -37,6 +37,7 @@ export class ConnectActions {
   public usb: MicrobitWebUSBConnection;
   public bluetooth: MicrobitWebBluetoothConnection;
   private accelerometerListener = (e: AccelerometerDataEvent) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     console.log(e.data);
   };
 

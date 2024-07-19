@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 import { ConnectionStageActions } from "./connection-stage-actions";
 import { useLogging } from "./logging/logging-hooks";
-import { useConnections } from "./connections-hooks";
 import { ConnectActions } from "./connect-actions";
 
 export enum ConnectionFlowType {
@@ -10,13 +9,32 @@ export enum ConnectionFlowType {
   RadioRemote = "remote",
 }
 
-export interface ConnectionStage {
-  step: ConnectionFlowStep;
-  type: ConnectionFlowType;
+export enum ConnectionStatus {
+  None, // Have not been connected before
+  Connecting,
+  Connected,
+  Disconnected,
+  Reconnecting,
+}
 
-  // TODO: Separate into different hook
-  isWebUsbSupported: boolean;
+export type ConnectionType = "bluetooth" | "radio";
+
+export interface ConnectionStage {
+  // For connection flow
+  flowStep: ConnectionFlowStep;
+  flowType: ConnectionFlowType;
+  // Number of times there have been consecutive reconnect fails
+  // for determining which reconnection dialog to show
+  reconnectFailStreak: number;
+
+  // Connection details
+  deviceIds: number[];
+  status: ConnectionStatus;
+  connType: ConnectionType;
+
+  // Compatibility
   isWebBluetoothSupported: boolean;
+  isWebUsbSupported: boolean;
 }
 
 export enum ConnectionFlowStep {
@@ -99,21 +117,23 @@ interface ConnectionStageProviderProps {
   children: ReactNode;
 }
 
+const initialConnectionStageValue: ConnectionStage = {
+  flowStep: ConnectionFlowStep.None,
+  flowType: ConnectionFlowType.Bluetooth,
+  reconnectFailStreak: 0,
+  deviceIds: [],
+  status: ConnectionStatus.Disconnected,
+  connType: "bluetooth",
+  isWebBluetoothSupported: true,
+  isWebUsbSupported: true,
+};
+
 export const ConnectionStageProvider = ({
   children,
 }: ConnectionStageProviderProps) => {
-  // TODO: Check bt and usb compatibility
-  const isWebBluetoothSupported = true;
-  const isWebUsbSupported = true;
-
-  const connectionStageContextValue = useState<ConnectionStage>({
-    type: isWebBluetoothSupported
-      ? ConnectionFlowType.Bluetooth
-      : ConnectionFlowType.RadioRemote,
-    step: ConnectionFlowStep.None,
-    isWebUsbSupported,
-    isWebBluetoothSupported,
-  });
+  const connectionStageContextValue = useState<ConnectionStage>(
+    initialConnectionStageValue
+  );
   return (
     <ConnectionStageContext.Provider value={connectionStageContextValue}>
       {children}
@@ -124,6 +144,7 @@ export const ConnectionStageProvider = ({
 export const useConnectionStage = (): {
   stage: ConnectionStage;
   actions: ConnectionStageActions;
+  isConnected: boolean;
 } => {
   const connectionStageContextValue = useContext(ConnectionStageContext);
   if (!connectionStageContextValue) {
@@ -131,22 +152,20 @@ export const useConnectionStage = (): {
   }
   const [stage, setStage] = connectionStageContextValue;
   const logging = useLogging();
-  const { connections, state: connectionsState } = useConnections();
 
   const actions = useMemo(() => {
-    const connectActions = new ConnectActions(logging, connections);
+    const connectActions = new ConnectActions(logging);
+    return new ConnectionStageActions(connectActions, stage, setStage);
+  }, [logging, stage, setStage]);
 
-    return new ConnectionStageActions(
-      connectActions,
-      stage,
-      setStage,
-      connectionsState,
-      connections
-    );
-  }, [logging, connections, stage, setStage, connectionsState]);
+  const isConnected = useMemo(
+    () => stage.status === ConnectionStatus.Connected,
+    [stage.status]
+  );
 
   return {
     stage,
     actions,
+    isConnected,
   };
 };

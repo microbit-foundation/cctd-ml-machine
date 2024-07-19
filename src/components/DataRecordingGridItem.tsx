@@ -14,7 +14,7 @@ import RecordIcon from "../images/record-icon.svg?react";
 import RecordingGraph from "./RecordingGraph";
 import RecordingDialog from "./RecordingDialog";
 import { useCallback, useRef } from "react";
-import { useConnections } from "../connections-hooks";
+import { useConnectionStage } from "../connection-stage-hooks";
 
 interface DataRecordingGridItemProps {
   data: GestureData;
@@ -31,7 +31,7 @@ const DataRecordingGridItem = ({
   const { isOpen, onClose, onOpen: onStartRecording } = useDisclosure();
   const closeRecordingDialogFocusRef = useRef(null);
   const actions = useGestureActions();
-  const { isInputConnected } = useConnections();
+  const { isConnected } = useConnectionStage();
 
   const handleDeleteRecording = useCallback(
     (idx: number) => {
@@ -74,7 +74,7 @@ const DataRecordingGridItem = ({
                   { id: "content.data.recordAction" },
                   { action: data.name }
                 )}
-                isDisabled={!isInputConnected}
+                isDisabled={!isConnected}
                 icon={
                   <Icon
                     as={RecordIcon}

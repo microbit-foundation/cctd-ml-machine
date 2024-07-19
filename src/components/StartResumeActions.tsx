@@ -2,7 +2,6 @@ import { Button, HStack, StackProps, useDisclosure } from "@chakra-ui/react";
 import { useCallback, useMemo } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
-import { useConnections } from "../connections-hooks";
 import { useGestureActions } from "../gestures-hooks";
 import { createStepPageUrl } from "../urls";
 import StartOverWarningDialog from "./StartOverWarningDialog";
@@ -16,8 +15,7 @@ const StartResumeActions = ({ ...props }: Partial<StackProps>) => {
   );
   const startOverWarningDialogDisclosure = useDisclosure();
   const navigate = useNavigate();
-  const { actions: connectionStageActions } = useConnectionStage();
-  const { isInputConnected } = useConnections();
+  const { actions: connStageActions, isConnected } = useConnectionStage();
 
   const handleNavigateToAddData = useCallback(() => {
     navigate(createStepPageUrl("add-data"));
@@ -25,17 +23,12 @@ const StartResumeActions = ({ ...props }: Partial<StackProps>) => {
 
   const handleStartNewSession = useCallback(() => {
     gestureActions.deleteAllGestures();
-    if (isInputConnected) {
+    if (isConnected) {
       handleNavigateToAddData();
     } else {
-      connectionStageActions.start();
+      connStageActions.start();
     }
-  }, [
-    gestureActions,
-    connectionStageActions,
-    handleNavigateToAddData,
-    isInputConnected,
-  ]);
+  }, [gestureActions, connStageActions, handleNavigateToAddData, isConnected]);
 
   const onClickStartNewSession = useCallback(() => {
     if (hasExistingSession) {

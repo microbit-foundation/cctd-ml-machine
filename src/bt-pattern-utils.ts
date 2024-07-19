@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+export type BluetoothPattern = boolean[];
 const microbitNameLength = 5;
 
 /**
@@ -21,8 +22,8 @@ const microbitBluetoothCodebook: string[][] = [
   ["z", "u", "z", "u", "z"],
 ];
 
-export const microbitNameToBluetoothPattern = (name: string): boolean[] => {
-  const pattern: boolean[] = new Array<boolean>(25).fill(true);
+const microbitNameToBluetoothPattern = (name: string): BluetoothPattern => {
+  const pattern: BluetoothPattern = new Array<boolean>(25).fill(true);
 
   // if wrong name length, return empty pattern
   if (name.length != microbitNameLength) {
@@ -39,4 +40,34 @@ export const microbitNameToBluetoothPattern = (name: string): boolean[] => {
   }
 
   return pattern;
+};
+
+const deviceIdToNameCodebook = [
+  ["z", "v", "g", "p", "t"],
+  ["u", "o", "i", "e", "a"],
+  ["z", "v", "g", "p", "t"],
+  ["u", "o", "i", "e", "a"],
+  ["z", "v", "g", "p", "t"],
+];
+
+const deviceIdToMicrobitName = (deviceId: number): string => {
+  let d = microbitNameLength;
+  let ld = 1;
+  let name = "";
+
+  for (let i = 0; i < microbitNameLength; i++) {
+    const h = Math.floor((deviceId % d) / ld);
+    deviceId -= h;
+    d *= microbitNameLength;
+    ld *= microbitNameLength;
+    name = deviceIdToNameCodebook[i][h] + name;
+  }
+  return name;
+};
+
+export const deviceIdToBluetoothPattern = (
+  deviceId: number
+): BluetoothPattern => {
+  const name = deviceIdToMicrobitName(deviceId);
+  return microbitNameToBluetoothPattern(name);
 };

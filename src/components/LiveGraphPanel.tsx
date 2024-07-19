@@ -2,20 +2,22 @@ import { Button, HStack, Portal, Text } from "@chakra-ui/react";
 import { useMemo, useRef } from "react";
 import { MdBolt } from "react-icons/md";
 import { FormattedMessage } from "react-intl";
-import { useConnectionStage } from "../connection-stage-hooks";
-import { ConnectionStatus, useConnections } from "../connections-hooks";
+import {
+  ConnectionStatus,
+  useConnectionStage,
+} from "../connection-stage-hooks";
 import InfoToolTip from "./InfoToolTip";
 import LiveGraph from "./LiveGraph";
 
 const LiveGraphPanel = () => {
   const { actions } = useConnectionStage();
-  const { inputConnection } = useConnections();
+  const { stage } = useConnectionStage();
   const parentPortalRef = useRef(null);
 
   const connectBtnConfig = useMemo(
     () =>
-      inputConnection.status === ConnectionStatus.None ||
-      inputConnection.status === ConnectionStatus.Connecting
+      stage.status === ConnectionStatus.None ||
+      stage.status === ConnectionStatus.Connecting
         ? {
             textId: "footer.connectButton",
             onClick: actions.start,
@@ -24,7 +26,7 @@ const LiveGraphPanel = () => {
             textId: "actions.reconnect",
             onClick: actions.reconnect,
           },
-    [actions.reconnect, actions.start, inputConnection]
+    [actions.reconnect, actions.start, stage]
   );
 
   return (
@@ -47,7 +49,7 @@ const LiveGraphPanel = () => {
         >
           <HStack gap={4}>
             <LiveIndicator />
-            {inputConnection.status === ConnectionStatus.Connected ? (
+            {stage.status === ConnectionStatus.Connected ? (
               <Button variant="primary" size="sm" onClick={actions.disconnect}>
                 <FormattedMessage id="footer.disconnectButton" />
               </Button>
@@ -56,15 +58,15 @@ const LiveGraphPanel = () => {
                 variant="primary"
                 size="sm"
                 isDisabled={
-                  inputConnection.status === ConnectionStatus.Reconnecting ||
-                  inputConnection.status === ConnectionStatus.Connecting
+                  stage.status === ConnectionStatus.Reconnecting ||
+                  stage.status === ConnectionStatus.Connecting
                 }
                 onClick={connectBtnConfig.onClick}
               >
                 <FormattedMessage id={connectBtnConfig.textId} />
               </Button>
             )}
-            {inputConnection.status === ConnectionStatus.Reconnecting && (
+            {stage.status === ConnectionStatus.Reconnecting && (
               <Text rounded="4xl" bg="white" py="1px" fontWeight="bold">
                 <FormattedMessage id="connectMB.reconnecting" />
               </Text>

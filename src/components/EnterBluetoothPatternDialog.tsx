@@ -5,8 +5,7 @@ import BluetoothPatternInput from "./BluetoothPatternInput";
 import ConnectContainerDialog, {
   ConnectContainerDialogProps,
 } from "./ConnectContainerDialog";
-
-export type BluetoothPattern = boolean[];
+import { BluetoothPattern } from "../bt-pattern-utils";
 
 export interface EnterBluetoothPatternDialogProps
   extends Omit<ConnectContainerDialogProps, "children" | "headingId"> {
@@ -37,7 +36,7 @@ const EnterBluetoothPatternDialog = ({
   }, [onBackClick]);
 
   const handlePatternChange = useCallback(
-    (newPattern: boolean[]) => {
+    (newPattern: BluetoothPattern) => {
       setBluetoothPattern(newPattern);
       setShowInvalid(false);
     },
@@ -70,7 +69,7 @@ const EnterBluetoothPatternDialog = ({
   );
 };
 
-const isPatternValid = (pattern: boolean[]) => {
+const isPatternValid = (pattern: BluetoothPattern) => {
   for (let col = 0; col < 5; col++) {
     let isAnyHighlighted = false;
     for (let row = 0; row < 5; row++) {

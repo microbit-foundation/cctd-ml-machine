@@ -1,6 +1,9 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { microbitNameToBluetoothPattern } from "../bt-pattern-utils";
+import {
+  BluetoothPattern,
+  deviceIdToBluetoothPattern,
+} from "../bt-pattern-utils";
 import {
   ConnEvent,
   ConnectionFlowStep,
@@ -11,18 +14,16 @@ import BrokenFirmwareDialog from "./BrokenFirmwareDialog";
 import ConnectBatteryDialog from "./ConnectBatteryDialog";
 import ConnectCableDialog from "./ConnectCableDialog";
 import DownloadingDialog from "./DownloadingDialog";
-import EnterBluetoothPatternDialog, {
-  BluetoothPattern,
-} from "./EnterBluetoothPatternDialog";
+import EnterBluetoothPatternDialog from "./EnterBluetoothPatternDialog";
 import LoadingDialog from "./LoadingDialog";
 import ManualFlashingDialog from "./ManualFlashingDialog";
+import ReconnectErrorDialog from "./ReconnectErrorDialog";
 import SelectMicrobitBluetoothDialog from "./SelectMicrobitBluetoothDialog";
 import SelectMicrobitUsbDialog from "./SelectMicrobitUsbDialog";
 import TryAgainDialog from "./TryAgainDialog";
 import UnsupportedMicrobitDialog from "./UnsupportedMicrobitDialog";
 import WebUsbBluetoothUnsupportedDialog from "./WebUsbBluetoothUnsupportedDialog";
 import WhatYouWillNeedDialog from "./WhatYouWillNeedDialog";
-import ReconnectErrorDialog from "./ReconnectErrorDialog";
 
 const ConnectionDialogs = () => {
   const { stage, actions } = useConnectionStage();
@@ -30,7 +31,9 @@ const ConnectionDialogs = () => {
   const [flashProgress, setFlashProgress] = useState<number>(0);
   const { isOpen, onClose: onCloseDialog, onOpen } = useDisclosure();
   const [bluetoothPattern, setBluetoothPattern] = useState<BluetoothPattern>(
-    Array(25).fill(false)
+    stage.deviceIds.length > 0
+      ? deviceIdToBluetoothPattern(stage.deviceIds[0])
+      : Array(25).fill(false)
   );
   const onClose = useCallback(() => {
     dispatch(ConnEvent.Close);
@@ -38,32 +41,31 @@ const ConnectionDialogs = () => {
   }, [dispatch, onCloseDialog]);
 
   useEffect(() => {
-    if (stage.step !== ConnectionFlowStep.None && !isOpen) {
+    if (stage.flowStep !== ConnectionFlowStep.None && !isOpen) {
       onOpen();
     }
-    if (stage.step === ConnectionFlowStep.None && isOpen) {
+    if (stage.flowStep === ConnectionFlowStep.None && isOpen) {
       onClose();
     }
   }, [isOpen, onClose, onOpen, stage]);
 
   const progressCallback = useCallback(
     (progress: number) => {
-      if (stage.step !== ConnectionFlowStep.FlashingInProgress) {
+      if (stage.flowStep !== ConnectionFlowStep.FlashingInProgress) {
         dispatch(ConnEvent.FlashingInProgress);
       }
       setFlashProgress(progress * 100);
     },
-    [dispatch, stage.step]
+    [dispatch, stage.flowStep]
   );
 
-  async function connectAndFlash(): Promise<void> {
-    await actions.connectAndflashMicrobit(progressCallback);
+  const onFlashSuccess = useCallback((deviceId: number) => {
+    // Infer pattern from device id saves the user from entering the pattern
+    setBluetoothPattern(deviceIdToBluetoothPattern(deviceId));
+  }, []);
 
-    const deviceId = actions.getDeviceId();
-    if (!!deviceId && stage.type === ConnectionFlowType.Bluetooth) {
-      // Infer pattern from device id saves the user from entering the pattern
-      setBluetoothPattern(microbitNameToBluetoothPattern(""));
-    }
+  async function connectAndFlash(): Promise<void> {
+    await actions.connectAndflashMicrobit(progressCallback, onFlashSuccess);
   }
 
   const onSwitchTypeClick = useCallback(
@@ -91,13 +93,15 @@ const ConnectionDialogs = () => {
 
   const dialogCommonProps = { isOpen, onClose };
 
-  switch (stage.step) {
+  switch (stage.flowStep) {
     case ConnectionFlowStep.ReconnectFailedTwice:
     case ConnectionFlowStep.Start: {
       return (
         <WhatYouWillNeedDialog
           type={
-            stage.type === ConnectionFlowType.Bluetooth ? "bluetooth" : "radio"
+            stage.flowType === ConnectionFlowType.Bluetooth
+              ? "bluetooth"
+              : "radio"
           }
           {...dialogCommonProps}
           onLinkClick={
@@ -106,7 +110,7 @@ const ConnectionDialogs = () => {
               : undefined
           }
           onNextClick={onNextClick}
-          reconnect={stage.step === ConnectionFlowStep.ReconnectFailedTwice}
+          reconnect={stage.flowStep === ConnectionFlowStep.ReconnectFailedTwice}
         />
       );
     }
@@ -115,7 +119,7 @@ const ConnectionDialogs = () => {
       return (
         <ConnectCableDialog
           {...commonProps}
-          type={stage.type}
+          type={stage.flowType}
           onSkip={onSkip}
           onSwitch={onSwitchTypeClick}
         />
@@ -180,7 +184,7 @@ const ConnectionDialogs = () => {
       };
       return (
         <DownloadingDialog
-          headingId={headingIdVariations[stage.type]}
+          headingId={headingIdVariations[stage.flowType]}
           isOpen={isOpen}
           progress={flashProgress}
         />
@@ -207,7 +211,7 @@ const ConnectionDialogs = () => {
         <TryAgainDialog
           {...dialogCommonProps}
           onTryAgain={onTryAgain}
-          type={stage.step}
+          type={stage.flowStep}
         />
       );
     }
@@ -239,8 +243,8 @@ const ConnectionDialogs = () => {
         <ReconnectErrorDialog
           {...dialogCommonProps}
           onReconnect={actions.reconnect}
-          flowType={stage.type}
-          errorStep={stage.step}
+          flowType={stage.flowType}
+          errorStep={stage.flowStep}
         />
       );
     }

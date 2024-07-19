@@ -23,7 +23,6 @@ import { resourcesConfig, stepsConfig } from "./pages-config";
 import { LoggingProvider } from "./logging/logging-hooks";
 import { GesturesProvider } from "./gestures-hooks";
 import { MlStatusProvider } from "./ml-status-hooks";
-import { ConnectionsProvider } from "./connections-hooks";
 import { ConnectionStageProvider } from "./connection-stage-hooks";
 
 export interface ProviderLayoutProps {
@@ -43,13 +42,11 @@ const Providers = ({ children }: ProviderLayoutProps) => {
             <SettingsProvider>
               <GesturesProvider>
                 <MlStatusProvider>
-                  <ConnectionsProvider>
-                    <ConnectionStageProvider>
-                      <TranslationProvider>
-                        <ErrorBoundary>{children}</ErrorBoundary>
-                      </TranslationProvider>
-                    </ConnectionStageProvider>
-                  </ConnectionsProvider>
+                  <ConnectionStageProvider>
+                    <TranslationProvider>
+                      <ErrorBoundary>{children}</ErrorBoundary>
+                    </TranslationProvider>
+                  </ConnectionStageProvider>
                 </MlStatusProvider>
               </GesturesProvider>
             </SettingsProvider>

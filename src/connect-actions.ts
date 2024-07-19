@@ -1,8 +1,8 @@
+import { MicrobitWebUSBConnection } from "@microbit/microbit-connection";
 import { ConnectionFlowType } from "./connection-stage-hooks";
 import { Connections } from "./connections";
 import { ConnectionStatus, ProgramType } from "./connections-hooks";
-import { getHexFileUrl } from "./device/get-hex-file";
-import MicrobitWebUSBConnection from "./device/microbit-usb";
+import { getFlashDataSource } from "./device/get-hex-file";
 import { Logging } from "./logging/logging";
 
 export enum ConnectAndFlashResult {
@@ -35,12 +35,12 @@ export class ConnectActions {
     progressCallback: (progress: number) => void
   ): Promise<ConnectAndFlashResult> => {
     try {
-      this.device = new MicrobitWebUSBConnection(this.logging);
+      this.device = new MicrobitWebUSBConnection({ logging: this.logging });
       await this.device.connect();
       const result = await this.flashMicrobit(hexType, progressCallback);
 
       // Save remote micro:bit device id is stored for passing it to bridge micro:bit
-      const deviceId = this.device.getDeviceId();
+      const deviceId = this.device.getDeviceId()?.toString();
       if (
         !!deviceId &&
         result === ConnectAndFlashResult.Success &&
@@ -62,23 +62,23 @@ export class ConnectActions {
     }
   };
 
-  flashMicrobit = async (
-    hexType: ConnectionFlowType,
-    progressCallback: (progress: number) => void
+  private flashMicrobit = async (
+    flowType: ConnectionFlowType,
+    progress: (progress: number) => void
   ): Promise<ConnectAndFlashResult> => {
     if (!this.device) {
       return ConnectAndFlashResult.Failed;
     }
-    const deviceVersion = this.device.getBoardVersion();
-    const hexUrl = deviceVersion
-      ? getHexFileUrl(deviceVersion, hexType)
-      : deviceVersion;
+    const data = getFlashDataSource(flowType);
 
-    if (!hexUrl) {
+    if (!data) {
       return ConnectAndFlashResult.ErrorMicrobitUnsupported;
     }
     try {
-      await this.device.flashHex(hexUrl, progressCallback);
+      await this.device.flash(data, {
+        partial: true,
+        progress: (v) => progress(v ?? 100),
+      });
       return ConnectAndFlashResult.Success;
     } catch (e) {
       this.logging.error(`Flashing failed: ${JSON.stringify(e)}`);

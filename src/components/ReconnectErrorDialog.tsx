@@ -1,4 +1,3 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Button,
   HStack,
@@ -19,6 +18,7 @@ import {
   ConnectionFlowStep,
   ConnectionFlowType,
 } from "../connection-stage-hooks";
+import TroubleshootingLink from "./TroubleshootingLink";
 
 interface ReconnectErrorDialogProps {
   isOpen: boolean;
@@ -105,21 +105,7 @@ const ReconnectErrorDialog = ({
             </VStack>
           </ModalBody>
           <ModalFooter justifyContent="space-between" px={0} pb={0}>
-            <Button
-              variant="link"
-              as="a"
-              display="flex"
-              gap={1}
-              fontSize="lg"
-              alignItems="center"
-              flexDirection="row"
-              href="https://support.microbit.org/a/solutions/articles/19000157495"
-              target="_blank"
-              rel="noopener"
-            >
-              <FormattedMessage id="connectMB.troubleshooting" />
-              <ExternalLinkIcon />
-            </Button>
+            <TroubleshootingLink textId="connectMB.troubleshooting" />
             <HStack gap={5}>
               <Button onClick={onClose} variant="secondary" size="lg">
                 <FormattedMessage id="cancel-action" />

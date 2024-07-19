@@ -66,8 +66,6 @@ const ConnectionDialogs = () => {
     }
   }
 
-  // TODO: Flag reconnect failed
-  const reconnectFailed = false;
   const onSwitchTypeClick = useCallback(
     () => dispatch(ConnEvent.Switch),
     [dispatch]
@@ -94,10 +92,13 @@ const ConnectionDialogs = () => {
   const dialogCommonProps = { isOpen, onClose };
 
   switch (stage.step) {
+    case ConnectionFlowStep.ReconnectFailedTwice:
     case ConnectionFlowStep.Start: {
       return (
         <WhatYouWillNeedDialog
-          type={stage.type}
+          type={
+            stage.type === ConnectionFlowType.Bluetooth ? "bluetooth" : "radio"
+          }
           {...dialogCommonProps}
           onLinkClick={
             stage.isWebBluetoothSupported && stage.isWebUsbSupported
@@ -105,7 +106,7 @@ const ConnectionDialogs = () => {
               : undefined
           }
           onNextClick={onNextClick}
-          reconnect={reconnectFailed}
+          reconnect={stage.step === ConnectionFlowStep.ReconnectFailedTwice}
         />
       );
     }
@@ -204,8 +205,7 @@ const ConnectionDialogs = () => {
     case ConnectionFlowStep.TryAgainCloseTabs: {
       return (
         <TryAgainDialog
-          onClose={onClose}
-          isOpen={isOpen}
+          {...dialogCommonProps}
           onTryAgain={onTryAgain}
           type={stage.step}
         />
@@ -238,14 +238,11 @@ const ConnectionDialogs = () => {
       return (
         <ReconnectErrorDialog
           {...dialogCommonProps}
-          onReconnect={actions.start}
+          onReconnect={actions.reconnect}
           flowType={stage.type}
           errorStep={stage.step}
         />
       );
-    }
-    case ConnectionFlowStep.ReconnectFailedTwice: {
-      return <></>;
     }
   }
 };

@@ -144,6 +144,10 @@ export const getUpdatedConnState = (
     case ConnEvent.Start:
       return {
         ...state,
+        type:
+          state.type === ConnectionFlowType.RadioBridge
+            ? ConnectionFlowType.RadioRemote
+            : ConnectionFlowType.Bluetooth,
         step:
           !state.isWebBluetoothSupported && !state.isWebUsbSupported
             ? ConnectionFlowStep.WebUsbBluetoothUnsupported

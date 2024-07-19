@@ -1,13 +1,10 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import {
-  BluetoothPattern,
-  deviceIdToBluetoothPattern,
-} from "../bt-pattern-utils";
-import {
   ConnEvent,
   ConnectionFlowStep,
   ConnectionFlowType,
+  ConnectionStage,
   useConnectionStage,
 } from "../connection-stage-hooks";
 import BrokenFirmwareDialog from "./BrokenFirmwareDialog";
@@ -30,10 +27,8 @@ const ConnectionDialogs = () => {
   const dispatch = actions.dispatchEvent;
   const [flashProgress, setFlashProgress] = useState<number>(0);
   const { isOpen, onClose: onCloseDialog, onOpen } = useDisclosure();
-  const [bluetoothPattern, setBluetoothPattern] = useState<BluetoothPattern>(
-    stage.deviceIds.length > 0
-      ? deviceIdToBluetoothPattern(stage.deviceIds[0])
-      : Array(25).fill(false)
+  const [microbitName, setMicrobitName] = useState<string | undefined>(
+    stage.microbitNames.length > 0 ? stage.microbitNames[0] : undefined
   );
   const onClose = useCallback(() => {
     dispatch(ConnEvent.Close);
@@ -59,14 +54,24 @@ const ConnectionDialogs = () => {
     [dispatch, stage.flowStep]
   );
 
-  const onFlashSuccess = useCallback((deviceId: number) => {
-    // Infer pattern from device id saves the user from entering the pattern
-    setBluetoothPattern(deviceIdToBluetoothPattern(deviceId));
+  const onFlashSuccess = useCallback(({ microbitNames }: ConnectionStage) => {
+    // Inferring microbit name saves the user from entering the pattern
+    if (microbitNames.length > 0) {
+      setMicrobitName(microbitNames[0]);
+    }
   }, []);
 
   async function connectAndFlash(): Promise<void> {
     await actions.connectAndflashMicrobit(progressCallback, onFlashSuccess);
   }
+
+  const onChangeMicrobitName = useCallback(
+    (name: string) => {
+      actions.setMicrobitName(name);
+      setMicrobitName(name);
+    },
+    [actions]
+  );
 
   const onSwitchTypeClick = useCallback(
     () => dispatch(ConnEvent.Switch),
@@ -158,8 +163,8 @@ const ConnectionDialogs = () => {
           {...dialogCommonProps}
           onBackClick={onBackClick}
           onNextClick={onNextClick}
-          bluetoothPattern={bluetoothPattern}
-          setBluetoothPattern={setBluetoothPattern}
+          microbitName={microbitName}
+          onChangeMicrobitName={onChangeMicrobitName}
         />
       );
     }

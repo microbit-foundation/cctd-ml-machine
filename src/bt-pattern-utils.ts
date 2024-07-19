@@ -22,7 +22,9 @@ const microbitBluetoothCodebook: string[][] = [
   ["z", "u", "z", "u", "z"],
 ];
 
-const microbitNameToBluetoothPattern = (name: string): BluetoothPattern => {
+export const microbitNameToBluetoothPattern = (
+  name: string
+): BluetoothPattern => {
   const pattern: BluetoothPattern = new Array<boolean>(25).fill(true);
 
   // if wrong name length, return empty pattern
@@ -50,7 +52,7 @@ const deviceIdToNameCodebook = [
   ["z", "v", "g", "p", "t"],
 ];
 
-const deviceIdToMicrobitName = (deviceId: number): string => {
+export const deviceIdToMicrobitName = (deviceId: number): string => {
   let d = microbitNameLength;
   let ld = 1;
   let name = "";
@@ -65,9 +67,27 @@ const deviceIdToMicrobitName = (deviceId: number): string => {
   return name;
 };
 
-export const deviceIdToBluetoothPattern = (
-  deviceId: number
-): BluetoothPattern => {
-  const name = deviceIdToMicrobitName(deviceId);
-  return microbitNameToBluetoothPattern(name);
+/**
+ * Converts a pairing pattern to a name.
+ * See guide on microbit names to understand how a pattern is turned into a name
+ * https://support.microbit.org/support/solutions/articles/19000067679-how-to-find-the-name-of-your-micro-bit
+ * @param {boolean[]} pattern The pattern to convert.
+ * @returns {string} The name of the micro:bit.
+ */
+export const microbitPatternToName = (pattern: boolean[]): string => {
+  const code: string[] = [" ", " ", " ", " ", " "];
+
+  for (let col = 0; col < microbitNameLength; col++) {
+    for (let row = 0; row < microbitNameLength; row++) {
+      if (pattern[row * microbitNameLength + col]) {
+        // Find the first vertical on/true in each column
+        code[col] = microbitBluetoothCodebook[row][col]; // Use code-book to find char
+        break; // Rest of column is irrelevant
+      }
+      // If we get to here the pattern is not legal, and the returned name
+      // will not match any microbit.
+    }
+  }
+
+  return code.join("");
 };

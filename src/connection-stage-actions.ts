@@ -1,3 +1,4 @@
+import { deviceIdToMicrobitName } from "./bt-pattern-utils";
 import {
   ConnectActions,
   ConnectAndFlashFailResult,
@@ -30,7 +31,7 @@ export class ConnectionStageActions {
 
   connectAndflashMicrobit = async (
     progressCallback: (progress: number) => void,
-    onSuccess: (deviceId: number) => void
+    onSuccess: (stage: ConnectionStage) => void
   ) => {
     this.dispatchEvent(ConnEvent.WebUsbChooseMicrobit);
     const { result, deviceId } =
@@ -41,16 +42,34 @@ export class ConnectionStageActions {
     if (result !== ConnectAndFlashResult.Success) {
       return this.handleConnectAndFlashFail(result);
     }
-    // Save device id for connecting micro:bits via serial, or to show bluetooth pattern
-    this.setStage({
-      ...this.stage,
-      deviceIds: [...this.stage.deviceIds, deviceId],
-    });
-    onSuccess(deviceId);
+    // Store radio/bluetooth details. Radio is essential to pass to micro:bit 2.
+    // Bluetooth saves the user from entering the pattern.
+    const newStage = this.storeDetectedDetails(deviceId);
+    onSuccess(newStage);
+
     if (this.stage.flowType === ConnectionFlowType.RadioBridge) {
       return await this.connectMicrobits();
     }
     return this.dispatchEvent(ConnEvent.ConnectBattery);
+  };
+
+  private storeDetectedDetails = (deviceId: number): ConnectionStage => {
+    const existingDeviceIds = this.stage.detectedDeviceIds;
+    const existingNames = this.stage.microbitNames;
+    const name = deviceIdToMicrobitName(deviceId);
+    const newStage = {
+      ...this.stage,
+      // Only store two device ids and names at any given time as only
+      // a maximum of two device infos are needed for radio connection
+      ...(existingDeviceIds.length === 2
+        ? { detectedDeviceIds: [deviceId], microbitNames: [name] }
+        : {
+            detectedDeviceIds: [...existingDeviceIds, deviceId],
+            microbitNames: [...existingNames, name],
+          }),
+    };
+    this.setStage(newStage);
+    return newStage;
   };
 
   private handleConnectAndFlashFail = (result: ConnectAndFlashFailResult) => {
@@ -73,17 +92,27 @@ export class ConnectionStageActions {
     }
   };
 
+  setMicrobitName = (name: string) => {
+    const microbitNames = [...this.stage.microbitNames];
+    microbitNames[0] = name;
+    this.setStage({ ...this.stage, microbitNames });
+  };
+
   connectBluetooth = async () => {
     this.dispatchEvent(ConnEvent.ConnectingBluetooth);
     this.onConnectingOrReconnectingStatus("bluetooth");
-    const result = await this.actions.connectBluetooth();
+    const result = await this.actions.connectBluetooth(
+      this.stage.microbitNames.length > 0
+        ? this.stage.microbitNames[0]
+        : undefined
+    );
     this.handleConnectResult(result);
   };
 
   connectMicrobits = async () => {
     this.dispatchEvent(ConnEvent.ConnectingMicrobits);
     this.onConnectingOrReconnectingStatus("radio");
-    const deviceId = this.stage.deviceIds;
+    const deviceId = this.stage.detectedDeviceIds;
     if (deviceId.length > 0) {
       const result = await this.actions.connectMicrobitsSerial(deviceId[0]);
       this.handleConnectResult(result);
@@ -148,7 +177,6 @@ export class ConnectionStageActions {
     this.setStage({
       ...this.stage,
       status: ConnectionStatus.Disconnected,
-      deviceIds: [],
     });
   };
 
@@ -234,7 +262,7 @@ export const getUpdatedConnState = (
         ...state,
         flowStep:
           state.flowStep === ConnectionFlowStep.TryAgainBluetoothConnect
-            ? ConnectionFlowStep.ConnectBluetoothTutorial
+            ? ConnectionFlowStep.EnterBluetoothPattern
             : ConnectionFlowStep.ConnectCable,
       };
     case ConnEvent.ReconnectAutoFail:

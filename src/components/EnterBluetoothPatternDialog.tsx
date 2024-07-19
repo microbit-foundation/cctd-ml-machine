@@ -5,22 +5,31 @@ import BluetoothPatternInput from "./BluetoothPatternInput";
 import ConnectContainerDialog, {
   ConnectContainerDialogProps,
 } from "./ConnectContainerDialog";
-import { BluetoothPattern } from "../bt-pattern-utils";
+import {
+  BluetoothPattern,
+  microbitNameToBluetoothPattern,
+  microbitPatternToName,
+} from "../bt-pattern-utils";
 
 export interface EnterBluetoothPatternDialogProps
   extends Omit<ConnectContainerDialogProps, "children" | "headingId"> {
-  setBluetoothPattern: (pattern: BluetoothPattern) => void;
-  bluetoothPattern: BluetoothPattern;
+  onChangeMicrobitName: (name: string) => void;
+  microbitName: string | undefined;
 }
 
 const EnterBluetoothPatternDialog = ({
   onNextClick,
   onBackClick,
-  setBluetoothPattern,
-  bluetoothPattern,
+  onChangeMicrobitName,
+  microbitName,
   ...props
 }: EnterBluetoothPatternDialogProps) => {
   const [showInvalid, setShowInvalid] = useState<boolean>(false);
+  const [bluetoothPattern, setBluetoothPattern] = useState<BluetoothPattern>(
+    microbitName
+      ? microbitNameToBluetoothPattern(microbitName)
+      : Array(25).fill(false)
+  );
 
   const handleNextClick = useCallback(() => {
     if (!isPatternValid(bluetoothPattern)) {
@@ -38,9 +47,10 @@ const EnterBluetoothPatternDialog = ({
   const handlePatternChange = useCallback(
     (newPattern: BluetoothPattern) => {
       setBluetoothPattern(newPattern);
+      onChangeMicrobitName(microbitPatternToName(newPattern));
       setShowInvalid(false);
     },
-    [setBluetoothPattern]
+    [onChangeMicrobitName]
   );
 
   return (

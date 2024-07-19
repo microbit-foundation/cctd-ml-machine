@@ -122,17 +122,16 @@ export class ConnectActions {
     return ConnectResult.ManualConnectFailed;
   };
 
-  // TODO: Replace with real connecting logic
-  connectBluetooth = async (): Promise<ConnectResult> => {
+  connectBluetooth = async (
+    name: string | undefined
+  ): Promise<ConnectResult> => {
     // TODO: move this to init point
     await this.bluetooth.initialize();
     this.bluetooth.addEventListener(
       "accelerometerdatachanged",
       this.accelerometerListener
     );
-    await this.bluetooth.connect({
-      // TODO: name
-    });
+    await this.bluetooth.connect({ name });
     if (this.bluetooth.status === DeviceConnectionStatus.CONNECTED) {
       return ConnectResult.Success;
     }

@@ -28,7 +28,11 @@ export interface ConnectionStage {
   reconnectFailStreak: number;
 
   // Connection details
-  deviceIds: number[];
+  // Detected device id may not be synced with micro:bit name if the user changes
+  // the bluetooth pattern, because it is not possible to compute device id from
+  // micro:bit name
+  detectedDeviceIds: number[];
+  microbitNames: string[];
   status: ConnectionStatus;
   connType: ConnectionType;
 
@@ -121,7 +125,8 @@ const initialConnectionStageValue: ConnectionStage = {
   flowStep: ConnectionFlowStep.None,
   flowType: ConnectionFlowType.Bluetooth,
   reconnectFailStreak: 0,
-  deviceIds: [],
+  detectedDeviceIds: [],
+  microbitNames: [],
   status: ConnectionStatus.Disconnected,
   connType: "bluetooth",
   isWebBluetoothSupported: true,

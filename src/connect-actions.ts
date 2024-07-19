@@ -3,21 +3,21 @@ import {
   ConnectionStatus as DeviceConnectionStatus,
   MicrobitWebBluetoothConnection,
   MicrobitWebUSBConnection,
+  AccelerometerDataEvent,
 } from "@microbit/microbit-connection";
 import { ConnectionFlowType } from "./connection-stage-hooks";
 import { Connections } from "./connections";
 import { ConnectionStatus, ProgramType } from "./connections-hooks";
 import { getFlashDataSource } from "./device/get-hex-file";
 import { Logging } from "./logging/logging";
-import { AccelerometerDataEvent } from "../../connection/build/accelerometer";
 
 export enum ConnectAndFlashResult {
-  Success,
-  Failed,
-  ErrorMicrobitUnsupported,
-  ErrorBadFirmware,
-  ErrorNoDeviceSelected,
-  ErrorUnableToClaimInterface,
+  Success = "Success",
+  Failed = "Failed",
+  ErrorMicrobitUnsupported = "ErrorMicrobitUnsupported",
+  ErrorBadFirmware = "ErrorBadFirmware",
+  ErrorNoDeviceSelected = "ErrorNoDeviceSelected",
+  ErrorUnableToClaimInterface = "ErrorUnableToClaimInterface",
 }
 
 type ConnectAndFlashFailResult = Exclude<

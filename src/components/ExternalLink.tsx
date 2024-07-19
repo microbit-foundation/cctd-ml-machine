@@ -2,11 +2,12 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
 import { FormattedMessage } from "react-intl";
 
-interface TroubleshootingLinkProps {
+interface ExternalLinkProps {
   textId: string;
+  href: string;
 }
 
-const TroubleshootingLink = ({ textId }: TroubleshootingLinkProps) => {
+const ExternalLink = ({ textId, href }: ExternalLinkProps) => {
   return (
     <Button
       variant="link"
@@ -16,7 +17,7 @@ const TroubleshootingLink = ({ textId }: TroubleshootingLinkProps) => {
       fontSize="lg"
       alignItems="center"
       flexDirection="row"
-      href="https://support.microbit.org/a/solutions/articles/19000157495"
+      href={href}
       target="_blank"
       rel="noopener"
     >
@@ -26,4 +27,4 @@ const TroubleshootingLink = ({ textId }: TroubleshootingLinkProps) => {
   );
 };
 
-export default TroubleshootingLink;
+export default ExternalLink;

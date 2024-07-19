@@ -18,7 +18,7 @@ import {
   ConnectionFlowStep,
   ConnectionFlowType,
 } from "../connection-stage-hooks";
-import TroubleshootingLink from "./TroubleshootingLink";
+import ExternalLink from "./ExternalLink";
 
 interface ReconnectErrorDialogProps {
   isOpen: boolean;
@@ -105,7 +105,10 @@ const ReconnectErrorDialog = ({
             </VStack>
           </ModalBody>
           <ModalFooter justifyContent="space-between" px={0} pb={0}>
-            <TroubleshootingLink textId="connectMB.troubleshooting" />
+            <ExternalLink
+              textId="connectMB.troubleshooting"
+              href="https://support.microbit.org/a/solutions/articles/19000157495"
+            />
             <HStack gap={5}>
               <Button onClick={onClose} variant="secondary" size="lg">
                 <FormattedMessage id="cancel-action" />

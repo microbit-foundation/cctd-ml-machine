@@ -1,7 +1,15 @@
-import { ReactNode, createContext, useContext, useMemo, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { ConnectionStageActions } from "./connection-stage-actions";
 import { useLogging } from "./logging/logging-hooks";
 import { ConnectActions } from "./connect-actions";
+import { useNavigate } from "react-router";
 
 export enum ConnectionFlowType {
   Bluetooth = "bluetooth",
@@ -10,11 +18,11 @@ export enum ConnectionFlowType {
 }
 
 export enum ConnectionStatus {
-  None, // Have not been connected before
-  Connecting,
-  Connected,
-  Disconnected,
-  Reconnecting,
+  None = "None", // Have not been connected before
+  Connecting = "Connecting",
+  Connected = "Connected",
+  Disconnected = "Disconnected",
+  Reconnecting = "Reconnecting",
 }
 
 export type ConnectionType = "bluetooth" | "radio";
@@ -43,33 +51,33 @@ export interface ConnectionStage {
 
 export enum ConnectionFlowStep {
   // Happy flow stages
-  None,
-  Start,
-  ConnectCable,
-  WebUsbFlashingTutorial,
-  ManualFlashingTutorial,
-  ConnectBattery,
-  EnterBluetoothPattern,
-  ConnectBluetoothTutorial,
+  None = "None",
+  Start = "Start",
+  ConnectCable = "ConnectCable",
+  WebUsbFlashingTutorial = "WebUsbFlashingTutorial",
+  ManualFlashingTutorial = "ManualFlashingTutorial",
+  ConnectBattery = "ConnectBattery",
+  EnterBluetoothPattern = "EnterBluetoothPattern",
+  ConnectBluetoothTutorial = "ConnectBluetoothTutorial",
 
   // Stages that are not user-controlled
-  WebUsbChooseMicrobit,
-  ConnectingBluetooth,
-  ConnectingMicrobits,
-  FlashingInProgress,
+  WebUsbChooseMicrobit = "WebUsbChooseMicrobit",
+  ConnectingBluetooth = "ConnectingBluetooth",
+  ConnectingMicrobits = "ConnectingMicrobits",
+  FlashingInProgress = "FlashingInProgress",
 
   // Failure stages
-  TryAgainReplugMicrobit,
-  TryAgainCloseTabs,
-  TryAgainSelectMicrobit,
-  TryAgainBluetoothConnect,
-  BadFirmware,
-  MicrobitUnsupported,
-  WebUsbBluetoothUnsupported,
+  TryAgainReplugMicrobit = "TryAgainReplugMicrobit",
+  TryAgainCloseTabs = "TryAgainCloseTabs",
+  TryAgainSelectMicrobit = "TryAgainSelectMicrobit",
+  TryAgainBluetoothConnect = "TryAgainBluetoothConnect",
+  BadFirmware = "BadFirmware",
+  MicrobitUnsupported = "MicrobitUnsupported",
+  WebUsbBluetoothUnsupported = "WebUsbBluetoothUnsupported",
 
-  ReconnectAutoFail,
-  ReconnectManualFail,
-  ReconnectFailedTwice,
+  ReconnectAutoFail = "ReconnectAutoFail",
+  ReconnectManualFail = "ReconnectManualFail",
+  ReconnectFailedTwice = "ReconnectFailedTwice",
 }
 
 export enum ConnEvent {
@@ -127,7 +135,7 @@ const initialConnectionStageValue: ConnectionStage = {
   reconnectFailStreak: 0,
   detectedDeviceIds: [],
   microbitNames: [],
-  status: ConnectionStatus.Disconnected,
+  status: ConnectionStatus.None,
   connType: "bluetooth",
   isWebBluetoothSupported: true,
   isWebUsbSupported: true,
@@ -157,11 +165,21 @@ export const useConnectionStage = (): {
   }
   const [stage, setStage] = connectionStageContextValue;
   const logging = useLogging();
+  const navigate = useNavigate();
 
   const actions = useMemo(() => {
     const connectActions = new ConnectActions(logging);
-    return new ConnectionStageActions(connectActions, stage, setStage);
-  }, [logging, stage, setStage]);
+    return new ConnectionStageActions(
+      connectActions,
+      navigate,
+      stage,
+      setStage
+    );
+  }, [logging, navigate, stage, setStage]);
+
+  useEffect(() => {
+    console.log(stage);
+  }, [stage]);
 
   const isConnected = useMemo(
     () => stage.status === ConnectionStatus.Connected,

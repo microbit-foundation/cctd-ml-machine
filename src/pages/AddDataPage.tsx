@@ -28,13 +28,14 @@ import {
 } from "../gestures-hooks";
 import { addDataConfig } from "../pages-config";
 import { createStepPageUrl } from "../urls";
+import { useConnectionStage } from "../connection-stage-hooks";
 
 const AddDataPage = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const [gestures] = useGestureData();
   const actions = useGestureActions();
-  const isInputConnected = true;
+  const { isConnected } = useConnectionStage();
 
   const hasSufficientData = useMemo(
     () => hasSufficientDataForTraining(gestures.data),
@@ -64,7 +65,7 @@ const AddDataPage = () => {
   return (
     <DefaultPageLayout titleId={`${addDataConfig.id}-title`}>
       <TabView activeStep={addDataConfig.id} />
-      {noStoredData && !isInputConnected ? (
+      {noStoredData && !isConnected ? (
         <ConnectFirstView />
       ) : (
         <AddDataGridView />
@@ -85,8 +86,7 @@ const AddDataPage = () => {
             leftIcon={<RiAddLine />}
             onClick={handleAddNewGesture}
             isDisabled={
-              !isInputConnected ||
-              gestures.data.some((g) => g.name.length === 0)
+              !isConnected || gestures.data.some((g) => g.name.length === 0)
             }
           >
             <FormattedMessage id="content.data.addAction" />

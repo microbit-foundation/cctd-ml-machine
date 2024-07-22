@@ -1,3 +1,4 @@
+import { NavigateFunction } from "react-router";
 import { deviceIdToMicrobitName } from "./bt-pattern-utils";
 import {
   ConnectActions,
@@ -13,12 +14,14 @@ import {
   ConnectionStatus,
   ConnectionType,
 } from "./connection-stage-hooks";
+import { createStepPageUrl } from "./urls";
 
 type FlowStage = Pick<ConnectionStage, "flowStep" | "flowType">;
 
 export class ConnectionStageActions {
   constructor(
     private actions: ConnectActions,
+    private navigate: NavigateFunction,
     private stage: ConnectionStage,
     private setStage: (stage: ConnectionStage) => void
   ) {}
@@ -138,8 +141,7 @@ export class ConnectionStageActions {
 
   private handleConnectResult = (result: ConnectResult) => {
     if (result === ConnectResult.Success) {
-      this.onConnected();
-      return this.dispatchEvent(ConnEvent.Close);
+      return this.onConnected();
     }
     const reconnectFailStreak = this.setDisconnectedAndRecordFailStreak();
     if (reconnectFailStreak === 0) {
@@ -157,10 +159,11 @@ export class ConnectionStageActions {
 
   private onConnected = () => {
     this.setStage({
-      ...this.stage,
+      ...getUpdatedConnStage(this.stage, ConnEvent.Close),
       status: ConnectionStatus.Connected,
       reconnectFailStreak: 0,
     });
+    this.navigate(createStepPageUrl("add-data"));
   };
 
   private setDisconnectedAndRecordFailStreak = () => {

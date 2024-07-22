@@ -177,10 +177,6 @@ export const useConnectionStage = (): {
     );
   }, [logging, navigate, stage, setStage]);
 
-  useEffect(() => {
-    console.log(stage);
-  }, [stage]);
-
   const isConnected = useMemo(
     () => stage.status === ConnectionStatus.Connected,
     [stage.status]

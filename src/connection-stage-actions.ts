@@ -26,7 +26,7 @@ export class ConnectionStageActions {
   start = () => this.dispatchEvent(ConnEvent.Start);
 
   dispatchEvent = (event: ConnEvent) => {
-    this.setStage(getUpdatedConnState(this.stage, event));
+    this.setStage(getUpdatedConnStage(this.stage, event));
   };
 
   connectAndflashMicrobit = async (
@@ -99,8 +99,7 @@ export class ConnectionStageActions {
   };
 
   connectBluetooth = async () => {
-    this.dispatchEvent(ConnEvent.ConnectingBluetooth);
-    this.onConnectingOrReconnectingStatus("bluetooth");
+    this.onConnectingOrReconnecting("bluetooth");
     const result = await this.actions.connectBluetooth(
       this.stage.microbitNames.length > 0
         ? this.stage.microbitNames[0]
@@ -110,8 +109,7 @@ export class ConnectionStageActions {
   };
 
   connectMicrobits = async () => {
-    this.dispatchEvent(ConnEvent.ConnectingMicrobits);
-    this.onConnectingOrReconnectingStatus("radio");
+    this.onConnectingOrReconnecting("radio");
     const deviceId = this.stage.detectedDeviceIds;
     if (deviceId.length > 0) {
       const result = await this.actions.connectMicrobitsSerial(deviceId[0]);
@@ -121,9 +119,15 @@ export class ConnectionStageActions {
     }
   };
 
-  private onConnectingOrReconnectingStatus = (connType: ConnectionType) => {
+  private onConnectingOrReconnecting = (connType: ConnectionType) => {
+    const nextStage = getUpdatedConnStage(
+      this.stage,
+      connType === "bluetooth"
+        ? ConnEvent.ConnectingBluetooth
+        : ConnEvent.ConnectingMicrobits
+    );
     this.setStage({
-      ...this.stage,
+      ...nextStage,
       connType,
       status:
         this.stage.status === ConnectionStatus.None
@@ -189,7 +193,7 @@ export class ConnectionStageActions {
   };
 }
 
-export const getUpdatedConnState = (
+export const getUpdatedConnStage = (
   state: ConnectionStage,
   event: ConnEvent
 ): ConnectionStage => {

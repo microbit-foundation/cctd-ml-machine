@@ -47,8 +47,7 @@ export class ConnectionStageActions {
     }
     // Store radio/bluetooth details. Radio is essential to pass to micro:bit 2.
     // Bluetooth saves the user from entering the pattern.
-    const newStage = this.storeDetectedDetails(deviceId);
-    onSuccess(newStage);
+    onSuccess({ ...this.stage, ...this.getDetectedDetails(deviceId) });
 
     if (this.stage.flowType === ConnectionFlowType.RadioBridge) {
       return await this.connectMicrobits();
@@ -56,23 +55,19 @@ export class ConnectionStageActions {
     return this.dispatchEvent(ConnEvent.ConnectBattery);
   };
 
-  private storeDetectedDetails = (deviceId: number): ConnectionStage => {
-    const existingDeviceIds = this.stage.detectedDeviceIds;
-    const existingNames = this.stage.microbitNames;
-    const name = deviceIdToMicrobitName(deviceId);
-    const newStage = {
-      ...this.stage,
-      // Only store two device ids and names at any given time as only
-      // a maximum of two device infos are needed for radio connection
-      ...(existingDeviceIds.length === 2
-        ? { detectedDeviceIds: [deviceId], microbitNames: [name] }
-        : {
-            detectedDeviceIds: [...existingDeviceIds, deviceId],
-            microbitNames: [...existingNames, name],
-          }),
-    };
-    this.setStage(newStage);
-    return newStage;
+  private getDetectedDetails = (deviceId: number): Partial<ConnectionStage> => {
+    switch (this.stage.flowType) {
+      case ConnectionFlowType.Bluetooth: {
+        const microbitName = deviceIdToMicrobitName(deviceId);
+        return { deviceId, microbitName };
+      }
+      case ConnectionFlowType.RadioBridge: {
+        return { bridgeDeviceId: deviceId };
+      }
+      case ConnectionFlowType.RadioRemote: {
+        return { remoteDeviceId: deviceId };
+      }
+    }
   };
 
   private handleConnectAndFlashFail = (result: ConnectAndFlashFailResult) => {
@@ -95,27 +90,38 @@ export class ConnectionStageActions {
     }
   };
 
-  setMicrobitName = (name: string) => {
-    const microbitNames = [...this.stage.microbitNames];
-    microbitNames[0] = name;
-    this.setStage({ ...this.stage, microbitNames });
+  onChangeMicrobitName = (name: string) => {
+    if (this.stage.connType !== "bluetooth") {
+      throw new Error("Microbit name can only be set for bluetooth flow");
+    }
+    this.setStage({
+      ...this.stage,
+      connType: "bluetooth",
+      // It is not possible to compute device id from micro:bit name
+      // so to remove confusion, device id is removed from state
+      deviceId: undefined,
+      microbitName: name,
+    });
+  };
+
+  getMicrobitName = () => {
+    return this.stage.connType === "bluetooth"
+      ? this.stage.microbitName
+      : undefined;
   };
 
   connectBluetooth = async () => {
     this.onConnectingOrReconnecting("bluetooth");
-    const result = await this.actions.connectBluetooth(
-      this.stage.microbitNames.length > 0
-        ? this.stage.microbitNames[0]
-        : undefined
-    );
+    const result = await this.actions.connectBluetooth(this.getMicrobitName());
     this.handleConnectResult(result);
   };
 
   connectMicrobits = async () => {
     this.onConnectingOrReconnecting("radio");
-    const deviceId = this.stage.detectedDeviceIds;
-    if (deviceId.length > 0) {
-      const result = await this.actions.connectMicrobitsSerial(deviceId[0]);
+    if (this.stage.connType === "radio" && this.stage.remoteDeviceId) {
+      const result = await this.actions.connectMicrobitsSerial(
+        this.stage.remoteDeviceId
+      );
       this.handleConnectResult(result);
     } else {
       this.dispatchEvent(ConnEvent.TryAgainReplugMicrobit);

@@ -28,7 +28,7 @@ const ConnectionDialogs = () => {
   const [flashProgress, setFlashProgress] = useState<number>(0);
   const { isOpen, onClose: onCloseDialog, onOpen } = useDisclosure();
   const [microbitName, setMicrobitName] = useState<string | undefined>(
-    stage.microbitNames.length > 0 ? stage.microbitNames[0] : undefined
+    actions.getMicrobitName()
   );
   const onClose = useCallback(() => {
     dispatch(ConnEvent.Close);
@@ -54,10 +54,11 @@ const ConnectionDialogs = () => {
     [dispatch, stage.flowStep]
   );
 
-  const onFlashSuccess = useCallback(({ microbitNames }: ConnectionStage) => {
+  const onFlashSuccess = useCallback((stage: ConnectionStage) => {
     // Inferring microbit name saves the user from entering the pattern
-    if (microbitNames.length > 0) {
-      setMicrobitName(microbitNames[0]);
+    // for bluetooth connection flow
+    if (stage.connType === "bluetooth" && stage.microbitName) {
+      setMicrobitName(stage.microbitName);
     }
   }, []);
 
@@ -67,7 +68,7 @@ const ConnectionDialogs = () => {
 
   const onChangeMicrobitName = useCallback(
     (name: string) => {
-      actions.setMicrobitName(name);
+      actions.onChangeMicrobitName(name);
       setMicrobitName(name);
     },
     [actions]

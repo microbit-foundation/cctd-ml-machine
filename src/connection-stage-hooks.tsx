@@ -1,11 +1,4 @@
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 import { ConnectionStageActions } from "./connection-stage-actions";
 import { useLogging } from "./logging/logging-hooks";
 import { ConnectActions } from "./connect-actions";
@@ -26,28 +19,6 @@ export enum ConnectionStatus {
 }
 
 export type ConnectionType = "bluetooth" | "radio";
-
-export interface ConnectionStage {
-  // For connection flow
-  flowStep: ConnectionFlowStep;
-  flowType: ConnectionFlowType;
-  // Number of times there have been consecutive reconnect fails
-  // for determining which reconnection dialog to show
-  reconnectFailStreak: number;
-
-  // Connection details
-  // Detected device id may not be synced with micro:bit name if the user changes
-  // the bluetooth pattern, because it is not possible to compute device id from
-  // micro:bit name
-  detectedDeviceIds: number[];
-  microbitNames: string[];
-  status: ConnectionStatus;
-  connType: ConnectionType;
-
-  // Compatibility
-  isWebBluetoothSupported: boolean;
-  isWebUsbSupported: boolean;
-}
 
 export enum ConnectionFlowStep {
   // Happy flow stages
@@ -117,6 +88,36 @@ export enum ConnEvent {
   ReconnectFailedTwice,
 }
 
+interface ConnectionStageBase {
+  // For connection flow
+  flowStep: ConnectionFlowStep;
+  flowType: ConnectionFlowType;
+  // Number of times there have been consecutive reconnect fails
+  // for determining which reconnection dialog to show
+  reconnectFailStreak: number;
+
+  // Compatibility
+  isWebBluetoothSupported: boolean;
+  isWebUsbSupported: boolean;
+
+  // Connection state
+  status: ConnectionStatus;
+}
+
+interface BluetoothConnectionStage extends ConnectionStageBase {
+  connType: "bluetooth";
+  deviceId?: number;
+  microbitName?: string;
+}
+
+interface RadioConnectionStage extends ConnectionStageBase {
+  connType: "radio";
+  bridgeDeviceId?: number;
+  remoteDeviceId?: number;
+}
+
+export type ConnectionStage = BluetoothConnectionStage | RadioConnectionStage;
+
 type ConnectionStageContextValue = [
   ConnectionStage,
   (state: ConnectionStage) => void
@@ -133,8 +134,6 @@ const initialConnectionStageValue: ConnectionStage = {
   flowStep: ConnectionFlowStep.None,
   flowType: ConnectionFlowType.Bluetooth,
   reconnectFailStreak: 0,
-  detectedDeviceIds: [],
-  microbitNames: [],
   status: ConnectionStatus.None,
   connType: "bluetooth",
   isWebBluetoothSupported: true,

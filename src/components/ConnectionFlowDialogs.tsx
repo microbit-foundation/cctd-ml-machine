@@ -1,7 +1,6 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import {
-  ConnEvent,
   ConnectionFlowStep,
   ConnectionFlowType,
   ConnectionStage,
@@ -24,16 +23,15 @@ import WhatYouWillNeedDialog from "./WhatYouWillNeedDialog";
 
 const ConnectionDialogs = () => {
   const { stage, actions } = useConnectionStage();
-  const dispatch = actions.dispatchEvent;
   const [flashProgress, setFlashProgress] = useState<number>(0);
   const { isOpen, onClose: onCloseDialog, onOpen } = useDisclosure();
   const [microbitName, setMicrobitName] = useState<string | undefined>(
     stage.bluetoothMicrobitName
   );
   const onClose = useCallback(() => {
-    dispatch(ConnEvent.Close);
+    actions.setFlowStep(ConnectionFlowStep.None);
     onCloseDialog();
-  }, [dispatch, onCloseDialog]);
+  }, [actions, onCloseDialog]);
 
   useEffect(() => {
     if (stage.flowStep !== ConnectionFlowStep.None && !isOpen) {
@@ -47,11 +45,11 @@ const ConnectionDialogs = () => {
   const progressCallback = useCallback(
     (progress: number) => {
       if (stage.flowStep !== ConnectionFlowStep.FlashingInProgress) {
-        dispatch(ConnEvent.FlashingInProgress);
+        actions.setFlowStep(ConnectionFlowStep.FlashingInProgress);
       }
       setFlashProgress(progress * 100);
     },
-    [dispatch, stage.flowStep]
+    [actions, stage.flowStep]
   );
 
   const onChangeMicrobitName = useCallback(
@@ -79,28 +77,13 @@ const ConnectionDialogs = () => {
   async function connectAndFlash(): Promise<void> {
     await actions.connectAndflashMicrobit(progressCallback, onFlashSuccess);
   }
-
-  const onSwitchTypeClick = useCallback(
-    () => dispatch(ConnEvent.Switch),
-    [dispatch]
-  );
-  const onBackClick = useCallback(() => dispatch(ConnEvent.Back), [dispatch]);
-  const onNextClick = useCallback(() => dispatch(ConnEvent.Next), [dispatch]);
   const onSkip = useCallback(
-    () => dispatch(ConnEvent.SkipFlashing),
-    [dispatch]
-  );
-  const onTryAgain = useCallback(
-    () => dispatch(ConnEvent.TryAgain),
-    [dispatch]
-  );
-  const onStartBluetooth = useCallback(
-    () => dispatch(ConnEvent.GoToBluetoothStart),
-    [dispatch]
+    () => actions.setFlowStep(ConnectionFlowStep.ConnectBattery),
+    [actions]
   );
   const onInstructManualFlashing = useCallback(
-    () => dispatch(ConnEvent.InstructManualFlashing),
-    [dispatch]
+    () => actions.setFlowStep(ConnectionFlowStep.ManualFlashingTutorial),
+    [actions]
   );
 
   const dialogCommonProps = { isOpen, onClose };
@@ -118,22 +101,26 @@ const ConnectionDialogs = () => {
           {...dialogCommonProps}
           onLinkClick={
             stage.isWebBluetoothSupported && stage.isWebUsbSupported
-              ? onSwitchTypeClick
+              ? actions.switchFlowType
               : undefined
           }
-          onNextClick={onNextClick}
+          onNextClick={actions.onNextClick}
           reconnect={stage.flowStep === ConnectionFlowStep.ReconnectFailedTwice}
         />
       );
     }
     case ConnectionFlowStep.ConnectCable: {
-      const commonProps = { onBackClick, onNextClick, ...dialogCommonProps };
+      const commonProps = {
+        onBackClick: actions.onBackClick,
+        onNextClick: actions.onNextClick,
+        ...dialogCommonProps,
+      };
       return (
         <ConnectCableDialog
           {...commonProps}
           type={stage.flowType}
           onSkip={onSkip}
-          onSwitch={onSwitchTypeClick}
+          onSwitch={actions.switchFlowType}
         />
       );
     }
@@ -141,7 +128,7 @@ const ConnectionDialogs = () => {
       return (
         <SelectMicrobitUsbDialog
           {...dialogCommonProps}
-          onBackClick={onBackClick}
+          onBackClick={actions.onBackClick}
           onNextClick={connectAndFlash}
         />
       );
@@ -150,8 +137,8 @@ const ConnectionDialogs = () => {
       return (
         <ManualFlashingDialog
           {...dialogCommonProps}
-          onNextClick={onNextClick}
-          onBackClick={onBackClick}
+          onNextClick={actions.onNextClick}
+          onBackClick={actions.onBackClick}
         />
       );
     }
@@ -159,8 +146,8 @@ const ConnectionDialogs = () => {
       return (
         <ConnectBatteryDialog
           {...dialogCommonProps}
-          onBackClick={onBackClick}
-          onNextClick={onNextClick}
+          onBackClick={actions.onBackClick}
+          onNextClick={actions.onNextClick}
         />
       );
     }
@@ -168,8 +155,8 @@ const ConnectionDialogs = () => {
       return (
         <EnterBluetoothPatternDialog
           {...dialogCommonProps}
-          onBackClick={onBackClick}
-          onNextClick={onNextClick}
+          onBackClick={actions.onBackClick}
+          onNextClick={actions.onNextClick}
           microbitName={microbitName}
           onChangeMicrobitName={onChangeMicrobitName}
         />
@@ -179,7 +166,7 @@ const ConnectionDialogs = () => {
       return (
         <SelectMicrobitBluetoothDialog
           {...dialogCommonProps}
-          onBackClick={onBackClick}
+          onBackClick={actions.onBackClick}
           onNextClick={actions.connectBluetooth}
         />
       );
@@ -222,7 +209,7 @@ const ConnectionDialogs = () => {
       return (
         <TryAgainDialog
           {...dialogCommonProps}
-          onTryAgain={onTryAgain}
+          onTryAgain={actions.onTryAgain}
           type={stage.flowStep}
         />
       );
@@ -232,7 +219,7 @@ const ConnectionDialogs = () => {
         <BrokenFirmwareDialog
           {...dialogCommonProps}
           onSkip={onInstructManualFlashing}
-          onTryAgain={onTryAgain}
+          onTryAgain={actions.onTryAgain}
         />
       );
     }
@@ -240,7 +227,7 @@ const ConnectionDialogs = () => {
       return (
         <UnsupportedMicrobitDialog
           {...dialogCommonProps}
-          onStartBluetoothClick={onStartBluetooth}
+          onStartBluetoothClick={actions.onStartBluetoothFlow}
           isBluetoothSupported={stage.isWebBluetoothSupported}
         />
       );

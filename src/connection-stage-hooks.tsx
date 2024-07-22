@@ -59,43 +59,6 @@ export enum ConnectionFlowStep {
   ReconnectFailedTwice = "ReconnectFailedTwice",
 }
 
-export enum ConnEvent {
-  // User triggered events
-  Start = "Start",
-  Switch = "Switch",
-  Next = "Next",
-  Back = "Back",
-  SkipFlashing = "SkipFlashing",
-  TryAgain = "TryAgain",
-  GoToBluetoothStart = "GoToBluetoothStart",
-  Close = "Close",
-
-  // Web USB Flashing events
-  WebUsbChooseMicrobit = "WebUsbChooseMicrobit",
-  FlashingInProgress = "FlashingInProgress",
-  ConnectBattery = "ConnectBattery",
-
-  // Web USB Flashing failure events
-  TryAgainReplugMicrobit = "TryAgainReplugMicrobit",
-  TryAgainCloseTabs = "TryAgainCloseTabs",
-  TryAgainSelectMicrobit = "TryAgainSelectMicrobit",
-  InstructManualFlashing = "InstructManualFlashing",
-  BadFirmware = "BadFirmware",
-  MicrobitUnsupported = "MicrobitUnsupported",
-
-  // Bluetooth connection event
-  ConnectingBluetooth = "ConnectingBluetooth",
-
-  // Connecting microbits for radio connection
-  ConnectingMicrobits = "ConnectingMicrobits",
-
-  // Connection failure event
-  ConnectFailed = "ConnectFailed",
-  ReconnectAutoFail = "ReconnectAutoFail",
-  ReconnectManualFail = "ReconnectManualFail",
-  ReconnectFailedTwice = "ReconnectFailedTwice",
-}
-
 export interface ConnectionStage {
   // For connection flow
   flowStep: ConnectionFlowStep;

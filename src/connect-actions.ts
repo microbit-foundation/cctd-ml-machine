@@ -119,7 +119,7 @@ export class ConnectActions {
     if (!deviceId) {
       return ConnectResult.ManualConnectFailed;
     }
-    return ConnectResult.ManualConnectFailed;
+    return ConnectResult.Success;
   };
 
   connectBluetooth = async (

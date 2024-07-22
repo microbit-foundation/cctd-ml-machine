@@ -7,12 +7,10 @@ import {
   ConnectResult,
 } from "./connect-actions";
 import {
-  ConnEvent,
   ConnectionFlowStep,
   ConnectionFlowType,
   ConnectionStage,
   ConnectionStatus,
-  ConnectionType,
 } from "./connection-stage-hooks";
 import { createStepPageUrl } from "./urls";
 
@@ -26,17 +24,28 @@ export class ConnectionStageActions {
     private setStage: (stage: ConnectionStage) => void
   ) {}
 
-  start = () => this.dispatchEvent(ConnEvent.Start);
+  start = () =>
+    this.setStage({
+      ...this.stage,
+      flowType:
+        this.stage.flowType === ConnectionFlowType.RadioBridge
+          ? ConnectionFlowType.RadioRemote
+          : ConnectionFlowType.Bluetooth,
+      flowStep:
+        !this.stage.isWebBluetoothSupported && !this.stage.isWebUsbSupported
+          ? ConnectionFlowStep.WebUsbBluetoothUnsupported
+          : ConnectionFlowStep.Start,
+    });
 
-  dispatchEvent = (event: ConnEvent) => {
-    this.setStage(getUpdatedConnStage(this.stage, event));
+  setFlowStep = (step: ConnectionFlowStep) => {
+    this.setStage({ ...this.stage, flowStep: step });
   };
 
   connectAndflashMicrobit = async (
     progressCallback: (progress: number) => void,
     onSuccess: (stage: ConnectionStage) => void
   ) => {
-    this.dispatchEvent(ConnEvent.WebUsbChooseMicrobit);
+    this.setFlowStep(ConnectionFlowStep.WebUsbChooseMicrobit);
     const { result, deviceId } =
       await this.actions.requestUSBConnectionAndFlash(
         this.stage.flowType,
@@ -61,6 +70,7 @@ export class ConnectionStageActions {
         const microbitName = deviceIdToMicrobitName(deviceId);
         newStage = {
           ...this.stage,
+          connType: "bluetooth",
           flowStep: ConnectionFlowStep.ConnectBattery,
           bluetoothDeviceId: deviceId,
           bluetoothMicrobitName: microbitName,
@@ -70,15 +80,17 @@ export class ConnectionStageActions {
       case ConnectionFlowType.RadioBridge: {
         newStage = {
           ...this.stage,
+          connType: "radio",
           flowStep: ConnectionFlowStep.ConnectingMicrobits,
           radioBridgeDeviceId: deviceId,
-          ...this.getConnectingOrReconnectingStage("radio"),
+          status: this.getConnectingOrReconnectingStatus(),
         };
         break;
       }
       case ConnectionFlowType.RadioRemote: {
         newStage = {
           ...this.stage,
+          connType: "radio",
           flowStep: ConnectionFlowStep.ConnectBattery,
           radioRemoteDeviceId: deviceId,
         };
@@ -91,21 +103,22 @@ export class ConnectionStageActions {
 
   private handleConnectAndFlashFail = (result: ConnectAndFlashFailResult) => {
     if (this.stage.flowType === ConnectionFlowType.Bluetooth) {
-      return this.dispatchEvent(ConnEvent.InstructManualFlashing);
+      return this.setFlowStep(ConnectionFlowStep.ManualFlashingTutorial);
     }
+
     // TODO: Not sure if this is a good way of error handling because it means
     // there are 2 levels of switch statements to go through to provide UI
     switch (result) {
       case ConnectAndFlashResult.ErrorMicrobitUnsupported:
-        return this.dispatchEvent(ConnEvent.MicrobitUnsupported);
+        return this.setFlowStep(ConnectionFlowStep.MicrobitUnsupported);
       case ConnectAndFlashResult.ErrorBadFirmware:
-        return this.dispatchEvent(ConnEvent.BadFirmware);
+        return this.setFlowStep(ConnectionFlowStep.BadFirmware);
       case ConnectAndFlashResult.ErrorNoDeviceSelected:
-        return this.dispatchEvent(ConnEvent.TryAgainSelectMicrobit);
+        return this.setFlowStep(ConnectionFlowStep.TryAgainSelectMicrobit);
       case ConnectAndFlashResult.ErrorUnableToClaimInterface:
-        return this.dispatchEvent(ConnEvent.TryAgainCloseTabs);
+        return this.setFlowStep(ConnectionFlowStep.TryAgainCloseTabs);
       default:
-        return this.dispatchEvent(ConnEvent.TryAgainReplugMicrobit);
+        return this.setFlowStep(ConnectionFlowStep.TryAgainReplugMicrobit);
     }
   };
 
@@ -124,6 +137,12 @@ export class ConnectionStageActions {
   };
 
   connectBluetooth = async () => {
+    this.setStage({
+      ...this.stage,
+      connType: "bluetooth",
+      flowStep: ConnectionFlowStep.ConnectingBluetooth,
+      status: this.getConnectingOrReconnectingStatus(),
+    });
     const result = await this.actions.connectBluetooth(
       this.stage.bluetoothMicrobitName
     );
@@ -137,18 +156,14 @@ export class ConnectionStageActions {
       );
       this.handleConnectResult(result);
     } else {
-      this.dispatchEvent(ConnEvent.TryAgainReplugMicrobit);
+      this.setFlowStep(ConnectionFlowStep.TryAgainReplugMicrobit);
     }
   };
 
-  private getConnectingOrReconnectingStage = (connType: ConnectionType) => {
-    return {
-      connType,
-      status:
-        this.stage.status === ConnectionStatus.None
-          ? ConnectionStatus.Connecting
-          : ConnectionStatus.Reconnecting,
-    };
+  private getConnectingOrReconnectingStatus = () => {
+    return this.stage.status === ConnectionStatus.None
+      ? ConnectionStatus.Connecting
+      : ConnectionStatus.Reconnecting;
   };
 
   private handleConnectResult = (result: ConnectResult) => {
@@ -157,21 +172,26 @@ export class ConnectionStageActions {
     }
     const reconnectFailStreak = this.setDisconnectedAndRecordFailStreak();
     if (reconnectFailStreak === 0) {
-      return this.dispatchEvent(ConnEvent.ConnectFailed);
-    }
-    if (reconnectFailStreak === 1) {
-      return this.dispatchEvent(
-        result === ConnectResult.ManualConnectFailed
-          ? ConnEvent.ReconnectManualFail
-          : ConnEvent.ReconnectAutoFail
+      return this.setFlowStep(
+        this.stage.flowType === ConnectionFlowType.Bluetooth
+          ? ConnectionFlowStep.TryAgainBluetoothConnect
+          : ConnectionFlowStep.TryAgainReplugMicrobit
       );
     }
-    return this.dispatchEvent(ConnEvent.ReconnectFailedTwice);
+    if (reconnectFailStreak === 1) {
+      return this.setFlowStep(
+        result === ConnectResult.ManualConnectFailed
+          ? ConnectionFlowStep.ReconnectManualFail
+          : ConnectionFlowStep.ReconnectAutoFail
+      );
+    }
+    return this.setFlowStep(ConnectionFlowStep.ReconnectFailedTwice);
   };
 
   private onConnected = () => {
     this.setStage({
-      ...getUpdatedConnStage(this.stage, ConnEvent.Close),
+      ...this.stage,
+      flowStep: ConnectionFlowStep.None,
       status: ConnectionStatus.Connected,
       reconnectFailStreak: 0,
     });
@@ -206,94 +226,41 @@ export class ConnectionStageActions {
       await this.connectMicrobits();
     }
   };
-}
 
-export const getUpdatedConnStage = (
-  state: ConnectionStage,
-  event: ConnEvent
-): ConnectionStage => {
-  switch (event) {
-    case ConnEvent.Start:
-      return {
-        ...state,
-        flowType:
-          state.flowType === ConnectionFlowType.RadioBridge
-            ? ConnectionFlowType.RadioRemote
-            : ConnectionFlowType.Bluetooth,
-        flowStep:
-          !state.isWebBluetoothSupported && !state.isWebUsbSupported
-            ? ConnectionFlowStep.WebUsbBluetoothUnsupported
-            : ConnectionFlowStep.Start,
-      };
-    case ConnEvent.Close:
-      return { ...state, flowStep: ConnectionFlowStep.None };
-    case ConnEvent.ConnectBattery:
-    case ConnEvent.SkipFlashing:
-      return { ...state, flowStep: ConnectionFlowStep.ConnectBattery };
-    case ConnEvent.FlashingInProgress:
-      return { ...state, flowStep: ConnectionFlowStep.FlashingInProgress };
-    case ConnEvent.InstructManualFlashing:
-      return { ...state, flowStep: ConnectionFlowStep.ManualFlashingTutorial };
-    case ConnEvent.WebUsbChooseMicrobit:
-      return { ...state, flowStep: ConnectionFlowStep.WebUsbChooseMicrobit };
-    case ConnEvent.ConnectingBluetooth:
-      return { ...state, flowStep: ConnectionFlowStep.ConnectingBluetooth };
-    case ConnEvent.ConnectingMicrobits:
-      return { ...state, flowStep: ConnectionFlowStep.ConnectingMicrobits };
-    case ConnEvent.Next:
-      return { ...state, ...getNextStage(state, 1) };
-    case ConnEvent.Back:
-      return { ...state, ...getNextStage(state, -1) };
-    case ConnEvent.Switch:
-      return {
-        ...state,
-        flowType:
-          state.flowType === ConnectionFlowType.Bluetooth
-            ? ConnectionFlowType.RadioRemote
-            : ConnectionFlowType.Bluetooth,
-      };
-    case ConnEvent.GoToBluetoothStart:
-      return {
-        ...state,
-        flowStep: ConnectionFlowStep.Start,
-        flowType: ConnectionFlowType.Bluetooth,
-      };
-    case ConnEvent.ConnectFailed:
-      return {
-        ...state,
-        flowStep:
-          state.flowType === ConnectionFlowType.Bluetooth
-            ? ConnectionFlowStep.TryAgainBluetoothConnect
-            : ConnectionFlowStep.TryAgainReplugMicrobit,
-      };
-    case ConnEvent.TryAgainReplugMicrobit:
-      return { ...state, flowStep: ConnectionFlowStep.TryAgainReplugMicrobit };
-    case ConnEvent.TryAgainCloseTabs:
-      return { ...state, flowStep: ConnectionFlowStep.TryAgainCloseTabs };
-    case ConnEvent.TryAgainSelectMicrobit:
-      return { ...state, flowStep: ConnectionFlowStep.TryAgainSelectMicrobit };
-    case ConnEvent.BadFirmware:
-      return { ...state, flowStep: ConnectionFlowStep.BadFirmware };
-    case ConnEvent.MicrobitUnsupported:
-      return { ...state, flowStep: ConnectionFlowStep.MicrobitUnsupported };
-    case ConnEvent.TryAgain:
-      return {
-        ...state,
-        flowStep:
-          state.flowStep === ConnectionFlowStep.TryAgainBluetoothConnect
-            ? ConnectionFlowStep.EnterBluetoothPattern
-            : ConnectionFlowStep.ConnectCable,
-      };
-    case ConnEvent.ReconnectAutoFail:
-      return { ...state, flowStep: ConnectionFlowStep.ReconnectAutoFail };
-    case ConnEvent.ReconnectManualFail:
-      return { ...state, flowStep: ConnectionFlowStep.ReconnectManualFail };
-    case ConnEvent.ReconnectFailedTwice:
-      return { ...state, flowStep: ConnectionFlowStep.ReconnectFailedTwice };
-    default:
-      return state;
-  }
-};
+  switchFlowType = () => {
+    this.setStage({
+      ...this.stage,
+      flowType:
+        this.stage.flowType === ConnectionFlowType.Bluetooth
+          ? ConnectionFlowType.RadioRemote
+          : ConnectionFlowType.Bluetooth,
+    });
+  };
+
+  onStartBluetoothFlow = () => {
+    this.setStage({
+      ...this.stage,
+      flowStep: ConnectionFlowStep.Start,
+      flowType: ConnectionFlowType.Bluetooth,
+    });
+  };
+
+  onNextClick = () => {
+    this.setStage({ ...this.stage, ...getNextStage(this.stage, 1) });
+  };
+
+  onBackClick = () => {
+    this.setStage({ ...this.stage, ...getNextStage(this.stage, -1) });
+  };
+
+  onTryAgain = () => {
+    this.setFlowStep(
+      this.stage.flowStep === ConnectionFlowStep.TryAgainBluetoothConnect
+        ? ConnectionFlowStep.EnterBluetoothPattern
+        : ConnectionFlowStep.ConnectCable
+    );
+  };
+}
 
 const getStagesOrder = (state: ConnectionStage): FlowStage[] => {
   const { RadioRemote, RadioBridge, Bluetooth } = ConnectionFlowType;
@@ -302,16 +269,14 @@ const getStagesOrder = (state: ConnectionStage): FlowStage[] => {
       { flowStep: ConnectionFlowStep.Start, flowType: Bluetooth },
       { flowStep: ConnectionFlowStep.ConnectCable, flowType: Bluetooth },
       // Only bluetooth mode has this fallback, the radio bridge mode requires working WebUSB.
-      !state.isWebUsbSupported ||
-      state.flowStep === ConnectionFlowStep.ManualFlashingTutorial
-        ? {
-            flowStep: ConnectionFlowStep.ManualFlashingTutorial,
-            flowType: Bluetooth,
-          }
-        : {
-            flowStep: ConnectionFlowStep.WebUsbFlashingTutorial,
-            flowType: Bluetooth,
-          },
+      {
+        flowStep:
+          !state.isWebUsbSupported ||
+          state.flowStep === ConnectionFlowStep.ManualFlashingTutorial
+            ? ConnectionFlowStep.ManualFlashingTutorial
+            : ConnectionFlowStep.WebUsbFlashingTutorial,
+        flowType: Bluetooth,
+      },
       { flowStep: ConnectionFlowStep.ConnectBattery, flowType: Bluetooth },
       {
         flowStep: ConnectionFlowStep.EnterBluetoothPattern,

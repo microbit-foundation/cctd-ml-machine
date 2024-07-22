@@ -1,8 +1,16 @@
-import { ReactNode, createContext, useContext, useMemo, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { ConnectionStageActions } from "./connection-stage-actions";
 import { useLogging } from "./logging/logging-hooks";
 import { ConnectActions } from "./connect-actions";
 import { useNavigate } from "react-router";
+import { useStorage } from "./hooks/use-storage";
 
 export enum ConnectionFlowType {
   Bluetooth = "bluetooth",
@@ -53,42 +61,42 @@ export enum ConnectionFlowStep {
 
 export enum ConnEvent {
   // User triggered events
-  Start,
-  Switch,
-  Next,
-  Back,
-  SkipFlashing,
-  TryAgain,
-  GoToBluetoothStart,
-  Close,
+  Start = "Start",
+  Switch = "Switch",
+  Next = "Next",
+  Back = "Back",
+  SkipFlashing = "SkipFlashing",
+  TryAgain = "TryAgain",
+  GoToBluetoothStart = "GoToBluetoothStart",
+  Close = "Close",
 
   // Web USB Flashing events
-  WebUsbChooseMicrobit,
-  FlashingInProgress,
-  ConnectBattery,
+  WebUsbChooseMicrobit = "WebUsbChooseMicrobit",
+  FlashingInProgress = "FlashingInProgress",
+  ConnectBattery = "ConnectBattery",
 
   // Web USB Flashing failure events
-  TryAgainReplugMicrobit,
-  TryAgainCloseTabs,
-  TryAgainSelectMicrobit,
-  InstructManualFlashing,
-  BadFirmware,
-  MicrobitUnsupported,
+  TryAgainReplugMicrobit = "TryAgainReplugMicrobit",
+  TryAgainCloseTabs = "TryAgainCloseTabs",
+  TryAgainSelectMicrobit = "TryAgainSelectMicrobit",
+  InstructManualFlashing = "InstructManualFlashing",
+  BadFirmware = "BadFirmware",
+  MicrobitUnsupported = "MicrobitUnsupported",
 
   // Bluetooth connection event
-  ConnectingBluetooth,
+  ConnectingBluetooth = "ConnectingBluetooth",
 
   // Connecting microbits for radio connection
-  ConnectingMicrobits,
+  ConnectingMicrobits = "ConnectingMicrobits",
 
   // Connection failure event
-  ConnectFailed,
-  ReconnectAutoFail,
-  ReconnectManualFail,
-  ReconnectFailedTwice,
+  ConnectFailed = "ConnectFailed",
+  ReconnectAutoFail = "ReconnectAutoFail",
+  ReconnectManualFail = "ReconnectManualFail",
+  ReconnectFailedTwice = "ReconnectFailedTwice",
 }
 
-interface ConnectionStageBase {
+export interface ConnectionStage {
   // For connection flow
   flowStep: ConnectionFlowStep;
   flowType: ConnectionFlowType;
@@ -102,21 +110,12 @@ interface ConnectionStageBase {
 
   // Connection state
   status: ConnectionStatus;
+  connType: "bluetooth" | "radio";
+  bluetoothDeviceId?: number;
+  bluetoothMicrobitName?: string;
+  radioBridgeDeviceId?: number;
+  radioRemoteDeviceId?: number;
 }
-
-interface BluetoothConnectionStage extends ConnectionStageBase {
-  connType: "bluetooth";
-  deviceId?: number;
-  microbitName?: string;
-}
-
-interface RadioConnectionStage extends ConnectionStageBase {
-  connType: "radio";
-  bridgeDeviceId?: number;
-  remoteDeviceId?: number;
-}
-
-export type ConnectionStage = BluetoothConnectionStage | RadioConnectionStage;
 
 type ConnectionStageContextValue = [
   ConnectionStage,
@@ -130,24 +129,40 @@ interface ConnectionStageProviderProps {
   children: ReactNode;
 }
 
-const initialConnectionStageValue: ConnectionStage = {
+const getInitialConnectionStageValue = (
+  microbitName: string | undefined
+): ConnectionStage => ({
   flowStep: ConnectionFlowStep.None,
   flowType: ConnectionFlowType.Bluetooth,
   reconnectFailStreak: 0,
   status: ConnectionStatus.None,
+  bluetoothMicrobitName: microbitName,
   connType: "bluetooth",
   isWebBluetoothSupported: true,
   isWebUsbSupported: true,
-};
+});
 
 export const ConnectionStageProvider = ({
   children,
 }: ConnectionStageProviderProps) => {
-  const connectionStageContextValue = useState<ConnectionStage>(
-    initialConnectionStageValue
+  const [val, setMicrobitName] = useStorage<{
+    value?: string;
+  }>("local", "microbitName", { value: undefined });
+  const [connectionStage, setConnStage] = useState<ConnectionStage>(
+    getInitialConnectionStageValue(val.value)
   );
+  const setConnectionStage = useCallback(
+    (connStage: ConnectionStage) => {
+      setMicrobitName({ value: connStage.bluetoothMicrobitName });
+      setConnStage(connStage);
+    },
+    [setMicrobitName]
+  );
+
   return (
-    <ConnectionStageContext.Provider value={connectionStageContextValue}>
+    <ConnectionStageContext.Provider
+      value={[connectionStage, setConnectionStage]}
+    >
       {children}
     </ConnectionStageContext.Provider>
   );
@@ -167,9 +182,8 @@ export const useConnectionStage = (): {
   const navigate = useNavigate();
 
   const actions = useMemo(() => {
-    const connectActions = new ConnectActions(logging);
     return new ConnectionStageActions(
-      connectActions,
+      new ConnectActions(logging),
       navigate,
       stage,
       setStage

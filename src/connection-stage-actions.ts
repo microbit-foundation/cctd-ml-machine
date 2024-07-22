@@ -45,29 +45,48 @@ export class ConnectionStageActions {
     if (result !== ConnectAndFlashResult.Success) {
       return this.handleConnectAndFlashFail(result);
     }
-    // Store radio/bluetooth details. Radio is essential to pass to micro:bit 2.
-    // Bluetooth saves the user from entering the pattern.
-    onSuccess({ ...this.stage, ...this.getDetectedDetails(deviceId) });
 
-    if (this.stage.flowType === ConnectionFlowType.RadioBridge) {
-      return await this.connectMicrobits();
-    }
-    return this.dispatchEvent(ConnEvent.ConnectBattery);
+    this.onFlashSuccess(deviceId, onSuccess);
   };
 
-  private getDetectedDetails = (deviceId: number): Partial<ConnectionStage> => {
+  private onFlashSuccess = (
+    deviceId: number,
+    onSuccess: (stage: ConnectionStage) => void
+  ) => {
+    let newStage = this.stage;
+    // Store radio/bluetooth details. Radio is essential to pass to micro:bit 2.
+    // Bluetooth saves the user from entering the pattern.
     switch (this.stage.flowType) {
       case ConnectionFlowType.Bluetooth: {
         const microbitName = deviceIdToMicrobitName(deviceId);
-        return { deviceId, microbitName };
+        newStage = {
+          ...this.stage,
+          flowStep: ConnectionFlowStep.ConnectBattery,
+          bluetoothDeviceId: deviceId,
+          bluetoothMicrobitName: microbitName,
+        };
+        break;
       }
       case ConnectionFlowType.RadioBridge: {
-        return { bridgeDeviceId: deviceId };
+        newStage = {
+          ...this.stage,
+          flowStep: ConnectionFlowStep.ConnectingMicrobits,
+          radioBridgeDeviceId: deviceId,
+          ...this.getConnectingOrReconnectingStage("radio"),
+        };
+        break;
       }
       case ConnectionFlowType.RadioRemote: {
-        return { remoteDeviceId: deviceId };
+        newStage = {
+          ...this.stage,
+          flowStep: ConnectionFlowStep.ConnectBattery,
+          radioRemoteDeviceId: deviceId,
+        };
+        break;
       }
     }
+    onSuccess(newStage);
+    this.setStage(newStage);
   };
 
   private handleConnectAndFlashFail = (result: ConnectAndFlashFailResult) => {
@@ -99,28 +118,22 @@ export class ConnectionStageActions {
       connType: "bluetooth",
       // It is not possible to compute device id from micro:bit name
       // so to remove confusion, device id is removed from state
-      deviceId: undefined,
-      microbitName: name,
+      bluetoothDeviceId: undefined,
+      bluetoothMicrobitName: name,
     });
   };
 
-  getMicrobitName = () => {
-    return this.stage.connType === "bluetooth"
-      ? this.stage.microbitName
-      : undefined;
-  };
-
   connectBluetooth = async () => {
-    this.onConnectingOrReconnecting("bluetooth");
-    const result = await this.actions.connectBluetooth(this.getMicrobitName());
+    const result = await this.actions.connectBluetooth(
+      this.stage.bluetoothMicrobitName
+    );
     this.handleConnectResult(result);
   };
 
   connectMicrobits = async () => {
-    this.onConnectingOrReconnecting("radio");
-    if (this.stage.connType === "radio" && this.stage.remoteDeviceId) {
+    if (this.stage.connType === "radio" && this.stage.radioRemoteDeviceId) {
       const result = await this.actions.connectMicrobitsSerial(
-        this.stage.remoteDeviceId
+        this.stage.radioRemoteDeviceId
       );
       this.handleConnectResult(result);
     } else {
@@ -128,21 +141,14 @@ export class ConnectionStageActions {
     }
   };
 
-  private onConnectingOrReconnecting = (connType: ConnectionType) => {
-    const nextStage = getUpdatedConnStage(
-      this.stage,
-      connType === "bluetooth"
-        ? ConnEvent.ConnectingBluetooth
-        : ConnEvent.ConnectingMicrobits
-    );
-    this.setStage({
-      ...nextStage,
+  private getConnectingOrReconnectingStage = (connType: ConnectionType) => {
+    return {
       connType,
       status:
         this.stage.status === ConnectionStatus.None
           ? ConnectionStatus.Connecting
           : ConnectionStatus.Reconnecting,
-    });
+    };
   };
 
   private handleConnectResult = (result: ConnectResult) => {

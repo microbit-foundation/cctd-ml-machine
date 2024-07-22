@@ -28,7 +28,7 @@ const ConnectionDialogs = () => {
   const [flashProgress, setFlashProgress] = useState<number>(0);
   const { isOpen, onClose: onCloseDialog, onOpen } = useDisclosure();
   const [microbitName, setMicrobitName] = useState<string | undefined>(
-    actions.getMicrobitName()
+    stage.bluetoothMicrobitName
   );
   const onClose = useCallback(() => {
     dispatch(ConnEvent.Close);
@@ -54,18 +54,6 @@ const ConnectionDialogs = () => {
     [dispatch, stage.flowStep]
   );
 
-  const onFlashSuccess = useCallback((stage: ConnectionStage) => {
-    // Inferring microbit name saves the user from entering the pattern
-    // for bluetooth connection flow
-    if (stage.connType === "bluetooth" && stage.microbitName) {
-      setMicrobitName(stage.microbitName);
-    }
-  }, []);
-
-  async function connectAndFlash(): Promise<void> {
-    await actions.connectAndflashMicrobit(progressCallback, onFlashSuccess);
-  }
-
   const onChangeMicrobitName = useCallback(
     (name: string) => {
       actions.onChangeMicrobitName(name);
@@ -73,6 +61,24 @@ const ConnectionDialogs = () => {
     },
     [actions]
   );
+
+  const onFlashSuccess = useCallback(
+    async (newStage: ConnectionStage) => {
+      // Inferring microbit name saves the user from entering the pattern
+      // for bluetooth connection flow
+      if (newStage.bluetoothMicrobitName) {
+        setMicrobitName(newStage.bluetoothMicrobitName);
+      }
+      if (newStage.flowType === ConnectionFlowType.RadioBridge) {
+        await actions.connectMicrobits();
+      }
+    },
+    [actions]
+  );
+
+  async function connectAndFlash(): Promise<void> {
+    await actions.connectAndflashMicrobit(progressCallback, onFlashSuccess);
+  }
 
   const onSwitchTypeClick = useCallback(
     () => dispatch(ConnEvent.Switch),

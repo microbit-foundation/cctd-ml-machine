@@ -170,22 +170,42 @@ export class ConnectionStageActions {
     if (result === ConnectResult.Success) {
       return this.onConnected();
     }
-    const reconnectFailStreak = this.setDisconnectedAndRecordFailStreak();
-    if (reconnectFailStreak === 0) {
-      return this.setFlowStep(
-        this.stage.flowType === ConnectionFlowType.Bluetooth
+    const newReconnectFailStreak =
+      this.stage.status === ConnectionStatus.Reconnecting
+        ? this.stage.reconnectFailStreak + 1
+        : this.stage.reconnectFailStreak;
+
+    const nextFlowStep = this.getReconnectFailFlowStep(
+      newReconnectFailStreak,
+      result
+    );
+    this.setStage({
+      ...this.stage,
+      reconnectFailStreak: newReconnectFailStreak,
+      status: ConnectionStatus.Disconnected,
+      flowStep: nextFlowStep,
+    });
+  };
+
+  private getReconnectFailFlowStep = (
+    failStreak: number,
+    result: ConnectResult
+  ) => {
+    switch (failStreak) {
+      case 0: {
+        return this.stage.flowType === ConnectionFlowType.Bluetooth
           ? ConnectionFlowStep.TryAgainBluetoothConnect
-          : ConnectionFlowStep.TryAgainReplugMicrobit
-      );
-    }
-    if (reconnectFailStreak === 1) {
-      return this.setFlowStep(
-        result === ConnectResult.ManualConnectFailed
+          : ConnectionFlowStep.TryAgainReplugMicrobit;
+      }
+      case 1: {
+        return result === ConnectResult.ManualConnectFailed
           ? ConnectionFlowStep.ReconnectManualFail
-          : ConnectionFlowStep.ReconnectAutoFail
-      );
+          : ConnectionFlowStep.ReconnectAutoFail;
+      }
+      default: {
+        return ConnectionFlowStep.ReconnectFailedTwice;
+      }
     }
-    return this.setFlowStep(ConnectionFlowStep.ReconnectFailedTwice);
   };
 
   private onConnected = () => {
@@ -196,19 +216,6 @@ export class ConnectionStageActions {
       reconnectFailStreak: 0,
     });
     this.navigate(createStepPageUrl("add-data"));
-  };
-
-  private setDisconnectedAndRecordFailStreak = () => {
-    const reconnectFailStreak =
-      this.stage.status === ConnectionStatus.Reconnecting
-        ? this.stage.reconnectFailStreak + 1
-        : this.stage.reconnectFailStreak;
-    this.setStage({
-      ...this.stage,
-      reconnectFailStreak,
-      status: ConnectionStatus.Disconnected,
-    });
-    return reconnectFailStreak;
   };
 
   disconnect = async () => {

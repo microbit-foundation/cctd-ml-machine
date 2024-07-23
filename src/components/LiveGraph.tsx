@@ -5,7 +5,9 @@ import { SmoothieChart, TimeSeries } from "smoothie";
 import { useConnectActions } from "../connect-actions-hooks";
 import { useConnectionStage } from "../connection-stage-hooks";
 
-const dampenDataPoint = (curr: number, next: number) => {
+const smoothenDataPoint = (curr: number, next: number) => {
+  // TODO: Factor out so that recording graph can do the same
+  // Remove dividing by 1000 operation once it gets moved to connection lib
   return (next / 1000) * 0.25 + curr * 0.75;
 };
 
@@ -82,11 +84,10 @@ const LiveGraph = () => {
       connectActions.addAccelerometerListener(({ data }) => {
         const t = new Date().getTime();
         dataRef.current = {
-          x: dampenDataPoint(dataRef.current.x, data.x),
-          y: dampenDataPoint(dataRef.current.y, data.y),
-          z: dampenDataPoint(dataRef.current.z, data.z),
+          x: smoothenDataPoint(dataRef.current.x, data.x),
+          y: smoothenDataPoint(dataRef.current.y, data.y),
+          z: smoothenDataPoint(dataRef.current.z, data.z),
         };
-        console.log(dataRef.current);
         lineX.append(t, dataRef.current.x, false);
         lineY.append(t, dataRef.current.y, false);
         lineZ.append(t, dataRef.current.z, false);

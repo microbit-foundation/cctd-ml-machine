@@ -5,6 +5,8 @@ import { SmoothieChart, TimeSeries } from "smoothie";
 import { useConnectActions } from "../connect-actions-hooks";
 import { useConnectionStage } from "../connection-stage-hooks";
 import { AccelerometerDataEvent } from "@microbit/microbit-connection";
+import { MlStage, useMlStatus } from "../ml-status-hooks";
+import { mlSettings } from "../ml";
 
 const smoothenDataPoint = (curr: number, next: number) => {
   // TODO: Factor out so that recording graph can do the same
@@ -14,6 +16,8 @@ const smoothenDataPoint = (curr: number, next: number) => {
 
 const LiveGraph = () => {
   const { isConnected } = useConnectionStage();
+  const [{ stage }] = useMlStatus();
+  const connectActions = useConnectActions();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -73,13 +77,30 @@ const LiveGraph = () => {
     }
   }, [chart, isConnected]);
 
-  const connectActions = useConnectActions();
+  // Draw on graph to display that users are recording
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  useEffect(() => {
+    if (stage === MlStage.RecordingData && !isRecording) {
+      // Set the start recording line
+      recordLines.append(new Date().getTime() - 1, -2, false);
+      recordLines.append(new Date().getTime(), 2.3, false);
+      setIsRecording(true);
+
+      setTimeout(() => {
+        // Set the end recording line
+        recordLines.append(new Date().getTime() - 1, 2.3, false);
+        recordLines.append(new Date().getTime(), -2, false);
+        setIsRecording(false);
+      }, mlSettings.duration);
+    }
+  }, [isRecording, recordLines, stage]);
 
   const dataRef = useRef<{ x: number; y: number; z: number }>({
     x: 0,
     y: 0,
     z: 0,
   });
+
   useEffect(() => {
     const listener = ({ data }: AccelerometerDataEvent) => {
       const t = new Date().getTime();

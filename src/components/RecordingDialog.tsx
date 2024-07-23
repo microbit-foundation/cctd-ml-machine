@@ -16,8 +16,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { GestureData, useGestureActions } from "../gestures-hooks";
 import gestureData from "../test-fixtures/gesture-data.json";
 import { MlStage, useMlStatus } from "../ml-status-hooks";
-
-const recordingDuration = 1800;
+import { mlSettings } from "../ml";
 
 interface CountdownConfig {
   value: string | number;
@@ -108,7 +107,7 @@ const RecordingDialog = ({
           ]);
           handleOnClose();
         }
-      }, recordingDuration);
+      }, mlSettings.duration);
     }
   }, [actions, gestureId, handleOnClose, recordingStatus]);
 

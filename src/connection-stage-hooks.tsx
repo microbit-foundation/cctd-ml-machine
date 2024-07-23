@@ -6,10 +6,10 @@ import {
   useMemo,
   useState,
 } from "react";
-import { ConnectionStageActions } from "./connection-stage-actions";
-import { useLogging } from "./logging/logging-hooks";
-import { ConnectActions } from "./connect-actions";
 import { useNavigate } from "react-router";
+import { ConnectActions } from "./connect-actions";
+import { useConnectActions } from "./connect-actions-hooks";
+import { ConnectionStageActions } from "./connection-stage-actions";
 import { useStorage } from "./hooks/use-storage";
 
 export enum ConnectionFlowType {
@@ -85,7 +85,7 @@ type ConnectionStageContextValue = [
   (state: ConnectionStage) => void
 ];
 
-export const ConnectionStageContext =
+const ConnectionStageContext =
   createContext<ConnectionStageContextValue | null>(null);
 
 interface ConnectionStageProviderProps {
@@ -135,23 +135,24 @@ export const useConnectionStage = (): {
   stage: ConnectionStage;
   actions: ConnectionStageActions;
   isConnected: boolean;
+  connectActions: ConnectActions;
 } => {
   const connectionStageContextValue = useContext(ConnectionStageContext);
   if (!connectionStageContextValue) {
     throw new Error("Missing provider");
   }
   const [stage, setStage] = connectionStageContextValue;
-  const logging = useLogging();
   const navigate = useNavigate();
+  const connectActions = useConnectActions();
 
   const actions = useMemo(() => {
     return new ConnectionStageActions(
-      new ConnectActions(logging),
+      connectActions,
       navigate,
       stage,
       setStage
     );
-  }, [logging, navigate, stage, setStage]);
+  }, [connectActions, navigate, stage, setStage]);
 
   const isConnected = useMemo(
     () => stage.status === ConnectionStatus.Connected,
@@ -162,5 +163,6 @@ export const useConnectionStage = (): {
     stage,
     actions,
     isConnected,
+    connectActions,
   };
 };

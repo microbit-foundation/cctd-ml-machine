@@ -34,13 +34,14 @@ const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export class ConnectActions {
   private usb: MicrobitWebUSBConnection;
   private bluetooth: MicrobitWebBluetoothConnection;
-  private accelerometerListener = (e: AccelerometerDataEvent) => {
-    console.log(e.data);
-  };
 
-  constructor(private logging: Logging) {
-    this.usb = new MicrobitWebUSBConnection({ logging });
-    this.bluetooth = new MicrobitWebBluetoothConnection({ logging });
+  constructor(
+    private logging: Logging,
+    usb: MicrobitWebUSBConnection,
+    bluetooth: MicrobitWebBluetoothConnection
+  ) {
+    this.usb = usb;
+    this.bluetooth = bluetooth;
   }
 
   requestUSBConnectionAndFlash = async (
@@ -51,8 +52,6 @@ export class ConnectActions {
     | { result: ConnectAndFlashFailResult; deviceId?: number }
   > => {
     try {
-      // TODO: move this to init point
-      await this.usb.initialize();
       await this.usb.connect();
       const result = await this.flashMicrobit(hexType, progressCallback);
       // Save remote micro:bit device id is stored for passing it to bridge micro:bit
@@ -125,12 +124,6 @@ export class ConnectActions {
   connectBluetooth = async (
     name: string | undefined
   ): Promise<ConnectResult> => {
-    // TODO: move this to init point
-    await this.bluetooth.initialize();
-    this.bluetooth.addEventListener(
-      "accelerometerdatachanged",
-      this.accelerometerListener
-    );
     await this.bluetooth.connect({ name });
     if (this.bluetooth.status === DeviceConnectionStatus.CONNECTED) {
       return ConnectResult.Success;
@@ -138,8 +131,20 @@ export class ConnectActions {
     return ConnectResult.ManualConnectFailed;
   };
 
+  addAccelerometerListener = (
+    listener: (e: AccelerometerDataEvent) => void
+  ) => {
+    if (this.bluetooth instanceof MicrobitWebBluetoothConnection) {
+      this.bluetooth?.addEventListener("accelerometerdatachanged", listener);
+    } else {
+      throw new Error(
+        "`getAccelerometerData` is not supported on `MicrobitWebUSBConnection`"
+      );
+    }
+  };
+
   // TODO: Replace with real disconnect logic
   disconnect = async () => {
-    await delay(5000);
+    await this.bluetooth.disconnect();
   };
 }

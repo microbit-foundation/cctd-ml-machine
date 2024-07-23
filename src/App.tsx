@@ -24,6 +24,7 @@ import { LoggingProvider } from "./logging/logging-hooks";
 import { GesturesProvider } from "./gestures-hooks";
 import { MlStatusProvider } from "./ml-status-hooks";
 import { ConnectionStageProvider } from "./connection-stage-hooks";
+import { ConnectProvider } from "./connect-actions-hooks";
 
 export interface ProviderLayoutProps {
   children: ReactNode;
@@ -42,11 +43,13 @@ const Providers = ({ children }: ProviderLayoutProps) => {
             <SettingsProvider>
               <GesturesProvider>
                 <MlStatusProvider>
-                  <ConnectionStageProvider>
-                    <TranslationProvider>
-                      <ErrorBoundary>{children}</ErrorBoundary>
-                    </TranslationProvider>
-                  </ConnectionStageProvider>
+                  <ConnectProvider>
+                    <ConnectionStageProvider>
+                      <TranslationProvider>
+                        <ErrorBoundary>{children}</ErrorBoundary>
+                      </TranslationProvider>
+                    </ConnectionStageProvider>
+                  </ConnectProvider>
                 </MlStatusProvider>
               </GesturesProvider>
             </SettingsProvider>

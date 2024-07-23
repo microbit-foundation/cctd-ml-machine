@@ -1,6 +1,6 @@
 import { HStack } from "@chakra-ui/react";
 import { useSize } from "@chakra-ui/react-use-size";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SmoothieChart, TimeSeries } from "smoothie";
 import { useConnectionStage } from "../connection-stage-hooks";
 
@@ -17,6 +17,11 @@ const LiveGraph = () => {
     width: 100,
     height: 100,
   };
+
+  const lineX = useMemo(() => new TimeSeries(), []);
+  const lineY = useMemo(() => new TimeSeries(), []);
+  const lineZ = useMemo(() => new TimeSeries(), []);
+  const recordLines = useMemo(() => new TimeSeries(), []);
 
   // On mount draw smoothieChart
   useEffect(() => {
@@ -36,11 +41,6 @@ const LiveGraph = () => {
       interpolation: "linear",
     });
 
-    const lineX = new TimeSeries();
-    const lineY = new TimeSeries();
-    const lineZ = new TimeSeries();
-    const recordLines = new TimeSeries();
-
     smoothieChart.addTimeSeries(lineX, { lineWidth, strokeStyle: "#f9808e" });
     smoothieChart.addTimeSeries(lineY, { lineWidth, strokeStyle: "#80f98e" });
     smoothieChart.addTimeSeries(lineZ, { lineWidth, strokeStyle: "#808ef9" });
@@ -55,7 +55,7 @@ const LiveGraph = () => {
     return () => {
       smoothieChart.stop();
     };
-  }, []);
+  }, [lineX, lineY, lineZ, recordLines]);
 
   useEffect(() => {
     if (isConnected) {
@@ -64,6 +64,19 @@ const LiveGraph = () => {
       chart?.stop();
     }
   }, [chart, isConnected]);
+
+  const { connectActions } = useConnectionStage();
+
+  useEffect(() => {
+    if (isConnected) {
+      connectActions.addAccelerometerListener(({ data }) => {
+        const t = new Date().getTime();
+        lineX.append(t, data.x / 1000, false);
+        lineY.append(t, data.y / 1000, false);
+        lineZ.append(t, data.z / 1000, false);
+      });
+    }
+  }, [connectActions, isConnected, lineX, lineY, lineZ]);
 
   // TODO Recording logic
   return (

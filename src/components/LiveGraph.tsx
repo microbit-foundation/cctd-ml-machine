@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { SmoothieChart, TimeSeries } from "smoothie";
 import { useConnectActions } from "../connect-actions-hooks";
 import { useConnectionStage } from "../connection-stage-hooks";
+import { AccelerometerDataEvent } from "@microbit/microbit-connection";
 
 const smoothenDataPoint = (curr: number, next: number) => {
   // TODO: Factor out so that recording graph can do the same
@@ -80,19 +81,23 @@ const LiveGraph = () => {
     z: 0,
   });
   useEffect(() => {
+    const listener = ({ data }: AccelerometerDataEvent) => {
+      const t = new Date().getTime();
+      dataRef.current = {
+        x: smoothenDataPoint(dataRef.current.x, data.x),
+        y: smoothenDataPoint(dataRef.current.y, data.y),
+        z: smoothenDataPoint(dataRef.current.z, data.z),
+      };
+      lineX.append(t, dataRef.current.x, false);
+      lineY.append(t, dataRef.current.y, false);
+      lineZ.append(t, dataRef.current.z, false);
+    };
     if (isConnected) {
-      connectActions.addAccelerometerListener(({ data }) => {
-        const t = new Date().getTime();
-        dataRef.current = {
-          x: smoothenDataPoint(dataRef.current.x, data.x),
-          y: smoothenDataPoint(dataRef.current.y, data.y),
-          z: smoothenDataPoint(dataRef.current.z, data.z),
-        };
-        lineX.append(t, dataRef.current.x, false);
-        lineY.append(t, dataRef.current.y, false);
-        lineZ.append(t, dataRef.current.z, false);
-      });
+      connectActions.addAccelerometerListener(listener);
     }
+    return () => {
+      connectActions.removeAccelerometerListener(listener);
+    };
   }, [connectActions, isConnected, lineX, lineY, lineZ]);
 
   // TODO Recording logic

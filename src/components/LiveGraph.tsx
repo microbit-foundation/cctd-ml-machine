@@ -2,7 +2,12 @@ import { HStack } from "@chakra-ui/react";
 import { useSize } from "@chakra-ui/react-use-size";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SmoothieChart, TimeSeries } from "smoothie";
+import { useConnectActions } from "../connect-actions-hooks";
 import { useConnectionStage } from "../connection-stage-hooks";
+
+const dampenDataPoint = (curr: number, next: number) => {
+  return (next / 1000) * 0.25 + curr * 0.75;
+};
 
 const LiveGraph = () => {
   const { isConnected } = useConnectionStage();
@@ -65,15 +70,26 @@ const LiveGraph = () => {
     }
   }, [chart, isConnected]);
 
-  const { connectActions } = useConnectionStage();
+  const connectActions = useConnectActions();
 
+  const dataRef = useRef<{ x: number; y: number; z: number }>({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
   useEffect(() => {
     if (isConnected) {
       connectActions.addAccelerometerListener(({ data }) => {
         const t = new Date().getTime();
-        lineX.append(t, data.x / 1000, false);
-        lineY.append(t, data.y / 1000, false);
-        lineZ.append(t, data.z / 1000, false);
+        dataRef.current = {
+          x: dampenDataPoint(dataRef.current.x, data.x),
+          y: dampenDataPoint(dataRef.current.y, data.y),
+          z: dampenDataPoint(dataRef.current.z, data.z),
+        };
+        console.log(dataRef.current);
+        lineX.append(t, dataRef.current.x, false);
+        lineY.append(t, dataRef.current.y, false);
+        lineZ.append(t, dataRef.current.z, false);
       });
     }
   }, [connectActions, isConnected, lineX, lineY, lineZ]);

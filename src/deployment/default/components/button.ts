@@ -40,9 +40,21 @@ const Button: StyleConfig = {
         borderColor: "brand.600",
       },
       _active: {
-        bg: "brand.50",
+        bg: "brand.500",
         borderColor: "brand.700",
       },
+    }),
+    led: () => ({
+      borderWidth: "2px",
+      borderRadius: 5,
+      borderColor: "green.500",
+      color: "green.700",
+      bg: "transparent",
+      _hover: {
+        cursor: "pointer",
+        borderColor: "green.500",
+      },
+      _active: { bg: "green.500", borderColor: "green.500" },
     }),
     ghost: () => ({
       color: "black",
@@ -61,11 +73,23 @@ const Button: StyleConfig = {
         bg: "brand.600",
         _disabled: {
           bg: "brand.500",
-          opacity: 0.6,
         },
       },
       _active: {
         bg: "brand.700",
+      },
+    }),
+    warning: () => ({
+      borderWidth: "2px",
+      borderColor: "red.500",
+      color: "red.500",
+      bg: "transparent",
+      _hover: {
+        borderColor: "red.600",
+      },
+      _active: {
+        bg: "red.50",
+        borderColor: "red.500",
       },
     }),
     toolbar: () => ({

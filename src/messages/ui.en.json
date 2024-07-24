@@ -1223,7 +1223,7 @@
       "value": "Start new session"
     }
   ],
-  "get-started-resource-title": [
+  "get-started-title": [
     {
       "type": 0,
       "value": "Get started"
@@ -1273,7 +1273,7 @@
       "value": "\""
     }
   ],
-  "introducing-microbit-resource-title": [
+  "introducing-the-microbit-machine-learning-tool-title": [
     {
       "type": 0,
       "value": "Introducing the micro:bit machine learning tool"

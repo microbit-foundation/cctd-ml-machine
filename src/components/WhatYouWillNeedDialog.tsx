@@ -1,21 +1,17 @@
 import { Grid, GridItem, Image, Text, VStack } from "@chakra-ui/react";
 import { FormattedMessage } from "react-intl";
-import ConnectContainerDialog, {
-  ConnectContainerDialogProps,
-} from "./ConnectContainerDialog";
 import batteryPackImage from "../images/stylised-battery-pack.svg";
 import microbitImage from "../images/stylised-microbit-black.svg";
 import twoMicrobitsImage from "../images/stylised-two-microbits-black.svg";
 import usbCableImage from "../images/stylised-usb-cable.svg";
 import computerImage from "../images/stylised_computer.svg";
 import computerBluetoothImage from "../images/stylised_computer_w_bluetooth.svg";
-import { ConnType } from "../connection-flow";
+import ConnectContainerDialog, {
+  ConnectContainerDialogProps,
+} from "./ConnectContainerDialog";
 
-const whatYouWillNeedRadioConfig = {
-  headingId: "connectMB.radioStart.heading",
-  reconnectHeadingId: "reconnectFailed.radioHeading",
-  linkTextId: "connectMB.radioStart.switchBluetooth",
-  items: [
+const itemsConfig = {
+  radio: [
     {
       imgSrc: twoMicrobitsImage,
       titleId: "connectMB.radioStart.requirements1",
@@ -35,13 +31,7 @@ const whatYouWillNeedRadioConfig = {
       subtitleId: "connectMB.radioStart.requirements4.subtitle",
     },
   ],
-};
-
-const whatYouWillNeedBluetoothConfig = {
-  headingId: "connectMB.bluetoothStart.heading",
-  reconnectHeadingId: "reconnectFailed.bluetoothHeading",
-  linkTextId: "connectMB.bluetoothStart.switchRadio",
-  items: [
+  bluetooth: [
     {
       imgSrc: microbitImage,
       titleId: "connectMB.bluetoothStart.requirements1",
@@ -69,7 +59,7 @@ export interface WhatYouWillNeedDialogProps
     "children" | "onBack" | "headingId"
   > {
   reconnect: boolean;
-  type: ConnType;
+  type: "radio" | "bluetooth";
 }
 
 const WhatYouWillNeedDialog = ({
@@ -77,17 +67,17 @@ const WhatYouWillNeedDialog = ({
   type,
   ...props
 }: WhatYouWillNeedDialogProps) => {
-  const configs = {
-    [ConnType.Bluetooth]: whatYouWillNeedBluetoothConfig,
-    [ConnType.RadioRemote]: whatYouWillNeedRadioConfig,
-    [ConnType.RadioBridge]: whatYouWillNeedRadioConfig,
-  };
-  const { items, headingId, reconnectHeadingId, linkTextId } = configs[type];
   return (
     <ConnectContainerDialog
       {...props}
-      linkTextId={linkTextId}
-      headingId={reconnect ? reconnectHeadingId : headingId}
+      linkTextId={`connectMB.${type}Start.switch${
+        type === "bluetooth" ? "Radio" : "Bluetooth"
+      }`}
+      headingId={
+        reconnect
+          ? `connectMB.${type}Start.heading`
+          : `connectMB.${type}Start.heading`
+      }
     >
       {reconnect && (
         <Text>
@@ -96,11 +86,11 @@ const WhatYouWillNeedDialog = ({
       )}
       <Grid
         width="100%"
-        templateColumns={`repeat(${items.length}, 1fr)`}
+        templateColumns={`repeat(${itemsConfig[type].length}, 1fr)`}
         gap={16}
         py="30px"
       >
-        {items.map(({ imgSrc, titleId, subtitleId }) => {
+        {itemsConfig[type].map(({ imgSrc, titleId, subtitleId }) => {
           return (
             <GridItem key={titleId}>
               <VStack gap={5}>

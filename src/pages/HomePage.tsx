@@ -3,33 +3,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import DefaultPageLayout from "../components/DefaultPageLayout";
 import ResourceCard from "../components/ResourceCard";
 import StartResumeActions from "../components/StartResumeActions";
-import resourceGetStartedImage from "../images/resource-get-started.jpg";
-import resourceIntroducingToolImage from "../images/resource-introducing-tool.jpg";
-import { stepsConfig } from "../steps-config";
-
-export const Paths = {
-  HOME: "/",
-  PLAYGROUND: "playground",
-  INTRODUCING_TOOL: "resources/introducing-the-microbit-machine-learning-tool",
-  GET_STARTED: "resources/get-started",
-  DATA: "add-data",
-  TRAINING: "train-model",
-  MODEL: "test-model",
-  FILTERS: "training/filters",
-} as const;
-
-const resources = [
-  {
-    titleId: "introducing-microbit-resource-title",
-    path: Paths.INTRODUCING_TOOL,
-    imgSrc: resourceIntroducingToolImage,
-  },
-  {
-    titleId: "get-started-resource-title",
-    path: Paths.GET_STARTED,
-    imgSrc: resourceGetStartedImage,
-  },
-];
+import { resourcesConfig, stepsConfig } from "../pages-config";
 
 const HomePage = () => {
   const intl = useIntl();
@@ -82,7 +56,7 @@ const HomePage = () => {
           px={10}
           gap={5}
         >
-          {resources.map((r, idx) => (
+          {resourcesConfig.map((r, idx) => (
             <ResourceCard {...r} key={idx} />
           ))}
         </Grid>

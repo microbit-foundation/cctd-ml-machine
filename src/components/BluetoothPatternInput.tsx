@@ -16,7 +16,7 @@ import {
   transformColumnsToMatrix,
   transformMatrixToColumns,
   updateMatrixColumns,
-} from "../patternMatrixTransforms";
+} from "../bt-pattern-matrix-utils";
 import React from "react";
 
 interface BluetoothPatternInputProps {
@@ -124,8 +124,7 @@ const PatternBox = ({
       w="100%"
       h="100%"
       as="div"
-      borderRadius={5}
-      _hover={{ cursor: "pointer" }}
+      variant="led"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

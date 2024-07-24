@@ -13,17 +13,23 @@ import NotFound from "./components/NotFound";
 import TranslationProvider from "./messages/TranslationProvider";
 import SettingsProvider from "./settings";
 import HomePage from "./pages/HomePage";
-import { createHomePageUrl, createStepPageUrl } from "./urls";
+import {
+  createHomePageUrl,
+  createResourcePageUrl,
+  createStepPageUrl,
+} from "./urls";
 import { deployment, useDeployment } from "./deployment";
-import { stepsConfig } from "./steps-config";
+import { resourcesConfig, stepsConfig } from "./pages-config";
 import { LoggingProvider } from "./logging/logging-hooks";
-import { ConnectionFlowProvider } from "./connections";
+import { GesturesProvider } from "./gestures-hooks";
+import { MlStatusProvider } from "./ml-status-hooks";
+import { ConnectionStageProvider } from "./connection-stage-hooks";
+import { ConnectProvider } from "./connect-actions-hooks";
 
 export interface ProviderLayoutProps {
   children: ReactNode;
 }
 
-// TODO: Use for logging provider
 const logging = deployment.logging;
 
 const Providers = ({ children }: ProviderLayoutProps) => {
@@ -35,11 +41,17 @@ const Providers = ({ children }: ProviderLayoutProps) => {
         <LoggingProvider value={logging}>
           <ConsentProvider>
             <SettingsProvider>
-              <ConnectionFlowProvider>
-                <TranslationProvider>
-                  <ErrorBoundary>{children}</ErrorBoundary>
-                </TranslationProvider>
-              </ConnectionFlowProvider>
+              <GesturesProvider>
+                <MlStatusProvider>
+                  <ConnectProvider>
+                    <ConnectionStageProvider>
+                      <TranslationProvider>
+                        <ErrorBoundary>{children}</ErrorBoundary>
+                      </TranslationProvider>
+                    </ConnectionStageProvider>
+                  </ConnectProvider>
+                </MlStatusProvider>
+              </GesturesProvider>
             </SettingsProvider>
           </ConsentProvider>
         </LoggingProvider>
@@ -77,6 +89,12 @@ const createRouter = () => {
           return {
             path: createStepPageUrl(step.id),
             element: <step.pageElement />,
+          };
+        }),
+        ...resourcesConfig.map((resource) => {
+          return {
+            path: createResourcePageUrl(resource.id),
+            element: <resource.pageElement />,
           };
         }),
         {

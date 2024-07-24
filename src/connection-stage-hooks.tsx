@@ -1,0 +1,168 @@
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
+import { useNavigate } from "react-router";
+import { ConnectActions } from "./connect-actions";
+import { useConnectActions } from "./connect-actions-hooks";
+import { ConnectionStageActions } from "./connection-stage-actions";
+import { useStorage } from "./hooks/use-storage";
+
+export enum ConnectionFlowType {
+  Bluetooth = "bluetooth",
+  RadioBridge = "bridge",
+  RadioRemote = "remote",
+}
+
+export enum ConnectionStatus {
+  None = "None", // Have not been connected before
+  Connecting = "Connecting",
+  Connected = "Connected",
+  Disconnected = "Disconnected",
+  Reconnecting = "Reconnecting",
+}
+
+export type ConnectionType = "bluetooth" | "radio";
+
+export enum ConnectionFlowStep {
+  // Happy flow stages
+  None = "None",
+  Start = "Start",
+  ConnectCable = "ConnectCable",
+  WebUsbFlashingTutorial = "WebUsbFlashingTutorial",
+  ManualFlashingTutorial = "ManualFlashingTutorial",
+  ConnectBattery = "ConnectBattery",
+  EnterBluetoothPattern = "EnterBluetoothPattern",
+  ConnectBluetoothTutorial = "ConnectBluetoothTutorial",
+
+  // Stages that are not user-controlled
+  WebUsbChooseMicrobit = "WebUsbChooseMicrobit",
+  ConnectingBluetooth = "ConnectingBluetooth",
+  ConnectingMicrobits = "ConnectingMicrobits",
+  FlashingInProgress = "FlashingInProgress",
+
+  // Failure stages
+  TryAgainReplugMicrobit = "TryAgainReplugMicrobit",
+  TryAgainCloseTabs = "TryAgainCloseTabs",
+  TryAgainSelectMicrobit = "TryAgainSelectMicrobit",
+  TryAgainBluetoothConnect = "TryAgainBluetoothConnect",
+  BadFirmware = "BadFirmware",
+  MicrobitUnsupported = "MicrobitUnsupported",
+  WebUsbBluetoothUnsupported = "WebUsbBluetoothUnsupported",
+
+  ReconnectAutoFail = "ReconnectAutoFail",
+  ReconnectManualFail = "ReconnectManualFail",
+  ReconnectFailedTwice = "ReconnectFailedTwice",
+}
+
+export interface ConnectionStage {
+  // For connection flow
+  flowStep: ConnectionFlowStep;
+  flowType: ConnectionFlowType;
+  // Number of times there have been consecutive reconnect fails
+  // for determining which reconnection dialog to show
+  reconnectFailStreak: number;
+
+  // Compatibility
+  isWebBluetoothSupported: boolean;
+  isWebUsbSupported: boolean;
+
+  // Connection state
+  status: ConnectionStatus;
+  connType: "bluetooth" | "radio";
+  bluetoothDeviceId?: number;
+  bluetoothMicrobitName?: string;
+  radioBridgeDeviceId?: number;
+  radioRemoteDeviceId?: number;
+}
+
+type ConnectionStageContextValue = [
+  ConnectionStage,
+  (state: ConnectionStage) => void
+];
+
+const ConnectionStageContext =
+  createContext<ConnectionStageContextValue | null>(null);
+
+interface ConnectionStageProviderProps {
+  children: ReactNode;
+}
+
+const getInitialConnectionStageValue = (
+  microbitName: string | undefined
+): ConnectionStage => ({
+  flowStep: ConnectionFlowStep.None,
+  flowType: ConnectionFlowType.Bluetooth,
+  reconnectFailStreak: 0,
+  status: ConnectionStatus.None,
+  bluetoothMicrobitName: microbitName,
+  connType: "bluetooth",
+  isWebBluetoothSupported: true,
+  isWebUsbSupported: true,
+});
+
+export const ConnectionStageProvider = ({
+  children,
+}: ConnectionStageProviderProps) => {
+  const [val, setMicrobitName] = useStorage<{
+    value?: string;
+  }>("local", "microbitName", { value: undefined });
+  const [connectionStage, setConnStage] = useState<ConnectionStage>(
+    getInitialConnectionStageValue(val.value)
+  );
+  const setConnectionStage = useCallback(
+    (connStage: ConnectionStage) => {
+      setMicrobitName({ value: connStage.bluetoothMicrobitName });
+      setConnStage(connStage);
+    },
+    [setMicrobitName]
+  );
+
+  return (
+    <ConnectionStageContext.Provider
+      value={[connectionStage, setConnectionStage]}
+    >
+      {children}
+    </ConnectionStageContext.Provider>
+  );
+};
+
+export const useConnectionStage = (): {
+  stage: ConnectionStage;
+  actions: ConnectionStageActions;
+  isConnected: boolean;
+  connectActions: ConnectActions;
+} => {
+  const connectionStageContextValue = useContext(ConnectionStageContext);
+  if (!connectionStageContextValue) {
+    throw new Error("Missing provider");
+  }
+  const [stage, setStage] = connectionStageContextValue;
+  const navigate = useNavigate();
+  const connectActions = useConnectActions();
+
+  const actions = useMemo(() => {
+    return new ConnectionStageActions(
+      connectActions,
+      navigate,
+      stage,
+      setStage
+    );
+  }, [connectActions, navigate, stage, setStage]);
+
+  const isConnected = useMemo(
+    () => stage.status === ConnectionStatus.Connected,
+    [stage.status]
+  );
+
+  return {
+    stage,
+    actions,
+    isConnected,
+    connectActions,
+  };
+};

@@ -6,6 +6,8 @@ const gray = {
   ...theme.colors.gray,
   // Brand grey
   500: "#e5e5e5",
+  // windi css text color
+  600: "#6b7280",
 };
 
 const brand = {
@@ -27,6 +29,20 @@ const brand = {
   900: "#023a5a",
 };
 
+// Taken from the red in https://windicss.org/utilities/general/colors.html
+const red = {
+  50: "#fef2f2",
+  100: "#fee2e2",
+  200: "#fecaca",
+  300: "#fca5a5",
+  400: "#f87171",
+  500: "#ef4444",
+  600: "#dc2626",
+  700: "#b91c1c",
+  800: "#991b1b",
+  900: "#7f1d1d",
+};
+
 const colors = {
   // Brand guidelines say:
   // "Each of the main primary colours can be tinted by 80%, 50%, 30%, 20% and 10% if needed."
@@ -35,6 +51,7 @@ const colors = {
   // https://maketintsandshades.com/#6C4BC1
   gray,
   brand,
+  red,
   purple: {
     50: "#e2dbf3", // 80% tint
     100: "#b6a5e0", // 50% tint

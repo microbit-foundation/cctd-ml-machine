@@ -719,7 +719,7 @@
     "defaultMessage": "Start new session",
     "description": ""
   },
-  "get-started-resource-title": {
+  "get-started-title": {
     "defaultMessage": "Get started",
     "description": "Title of a resource"
   },
@@ -747,7 +747,7 @@
     "defaultMessage": "More information about \"{item}\"",
     "description": ""
   },
-  "introducing-microbit-resource-title": {
+  "introducing-the-microbit-machine-learning-tool-title": {
     "defaultMessage": "Introducing the micro:bit machine learning tool",
     "description": "Title of a resource"
   },

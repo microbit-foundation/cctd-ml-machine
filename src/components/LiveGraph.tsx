@@ -1,13 +1,23 @@
 import { HStack } from "@chakra-ui/react";
 import { useSize } from "@chakra-ui/react-use-size";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SmoothieChart, TimeSeries } from "smoothie";
+import { useConnectActions } from "../connect-actions-hooks";
+import { useConnectionStage } from "../connection-stage-hooks";
+import { AccelerometerDataEvent } from "@microbit/microbit-connection";
+import { MlStage, useMlStatus } from "../ml-status-hooks";
+import { mlSettings } from "../ml";
+
+const smoothenDataPoint = (curr: number, next: number) => {
+  // TODO: Factor out so that recording graph can do the same
+  // Remove dividing by 1000 operation once it gets moved to connection lib
+  return (next / 1000) * 0.25 + curr * 0.75;
+};
 
 const LiveGraph = () => {
-  // Updates width to ensure that the canvas fills the whole screen
-  //   export let width: number;
-
-  const connected = false;
+  const { isConnected } = useConnectionStage();
+  const [{ stage }] = useMlStatus();
+  const connectActions = useConnectActions();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -19,6 +29,11 @@ const LiveGraph = () => {
     width: 100,
     height: 100,
   };
+
+  const lineX = useMemo(() => new TimeSeries(), []);
+  const lineY = useMemo(() => new TimeSeries(), []);
+  const lineZ = useMemo(() => new TimeSeries(), []);
+  const recordLines = useMemo(() => new TimeSeries(), []);
 
   // On mount draw smoothieChart
   useEffect(() => {
@@ -38,11 +53,6 @@ const LiveGraph = () => {
       interpolation: "linear",
     });
 
-    const lineX = new TimeSeries();
-    const lineY = new TimeSeries();
-    const lineZ = new TimeSeries();
-    const recordLines = new TimeSeries();
-
     smoothieChart.addTimeSeries(lineX, { lineWidth, strokeStyle: "#f9808e" });
     smoothieChart.addTimeSeries(lineY, { lineWidth, strokeStyle: "#80f98e" });
     smoothieChart.addTimeSeries(lineZ, { lineWidth, strokeStyle: "#808ef9" });
@@ -57,15 +67,59 @@ const LiveGraph = () => {
     return () => {
       smoothieChart.stop();
     };
-  }, []);
+  }, [lineX, lineY, lineZ, recordLines]);
 
   useEffect(() => {
-    if (connected) {
+    if (isConnected) {
       chart?.start();
     } else {
       chart?.stop();
     }
-  }, [chart, connected]);
+  }, [chart, isConnected]);
+
+  // Draw on graph to display that users are recording
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  useEffect(() => {
+    if (stage === MlStage.RecordingData && !isRecording) {
+      // Set the start recording line
+      recordLines.append(new Date().getTime() - 1, -2, false);
+      recordLines.append(new Date().getTime(), 2.3, false);
+      setIsRecording(true);
+
+      setTimeout(() => {
+        // Set the end recording line
+        recordLines.append(new Date().getTime() - 1, 2.3, false);
+        recordLines.append(new Date().getTime(), -2, false);
+        setIsRecording(false);
+      }, mlSettings.duration);
+    }
+  }, [isRecording, recordLines, stage]);
+
+  const dataRef = useRef<{ x: number; y: number; z: number }>({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
+
+  useEffect(() => {
+    const listener = ({ data }: AccelerometerDataEvent) => {
+      const t = new Date().getTime();
+      dataRef.current = {
+        x: smoothenDataPoint(dataRef.current.x, data.x),
+        y: smoothenDataPoint(dataRef.current.y, data.y),
+        z: smoothenDataPoint(dataRef.current.z, data.z),
+      };
+      lineX.append(t, dataRef.current.x, false);
+      lineY.append(t, dataRef.current.y, false);
+      lineZ.append(t, dataRef.current.z, false);
+    };
+    if (isConnected) {
+      connectActions.addAccelerometerListener(listener);
+    }
+    return () => {
+      connectActions.removeAccelerometerListener(listener);
+    };
+  }, [connectActions, isConnected, lineX, lineY, lineZ]);
 
   // TODO Recording logic
   return (

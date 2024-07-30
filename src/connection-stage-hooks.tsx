@@ -11,19 +11,16 @@ import { ConnectActions } from "./connect-actions";
 import { useConnectActions } from "./connect-actions-hooks";
 import { ConnectionStageActions } from "./connection-stage-actions";
 import { useStorage } from "./hooks/use-storage";
+import {
+  ConnectionStatus,
+  useConnectStatus,
+  useSetConnectStatus,
+} from "./connect-status-hooks";
 
 export enum ConnectionFlowType {
   Bluetooth = "bluetooth",
   RadioBridge = "bridge",
   RadioRemote = "remote",
-}
-
-export enum ConnectionStatus {
-  None = "None", // Have not been connected before
-  Connecting = "Connecting",
-  Connected = "Connected",
-  Disconnected = "Disconnected",
-  Reconnecting = "Reconnecting",
 }
 
 export type ConnectionType = "bluetooth" | "radio";
@@ -54,8 +51,8 @@ export enum ConnectionFlowStep {
   MicrobitUnsupported = "MicrobitUnsupported",
   WebUsbBluetoothUnsupported = "WebUsbBluetoothUnsupported",
 
-  ReconnectAutoFail = "ReconnectAutoFail",
-  ReconnectManualFail = "ReconnectManualFail",
+  ConnectionLost = "ConnectionLoss",
+  ReconnectFailed = "ReconnectFailed",
   ReconnectFailedTwice = "ReconnectFailedTwice",
 }
 
@@ -63,21 +60,18 @@ export interface ConnectionStage {
   // For connection flow
   flowStep: ConnectionFlowStep;
   flowType: ConnectionFlowType;
-  // Number of times there have been consecutive reconnect fails
-  // for determining which reconnection dialog to show
-  reconnectFailStreak: number;
 
   // Compatibility
   isWebBluetoothSupported: boolean;
   isWebUsbSupported: boolean;
 
   // Connection state
-  status: ConnectionStatus;
   connType: "bluetooth" | "radio";
   bluetoothDeviceId?: number;
   bluetoothMicrobitName?: string;
   radioBridgeDeviceId?: number;
   radioRemoteDeviceId?: number;
+  hasFailedToReconnectTwice: boolean;
 }
 
 type ConnectionStageContextValue = [
@@ -97,12 +91,11 @@ const getInitialConnectionStageValue = (
 ): ConnectionStage => ({
   flowStep: ConnectionFlowStep.None,
   flowType: ConnectionFlowType.Bluetooth,
-  reconnectFailStreak: 0,
-  status: ConnectionStatus.None,
   bluetoothMicrobitName: microbitName,
   connType: "bluetooth",
   isWebBluetoothSupported: true,
   isWebUsbSupported: true,
+  hasFailedToReconnectTwice: false,
 });
 
 export const ConnectionStageProvider = ({
@@ -144,20 +137,20 @@ export const useConnectionStage = (): {
   const [stage, setStage] = connectionStageContextValue;
   const navigate = useNavigate();
   const connectActions = useConnectActions();
+  const setStatus = useSetConnectStatus();
 
   const actions = useMemo(() => {
     return new ConnectionStageActions(
       connectActions,
       navigate,
       stage,
-      setStage
+      setStage,
+      setStatus
     );
-  }, [connectActions, navigate, stage, setStage]);
+  }, [connectActions, navigate, stage, setStage, setStatus]);
 
-  const isConnected = useMemo(
-    () => stage.status === ConnectionStatus.Connected,
-    [stage.status]
-  );
+  const status = useConnectStatus(actions.handleConnectionStatus);
+  const isConnected = status === ConnectionStatus.Connected;
 
   return {
     stage,

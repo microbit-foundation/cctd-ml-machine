@@ -1,5 +1,6 @@
 import {
   AccelerometerDataEvent,
+  ConnectionStatusEvent,
   ButtonEvent,
   ConnectionStatus as DeviceConnectionStatus,
   DeviceError,
@@ -78,7 +79,7 @@ export class ConnectActions {
     try {
       await this.usb.flash(data, {
         partial: true,
-        progress: (v) => progress(v ?? 100),
+        progress: (v: number | undefined) => progress(v ?? 100),
       });
       return ConnectAndFlashResult.Success;
     } catch (e) {
@@ -118,16 +119,16 @@ export class ConnectActions {
   };
 
   connectBluetooth = async (
-    name: string | undefined
-  ): Promise<ConnectResult> => {
+    name: string | undefined,
+    clearDevice: boolean
+  ): Promise<void> => {
+    if (clearDevice) {
+      await this.bluetooth.clearDevice();
+    }
     if (name) {
       this.bluetooth.setNameFilter(name);
     }
     await this.bluetooth.connect();
-    if (this.bluetooth.status === DeviceConnectionStatus.CONNECTED) {
-      return ConnectResult.Success;
-    }
-    return ConnectResult.ManualConnectFailed;
   };
 
   addAccelerometerListener = (
@@ -165,5 +166,13 @@ export class ConnectActions {
   disconnect = async () => {
     await this.bluetooth.disconnect();
     await this.radioBridge.disconnect();
+  };
+
+  addStatusListener = (listener: (e: ConnectionStatusEvent) => void) => {
+    this.bluetooth.addEventListener("status", listener);
+  };
+
+  removeStatusListener = (listener: (e: ConnectionStatusEvent) => void) => {
+    this.bluetooth.removeEventListener("status", listener);
   };
 }

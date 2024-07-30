@@ -45,6 +45,7 @@ class Gestures implements Readable<GestureData[]> {
     this.repository.subscribe(storeArray => {
       Gestures.subscribableGestures.set(storeArray);
     });
+
     this.confidenceStore = derived([this, ...this.getGestures()], stores => {
       const confidenceMap: Map<number, Confidence> = new Map();
 

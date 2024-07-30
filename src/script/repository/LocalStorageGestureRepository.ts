@@ -111,11 +111,7 @@ class LocalStorageGestureRepository implements GestureRepository {
     }
     const confidence = this.classifierRepository.getGestureConfidence(get(store).ID);
 
-    return new Gesture(
-      store,
-      confidence,
-      onRecordingsChanged,
-    );
+    return new Gesture(store, confidence, onRecordingsChanged);
   }
 
   private getPersistedData(): PersistantGestureData[] {

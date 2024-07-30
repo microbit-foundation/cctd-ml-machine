@@ -22,6 +22,10 @@ class RootMeanSquareFilter implements Filter {
   public filter(inValues: number[]): number {
     return Math.sqrt(inValues.reduce((a, b) => a + Math.pow(b, 2), 0) / inValues.length);
   }
+
+  public getMinNumberOfSamples(): number {
+    return 1;
+  }
 }
 
 export default RootMeanSquareFilter;

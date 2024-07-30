@@ -7,6 +7,8 @@ import Filters from './Filters';
 
 interface ClassifierInput {
   getInput(filters: Filters): number[];
+
+  getNumberOfSamples(): number;
 }
 
 export default ClassifierInput;

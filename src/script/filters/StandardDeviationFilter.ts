@@ -26,6 +26,10 @@ class StandardDeviationFilter extends FilterWithMaths {
   public getDescription(): string {
     return get(t)('content.filters.std.description');
   }
+
+  public getMinNumberOfSamples(): number {
+    return 2;
+  }
 }
 
 export default StandardDeviationFilter;

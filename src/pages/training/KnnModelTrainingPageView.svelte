@@ -16,8 +16,9 @@
   import { onMount } from 'svelte';
   import { knnConfig } from '../../script/stores/knnConfig';
   const classifier = stores.getClassifier();
+  const confidences = stores.getConfidences();
   const gestures = stores.getGestures();
-  const confidences = gestures.getConfidences();
+  //const confidences = gestures.getConfidences();
   const filters = classifier.getFilters();
 
   onMount(() => {
@@ -85,7 +86,7 @@
           </div>
           {#if $state.isInputReady}
             <p>
-              {(($confidences.get(gesture.ID)?.currentConfidence ?? 0) * 100).toFixed(2)}%
+              {(($confidences.get(gesture.ID) ?? 0) * 100).toFixed(2)}%
             </p>
           {/if}
         </div>

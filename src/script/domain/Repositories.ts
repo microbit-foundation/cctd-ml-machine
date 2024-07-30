@@ -5,6 +5,7 @@
  */
 import ClassifierRepository from './ClassifierRepository';
 import GestureRepository from './GestureRepository';
+import Confidences from './stores/Confidences';
 
 interface Repositories {
   getGestureRepository(): GestureRepository;

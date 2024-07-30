@@ -23,6 +23,7 @@ import Gestures from '../domain/stores/gesture/Gestures';
 import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Logger from '../utils/Logger';
+import Confidences from '../domain/stores/Confidences';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector>;
@@ -35,16 +36,15 @@ class Stores implements Readable<StoresType> {
   private engine: Engine | undefined;
   private classifier: Classifier;
   private gestures: Gestures;
+  private confidences: Confidences;
 
   public constructor() {
     this.liveData = writable(undefined);
     this.engine = undefined;
     const repositories: Repositories = new LocalStorageRepositories();
     this.classifier = repositories.getClassifierRepository().getClassifier();
-    this.gestures = new Gestures(
-      repositories.getClassifierRepository(),
-      repositories.getGestureRepository(),
-    );
+    this.confidences = repositories.getClassifierRepository().getConfidences();
+    this.gestures = new Gestures(repositories.getGestureRepository());
   }
 
   public subscribe(
@@ -93,6 +93,10 @@ class Stores implements Readable<StoresType> {
       );
     }
     return this.engine;
+  }
+
+  public getConfidences(): Confidences {
+    return this.confidences;
   }
 }
 

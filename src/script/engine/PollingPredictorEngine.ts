@@ -58,9 +58,21 @@ class PollingPredictorEngine implements Engine {
   }
 
   private predict() {
-    if (this.classifier.getModel().isTrained() && get(this.isRunning)) {
-      void this.classifier.classify(this.bufferToInput());
+    if (!this.classifier.getModel().isTrained()) {
+      return;
     }
+    if (!get(this.isRunning)) {
+      return;
+    }
+    const input = this.bufferToInput();
+    const numberOfSamples = input.getNumberOfSamples();
+    const requiredNumberOfSamples = Math.max(
+      ...get(this.classifier.getFilters()).map(filter => filter.getMinNumberOfSamples()),
+    );
+    if (numberOfSamples < requiredNumberOfSamples) {
+      return;
+    }
+    void this.classifier.classify(input);
   }
 
   private bufferToInput(): AccelerometerClassifierInput {
@@ -86,6 +98,7 @@ class PollingPredictorEngine implements Engine {
       if (sampleSize < 8) {
         return []; // The minimum number of points is 8, otherwise the filters will throw an exception
       } else {
+        // If too few samples are available, try again with fewer samples
         return this.getRawDataFromBuffer(
           sampleSize - StaticConfiguration.pollingPredictionSampleSizeSearchStepSize,
         );

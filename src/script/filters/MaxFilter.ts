@@ -21,5 +21,8 @@ class MaxFilter implements Filter {
   public filter(inValues: number[]): number {
     return Math.max(...inValues);
   }
+  public getMinNumberOfSamples(): number {
+    return 1;
+  }
 }
 export default MaxFilter;

@@ -21,6 +21,9 @@ class TotalAccFilter implements Filter {
   public filter(inValues: number[]): number {
     return inValues.reduce((a, b) => a + Math.abs(b));
   }
+  public getMinNumberOfSamples(): number {
+    return 2;
+  }
 }
 
 export default TotalAccFilter;

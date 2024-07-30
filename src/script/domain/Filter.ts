@@ -13,6 +13,8 @@ interface Filter {
   getName(): string;
 
   getDescription(): string;
+
+  getMinNumberOfSamples(): number;
 }
 
 export default Filter;

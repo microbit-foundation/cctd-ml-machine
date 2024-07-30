@@ -109,16 +109,13 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
   }
 
   public getGestureConfidence(gestureId: number): GestureConfidence {
-    const derivedConfidence = derived(
-      [this.confidences],
-      stores => {
-        const confidenceStore = stores[0];
-        if (confidenceStore.has(gestureId)) {
-          return confidenceStore.get(gestureId) as number;
-        }
-        throw new Error("No confidence found for gesture with id '" + gestureId + "'");
-      },
-    );
+    const derivedConfidence = derived([this.confidences], stores => {
+      const confidenceStore = stores[0];
+      if (confidenceStore.has(gestureId)) {
+        return confidenceStore.get(gestureId) as number;
+      }
+      throw new Error("No confidence found for gesture with id '" + gestureId + "'");
+    });
     return new GestureConfidence(
       StaticConfiguration.defaultRequiredConfidence,
       derivedConfidence,

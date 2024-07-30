@@ -44,10 +44,7 @@ class Stores implements Readable<StoresType> {
     const repositories: Repositories = new LocalStorageRepositories();
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
-    this.gestures = new Gestures(
-      repositories.getClassifierRepository(),
-      repositories.getGestureRepository(),
-    );
+    this.gestures = new Gestures(repositories.getGestureRepository());
   }
 
   public subscribe(

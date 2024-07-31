@@ -49,8 +49,8 @@ const trainKNNModel = async () => {
     data => {
       const extractedData = extractAxisFromTrainingData(data, offset, 3);
       Logger.log('TrainingPage', 'Extracted data: \n' + JSON.stringify(extractedData));
-      return extractedData
-    } // 3 assumes 3 axis
+      return extractedData;
+    }, // 3 assumes 3 axis
   );
   await stores.getClassifier().getModel().train(modelTrainer);
 };

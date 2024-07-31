@@ -15,7 +15,7 @@ class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLMod
   constructor(
     private k: number,
     private dataFilterer?: (allData: TrainingData) => TrainingData,
-  ) { }
+  ) {}
 
   public trainModel(trainingData: TrainingData): Promise<KNNNonNormalizedMLModel> {
     Logger.log('KNNNonNormalizedModelTrainer', 'Training model');

@@ -13,6 +13,8 @@
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import Logger from '../../script/utils/Logger';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
+  import { onMount } from 'svelte';
+  import { highlightedAxis } from '../../script/stores/uiStore';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
@@ -26,6 +28,10 @@
   $: trainButtonSimpleLabel = !$model.hasModel
     ? 'menu.trainer.trainModelButtonSimple'
     : 'menu.trainer.trainNewModelButtonSimple';
+
+  onMount(() => {
+    $highlightedAxis = undefined;
+  });
 </script>
 
 <div class="flex flex-col flex-grow justify-center items-center text-center">

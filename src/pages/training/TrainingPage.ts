@@ -29,6 +29,7 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
 };
 
 const trainNNModel = async () => {
+  highlightedAxis.set(undefined);
   loss.set([]);
   const modelTrainer = new LayersModelTrainer(
     StaticConfiguration.layersModelTrainingSettings,
@@ -45,14 +46,18 @@ const trainKNNModel = async () => {
   const offset = currentAxis === Axes.X ? 0 : currentAxis === Axes.Y ? 1 : 2;
   const modelTrainer = new KNNNonNormalizedModelTrainer(
     get(knnConfig).k,
-    data => extractAxisFromTrainingData(data, offset, 3), // 3 assumes 3 axis
+    data => {
+      const extractedData = extractAxisFromTrainingData(data, offset, 3);
+      Logger.log('TrainingPage', 'Extracted data: \n' + JSON.stringify(extractedData));
+      return extractedData
+    } // 3 assumes 3 axis
   );
   await stores.getClassifier().getModel().train(modelTrainer);
 };
 
 export const trainModel = async (model: ModelInfo) => {
   Logger.log('TrainingPage', 'Training new model: ' + model.title);
-  highlightedAxis.set(undefined);
+  // highlightedAxis.set(undefined);
   if (ModelRegistry.KNN.id === model.id) {
     await trainKNNModel();
   } else if (ModelRegistry.NeuralNetwork.id === model.id) {

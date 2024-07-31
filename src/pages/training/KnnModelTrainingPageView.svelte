@@ -15,6 +15,7 @@
   import { t } from '../../i18n';
   import { onMount } from 'svelte';
   import { knnConfig } from '../../script/stores/knnConfig';
+  import Logger from '../../script/utils/Logger';
   const classifier = stores.getClassifier();
   const confidences = stores.getConfidences();
   const gestures = stores.getGestures();
@@ -23,6 +24,7 @@
 
   onMount(() => {
     trainModel(ModelRegistry.KNN);
+    return () => unsubscribe();
   });
   $: {
     if ($highlightedAxis === undefined) {
@@ -32,6 +34,10 @@
       trainModel(ModelRegistry.KNN);
     }
   }
+
+  const unsubscribe = highlightedAxis.subscribe(axis => {
+    trainModel(ModelRegistry.KNN);
+  });
 
   const noOfRecordings = $gestures.reduce(
     (acc, gesture) => acc + gesture.recordings.length,

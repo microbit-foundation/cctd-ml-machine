@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import ModelTrainer, { TrainingData } from '../domain/ModelTrainer';
+import Logger from '../utils/Logger';
 import KNNNonNormalizedMLModel, { LabelledPoint } from './KNNNonNormalizedMLModel';
 
 /**
@@ -14,11 +15,15 @@ class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLMod
   constructor(
     private k: number,
     private dataFilterer?: (allData: TrainingData) => TrainingData,
-  ) {}
+  ) { }
 
   public trainModel(trainingData: TrainingData): Promise<KNNNonNormalizedMLModel> {
+    Logger.log('KNNNonNormalizedModelTrainer', 'Training model');
     if (this.dataFilterer) {
+      Logger.log('KNNNonNormalizedModelTrainer', 'Filtering training data');
       trainingData = this.dataFilterer(trainingData);
+    } else {
+      Logger.log('KNNNonNormalizedModelTrainer', 'No data filtering');
     }
     const points: LabelledPoint[] = [];
 

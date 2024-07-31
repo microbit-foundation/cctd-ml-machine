@@ -8,7 +8,8 @@ import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import CookieManager from './script/CookieManager';
 
 const load = () => {
-  if (location.hostname !== "ml-machine.org") {
+  // Do not load if the connection string is not set. E.g. in local development
+  if (process.env.APP_INSIGHTS_INSTRUMENTATION_KEY === undefined || process.env.APP_INSIGHTS_INSTRUMENTATION_KEY === '') {
     return;
   }
   if (CookieManager.getComplianceChoices().analytics) {
@@ -19,8 +20,8 @@ const load = () => {
 export const appInsights = new ApplicationInsights({
   config: {
     connectionString:
-      'InstrumentationKey=9ff70ae9-1397-4b70-85f2-2d3e80a29113;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/',
-  },
+    process.env.APP_INSIGHTS_INSTRUMENTATION_KEY, // Add this environment variable to enable AppInsights 
+    },
 });
 
 load();

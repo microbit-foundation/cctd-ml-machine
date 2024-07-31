@@ -41,8 +41,9 @@
         class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
     </div>
   {:else}
-    <StandardButton onClick={trainModelClickHandler}
-      >{$t(trainButtonSimpleLabel)}</StandardButton>
+    <StandardButton onClick={trainModelClickHandler}>
+      {$t(trainButtonSimpleLabel)}
+    </StandardButton>
   {/if}
   {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH)}
     <LossGraph {loss} maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />

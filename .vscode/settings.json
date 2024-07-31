@@ -24,5 +24,6 @@
     "a11y-missing-content": "ignore",
     "a11y-no-noninteractive-element-interactions":"ignore",
     "a11y-no-static-element-interactions": "ignore"
-  }
+  },
+  "cmake.configureOnOpen": false
 }

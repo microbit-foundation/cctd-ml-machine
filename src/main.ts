@@ -8,8 +8,6 @@ import App from './App.svelte';
 import './appInsights';
 import 'virtual:windi.css';
 
-console.log('Envs:', process.env);
-
 const app = new App({
   target: document.body,
 });

@@ -10,7 +10,10 @@ import * as fs from 'fs';
 const appInsightsKey = process.env.APP_INSIGHTS_INSTRUMENTATION_KEY;
 if (appInsightsKey) {
     const envText = "APP_INSIGHTS_INSTRUMENTATION_KEY=" + appInsightsKey;
+    console.log("Setting APP_INSIGHTS_INSTRUMENTATION_KEY in .env file");
     fs.writeFileSync(".env", envText);
+} else {
+    console.log("APP_INSIGHTS_INSTRUMENTATION_KEY not set. Skipping .env file update");
 }
 
 // Validate input

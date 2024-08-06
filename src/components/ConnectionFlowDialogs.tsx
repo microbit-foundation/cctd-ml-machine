@@ -13,7 +13,7 @@ import DownloadingDialog from "./DownloadingDialog";
 import EnterBluetoothPatternDialog from "./EnterBluetoothPatternDialog";
 import LoadingDialog from "./LoadingDialog";
 import ManualFlashingDialog from "./ManualFlashingDialog";
-import ReconnectErrorDialog from "./ReconnectErrorDialog";
+import ConnectErrorDialog from "./ConnectErrorDialog";
 import SelectMicrobitBluetoothDialog from "./SelectMicrobitBluetoothDialog";
 import SelectMicrobitUsbDialog from "./SelectMicrobitUsbDialog";
 import TryAgainDialog from "./TryAgainDialog";
@@ -60,19 +60,13 @@ const ConnectionDialogs = () => {
     [actions]
   );
 
-  const onFlashSuccess = useCallback(
-    async (newStage: ConnectionStage) => {
-      // Inferring microbit name saves the user from entering the pattern
-      // for bluetooth connection flow
-      if (newStage.bluetoothMicrobitName) {
-        setMicrobitName(newStage.bluetoothMicrobitName);
-      }
-      if (newStage.flowType === ConnectionFlowType.RadioBridge) {
-        await actions.connectMicrobits();
-      }
-    },
-    [actions]
-  );
+  const onFlashSuccess = useCallback((newStage: ConnectionStage) => {
+    // Inferring microbit name saves the user from entering the pattern
+    // for bluetooth connection flow
+    if (newStage.bluetoothMicrobitName) {
+      setMicrobitName(newStage.bluetoothMicrobitName);
+    }
+  }, []);
 
   async function connectAndFlash(): Promise<void> {
     await actions.connectAndflashMicrobit(progressCallback, onFlashSuccess);
@@ -202,9 +196,9 @@ const ConnectionDialogs = () => {
         <LoadingDialog isOpen={isOpen} headingId="connectMB.radio.heading" />
       );
     }
-    case ConnectionFlowStep.TryAgainBluetoothConnect:
+    case ConnectionFlowStep.TryAgainBluetoothSelectMicrobit:
     case ConnectionFlowStep.TryAgainReplugMicrobit:
-    case ConnectionFlowStep.TryAgainSelectMicrobit:
+    case ConnectionFlowStep.TryAgainWebUsbSelectMicrobit:
     case ConnectionFlowStep.TryAgainCloseTabs: {
       return (
         <TryAgainDialog
@@ -235,12 +229,13 @@ const ConnectionDialogs = () => {
     case ConnectionFlowStep.WebUsbBluetoothUnsupported: {
       return <WebUsbBluetoothUnsupportedDialog {...dialogCommonProps} />;
     }
+    case ConnectionFlowStep.ConnectFailed:
     case ConnectionFlowStep.ReconnectFailed:
     case ConnectionFlowStep.ConnectionLost: {
       return (
-        <ReconnectErrorDialog
+        <ConnectErrorDialog
           {...dialogCommonProps}
-          onReconnect={actions.reconnect}
+          onConnect={actions.reconnect}
           flowType={stage.flowType}
           errorStep={stage.flowStep}
         />

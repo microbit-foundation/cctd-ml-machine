@@ -24,7 +24,7 @@ export const usePrediction = () => {
   const buffer = useBufferedData();
   const logging = useLogging();
   const [status] = useMlStatus();
-  const connectStatus = useConnectStatus();
+  const [connectStatus] = useConnectStatus();
   const connection = useConnectActions();
   const [confidences, setConfidences] = useState<Confidences | undefined>();
   const [gestureData] = useGestureData();

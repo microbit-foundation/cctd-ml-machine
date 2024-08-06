@@ -14,7 +14,7 @@ import { useStorage } from "./hooks/use-storage";
 import {
   ConnectionStatus,
   useConnectStatus,
-  useSetConnectStatus,
+  useConnectStatusUpdater,
 } from "./connect-status-hooks";
 
 export enum ConnectionFlowType {
@@ -45,8 +45,9 @@ export enum ConnectionFlowStep {
   // Failure stages
   TryAgainReplugMicrobit = "TryAgainReplugMicrobit",
   TryAgainCloseTabs = "TryAgainCloseTabs",
-  TryAgainSelectMicrobit = "TryAgainSelectMicrobit",
-  TryAgainBluetoothConnect = "TryAgainBluetoothConnect",
+  TryAgainWebUsbSelectMicrobit = "TryAgainWebUsbSelectMicrobit",
+  TryAgainBluetoothSelectMicrobit = "TryAgainBluetoothSelectMicrobit",
+  ConnectFailed = "ConnectFailed",
   BadFirmware = "BadFirmware",
   MicrobitUnsupported = "MicrobitUnsupported",
   WebUsbBluetoothUnsupported = "WebUsbBluetoothUnsupported",
@@ -86,12 +87,18 @@ interface ConnectionStageProviderProps {
   children: ReactNode;
 }
 
+interface StoredConnectionConfig {
+  bluetoothMicrobitName?: string;
+  radioRemoteDeviceId?: number;
+}
+
 const getInitialConnectionStageValue = (
-  microbitName: string | undefined
+  config: StoredConnectionConfig
 ): ConnectionStage => ({
   flowStep: ConnectionFlowStep.None,
   flowType: ConnectionFlowType.Bluetooth,
-  bluetoothMicrobitName: microbitName,
+  bluetoothMicrobitName: config.bluetoothMicrobitName,
+  radioRemoteDeviceId: config.radioRemoteDeviceId,
   connType: "bluetooth",
   isWebBluetoothSupported: true,
   isWebUsbSupported: true,
@@ -101,18 +108,23 @@ const getInitialConnectionStageValue = (
 export const ConnectionStageProvider = ({
   children,
 }: ConnectionStageProviderProps) => {
-  const [val, setMicrobitName] = useStorage<{
-    value?: string;
-  }>("local", "microbitName", { value: undefined });
+  const [config, setConfig] = useStorage<StoredConnectionConfig>(
+    "local",
+    "connectionConfig",
+    { bluetoothMicrobitName: undefined, radioRemoteDeviceId: undefined }
+  );
   const [connectionStage, setConnStage] = useState<ConnectionStage>(
-    getInitialConnectionStageValue(val.value)
+    getInitialConnectionStageValue(config)
   );
   const setConnectionStage = useCallback(
     (connStage: ConnectionStage) => {
-      setMicrobitName({ value: connStage.bluetoothMicrobitName });
+      setConfig({
+        bluetoothMicrobitName: connStage.bluetoothMicrobitName,
+        radioRemoteDeviceId: connStage.radioRemoteDeviceId,
+      });
       setConnStage(connStage);
     },
-    [setMicrobitName]
+    [setConfig]
   );
 
   return (
@@ -125,6 +137,7 @@ export const ConnectionStageProvider = ({
 };
 
 export const useConnectionStage = (): {
+  status: ConnectionStatus;
   stage: ConnectionStage;
   actions: ConnectionStageActions;
   isConnected: boolean;
@@ -137,7 +150,7 @@ export const useConnectionStage = (): {
   const [stage, setStage] = connectionStageContextValue;
   const navigate = useNavigate();
   const connectActions = useConnectActions();
-  const setStatus = useSetConnectStatus();
+  const [, setStatus] = useConnectStatus();
 
   const actions = useMemo(() => {
     return new ConnectionStageActions(
@@ -149,10 +162,14 @@ export const useConnectionStage = (): {
     );
   }, [connectActions, navigate, stage, setStage, setStatus]);
 
-  const status = useConnectStatus(actions.handleConnectionStatus);
+  const status = useConnectStatusUpdater(
+    stage.connType,
+    actions.handleConnectionStatus
+  );
   const isConnected = status === ConnectionStatus.Connected;
 
   return {
+    status,
     stage,
     actions,
     isConnected,

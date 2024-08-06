@@ -4,7 +4,6 @@ import {
   ConnectActions,
   ConnectAndFlashFailResult,
   ConnectAndFlashResult,
-  ConnectResult,
 } from "./connect-actions";
 import {
   ConnectionFlowStep,
@@ -60,10 +59,10 @@ export class ConnectionStageActions {
       return this.handleConnectAndFlashFail(result);
     }
 
-    this.onFlashSuccess(deviceId, onSuccess);
+    await this.onFlashSuccess(deviceId, onSuccess);
   };
 
-  private onFlashSuccess = (
+  private onFlashSuccess = async (
     deviceId: number,
     onSuccess: (stage: ConnectionStage) => void
   ) => {
@@ -83,11 +82,10 @@ export class ConnectionStageActions {
         break;
       }
       case ConnectionFlowType.RadioBridge: {
-        newStage = {
-          ...this.getConnectingStage("radio"),
+        await this.connectMicrobits({
           radioBridgeDeviceId: deviceId,
-        };
-        break;
+        });
+        return;
       }
       case ConnectionFlowType.RadioRemote: {
         newStage = {
@@ -116,7 +114,9 @@ export class ConnectionStageActions {
       case ConnectAndFlashResult.ErrorBadFirmware:
         return this.setFlowStep(ConnectionFlowStep.BadFirmware);
       case ConnectAndFlashResult.ErrorNoDeviceSelected:
-        return this.setFlowStep(ConnectionFlowStep.TryAgainSelectMicrobit);
+        return this.setFlowStep(
+          ConnectionFlowStep.TryAgainWebUsbSelectMicrobit
+        );
       case ConnectAndFlashResult.ErrorUnableToClaimInterface:
         return this.setFlowStep(ConnectionFlowStep.TryAgainCloseTabs);
       default:
@@ -146,15 +146,16 @@ export class ConnectionStageActions {
     );
   };
 
-  connectMicrobits = async () => {
-    if (this.stage.connType === "radio" && this.stage.radioRemoteDeviceId) {
-      const result = await this.actions.connectMicrobitsSerial(
-        this.stage.radioRemoteDeviceId
-      );
-      this.handleConnectResult(result);
-    } else {
-      this.setFlowStep(ConnectionFlowStep.TryAgainReplugMicrobit);
+  connectMicrobits = async (partialStage?: Partial<ConnectionStage>) => {
+    const newStage = {
+      ...this.getConnectingStage("radio"),
+      ...(partialStage || {}),
+    };
+    this.setStage(newStage);
+    if (!newStage.radioRemoteDeviceId) {
+      throw new Error("Radio bridge device id not set");
     }
+    await this.actions.connectMicrobitsSerial(newStage.radioRemoteDeviceId);
   };
 
   private getConnectingStage = (connType: ConnectionType) => {
@@ -168,24 +169,8 @@ export class ConnectionStageActions {
     };
   };
 
-  private handleConnectResult = (result: ConnectResult) => {
-    if (result === ConnectResult.Success) {
-      // TODO: Remove forced set status and listen to status event
-      // from connection library instead for radio
-      if (this.stage.connType === "radio") {
-        this.setStatus(ConnectionStatus.Connected);
-      }
-      return this.onConnected();
-    }
-    this.handleConnectFail();
-  };
-
   private handleConnectFail = () => {
-    this.setFlowStep(
-      this.stage.flowType === ConnectionFlowType.Bluetooth
-        ? ConnectionFlowStep.TryAgainBluetoothConnect
-        : ConnectionFlowStep.TryAgainReplugMicrobit
-    );
+    this.setFlowStep(ConnectionFlowStep.ConnectFailed);
   };
 
   private onConnected = () => {
@@ -197,10 +182,18 @@ export class ConnectionStageActions {
     await this.actions.disconnect();
   };
 
-  handleConnectionStatus = (status: ConnectionStatus) => {
+  handleConnectionStatus = (
+    status: ConnectionStatus,
+    flowType: ConnectionFlowType
+  ) => {
     switch (status) {
       case ConnectionStatus.Connected: {
         return this.onConnected();
+      }
+      case ConnectionStatus.FailedToSelectBluetoothDevice: {
+        return this.setFlowStep(
+          ConnectionFlowStep.TryAgainBluetoothSelectMicrobit
+        );
       }
       case ConnectionStatus.FailedToConnect: {
         return this.handleConnectFail();
@@ -208,18 +201,22 @@ export class ConnectionStageActions {
       case ConnectionStatus.FailedToReconnectTwice: {
         return this.setStage({
           ...this.stage,
+          flowType,
           hasFailedToReconnectTwice: true,
           flowStep: ConnectionFlowStep.ReconnectFailedTwice,
         });
       }
       case ConnectionStatus.FailedToReconnect: {
-        return this.setFlowStep(ConnectionFlowStep.ReconnectFailed);
+        return this.setFlowStage({
+          flowStep: ConnectionFlowStep.ReconnectFailed,
+          flowType,
+        });
       }
       case ConnectionStatus.ConnectionLost: {
-        return this.setFlowStep(ConnectionFlowStep.ConnectionLost);
-      }
-      case ConnectionStatus.Reconnecting: {
-        return this.setStage(this.getConnectingStage("bluetooth"));
+        return this.setFlowStage({
+          flowStep: ConnectionFlowStep.ConnectionLost,
+          flowType,
+        });
       }
     }
     return;
@@ -229,7 +226,6 @@ export class ConnectionStageActions {
     if (this.stage.connType === "bluetooth") {
       await this.connectBluetooth(false);
     } else {
-      this.setStage(this.getConnectingStage("radio"));
       await this.connectMicrobits();
     }
   };
@@ -253,34 +249,30 @@ export class ConnectionStageActions {
   };
 
   private getStagesOrder = () => {
-    if (this.stage.flowType === ConnectionFlowType.Bluetooth) {
-      return bluetoothFlow({
-        isManualFlashing:
-          !this.stage.isWebUsbSupported ||
-          this.stage.flowStep === ConnectionFlowStep.ManualFlashingTutorial,
-        isRestartAgain: this.stage.hasFailedToReconnectTwice,
-      });
-    }
-    return radioFlow();
+    const isRestartAgain = this.stage.hasFailedToReconnectTwice;
+    const isManualFlashing =
+      !this.stage.isWebUsbSupported ||
+      this.stage.flowStep === ConnectionFlowStep.ManualFlashingTutorial;
+    return this.stage.flowType === ConnectionFlowType.Bluetooth
+      ? bluetoothFlow({ isManualFlashing, isRestartAgain })
+      : radioFlow({ isRestartAgain });
+  };
+
+  private setFlowStage = (flowStage: FlowStage) => {
+    this.setStage({ ...this.stage, ...flowStage });
   };
 
   onNextClick = () => {
-    this.setStage({
-      ...this.stage,
-      ...getNextStage(this.stage, 1, this.getStagesOrder()),
-    });
+    this.setFlowStage(getNextStage(this.stage, 1, this.getStagesOrder()));
   };
 
   onBackClick = () => {
-    this.setStage({
-      ...this.stage,
-      ...getNextStage(this.stage, -1, this.getStagesOrder()),
-    });
+    this.setFlowStage(getNextStage(this.stage, -1, this.getStagesOrder()));
   };
 
   onTryAgain = () => {
     this.setFlowStep(
-      this.stage.flowStep === ConnectionFlowStep.TryAgainBluetoothConnect
+      this.stage.flowStep === ConnectionFlowStep.TryAgainBluetoothSelectMicrobit
         ? ConnectionFlowStep.EnterBluetoothPattern
         : ConnectionFlowStep.ConnectCable
     );
@@ -325,9 +317,11 @@ const bluetoothFlow = ({
   },
 ];
 
-const radioFlow = () => [
+const radioFlow = ({ isRestartAgain }: { isRestartAgain: boolean }) => [
   {
-    flowStep: ConnectionFlowStep.Start,
+    flowStep: isRestartAgain
+      ? ConnectionFlowStep.ReconnectFailedTwice
+      : ConnectionFlowStep.Start,
     flowType: ConnectionFlowType.RadioRemote,
   },
   {

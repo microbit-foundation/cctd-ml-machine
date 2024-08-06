@@ -29,13 +29,14 @@ import {
 import { addDataConfig } from "../pages-config";
 import { createStepPageUrl } from "../urls";
 import { useConnectionStage } from "../connection-stage-hooks";
+import { ConnectionStatus } from "../connect-status-hooks";
 
 const AddDataPage = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const [gestures] = useGestureData();
   const actions = useGestureActions();
-  const { isConnected } = useConnectionStage();
+  const { isConnected, status } = useConnectionStage();
 
   const hasSufficientData = useMemo(
     () => hasSufficientDataForTraining(gestures.data),
@@ -44,7 +45,7 @@ const AddDataPage = () => {
 
   const noStoredData = useMemo<boolean>(() => {
     const gestureData = gestures.data;
-    return (
+    return !(
       gestureData.length !== 0 &&
       gestureData.some((g) => g.recordings.length > 0)
     );
@@ -65,7 +66,9 @@ const AddDataPage = () => {
   return (
     <DefaultPageLayout titleId={`${addDataConfig.id}-title`}>
       <TabView activeStep={addDataConfig.id} />
-      {noStoredData && !isConnected ? (
+      {noStoredData &&
+      !isConnected &&
+      status !== ConnectionStatus.ReconnectingAutomatically ? (
         <ConnectFirstView />
       ) : (
         <AddDataGridView />

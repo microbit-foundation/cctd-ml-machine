@@ -1,9 +1,5 @@
+import { ConnectionStatus as DeviceConnectionStatus } from "@microbit/microbit-connection";
 import {
-  ConnectionStatusEvent,
-  ConnectionStatus as DeviceConnectionStatus,
-} from "@microbit/microbit-connection";
-import {
-  MutableRefObject,
   ReactNode,
   createContext,
   useContext,
@@ -11,7 +7,10 @@ import {
   useRef,
   useState,
 } from "react";
+import { StatusListener } from "./connect-actions";
 import { useConnectActions } from "./connect-actions-hooks";
+import { ConnectionFlowType, ConnectionType } from "./connection-stage-hooks";
+import { getNextConnectionState } from "./get-next-connection-state";
 
 export enum ConnectionStatus {
   /**
@@ -27,13 +26,22 @@ export enum ConnectionStatus {
    */
   Connected = "Connected",
   /**
-   * Reconnecting occurs for the subsequent connections after the initial one.
+   * Reconnecting explicitly occurs when a reconnection is triggered by the user.
    */
-  Reconnecting = "Reconnecting",
+  ReconnectingExplicitly = "ReconnectingExplicitly",
+  /**
+   * Reconnecting automatically occurs when a reconnection is triggered automatically.
+   * This happens before a connection lost is declared.
+   */
+  ReconnectingAutomatically = "ReconnectingAutomatically",
   /**
    * Disconnected. The disconnection is triggered by the user.
    */
   Disconnected = "Disconnected",
+  /**
+   * Failure to select a device by the user.
+   */
+  FailedToSelectBluetoothDevice = "FailedToSelectDevice",
   /**
    * Failure to establish initial connection triggered by the user.
    */
@@ -80,110 +88,61 @@ export const ConnectStatusProvider = ({
   );
 };
 
-export const useSetConnectStatus = (): ((status: ConnectionStatus) => void) => {
+export const useConnectStatus = (): [
+  ConnectionStatus,
+  (status: ConnectionStatus) => void
+] => {
   const connectStatusContextValue = useContext(ConnectStatusContext);
   if (!connectStatusContextValue) {
     throw new Error("Missing provider");
   }
-  const [, setStatus] = connectStatusContextValue;
-
-  return setStatus;
+  return connectStatusContextValue;
 };
 
-export const useConnectStatus = (
-  handleStatus?: (status: ConnectionStatus) => void
+export const useConnectStatusUpdater = (
+  currConnType: ConnectionType,
+  handleStatus: (status: ConnectionStatus, type: ConnectionFlowType) => void
 ): ConnectionStatus => {
-  const connectStatusContextValue = useContext(ConnectStatusContext);
-  if (!connectStatusContextValue) {
-    throw new Error("Missing provider");
-  }
-  const [status, setStatus] = connectStatusContextValue;
+  const [connectionStatus, setConnectionStatus] = useConnectStatus();
   const connectActions = useConnectActions();
   const prevDeviceStatus = useRef<DeviceConnectionStatus | null>(null);
-  const hasAttempedReconnect = useRef<boolean>(false);
+  const [hasAttempedReconnect, setHasAttemptedReconnect] =
+    useState<boolean>(false);
+  const [onFirstConnectAttempt, setOnFirstConnectAttempt] =
+    useState<boolean>(true);
 
   useEffect(() => {
-    const listener = ({ status: deviceStatus }: ConnectionStatusEvent) => {
-      const newStatus = getNextConnectionStatus(
-        status,
+    const listener: StatusListener = ({ status: deviceStatus, type }) => {
+      const nextState = getNextConnectionState({
+        currConnType,
+        currStatus: connectionStatus,
         deviceStatus,
-        prevDeviceStatus.current,
-        hasAttempedReconnect
-      );
+        prevDeviceStatus: prevDeviceStatus.current,
+        type,
+        hasAttempedReconnect,
+        setHasAttemptedReconnect,
+        onFirstConnectAttempt,
+        setOnFirstConnectAttempt,
+      });
       prevDeviceStatus.current = deviceStatus;
-      if (newStatus) {
-        handleStatus && handleStatus(newStatus);
-        setStatus(newStatus);
+      if (nextState) {
+        handleStatus && handleStatus(nextState.status, nextState.flowType);
+        setConnectionStatus(nextState.status);
       }
     };
     connectActions.addStatusListener(listener);
     return () => {
-      connectActions.removeStatusListener(listener);
+      connectActions.removeStatusListener();
     };
-  }, [connectActions, handleStatus, setStatus, status]);
+  }, [
+    connectActions,
+    connectionStatus,
+    currConnType,
+    handleStatus,
+    hasAttempedReconnect,
+    onFirstConnectAttempt,
+    setConnectionStatus,
+  ]);
 
-  return status;
-};
-
-const getNextConnectionStatus = (
-  status: ConnectionStatus,
-  deviceStatus: DeviceConnectionStatus,
-  prevDeviceStatus: DeviceConnectionStatus | null,
-  hasAttempedReconnect: MutableRefObject<boolean>
-) => {
-  if (
-    // Disconnection happens for newly started / restarted
-    // connection flows when clearing device
-    deviceStatus === DeviceConnectionStatus.DISCONNECTED &&
-    status === ConnectionStatus.NotConnected
-  ) {
-    return ConnectionStatus.NotConnected;
-  }
-  if (deviceStatus === DeviceConnectionStatus.CONNECTED) {
-    hasAttempedReconnect.current = false;
-    return ConnectionStatus.Connected;
-  }
-  if (
-    (status === ConnectionStatus.Connecting &&
-      deviceStatus === DeviceConnectionStatus.DISCONNECTED) ||
-    // If user does not select a device
-    (deviceStatus === DeviceConnectionStatus.NO_AUTHORIZED_DEVICE &&
-      prevDeviceStatus === DeviceConnectionStatus.NO_AUTHORIZED_DEVICE)
-  ) {
-    return ConnectionStatus.FailedToConnect;
-  }
-  if (
-    hasAttempedReconnect.current &&
-    deviceStatus === DeviceConnectionStatus.DISCONNECTED &&
-    prevDeviceStatus === DeviceConnectionStatus.CONNECTING
-  ) {
-    return ConnectionStatus.FailedToReconnectTwice;
-  }
-  if (
-    deviceStatus === DeviceConnectionStatus.DISCONNECTED &&
-    prevDeviceStatus === DeviceConnectionStatus.CONNECTING
-  ) {
-    hasAttempedReconnect.current = true;
-    return ConnectionStatus.FailedToReconnect;
-  }
-  if (
-    deviceStatus === DeviceConnectionStatus.DISCONNECTED &&
-    prevDeviceStatus === DeviceConnectionStatus.RECONNECTING
-  ) {
-    hasAttempedReconnect.current = true;
-    return ConnectionStatus.ConnectionLost;
-  }
-  if (deviceStatus === DeviceConnectionStatus.DISCONNECTED) {
-    return ConnectionStatus.Disconnected;
-  }
-  if (
-    deviceStatus === DeviceConnectionStatus.RECONNECTING ||
-    deviceStatus === DeviceConnectionStatus.CONNECTING
-  ) {
-    return status === ConnectionStatus.NotConnected ||
-      status === ConnectionStatus.FailedToConnect
-      ? ConnectionStatus.Connecting
-      : ConnectionStatus.Reconnecting;
-  }
-  return undefined;
+  return connectionStatus;
 };

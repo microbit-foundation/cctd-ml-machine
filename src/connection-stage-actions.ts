@@ -179,6 +179,7 @@ export class ConnectionStageActions {
   };
 
   disconnect = async () => {
+    this.setStatus(ConnectionStatus.Disconnected);
     await this.actions.disconnect();
   };
 
@@ -218,11 +219,16 @@ export class ConnectionStageActions {
           flowType,
         });
       }
+      case ConnectionStatus.ReconnectingAutomatically: {
+        // Don't show dialogs when reconnecting automatically
+        return this.setFlowStep(ConnectionFlowStep.None);
+      }
     }
     return;
   };
 
   reconnect = async () => {
+    this.setStatus(ConnectionStatus.ReconnectingExplicitly);
     if (this.stage.connType === "bluetooth") {
       await this.connectBluetooth(false);
     } else {

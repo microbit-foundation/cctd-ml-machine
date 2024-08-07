@@ -105,6 +105,7 @@ export const useConnectStatusUpdater = (
 ): ConnectionStatus => {
   const [connectionStatus, setConnectionStatus] = useConnectStatus();
   const connectActions = useConnectActions();
+  const isBrowserTabVisible = useBrowserTabVisibility();
   const prevDeviceStatus = useRef<DeviceConnectionStatus | null>(null);
   const [hasAttempedReconnect, setHasAttemptedReconnect] =
     useState<boolean>(false);
@@ -112,6 +113,11 @@ export const useConnectStatusUpdater = (
     useState<boolean>(true);
 
   useEffect(() => {
+    if (!isBrowserTabVisible && currConnType === "radio") {
+      // Show reconnecting when user hides browser tab for radio bridge connection
+      setConnectionStatus(ConnectionStatus.ReconnectingAutomatically);
+      return;
+    }
     const listener: StatusListener = ({ status: deviceStatus, type }) => {
       const nextState = getNextConnectionState({
         currConnType,
@@ -130,7 +136,9 @@ export const useConnectStatusUpdater = (
         setConnectionStatus(nextState.status);
       }
     };
-    connectActions.addStatusListener(listener);
+    // Only add relevant connection type status listener
+    connectActions.removeStatusListener();
+    connectActions.addStatusListener(listener, currConnType);
     return () => {
       connectActions.removeStatusListener();
     };
@@ -140,9 +148,24 @@ export const useConnectStatusUpdater = (
     currConnType,
     handleStatus,
     hasAttempedReconnect,
+    isBrowserTabVisible,
     onFirstConnectAttempt,
     setConnectionStatus,
   ]);
 
   return connectionStatus;
+};
+
+const useBrowserTabVisibility = (): boolean => {
+  const [visible, setVisible] = useState<boolean>(true);
+
+  useEffect(() => {
+    const listener = () => setVisible(!document.hidden);
+    document.addEventListener("visibilitychange", listener, false);
+    return () => {
+      document.removeEventListener("visibilitychange", listener);
+    };
+  }, []);
+
+  return visible;
 };

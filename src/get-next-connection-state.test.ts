@@ -113,7 +113,7 @@ describe("getNextConnectionState for radio connection", () => {
     testGetNextConnectionState({
       input: {
         currConnType: "radio",
-        currStatus: ConnectionStatus.Disconnected,
+        currStatus: ConnectionStatus.Connecting,
         deviceStatus: DeviceConnectionStatus.CONNECTED,
         prevDeviceStatus: DeviceConnectionStatus.CONNECTING,
         type: "radioRemote",
@@ -141,10 +141,7 @@ describe("getNextConnectionState for radio connection", () => {
       expectedOnFirstConnectAttempt: false,
       initialHasAttemptedReconnect: false,
       expectedHasAttemptedReconnect: false,
-      expectedNextConnectionState: {
-        status: ConnectionStatus.Disconnected,
-        flowType: ConnectionFlowType.RadioRemote,
-      },
+      expectedNextConnectionState: undefined,
     });
   });
   test("radio connect fail", () => {
@@ -179,10 +176,7 @@ describe("getNextConnectionState for radio connection", () => {
       expectedOnFirstConnectAttempt: false,
       initialHasAttemptedReconnect: false,
       expectedHasAttemptedReconnect: false,
-      expectedNextConnectionState: {
-        status: ConnectionStatus.ReconnectingExplicitly,
-        flowType: ConnectionFlowType.RadioRemote,
-      },
+      expectedNextConnectionState: undefined,
     });
   });
   test("radio reconnecting automatically", () => {
@@ -254,7 +248,7 @@ describe("getNextConnectionState for radio connection", () => {
       initialOnFirstConnectAttempt: false,
       expectedOnFirstConnectAttempt: false,
       initialHasAttemptedReconnect: true,
-      expectedHasAttemptedReconnect: true,
+      expectedHasAttemptedReconnect: false,
       expectedNextConnectionState: {
         status: ConnectionStatus.FailedToReconnectTwice,
         flowType: ConnectionFlowType.RadioRemote,
@@ -311,7 +305,7 @@ describe("getNextConnectionState for radio connection", () => {
       initialOnFirstConnectAttempt: false,
       expectedOnFirstConnectAttempt: false,
       initialHasAttemptedReconnect: true,
-      expectedHasAttemptedReconnect: true,
+      expectedHasAttemptedReconnect: false,
       expectedNextConnectionState: {
         status: ConnectionStatus.FailedToReconnectTwice,
         flowType: ConnectionFlowType.RadioRemote,
@@ -363,7 +357,7 @@ describe("getNextConnectionState for bluetooth connection", () => {
     testGetNextConnectionState({
       input: {
         currConnType: "bluetooth",
-        currStatus: ConnectionStatus.Disconnected,
+        currStatus: ConnectionStatus.Connecting,
         deviceStatus: DeviceConnectionStatus.CONNECTED,
         prevDeviceStatus: DeviceConnectionStatus.CONNECTING,
         type: "bluetooth",
@@ -391,10 +385,7 @@ describe("getNextConnectionState for bluetooth connection", () => {
       expectedOnFirstConnectAttempt: false,
       initialHasAttemptedReconnect: false,
       expectedHasAttemptedReconnect: false,
-      expectedNextConnectionState: {
-        status: ConnectionStatus.Disconnected,
-        flowType: ConnectionFlowType.Bluetooth,
-      },
+      expectedNextConnectionState: undefined,
     });
   });
   test("bluetooth did not select device", () => {
@@ -448,10 +439,7 @@ describe("getNextConnectionState for bluetooth connection", () => {
       expectedOnFirstConnectAttempt: false,
       initialHasAttemptedReconnect: false,
       expectedHasAttemptedReconnect: false,
-      expectedNextConnectionState: {
-        status: ConnectionStatus.ReconnectingExplicitly,
-        flowType: ConnectionFlowType.Bluetooth,
-      },
+      expectedNextConnectionState: undefined,
     });
   });
   test("bluetooth reconnecting automatically", () => {
@@ -523,7 +511,7 @@ describe("getNextConnectionState for bluetooth connection", () => {
       initialOnFirstConnectAttempt: false,
       expectedOnFirstConnectAttempt: false,
       initialHasAttemptedReconnect: true,
-      expectedHasAttemptedReconnect: true,
+      expectedHasAttemptedReconnect: false,
       expectedNextConnectionState: {
         status: ConnectionStatus.FailedToReconnectTwice,
         flowType: ConnectionFlowType.Bluetooth,

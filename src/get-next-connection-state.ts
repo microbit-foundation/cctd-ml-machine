@@ -30,6 +30,11 @@ export const getNextConnectionState = ({
   onFirstConnectAttempt,
   setOnFirstConnectAttempt,
 }: GetNextConnectionStateInput): NextConnectionState => {
+  if (currStatus === ConnectionStatus.Disconnected) {
+    // Do not update connection status when user explicitly disconnected connection
+    // until user reconnects explicitly
+    return undefined;
+  }
   const flowType =
     type === "usb"
       ? ConnectionFlowType.RadioBridge
@@ -46,7 +51,6 @@ export const getNextConnectionState = ({
       currConnType !== "radio" ||
       onFirstConnectAttempt ||
       deviceStatus !== DeviceConnectionStatus.DISCONNECTED ||
-      currStatus === ConnectionStatus.Disconnected ||
       // Ignore usb status when reconnecting.
       // Serial connection gets intentionally disconnected before reconnect.
       currStatus === ConnectionStatus.ReconnectingAutomatically ||
@@ -58,6 +62,7 @@ export const getNextConnectionState = ({
       // If bridge micro:bit causes radio bridge reconnect to fail twice
       hasAttempedReconnect
     ) {
+      setHasAttemptedReconnect(false);
       return {
         status: ConnectionStatus.FailedToReconnectTwice,
         flowType: ConnectionFlowType.RadioRemote,
@@ -108,9 +113,9 @@ export const getNextConnectionState = ({
   if (
     // If fails to reconnect twice.
     hasAttempedReconnect &&
-    deviceStatus === DeviceConnectionStatus.DISCONNECTED &&
-    prevDeviceStatus === DeviceConnectionStatus.CONNECTING
+    deviceStatus === DeviceConnectionStatus.DISCONNECTED
   ) {
+    setHasAttemptedReconnect(false);
     return { status: ConnectionStatus.FailedToReconnectTwice, flowType };
   }
   if (
@@ -130,12 +135,6 @@ export const getNextConnectionState = ({
     setHasAttemptedReconnect(true);
     return { status: ConnectionStatus.ConnectionLost, flowType };
   }
-  if (
-    // If disconnected by user.
-    deviceStatus === DeviceConnectionStatus.DISCONNECTED
-  ) {
-    return { status: ConnectionStatus.Disconnected, flowType };
-  }
   const hasStartedOver =
     currStatus === ConnectionStatus.NotConnected ||
     currStatus === ConnectionStatus.FailedToConnect;
@@ -146,12 +145,6 @@ export const getNextConnectionState = ({
   ) {
     setOnFirstConnectAttempt(true);
     return { status: ConnectionStatus.Connecting, flowType };
-  }
-  if (
-    // If reconnecting explicitly by user.
-    deviceStatus === DeviceConnectionStatus.CONNECTING
-  ) {
-    return { status: ConnectionStatus.ReconnectingExplicitly, flowType };
   }
   if (
     // If reconnecting automatically.

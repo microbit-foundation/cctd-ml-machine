@@ -44,10 +44,13 @@ class InputBehaviour extends LoggingDecorator {
 
   onIdentifiedAsOutdated(): void {
     super.onIdentifiedAsOutdated();
+    /*
+    TODO: Disabled for now as the results are unpredictable
     state.update(s => {
       s.isInputOutdated = true;
       return s;
     });
+ */
   }
 
   onVersionIdentified(versionNumber: number): void {

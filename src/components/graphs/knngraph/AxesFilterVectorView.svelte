@@ -140,18 +140,21 @@
         <div class="flex flex-col justify-evenly">
           <div class="flex flex-row space-x-2" id="fromX">
             <StandardButton
+              color={StaticConfiguration.liveGraphColors[0]}
               small
               outlined={$highlightedAxis !== Axes.X}
               onClick={() => ($highlightedAxis = Axes.X)}>X</StandardButton>
           </div>
           <div class="flex flex-row space-x-2" id="fromY">
             <StandardButton
+              color={StaticConfiguration.liveGraphColors[1]}
               small
               outlined={$highlightedAxis !== Axes.Y}
               onClick={() => ($highlightedAxis = Axes.Y)}>Y</StandardButton>
           </div>
           <div class="flex flex-row space-x-2" id="fromZ">
             <StandardButton
+              color={StaticConfiguration.liveGraphColors[2]}
               small
               outlined={$highlightedAxis !== Axes.Z}
               onClick={() => ($highlightedAxis = Axes.Z)}>Z</StandardButton>

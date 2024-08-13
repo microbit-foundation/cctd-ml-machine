@@ -96,7 +96,9 @@ class KNNModelGraphController {
 
   private getDefaultScale() {
     // TODO: This is a hack to make the data fit inside the graph.
-    return (this.filters.has(FilterType.ACC) || this.filters.has(FilterType.PEAKS)) ? 25 : 100
+    return this.filters.has(FilterType.ACC) || this.filters.has(FilterType.PEAKS)
+      ? 25
+      : 100;
   }
 
   public multiplyScale(amount: number) {
@@ -238,10 +240,11 @@ class KNNModelGraphController {
       }
     };
 
-    try { // Some filters throw when no filters data is available
+    try {
+      // Some filters throw when no filters data is available
       const liveData = getLiveFilteredData();
       this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
-    } catch (_ignored) { }
+    } catch (_ignored) {}
 
     if (this.redrawTrainingData) {
       const drawData: Point3D[][][] = [...this.trainingData];

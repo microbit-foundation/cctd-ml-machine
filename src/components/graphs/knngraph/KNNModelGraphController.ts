@@ -27,6 +27,11 @@ type UpdateCall = {
   data: TimestampedData<MicrobitAccelerometerDataVector>[];
 };
 
+/**
+ * Controller for the KNNModelGraph. Handles the interaction between the graph and the user.
+ * 
+ * Generally the controller will be instantiated, whenever the model is retrained or the user navigates to the KNNModelGraph.
+ */
 class KNNModelGraphController {
   private rotationX: Writable<number>;
   private rotationY: Writable<number>;
@@ -95,7 +100,7 @@ class KNNModelGraphController {
   }
 
   private getDefaultScale() {
-    // TODO: This is a hack to make the data fit inside the graph.
+    // TODO: This is a hack to make the data fit inside the graph. The proper solution is to calculate the scale based on the data
     return this.filters.has(FilterType.ACC) || this.filters.has(FilterType.PEAKS)
       ? 25
       : 100;
@@ -244,7 +249,7 @@ class KNNModelGraphController {
       // Some filters throw when no filters data is available
       const liveData = getLiveFilteredData();
       this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
-    } catch (_ignored) {}
+    } catch (_ignored) { }
 
     if (this.redrawTrainingData) {
       const drawData: Point3D[][][] = [...this.trainingData];

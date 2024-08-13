@@ -17,11 +17,14 @@
   import { stores } from '../../../script/stores/Stores';
   import { get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
+  import Filters from '../../../script/domain/Filters';
+  import { FilterType } from '../../../script/domain/FilterTypes';
 
   const classifierFactory = new ClassifierFactory();
 
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
+  const filters = classifier.getFilters();
 
   const canvasWidth = 450;
   const canvasHeight = 300;
@@ -78,6 +81,11 @@
       controller.set(initSingle($highlightedAxis));
     }
   }
+
+  filters.subscribe(() => {
+    const expandedZoom = filters.has(FilterType.ACC) || filters.has(FilterType.PEAKS);
+    get(controller)?.multiplyScale(expandedZoom ? 1.5 : 1);
+  });
 
   onMount(() => {
     controller.set(initSingle(Axes.X));

@@ -9,7 +9,7 @@ import FilterTypes, { FilterType } from './FilterTypes';
 import Logger from '../utils/Logger';
 
 class Filters implements Readable<Filter[]> {
-  constructor(private filters: Writable<Filter[]>) {}
+  constructor(private filters: Writable<Filter[]>) { }
   public subscribe(
     run: Subscriber<Filter[]>,
     invalidate?: ((value?: Filter[] | undefined) => void) | undefined,

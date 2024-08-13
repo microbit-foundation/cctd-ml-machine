@@ -16,6 +16,7 @@ import Filters from '../../../script/domain/Filters';
 import { Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { stores } from '../../../script/stores/Stores';
+import { FilterType } from '../../../script/domain/FilterTypes';
 
 type SampleData = {
   value: number[];
@@ -56,7 +57,7 @@ class KNNModelGraphController {
     this.rotationX = writable(3);
     this.rotationY = writable(0.5);
     this.rotationZ = writable(0);
-    this.scale = writable(100);
+    this.scale = writable(this.getDefaultScale());
     this.origin = writable(origin);
     this.graphColors = colors;
 
@@ -91,6 +92,11 @@ class KNNModelGraphController {
     this.rotationZ.update(oldRot => {
       return oldRot + rotation.z;
     });
+  }
+
+  private getDefaultScale() {
+    // TODO: This is a hack to make the data fit inside the graph.
+    return (this.filters.has(FilterType.ACC) || this.filters.has(FilterType.PEAKS)) ? 25 : 100
   }
 
   public multiplyScale(amount: number) {
@@ -232,8 +238,10 @@ class KNNModelGraphController {
       }
     };
 
-    const liveData = getLiveFilteredData();
-    this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
+    try { // Some filters throw when no filters data is available
+      const liveData = getLiveFilteredData();
+      this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
+    } catch (_ignored) { }
 
     if (this.redrawTrainingData) {
       const drawData: Point3D[][][] = [...this.trainingData];

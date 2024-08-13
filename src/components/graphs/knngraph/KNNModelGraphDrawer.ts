@@ -41,7 +41,7 @@ class KNNModelGraphDrawer {
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) {}
+  ) { }
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {
@@ -258,7 +258,7 @@ class KNNModelGraphDrawer {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const grid3d = this.getGridTransformer(drawConfig);
     const xGrid = [];
-    const j = 10;
+    const j = 30;
     for (let z = -j; z < j; z++) {
       for (let x = -j; x < j; x++) {
         if (stores.getClassifier().getFilters().count() === 2) {
@@ -325,7 +325,7 @@ class KNNModelGraphDrawer {
   private getGridTransformer(drawConfig: GraphDrawConfig) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     return gridPlanes3D()
-      .rows(20)
+      .rows(60)
       .rotateX(drawConfig.xRot)
       .rotateY(drawConfig.yRot)
       .rotateZ(drawConfig.zRot)

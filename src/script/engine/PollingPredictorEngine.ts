@@ -63,7 +63,7 @@ class PollingPredictorEngine implements Engine {
     }
   }
 
-  private bufferToInput(): AccelerometerClassifierInput {
+  public bufferToInput(): AccelerometerClassifierInput {
     const bufferedData = this.getRawDataFromBuffer(
       StaticConfiguration.pollingPredictionSampleSize,
     );

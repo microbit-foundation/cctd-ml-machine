@@ -24,6 +24,7 @@
   import { gestures, liveAccelerometerData } from '../script/stores/Stores';
   import Gesture from '../script/domain/stores/gesture/Gesture';
   import { RecordingData } from '../script/domain/stores/gesture/Gestures';
+  import Fingerprint from './graphs/Fingerprint.svelte';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -234,7 +235,10 @@
       <GestureTilePart small>
         <div class="flex p-2 h-30">
           {#each $gesture.recordings as recording (String($gesture.ID) + String(recording.ID))}
-            <Recording {recording} onDelete={deleteRecording} />
+            <div class="flex items-center">
+              <Recording {recording} onDelete={deleteRecording} />
+              <Fingerprint {recording} gestureName={$nameBind} />
+            </div>
           {/each}
         </div>
       </GestureTilePart>

@@ -37,6 +37,23 @@ class AccelerometerClassifierInput implements ClassifierInput {
       ...filters.compute(this.zs),
     ];
   }
+
+  public getNormalizedInput(filters: Filters): number[] {
+    try {
+      const x = filters.computeNormalizedOutput(this.xs);
+      const y = filters.computeNormalizedOutput(this.ys);
+      const z = filters.computeNormalizedOutput(this.zs);
+      const result = [];
+      // Group filters together instead of axes, i.e., max - x,
+      // max - y, max - z, min - x, etc.
+      for (let i = 0; i < x.length; i++) {
+        result.push(x[i], y[i], z[i]);
+      }
+      return result;
+    } catch (err) {
+      return [];
+    }
+  }
 }
 
 export default AccelerometerClassifierInput;

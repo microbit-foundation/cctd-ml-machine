@@ -102,7 +102,7 @@ class KNNModelGraphController {
   private getDefaultScale() {
     // TODO: This is a hack to make the data fit inside the graph. The proper solution is to calculate the scale based on the data
     return this.filters.has(FilterType.ACC) || this.filters.has(FilterType.PEAKS)
-      ? 25
+      ? 18
       : 100;
   }
 

@@ -17,6 +17,9 @@
   import BaseDialog from '../dialogs/BaseDialog.svelte';
   import View3DLive from '../3d-inspector/View3DLive.svelte';
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
+  import LiveFingerprint from '../graphs/LiveFingerprint.svelte';
+  import { get } from 'svelte/store';
+  import { currentPath, Paths } from '../../router/paths';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -34,6 +37,8 @@
   };
 
   let isLive3DOpen = false;
+
+  $: isDataPage = $currentPath === Paths.DATA;
 </script>
 
 <div
@@ -76,11 +81,17 @@
             onOutputDisconnectButtonClicked={outputDisconnectButtonClicked} />
         </div>
       </div>
-      <div
-        class="absolute right-0 cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
-        on:click={() => (isLive3DOpen = true)}>
-        <View3DLive width={160} height={160} freeze={isLive3DOpen} />
-      </div>
+      {#if isDataPage}
+        <div class="absolute right-0">
+          <LiveFingerprint />
+        </div>
+      {:else}
+        <div
+          class="absolute right-0 cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
+          on:click={() => (isLive3DOpen = true)}>
+          <View3DLive width={160} height={160} freeze={isLive3DOpen} />
+        </div>
+      {/if}
       <BaseDialog isOpen={isLive3DOpen} onClose={() => (isLive3DOpen = false)}>
         <!-- hardcoded margin-left matches the size of the sidebar -->
         <div

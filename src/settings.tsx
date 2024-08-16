@@ -10,6 +10,8 @@ export interface Language {
   name: string;
   enName: string;
   preview?: boolean;
+  // Language supported in Microsoft MakeCode editor.
+  makeCode: boolean;
 }
 
 // Tag new languages with `preview: true` to enable for beta only.
@@ -18,8 +20,12 @@ export const allLanguages: Language[] = [
     id: "en",
     name: "English",
     enName: "English",
+    makeCode: true,
   },
 ];
+
+export const getMakeCodeLang = (languageId: string): string =>
+  allLanguages.find((l) => l.id === languageId)?.makeCode ? languageId : "en";
 
 export const supportedLanguages: Language[] = allLanguages.filter(
   (l) => stage !== "production" || !l.preview

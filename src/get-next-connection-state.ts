@@ -37,10 +37,10 @@ export const getNextConnectionState = ({
   }
   const flowType =
     type === "usb"
-      ? ConnectionFlowType.RadioBridge
+      ? ConnectionFlowType.ConnectRadioBridge
       : type === "radioRemote"
-      ? ConnectionFlowType.RadioRemote
-      : ConnectionFlowType.Bluetooth;
+      ? ConnectionFlowType.ConnectRadioRemote
+      : ConnectionFlowType.ConnectBluetooth;
 
   // We use usb status to infer the radio bridge device status for handling error.
   if (type === "usb") {
@@ -65,7 +65,7 @@ export const getNextConnectionState = ({
       setHasAttemptedReconnect(false);
       return {
         status: ConnectionStatus.FailedToReconnectTwice,
-        flowType: ConnectionFlowType.RadioRemote,
+        flowType: ConnectionFlowType.ConnectRadioRemote,
       };
     }
     // If bridge micro:bit causes radio bridge reconnect to fail
@@ -75,6 +75,15 @@ export const getNextConnectionState = ({
         ? ConnectionStatus.ConnectionLost
         : ConnectionStatus.FailedToReconnect;
     return { status, flowType };
+  }
+
+  const hasStartedOver =
+    currStatus === ConnectionStatus.NotConnected ||
+    currStatus === ConnectionStatus.FailedToConnect;
+
+  if (hasStartedOver) {
+    setHasAttemptedReconnect(false);
+    setOnFirstConnectAttempt(true);
   }
 
   if (
@@ -112,6 +121,7 @@ export const getNextConnectionState = ({
   }
   if (
     // If fails to reconnect twice.
+    !onFirstConnectAttempt &&
     hasAttempedReconnect &&
     deviceStatus === DeviceConnectionStatus.DISCONNECTED
   ) {
@@ -120,6 +130,7 @@ export const getNextConnectionState = ({
   }
   if (
     // If fails to reconnect by user.
+    !onFirstConnectAttempt &&
     deviceStatus === DeviceConnectionStatus.DISCONNECTED &&
     (prevDeviceStatus === DeviceConnectionStatus.CONNECTING ||
       prevDeviceStatus === DeviceConnectionStatus.NO_AUTHORIZED_DEVICE)
@@ -135,19 +146,16 @@ export const getNextConnectionState = ({
     setHasAttemptedReconnect(true);
     return { status: ConnectionStatus.ConnectionLost, flowType };
   }
-  const hasStartedOver =
-    currStatus === ConnectionStatus.NotConnected ||
-    currStatus === ConnectionStatus.FailedToConnect;
   if (
     // If connecting.
     deviceStatus === DeviceConnectionStatus.CONNECTING &&
     hasStartedOver
   ) {
-    setOnFirstConnectAttempt(true);
     return { status: ConnectionStatus.Connecting, flowType };
   }
   if (
     // If reconnecting automatically.
+    !onFirstConnectAttempt &&
     deviceStatus === DeviceConnectionStatus.RECONNECTING
   ) {
     return { status: ConnectionStatus.ReconnectingAutomatically, flowType };

@@ -6,7 +6,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useNavigate } from "react-router";
 import { ConnectActions } from "./connect-actions";
 import { useConnectActions } from "./connect-actions-hooks";
 import { ConnectionStageActions } from "./connection-stage-actions";
@@ -18,10 +17,16 @@ import {
 } from "./connect-status-hooks";
 
 export enum ConnectionFlowType {
-  Bluetooth = "bluetooth",
-  RadioBridge = "bridge",
-  RadioRemote = "remote",
+  ConnectBluetooth = "ConnectBluetooth",
+  ConnectRadioBridge = "ConnectRadioBridge",
+  ConnectRadioRemote = "ConnectRadioRemote",
+  DownloadProject = "DownloadProject",
 }
+
+export type InputConnectionFlowType =
+  | ConnectionFlowType.ConnectBluetooth
+  | ConnectionFlowType.ConnectRadioBridge
+  | ConnectionFlowType.ConnectRadioRemote;
 
 export type ConnectionType = "bluetooth" | "radio";
 
@@ -73,6 +78,9 @@ export interface ConnectionStage {
   radioBridgeDeviceId?: number;
   radioRemoteDeviceId?: number;
   hasFailedToReconnectTwice: boolean;
+
+  // User Project
+  makeCodeHex?: string;
 }
 
 type ConnectionStageContextValue = [
@@ -99,8 +107,8 @@ const getInitialConnectionStageValue = (
 ): ConnectionStage => ({
   flowStep: ConnectionFlowStep.None,
   flowType: isWebBluetoothSupported
-    ? ConnectionFlowType.Bluetooth
-    : ConnectionFlowType.RadioRemote,
+    ? ConnectionFlowType.ConnectBluetooth
+    : ConnectionFlowType.ConnectRadioRemote,
   bluetoothMicrobitName: config.bluetoothMicrobitName,
   radioRemoteDeviceId: config.radioRemoteDeviceId,
   connType: isWebBluetoothSupported ? "bluetooth" : "radio",
@@ -157,19 +165,17 @@ export const useConnectionStage = (): {
     throw new Error("Missing provider");
   }
   const [stage, setStage] = connectionStageContextValue;
-  const navigate = useNavigate();
   const connectActions = useConnectActions();
   const [, setStatus] = useConnectStatus();
 
   const actions = useMemo(() => {
     return new ConnectionStageActions(
       connectActions,
-      navigate,
       stage,
       setStage,
       setStatus
     );
-  }, [connectActions, navigate, stage, setStage, setStatus]);
+  }, [connectActions, stage, setStage, setStatus]);
 
   const status = useConnectStatusUpdater(
     stage.connType,

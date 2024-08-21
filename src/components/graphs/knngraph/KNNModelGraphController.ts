@@ -29,7 +29,7 @@ type UpdateCall = {
 
 /**
  * Controller for the KNNModelGraph. Handles the interaction between the graph and the user.
- * 
+ *
  * Generally the controller will be instantiated, whenever the model is retrained or the user navigates to the KNNModelGraph.
  */
 class KNNModelGraphController {
@@ -249,7 +249,7 @@ class KNNModelGraphController {
       // Some filters throw when no filters data is available
       const liveData = getLiveFilteredData();
       this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
-    } catch (_ignored) { }
+    } catch (_ignored) {}
 
     if (this.redrawTrainingData) {
       const drawData: Point3D[][][] = [...this.trainingData];

@@ -123,7 +123,9 @@ class StaticConfiguration {
    */
   public static readonly minNoOfGestures = 2;
 
-  // The settings given to the LayersModelTrainer
+  /**
+   * The neural network training settings
+   */
   public static readonly layersModelTrainingSettings: LayersModelTrainingSettings = {
     noOfEpochs: 80,
     batchSize: 16,
@@ -132,6 +134,9 @@ class StaticConfiguration {
     noOfUnits: 16, // size of hidden layer
   };
 
+  /**
+   * How many samples should the KNN model use for prediction? i.e the k-value.
+   */
   public static readonly defaultKnnNeighbourCount = 3;
 }
 export default StaticConfiguration;

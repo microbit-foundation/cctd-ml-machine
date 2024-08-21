@@ -161,12 +161,16 @@ const LiveGraph = () => {
             <React.Fragment key={idx}>
               <Box
                 ml={-7}
-                transform={`translateY(${
-                  config.arrowHeight - arrowHeightTransformAdjustValue
-                }rem)`}
                 color={config.color}
                 position="absolute"
                 w="fit-content"
+                // Use inline style attribute to avoid style tags being
+                // constantly appended to the <head/> element.
+                style={{
+                  transform: `translateY(${
+                    config.arrowHeight - arrowHeightTransformAdjustValue
+                  }rem)`,
+                }}
               >
                 <Icon as={RiArrowDropLeftFill} boxSize={12} />
               </Box>
@@ -175,10 +179,14 @@ const LiveGraph = () => {
                 fontSize="xl"
                 position="absolute"
                 color={config.color}
-                transform={`translateY(${
-                  config.labelHeight - arrowHeightTransformAdjustValue + 0.45
-                }rem)`}
                 w="fit-content"
+                // Use inline style attribute to avoid style tags being
+                // constantly appended to the <head/> element.
+                style={{
+                  transform: `translateY(${
+                    config.labelHeight - arrowHeightTransformAdjustValue + 0.45
+                  }rem)`,
+                }}
               >
                 {config.label}
               </Text>

@@ -20,9 +20,8 @@
   import ConnectSameDialog from './ConnectSameDialog.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { btPatternInput, btPatternOutput } from '../../script/stores/connectionStore';
-  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
-  import { onMount } from 'svelte';
+  import { MBSpecs } from 'microbyte';
 
   let flashProgress = 0;
 

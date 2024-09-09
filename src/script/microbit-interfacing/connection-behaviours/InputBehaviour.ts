@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type MicrobitBluetooth from '../MicrobitBluetooth';
 import {
   ModelView,
   buttonPressed,
@@ -13,7 +12,6 @@ import {
 } from '../../stores/uiStore';
 import { t } from '../../../i18n';
 import { get } from 'svelte/store';
-import MBSpecs from '../MBSpecs';
 import LoggingDecorator from './LoggingDecorator';
 import TypingUtils from '../../TypingUtils';
 import { DeviceRequestStates } from '../../stores/connectDialogStore';
@@ -23,6 +21,7 @@ import MicrobitAccelerometerLiveData, {
 } from '../../livedata/MicrobitAccelerometerData';
 import { stores } from '../../stores/Stores';
 import LiveDataBuffer from '../../domain/LiveDataBuffer';
+import { MBSpecs, Microbit } from 'microbyte';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -87,7 +86,7 @@ class InputBehaviour extends LoggingDecorator {
     });
   }
 
-  onAssigned(microbitBluetooth: MicrobitBluetooth, name?: string) {
+  onAssigned(microbitBluetooth: Microbit, name?: string) {
     super.onAssigned(microbitBluetooth, name);
     state.update(s => {
       s.isInputAssigned = true;

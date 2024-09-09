@@ -10,9 +10,9 @@
   import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
   import { btPatternInput, btPatternOutput } from '../script/stores/connectionStore';
-  import MBSpecs from '../script/microbit-interfacing/MBSpecs';
   import Microbits from '../script/microbit-interfacing/Microbits';
   import { DeviceRequestStates } from '../script/stores/connectDialogStore';
+  import { MBSpecs } from 'microbyte';
 
   let reconnectText: string;
   let reconnectButtonText: string;

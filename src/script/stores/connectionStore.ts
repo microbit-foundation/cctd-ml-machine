@@ -6,7 +6,7 @@
 
 import { get, type Writable } from 'svelte/store';
 import { persistantWritable } from './storeUtil';
-import MBSpecs from '../microbit-interfacing/MBSpecs';
+import { MBSpecs } from 'microbyte';
 // Todo: Rename file to a more appropriate name
 // Pattern for connecting to input microbit
 export const btPatternInput: Writable<boolean[]> = persistantWritable<boolean[]>(

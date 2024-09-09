@@ -27,9 +27,9 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
-  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   import Gesture, { SoundData } from '../../script/domain/stores/gesture/Gesture';
   import { stores } from '../../script/stores/Stores';
+  import { MBSpecs } from 'microbyte';
 
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
@@ -137,7 +137,7 @@
       return;
     }
 
-    if (Microbits.getAssignedOutput().getVersion() === 1) {
+    if (Microbits.getAssignedOutput().getLastVersion() === 1) {
       const sound = new Audio(selectedSound.path);
       void sound.play();
     } else {

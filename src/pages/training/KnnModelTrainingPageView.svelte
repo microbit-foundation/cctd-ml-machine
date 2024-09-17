@@ -86,7 +86,7 @@
             <div class="flex flex-col justify-center mr-1">
               <div
                 class="rounded-full w-3 h-3"
-                style={'background-color:' + StaticConfiguration.gestureColors[index]} />
+                style={'background-color:' + gesture.color} />
             </div>
             <p>{gesture.name}</p>
           </div>

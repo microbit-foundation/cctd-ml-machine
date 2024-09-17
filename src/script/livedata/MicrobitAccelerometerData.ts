@@ -33,7 +33,7 @@ export const asAccelerometerData = (input: LiveDataVector) => {
 };
 
 export class MicrobitAccelerometerDataVector implements LiveDataVector {
-  public constructor(private data: MicrobitAccelerometerData) {}
+  public constructor(private data: MicrobitAccelerometerData) { }
 
   public getLabels(): string[] {
     return ['X', 'Y', 'Z'];
@@ -50,6 +50,21 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
     return this.data;
   }
 }
+
+export class MicrobitAccelerometerZDataVector implements LiveDataVector {
+  public constructor(private data: number) { }
+  getVector(): number[] {
+    return [this.data];
+  }
+  getSize(): number {
+    return this.getVector().length;
+  }
+  getLabels(): string[] {
+    return ['Z'];
+  }
+}
+
+
 
 class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDataVector> {
   private store: Writable<MicrobitAccelerometerDataVector>;

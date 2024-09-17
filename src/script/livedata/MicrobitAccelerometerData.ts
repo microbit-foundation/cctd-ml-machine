@@ -65,6 +65,42 @@ export class MicrobitAccelerometerZDataVector implements LiveDataVector {
 }
 
 
+export class MicrobitAccelerometerZLiveData implements LiveData<MicrobitAccelerometerZDataVector> {
+  private store: Writable<MicrobitAccelerometerZDataVector>;
+  constructor(private dataBuffer: LiveDataBuffer<MicrobitAccelerometerZDataVector>) {
+    this.store = writable(
+      new MicrobitAccelerometerZDataVector(0),
+    );
+  }
+
+  public getBuffer(): LiveDataBuffer<MicrobitAccelerometerZDataVector> {
+    return this.dataBuffer;
+  }
+
+  public put(data: MicrobitAccelerometerZDataVector): void {
+    this.store.set(data);
+    this.dataBuffer.addValue(data);
+  }
+
+  public getSeriesSize(): number {
+    // TODO: Could be replaced with the version in the store, as it is initialized in constructor
+    return new MicrobitAccelerometerZDataVector(0).getSize();
+  }
+
+  public getLabels(): string[] {
+    // TODO: Could be replaced with the version in the store, as it is initialized in constructor
+    return new MicrobitAccelerometerZDataVector(0).getLabels();
+  }
+
+  public subscribe(
+    run: Subscriber<MicrobitAccelerometerZDataVector>,
+    invalidate?:
+      | ((value?: MicrobitAccelerometerZDataVector | undefined) => void)
+      | undefined,
+  ): Unsubscriber {
+    return this.store.subscribe(run, invalidate);
+  }
+}
 
 class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDataVector> {
   private store: Writable<MicrobitAccelerometerDataVector>;

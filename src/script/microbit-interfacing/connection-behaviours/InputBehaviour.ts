@@ -19,7 +19,7 @@ import TypingUtils from '../../TypingUtils';
 import { DeviceRequestStates } from '../../stores/connectDialogStore';
 import StaticConfiguration from '../../../StaticConfiguration';
 import MicrobitAccelerometerLiveData, {
-  MicrobitAccelerometerDataVector, MicrobitAccelerometerZDataVector,
+  MicrobitAccelerometerDataVector, MicrobitAccelerometerZDataVector, MicrobitAccelerometerZLiveData,
 } from '../../livedata/MicrobitAccelerometerData';
 import { stores } from '../../stores/Stores';
 import LiveDataBuffer from '../../domain/LiveDataBuffer';
@@ -131,10 +131,10 @@ class InputBehaviour extends LoggingDecorator {
 
   onConnected(name?: string): void {
     super.onConnected(name);
-    const buffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(
+    const buffer = new LiveDataBuffer<MicrobitAccelerometerZDataVector>(
       StaticConfiguration.accelerometerLiveDataBufferSize,
     );
-    stores.setLiveData(new MicrobitAccelerometerLiveData(buffer));
+    stores.setLiveData(new MicrobitAccelerometerZLiveData(buffer));
 
     state.update(s => {
       s.isInputConnected = true;

@@ -19,7 +19,9 @@ import TypingUtils from '../../TypingUtils';
 import { DeviceRequestStates } from '../../stores/connectDialogStore';
 import StaticConfiguration from '../../../StaticConfiguration';
 import MicrobitAccelerometerLiveData, {
-  MicrobitAccelerometerDataVector, MicrobitAccelerometerZDataVector, MicrobitAccelerometerZLiveData,
+  MicrobitAccelerometerDataVector,
+  MicrobitAccelerometerZDataVector,
+  MicrobitAccelerometerZLiveData,
 } from '../../livedata/MicrobitAccelerometerData';
 import { stores } from '../../stores/Stores';
 import LiveDataBuffer from '../../domain/LiveDataBuffer';
@@ -159,9 +161,7 @@ class InputBehaviour extends LoggingDecorator {
     //const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
 
-    get(stores).liveData.put(
-      new MicrobitAccelerometerZDataVector(accelZ),
-    );
+    get(stores).liveData.put(new MicrobitAccelerometerZDataVector(accelZ));
   }
 
   buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {

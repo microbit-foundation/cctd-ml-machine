@@ -17,7 +17,7 @@ import { useStore } from "../store";
 interface GestureNameGridItemProps {
   name: string;
   icon: MakeCodeIcon;
-  onCloseClick?: () => void;
+  onDeleteAction?: () => void;
   onSelectRow?: () => void;
   id: number;
   selected?: boolean;
@@ -30,7 +30,7 @@ const gestureNameMaxLength = 18;
 const GestureNameGridItem = ({
   name,
   icon,
-  onCloseClick,
+  onDeleteAction,
   onSelectRow,
   id,
   selected = false,
@@ -84,12 +84,12 @@ const GestureNameGridItem = ({
         onClick={onSelectRow}
         position="relative"
       >
-        {!readOnly && onCloseClick && (
+        {!readOnly && onDeleteAction && (
           <CloseButton
             position="absolute"
             right={1}
             top={1}
-            onClick={onCloseClick}
+            onClick={onDeleteAction}
             size="sm"
             borderRadius="sm"
             aria-label={intl.formatMessage(

@@ -1,11 +1,11 @@
-import { GridItem } from "@chakra-ui/react";
-import { useCallback } from "react";
-import { useIntl } from "react-intl";
+import { GridItem, Text, useDisclosure } from "@chakra-ui/react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { GestureData } from "../model";
+import { useStore } from "../store";
 import AddDataGridWalkThrough from "./AddDataGridWalkThrough";
+import { ConfirmDialog } from "./ConfirmDialog";
 import DataRecordingGridItem from "./DataRecordingGridItem";
 import GestureNameGridItem from "./GestureNameGridItem";
-import { useStore } from "../store";
 
 interface AddDataGridRowProps {
   gesture: GestureData;
@@ -23,26 +23,33 @@ const DataSampleGridRow = ({
   showWalkThrough,
 }: AddDataGridRowProps) => {
   const intl = useIntl();
+  const deleteConfirmDisclosure = useDisclosure();
   const deleteGesture = useStore((s) => s.deleteGesture);
-
-  const handleDeleteDataItem = useCallback(() => {
-    const confirmationText = intl.formatMessage(
-      { id: "alert.deleteGestureConfirm" },
-      { action: gesture.name }
-    );
-    if (!window.confirm(confirmationText)) {
-      return;
-    }
-    deleteGesture(gesture.ID);
-  }, [deleteGesture, gesture.ID, gesture.name, intl]);
-
   return (
     <>
+      <ConfirmDialog
+        isOpen={deleteConfirmDisclosure.isOpen}
+        heading={intl.formatMessage({
+          id: "alert.deleteGestureConfirmHeading",
+        })}
+        body={
+          <Text>
+            <FormattedMessage
+              id="alert.deleteGestureConfirm"
+              values={{
+                action: gesture.name,
+              }}
+            />
+          </Text>
+        }
+        onConfirm={() => deleteGesture(gesture.ID)}
+        onCancel={deleteConfirmDisclosure.onClose}
+      />
       <GestureNameGridItem
         id={gesture.ID}
         name={gesture.name}
         icon={gesture.icon}
-        onCloseClick={handleDeleteDataItem}
+        onDeleteAction={deleteConfirmDisclosure.onOpen}
         onSelectRow={onSelectRow}
         selected={selected}
         readOnly={false}

@@ -1,6 +1,6 @@
 import { MBSpecs, MicrobitHandler } from "microbyte";
 import Logger from "../utils/Logger";
-import { buttonPressed, onCatastrophicError, state } from "../stores/uiStore";
+import { ModelView, buttonPressed, onCatastrophicError, state } from "../stores/uiStore";
 import TypingUtils from "../TypingUtils";
 import { get } from "svelte/store";
 import { stores } from "../stores/Stores";
@@ -8,6 +8,7 @@ import MicrobitAccelerometerLiveData, { MicrobitAccelerometerDataVector } from "
 import LiveDataBuffer from "../domain/LiveDataBuffer";
 import StaticConfiguration from "../../StaticConfiguration";
 import { DeviceRequestStates } from "../stores/connectDialogStore";
+import Microbits, { HexOrigin } from "./Microbits";
 
 class InputMicrobitHandler implements MicrobitHandler {
 
@@ -35,7 +36,7 @@ class InputMicrobitHandler implements MicrobitHandler {
     }
 
     public onAccelerometerDataReceived(x: number, y: number, z: number): void {
-        Logger.log("InputMicrobitHandler", "onAccelerometerDataReceived", x, y, z);
+        //Logger.log("InputMicrobitHandler", "onAccelerometerDataReceived", x, y, z);
 
         const accelX = x / 1000.0;
         const accelY = y / 1000.0;
@@ -69,7 +70,27 @@ class InputMicrobitHandler implements MicrobitHandler {
     }
 
     public onMessageReceived(data: string): void {
-        Logger.log("InputMicrobitHandler", "onMessageReceived", data);
+        //Logger.log("InputMicrobitHandler", "onMessageReceived", data);
+        if (data === "id_mkcd") {
+            Microbits.setInputOrigin(HexOrigin.MAKECODE);
+            state.update(s => {
+                s.modelView = ModelView.TILE;
+                return s;
+            });
+        }
+        if (data === "id_prop") {
+            Microbits.setInputOrigin(HexOrigin.PROPRIETARY);
+            // TODO: Maybe add ModelView.STACK here
+        }
+
+        if (data.includes('vi_')) {
+            const version = parseInt(data.substring(3));
+            Microbits.setInputBuildVersion(version)
+            const isOutdated = StaticConfiguration.isMicrobitOutdated(
+                Microbits.getInputOrigin(),
+                version,
+            ); // TODO do something with this information
+        }
     }
 
     public onDisconnected(): void {
@@ -98,6 +119,7 @@ class InputMicrobitHandler implements MicrobitHandler {
         state.update(s => {
             s.isInputConnected = false;
             s.isInputAssigned = false;
+            s.isInputReady = false;
             return s;
         });
     }

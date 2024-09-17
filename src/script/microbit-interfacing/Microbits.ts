@@ -17,6 +17,8 @@ import StaticConfiguration from '../../StaticConfiguration';
 import { MBSpecs, Microbit, MicrobitBluetoothDevice, MicrobitDeviceState } from 'microbyte';
 import { t } from 'svelte-i18n';
 import Logger from '../utils/Logger';
+import { Log } from '@tensorflow/tfjs-core';
+import OutputMicrobitHandler from './OutputMicrobitHandler';
 
 type QueueElement = {
   service: BluetoothRemoteGATTCharacteristic;
@@ -46,6 +48,12 @@ class Microbits {
     2: 'firmware/MICROBIT.hex',
     universal: 'firmware/universal-hex.hex',
   };
+
+  private static outputOrigin = HexOrigin.UNKNOWN;
+  private static inputOrigin = HexOrigin.UNKNOWN;
+
+  private static inputBuildVersion: number | undefined;
+  private static outputBuildVersion: number | undefined;
   /*   private static assignedInputMicrobit: MicrobitBluetooth | undefined;
     private static assignedOutputMicrobit: MicrobitBluetooth | undefined;
     private static inputName: string | undefined;
@@ -61,11 +69,8 @@ class Microbits {
     private static isInputReconnecting = false;
     private static isOutputReconnecting = false;
   
-    private static outputOrigin = HexOrigin.UNKNOWN;
-    private static inputOrigin = HexOrigin.UNKNOWN;
-  
-    private static inputBuildVersion: number | undefined;
-    private static outputBuildVersion: number | undefined;
+
+
   
     private static inputVersionIdentificationTimeout: NodeJS.Timeout | undefined;
     private static outputVersionIdentificationTimeout: NodeJS.Timeout | undefined; */
@@ -172,6 +177,14 @@ class Microbits {
         }
         return this.assignedOutputMicrobit; */
     return this.microbits[1];
+  }
+
+  public static setOutputOrigin(origin: HexOrigin) {
+    this.outputOrigin = origin;
+  }
+
+  public static setInputOrigin(origin: HexOrigin) {
+    this.inputOrigin = origin;
   }
 
   /**
@@ -407,11 +420,12 @@ class Microbits {
   }
 
   private static async connectToInput(name?: string) {
+    Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
+    this.getInput().setDevice(bluetoothDevice);
     this.getInput().setHandler(new InputMicrobitHandler());
     this.getInput().setAutoReconnect(true);
     await bluetoothDevice.connect(name);
-    this.getInput().setDevice(bluetoothDevice);
   }
 
   /**
@@ -419,7 +433,7 @@ class Microbits {
    * @param name The expected name of the microbit.
    * @return Returns true if the connection was successful, else false.
    */
-  public static async assignOutputNoName(): Promise<boolean> {
+  public static async assignOutputNoName(): Promise<void> {
     /*     const connectionBehaviour: ConnectionBehaviour =
           ConnectionBehaviours.getOutputBehaviour();
     
@@ -490,7 +504,7 @@ class Microbits {
           this.onFailedConnection(connectionBehaviour)(e as Error);
         }
         return false; */
-    throw new Error("This is not something we do anymore");
+    await this.connectToOutput();
   }
 
   /**
@@ -498,7 +512,7 @@ class Microbits {
    * @param name The expected name of the microbit.
    * @return Returns true if the connection was successful, else false.
    */
-  public static async assignOutput(name: string): Promise<boolean> {
+  public static async assignOutput(name: string): Promise<void> {
     /*     console.assert(name.length == 5);
     
         const connectionBehaviour: ConnectionBehaviour =
@@ -573,7 +587,16 @@ class Microbits {
           this.onFailedConnection(connectionBehaviour)(e as Error);
         }
         return false; */
-    throw new Error("This is not something we do anymore");
+    await this.connectToOutput(name);
+  }
+
+  private static async connectToOutput(name?: string): Promise<void> {
+    Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
+    const bluetoothDevice = new MicrobitBluetoothDevice();
+    this.getOutput().setDevice(bluetoothDevice);
+    this.getOutput().setHandler(new OutputMicrobitHandler());
+    this.getOutput().setAutoReconnect(true);
+    await bluetoothDevice.connect(name);
   }
 
   private static inputUartHandler(data: string) {
@@ -629,6 +652,14 @@ class Microbits {
           }
         }
         connectionBehaviour.onUartMessageReceived(data); */
+  }
+
+  public static setInputBuildVersion(version: number) {
+    this.inputBuildVersion = version;
+  }
+
+  public static setOutputBuildVersion(version: number) {
+    this.outputBuildVersion = version;
   }
 
   private static onFailedConnection(behaviour: ConnectionBehaviour) {
@@ -1008,8 +1039,7 @@ class Microbits {
    * @returns True if the output microbit is from Makecode.
    */
   public static isOutputMakecode() {
-    /*     return this.outputOrigin === HexOrigin.MAKECODE; */
-    throw new Error("I am not sure how this is supposed to work");
+    return this.outputOrigin === HexOrigin.MAKECODE;
   }
 
   /**

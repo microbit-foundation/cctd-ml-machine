@@ -57,16 +57,19 @@
     }
     isConnecting = true;
     const connectionResult = async () => {
+      Logger.log('BluetoothConnectDialog', 'Attempting to connect to micro:bit');
       if (deviceState == DeviceRequestStates.INPUT) {
         if (name) {
           await Microbits.assignInput(name);
+        } else {
+          await Microbits.assignInputNoName();
         }
-        await Microbits.assignInputNoName();
       } else {
         if (name) {
           await Microbits.assignOutput(name);
+        } else {
+          await Microbits.assignOutputNoName();
         }
-        await Microbits.assignOutputNoName();
       }
     };
 

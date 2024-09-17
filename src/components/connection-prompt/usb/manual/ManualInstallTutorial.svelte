@@ -68,7 +68,8 @@
     </div>
   </div>
   <div class="grid grid-cols-1 place-items-center w-full">
-    <StandardButton onClick={onConnectBluetoothClick}
-      >{$t('connectMB.usb.manual.done')}</StandardButton>
+    <StandardButton onClick={onConnectBluetoothClick}>
+      {$t('connectMB.usb.manual.done')}
+    </StandardButton>
   </div>
 </main>

@@ -162,8 +162,11 @@
         <PatternMatrix matrix={$patternMatrixState} onMatrixChange={updateMatrix} />
       </div>
     </div>
-    <StandardButton onClick={connectUsingPatternName}
-      >{$t('popup.connectMB.bluetooth.connect')}</StandardButton>
+    <div class="flex justify-center">
+      <StandardButton onClick={connectUsingPatternName}>
+        {$t('popup.connectMB.bluetooth.connect')}
+      </StandardButton>
+    </div>
   {/if}
   <!-- </div> -->
 </main>

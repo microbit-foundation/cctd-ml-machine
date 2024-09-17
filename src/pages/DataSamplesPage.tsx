@@ -23,7 +23,6 @@ import ConnectFirstView from "../components/ConnectFirstView";
 import DataSampleGridView from "../components/DataSampleGridView";
 import DefaultPageLayout from "../components/DefaultPageLayout";
 import LiveGraphPanel from "../components/LiveGraphPanel";
-import TrainingButton from "../components/TrainingButton";
 import UploadDataSamplesMenuItem from "../components/UploadDataSamplesMenuItem";
 import { ConnectionStatus } from "../connect-status-hooks";
 import { useConnectionStage } from "../connection-stage-hooks";
@@ -120,10 +119,12 @@ const DataSamplesPage = () => {
               <FormattedMessage id={`${SessionPageId.TestingModel}-title`} />
             </Button>
           ) : (
-            <TrainingButton
+            <Button
               onClick={trainModelFlowStart}
-              variant={hasSufficientData ? "primary" : "secondary"}
-            />
+              variant={hasSufficientData ? "primary" : "secondary-disabled"}
+            >
+              <FormattedMessage id={"menu.trainer.trainModelButton"} />
+            </Button>
           )}
         </HStack>
         <LiveGraphPanel />

@@ -1,6 +1,15 @@
 import { Project } from "@microbit/makecode-embed/react";
 import * as tf from "@tensorflow/tfjs";
 import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
+import { useShallow } from "zustand/react/shallow";
+import { flags } from "./flags";
+import {
+  filenames,
+  generateCustomFiles,
+  generateProject,
+} from "./makecode/utils";
+import { trainModel } from "./ml";
 import {
   DatasetEditorJsonFormat,
   Gesture,
@@ -8,17 +17,8 @@ import {
   RecordingData,
   TrainModelDialogStage,
 } from "./model";
-import {
-  filenames,
-  generateCustomFiles,
-  generateProject,
-} from "./makecode/utils";
-import { trainModel } from "./ml";
-import { defaultIcons, MakeCodeIcon } from "./utils/icons";
-import { devtools, persist } from "zustand/middleware";
-import { flags } from "./flags";
 import { defaultSettings, Settings } from "./settings";
-import { useShallow } from "zustand/react/shallow";
+import { defaultIcons, MakeCodeIcon } from "./utils/icons";
 
 export const modelUrl = "indexeddb://micro:bit-ml-tool-model";
 
@@ -89,14 +89,14 @@ export interface Actions {
   recordingStarted(): void;
   recordingStopped(): void;
   newSession(): void;
+  trainModelFlowStart: () => Promise<void>;
+  closeTrainModelDialogs: () => void;
   trainModel(): Promise<boolean>;
   setSettings(update: Partial<Settings>): void;
   /**
    * Resets the project.
    */
   resetProject: () => void;
-  trainModelFlowStart: () => Promise<void>;
-  closeTrainModelDialogs: () => void;
 
   /**
    * Used by project hooks for MakeCode integration.
@@ -353,13 +353,21 @@ export const useStore = create<Store>()(
         },
 
         async trainModelFlowStart() {
-          if (get().settings.showPreTrainHelp) {
+          const {
+            settings: { showPreTrainHelp },
+            gestures,
+            trainModel,
+          } = get();
+          if (!hasSufficientDataForTraining(gestures)) {
             set({
-              // TODO: this should respect the settings which should be in the state
-              trainModelDialogStage: TrainModelDialogStage.ShowingIntroduction,
+              trainModelDialogStage: TrainModelDialogStage.InsufficientData,
+            });
+          } else if (showPreTrainHelp) {
+            set({
+              trainModelDialogStage: TrainModelDialogStage.Help,
             });
           } else {
-            await get().trainModel();
+            await trainModel();
           }
         },
 

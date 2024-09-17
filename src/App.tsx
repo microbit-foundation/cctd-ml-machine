@@ -18,6 +18,7 @@ import { ConnectProvider } from "./connect-actions-hooks";
 import { ConnectStatusProvider } from "./connect-status-hooks";
 import { ConnectionStageProvider } from "./connection-stage-hooks";
 import { deployment, useDeployment } from "./deployment";
+import { ProjectProvider } from "./hooks/project-hooks";
 import { LoggingProvider } from "./logging/logging-hooks";
 import TranslationProvider from "./messages/TranslationProvider";
 import { resourcesConfig, sessionPageConfigs } from "./pages-config";
@@ -27,7 +28,6 @@ import {
   createResourcePageUrl,
   createSessionPageUrl,
 } from "./urls";
-import { ProjectProvider } from "./hooks/project-hooks";
 
 export interface ProviderLayoutProps {
   children: ReactNode;

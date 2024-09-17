@@ -35,6 +35,7 @@
 <script lang="ts">
   import TypingUtils from './../../script/TypingUtils';
   import windi from './../../../windi.config.js';
+  import { SvelteComponent } from 'svelte';
 
   type variants =
     | 'secondary'
@@ -66,7 +67,7 @@
   const colorParam = isKey ? bgColors[disabled ? 'disabled' : color] : color;
 </script>
 
-<div class="grid grid-cols-1 content-center place-items-center">
+<div>
   <button
     {disabled}
     style="--color: {colorParam}
@@ -82,6 +83,8 @@
     class:cursor-pointer={!disabled}
     class:cursor-default={disabled}
     on:click={onClick}>
-    <slot />
+    <div class="flex flex-row justify-between justify-center items-center">
+      <slot />
+    </div>
   </button>
 </div>

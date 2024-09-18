@@ -1,3 +1,5 @@
+import { HexData, HexUrl } from "../model";
+
 export const getFileExtension = (filename: string): string | undefined => {
   const parts = filename.split(".");
   return parts.length > 1 ? parts.pop() || undefined : undefined;
@@ -27,4 +29,32 @@ export const readFileAsText = async (file: File): Promise<string> => {
     };
     reader.readAsText(file);
   });
+};
+
+const isHexUrl = (hex: HexData | HexUrl): hex is HexUrl => {
+  return "url" in hex;
+};
+
+export const downloadHex = (hex: HexData | HexUrl) => {
+  if (isHexUrl(hex)) {
+    downloadUrl(hex.url, `${hex.name}.hex`);
+  } else {
+    downloadHexData(hex);
+  }
+};
+
+const downloadHexData = (hex: HexData) => {
+  const blob = new Blob([hex.hex], { type: "application/octet-stream" });
+  const url = URL.createObjectURL(blob);
+  downloadUrl(url, `${hex.name}.hex`);
+  URL.revokeObjectURL(url);
+};
+
+export const downloadUrl = (url: string, download?: string) => {
+  const a = document.createElement("a");
+  a.href = url;
+  if (download) {
+    a.download = download;
+  }
+  a.click();
 };

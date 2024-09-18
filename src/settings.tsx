@@ -37,10 +37,12 @@ export const defaultSettings: Settings = {
   languageId: getLanguageFromQuery(),
   showPreSaveHelp: true,
   showPreTrainHelp: true,
+  showPreDownloadHelp: true,
 };
 
 export interface Settings {
   languageId: string;
   showPreSaveHelp: boolean;
   showPreTrainHelp: boolean;
+  showPreDownloadHelp: boolean;
 }

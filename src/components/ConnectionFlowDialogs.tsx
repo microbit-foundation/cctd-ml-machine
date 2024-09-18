@@ -11,17 +11,18 @@ import ConnectBatteryDialog from "./ConnectBatteryDialog";
 import ConnectCableDialog, {
   getConnectionCableDialogConfig,
 } from "./ConnectCableDialog";
+import ConnectErrorDialog from "./ConnectErrorDialog";
 import DownloadingDialog, { getHeadingId } from "./DownloadingDialog";
 import EnterBluetoothPatternDialog from "./EnterBluetoothPatternDialog";
 import LoadingDialog from "./LoadingDialog";
 import ManualFlashingDialog from "./ManualFlashingDialog";
-import ConnectErrorDialog from "./ConnectErrorDialog";
 import SelectMicrobitBluetoothDialog from "./SelectMicrobitBluetoothDialog";
 import SelectMicrobitUsbDialog from "./SelectMicrobitUsbDialog";
 import TryAgainDialog from "./TryAgainDialog";
 import UnsupportedMicrobitDialog from "./UnsupportedMicrobitDialog";
 import WebUsbBluetoothUnsupportedDialog from "./WebUsbBluetoothUnsupportedDialog";
 import WhatYouWillNeedDialog from "./WhatYouWillNeedDialog";
+import { bluetoothUniversalHex } from "../connection-stage-actions";
 
 const ConnectionDialogs = () => {
   const { stage, actions } = useConnectionStage();
@@ -130,10 +131,12 @@ const ConnectionDialogs = () => {
         />
       );
     }
+    // Only bluetooth mode has this fallback, the radio bridge mode requires working WebUSB.
     case ConnectionFlowStep.ManualFlashingTutorial: {
       return (
         <ManualFlashingDialog
           {...dialogCommonProps}
+          hex={bluetoothUniversalHex}
           onNextClick={actions.onNextClick}
           onBackClick={actions.onBackClick}
         />

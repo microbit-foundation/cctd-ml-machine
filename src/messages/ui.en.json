@@ -319,6 +319,12 @@
       "value": "animation showing a USB cable being connected to the top of a micro:bit"
     }
   ],
+  "connectMB.connectCable.downloadProject.subtitle": [
+    {
+      "type": 0,
+      "value": "Connect a micro:bit to this computer with a USB cable to download your machine learning MakeCode program to it."
+    }
+  ],
   "connectMB.connectCable.heading": [
     {
       "type": 0,
@@ -1185,6 +1191,48 @@
     {
       "type": 0,
       "value": "Don't show this again"
+    }
+  ],
+  "download-action": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "download-project-choose-microbit-subtitle": [
+    {
+      "type": 0,
+      "value": "Downloading your project on to the same micro:bit will disconnect the micro:bit from the tool. You will need to reconnect the micro:bit if you want to record more data samples."
+    }
+  ],
+  "download-project-choose-microbit-title": [
+    {
+      "type": 0,
+      "value": "Which micro:bit do you want to use?"
+    }
+  ],
+  "download-project-different-microbit-option": [
+    {
+      "type": 0,
+      "value": "Different micro:bit"
+    }
+  ],
+  "download-project-intro-description": [
+    {
+      "type": 0,
+      "value": "Your program includes the machine learning model you created. The model runs on the micro:bit so you can use it without being connected to the micro:bit machine learning tool."
+    }
+  ],
+  "download-project-intro-title": [
+    {
+      "type": 0,
+      "value": "Download your machine learning MakeCode project"
+    }
+  ],
+  "download-project-same-microbit-option": [
+    {
+      "type": 0,
+      "value": "Same micro:bit"
     }
   ],
   "edit-in-makecode-action": [

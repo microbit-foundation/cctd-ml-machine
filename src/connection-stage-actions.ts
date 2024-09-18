@@ -4,16 +4,23 @@ import {
   ConnectAndFlashFailResult,
   ConnectAndFlashResult,
 } from "./connect-actions";
+import { ConnectionStatus } from "./connect-status-hooks";
 import {
   ConnectionFlowStep,
   ConnectionFlowType,
   ConnectionStage,
   ConnectionType,
 } from "./connection-stage-hooks";
-import { ConnectionStatus } from "./connect-status-hooks";
-import { HexType } from "./device/get-hex-file";
+import { getHexFileUrl, HexType } from "./device/get-hex-file";
+import { HexUrl } from "./model";
+import { downloadHex } from "./utils/fs-util";
 
 type FlowStage = Pick<ConnectionStage, "flowStep" | "flowType">;
+
+export const bluetoothUniversalHex: HexUrl = {
+  url: getHexFileUrl("universal", HexType.Bluetooth)!,
+  name: "machine-learning-tool-program",
+};
 
 export class ConnectionStageActions {
   constructor(
@@ -39,18 +46,10 @@ export class ConnectionStageActions {
     });
   };
 
-  startDownloadUserProjectHex = async (hex: string) => {
-    // TODO: Only disconnect input micro:bit if user chooses this device.
+  disconnectInputMicrobit = async () => {
     await this.actions.disconnect();
     this.actions.removeStatusListener();
     this.setStatus(ConnectionStatus.NotConnected);
-
-    this.setStage({
-      ...this.stage,
-      makeCodeHex: hex,
-      flowType: ConnectionFlowType.DownloadProject,
-      flowStep: ConnectionFlowStep.ConnectCable,
-    });
   };
 
   setFlowStep = (step: ConnectionFlowStep) => {
@@ -62,7 +61,7 @@ export class ConnectionStageActions {
     onSuccess: (stage: ConnectionStage) => void
   ) => {
     this.setFlowStep(ConnectionFlowStep.WebUsbChooseMicrobit);
-    const hex = this.getHexStringOrType();
+    const hex = this.getHexType();
     const { result, deviceId } =
       await this.actions.requestUSBConnectionAndFlash(hex, progressCallback);
     if (result !== ConnectAndFlashResult.Success) {
@@ -72,14 +71,12 @@ export class ConnectionStageActions {
     await this.onFlashSuccess(deviceId, onSuccess);
   };
 
-  private getHexStringOrType = () => {
-    return this.stage.flowType === ConnectionFlowType.DownloadProject
-      ? this.stage.makeCodeHex!
-      : {
-          [ConnectionFlowType.ConnectBluetooth]: HexType.Bluetooth,
-          [ConnectionFlowType.ConnectRadioBridge]: HexType.RadioBridge,
-          [ConnectionFlowType.ConnectRadioRemote]: HexType.RadioRemote,
-        }[this.stage.flowType];
+  private getHexType = () => {
+    return {
+      [ConnectionFlowType.ConnectBluetooth]: HexType.Bluetooth,
+      [ConnectionFlowType.ConnectRadioBridge]: HexType.RadioBridge,
+      [ConnectionFlowType.ConnectRadioRemote]: HexType.RadioRemote,
+    }[this.stage.flowType];
   };
 
   private onFlashSuccess = async (
@@ -90,9 +87,6 @@ export class ConnectionStageActions {
     // Store radio/bluetooth details. Radio is essential to pass to micro:bit 2.
     // Bluetooth saves the user from entering the pattern.
     switch (this.stage.flowType) {
-      case ConnectionFlowType.DownloadProject: {
-        return this.setFlowStep(ConnectionFlowStep.None);
-      }
       case ConnectionFlowType.ConnectBluetooth: {
         const microbitName = deviceIdToMicrobitName(deviceId);
         newStage = {
@@ -125,10 +119,8 @@ export class ConnectionStageActions {
   };
 
   private handleConnectAndFlashFail = (result: ConnectAndFlashFailResult) => {
-    if (
-      this.stage.flowType === ConnectionFlowType.ConnectBluetooth ||
-      this.stage.flowType === ConnectionFlowType.DownloadProject
-    ) {
+    if (this.stage.flowType === ConnectionFlowType.ConnectBluetooth) {
+      downloadHex(bluetoothUniversalHex);
       return this.setFlowStep(ConnectionFlowStep.ManualFlashingTutorial);
     }
 
@@ -285,14 +277,10 @@ export class ConnectionStageActions {
       !this.stage.isWebUsbSupported ||
       this.stage.flowStep === ConnectionFlowStep.ManualFlashingTutorial;
 
-    switch (this.stage.flowType) {
-      case ConnectionFlowType.DownloadProject:
-        return downloadProjectFlow({ isManualFlashing });
-      case ConnectionFlowType.ConnectBluetooth:
-        return bluetoothFlow({ isManualFlashing, isRestartAgain });
-      default:
-        return radioFlow({ isRestartAgain });
+    if (this.stage.flowType === ConnectionFlowType.ConnectBluetooth) {
+      return bluetoothFlow({ isManualFlashing, isRestartAgain });
     }
+    return radioFlow({ isRestartAgain });
   };
 
   private setFlowStage = (flowStage: FlowStage) => {
@@ -380,23 +368,6 @@ const radioFlow = ({ isRestartAgain }: { isRestartAgain: boolean }) => [
   {
     flowStep: ConnectionFlowStep.WebUsbFlashingTutorial,
     flowType: ConnectionFlowType.ConnectRadioBridge,
-  },
-];
-
-const downloadProjectFlow = ({
-  isManualFlashing,
-}: {
-  isManualFlashing: boolean;
-}) => [
-  {
-    flowStep: ConnectionFlowStep.ConnectCable,
-    flowType: ConnectionFlowType.DownloadProject,
-  },
-  {
-    flowStep: isManualFlashing
-      ? ConnectionFlowStep.ManualFlashingTutorial
-      : ConnectionFlowStep.WebUsbFlashingTutorial,
-    flowType: ConnectionFlowType.DownloadProject,
   },
 ];
 

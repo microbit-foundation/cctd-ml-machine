@@ -13,10 +13,14 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { useConnectionStage } from "../connection-stage-hooks";
-import { isDatasetUserFileFormat } from "../model";
+import { HexData, isDatasetUserFileFormat } from "../model";
 import { useStore } from "../store";
-import { getLowercaseFileExtension, readFileAsText } from "../utils/fs-util";
+import {
+  downloadHex,
+  getLowercaseFileExtension,
+  readFileAsText,
+} from "../utils/fs-util";
+import { useDownloadActions } from "./download-hooks";
 
 interface ProjectContext {
   openEditor(): Promise<void>;
@@ -51,31 +55,9 @@ export const ProjectProvider = ({
   children,
 }: ProjectProviderProps) => {
   const setEditorOpen = useStore((s) => s.setEditorOpen);
-
-  // We use this to track when we need special handling of an event from MakeCode
-  const waitingForEditorContentLoaded = useRef<undefined | (() => void)>(
-    undefined
-  );
-
-  // We use this to track when we're expecting a native app save from MakeCode
-  const waitingForDownload = useRef<
-    undefined | ((download: { hex: string; name: string }) => void)
-  >(undefined);
-  const waitForNextDownload = useCallback(() => {
-    return new Promise<{ hex: string; name: string }>((resolve) => {
-      waitingForDownload.current = (download: {
-        hex: string;
-        name: string;
-      }) => {
-        resolve(download);
-        waitingForDownload.current = undefined;
-      };
-    });
-  }, []);
-
   const project = useStore((s) => s.project);
   const projectEdited = useStore((s) => s.projectEdited);
-  const expectChangedHeader = useStore((s) => s.expectChangedHeader);
+  const expectChangedHeader = useStore((s) => s.setChangedHeaderExpected);
   const projectFlushedToEditor = useStore((s) => s.projectFlushedToEditor);
   const appEditNeedsFlushToEditor = useStore(
     (s) => s.appEditNeedsFlushToEditor
@@ -128,14 +110,13 @@ export const ProjectProvider = ({
     [driverRef, loadDataset]
   );
 
+  const saveNextDownloadRef = useRef(false);
   const saveProjectHex = useCallback(async (): Promise<void> => {
     await doAfterMakeCodeUpdate(async () => {
-      const downloadPromise = waitForNextDownload();
+      saveNextDownloadRef.current = true;
       await driverRef.current!.compile();
-      const download = await downloadPromise;
-      triggerBrowserDownload(download);
     });
-  }, [doAfterMakeCodeUpdate, driverRef, waitForNextDownload]);
+  }, [doAfterMakeCodeUpdate, driverRef]);
 
   // These are event handlers for MakeCode
 
@@ -148,33 +129,19 @@ export const ProjectProvider = ({
   );
 
   const onBack = useCallback(() => setEditorOpen(false), [setEditorOpen]);
-
-  const onSave = useCallback((save: { name: string; hex: string }) => {
-    // Handles the event we get from MakeCode to say a hex needs saving to disk.
-    // In practice this is via "Download" ... "Save as file"
-    // TODO: give this the same behaviour as SaveButton in terms of dialogs etc.
-    triggerBrowserDownload(save);
-  }, []);
-
-  const onEditorContentLoaded = useCallback(() => {
-    waitingForEditorContentLoaded.current?.();
-    waitingForEditorContentLoaded.current = undefined;
-  }, []);
-
-  const { actions } = useConnectionStage();
+  const onSave = useStore((s) => s.editorSave);
+  const downloadActions = useDownloadActions();
   const onDownload = useCallback(
-    // Handles the event we get from MakeCode to say a hex needs downloading to the micro:bit.
-    async (download: { name: string; hex: string }) => {
-      if (waitingForDownload?.current) {
-        waitingForDownload.current(download);
+    (download: HexData) => {
+      if (saveNextDownloadRef.current) {
+        saveNextDownloadRef.current = false;
+        downloadHex(download);
       } else {
-        // Ideally we'd preserve the filename here and use it for the fallback if WebUSB fails.
-        await actions.startDownloadUserProjectHex(download.hex);
+        void downloadActions.start(download);
       }
     },
-    [actions]
+    [downloadActions]
   );
-
   const value = useMemo(
     () => ({
       loadProject,
@@ -188,14 +155,12 @@ export const ProjectProvider = ({
         onWorkspaceSave,
         onDownload,
         onBack,
-        onEditorContentLoaded,
       },
     }),
     [
       loadProject,
       onBack,
       onDownload,
-      onEditorContentLoaded,
       onSave,
       onWorkspaceSave,
       openEditor,
@@ -209,13 +174,4 @@ export const ProjectProvider = ({
   return (
     <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>
   );
-};
-
-const triggerBrowserDownload = (save: { name: string; hex: string }) => {
-  const blob = new Blob([save.hex], { type: "application/octet-stream" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `${save.name}.hex`;
-  a.click();
-  URL.revokeObjectURL(a.href);
 };

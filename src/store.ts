@@ -12,12 +12,17 @@ import {
 import { trainModel } from "./ml";
 import {
   DatasetEditorJsonFormat,
+  DownloadProjectStage,
+  DownloadProjectStep,
   Gesture,
   GestureData,
+  HexData,
+  MicrobitToFlash,
   RecordingData,
   TrainModelDialogStage,
 } from "./model";
 import { defaultSettings, Settings } from "./settings";
+import { downloadHex } from "./utils/fs-util";
 import { defaultIcons, MakeCodeIcon } from "./utils/icons";
 
 export const modelUrl = "indexeddb://micro:bit-ml-tool-model";
@@ -64,6 +69,7 @@ export interface State {
   changedHeaderExpected: boolean;
   appEditNeedsFlushToEditor: boolean;
   isEditorOpen: boolean;
+  downloadStage: DownloadProjectStage;
 
   settings: Settings;
 
@@ -96,20 +102,16 @@ export interface Actions {
   /**
    * Resets the project.
    */
-  resetProject: () => void;
+  resetProject(): void;
 
   /**
-   * Used by project hooks for MakeCode integration.
+   * Remainer are used by project hooks for MakeCode integration.
    */
-  editorChange: (project: Project) => void;
-  /**
-   * Used by project hooks for MakeCode integration.
-   */
-  expectChangedHeader(): void;
-  /**
-   * Used by project hooks for MakeCode integration.
-   */
+  editorChange(project: Project): void;
+  editorSave(project: HexData): void;
+  setChangedHeaderExpected(): void;
   projectFlushedToEditor(): void;
+  setDownloadStage(stage: DownloadProjectStage): void;
 }
 
 type Store = State & Actions;
@@ -145,6 +147,11 @@ export const useStore = create<Store>()(
           } as any,
           ...generateProject({ data: [] }, undefined),
         },
+        downloadStage: {
+          step: DownloadProjectStep.None,
+          microbitToFlash: MicrobitToFlash.Default,
+          flashProgress: 0,
+        },
         projectEdited: false,
         settings: defaultSettings,
         model: undefined,
@@ -175,11 +182,15 @@ export const useStore = create<Store>()(
 
         setEditorOpen(open: boolean) {
           set(
-            {
+            ({ downloadStage }) => ({
               isEditorOpen: open,
               // We just assume its been edited as spurious changes from MakeCode happen that we can't identify
               projectEdited: true,
-            },
+              downloadStage: {
+                ...downloadStage,
+                usbDevice: undefined,
+              },
+            }),
             false,
             "setEditorOpen"
           );
@@ -464,7 +475,15 @@ export const useStore = create<Store>()(
             actionName
           );
         },
-        expectChangedHeader() {
+        setDownloadStage(downloadStage: DownloadProjectStage) {
+          set({ downloadStage });
+        },
+        editorSave(project: HexData) {
+          // TODO: We'd like to trigger the same UI as we do for the "Save"
+          // buttob but with this project rather than poking MakeCode.
+          downloadHex(project);
+        },
+        setChangedHeaderExpected() {
           set({ changedHeaderExpected: true });
         },
         projectFlushedToEditor() {

@@ -195,6 +195,10 @@
     "defaultMessage": "animation showing a USB cable being connected to the top of a micro:bit",
     "description": ""
   },
+  "connectMB.connectCable.downloadProject.subtitle": {
+    "defaultMessage": "Connect a micro:bit to this computer with a USB cable to download your machine learning MakeCode program to it.",
+    "description": ""
+  },
   "connectMB.connectCable.heading": {
     "defaultMessage": "Connect USB cable to micro:bit",
     "description": ""
@@ -694,6 +698,34 @@
   "dont-show-again": {
     "defaultMessage": "Don't show this again",
     "description": "Text to never show a dialog again"
+  },
+  "download-action": {
+    "defaultMessage": "Download",
+    "description": "Download button text"
+  },
+  "download-project-choose-microbit-subtitle": {
+    "defaultMessage": "Downloading your project on to the same micro:bit will disconnect the micro:bit from the tool. You will need to reconnect the micro:bit if you want to record more data samples.",
+    "description": "Download project choose micro:bit dialog subtitle"
+  },
+  "download-project-choose-microbit-title": {
+    "defaultMessage": "Which micro:bit do you want to use?",
+    "description": "Download project choose micro:bit dialog title"
+  },
+  "download-project-different-microbit-option": {
+    "defaultMessage": "Different micro:bit",
+    "description": "Download project different micro:bit option"
+  },
+  "download-project-intro-description": {
+    "defaultMessage": "Your program includes the machine learning model you created. The model runs on the micro:bit so you can use it without being connected to the micro:bit machine learning tool.",
+    "description": "Download project intro dialog description"
+  },
+  "download-project-intro-title": {
+    "defaultMessage": "Download your machine learning MakeCode project",
+    "description": "Download project intro dialog title"
+  },
+  "download-project-same-microbit-option": {
+    "defaultMessage": "Same micro:bit",
+    "description": "Download project same micro:bit option"
   },
   "edit-in-makecode-action": {
     "defaultMessage": "Edit in MakeCode",

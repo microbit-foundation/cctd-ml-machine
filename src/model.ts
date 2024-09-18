@@ -1,3 +1,4 @@
+import { MicrobitWebUSBConnection } from "@microbit/microbit-connection";
 import { MakeCodeIcon } from "./utils/icons";
 
 export interface XYZData {
@@ -72,10 +73,60 @@ export const isDatasetUserFileFormat = (
   return true;
 };
 
+export interface HexData {
+  /**
+   * Hex data.
+   */
+  hex: string;
+  /**
+   * Filename without the .hex extension.
+   */
+  name: string;
+}
+
+export interface HexUrl {
+  url: string;
+
+  /**
+   * Filename without the .hex extension.
+   */
+  name: string;
+}
+
 export const enum TrainModelDialogStage {
   Closed,
   InsufficientData,
   Help,
   TrainingError,
   TrainingInProgress,
+}
+
+export enum DownloadProjectStep {
+  None = "None",
+  Help = "Introduction",
+  ChooseSameOrAnotherMicrobit = "ChooseSameOrAnotherMicrobit",
+  ConnectCable = "ConnectCable",
+  WebUsbFlashingTutorial = "WebUsbFlashingTutorial",
+  WebUsbChooseMicrobit = "WebUsbChooseMicrobit",
+  FlashingInProgress = "FlashingInProgress",
+  ManualFlashingTutorial = "ManualFlashingTutorial",
+}
+
+export enum MicrobitToFlash {
+  // No micro:bit is connected.
+  Default = "default",
+  // Same as the connected micro:bit.
+  Same = "same",
+  // Different from the connected micro:bit.
+  Different = "different",
+}
+
+export interface DownloadProjectStage {
+  step: DownloadProjectStep;
+  microbitToFlash: MicrobitToFlash;
+  flashProgress: number;
+  project?: HexData;
+  // The micro:bit used to flash the hex.  We remember your choice for easy code
+  // iteration for as long as the editor is open.
+  usbDevice?: MicrobitWebUSBConnection;
 }

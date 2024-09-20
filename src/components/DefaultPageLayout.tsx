@@ -1,54 +1,70 @@
 import {
+  Button,
   Flex,
   Heading,
   HStack,
+  Icon,
   IconButton,
+  MenuDivider,
+  MenuItem,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import { ReactNode, useCallback, useEffect } from "react";
-import { RiHome2Line } from "react-icons/ri";
+import { RiDownload2Line, RiFolderOpenLine, RiHome2Line } from "react-icons/ri";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router";
 import { TOOL_NAME } from "../constants";
 import { flags } from "../flags";
+import { useProject } from "../hooks/project-hooks";
+import { SaveStep } from "../model";
+import { SessionPageId } from "../pages-config";
+import { useSettings, useStore } from "../store";
 import { createHomePageUrl, createSessionPageUrl } from "../urls";
 import ActionBar from "./ActionBar";
 import AppLogo from "./AppLogo";
 import ConnectionDialogs from "./ConnectionFlowDialogs";
-import HelpMenu from "./HelpMenu";
-import PrototypeVersionWarning from "./PrototypeVersionWarning";
-import SettingsMenu from "./SettingsMenu";
-import TrainModelDialogs from "./TrainModelFlowDialogs";
 import DownloadDialogs from "./DownloadDialogs";
-import { useStore } from "../store";
-import { SessionPageId } from "../pages-config";
+import HelpMenu from "./HelpMenu";
+import LanguageMenuItem from "./LanguageMenuItem";
+import LoadProjectMenuItem from "./LoadProjectMenuItem";
+import OpenButton from "./OpenButton";
+import PrototypeVersionWarning from "./PrototypeVersionWarning";
 import SaveDialogs from "./SaveDialogs";
+import SettingsMenu from "./SettingsMenu";
+import ToolbarMenu from "./ToolbarMenu";
+import TrainModelDialogs from "./TrainModelFlowDialogs";
 
 interface DefaultPageLayoutProps {
   titleId: string;
   children: ReactNode;
-  toolbarItemsRight?: ReactNode;
   toolbarItemsLeft?: ReactNode;
   showPageTitle?: boolean;
+  showHomeButton?: boolean;
+  showSaveButton?: boolean;
+  showOpenButton?: boolean;
 }
 
 const DefaultPageLayout = ({
   titleId,
   children,
-  toolbarItemsRight,
   toolbarItemsLeft,
   showPageTitle = false,
+  showHomeButton = false,
+  showSaveButton = false,
+  showOpenButton = false,
 }: DefaultPageLayoutProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const isEditorOpen = useStore((s) => s.isEditorOpen);
+  const { saveHex } = useProject();
+  const [settings] = useSettings();
+  const toast = useToast();
 
   useEffect(() => {
     document.title = intl.formatMessage({ id: titleId });
   }, [intl, titleId]);
 
-  const toast = useToast();
   useEffect(() => {
     return useStore.subscribe(
       (
@@ -72,6 +88,15 @@ const DefaultPageLayout = ({
   const handleHomeClick = useCallback(() => {
     navigate(createHomePageUrl());
   }, [navigate]);
+
+  const setSave = useStore((s) => s.setSave);
+  const handleSave = useCallback(() => {
+    if (settings.showPreSaveHelp) {
+      setSave({ step: SaveStep.PreSaveHelp });
+    } else {
+      void saveHex();
+    }
+  }, [saveHex, setSave, settings.showPreSaveHelp]);
 
   return (
     <>
@@ -106,19 +131,64 @@ const DefaultPageLayout = ({
           }
           itemsLeft={toolbarItemsLeft || <AppLogo name={TOOL_NAME} />}
           itemsRight={
-            <HStack spacing={3}>
-              {toolbarItemsRight}
-              <IconButton
-                onClick={handleHomeClick}
-                icon={<RiHome2Line size={24} color="white" />}
-                aria-label={intl.formatMessage({ id: "homepage.Link" })}
+            <>
+              <HStack spacing={3} display={{ base: "none", lg: "flex" }}>
+                {showOpenButton && <OpenButton />}
+                {showSaveButton && (
+                  <Button
+                    variant="toolbar"
+                    leftIcon={<RiDownload2Line />}
+                    onClick={handleSave}
+                  >
+                    <FormattedMessage id="save-action" />
+                  </Button>
+                )}
+                {showHomeButton && (
+                  <IconButton
+                    onClick={handleHomeClick}
+                    icon={<RiHome2Line size={24} color="white" />}
+                    aria-label={intl.formatMessage({ id: "homepage.Link" })}
+                    variant="plain"
+                    size="lg"
+                    fontSize="xl"
+                  />
+                )}
+                <SettingsMenu />
+              </HStack>
+              <HelpMenu appName={TOOL_NAME} cookies />
+              <ToolbarMenu
+                isMobile
                 variant="plain"
-                size="lg"
-                fontSize="xl"
-              />
-              <SettingsMenu />
-              <HelpMenu appName={TOOL_NAME} mode="nextgen" cookies />
-            </HStack>
+                label={intl.formatMessage({ id: "main-menu" })}
+              >
+                {showOpenButton && (
+                  <LoadProjectMenuItem
+                    icon={<Icon h={5} w={5} as={RiFolderOpenLine} />}
+                    accept=".hex"
+                  >
+                    <FormattedMessage id="open-file-action" />
+                  </LoadProjectMenuItem>
+                )}
+                {showSaveButton && (
+                  <MenuItem
+                    onClick={handleSave}
+                    icon={<Icon h={5} w={5} as={RiDownload2Line} />}
+                  >
+                    <FormattedMessage id="save-action" />
+                  </MenuItem>
+                )}
+                <MenuDivider />
+                {showHomeButton && (
+                  <MenuItem
+                    onClick={handleHomeClick}
+                    icon={<Icon h={5} w={5} as={RiHome2Line} />}
+                  >
+                    <FormattedMessage id="home-action" />
+                  </MenuItem>
+                )}
+                <LanguageMenuItem />
+              </ToolbarMenu>
+            </>
           }
         />
         {flags.prototypeWarning && <PrototypeVersionWarning />}

@@ -1295,6 +1295,12 @@
       "value": "Help & support"
     }
   ],
+  "home-action": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
   "homepage-subtitle": [
     {
       "type": 0,
@@ -1427,6 +1433,12 @@
     {
       "type": 0,
       "value": "Page not found"
+    }
+  ],
+  "open-file-action": [
+    {
+      "type": 0,
+      "value": "Open…"
     }
   ],
   "open-file-dropped": [

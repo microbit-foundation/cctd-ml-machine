@@ -33,9 +33,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
   constructor(private confidences: Confidences) {
     LocalStorageClassifierRepository.mlModel = writable(undefined);
     LocalStorageClassifierRepository.persistedFilters = new PersistantWritable(
-      [
-        FilterType.MAX, FilterType.MEAN, FilterType.MIN, FilterType.STD
-      ],
+      [FilterType.MAX, FilterType.MEAN, FilterType.MIN, FilterType.STD],
       LocalStorageClassifierRepository.PERSISTANT_FILTERS_KEY,
     );
     LocalStorageClassifierRepository.filters = new Filters(this.getFilters());

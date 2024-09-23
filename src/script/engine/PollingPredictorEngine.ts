@@ -11,6 +11,7 @@ import Engine, { EngineData } from '../domain/stores/Engine';
 import Classifier from '../domain/stores/Classifier';
 import LiveData from '../domain/stores/LiveData';
 import { LiveDataVector } from '../domain/stores/LiveDataVector';
+import Logger from '../utils/Logger';
 
 /**
  * The PollingPredictorEngine will predict on the current input with consistent intervals.
@@ -96,6 +97,7 @@ class PollingPredictorEngine implements Engine {
         .getSeries(StaticConfiguration.pollingPredictionSampleDuration, sampleSize);
     } catch (_e) {
       if (sampleSize < 8) {
+        Logger.log("PollingPredictorEngine", "Too few samples available, returning empty array");
         return []; // The minimum number of points is 8, otherwise the filters will throw an exception
       } else {
         // If too few samples are available, try again with fewer samples

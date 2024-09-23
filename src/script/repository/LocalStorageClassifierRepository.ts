@@ -68,6 +68,8 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
       get(gestureRepository),
       LocalStorageClassifierRepository.filters,
     );
+
+    console.log(trainingData)
     const model = await trainer.trainModel(trainingData);
     LocalStorageClassifierRepository.mlModel.set(model);
   }

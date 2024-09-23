@@ -5,7 +5,9 @@
  -->
 <script lang="ts">
   import Gesture from '../../script/domain/stores/gesture/Gesture';
-  import AccelerometerClassifierInput from '../../script/mlmodels/AccelerometerClassifierInput';
+  import AccelerometerClassifierInput, {
+    SingleAxisClassifierInput,
+  } from '../../script/mlmodels/AccelerometerClassifierInput';
   import { stores } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';
   import TrainKnnModelButton from './TrainKNNModelButton.svelte';
@@ -26,10 +28,8 @@
     playgroundContext.addMessage(
       'Predicting on random recording of: ' + randGesture.getName(),
     );
-    const xs = randGesture.getRecordings()[0].data.x;
-    const ys = randGesture.getRecordings()[0].data.y;
     const zs = randGesture.getRecordings()[0].data.z;
-    const input = new AccelerometerClassifierInput(xs, ys, zs);
+    const input = new SingleAxisClassifierInput(zs);
     classifier.classify(input).then(() => {
       playgroundContext.addMessage('Finished predicting');
     });

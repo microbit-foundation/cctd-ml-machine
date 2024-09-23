@@ -149,12 +149,4 @@
       <NewGestureButton />
     </div>
   {/if}
-  {#if !hasSomeData()}
-    <div class="flex flex-grow"></div>
-    <div class="flex mt-3 mb-3 justify-center">
-      <StandardButton onClick={importExampleDataset}>
-        {$t('content.data.noData.templateDataButton')}
-      </StandardButton>
-    </div>
-  {/if}
 </main>

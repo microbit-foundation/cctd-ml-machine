@@ -72,13 +72,11 @@
     isThisRecording = true;
 
     // New array for data
-    let newData: { x: number[]; y: number[]; z: number[] } = { x: [], y: [], z: [] };
+    let newData: { z: number[] } = { z: [] };
 
     // Set timeout to allow recording in 1s
     const unsubscribe = liveData.subscribe(data => {
-      newData.x.push(data.getVector()[0]);
-      newData.y.push(data.getVector()[1]);
-      newData.z.push(data.getVector()[2]);
+      newData.z.push(data.getVector()[0]);
     });
 
     // Once duration is over (1000ms default), stop recording
@@ -86,7 +84,7 @@
       $state.isRecording = false;
       isThisRecording = false;
       unsubscribe();
-      if (StaticConfiguration.pollingPredictionSampleSize <= newData.x.length) {
+      if (StaticConfiguration.pollingPredictionSampleSize <= newData.z.length) {
         const recording = { ID: Date.now(), data: newData } as RecordingData;
         gesture.addRecording(recording);
       } else {

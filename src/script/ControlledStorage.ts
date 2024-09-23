@@ -11,7 +11,7 @@ type StoredValue<T> = {
 };
 
 class ControlledStorage {
-  public static readonly localStorageVersion = 2;
+  public static readonly localStorageVersion = 3;
 
   public static get<T>(key: string): T {
     const storedValue = this.getStoredItem(key);

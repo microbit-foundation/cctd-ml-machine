@@ -18,7 +18,7 @@
   } from 'chart.js';
   import RecordingInspector from '../3d-inspector/RecordingInspector.svelte';
 
-  export let data: { x: number[]; y: number[]; z: number[] };
+  export let data: { z: number[] };
 
   let verticalLineX = NaN;
   let hoverIndex = NaN;
@@ -29,11 +29,9 @@
 
   const getDataByIndex = (index: number) => {
     if (isNaN(index)) {
-      return { x: 0, y: 0, z: 0 };
+      return { z: 0 };
     }
     return {
-      x: data.x[index],
-      y: data.y[index],
       z: data.z[index],
     };
   };
@@ -81,12 +79,8 @@
     { x: number; y: number }[],
     string
   > {
-    const x: { x: number; y: number }[] = [];
-    const y: { x: number; y: number }[] = [];
     const z: { x: number; y: number }[] = [];
-    for (let i = 1; i < data.x.length; i++) {
-      x.push({ x: i, y: data.x[i - 1] });
-      y.push({ x: i, y: data.y[i - 1] });
+    for (let i = 1; i < data.z.length; i++) {
       z.push({ x: i, y: data.z[i - 1] });
     }
     return {
@@ -94,24 +88,8 @@
       data: {
         datasets: [
           {
-            label: 'x',
-            borderColor: 'red',
-            borderWidth: 1,
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            data: x,
-          },
-          {
-            label: 'y',
-            borderColor: 'green',
-            borderWidth: 1,
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            data: y,
-          },
-          {
             label: 'z',
-            borderColor: 'blue',
+            borderColor: 'red',
             borderWidth: 1,
             pointRadius: 0,
             pointHoverRadius: 0,
@@ -131,7 +109,7 @@
           x: {
             type: 'linear',
             min: 0,
-            max: data.x.length,
+            max: data.z.length,
             grid: {
               color: '#f3f3f3',
             },
@@ -232,7 +210,7 @@
     <canvas bind:this={canvas} />
   </div>
   <RecordingInspector
-    dataPoint={getDataByIndex(hoverIndex)}
+    dataPoint={{ x: 0, y: 0, z: getDataByIndex(hoverIndex).z }}
     position={modalPosition}
     isOpen={!isNaN(hoverIndex)}
     size={modalSize} />

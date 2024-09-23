@@ -28,8 +28,6 @@
     ID: number;
     gestureClassName: string;
     gestureClassID: number;
-    x: number;
-    y: number;
     z: number;
   };
   type Axis = 'x' | 'y' | 'z';
@@ -161,8 +159,6 @@
       ID: uniqueLiveDataID,
       gestureClassName: 'live',
       gestureClassID: uniqueLiveDataID,
-      x: filterFunction(xs),
-      y: filterFunction(ys),
       z: filterFunction(zs),
     };
     return filteredData;
@@ -182,10 +178,8 @@
       }
       gestureClassObject.recordings.map((recording: RecordingData) => {
         const ID = recording.ID;
-        const x = filterFunction(recording.data.x);
-        const y = filterFunction(recording.data.y);
         const z = filterFunction(recording.data.z);
-        recordings.push({ ID, gestureClassName, gestureClassID, x, y, z });
+        recordings.push({ ID, gestureClassName, gestureClassID, z });
       });
     });
     classList = classes;
@@ -296,7 +290,7 @@
     return (gesture: RecordingRepresentation) =>
       d3.line()(
         d.map(function (axis: Axis) {
-          return [x(axis) as number, y[axis](gesture[axis])];
+          return [x(axis) as number, y[axis](gesture['z'])];
         }),
       );
   }

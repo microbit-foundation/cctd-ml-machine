@@ -81,8 +81,9 @@ class PollingPredictorEngine implements Engine {
       StaticConfiguration.pollingPredictionSampleSize,
     );
     const xs = bufferedData.map(data => data.value.getVector()[0]);
-    const ys = xs.map(e => 0);
-    const zs = xs.map(e => 0);
+    // Make it same size as xs
+    const ys = new Array(xs.length).fill(0);
+    const zs = new Array(xs.length).fill(0);
     // TODO: Generalize
     return new AccelerometerClassifierInput(xs, ys, zs);
   }

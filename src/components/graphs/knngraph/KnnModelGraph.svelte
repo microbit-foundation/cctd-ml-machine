@@ -35,22 +35,10 @@
     classifier.getFilters(),
   );
 
-  const accelXData = extractAxisFromTrainingData(allData, 0, 3);
-  const accelYData = extractAxisFromTrainingData(allData, 1, 3);
-  const accelZData = extractAxisFromTrainingData(allData, 2, 3);
+  const accelZData = extractAxisFromTrainingData(allData, 0, 1);
 
   const dataGetter = (): TrainingData => {
-    const axis = get(highlightedAxis);
-    if (axis === Axes.X) {
-      return accelXData;
-    }
-    if (axis === Axes.Y) {
-      return accelYData;
-    }
-    if (axis === Axes.Z) {
-      return accelZData;
-    }
-    throw new Error('Should not happen');
+    return accelZData;
   };
 
   const initSingle = (axis: Axes) => {

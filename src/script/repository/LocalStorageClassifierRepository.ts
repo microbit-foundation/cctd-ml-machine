@@ -33,7 +33,9 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
   constructor(private confidences: Confidences) {
     LocalStorageClassifierRepository.mlModel = writable(undefined);
     LocalStorageClassifierRepository.persistedFilters = new PersistantWritable(
-      FilterTypes.toIterable(),
+      [
+        FilterType.MAX, FilterType.MEAN, FilterType.MIN, FilterType.STD
+      ],
       LocalStorageClassifierRepository.PERSISTANT_FILTERS_KEY,
     );
     LocalStorageClassifierRepository.filters = new Filters(this.getFilters());
@@ -69,7 +71,6 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
       LocalStorageClassifierRepository.filters,
     );
 
-    console.log(trainingData);
     const model = await trainer.trainModel(trainingData);
     LocalStorageClassifierRepository.mlModel.set(model);
   }

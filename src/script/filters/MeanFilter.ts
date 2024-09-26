@@ -23,6 +23,10 @@ class MeanFilter extends FilterWithMaths {
   public getName(): string {
     return get(t)('content.filters.mean.title');
   }
+
+  public getMinNumberOfSamples(): number {
+    return 1;
+  }
 }
 
 export default MeanFilter;

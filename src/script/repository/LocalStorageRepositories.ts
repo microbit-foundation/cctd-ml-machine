@@ -6,6 +6,7 @@
 import LocalStorageGestureRepository from './LocalStorageGestureRepository';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
 import Repositories from '../domain/Repositories';
+import Confidences from '../domain/stores/Confidences';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;
@@ -20,7 +21,8 @@ class LocalStorageRepositories implements Repositories {
       throw new Error('Could not instantiate repository. It is already instantiated!');
     }
     LocalStorageRepositories.instance = this;
-    this.classifierRepository = new LocalStorageClassifierRepository();
+    const confidences = new Confidences();
+    this.classifierRepository = new LocalStorageClassifierRepository(confidences);
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }
 

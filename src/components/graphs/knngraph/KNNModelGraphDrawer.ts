@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
-import { classifier, gestures } from '../../../script/stores/Stores';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
 import {
@@ -12,6 +11,10 @@ import {
   Point3DTransformed,
   distanceBetween,
 } from '../../../script/utils/graphUtils';
+import { stores } from '../../../script/stores/Stores';
+import { state } from '../../../script/stores/uiStore';
+import { get } from 'svelte/store';
+import { knnConfig } from '../../../script/stores/knnConfig';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -19,6 +22,7 @@ export type GraphDrawConfig = {
   zRot: number;
   origin: { x: number; y: number };
   scale: number;
+  colors: string[]; // The number of colors should be equal to the number of classes plus one for live data
 };
 
 export type GrahpDrawData = {
@@ -44,38 +48,46 @@ class KNNModelGraphDrawer {
       return;
     }
     const pointTransformer = this.getPointTransformer(drawConfig);
-    const color = StaticConfiguration.gestureColors[gestures.getNumberOfGestures()];
+    const color = drawConfig.colors.slice(-1)[0]; // Fetch the last element of the colors array
+    if (!color) {
+      throw new Error('No color available for live data');
+    }
     const drawableLivePoint: DrawablePoint = {
       pointTransformed: pointTransformer(drawData),
       color,
       id: `live`,
     };
+    if (isNaN(drawableLivePoint.pointTransformed.projected.x)) {
+      return; // May happen if the model has just been trained.
+    }
 
-    this.addPoint(drawableLivePoint, 'live');
+    if (get(state).isInputReady) {
+      this.addPoint(drawableLivePoint, 'live');
 
-    // Draw lines from live point to the nearest neighbours
-    const predictedPoints = [...this.drawnTrainingPoints]
-      .sort((a, b) => {
-        const aDist = distanceBetween(drawableLivePoint.pointTransformed, a);
-        const bDist = distanceBetween(drawableLivePoint.pointTransformed, b);
-        return aDist - bDist;
-      })
-      .slice(0, StaticConfiguration.knnNeighbourCount);
+      // Draw lines from live point to the nearest neighbours
+      const predictedPoints = [...this.drawnTrainingPoints]
+        .sort((a, b) => {
+          const aDist = distanceBetween(drawableLivePoint.pointTransformed, a);
+          const bDist = distanceBetween(drawableLivePoint.pointTransformed, b);
+          return aDist - bDist;
+        })
+        .slice(0, get(knnConfig).k);
 
-    const lines = this.svg.selectAll(`line.points-class`).data(predictedPoints);
-    lines
-      .enter()
-      .append('line')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      .merge(lines)
-      .attr('x1', d => drawableLivePoint.pointTransformed.projected.x)
-      .attr('y1', d => drawableLivePoint.pointTransformed.projected.y)
-      .attr('x2', d => d.projected.x)
-      .attr('y2', d => d.projected.y)
-      .attr('class', `${this.classId} points-class`)
-      .attr('stroke', '#1a1a1a');
-    lines.exit().remove();
+      const lines = this.svg.selectAll(`line.points-class`).data(predictedPoints);
+      lines
+        .enter()
+        .append('line')
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        .merge(lines)
+        .attr('x1', d => drawableLivePoint.pointTransformed.projected.x)
+        .attr('y1', d => drawableLivePoint.pointTransformed.projected.y)
+        .attr('x2', d => d.projected.x)
+        .attr('y2', d => d.projected.y)
+        .attr('class', `${this.classId} points-class`)
+        .attr('stroke', '#1a1a1a');
+      lines.exit().remove();
+    }
   };
 
   public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][][]) {
@@ -96,7 +108,7 @@ class KNNModelGraphDrawer {
       drawConfig,
       StaticConfiguration.liveGraphColors[1],
     );
-    if (classifier.getFilters().count() === 3) {
+    if (stores.getClassifier().getFilters().count() === 3) {
       // 3d, draw z-axis (forward/backward)
       this.addAxis(
         { x: 0, y: 0, z: 1 },
@@ -113,7 +125,7 @@ class KNNModelGraphDrawer {
     drawData.forEach((clazz, classIndex) => {
       clazz.forEach((sample, exampleIndex) => {
         sample.forEach((axisValue, axisIndex) => {
-          const color = StaticConfiguration.gestureColors[classIndex];
+          const color = drawConfig.colors[classIndex];
           const transformedPoint: Point3DTransformed = pointTransformer(axisValue);
           this.drawnTrainingPoints.push(transformedPoint);
           drawablePoints.push({
@@ -234,7 +246,7 @@ class KNNModelGraphDrawer {
    */
   private getLabel(dataIndex: number) {
     try {
-      const gestureList = gestures.getGestures();
+      const gestureList = stores.getGestures().getGestures();
       return gestureList[dataIndex].getName();
     } catch (error) {
       // Index out of bounds indicates either an error or live data.
@@ -246,10 +258,10 @@ class KNNModelGraphDrawer {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const grid3d = this.getGridTransformer(drawConfig);
     const xGrid = [];
-    const j = 10;
+    const j = 30;
     for (let z = -j; z < j; z++) {
       for (let x = -j; x < j; x++) {
-        if (classifier.getFilters().count() === 2) {
+        if (stores.getClassifier().getFilters().count() === 2) {
           xGrid.push({ x: x, y: z, z: 0 }); // Draw grid vertically (2d)
         } else {
           xGrid.push({ x: x, y: 0, z: z }); // Draw grid horizontally (3d)
@@ -313,7 +325,7 @@ class KNNModelGraphDrawer {
   private getGridTransformer(drawConfig: GraphDrawConfig) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     return gridPlanes3D()
-      .rows(20)
+      .rows(60)
       .rotateX(drawConfig.xRot)
       .rotateY(drawConfig.yRot)
       .rotateZ(drawConfig.zRot)

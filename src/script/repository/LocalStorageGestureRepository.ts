@@ -6,15 +6,15 @@
 import ControlledStorage from '../ControlledStorage';
 import { Subscriber, Unsubscriber, Writable, get, writable } from 'svelte/store';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
-import { classifier } from '../stores/Stores';
 import GestureRepository from '../domain/GestureRepository';
 import Gesture from '../domain/stores/gesture/Gesture';
 import { PersistantGestureData } from '../domain/stores/gesture/Gestures';
+import { stores } from '../stores/Stores';
 
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private static gestureStore: Writable<Gesture[]>;
-  constructor(private modelRepository: LocalStorageClassifierRepository) {
+  constructor(private classifierRepository: LocalStorageClassifierRepository) {
     LocalStorageGestureRepository.gestureStore = writable([]);
     LocalStorageGestureRepository.gestureStore.set(this.getPersistedGestures());
   }
@@ -88,32 +88,40 @@ class LocalStorageGestureRepository implements GestureRepository {
       ID: gesture.getId(),
       name: gesture.getName(),
       recordings: gesture.getRecordings(),
+      color: gesture.getColor(),
       output: gesture.getOutput(),
     };
   }
 
   private getPersistedGestures(): Gesture[] {
     const resultFromFetch: PersistantGestureData[] = this.getPersistedData();
-    return resultFromFetch.map(persistedData => this.buildGesture(persistedData));
+    return resultFromFetch.map((persistedData, index) => {
+      const gesture = this.buildGesture(persistedData);
+      return gesture;
+    });
   }
 
   private buildGesture(persistedData: PersistantGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
     // TODO: The classifier object should be accessed through the repository, not the store. This cannot be done until the classifier is cached.
-    const onRecordingsChanged = () => classifier.getModel().markAsUntrained();
-    return new Gesture(
-      store,
-      this.modelRepository.getGestureConfidence(get(store).ID),
-      onRecordingsChanged,
-    );
+    const onRecordingsChanged = () => stores.getClassifier().getModel().markAsUntrained();
+
+    if (!this.classifierRepository.hasGestureConfidence(get(store).ID)) {
+      this.classifierRepository.setGestureConfidence(get(store).ID, 0);
+    }
+    const confidence = this.classifierRepository.getGestureConfidence(get(store).ID);
+
+    return new Gesture(store, confidence, onRecordingsChanged);
   }
 
   private getPersistedData(): PersistantGestureData[] {
-    const result = localStorage.getItem(this.LOCAL_STORAGE_KEY);
-    if (!result) {
+    if (!ControlledStorage.hasValid(this.LOCAL_STORAGE_KEY)) {
       return [];
     }
-    return ControlledStorage.get(this.LOCAL_STORAGE_KEY);
+    const storedData = ControlledStorage.get<PersistantGestureData[]>(
+      this.LOCAL_STORAGE_KEY,
+    );
+    return storedData;
   }
 }
 

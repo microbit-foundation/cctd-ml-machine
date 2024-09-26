@@ -10,7 +10,7 @@ import { writable, type Writable } from 'svelte/store';
 // Increment if stored information types are changed
 // or if a localstorage data needs to be wiped
 // (incrementing it, will overwrite all persistantWritable data stored in localstorage)
-const persistVersion = 1;
+const persistVersion = 3;
 
 // Creates a svelte store which automatically loads from localstorage, and
 // keeps localstorage up to date

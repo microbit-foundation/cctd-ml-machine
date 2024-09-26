@@ -8,8 +8,10 @@
   import Information from '../../components/information/Information.svelte';
   import Filter from '../../script/domain/Filter';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
-  import { classifier } from '../../script/stores/Stores';
+  import { stores } from '../../script/stores/Stores';
   import D3Plot from './D3Plot.svelte';
+
+  const classifier = stores.getClassifier();
 
   export let filterType: FilterType;
   export let openFilterInspector: (filter: FilterType, fullScreen: boolean) => void;

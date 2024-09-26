@@ -14,10 +14,11 @@
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
-  import PleaseConnectFirst from '../../../components/PleaseConnectFirst.svelte';
-  import { classifier } from '../../../script/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
+  import { stores } from '../../../script/stores/Stores';
+  import PleaseConnect from '../../../components/PleaseConnect.svelte';
 
+  const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
 
@@ -82,7 +83,7 @@
     {#if $state.isInputReady}
       <ModelPageStackViewContent />
     {:else}
-      <PleaseConnectFirst />
+      <PleaseConnect />
     {/if}
   {:else}
     <TrainModelFirstTitle />

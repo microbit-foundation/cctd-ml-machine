@@ -18,7 +18,13 @@ import LoggingDecorator from './LoggingDecorator';
 import TypingUtils from '../../TypingUtils';
 import { DeviceRequestStates } from '../../stores/connectDialogStore';
 import StaticConfiguration from '../../../StaticConfiguration';
-import { liveAccelerometerData } from '../../stores/Stores';
+import MicrobitAccelerometerLiveData, {
+  MicrobitAccelerometerDataVector,
+  MicrobitAccelerometerZDataVector,
+  MicrobitAccelerometerZLiveData,
+} from '../../livedata/MicrobitAccelerometerData';
+import { stores } from '../../stores/Stores';
+import LiveDataBuffer from '../../domain/LiveDataBuffer';
 
 let text = get(t);
 t.subscribe(t => (text = t));
@@ -40,10 +46,13 @@ class InputBehaviour extends LoggingDecorator {
 
   onIdentifiedAsOutdated(): void {
     super.onIdentifiedAsOutdated();
+    /*
+    TODO: Disabled for now as the results are unpredictable
     state.update(s => {
       s.isInputOutdated = true;
       return s;
     });
+ */
   }
 
   onVersionIdentified(versionNumber: number): void {
@@ -72,6 +81,7 @@ class InputBehaviour extends LoggingDecorator {
 
   onReady() {
     super.onReady();
+
     clearTimeout(this.reconnectTimeout);
     state.update(s => {
       s.isInputReady = true;
@@ -123,6 +133,10 @@ class InputBehaviour extends LoggingDecorator {
 
   onConnected(name?: string): void {
     super.onConnected(name);
+    const buffer = new LiveDataBuffer<MicrobitAccelerometerZDataVector>(
+      StaticConfiguration.accelerometerLiveDataBufferSize,
+    );
+    stores.setLiveData(new MicrobitAccelerometerZLiveData(buffer));
 
     state.update(s => {
       s.isInputConnected = true;
@@ -143,15 +157,11 @@ class InputBehaviour extends LoggingDecorator {
   accelerometerChange(x: number, y: number, z: number): void {
     super.accelerometerChange(x, y, z);
 
-    const accelX = x / 1000.0;
-    const accelY = y / 1000.0;
+    //const accelX = x / 1000.0;
+    //const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
 
-    liveAccelerometerData.put({
-      x: accelX,
-      y: accelY,
-      z: accelZ,
-    });
+    get(stores).liveData.put(new MicrobitAccelerometerZDataVector(accelZ));
   }
 
   buttonChange(buttonState: MBSpecs.ButtonState, button: MBSpecs.Button): void {

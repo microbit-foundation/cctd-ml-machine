@@ -5,7 +5,7 @@
  */
 import { GestureData } from '../domain/stores/gesture/Gesture';
 import { PersistantGestureData } from '../domain/stores/gesture/Gestures';
-import { gestures } from '../stores/Stores';
+import { stores } from '../stores/Stores';
 
 class FileUtility {
   public static loadDatasetFromFile(file: File) {
@@ -16,7 +16,7 @@ class FileUtility {
       }
       const contents = e.target.result;
       if (typeof contents === 'string') {
-        gestures.importFrom(JSON.parse(contents) as PersistantGestureData[]);
+        stores.getGestures().importFrom(JSON.parse(contents) as PersistantGestureData[]);
       }
     };
     reader.readAsText(file as Blob);

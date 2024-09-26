@@ -22,6 +22,9 @@ class MinFilter implements Filter {
   public filter(inValues: number[]): number {
     return Math.min(...inValues);
   }
+  public getMinNumberOfSamples(): number {
+    return 1;
+  }
 }
 
 export default MinFilter;

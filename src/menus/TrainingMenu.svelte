@@ -7,9 +7,9 @@
 <script lang="ts">
   import { t } from '../i18n';
   import ImageSkeleton from '../components/skeletonloading/ImageSkeleton.svelte';
-  import { classifier } from '../script/stores/Stores';
+  import { stores } from '../script/stores/Stores';
 
-  const model = classifier.getModel();
+  const model = stores.getClassifier().getModel();
 </script>
 
 <div class="h-40 w-40 m-auto mt-2 flex flex-col justify-center">

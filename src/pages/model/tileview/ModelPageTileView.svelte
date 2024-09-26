@@ -15,9 +15,10 @@
   import { onMount } from 'svelte';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
-  import { classifier } from '../../../script/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
+  import { stores } from '../../../script/stores/Stores';
 
+  const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
   // let lastRecording;

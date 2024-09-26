@@ -5,9 +5,10 @@
  -->
 
 <script lang="ts">
-  import { slide } from 'svelte/transition';
   import { t } from '../i18n';
-  import { gestures } from '../script/stores/Stores';
+  import { stores } from '../script/stores/Stores';
+
+  const gestures = stores.getGestures();
 
   // Count of amount of recordings
   $: numberOfRecodings = $gestures.reduce(

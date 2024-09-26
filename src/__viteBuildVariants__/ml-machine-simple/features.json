@@ -1,4 +1,6 @@
 {
   "title": "ML-Machine",
-  "knnModel": false
+  "knnModel": false,
+  "lossGraph": false,
+  "makecode": false
 }

@@ -21,13 +21,15 @@
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
-  import { gestures, liveAccelerometerData } from '../script/stores/Stores';
   import Gesture from '../script/domain/stores/gesture/Gesture';
   import { RecordingData } from '../script/domain/stores/gesture/Gestures';
+  import { stores } from '../script/stores/Stores';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
+  const gestures = stores.getGestures();
+  $: liveData = $stores.liveData;
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = StaticConfiguration.recordingDuration;
@@ -70,13 +72,11 @@
     isThisRecording = true;
 
     // New array for data
-    let newData: { x: number[]; y: number[]; z: number[] } = { x: [], y: [], z: [] };
+    let newData: { z: number[] } = { z: [] };
 
     // Set timeout to allow recording in 1s
-    const unsubscribe = liveAccelerometerData.subscribe(data => {
-      newData.x.push(data.x);
-      newData.y.push(data.y);
-      newData.z.push(data.z);
+    const unsubscribe = liveData.subscribe(data => {
+      newData.z.push(data.getVector()[0]);
     });
 
     // Once duration is over (1000ms default), stop recording
@@ -84,7 +84,7 @@
       $state.isRecording = false;
       isThisRecording = false;
       unsubscribe();
-      if (StaticConfiguration.pollingPredictionSampleSize <= newData.x.length) {
+      if (StaticConfiguration.pollingPredictionSampleSize <= newData.z.length) {
         const recording = { ID: Date.now(), data: newData } as RecordingData;
         gesture.addRecording(recording);
       } else {
@@ -185,6 +185,10 @@
   <div class="items-center flex mb-1">
     <!-- Title of gesture-->
     <GestureTilePart mr small>
+      <div
+        class="absolute rounded-full w-3 h-3 m-3"
+        style={`background-color:${gesture.getColor()}`}>
+      </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
         <div
           class="w-40 col-start-2 col-end-5 text-center

@@ -33,10 +33,13 @@ class OutputBehaviour extends LoggingDecorator {
 
   onIdentifiedAsOutdated(): void {
     super.onIdentifiedAsOutdated();
+    /*
+    TODO: Disabled for now as the results are unpredictable
     state.update(s => {
       s.isOutputOutdated = true;
       return s;
     });
+     */
   }
 
   onVersionIdentified(versionNumber: number): void {

@@ -12,22 +12,22 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import Gesture, { GestureData, GestureID, GestureOutput } from './Gesture';
+import Gesture, { Confidence, GestureData, GestureID, GestureOutput } from './Gesture';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import GestureRepository from '../../GestureRepository';
+import ClassifierRepository from '../../ClassifierRepository';
 
 export type PersistantGestureData = {
   name: string;
   ID: GestureID;
   recordings: RecordingData[];
   output: GestureOutput;
+  color: string;
 };
 
 export type RecordingData = {
   ID: number;
   data: {
-    x: number[];
-    y: number[];
     z: number[];
   };
 };
@@ -73,17 +73,23 @@ class Gestures implements Readable<GestureData[]> {
     return this.repository.getGesture(gestureID);
   }
 
+  // TODO: Change to getCurrent() or something else maybe
   public getGestures(): Gesture[] {
     return get(Gestures.subscribableGestures);
   }
 
   public createGesture(name = ''): Gesture {
     const newId = Date.now();
+    const color =
+      StaticConfiguration.gestureColors[
+        this.getNumberOfGestures() % StaticConfiguration.gestureColors.length
+      ];
     return this.addGestureFromPersistedData({
       ID: newId,
       recordings: [],
       output: {}, //TODO: ADD DEFAULT VALUES HERE
       name: name,
+      color,
     });
   }
 
@@ -133,6 +139,7 @@ class Gestures implements Readable<GestureData[]> {
       name: gesture.getName(),
       recordings: gesture.getRecordings(),
       output: gesture.getOutput(),
+      color: gesture.getColor(),
       confidence: {
         currentConfidence: gesture.getConfidence().getCurrentConfidence(),
         requiredConfidence: gesture.getConfidence().getRequiredConfidence(),

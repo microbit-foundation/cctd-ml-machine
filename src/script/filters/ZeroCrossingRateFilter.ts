@@ -31,6 +31,10 @@ class ZeroCrossingRateFilter implements Filter {
     }
     return count / (inValues.length - 1);
   }
+
+  public getMinNumberOfSamples(): number {
+    return 2;
+  }
 }
 
 export default ZeroCrossingRateFilter;

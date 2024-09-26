@@ -5,16 +5,21 @@
  -->
 
 <script lang="ts">
-  import { Readable, derived, get } from 'svelte/store';
-  import { classifier, liveAccelerometerData } from '../../../script/stores/Stores';
+  import { Unsubscriber, derived, get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Axes from '../../../script/domain/Axes';
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';
   import { highlightedAxis } from '../../../script/stores/uiStore';
-  import arrowCreate, { IArrow } from 'arrows-svg';
-  import { afterUpdate, onMount } from 'svelte';
+  import arrowCreate from 'arrows-svg';
+  import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
+  import { stores } from '../../../script/stores/Stores';
+  import { asAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
+
+  const classifier = stores.getClassifier();
+
+  $: liveData = $stores.liveData;
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -66,17 +71,19 @@
       return Array(classifier.getFilters().count()).fill(0);
     }
     try {
-      const seriesTimestamped = liveAccelerometerData
+      const seriesTimestamped = liveData
         .getBuffer()
         .getSeries(
           StaticConfiguration.pollingPredictionSampleDuration,
           StaticConfiguration.pollingPredictionSampleSize,
         );
-      const series = seriesTimestamped.map(s => s.value);
-      const filteredSeries = classifier
+      const series = seriesTimestamped.map(s =>
+        asAccelerometerData(s.value).getAccelerometerData(),
+      );
+      const filteredSeries = stores
+        .getClassifier()
         .getFilters()
         .compute(extractAxisFromAccelerometerData(series, get(highlightedAxis)!));
-
       return filteredSeries;
     } catch (e) {
       return Array(classifier.getFilters().count()).fill(0);
@@ -103,6 +110,7 @@
     );
   };
 
+  let unsubscribe: undefined | Unsubscriber = undefined;
   const denit = () => {
     $vectorArrows.forEach(arr => arr.clear());
     clearInterval(valueInterval);
@@ -110,10 +118,15 @@
 
   onMount(() => {
     init();
-    return denit;
+    return () => {
+      denit();
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   });
 
-  derived([highlightedAxis, classifier], s => s).subscribe(s => {
+  unsubscribe = derived([highlightedAxis, classifier], s => s).subscribe(s => {
     init();
   });
 
@@ -124,21 +137,24 @@
   <div>
     {#if $highlightedAxis}
       <div class="flex flex-row space-x-1">
-        <div class="flex flex-col">
+        <div class="flex flex-col justify-evenly">
           <div class="flex flex-row space-x-2" id="fromX">
             <StandardButton
+              color={StaticConfiguration.liveGraphColors[0]}
               small
               outlined={$highlightedAxis !== Axes.X}
               onClick={() => ($highlightedAxis = Axes.X)}>X</StandardButton>
           </div>
           <div class="flex flex-row space-x-2" id="fromY">
             <StandardButton
+              color={StaticConfiguration.liveGraphColors[1]}
               small
               outlined={$highlightedAxis !== Axes.Y}
               onClick={() => ($highlightedAxis = Axes.Y)}>Y</StandardButton>
           </div>
           <div class="flex flex-row space-x-2" id="fromZ">
             <StandardButton
+              color={StaticConfiguration.liveGraphColors[2]}
               small
               outlined={$highlightedAxis !== Axes.Z}
               onClick={() => ($highlightedAxis = Axes.Z)}>Z</StandardButton>
@@ -154,18 +170,12 @@
             <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />
           {/each}
         </div>
-        <div class="flex flex-col justify-around">
-          <img src={'imgs/left_bracket_blue.png'} alt="left bracket" />
-        </div>
         <div class="flex flex-col justify-around w-12">
           {#each liveFilteredAxesData as val, index}
-            <p style={`color:${['red', 'green', 'blue'][index]}`}>
+            <p style={`color:${StaticConfiguration.liveGraphColors[index]}`}>
               {val.toFixed(3)}
             </p>
           {/each}
-        </div>
-        <div class="flex flex-col justify-around">
-          <img src={'imgs/right_bracket_blue.png'} alt="left bracket" />
         </div>
       </div>
     {/if}

@@ -1,13 +1,15 @@
+import { LiveDataVector } from './stores/LiveDataVector';
+
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
-export type TimestampedData<T> = {
+export type TimestampedData<T extends LiveDataVector> = {
   value: T;
   timestamp: number;
 };
-class LiveDataBuffer<T> {
+class LiveDataBuffer<T extends LiveDataVector> {
   private buffer: (TimestampedData<T> | null)[];
   private bufferPtr = 0; // The buffer pointer keeps increasing from 0 to infinity each time a new item is added
   private bufferUtilization = 0;

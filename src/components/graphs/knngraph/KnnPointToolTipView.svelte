@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { classifier } from '../../../script/stores/Stores';
+  import { stores } from '../../../script/stores/Stores';
   import { knnHighlightedPoint } from './KnnPointToolTip';
 
   const offsetX = 7;
@@ -20,7 +20,7 @@
     values: [
       $knnHighlightedPoint?.pointTransformed.x,
       $knnHighlightedPoint?.pointTransformed.y,
-      classifier.getFilters().count() === 3
+      stores.getClassifier().getFilters().count() === 3
         ? $knnHighlightedPoint?.pointTransformed.z
         : undefined,
     ],

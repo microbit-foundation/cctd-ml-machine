@@ -9,6 +9,7 @@
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
+  import { Feature, hasFeature } from '../../script/FeatureToggles';
   import { ModelView, state } from '../../script/stores/uiStore';
   import ModelPageStackView from './stackview/ModelPageStackView.svelte';
   import ModelPageTileView from './tileview/ModelPageTileView.svelte';
@@ -23,11 +24,13 @@
 
 <div>
   <ControlBar>
-    <ExpandableControlBarMenu>
-      <StandardButton small outlined onClick={openMakeCodeInNewTab}>
-        MakeCode HEX
-      </StandardButton>
-    </ExpandableControlBarMenu>
+    {#if hasFeature(Feature.MAKECODE)}
+      <ExpandableControlBarMenu>
+        <StandardButton small outlined onClick={openMakeCodeInNewTab}>
+          MakeCode HEX
+        </StandardButton>
+      </ExpandableControlBarMenu>
+    {/if}
   </ControlBar>
 </div>
 

@@ -1,5 +1,6 @@
 {
   "title": "Learning tool",
   "knnModel": true,
-  "lossGraph": true
+  "lossGraph": true,
+  "makecode": true
 }

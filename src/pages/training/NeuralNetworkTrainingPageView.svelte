@@ -40,7 +40,14 @@
       <i
         class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
     </div>
+    {#if !hasFeature(Feature.LOSS_GRAPH)}
+      <p class="text-2xl mt-3">{$t('menu.trainer.isTrainingModelButton')}</p>
+    {/if}
   {:else}
+    {#if $model.isTrained && !hasFeature(Feature.LOSS_GRAPH)}
+      <p class="text-2xl">{$t('menu.trainer.TrainingFinished')}</p>
+      <p class="text-lg mt-4 mb-4">{$t('menu.trainer.TrainingFinished.body')}</p>
+    {/if}
     <StandardButton onClick={trainModelClickHandler}>
       {$t(trainButtonSimpleLabel)}
     </StandardButton>

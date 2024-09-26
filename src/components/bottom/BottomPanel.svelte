@@ -44,9 +44,10 @@
 
   {#if !$state.isInputAssigned}
     <!-- No input microbit assigned -->
-    <div class="h-full w-full flex justify-center bg-white">
-      <StandardButton onClick={connectButtonClicked}
-        >{$t('footer.connectButtonNotConnected')}</StandardButton>
+    <div class="h-full w-full flex justify-center items-center bg-white">
+      <StandardButton onClick={connectButtonClicked}>
+        {$t('footer.connectButtonNotConnected')}
+      </StandardButton>
     </div>
   {:else}
     <!-- Input microbit is assigned -->

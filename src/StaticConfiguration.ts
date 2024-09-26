@@ -72,8 +72,8 @@ class StaticConfiguration {
   // Colors to assign to gestures, useful for identifying gestures on graphs.
   public static readonly gestureColors = [
     '#FCA311',
-    '#65334D',
-    '#CB04A5',
+    '#00ff81',
+    '#b1e400',
     '#ADFCF9',
     '#89A894',
     '#4B644A',

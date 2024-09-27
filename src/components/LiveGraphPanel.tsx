@@ -4,6 +4,7 @@ import { FormattedMessage } from "react-intl";
 import { ConnectionStatus } from "../connect-status-hooks";
 import { useConnectionStage } from "../connection-stage-hooks";
 import { Gesture } from "../model";
+import { tourElClassname } from "../tours";
 import InfoToolTip from "./InfoToolTip";
 import LedIcon from "./LedIcon";
 import LiveGraph from "./LiveGraph";
@@ -47,6 +48,7 @@ const LiveGraphPanel = ({
       width="100%"
       bgColor="white"
       ref={parentPortalRef}
+      className={tourElClassname.liveGraph}
     >
       <Portal containerRef={parentPortalRef}>
         <HStack
@@ -62,7 +64,9 @@ const LiveGraphPanel = ({
         >
           <HStack gap={4}>
             <HStack gap={2}>
-              <Text fontWeight="bold">Live data graph</Text>
+              <Text fontWeight="bold">
+                <FormattedMessage id="live-data-graph" />
+              </Text>
               <InfoToolTip
                 titleId="footer.helpHeader"
                 descriptionId="footer.helpContent"
@@ -101,6 +105,7 @@ const LiveGraphPanel = ({
         <LiveGraph />
         {showPredictedGesture && (
           <VStack
+            className={tourElClassname.estimatedAction}
             w={`${predictedGestureDisplayWidth}px`}
             gap={0}
             h="100%"

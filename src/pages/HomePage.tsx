@@ -37,8 +37,17 @@ const HomePage = () => {
       }
     >
       <Container centerContent gap={16} p={8} maxW="container.lg">
-        <HStack gap={5}>
-          <VStack flex="1" alignItems="flex-start" gap={5}>
+        <HStack
+          gap={5}
+          flexDir={{ base: "column", lg: "row" }}
+          w={{ base: "100%", lg: "unset" }}
+        >
+          <VStack
+            flex="1"
+            alignItems="flex-start"
+            gap={5}
+            w={{ base: "100%", lg: "unset" }}
+          >
             <Heading as="h1" fontSize="4xl" fontWeight="bold">
               <FormattedMessage id="homepage-title" />
             </Heading>
@@ -56,12 +65,12 @@ const HomePage = () => {
               size="lg"
               variant="primary"
               onClick={handleGetStarted}
-              mt={12}
+              mt={5}
             >
               Get started
             </Button>
           </VStack>
-          <Box flex="1" position="relative" mb={12}>
+          <Box flex="1" position="relative">
             <Image src={xyzGraph} borderRadius="md" bgColor="white" pr={1} />
           </Box>
         </HStack>
@@ -79,7 +88,7 @@ const HomePage = () => {
             Watch the video to learn how to use the micro:bit AI creator.
           </Text>
         </VStack>
-        <VStack>
+        <VStack gap={8}>
           <Heading as="h2" textAlign="center">
             Step by step
           </Heading>
@@ -93,14 +102,14 @@ const HomePage = () => {
               title="Train & test"
               imgSrc={testModelImage}
               description={
-                "micro:bit AI creator will uses your data to train a machine learning model to recognise the actions. Does the model detect your actions?"
+                "micro:bit AI creator trains a machine learning model to recognise the actions. Does the model detect your actions? Add more data to improve your model."
               }
             />
             <Step
               title="Code"
               imgSrc={testModelImage}
               description={
-                "Open your project in MakeCode to download the program and your machine learning model to a micro:bit. You can add more blocks to create your own programs using your model."
+                "Use Microsoft MakeCode to download the program and machine learning model to your micro:bit. Add more blocks to create your own programs using your model."
               }
             />
           </VStack>
@@ -109,7 +118,7 @@ const HomePage = () => {
           <Heading as="h2" textAlign="center">
             Projects
           </Heading>
-          <HStack gap={5}>
+          <HStack gap={5} flexDir={{ base: "column", lg: "row" }}>
             <ResourceCard
               title="Simple AI activity timer"
               url="https://www.example.com"
@@ -130,7 +139,11 @@ interface StepProps {
 }
 
 const Step = ({ title, imgSrc, description }: StepProps) => (
-  <HStack w="100%" justifyContent="space-between">
+  <HStack
+    w="100%"
+    justifyContent="space-between"
+    flexDir={{ base: "column", lg: "row" }}
+  >
     <VStack gap={2} alignItems="flex-start">
       <Heading as="h2" textAlign="center" fontSize="xl">
         {title}

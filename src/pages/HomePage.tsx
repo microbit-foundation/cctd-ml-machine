@@ -2,25 +2,25 @@ import {
   AspectRatio,
   Box,
   Button,
+  Container,
   Heading,
   HStack,
   Image,
-  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { ReactNode, useCallback } from "react";
 import { FormattedMessage } from "react-intl";
+import { useNavigate } from "react-router";
 import DefaultPageLayout from "../components/DefaultPageLayout";
+import ResourceCard from "../components/ResourceCard";
+import ResourceCardPlaceholder from "../components/ResourceCardPlaceholder";
 import YoutubeVideoEmbed from "../components/YoutubeVideoEmbed";
 import addDataImage from "../images/add_data.svg";
 import testModelImage from "../images/test_model_blue.svg";
-import trainModelImage from "../images/train_model_blue.svg";
-import ResourceCard from "../components/ResourceCard";
-import ResourceCardPlaceholder from "../components/ResourceCardPlaceholder";
-import { useNavigate } from "react-router";
-import { createSessionPageUrl } from "../urls";
+import xyzGraph from "../images/xyz-graph.png";
 import { SessionPageId } from "../pages-config";
+import { createSessionPageUrl } from "../urls";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -36,9 +36,9 @@ const HomePage = () => {
         </Button>
       }
     >
-      <Stack gap={16} p={8} w="100%">
-        <HStack w="100%" h="100%" alignItems="flex-start" gap={5}>
-          <VStack flex="1" alignItems="flex-start" gap={5} h="100%">
+      <Container centerContent gap={16} p={8} maxW="container.lg">
+        <HStack gap={5}>
+          <VStack flex="1" alignItems="flex-start" gap={5}>
             <Heading as="h1" fontSize="4xl" fontWeight="bold">
               <FormattedMessage id="homepage-title" />
             </Heading>
@@ -52,39 +52,55 @@ const HomePage = () => {
             <Text fontSize="md">
               Add code to use your model in real-world projects.
             </Text>
-            <Button size="lg" variant="primary" onClick={handleGetStarted}>
+            <Button
+              size="lg"
+              variant="primary"
+              onClick={handleGetStarted}
+              mt={12}
+            >
               Get started
             </Button>
           </VStack>
-          <Box flex="1">
+          <Box flex="1" position="relative" mb={12}>
+            <Image src={xyzGraph} borderRadius="md" bgColor="white" pr={1} />
+          </Box>
+        </HStack>
+        <VStack spacing={8} w="100%" maxW="container.md">
+          <Heading as="h2" textAlign="center">
+            How it works
+          </Heading>
+          <Box w="100%">
             <YoutubeVideoEmbed
               youtubeId="ZhUtuuQemFc"
               alt="Introductory video"
             />
           </Box>
-        </HStack>
+          <Text fontSize="md">
+            Watch the video to learn how to use the micro:bit AI creator.
+          </Text>
+        </VStack>
         <VStack>
           <Heading as="h2" textAlign="center">
             Step by step
           </Heading>
           <VStack gap={5} maxW="container.md">
             <Step
-              title={<FormattedMessage id="add-data-title" />}
+              title="Collect data"
               imgSrc={addDataImage}
-              description={<FormattedMessage id="add-data-intro-description" />}
+              description="Connect a micro:bit and collect data samples of the actions you would like your model to recognise (e.g. ‘waving’ and ‘clapping’)."
             />
             <Step
-              title={<FormattedMessage id="train-model-title" />}
-              imgSrc={trainModelImage}
+              title="Train & test"
+              imgSrc={testModelImage}
               description={
-                <FormattedMessage id="train-model-intro-description" />
+                "micro:bit AI creator will uses your data to train a machine learning model to recognise the actions. Does the model detect your actions?"
               }
             />
             <Step
-              title={<FormattedMessage id="test-model-title" />}
+              title="Code"
               imgSrc={testModelImage}
               description={
-                <FormattedMessage id="test-model-intro-description" />
+                "Open your project in MakeCode to download the program and your machine learning model to a micro:bit. You can add more blocks to create your own programs using your model."
               }
             />
           </VStack>
@@ -102,7 +118,7 @@ const HomePage = () => {
             <ResourceCardPlaceholder />
           </HStack>
         </VStack>
-      </Stack>
+      </Container>
     </DefaultPageLayout>
   );
 };

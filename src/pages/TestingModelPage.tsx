@@ -3,7 +3,10 @@ import { useCallback, useEffect } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
 import BackArrow from "../components/BackArrow";
-import DefaultPageLayout from "../components/DefaultPageLayout";
+import DefaultPageLayout, {
+  ProjectMenuItems,
+  ProjectToolbarItems,
+} from "../components/DefaultPageLayout";
 import TestingModelGridView from "../components/TestingModelGridView";
 import { SessionPageId } from "../pages-config";
 import { useStore } from "../store";
@@ -27,8 +30,8 @@ const TestingModelPage = () => {
     <DefaultPageLayout
       titleId={`${SessionPageId.TestingModel}-title`}
       showPageTitle
-      showHomeButton
-      showSaveButton
+      menuItems={<ProjectMenuItems />}
+      toolbarItemsRight={<ProjectToolbarItems />}
       toolbarItemsLeft={
         <Button
           size="lg"

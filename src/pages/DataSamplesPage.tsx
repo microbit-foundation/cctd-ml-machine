@@ -4,7 +4,10 @@ import { RiAddLine, RiArrowRightLine } from "react-icons/ri";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
 import DataSampleGridView from "../components/DataSampleGridView";
-import DefaultPageLayout from "../components/DefaultPageLayout";
+import DefaultPageLayout, {
+  ProjectMenuItems,
+  ProjectToolbarItems,
+} from "../components/DefaultPageLayout";
 import LiveGraphPanel from "../components/LiveGraphPanel";
 import { SessionPageId } from "../pages-config";
 import { useHasSufficientDataForTraining, useStore } from "../store";
@@ -30,8 +33,8 @@ const DataSamplesPage = () => {
     <DefaultPageLayout
       titleId={`${SessionPageId.DataSamples}-title`}
       showPageTitle
-      showHomeButton
-      showSaveButton
+      menuItems={<ProjectMenuItems />}
+      toolbarItemsRight={<ProjectToolbarItems />}
     >
       <DataSampleGridView />
       <VStack w="full" flexShrink={0} bottom={0} gap={0} bg="gray.25">

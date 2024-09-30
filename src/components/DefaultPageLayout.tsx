@@ -11,16 +11,16 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ReactNode, useCallback, useEffect } from "react";
-import { RiDownload2Line, RiFolderOpenLine, RiHome2Line } from "react-icons/ri";
+import { RiDownload2Line, RiHome2Line } from "react-icons/ri";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router";
 import { TOOL_NAME } from "../constants";
 import { flags } from "../flags";
 import { useProject } from "../hooks/project-hooks";
-import { SaveStep, TrainModelDialogStage } from "../model";
+import { TrainModelDialogStage } from "../model";
 import { SessionPageId } from "../pages-config";
 import Tour from "../pages/Tour";
-import { useSettings, useStore } from "../store";
+import { useStore } from "../store";
 import { createHomePageUrl, createSessionPageUrl } from "../urls";
 import ActionBar from "./ActionBar";
 import AppLogo from "./AppLogo";
@@ -28,8 +28,6 @@ import ConnectionDialogs from "./ConnectionFlowDialogs";
 import DownloadDialogs from "./DownloadDialogs";
 import HelpMenu from "./HelpMenu";
 import LanguageMenuItem from "./LanguageMenuItem";
-import LoadProjectMenuItem from "./LoadProjectMenuItem";
-import OpenButton from "./OpenButton";
 import PrototypeVersionWarning from "./PrototypeVersionWarning";
 import SaveDialogs from "./SaveDialogs";
 import SettingsMenu from "./SettingsMenu";
@@ -40,28 +38,23 @@ interface DefaultPageLayoutProps {
   titleId?: string;
   children: ReactNode;
   toolbarItemsLeft?: ReactNode;
+  toolbarItemsRight?: ReactNode;
+  menuItems?: ReactNode;
   showPageTitle?: boolean;
-  showHomeButton?: boolean;
-  showSaveButton?: boolean;
-  showOpenButton?: boolean;
 }
 
 const DefaultPageLayout = ({
   titleId,
   children,
+  menuItems,
   toolbarItemsLeft,
+  toolbarItemsRight,
   showPageTitle = false,
-  showHomeButton = false,
-  showSaveButton = false,
-  showOpenButton = false,
 }: DefaultPageLayoutProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const isEditorOpen = useStore((s) => s.isEditorOpen);
   const stage = useStore((s) => s.trainModelDialogStage);
-
-  const { saveHex } = useProject();
-  const [settings] = useSettings();
   const toast = useToast();
 
   useEffect(() => {
@@ -90,19 +83,6 @@ const DefaultPageLayout = ({
       }
     );
   }, [intl, navigate, toast]);
-
-  const handleHomeClick = useCallback(() => {
-    navigate(createHomePageUrl());
-  }, [navigate]);
-
-  const setSave = useStore((s) => s.setSave);
-  const handleSave = useCallback(() => {
-    if (settings.showPreSaveHelp) {
-      setSave({ step: SaveStep.PreSaveHelp });
-    } else {
-      void saveHex();
-    }
-  }, [saveHex, setSave, settings.showPreSaveHelp]);
 
   return (
     <>
@@ -138,26 +118,7 @@ const DefaultPageLayout = ({
           itemsRight={
             <>
               <HStack spacing={3} display={{ base: "none", lg: "flex" }}>
-                {showOpenButton && <OpenButton />}
-                {showSaveButton && (
-                  <Button
-                    variant="toolbar"
-                    leftIcon={<RiDownload2Line />}
-                    onClick={handleSave}
-                  >
-                    <FormattedMessage id="save-action" />
-                  </Button>
-                )}
-                {showHomeButton && (
-                  <IconButton
-                    onClick={handleHomeClick}
-                    icon={<RiHome2Line size={24} color="white" />}
-                    aria-label={intl.formatMessage({ id: "homepage.Link" })}
-                    variant="plain"
-                    size="lg"
-                    fontSize="xl"
-                  />
-                )}
+                {toolbarItemsRight}
                 <SettingsMenu />
               </HStack>
               <HelpMenu appName={TOOL_NAME} cookies />
@@ -166,31 +127,7 @@ const DefaultPageLayout = ({
                 variant="plain"
                 label={intl.formatMessage({ id: "main-menu" })}
               >
-                {showOpenButton && (
-                  <LoadProjectMenuItem
-                    icon={<Icon h={5} w={5} as={RiFolderOpenLine} />}
-                    accept=".hex"
-                  >
-                    <FormattedMessage id="open-file-action" />
-                  </LoadProjectMenuItem>
-                )}
-                {showSaveButton && (
-                  <MenuItem
-                    onClick={handleSave}
-                    icon={<Icon h={5} w={5} as={RiDownload2Line} />}
-                  >
-                    <FormattedMessage id="save-action" />
-                  </MenuItem>
-                )}
-                <MenuDivider />
-                {showHomeButton && (
-                  <MenuItem
-                    onClick={handleHomeClick}
-                    icon={<Icon h={5} w={5} as={RiHome2Line} />}
-                  >
-                    <FormattedMessage id="home-action" />
-                  </MenuItem>
-                )}
+                {menuItems}
                 <LanguageMenuItem />
               </ToolbarMenu>
             </>
@@ -201,6 +138,67 @@ const DefaultPageLayout = ({
           {children}
         </Flex>
       </VStack>
+    </>
+  );
+};
+
+export const ProjectToolbarItems = () => {
+  const intl = useIntl();
+  const { saveHex } = useProject();
+  const navigate = useNavigate();
+  const handleSave = useCallback(() => {
+    void saveHex();
+  }, [saveHex]);
+  const handleHomeClick = useCallback(() => {
+    navigate(createHomePageUrl());
+  }, [navigate]);
+
+  return (
+    <>
+      <Button
+        variant="toolbar"
+        leftIcon={<RiDownload2Line />}
+        onClick={handleSave}
+      >
+        <FormattedMessage id="save-action" />
+      </Button>
+      <IconButton
+        onClick={handleHomeClick}
+        icon={<RiHome2Line size={24} color="white" />}
+        aria-label={intl.formatMessage({ id: "homepage.Link" })}
+        variant="plain"
+        size="lg"
+        fontSize="xl"
+      />
+    </>
+  );
+};
+
+export const ProjectMenuItems = () => {
+  const { saveHex } = useProject();
+  const navigate = useNavigate();
+  const handleSave = useCallback(() => {
+    void saveHex();
+  }, [saveHex]);
+  const handleHomeClick = useCallback(() => {
+    navigate(createHomePageUrl());
+  }, [navigate]);
+
+  return (
+    <>
+      <MenuItem
+        onClick={handleSave}
+        icon={<Icon h={5} w={5} as={RiDownload2Line} />}
+      >
+        <FormattedMessage id="save-action" />
+      </MenuItem>
+      <MenuDivider />
+      <MenuItem
+        onClick={handleHomeClick}
+        icon={<Icon h={5} w={5} as={RiHome2Line} />}
+      >
+        <FormattedMessage id="home-action" />
+      </MenuItem>
     </>
   );
 };

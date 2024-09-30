@@ -132,29 +132,14 @@ export const ProjectProvider = ({
   const saveHex = useCallback(
     async (hex?: HexData): Promise<void> => {
       const { step } = save;
-      if (hex) {
-        if (settings.showPreSaveHelp && step === SaveStep.None) {
-          // All we do is trigger the help and remember the project.
-          setSave({
-            step: SaveStep.PreSaveHelp,
-            hex: hex,
-          });
-        } else {
-          // We can just go ahead and download. Either the project came from
-          // the editor or via the dialog flow.
-          downloadHex(hex);
-          setSave({
-            step: SaveStep.None,
-          });
-          toast({
-            id: "save-complete",
-            position: "top",
-            duration: 5_000,
-            title: intl.formatMessage({ id: "saving-toast-title" }),
-            status: "info",
-          });
-        }
-      } else {
+      if (settings.showPreSaveHelp && step === SaveStep.None) {
+        // All we do is trigger the help and remember the project (if any).
+        // We'll be invoked again
+        setSave({
+          step: SaveStep.PreSaveHelp,
+          hex: hex,
+        });
+      } else if (!hex) {
         // We need to request something to save.
         setSave({
           step: SaveStep.SaveProgress,
@@ -162,6 +147,20 @@ export const ProjectProvider = ({
         await doAfterEditorUpdate(async () => {
           saveNextDownloadRef.current = true;
           await driverRef.current!.compile();
+        });
+      } else {
+        // We can just go ahead and download. Either the project came from
+        // the editor or via the dialog flow.
+        downloadHex(hex);
+        setSave({
+          step: SaveStep.None,
+        });
+        toast({
+          id: "save-complete",
+          position: "top",
+          duration: 5_000,
+          title: intl.formatMessage({ id: "saving-toast-title" }),
+          status: "info",
         });
       }
     },

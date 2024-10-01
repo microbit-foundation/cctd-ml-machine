@@ -26,6 +26,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
                 s.modelView = Microbits.isOutputMakecode() ? ModelView.TILE : s.modelView;
             }
             s.isOutputConnected = true;
+            s.isOutputAssigned = true;
             s.isRequestingDevice = DeviceRequestStates.NONE;
             s.offerReconnect = false;
             s.isOutputReady = true;
@@ -56,15 +57,12 @@ class OutputMicrobitHandler implements MicrobitHandler {
     }
 
     public onAccelerometerDataReceived(x: number, y: number, z: number): void {
-        return;
     }
 
     public onButtonAPressed(state: MBSpecs.ButtonState): void {
-        return;
     }
 
     public onButtonBPressed(state: MBSpecs.ButtonState): void {
-        return;
     }
 
     public onMessageReceived(data: string): void {

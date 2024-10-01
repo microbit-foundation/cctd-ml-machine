@@ -19,6 +19,7 @@ import { t } from 'svelte-i18n';
 import Logger from '../utils/Logger';
 import { Log } from '@tensorflow/tfjs-core';
 import OutputMicrobitHandler from './OutputMicrobitHandler';
+import CombinedMicrobitHandler from './CombinedMicrobitHandler';
 
 type QueueElement = {
   service: BluetoothRemoteGATTCharacteristic;
@@ -38,10 +39,12 @@ type UARTMessageType = 'g' | 's'; // Gesture or sound
  */
 class Microbits {
 
-  public static microbits: Microbit[] = [
+  private static microbits: Microbit[] = [
     new Microbit(), // Input
-    new Microbit()  // Output
+    new Microbit()  // Output (May not be used if input/output is the same, then defer to the above)
   ];
+
+  private static isUsingInputAsOutput: boolean = false;
 
   public static hexFiles: { 1: string; 2: string; universal: string } = {
     1: 'firmware/ml-microbit-cpp-version-combined.hex',
@@ -176,6 +179,9 @@ class Microbits {
           throw new Error('Cannot get output microbit, it is not assigned!');
         }
         return this.assignedOutputMicrobit; */
+    if (this.isUsingInputAsOutput) {
+      return this.microbits[0];
+    }
     return this.microbits[1];
   }
 
@@ -423,7 +429,7 @@ class Microbits {
     Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.getInput().setDevice(bluetoothDevice);
-    this.getInput().setHandler(new InputMicrobitHandler());
+    this.getInput().setHandler(new CombinedMicrobitHandler(new OutputMicrobitHandler()));
     this.getInput().setAutoReconnect(true);
     await bluetoothDevice.connect(name);
   }
@@ -710,7 +716,7 @@ class Microbits {
           return false;
         }
         return this.getInput().getDevice().id == this.getOutput().getDevice().id; */
-    throw new Error("I'm not sure how to implement this atm");
+    return this.isUsingInputAsOutput;
   }
 
   /**
@@ -789,7 +795,7 @@ class Microbits {
    * @param { { pin: number; on: boolean }[] } data The pins and their states
    * @throws {Error} Throws an error if no output microbit is assigned, or no outputIO service could be found.
    */
-  public static sendToOutputPin(data: { pin: MBSpecs.UsableIOPin; on: boolean }[]) {
+  public static async sendToOutputPin(data: { pin: MBSpecs.UsableIOPin; on: boolean }[]) {
     /*     if (!this.isOutputAssigned()) {
           throw new Error('No output microbit is connected, cannot send to pin.');
         }
@@ -813,9 +819,9 @@ class Microbits {
         for (const [key, value] of this.ioPinMessages) {
           this.sendIOPinMessage({ pin: key, on: value != 0 });
         } */
-    data.forEach((state) => {
-      this.getOutput().setIOPin(state.pin, state.on);
-    });
+    for (const state of data) {
+      await this.getOutput().setIOPin(state.pin, state.on);
+    }
   }
 
   public static resetIOPins() {
@@ -824,7 +830,7 @@ class Microbits {
       return;
     }
     StaticConfiguration.supportedPins.forEach(value => {
-      this.sendIOPinMessage({ pin: value, on: false });
+      this.sendIOPinMessage({ pin: value, on: ealse });
     });
   }
 
@@ -848,29 +854,23 @@ class Microbits {
       );
     }
     this.addToServiceActionQueue(this.outputMatrix, dataView); */
-    StaticConfiguration.supportedPins.forEach((pin) => {
-      this.getOutput().setIOPin(pin, false);
+    StaticConfiguration.supportedPins.forEach(async (pin) => {
+      await Microbits.getOutput().setIOPin(pin, false);
     });
   }
 
   public static useInputAsOutput() {
-    /*  if (!this.isInputAssigned()) {
-       throw new Error(
-         'No input microbit has be defined! Please check that it is connected before using it',
-       );
-     }
-     this.assignedOutputMicrobit = this.getInput();
-     this.outputName = this.inputName;
-     this.outputVersion = this.inputVersion;
-     this.outputOrigin = this.inputOrigin;
-     this.outputBuildVersion = this.inputBuildVersion;
- 
-     ConnectionBehaviours.getOutputBehaviour().onAssigned(
-       this.getOutput(),
-       this.outputName,
-     );
-     ConnectionBehaviours.getOutputBehaviour().onConnected(this.outputName);
- 
+    if (this.getInput().getDeviceState() === MicrobitDeviceState.CLOSED) {
+      throw new Error("The input micro:bit is not")
+    }
+    this.isUsingInputAsOutput = true;
+    this.outputBuildVersion = this.inputBuildVersion;
+    this.outputOrigin = this.inputOrigin;
+
+    this.getOutput().getHandler()?.onConnecting(); // Might contain some setup.
+    this.getOutput().getHandler()?.onConnected(this.getInput().getLastVersion());
+    // Remaining ad-hoc logic handled by the input handler
+    /*
      this.listenToOutputServices()
        .then(() => {
          ConnectionBehaviours.getOutputBehaviour().onReady();
@@ -899,7 +899,6 @@ class Microbits {
        .catch(e => {
          console.log(e);
        }); */
-    throw new Error("Not sure how to implement this atm")
   }
 
   public static getInputVersion(): MBSpecs.MBVersion | undefined {
@@ -1047,8 +1046,7 @@ class Microbits {
    * @returns True if the input microbit is from Makecode.
    */
   public static isInputMakecode() {
-    /*     return this.inputOrigin === HexOrigin.MAKECODE; */
-    throw new Error("I am not sure how this is supposed to work");
+    return this.inputOrigin === HexOrigin.MAKECODE;
   }
 
   /**
@@ -1075,12 +1073,12 @@ class Microbits {
 
   public static getInputOrigin(): HexOrigin {
     /*     return this.inputOrigin; */
-    throw new Error("I am not sure how this is supposed to work");
+    return this.inputOrigin;
   }
 
   public static getOutputOrigin(): HexOrigin {
     /*     return this.outputOrigin; */
-    throw new Error("I am not sure how this is supposed to work");
+    return this.outputOrigin;
   }
 
   /**

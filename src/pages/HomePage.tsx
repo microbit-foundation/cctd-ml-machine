@@ -8,9 +8,10 @@ import {
   Image,
   Stack,
   Text,
+  useInterval,
   VStack,
 } from "@chakra-ui/react";
-import { ReactNode, useCallback } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
 import DefaultPageLayout from "../components/DefaultPageLayout";
@@ -135,63 +136,23 @@ const HomePage = () => {
           <VStack gap={5} maxW="container.md">
             <Step
               title="Collect data"
-              image={
-                <HStack w="200px" borderRadius="md" position="relative" mb="5">
-                  <RecordingGraph data={graphData} bgColor="white" w="158px" />
-                  <RecordingGraph
-                    data={graphData}
-                    bgColor="white"
-                    w="158px"
-                    position="absolute"
-                    left="20px"
-                    top="10px"
-                  />
-                  <RecordingGraph
-                    data={graphData}
-                    bgColor="white"
-                    w="158px"
-                    position="absolute"
-                    left="40px"
-                    top="20px"
-                  />
-                </HStack>
-              }
+              image={<CollectDataIllustration />}
               description="Connect a micro:bit to collect data samples of the actions you would like your model to recognise (e.g. ‘waving’ and ‘clapping’)."
             />
             {/* micro:bit AI creator trains a machine learning model to recognise the actions. */}
 
             <Step
               title="Test your model"
-              image={
-                <VStack
-                  w="200px"
-                  bgColor="white"
-                  borderRadius="md"
-                  aspectRatio={288 / 172}
-                  justifyContent="space-evenly"
-                  alignItems="stretch"
-                  p={3}
-                >
-                  <PercentageDisplay value={0.8} alignSelf="center" />
-                  <PercentageMeter value={0.8} />
-                </VStack>
-              }
+              image={<TestModelStepIllustration />}
               description={
                 "Try each action by moving your data collection micro:bit. Does the model detect your actions? Add more data to improve your model."
               }
             />
             <Step
               title="Code"
-              image={
-                <Image
-                  src={blockImage}
-                  alt=""
-                  aspectRatio={288 / 172}
-                  width="200px"
-                />
-              }
+              image={<CodeIllustration />}
               description={
-                "Use Microsoft MakeCode to download the program and machine learning model to your micro:bit. Add more blocks to create your own programs using your model."
+                "Use Microsoft MakeCode to download the program and machine learning model to your micro:bit. Add more blocks to create your own program using your model."
               }
             />
           </VStack>
@@ -224,6 +185,7 @@ const Step = ({ title, image, description }: StepProps) => (
   <HStack
     w="100%"
     justifyContent="space-between"
+    gap={5}
     flexDir={{ base: "column", lg: "row" }}
   >
     <VStack gap={2} alignItems="flex-start">
@@ -235,5 +197,53 @@ const Step = ({ title, image, description }: StepProps) => (
     {image}
   </HStack>
 );
+
+const CollectDataIllustration = () => {
+  const props = {
+    data: graphData,
+    bgColor: "white",
+    w: "158px",
+  };
+  return (
+    <HStack w="200px" position="relative" mb="5">
+      <RecordingGraph {...props} />
+      <RecordingGraph {...props} position="absolute" left="20px" top="10px" />
+      <RecordingGraph {...props} position="absolute" left="40px" top="20px" />
+    </HStack>
+  );
+};
+
+const TestModelStepIllustration = () => {
+  const [value, setValue] = useState(0.75);
+  const colorScheme = value >= 0.8 ? "green.500" : undefined;
+  useInterval(() => {
+    setValue((value) => 0.8 * value + 0.2 * Math.min(1, 2.5 * Math.random()));
+  }, 1500);
+  return (
+    <VStack
+      w="200px"
+      bgColor="white"
+      borderRadius="md"
+      justifyContent="space-between"
+      alignItems="stretch"
+      px={5}
+      py={5}
+      gap={4}
+    >
+      <PercentageDisplay
+        value={value}
+        alignSelf="center"
+        colorScheme={colorScheme}
+      />
+      <PercentageMeter value={value} colorScheme={colorScheme} />
+    </VStack>
+  );
+};
+
+const CodeIllustration = () => {
+  return (
+    <Image src={blockImage} alt="" aspectRatio={288 / 172} width="200px" />
+  );
+};
 
 export default HomePage;

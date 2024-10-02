@@ -24,8 +24,13 @@ import { SessionPageId } from "../pages-config";
 import { createSessionPageUrl } from "../urls";
 import PercentageMeter from "../components/PercentageMeter";
 import PercentageDisplay from "../components/PercentageDisplay";
-import { ArrowDownIcon } from "@chakra-ui/icons";
+import { ArrowDownIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import RecordingGraph from "../components/RecordingGraph";
+import {
+  RiArrowLeftDoubleLine,
+  RiArrowLeftLine,
+  RiArrowRightLine,
+} from "react-icons/ri";
 
 const graphData = {
   x: [
@@ -133,12 +138,27 @@ const HomePage = () => {
           <Heading as="h2" textAlign="center">
             Step by step
           </Heading>
-          <VStack gap={5} maxW="container.md">
+          <HStack gap={5} w="container.md" justifyContent="space-between">
             <Step
               title="Collect data"
               image={<CollectDataIllustration />}
               description="Connect a micro:bit to collect data samples of the actions you would like your model to recognise (e.g. ‘waving’ and ‘clapping’)."
             />
+
+            <VStack>
+              <VStack w="100px" alignItems="center">
+                <RiArrowRightLine />
+                <Text textAlign="center" fontSize="lg" fontWeight="bold">
+                  Train
+                </Text>
+              </VStack>
+              <VStack w="100px" alignItems="center">
+                <RiArrowLeftLine />
+                <Text textAlign="center" fontSize="lg" fontWeight="bold">
+                  Iterate
+                </Text>
+              </VStack>
+            </VStack>
             {/* micro:bit AI creator trains a machine learning model to recognise the actions. */}
 
             <Step
@@ -148,14 +168,20 @@ const HomePage = () => {
                 "Try each action by moving your data collection micro:bit. Does the model detect your actions? Add more data to improve your model."
               }
             />
-            <Step
-              title="Code"
-              image={<CodeIllustration />}
-              description={
-                "Use Microsoft MakeCode to download the program and machine learning model to your micro:bit. Add more blocks to create your own program using your model."
-              }
-            />
-          </VStack>
+          </HStack>
+          <HStack gap={5} w="container.md" mt={5}>
+            <VStack gap={2} alignItems="flex-start">
+              <Heading as="h2" textAlign="center" fontSize="xl">
+                Code
+              </Heading>
+              <Text>
+                Use Microsoft MakeCode to download the program and machine
+                learning model to your micro:bit. Add more blocks to create your
+                own program using your model.
+              </Text>
+            </VStack>
+            <CodeIllustration />
+          </HStack>
         </VStack>
         <VStack gap={8}>
           <Heading as="h2" textAlign="center">
@@ -182,20 +208,17 @@ interface StepProps {
 }
 
 const Step = ({ title, image, description }: StepProps) => (
-  <HStack
-    w="100%"
-    justifyContent="space-between"
-    gap={5}
-    flexDir={{ base: "column", lg: "row" }}
-  >
+  <VStack alignItems="stretch" gap={5} w="64" padding={5} borderRadius="md">
+    <AspectRatio ratio={2 / 1}>
+      <Box display="flex">{image}</Box>
+    </AspectRatio>
     <VStack gap={2} alignItems="flex-start">
       <Heading as="h2" textAlign="center" fontSize="xl">
         {title}
       </Heading>
-      <Text maxW="md">{description}</Text>
+      <Text>{description}</Text>
     </VStack>
-    {image}
-  </HStack>
+  </VStack>
 );
 
 const CollectDataIllustration = () => {

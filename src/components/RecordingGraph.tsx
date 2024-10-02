@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, BoxProps } from "@chakra-ui/react";
 import {
   Chart,
   LineController,
@@ -11,11 +11,11 @@ import { useEffect, useRef } from "react";
 import { XYZData } from "../model";
 import { getConfig as getRecordingChartConfig } from "../recording-graph";
 
-interface RecordingGraphProps {
+interface RecordingGraphProps extends BoxProps {
   data: XYZData;
 }
 
-const RecordingGraph = ({ data }: RecordingGraphProps) => {
+const RecordingGraph = ({ data, ...rest }: RecordingGraphProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -40,6 +40,7 @@ const RecordingGraph = ({ data }: RecordingGraphProps) => {
       borderColor="gray.200"
       width="100%"
       height="100%"
+      {...rest}
     >
       <canvas width="158px" height="95px" ref={canvasRef} />
     </Box>

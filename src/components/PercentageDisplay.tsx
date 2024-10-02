@@ -1,6 +1,6 @@
-import { StackProps, Text } from "@chakra-ui/react";
+import { BoxProps, Text } from "@chakra-ui/react";
 
-interface PercentageDisplayProps extends StackProps {
+interface PercentageDisplayProps extends BoxProps {
   value: number;
   colorScheme?: string;
 }
@@ -8,6 +8,7 @@ interface PercentageDisplayProps extends StackProps {
 const PercentageDisplay = ({
   value,
   colorScheme = "gray.600",
+  ...rest
 }: PercentageDisplayProps) => {
   return (
     <Text
@@ -17,6 +18,7 @@ const PercentageDisplay = ({
       textAlign="center"
       fontSize="xl"
       w="60px"
+      {...rest}
     >{`${Math.round(value * 100)}%`}</Text>
   );
 };

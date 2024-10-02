@@ -55,7 +55,6 @@
   import { GestureData } from '../../script/domain/stores/gesture/Gesture';
 
   // TODO: Shares a lot with 'PatternMatrix'. Extract 'Matrix' component and reuse
-  import microbits from '../../script/microbit-interfacing/Microbits';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { stores } from '../../script/stores/Stores';
 
@@ -64,7 +63,7 @@
   //       If the one in 'OutputGesture.svelte' is used why do we have default value here?
   export const trigger = () => {
     if (Microbits.isOutputReady()) {
-      microbits.setOutputMatrix(matrix);
+      Microbits.setOutputMatrix(matrix);
     }
   };
 

@@ -14,7 +14,13 @@ import type ConnectionBehaviour from './connection-behaviours/ConnectionBehaviou
 import InputMicrobitHandler from './InputMicrobitHandler';
 import TypingUtils from '../TypingUtils';
 import StaticConfiguration from '../../StaticConfiguration';
-import { MBSpecs, Microbit, MicrobitBluetoothDevice, MicrobitDeviceState, MicrobitHandler } from 'microbyte';
+import {
+  MBSpecs,
+  Microbit,
+  MicrobitBluetoothDevice,
+  MicrobitDeviceState,
+  MicrobitHandler,
+} from 'microbyte';
 import { t } from 'svelte-i18n';
 import Logger from '../utils/Logger';
 import { Log } from '@tensorflow/tfjs-core';
@@ -38,10 +44,9 @@ type UARTMessageType = 'g' | 's'; // Gesture or sound
  * Entry point for microbit interfaces
  */
 class Microbits {
-
   private static microbits: Microbit[] = [
     new Microbit(), // Input
-    new Microbit()  // Output (May not be used if input/output is the same, then defer to the above)
+    new Microbit(), // Output (May not be used if input/output is the same, then defer to the above)
   ];
 
   private static inputIndexRef = 0;
@@ -63,6 +68,8 @@ class Microbits {
 
   private static outputHandler = new OutputMicrobitHandler();
   private static inputHandler = new CombinedMicrobitHandler(this.outputHandler);
+
+  private static linkedMicrobit: Microbit = new Microbit();
 
   /*   private static assignedInputMicrobit: MicrobitBluetooth | undefined;
     private static assignedOutputMicrobit: MicrobitBluetooth | undefined;
@@ -849,29 +856,29 @@ class Microbits {
     */
     for (const pin of StaticConfiguration.supportedPins) {
       await this.getOutput().setIOPin(pin, false);
-    };
+    }
   }
 
   public static async setOutputMatrix(matrix: boolean[]) {
     if (this.getOutput().getDeviceState() !== MicrobitDeviceState.CONNECTED) {
       return;
     }
-    const vecMat: boolean[][] = [[], [], [], [], []]
+    const vecMat: boolean[][] = [[], [], [], [], []];
     for (let i = 0; i < matrix.length; i++) {
       const element = matrix[i];
-      const row = Math.floor(i / 5)
-      vecMat[row].push(element)
+      const row = Math.floor(i / 5);
+      vecMat[row].push(element);
     }
-    await this.getOutput().setLEDMatrix(vecMat)
+    await this.getOutput().setLEDMatrix(vecMat);
   }
 
   public static useInputAsOutput() {
     if (this.getInput().getDeviceState() === MicrobitDeviceState.CLOSED) {
-      throw new Error("The input micro:bit is not")
+      throw new Error('The input micro:bit is not');
     }
-    const inputDevice = this.getInput().getDevice()
+    const inputDevice = this.getInput().getDevice();
     if (!inputDevice) {
-      throw new Error("Cannot use input as output. Input has no MicrobitDevice!");
+      throw new Error('Cannot use input as output. Input has no MicrobitDevice!');
     }
     this.outputIndexRef = 0;
     this.outputBuildVersion = this.inputBuildVersion;
@@ -962,7 +969,7 @@ class Microbits {
         const view = MBSpecs.Utility.messageToDataview(`${type}_${value}`);
     
         this.addToServiceActionQueue(this.outputUart, view); */
-    await this.getOutput().sendMessage(`${type}_${value}`)
+    await this.getOutput().sendMessage(`${type}_${value}`);
   }
 
   /**
@@ -1009,13 +1016,7 @@ class Microbits {
    * @returns Whether a microbit was successfully connected
    */
   public static async linkMicrobit() {
-    /*     try {
-          this.linkedMicrobit = await MicrobitUSB.requestConnection();
-        } catch (e) {
-          console.log(e);
-          return Promise.reject(e);
-        } */
-    throw new Error("I am not sure how this is supposed to work");
+    await this.linkedMicrobit.getUsbController().connect();
   }
 
   /**
@@ -1029,7 +1030,7 @@ class Microbits {
     
         return this.linkedMicrobit; */
 
-    throw new Error("I am not sure how this is supposed to work");
+    throw new Error('I am not sure how this is supposed to work');
   }
 
   /**
@@ -1040,7 +1041,7 @@ class Microbits {
           throw new Error('Cannot disconnect USB. No USB microbit could be found');
         }
         await this.getLinked().disconnect(); */
-    throw new Error("I am not sure how this is supposed to work");
+    throw new Error('I am not sure how this is supposed to work');
   }
 
   /**
@@ -1063,14 +1064,20 @@ class Microbits {
    * Flashes the appropriate hex file to the micro:bit which is connected via USB
    * @param progressCallback The callback that is fired each time the progress status is updated
    */
-  public static flashHexToLinked(progressCallback: (progress: number) => void): Promise<void> {
+  public static async flashHexToLinked(
+    progressCallback: (progress: number) => void,
+  ): Promise<void> {
     /*     if (!this.isMicrobitLinked()) {
           throw new Error('Cannot flash to USB, none are connected!');
         }
-        const version = this.getLinked().getModelNumber();
-        const hex = this.hexFiles[version]; // Note: For this we CANNOT use the universal hex file (don't know why)
+        
         return this.getLinked().flashHex(hex, progressCallback); */
-    throw new Error("I am not sure how this is supposed to work");
+    const version = this.getLinked().getUsbController().getModelNumber();
+    const hexFileName = this.hexFiles[version]; // Note: For this we CANNOT use the universal hex file (don't know why)
+    const hexFile = await fetch(hexFileName);
+    const hex = await hexFile.arrayBuffer();
+
+    this.linkedMicrobit.getUsbController().flashHex(hex, progressCallback);
   }
 
   public static async getLinkedFriendlyName(): Promise<string> {
@@ -1078,7 +1085,7 @@ class Microbits {
           throw new Error('Cannot get friendly name from USB, none are connected!');
         }
         return await this.getLinked().getFriendlyName(); */
-    throw new Error("I am not sure how this is supposed to work");
+    return await this.linkedMicrobit.getUsbController().getFriendlyName();
   }
 
   public static getInputOrigin(): HexOrigin {

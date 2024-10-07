@@ -28,8 +28,10 @@
     <p class="mb-5 w-70%">
       {$t('connectMB.usb.done.body4')}
     </p>
-
-    <StandardButton onClick={onConnectBluetoothClick}
-      >{$t('popup.connectMB.main.bluetooth.subtitle')}</StandardButton>
+    <div class="flex flex-row justify-center">
+    <StandardButton onClick={onConnectBluetoothClick}>
+      {$t('popup.connectMB.main.bluetooth.subtitle')}
+    </StandardButton>
   </div>
+</div>
 </main>

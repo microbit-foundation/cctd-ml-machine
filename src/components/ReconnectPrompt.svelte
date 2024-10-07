@@ -47,10 +47,8 @@
       return Microbits.assignOutput(name);
     };
 
-    void connect().then(didSucceed => {
-      if (didSucceed) {
-        $state.offerReconnect = false;
-      }
+    void connect().then(() => {
+      $state.offerReconnect = false;
     });
   };
 </script>

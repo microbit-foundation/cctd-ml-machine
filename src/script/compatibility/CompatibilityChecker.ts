@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
+/// <reference types="w3c-web-usb" />
 
 import Bowser from 'bowser';
 import {

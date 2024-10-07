@@ -72,10 +72,10 @@ test(
       expect(
         filesIncludesExpression(flatten, translationKey),
         "unused translation --> '" +
-        translationKey +
-        "' \n confirm with command .. \n grep -rnw ./src -e '" +
-        translationKey +
-        "'",
+          translationKey +
+          "' \n confirm with command .. \n grep -rnw ./src -e '" +
+          translationKey +
+          "'",
       ).toEqual(true);
     }
   },

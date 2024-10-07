@@ -22,9 +22,6 @@
 </style>
 
 <script lang="ts">
-  import ConnectionBehaviours from './script/microbit-interfacing/connection-behaviours/ConnectionBehaviours';
-  import InputBehaviour from './script/microbit-interfacing/connection-behaviours/InputBehaviour';
-  import OutputBehaviour from './script/microbit-interfacing/connection-behaviours/OutputBehaviour';
   import OverlayView from './views/OverlayView.svelte';
   import SideBarMenuView from './views/SideBarMenuView.svelte';
   import PageContentView from './views/PageContentView.svelte';
@@ -41,9 +38,6 @@
   import { Feature, getFeature } from './script/FeatureToggles';
   import { welcomeLog } from './script/utils/Logger';
   welcomeLog();
-
-  ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
-  ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
 
   if (CookieManager.isReconnectFlagSet()) {
     $state.offerReconnect = true;

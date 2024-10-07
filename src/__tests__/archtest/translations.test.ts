@@ -38,4 +38,4 @@ describe('Translation tests', () => {
   });
 });
 
-export { };
+export {};

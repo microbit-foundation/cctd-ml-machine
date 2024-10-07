@@ -60,11 +60,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
     });
   }
 
-  public onAccelerometerDataReceived(x: number, y: number, z: number): void { }
+  public onAccelerometerDataReceived(x: number, y: number, z: number): void {}
 
-  public onButtonAPressed(state: MBSpecs.ButtonState): void { }
+  public onButtonAPressed(state: MBSpecs.ButtonState): void {}
 
-  public onButtonBPressed(state: MBSpecs.ButtonState): void { }
+  public onButtonBPressed(state: MBSpecs.ButtonState): void {}
 
   public onMessageReceived(data: string): void {
     if (data === 'id_mkcd') {

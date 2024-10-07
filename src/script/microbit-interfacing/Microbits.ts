@@ -14,7 +14,7 @@ import type ConnectionBehaviour from './connection-behaviours/ConnectionBehaviou
 import InputMicrobitHandler from './InputMicrobitHandler';
 import TypingUtils from '../TypingUtils';
 import StaticConfiguration from '../../StaticConfiguration';
-import { MBSpecs, Microbit, MicrobitBluetoothDevice, MicrobitDeviceState } from 'microbyte';
+import { MBSpecs, Microbit, MicrobitBluetoothDevice, MicrobitDeviceState, MicrobitHandler } from 'microbyte';
 import { t } from 'svelte-i18n';
 import Logger from '../utils/Logger';
 import { Log } from '@tensorflow/tfjs-core';
@@ -44,6 +44,9 @@ class Microbits {
     new Microbit()  // Output (May not be used if input/output is the same, then defer to the above)
   ];
 
+  private static inputIndexRef = 0;
+  private static outputIndexRef = 1;
+
   private static isUsingInputAsOutput: boolean = false;
 
   public static hexFiles: { 1: string; 2: string; universal: string } = {
@@ -57,6 +60,10 @@ class Microbits {
 
   private static inputBuildVersion: number | undefined;
   private static outputBuildVersion: number | undefined;
+
+  private static outputHandler = new OutputMicrobitHandler();
+  private static inputHandler = new CombinedMicrobitHandler(this.outputHandler);
+
   /*   private static assignedInputMicrobit: MicrobitBluetooth | undefined;
     private static assignedOutputMicrobit: MicrobitBluetooth | undefined;
     private static inputName: string | undefined;
@@ -168,7 +175,7 @@ class Microbits {
           throw new Error('Cannot get input microbit, it is not assigned!');
         }
         return this.assignedInputMicrobit; */
-    return this.microbits[0];
+    return this.microbits[this.inputIndexRef];
   }
 
   /**
@@ -179,10 +186,7 @@ class Microbits {
           throw new Error('Cannot get output microbit, it is not assigned!');
         }
         return this.assignedOutputMicrobit; */
-    if (this.isUsingInputAsOutput) {
-      return this.microbits[0];
-    }
-    return this.microbits[1];
+    return this.microbits[this.outputIndexRef];
   }
 
   public static setOutputOrigin(origin: HexOrigin) {
@@ -428,8 +432,9 @@ class Microbits {
   private static async connectToInput(name?: string) {
     Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
+    this.inputIndexRef = 0;
     this.getInput().setDevice(bluetoothDevice);
-    this.getInput().setHandler(new CombinedMicrobitHandler(new OutputMicrobitHandler()));
+    this.getInput().setHandler(this.inputHandler);
     this.getInput().setAutoReconnect(true);
     await bluetoothDevice.connect(name);
   }
@@ -600,9 +605,14 @@ class Microbits {
     Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.getOutput().setDevice(bluetoothDevice);
-    this.getOutput().setHandler(new OutputMicrobitHandler());
+    this.getOutput().setHandler(this.outputHandler);
     this.getOutput().setAutoReconnect(true);
     await bluetoothDevice.connect(name);
+    if (this.isInputOutputTheSame()) {
+      this.outputIndexRef = 0;
+    } else {
+      this.outputIndexRef = 1;
+    }
   }
 
   private static inputUartHandler(data: string) {
@@ -712,11 +722,10 @@ class Microbits {
    * Compares the input/output bluetooth device IDs to determine if they are the same device.
    */
   public static isInputOutputTheSame(): boolean {
-    /*     if (!this.isOutputAssigned() || !this.isInputAssigned()) {
-          return false;
-        }
-        return this.getInput().getDevice().id == this.getOutput().getDevice().id; */
-    return this.isUsingInputAsOutput;
+    if (!this.getInput().getId() || !this.getOutput().getId()) {
+      return false;
+    }
+    return this.getInput().getId() === this.getOutput().getId();
   }
 
   /**
@@ -747,8 +756,8 @@ class Microbits {
         }
         this.clearAssignedInputReference();
         this.clearAssignedOutputReference(); */
-    this.getInput().disconnect();
-    this.getOutput().disconnect();
+    this.expelInput();
+    this.expelOutput();
   }
 
   /**
@@ -768,8 +777,13 @@ class Microbits {
           this.disconnectOrFlagOutputGATT();
           this.clearAssignedOutputReference();
         } */
-
-    this.getOutput().disconnect();
+    if (this.isInputOutputTheSame()) {
+      this.outputHandler.onDisconnected();
+      this.outputHandler.onClosed();
+      this.outputIndexRef = 1;
+    } else {
+      this.getOutput().disconnect();
+    }
   }
 
   /**
@@ -824,7 +838,7 @@ class Microbits {
     }
   }
 
-  public static resetIOPins() {
+  public static async resetIOPins() {
     /* this.ioPinMessages = new Map<MBSpecs.UsableIOPin, number>();
     if (!this.isOutputReady()) {
       return;
@@ -832,38 +846,34 @@ class Microbits {
     StaticConfiguration.supportedPins.forEach(value => {
       this.sendIOPinMessage({ pin: value, on: ealse });
     });
+    */
+    for (const pin of StaticConfiguration.supportedPins) {
+      await this.getOutput().setIOPin(pin, false);
+    };
   }
 
-  public static setOutputMatrix(matrix: boolean[]) {
-    if (!this.isOutputAssigned()) {
-      throw new Error('No output microbit is connected, cannot set matrix.');
+  public static async setOutputMatrix(matrix: boolean[]) {
+    if (this.getOutput().getDeviceState() !== MicrobitDeviceState.CONNECTED) {
+      return;
     }
-    if (!this.outputMatrix) {
-      throw new Error(
-        'Cannot send to output matrix, have not subscribed to the matrix service yet!',
-      );
+    const vecMat: boolean[][] = [[], [], [], [], []]
+    for (let i = 0; i < matrix.length; i++) {
+      const element = matrix[i];
+      const row = Math.floor(i / 5)
+      vecMat[row].push(element)
     }
-    const dataView = new DataView(new ArrayBuffer(5));
-    for (let i = 0; i < 5; i++) {
-      dataView.setUint8(
-        i,
-        this.subarray(matrix, i * 5, 5 + i * 5).reduce(
-          (byte, bool) => (byte << 1) | (bool ? 1 : 0),
-          0,
-        ),
-      );
-    }
-    this.addToServiceActionQueue(this.outputMatrix, dataView); */
-    StaticConfiguration.supportedPins.forEach(async (pin) => {
-      await Microbits.getOutput().setIOPin(pin, false);
-    });
+    await this.getOutput().setLEDMatrix(vecMat)
   }
 
   public static useInputAsOutput() {
     if (this.getInput().getDeviceState() === MicrobitDeviceState.CLOSED) {
       throw new Error("The input micro:bit is not")
     }
-    this.isUsingInputAsOutput = true;
+    const inputDevice = this.getInput().getDevice()
+    if (!inputDevice) {
+      throw new Error("Cannot use input as output. Input has no MicrobitDevice!");
+    }
+    this.outputIndexRef = 0;
     this.outputBuildVersion = this.inputBuildVersion;
     this.outputOrigin = this.inputOrigin;
 

@@ -6,8 +6,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import da from './../messages/ui.da.json';
-import en from './../messages/ui.en.json';
+import da from '../../messages/ui.da.json';
+import en from '../../messages/ui.en.json';
 
 describe('Translation tests', () => {
   test('Should be same number of translations', () => {
@@ -38,4 +38,4 @@ describe('Translation tests', () => {
   });
 });
 
-export {};
+export { };

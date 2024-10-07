@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
+import { MBSpecs } from 'microbyte';
 import { MockBluetoothCharacteristicProperties } from './mock-bluetooth';
 
 class MockBluetoothAccelerometerService implements BluetoothRemoteGATTService {
@@ -18,13 +18,13 @@ class MockBluetoothAccelerometerService implements BluetoothRemoteGATTService {
     this.characteristic = new MockBluetoothAccelerometerCharacteristic(this);
   }
 
-  oncharacteristicvaluechanged(ev: Event): any {}
+  oncharacteristicvaluechanged(ev: Event): any { }
 
-  onserviceadded(ev: Event): any {}
+  onserviceadded(ev: Event): any { }
 
-  onservicechanged(ev: Event): any {}
+  onservicechanged(ev: Event): any { }
 
-  onserviceremoved(ev: Event): any {}
+  onserviceremoved(ev: Event): any { }
 
   addEventListener(
     type: 'serviceadded',
@@ -63,7 +63,7 @@ class MockBluetoothAccelerometerService implements BluetoothRemoteGATTService {
       | EventListenerOrEventListenerObject
       | null,
     useCapture?: boolean | AddEventListenerOptions,
-  ): void {}
+  ): void { }
 
   dispatchEvent(event: Event): boolean;
   dispatchEvent(event: Event): boolean;
@@ -110,12 +110,11 @@ class MockBluetoothAccelerometerService implements BluetoothRemoteGATTService {
     type: string,
     callback: EventListenerOrEventListenerObject | null,
     options?: EventListenerOptions | boolean,
-  ): void {}
+  ): void { }
 }
 
 export class MockBluetoothAccelerometerCharacteristic
-  implements BluetoothRemoteGATTCharacteristic
-{
+  implements BluetoothRemoteGATTCharacteristic {
   readonly properties: BluetoothCharacteristicProperties =
     new MockBluetoothCharacteristicProperties();
   readonly service: BluetoothRemoteGATTService;
@@ -125,7 +124,7 @@ export class MockBluetoothAccelerometerCharacteristic
     this.service = service;
   }
 
-  oncharacteristicvaluechanged(ev: Event): any {}
+  oncharacteristicvaluechanged(ev: Event): any { }
 
   addEventListener(
     type: 'characteristicvaluechanged',
@@ -154,7 +153,7 @@ export class MockBluetoothAccelerometerCharacteristic
       | EventListenerOrEventListenerObject
       | null,
     useCapture?: boolean | AddEventListenerOptions,
-  ): void {}
+  ): void { }
 
   dispatchEvent(event: Event): boolean;
   dispatchEvent(event: Event): boolean;
@@ -192,7 +191,7 @@ export class MockBluetoothAccelerometerCharacteristic
     type: string,
     callback: EventListenerOrEventListenerObject | null,
     options?: EventListenerOptions | boolean,
-  ): void {}
+  ): void { }
 
   startNotifications(): Promise<BluetoothRemoteGATTCharacteristic> {
     return Promise.resolve(undefined as unknown as BluetoothRemoteGATTCharacteristic);

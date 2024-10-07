@@ -7,8 +7,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { stores } from '../script/stores/Stores';
-import TestMLModelTrainer from './mocks/mlmodel/TestMLModelTrainer';
+import { stores } from '../../script/stores/Stores';
+import TestMLModelTrainer from '../mocks/mlmodel/TestMLModelTrainer';
 
 describe('Classifier tests', () => {
   test('Changing matrix does not mark model as untrained', async () => {

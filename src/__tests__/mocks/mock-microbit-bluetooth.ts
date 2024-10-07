@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
 import MockInfoService, {
   MockBluetoothModelNumberCharacteristic,
 } from './mock-bluetooth-info-service';
 import MockBluetoothAccelerometerService from './mock-bluetooth-accelerometer-service';
 import MockBluetoothGattservice from './mock-bluetooth-gattservice';
+import { MBSpecs } from 'microbyte';
 
 class MockBTDevice implements BluetoothDevice {
   readonly id: string = '';

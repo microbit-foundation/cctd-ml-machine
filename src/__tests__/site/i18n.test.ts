@@ -11,7 +11,7 @@ import { MockInstance } from 'vitest';
 import { spyOn } from '@vitest/spy';
 
 describe('Initialization tests', () => {
-  let windowSpy: MockInstance<[], any>;
+  let windowSpy: MockInstance<any>;
 
   beforeEach(() => {
     windowSpy = spyOn(window, 'window', 'get');
@@ -29,7 +29,7 @@ describe('Initialization tests', () => {
         languages: ['da', 'en'],
       },
     }));
-    const i18n = await import('../i18n');
+    const i18n = await import('../../i18n');
     const getText = get(i18n.t);
 
     const translatedText = getText('alert.isRecording');
@@ -43,7 +43,7 @@ describe('Initialization tests', () => {
         languages: ['random-language'],
       },
     }));
-    const i18n = await import('../i18n');
+    const i18n = await import('../../i18n');
     const getText = get(i18n.t);
 
     const translatedText = getText('alert.isRecording');

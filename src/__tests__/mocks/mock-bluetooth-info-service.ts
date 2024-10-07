@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
-import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
 import util from 'util';
 import { MockBluetoothCharacteristicProperties } from './mock-bluetooth';
+import { MBSpecs } from 'microbyte';
 
 class MockInfoService implements BluetoothRemoteGATTService {
   readonly device: BluetoothDevice;
@@ -19,13 +19,13 @@ class MockInfoService implements BluetoothRemoteGATTService {
     this.device = device;
   }
 
-  oncharacteristicvaluechanged(ev: Event): any {}
+  oncharacteristicvaluechanged(ev: Event): any { }
 
-  onserviceadded(ev: Event): any {}
+  onserviceadded(ev: Event): any { }
 
-  onservicechanged(ev: Event): any {}
+  onservicechanged(ev: Event): any { }
 
-  onserviceremoved(ev: Event): any {}
+  onserviceremoved(ev: Event): any { }
 
   withModelNumber(modelNumberCharacteristic: BluetoothRemoteGATTCharacteristic) {
     this.modelNumberCharacteristic = modelNumberCharacteristic;
@@ -69,7 +69,7 @@ class MockInfoService implements BluetoothRemoteGATTService {
       | EventListenerOrEventListenerObject
       | null,
     useCapture?: boolean | AddEventListenerOptions,
-  ): void {}
+  ): void { }
 
   dispatchEvent(event: Event): boolean;
   dispatchEvent(event: Event): boolean;
@@ -116,12 +116,11 @@ class MockInfoService implements BluetoothRemoteGATTService {
     type: string,
     callback: EventListenerOrEventListenerObject | null,
     options?: EventListenerOptions | boolean,
-  ): void {}
+  ): void { }
 }
 
 export class MockBluetoothModelNumberCharacteristic
-  implements BluetoothRemoteGATTCharacteristic
-{
+  implements BluetoothRemoteGATTCharacteristic {
   readonly properties: BluetoothCharacteristicProperties =
     new MockBluetoothCharacteristicProperties();
   readonly service: BluetoothRemoteGATTService;
@@ -134,7 +133,7 @@ export class MockBluetoothModelNumberCharacteristic
     this.service = service;
   }
 
-  oncharacteristicvaluechanged(ev: Event): any {}
+  oncharacteristicvaluechanged(ev: Event): any { }
 
   addEventListener(
     type: 'characteristicvaluechanged',
@@ -163,7 +162,7 @@ export class MockBluetoothModelNumberCharacteristic
       | EventListenerOrEventListenerObject
       | null,
     useCapture?: boolean | AddEventListenerOptions,
-  ): void {}
+  ): void { }
 
   dispatchEvent(event: Event): boolean;
   dispatchEvent(event: Event): boolean;
@@ -209,7 +208,7 @@ export class MockBluetoothModelNumberCharacteristic
     type: string,
     callback: EventListenerOrEventListenerObject | null,
     options?: EventListenerOptions | boolean,
-  ): void {}
+  ): void { }
 
   startNotifications(): Promise<BluetoothRemoteGATTCharacteristic> {
     return Promise.reject(undefined);

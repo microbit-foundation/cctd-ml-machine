@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import { MBSpecs, MicrobitHandler } from 'microbyte';
 import { ModelView, onCatastrophicError, state } from '../stores/uiStore';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
@@ -55,11 +60,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
     });
   }
 
-  public onAccelerometerDataReceived(x: number, y: number, z: number): void {}
+  public onAccelerometerDataReceived(x: number, y: number, z: number): void { }
 
-  public onButtonAPressed(state: MBSpecs.ButtonState): void {}
+  public onButtonAPressed(state: MBSpecs.ButtonState): void { }
 
-  public onButtonBPressed(state: MBSpecs.ButtonState): void {}
+  public onButtonBPressed(state: MBSpecs.ButtonState): void { }
 
   public onMessageReceived(data: string): void {
     if (data === 'id_mkcd') {

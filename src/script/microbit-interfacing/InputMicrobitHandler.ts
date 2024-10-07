@@ -1,3 +1,8 @@
+/**
+ * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import { MBSpecs, MicrobitHandler } from 'microbyte';
 import Logger from '../utils/Logger';
 import { ModelView, buttonPressed, onCatastrophicError, state } from '../stores/uiStore';

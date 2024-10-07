@@ -378,7 +378,7 @@ class Microbits {
     const hexFile = await fetch(hexFileName);
     const hex = await hexFile.arrayBuffer();
 
-    this.linkedMicrobit.getUsbController().flashHex(hex, progressCallback);
+    await this.linkedMicrobit.getUsbController().flashHex(hex, progressCallback);
   }
 
   public static async getLinkedFriendlyName(): Promise<string> {

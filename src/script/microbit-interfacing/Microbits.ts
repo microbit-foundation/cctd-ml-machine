@@ -101,7 +101,7 @@ class Microbits {
   }
 
   /**
-   * Attempts to assign and connect via bluetooth, using the given name. 
+   * Attempts to assign and connect via bluetooth, using the given name.
    * If no name is given, it will search for any nearby microbit.
    */
   public static async connectInput(name?: string) {

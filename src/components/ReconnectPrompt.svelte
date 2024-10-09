@@ -42,9 +42,9 @@
 
     const connect = () => {
       if (connectState == DeviceRequestStates.INPUT) {
-        return Microbits.assignInput(name);
+        return Microbits.connectInput(name);
       }
-      return Microbits.assignOutput(name);
+      return Microbits.connectOutput(name);
     };
 
     void connect().then(() => {

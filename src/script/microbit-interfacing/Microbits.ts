@@ -47,9 +47,6 @@ class Microbits {
   private static outputOrigin = HexOrigin.UNKNOWN;
   private static inputOrigin = HexOrigin.UNKNOWN;
 
-  private static inputBuildVersion: number | undefined;
-  private static outputBuildVersion: number | undefined;
-
   private static outputHandler = new OutputMicrobitHandler();
   private static inputHandler = new CombinedMicrobitHandler(this.outputHandler);
 
@@ -82,13 +79,6 @@ class Microbits {
   }
 
   /**
-   * Whether the microbit assigned as output is currently connected
-   */
-  public static isOutputReady(): boolean {
-    return this.isOutputConnected();
-  }
-
-  /**
    * The input MicrobitBluetooth object
    */
   public static getInput(): Microbit {
@@ -111,20 +101,10 @@ class Microbits {
   }
 
   /**
-   * Attempts to assign and connect via bluetooth, without a name.
+   * Attempts to assign and connect via bluetooth, using the given name. 
+   * If no name is given, it will search for any nearby microbit.
    */
-  public static async assignInputNoName(): Promise<void> {
-    await this.connectToInput();
-  }
-
-  /**
-   * Attempts to assign and connect via bluetooth, using the given name.
-   */
-  public static async assignInput(name: string): Promise<void> {
-    await this.connectToInput(name);
-  }
-
-  private static async connectToInput(name?: string) {
+  public static async connectInput(name?: string) {
     Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.inputIndexRef = 0;
@@ -135,24 +115,10 @@ class Microbits {
   }
 
   /**
-   * Attempts to assign and connect via bluetooth.
-   * @param name The expected name of the microbit.
-   * @return Returns true if the connection was successful, else false.
+   * Attempts to connect to a microbit, using it as output.
+   * If no name is provided, it will search for any nearby micro:bit.
    */
-  public static async assignOutputNoName(): Promise<void> {
-    await this.connectToOutput();
-  }
-
-  /**
-   * Attempts to assign and connect via bluetooth.
-   * @param name The expected name of the microbit.
-   * @return Returns true if the connection was successful, else false.
-   */
-  public static async assignOutput(name: string): Promise<void> {
-    await this.connectToOutput(name);
-  }
-
-  private static async connectToOutput(name?: string): Promise<void> {
+  public static async connectOutput(name?: string): Promise<void> {
     Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.getOutput().setDevice(bluetoothDevice);
@@ -164,28 +130,6 @@ class Microbits {
     } else {
       this.outputIndexRef = 1;
     }
-  }
-
-  public static setInputBuildVersion(version: number) {
-    this.inputBuildVersion = version;
-  }
-
-  public static setOutputBuildVersion(version: number) {
-    this.outputBuildVersion = version;
-  }
-
-  /**
-   * Returns the reference to the connected output microbit. Throws error if none are connected.
-   */
-  public static getAssignedOutput(): Microbit {
-    return this.getOutput();
-  }
-
-  /**
-   * Returns the reference to the connected input microbit. Throws error if none are connected.
-   */
-  public static getAssignedInput(): Microbit {
-    return this.getInput();
   }
 
   /**
@@ -203,9 +147,9 @@ class Microbits {
    * If the function is called while the micro:bit is reconnecting, it will be disconnected as soon as it has connected.
    * @throws {Error} Throws an error if no micro:bit is assigned.
    */
-  public static expelInputAndOutput() {
-    this.expelInput();
-    this.expelOutput();
+  public static disconnectInputAndOutput() {
+    this.disconnectInput();
+    this.disconnectOutput();
   }
 
   /**
@@ -213,7 +157,7 @@ class Microbits {
    * If the function is called while the micro:bit is reconnecting, it will be disconnected as soon as it has connected.
    * @throws {Error} Throws an error if no output micro:bit is assigned.
    */
-  public static expelOutput() {
+  public static disconnectOutput() {
     if (this.isInputOutputTheSame()) {
       this.outputHandler.onDisconnected();
       this.outputHandler.onClosed();
@@ -228,7 +172,7 @@ class Microbits {
    * If the function is called while the micro:bit is reconnecting, it will be disconnected as soon as it has connected.
    * @throws {Error} Throws an error if no input micro:bit is assigned.
    */
-  public static expelInput() {
+  public static disconnectInput() {
     this.getInput().disconnect();
   }
 
@@ -270,28 +214,11 @@ class Microbits {
       throw new Error('Cannot use input as output. Input has no MicrobitDevice!');
     }
     this.outputIndexRef = 0;
-    this.outputBuildVersion = this.inputBuildVersion;
     this.outputOrigin = this.inputOrigin;
 
     this.getOutput().getHandler()?.onConnecting(); // Might contain some setup.
     this.getOutput().getHandler()?.onConnected(this.getInput().getLastVersion());
     // Remaining ad-hoc logic handled by the input handler
-  }
-
-  public static getInputVersion(): MBSpecs.MBVersion | undefined {
-    return this.getInput().getLastVersion();
-  }
-
-  public static getOutputVersion(): MBSpecs.MBVersion | undefined {
-    return this.getOutput().getLastVersion();
-  }
-
-  public static getOutputName(): string | undefined {
-    return this.getOutput().getLastName();
-  }
-
-  public static getInputName(): string | undefined {
-    return this.getInput().getLastName();
   }
 
   /**

@@ -56,15 +56,7 @@
       })
       .catch((e: Error) => {
         // Couldn't find name. Set to manual transfer progress instead
-
         $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
-        /* TODO: Disabled the broken firmware warning for now
-        if (e.message.includes('No valid interfaces found')) {
-          // Edge case, caused by a bad micro:bit firmware
-          $connectionDialogState.connectionState = ConnectDialogStates.BAD_FIRMWARE;
-        } else {
-        }
-*/
       });
   }
 

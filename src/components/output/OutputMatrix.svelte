@@ -62,7 +62,7 @@
   // TODO: Which is used. The function defined here. Or the one in 'OutputGesture.svelte'
   //       If the one in 'OutputGesture.svelte' is used why do we have default value here?
   export const trigger = () => {
-    if (Microbits.isOutputReady()) {
+    if (Microbits.isOutputConnected()) {
       Microbits.setOutputMatrix(matrix);
     }
   };

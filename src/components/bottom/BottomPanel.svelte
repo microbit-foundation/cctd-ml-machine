@@ -26,11 +26,11 @@
   };
 
   const inputDisconnectButtonClicked = () => {
-    Microbits.expelInputAndOutput();
+    Microbits.disconnectInputAndOutput();
   };
 
   const outputDisconnectButtonClicked = () => {
-    Microbits.expelOutput();
+    Microbits.disconnectOutput();
   };
 
   let isLive3DOpen = false;

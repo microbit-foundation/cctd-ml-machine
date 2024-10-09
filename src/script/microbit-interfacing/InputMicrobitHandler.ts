@@ -91,7 +91,6 @@ class InputMicrobitHandler implements MicrobitHandler {
 
     if (data.includes('vi_')) {
       const version = parseInt(data.substring(3));
-      Microbits.setInputBuildVersion(version);
       const isOutdated = StaticConfiguration.isMicrobitOutdated(
         Microbits.getInputOrigin(),
         version,

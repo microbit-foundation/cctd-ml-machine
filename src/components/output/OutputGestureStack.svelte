@@ -104,7 +104,7 @@
   }
 
   function setOutputPin(on: boolean) {
-    if (!Microbits.isOutputReady()) {
+    if (!Microbits.isOutputConnected()) {
       return;
     }
 
@@ -137,7 +137,7 @@
       return;
     }
 
-    if (Microbits.getAssignedOutput().getLastVersion() === 1) {
+    if (Microbits.getOutput().getLastVersion() === 1) {
       const sound = new Audio(selectedSound.path);
       void sound.play();
     } else {

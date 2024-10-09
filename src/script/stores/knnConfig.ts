@@ -10,6 +10,9 @@ export type KNNSettings = {
   k: number;
 };
 
-export const knnConfig = new PersistantWritable({
-  k: StaticConfiguration.defaultKnnNeighbourCount,
-}, 'knnConfig');
+export const knnConfig = new PersistantWritable(
+  {
+    k: StaticConfiguration.defaultKnnNeighbourCount,
+  },
+  'knnConfig',
+);

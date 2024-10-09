@@ -18,7 +18,7 @@ const initialLocale = browserLang({
   fallback: 'en',
 });
 
-const persistantLocale = new PersistantWritable(initialLocale, "lang");
+const persistantLocale = new PersistantWritable(initialLocale, 'lang');
 
 locale.subscribe(newLocal => {
   if (newLocal) {

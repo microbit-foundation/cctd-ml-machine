@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { LossTrainingIteration } from '../../components/graphs/LossGraphUtil';
 import ModelTrainer, { TrainingData } from '../domain/ModelTrainer';
 import LayersMLModel from './LayersMLModel';
 import * as tf from '@tensorflow/tfjs';
@@ -13,6 +12,11 @@ export type LayersModelTrainingSettings = {
   validationSplit: number;
   learningRate: number;
   batchSize: number;
+};
+
+export type LossTrainingIteration = {
+  loss: number;
+  epoch: number;
 };
 
 class LayersModelTrainer implements ModelTrainer<LayersMLModel> {

@@ -8,6 +8,7 @@ import Filter from '../domain/Filter';
 import { FilterType } from '../domain/FilterTypes';
 
 abstract class FilterWithMaths implements Filter {
+  abstract getMinNumberOfSamples(): number;
   abstract filter(inValues: number[]): number;
 
   abstract getType(): FilterType;

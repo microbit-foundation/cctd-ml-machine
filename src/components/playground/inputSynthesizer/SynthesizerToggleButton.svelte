@@ -4,13 +4,13 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import accelerometerSynthesizer from './AccelerometerDataSynthesizer';
+  import liveDataSynthesizer from './LiveDataSynthesizer';
 
   const toggleSynthesizer = () => {
-    if (accelerometerSynthesizer.isActive()) {
-      accelerometerSynthesizer.stop();
+    if (liveDataSynthesizer.isActive()) {
+      liveDataSynthesizer.stop();
     } else {
-      accelerometerSynthesizer.start();
+      liveDataSynthesizer.start();
     }
   };
 </script>
@@ -18,8 +18,7 @@
 <div>
   <button
     class="border-1 border-primary bg-white rounded px-4 py-2"
-    on:click={toggleSynthesizer}
-    >{$accelerometerSynthesizer.isActive
-      ? 'Stop synthesizer'
-      : 'Start synthesizer'}</button>
+    on:click={toggleSynthesizer}>
+    {$liveDataSynthesizer.isActive ? 'Stop synthesizer' : 'Start synthesizer'}
+  </button>
 </div>

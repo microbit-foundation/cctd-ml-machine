@@ -14,17 +14,18 @@
   import NewGestureButton from '../components/NewGestureButton.svelte';
   import StandardButton from '../components/buttons/StandardButton.svelte';
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
-  import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
-  import { gestures } from '../script/stores/Stores';
   import FileUtility from '../script/repository/FileUtility';
   import { get } from 'svelte/store';
   import exampleDataset from '../exampleDataset.json';
   import { GestureData } from '../script/domain/stores/gesture/Gesture';
+  import { stores } from '../script/stores/Stores';
+  import PleaseConnect from '../components/PleaseConnect.svelte';
 
   let isConnectionDialogOpen = false;
+  const gestures = stores.getGestures();
 
   $: hasSomeData = (): boolean => {
     if ($gestures.length === 0) {
@@ -88,7 +89,7 @@
   </div>
   {#if !hasSomeData() && !$state.isInputConnected}
     <div class="mt-4">
-      <PleaseConnectFirst />
+      <PleaseConnect />
     </div>
   {:else}
     <div class="mt-4 ml-3">

@@ -21,7 +21,7 @@
 
   import { onMount } from 'svelte';
   import { Readable } from 'svelte/store';
-  import { LossTrainingIteration } from './LossGraphUtil';
+  import { LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
 
   export let loss: Readable<LossTrainingIteration[]>;
   export let maxX: number | undefined = undefined;
@@ -71,7 +71,7 @@
             },
           },
           y: {
-            type: 'logarithmic',
+            type: 'linear',
             min: 0,
             max: 1,
             grid: {

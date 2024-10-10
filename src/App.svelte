@@ -39,6 +39,8 @@
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Router from './router/Router.svelte';
   import { Feature, getFeature } from './script/FeatureToggles';
+  import { welcomeLog } from './script/utils/Logger';
+  welcomeLog();
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());

@@ -17,6 +17,7 @@ import ClassifierRepository from '../domain/ClassifierRepository';
 import Gesture, { GestureID } from '../domain/stores/gesture/Gesture';
 import Classifier from '../domain/stores/Classifier';
 import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
+import Confidences from '../domain/stores/Confidences';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
@@ -24,15 +25,12 @@ export type TrainerConsumer = <T extends MLModel>(
 
 class LocalStorageClassifierRepository implements ClassifierRepository {
   private static readonly PERSISTANT_FILTERS_KEY = 'filters';
-  private static confidences: Writable<Map<GestureID, number>>;
   private static mlModel: Writable<MLModel | undefined>;
   private static filters: Filters;
   private static persistedFilters: PersistantWritable<FilterType[]>;
   private classifierFactory: ClassifierFactory;
 
-  constructor() {
-    const initialConfidence = new Map<GestureID, number>();
-    LocalStorageClassifierRepository.confidences = writable(initialConfidence);
+  constructor(private confidences: Confidences) {
     LocalStorageClassifierRepository.mlModel = writable(undefined);
     LocalStorageClassifierRepository.persistedFilters = new PersistantWritable(
       FilterTypes.toIterable(),
@@ -78,13 +76,11 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
     return <T extends MLModel>(trainer: ModelTrainer<T>) => this.trainModel(trainer);
   }
 
-  private setGestureConfidence(gestureId: GestureID, confidence: number) {
+  public setGestureConfidence(gestureId: GestureID, confidence: number) {
     if (confidence < 0 || confidence > 1) {
       throw new Error('Cannot set gesture confidence. Must be in the range 0.0-1.0');
     }
-    const newConfidences = get(LocalStorageClassifierRepository.confidences);
-    newConfidences.set(gestureId, confidence);
-    LocalStorageClassifierRepository.confidences.set(newConfidences);
+    this.confidences.setConfidence(gestureId, confidence);
   }
 
   private getFilters(): Writable<Filter[]> {
@@ -113,20 +109,25 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
   }
 
   public getGestureConfidence(gestureId: number): GestureConfidence {
-    const derivedConfidence = derived(
-      [LocalStorageClassifierRepository.confidences],
-      stores => {
-        const confidenceStore = stores[0];
-        if (confidenceStore.has(gestureId)) {
-          return confidenceStore.get(gestureId) as number;
-        }
-        return 0;
-      },
-    );
+    const derivedConfidence = derived([this.confidences], stores => {
+      const confidenceStore = stores[0];
+      if (confidenceStore.has(gestureId)) {
+        return confidenceStore.get(gestureId) as number;
+      }
+      throw new Error("No confidence found for gesture with id '" + gestureId + "'");
+    });
     return new GestureConfidence(
       StaticConfiguration.defaultRequiredConfidence,
       derivedConfidence,
     );
+  }
+
+  public hasGestureConfidence(gestureId: number): boolean {
+    return get(this.confidences).has(gestureId);
+  }
+
+  public getConfidences(): Confidences {
+    return this.confidences;
   }
 }
 

@@ -3,43 +3,101 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import LocalStorageRepositories from '../repository/LocalStorageRepositories';
-import PollingPredictorEngine from '../engine/PollingPredictorEngine';
-import MicrobitAccelerometerLiveData, {
-  MicrobitAccelerometerData,
-} from '../livedata/MicrobitAccelerometerData';
-import LiveDataBuffer from '../domain/LiveDataBuffer';
-import StaticConfiguration from '../../StaticConfiguration';
+
+import {
+  Invalidator,
+  Readable,
+  Subscriber,
+  Unsubscriber,
+  Writable,
+  derived,
+  get,
+  writable,
+} from 'svelte/store';
 import Repositories from '../domain/Repositories';
-import Gestures from '../domain/stores/gesture/Gestures';
 import Classifier from '../domain/stores/Classifier';
 import Engine from '../domain/stores/Engine';
 import LiveData from '../domain/stores/LiveData';
-import { derived } from 'svelte/store';
+import { LiveDataVector } from '../domain/stores/LiveDataVector';
+import Gestures from '../domain/stores/gesture/Gestures';
+import PollingPredictorEngine from '../engine/PollingPredictorEngine';
+import LocalStorageRepositories from '../repository/LocalStorageRepositories';
+import Logger from '../utils/Logger';
+import Confidences from '../domain/stores/Confidences';
 
-const repositories: Repositories = new LocalStorageRepositories();
+type StoresType = {
+  liveData: LiveData<LiveDataVector>;
+};
+/**
+ * Stores is a container object, that allows for management of global stores.
+ */
+class Stores implements Readable<StoresType> {
+  private liveData: Writable<LiveData<LiveDataVector> | undefined>;
+  private engine: Engine | undefined;
+  private classifier: Classifier;
+  private gestures: Gestures;
+  private confidences: Confidences;
 
-const gestures: Gestures = new Gestures(repositories.getGestureRepository());
-const classifier: Classifier = repositories.getClassifierRepository().getClassifier();
+  public constructor() {
+    this.liveData = writable(undefined);
+    this.engine = undefined;
+    const repositories: Repositories = new LocalStorageRepositories();
+    this.classifier = repositories.getClassifierRepository().getClassifier();
+    this.confidences = repositories.getClassifierRepository().getConfidences();
+    this.gestures = new Gestures(repositories.getGestureRepository());
+  }
 
-const accelerometerDataBuffer = new LiveDataBuffer<MicrobitAccelerometerData>(
-  StaticConfiguration.accelerometerLiveDataBufferSize,
-);
-const liveAccelerometerData: LiveData<MicrobitAccelerometerData> =
-  new MicrobitAccelerometerLiveData(accelerometerDataBuffer);
+  public subscribe(
+    run: Subscriber<StoresType>,
+    invalidate?: Invalidator<StoresType> | undefined,
+  ): Unsubscriber {
+    return derived([this.liveData], stores => {
+      if (!stores[0]) {
+        throw new Error(
+          'Cannot subscribe to stores, livedata is null or undefined, set it user setLiveData(...) first',
+        );
+      }
+      return {
+        liveData: stores[0],
+      };
+    }).subscribe(run, invalidate);
+  }
 
-const engine: Engine = new PollingPredictorEngine(classifier, liveAccelerometerData);
+  public setLiveData<T extends LiveData<LiveDataVector>>(liveDataStore: T): T {
+    Logger.log('stores', 'setting live data');
+    if (!liveDataStore) {
+      throw new Error('Cannot set live data store to undefined/null');
+    }
+    this.liveData.set(liveDataStore);
 
-// I'm not sure if this one should be
-const confidences = derived([gestures, ...gestures.getGestures()], stores => {
-  const confidenceMap = new Map();
+    // We stop the previous engine from making predictions
+    if (this.engine) {
+      this.engine.stop();
+    }
+    this.engine = new PollingPredictorEngine(this.classifier, liveDataStore);
+    return get(this.liveData) as T;
+  }
 
-  const [_, ...gestureStores] = stores;
-  gestureStores.forEach(store => {
-    confidenceMap.set(store.ID, store.confidence);
-  });
-  return confidenceMap;
-});
-// Export the stores here. Please be mindful when exporting stores, avoid whenever possible.
-// This helps us avoid leaking too many objects, that aren't meant to be interacted with
-export { engine, gestures, classifier, liveAccelerometerData, confidences };
+  public getClassifier(): Classifier {
+    return this.classifier;
+  }
+
+  public getGestures(): Gestures {
+    return this.gestures;
+  }
+
+  public getEngine(): Engine {
+    if (!this.engine) {
+      throw new Error(
+        'Cannot get engine store, the liveData store has not been set. You must set it using setLiveData(...)',
+      );
+    }
+    return this.engine;
+  }
+
+  public getConfidences(): Confidences {
+    return this.confidences;
+  }
+}
+
+export const stores = new Stores();

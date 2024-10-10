@@ -35,8 +35,16 @@
 <script lang="ts">
   import TypingUtils from './../../script/TypingUtils';
   import windi from './../../../windi.config.js';
+  import { SvelteComponent } from 'svelte';
 
-  type variants = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight' | 'disabled';
+  type variants =
+    | 'secondary'
+    | 'primary'
+    | 'warning'
+    | 'info'
+    | 'infolight'
+    | 'disabled'
+    | string;
 
   export let color: variants = 'secondary';
   export let onClick: (e: Event) => void = TypingUtils.emptyFunction;
@@ -55,12 +63,14 @@
     infolight: windi.theme.extend.colors.infolight,
     disabled: windi.theme.extend.colors.disabled,
   };
+  const isKey = Object.keys(bgColors).includes(color);
+  const colorParam = isKey ? bgColors[disabled ? 'disabled' : color] : color;
 </script>
 
-<div class="grid grid-cols-1 content-center place-items-center">
+<div>
   <button
     {disabled}
-    style="--color: {bgColors[disabled ? 'disabled' : color]}
+    style="--color: {colorParam}
     ; --border-width: {bold ? '2px' : '1px'}"
     class="outline-none rounded-full"
     class:shadow-md={shadows}
@@ -73,6 +83,8 @@
     class:cursor-pointer={!disabled}
     class:cursor-default={disabled}
     on:click={onClick}>
-    <slot />
+    <div class="flex flex-row justify-between justify-center items-center">
+      <slot />
+    </div>
   </button>
 </div>

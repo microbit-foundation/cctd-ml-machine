@@ -10,6 +10,8 @@ import Logger from './utils/Logger';
 export enum Feature {
   KNN_MODEL = 'knnModel',
   TITLE = 'title',
+  LOSS_GRAPH = 'lossGraph',
+  MAKECODE = 'makecode',
 }
 
 export const hasFeature = (feature: Feature): boolean => {

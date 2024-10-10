@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
@@ -8,11 +8,10 @@
  */
 
 import fs from 'fs';
-import 'jest-expect-message';
 import * as path from 'path';
 
 // Place files you wish to ignore by name in here
-const ignoredFiles: string[] = ['.DS_Store'];
+const ignoredFiles: string[] = ['.DS_Store', 'ui.da.json', 'ui.en.json', 'README.md'];
 const directoriesToScan = ['./src/', './microbit/v2/source/', './microbit/v1/source/'];
 
 const licenseIdentifierStringContributors =
@@ -36,6 +35,7 @@ const readDirectory = (directory: string, ignoreList: string[]): DirectoryConten
   const filesRead = fs.readdirSync(directory);
   filesRead.forEach(file => {
     if (ignoreList.includes(file)) return;
+    if (file.endsWith('.json')) return; // Json cant have comments
     const fileLocation = path.join(directory, file);
     const stats = fs.statSync(fileLocation);
     if (stats.isFile()) {
@@ -79,7 +79,7 @@ describe('License identifier tests', () => {
   test(
     'All files should contain license identifier',
     () => {
-      const flatten = directoriesToScan.reduce((acc: any, current) => {
+      const flatten = directoriesToScan.reduce((acc: string[], current) => {
         return acc.concat(flattenDirectory(current));
       }, []);
 

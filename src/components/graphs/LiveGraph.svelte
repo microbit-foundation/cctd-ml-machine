@@ -6,28 +6,59 @@
 
 <script lang="ts">
   import { state } from '../../script/stores/uiStore';
-  import { currentData, settings } from '../../script/stores/mlStore';
   import { onMount } from 'svelte';
-  import { get, type Unsubscriber } from 'svelte/store';
+  import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
+  import LiveData from '../../script/domain/stores/LiveData';
+  import StaticConfiguration from '../../StaticConfiguration';
+  import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
+  import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
+  import { stores } from '../../script/stores/Stores';
+
+  /**
+   * TimesSeries, but with the data array added.
+   * `data[i][0]` is the timestamp,
+   * `data[i][1]` is the value,
+   */
+  type TimeSeriesWithData = TimeSeries & { data: number[][] };
+  const classifier = stores.getClassifier();
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
+  export let liveData: LiveData<LiveDataVector>;
+  export let maxValue: number;
+  export let minValue: number;
+  export let highlightVectorIndex: number | undefined = undefined;
+
+  let axisColors = StaticConfiguration.liveGraphColors;
+
+  // Smoothes real-time data by using the 3 most recent data points
+  let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
+  let cnt = 0;
+
+  // Subscribing to the stores object, allows us to detect changes in the LiveData store
+  // Without it, reconnecting would cause the component to use an outdated reference of the liveData store.
+  stores.subscribe(e => {
+    cnt++; // The cnt variable is the key that will force the dimension labels to update
+    smoothedLiveData = new SmoothedLiveData(e.liveData, 3);
+  });
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
-  let lineX = new TimeSeries();
-  let lineY = new TimeSeries();
-  let lineZ = new TimeSeries();
+  const lines: TimeSeriesWithData[] = [];
+
+  for (let i = 0; i < smoothedLiveData.getSeriesSize(); i++) {
+    lines.push(new TimeSeries() as TimeSeriesWithData);
+  }
+
   let recordLines = new TimeSeries();
   const lineWidth = 2;
 
-  // On mount draw smoothieChart
-  onMount(() => {
+  const init = () => {
     chart = new SmoothieChart({
-      maxValue: 2.3,
-      minValue: -2,
+      maxValue,
+      minValue,
       millisPerPixel: 7,
       grid: {
         fillStyle: '#ffffff00',
@@ -38,9 +69,22 @@
       interpolation: 'linear',
     });
 
-    chart.addTimeSeries(lineX, { lineWidth, strokeStyle: '#f9808e' });
-    chart.addTimeSeries(lineY, { lineWidth, strokeStyle: '#80f98e' });
-    chart.addTimeSeries(lineZ, { lineWidth, strokeStyle: '#808ef9' });
+    lines.forEach((line, index) => {
+      let opaque = true;
+      if (highlightVectorIndex !== undefined) {
+        if (index === highlightVectorIndex) {
+          opaque = true;
+        } else {
+          opaque = false;
+        }
+      }
+      const color = axisColors[index] + (opaque ? 'ff' : '30');
+      chart!.addTimeSeries(line, {
+        lineWidth,
+        strokeStyle: color,
+      });
+    });
+
     chart.addTimeSeries(recordLines, {
       lineWidth: 3,
       strokeStyle: '#4040ff44',
@@ -48,13 +92,19 @@
     });
     chart.streamTo(<HTMLCanvasElement>canvas, 0);
     chart.stop();
+  };
+
+  // On mount draw smoothieChart
+  onMount(() => {
+    init();
   });
 
   // Start and stop chart when microbit connect/disconnect
+  const model = classifier.getModel();
   $: {
     if (chart !== undefined) {
       if ($state.isInputReady) {
-        if (!$state.isTraining) {
+        if (!$model.isTraining) {
           chart.start();
         } else {
           chart.stop();
@@ -69,7 +119,7 @@
   // The jagged edges problem is caused by repeating the recordingStarted function.
   // We will simply block the recording from starting, while it's recording
   let blockRecordingStart = false;
-  $: recordingStarted($state.isRecording || $state.isTesting);
+  $: recordingStarted($state.isRecording);
 
   // Function to clearly diplay the area in which users are recording
   function recordingStarted(isRecording: boolean): void {
@@ -78,21 +128,21 @@
     }
 
     // Set start line
-    recordLines.append(new Date().getTime() - 1, -2, false);
-    recordLines.append(new Date().getTime(), 2.3, false);
+    recordLines.append(new Date().getTime() - 1, minValue, false);
+    recordLines.append(new Date().getTime(), maxValue, false);
 
     // Wait a second and set end line
     blockRecordingStart = true;
     setTimeout(() => {
-      recordLines.append(new Date().getTime() - 1, 2.3, false);
-      recordLines.append(new Date().getTime(), -2, false);
+      recordLines.append(new Date().getTime() - 1, maxValue, false);
+      recordLines.append(new Date().getTime(), minValue, false);
       blockRecordingStart = false;
-    }, get(settings).duration);
+    }, StaticConfiguration.recordingDuration);
   }
 
   // When state changes, update the state of the canvas
   $: {
-    const isConnected = $state.isInputConnected;
+    const isConnected = $state.isInputReady;
     updateCanvas(isConnected);
   }
 
@@ -101,13 +151,9 @@
   // If state is connected. Start updating the graph whenever there is new data
   // From the Micro:Bit
   function updateCanvas(isConnected: boolean) {
-    // TODO: Clean this
-    if (isConnected) {
-      unsubscribeFromData = currentData.subscribe(data => {
-        const t = new Date().getTime();
-        lineX.append(t, data.x, false);
-        lineY.append(t, data.y, false);
-        lineZ.append(t, data.z, false);
+    if (isConnected || !unsubscribeFromData) {
+      unsubscribeFromData = smoothedLiveData.subscribe(data => {
+        addDataToGraphLines(data);
       });
 
       // Else if we're currently subscribed to data. Unsubscribe.
@@ -117,9 +163,30 @@
       unsubscribeFromData = undefined;
     }
   }
+
+  const addDataToGraphLines = (data: LiveDataVector) => {
+    const t = new Date().getTime();
+    let i = 0;
+    for (const num of data.getVector()) {
+      const line: TimeSeriesWithData = lines[i];
+      if (!line) {
+        break;
+      }
+      const newValue = num;
+      line.append(t, newValue, false);
+      i++;
+    }
+  };
 </script>
 
 <main class="flex">
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
-  <DimensionLabels />
+  {#key cnt}
+    <DimensionLabels
+      hidden={!$state.isInputConnected}
+      {minValue}
+      graphHeight={160}
+      {maxValue}
+      liveData={smoothedLiveData} />
+  {/key}
 </main>

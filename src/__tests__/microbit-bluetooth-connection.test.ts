@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
@@ -7,7 +7,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import 'svelte-jester';
 import MicrobitBluetooth from '../script/microbit-interfacing/MicrobitBluetooth';
 import MockBTDevice from './mocks/mock-microbit-bluetooth';
 import TypingUtils from '../script/TypingUtils';
@@ -171,16 +170,16 @@ describe('Microbit Bluetooth interface tests', () => {
 
   test('Request device yields device', async () => {
     const device = await MicrobitBluetooth.requestDevice(
-      'vatav',
       TypingUtils.emptyFunction,
+      'vatav',
     );
     expect(device).toBeDefined();
   });
 
   test('Can connect to requested device', async () => {
     const device = await MicrobitBluetooth.requestDevice(
-      'vatav',
       TypingUtils.emptyFunction,
+      'vatav',
     );
 
     const con = await MicrobitBluetooth.createMicrobitBluetooth(

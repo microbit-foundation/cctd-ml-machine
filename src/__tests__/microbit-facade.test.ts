@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
@@ -7,11 +7,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import 'svelte-jester';
 import Microbits from '../script/microbit-interfacing/Microbits';
-import ConnectionBehaviours from '../script/connection-behaviours/ConnectionBehaviours';
-import OutputBehaviour from '../script/connection-behaviours/OutputBehaviour';
-import InputBehaviour from '../script/connection-behaviours/InputBehaviour';
+import ConnectionBehaviours from '../script/microbit-interfacing/connection-behaviours/ConnectionBehaviours';
+import OutputBehaviour from '../script/microbit-interfacing/connection-behaviours/OutputBehaviour';
+import InputBehaviour from '../script/microbit-interfacing/connection-behaviours/InputBehaviour';
 import SpyConnectionBehaviour from './mocks/SpyConnectionBehaviour';
 import MockBTDevice from './mocks/mock-microbit-bluetooth';
 
@@ -35,7 +34,7 @@ describe('Microbit facade tests', () => {
     Object.assign(navigator, {
       bluetooth: {
         requestDevice(
-          options?: RequestDeviceOptions & { filters?: any | any[] },
+          options?: RequestDeviceOptions & { filters?: { namePrefix: string }[] },
         ): Promise<BluetoothDevice> {
           const microBitName = 'vatav';
           if (!options) {
@@ -97,7 +96,7 @@ describe('Microbit facade tests', () => {
 
   test('Can connect the same microbit to output and input', async () => {
     const wasConnected = await Microbits.assignInput('vatav');
-    await Microbits.useInputAsOutput();
+    Microbits.useInputAsOutput();
     expect(wasConnected).toBeTruthy();
     expect(Microbits.isOutputAssigned()).toBeTruthy();
     expect(Microbits.isInputAssigned()).toBeTruthy();
@@ -106,7 +105,7 @@ describe('Microbit facade tests', () => {
 
   test('When same, disconnecting input also disconnects output', async () => {
     const wasConnected = await Microbits.assignInput('vatav');
-    await Microbits.useInputAsOutput();
+    Microbits.useInputAsOutput();
     expect(wasConnected).toBeTruthy();
     Microbits.expelInputAndOutput();
     expect(Microbits.isOutputAssigned()).toBeFalsy();

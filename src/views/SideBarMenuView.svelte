@@ -9,9 +9,10 @@
   import Menus, { MenuProperties } from '../script/navigation/Menus';
   import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
-  import Environment from '../script/Environment.js';
+  import Environment from '../script/Environment';
   import { Paths, currentPath, navigate } from '../router/paths';
   import { state } from '../script/stores/uiStore';
+  import { Feature, getFeature } from '../script/FeatureToggles';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;
@@ -34,7 +35,7 @@
   <!-- flush top bar -->
   <div class="h-12 shadow-md w-full flex justify-center">
     <p class="text-secondarytext font-extrabold self-center text-3xl">
-      {Environment.pageTitle}
+      {getFeature(Feature.TITLE)}
     </p>
     <div class="text-white self-center ml-4 focus:outline-none">
       <button

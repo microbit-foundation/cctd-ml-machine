@@ -1,16 +1,15 @@
+/// <reference types="vitest" />
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
-
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import WindiCSS from 'vite-plugin-windicss';
 import { sveltePreprocess } from 'svelte-preprocess/dist/autoProcess';
 import EnvironmentPlugin from 'vite-plugin-environment';
 
-/** @type {import('vite').UserConfig} */
 export default defineConfig({
   plugins: [
     svelte({
@@ -27,8 +26,19 @@ export default defineConfig({
     EnvironmentPlugin('all'),
   ],
   build: {
+    target: 'esnext',
     rollupOptions: {
       input: 'index.html',
+    },
+  },
+  test: {
+    globals: true,
+    setupFiles: ['./src/setup_tests.ts'],
+    poolOptions: {
+      threads: {
+        // threads disabled for now due to https://github.com/vitest-dev/vitest/issues/1982
+        singleThread: true,
+      },
     },
   },
 });

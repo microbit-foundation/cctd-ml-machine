@@ -49,11 +49,17 @@ void onConnected(MicroBitEvent)
 {
     connected = 1; // Set the connected flag
 
-    uBit.sleep(3000);
-    uart->send(ManagedString("id_prop")); // MUST be sent before vi_ message
-    uart->send(ManagedString("vi_") + ManagedString(buildNumber));
-
     printSmiley(GLAD_SMILEY);
+
+    for (size_t i = 0; i < 12; i++)
+    {
+        if (!connected) {
+            break;
+        }
+        uBit.sleep(1000);
+        uart->send(ManagedString("id_prop")); // MUST be sent before vi_ message
+        uart->send(ManagedString("vi_") + ManagedString(buildNumber));
+    }
 }
 
 /**

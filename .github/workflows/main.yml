@@ -27,14 +27,29 @@ permissions:
   contents: read
 
 jobs:
-  Jest:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Run Tests
         run: |
-          npm install 
+          npm ci 
           npm test
+  formatting_and_linting:
+    name: Prettier / svelte Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Run prettier
+        shell: bash
+        run: |
+          npm ci
+          npm run checkFormat 
+      - name: Svelte check
+        shell: bash
+        run: npm run check
+
   build_and_deploy:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
@@ -43,9 +58,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - name: Branding
-        run: |
-          cp -f ./src/__viteBuildVariants__/ml-machine/windi.config.js ./windi.config.js
       - name: Build And Deploy
         uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9
         with:
@@ -54,8 +66,6 @@ jobs:
           action: "upload"
           app_location: ${{ env.APP_LOCATION }}
           app_artifact_location: ${{ env.APP_ARTIFACT_LOCATION }}
-        env:
-          VITE_TITLE: ML-Machine
 
   close:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

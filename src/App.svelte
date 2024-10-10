@@ -5,10 +5,6 @@
  -->
 
 <style global windi:preflights:global windi:safelist:global>
-  .textAnimation {
-    animation: 3s textAni ease;
-  }
-
   @keyframes textAni {
     0% {
       opacity: 0;
@@ -26,24 +22,25 @@
 </style>
 
 <script lang="ts">
-  import ConnectionBehaviours from './script/connection-behaviours/ConnectionBehaviours';
-  import InputBehaviour from './script/connection-behaviours/InputBehaviour';
-  import OutputBehaviour from './script/connection-behaviours/OutputBehaviour';
+  import ConnectionBehaviours from './script/microbit-interfacing/connection-behaviours/ConnectionBehaviours';
+  import InputBehaviour from './script/microbit-interfacing/connection-behaviours/InputBehaviour';
+  import OutputBehaviour from './script/microbit-interfacing/connection-behaviours/OutputBehaviour';
   import OverlayView from './views/OverlayView.svelte';
   import SideBarMenuView from './views/SideBarMenuView.svelte';
   import PageContentView from './views/PageContentView.svelte';
   import BottomBarMenuView from './views/BottomBarMenuView.svelte';
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
   import { fade } from 'svelte/transition';
-  import { state } from './script/stores/uiStore';
+  import { compatibility, state } from './script/stores/uiStore';
   import LoadingSpinner from './components/LoadingSpinner.svelte';
-  import { checkCompatibility } from './script/compatibility/CompatibilityChecker';
   import IncompatiblePlatformView from './views/IncompatiblePlatformView.svelte';
   import BluetoothIncompatibilityWarningDialog from './components/BluetoothIncompatibilityWarningDialog.svelte';
   import CookieManager from './script/CookieManager';
   import { DeviceRequestStates } from './script/stores/connectDialogStore';
-  import Environment from './script/Environment';
   import Router from './router/Router.svelte';
+  import { Feature, getFeature } from './script/FeatureToggles';
+  import { welcomeLog } from './script/utils/Logger';
+  welcomeLog();
 
   ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
   ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
@@ -54,11 +51,11 @@
     CookieManager.unsetReconnectFlag();
   }
 
-  document.title = Environment.pageTitle;
+  document.title = getFeature(Feature.TITLE);
 </script>
 
 <Router>
-  {#if !checkCompatibility().platformAllowed}
+  {#if !$compatibility.platformAllowed}
     <!-- Denies mobile users access to the platform -->
     <IncompatiblePlatformView />
   {:else}

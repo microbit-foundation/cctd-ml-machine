@@ -109,7 +109,6 @@ abstract class CompatibilityList {
   protected static readonly minVersions: BrowserVersion[];
   protected static readonly exceptions: BrowserException[];
 
-  // TODO: Use or remove. Never used at the moment
   public static getMinVersion(browserName: string): SemVer | undefined {
     return this.minVersions.find(
       version => version.browser.toLowerCase() === browserName.toLowerCase(),

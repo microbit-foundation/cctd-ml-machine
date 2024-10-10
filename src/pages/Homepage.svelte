@@ -25,6 +25,8 @@
   import SelectLanguageControlBarDropdown from '../components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
   import { t } from '../i18n';
   import { state } from '../script/stores/uiStore';
+  import Environment from '../script/Environment';
+  import DevTools from '../components/DevTools.svelte';
 
   type ContentTile = { tile: ComponentType; spanColumns: number };
   // Just add the content titles you wish to put on front page, in the order you wish them to be there
@@ -40,6 +42,12 @@
     <div>
       <ControlBar>
         <div class="w-full">
+          {#if Environment.isInDevelopment}
+            <div class="float-left flex flex-row">
+              <p>(DevTools)</p>
+              <DevTools />
+            </div>
+          {/if}
           <div class="float-right flex flex-row">
             <ContactUsControlBarButton />
             <SelectLanguageControlBarDropdown />

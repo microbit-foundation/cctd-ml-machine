@@ -8,6 +8,7 @@
   input[type='range'][orient='vertical'] {
     writing-mode: bt-lr; /* IE */
     -webkit-appearance: slider-vertical; /* WebKit */
+    appearance: slider-vertical;
     width: 20px;
     background: #13bba4;
   }
@@ -16,12 +17,6 @@
 <script lang="ts">
   // IMPORT AND DEFAULTS
   import OutputMatrix from './OutputMatrix.svelte';
-  import {
-    settings,
-    updateGestureSoundOutput,
-    type SoundData,
-    updateGesturePinOutput,
-  } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
   import OutputSoundSelector from './OutputSoundSelector.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
@@ -33,8 +28,10 @@
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import Gesture from '../../script/stores/Gesture';
+  import Gesture, { SoundData } from '../../script/domain/stores/gesture/Gesture';
+  import { stores } from '../../script/stores/Stores';
 
+  const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component
@@ -65,7 +62,7 @@
     requiredConfidence: number,
   ): TriggerAction => {
     let isConfident = requiredConfidence <= confidence;
-    if ((!lastWasTriggered || !$settings.automaticClassification) && isConfident) {
+    if (!lastWasTriggered && isConfident) {
       return 'turnOn';
     }
     if (lastWasTriggered && !isConfident) {
@@ -128,7 +125,7 @@
 
   function onSoundSelected(sound: SoundData | undefined): void {
     selectedSound = sound;
-    updateGestureSoundOutput($gesture.ID, sound);
+    gestures.getGesture($gesture.ID).setSoundOutput(sound);
     onUserInteraction();
   }
 
@@ -154,7 +151,7 @@
     }
     selectedPin = selected;
     refreshAfterChange();
-    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
+    gestures.getGesture($gesture.ID).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
   };
 
   const triggerComponents = () =>
@@ -169,7 +166,7 @@
     turnOnState = state.turnOnState;
     turnOnTime = state.turnOnTime;
     refreshAfterChange();
-    updateGesturePinOutput($gesture.ID, selectedPin, turnOnState, turnOnTime);
+    gestures.getGesture($gesture.ID).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
     if (wasTriggered) {
       setOutputPin(true);
     }
@@ -188,11 +185,19 @@
   let hasLoadedMicrobitImage = false;
 
   $: meterHeightPct = 100 * $gesture.confidence.currentConfidence;
+
+  const noTypeCheckNonStandardOrientProp = (orient?: 'vertical' | 'horizontal'): any => ({
+    orient,
+  });
 </script>
 
 <main class="mb-4 items-center flex flex-row">
   <!-- NAMES AND CONFIDENCE METER -->
   <GestureTilePart>
+    <div
+      class="absolute rounded-full w-3 h-3 m-3"
+      style={`background-color:${gesture.getColor()}`}>
+    </div>
     <div class="items-center flex p-2">
       <div
         class="w-36 text-center font-semibold rounded-xl
@@ -204,7 +209,7 @@
       <input
         class="h-25 rotate-90 accent-primary"
         type="range"
-        orient="vertical"
+        {...noTypeCheckNonStandardOrientProp('vertical')}
         name=""
         min="10"
         max="90"

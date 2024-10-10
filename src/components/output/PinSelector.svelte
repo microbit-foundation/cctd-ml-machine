@@ -8,9 +8,8 @@
   import GestureTilePart from './../GestureTilePart.svelte';
   import StaticConfiguration from '../../StaticConfiguration';
   import { PinTurnOnState } from './PinSelectorUtil';
-  import { t } from '../../i18n.js';
-  import MBSpecs from '../../script/microbit-interfacing/MBSpecs.js';
-  import { currentData } from '../../script/stores/mlStore';
+  import { t } from '../../i18n';
+  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   export let onPinSelect: (pin: MBSpecs.UsableIOPin) => void;
   export let onTurnOnTimeSelect: (turnOnArgs: {
     turnOnState: PinTurnOnState;

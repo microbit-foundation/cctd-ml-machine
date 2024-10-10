@@ -8,6 +8,7 @@
   input[type='range'][orient='vertical'] {
     writing-mode: bt-lr; /* IE */
     -webkit-appearance: slider-vertical; /* WebKit */
+    appearance: slider-vertical;
     width: 20px;
     background: #13bba4;
   }
@@ -15,12 +16,10 @@
 
 <script lang="ts">
   // IMPORT AND DEFAULTS
-  import { type GestureData } from '../../script/stores/mlStore';
   import { t } from '../../i18n';
+  import Gesture from '../../script/domain/stores/gesture/Gesture';
   import GestureTilePart from '../GestureTilePart.svelte';
   import Information from '../information/Information.svelte';
-  import { Writable } from 'svelte/store';
-  import Gesture from '../../script/stores/Gesture';
 
   // Variables for component
   export let gesture: Gesture;
@@ -32,6 +31,10 @@
 
   $: active =
     $gesture.confidence.currentConfidence > $gesture.confidence.requiredConfidence;
+
+  const noTypeCheckNonStandardOrientProp = (orient?: 'vertical' | 'horizontal'): any => ({
+    orient,
+  });
 </script>
 
 <GestureTilePart>
@@ -48,7 +51,7 @@
       <input
         class="h-25 rotate-90 accent-primary"
         type="range"
-        orient="vertical"
+        {...noTypeCheckNonStandardOrientProp('vertical')}
         name=""
         min="10"
         max="90"

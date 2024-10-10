@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { get, writable } from 'svelte/store';
+import { Writable, derived, get, writable } from 'svelte/store';
 import {
   type CompatibilityStatus,
   checkCompatibility,
@@ -13,17 +13,24 @@ import { t } from '../../i18n';
 import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
-import { gestures } from './Stores';
-
-// TODO: Rename? Split up further?
+import Gesture from '../domain/stores/gesture/Gesture';
+import Axes from '../domain/Axes';
+import PersistantWritable from '../repository/PersistantWritable';
+import { DropdownOption } from '../../components/buttons/Buttons';
+import { stores } from './Stores';
+import ModelRegistry, { ModelInfo } from '../domain/ModelRegistry';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
-export const compatibility = writable<CompatibilityStatus>(checkCompatibility());
+export const compatibility: Writable<CompatibilityStatus> =
+  writable(checkCompatibility());
 
-export const isBluetoothWarningDialogOpen = writable<boolean>(
-  get(compatibility) ? !get(compatibility).bluetooth : false,
+export const chosenGesture = writable<Gesture | null>(null);
+
+export const isBluetoothWarningDialogOpen = derived(
+  compatibility,
+  stores => !stores.bluetooth,
 );
 
 export enum ModelView {
@@ -35,12 +42,9 @@ export enum ModelView {
 export const state = writable<{
   isRequestingDevice: DeviceRequestStates;
   isFlashingDevice: boolean;
-  isTesting: boolean;
   isRecording: boolean;
-  isTraining: boolean;
   isInputConnected: boolean;
   isOutputConnected: boolean;
-  isPredicting: boolean;
   offerReconnect: boolean;
   requestDeviceWasCancelled: boolean;
   reconnectState: DeviceRequestStates;
@@ -55,12 +59,9 @@ export const state = writable<{
 }>({
   isRequestingDevice: DeviceRequestStates.NONE,
   isFlashingDevice: false,
-  isTesting: false,
   isRecording: false,
-  isTraining: false,
   isInputConnected: false,
   isOutputConnected: false,
-  isPredicting: false,
   offerReconnect: false,
   requestDeviceWasCancelled: false,
   reconnectState: DeviceRequestStates.NONE,
@@ -106,24 +107,15 @@ export function areActionsAllowed(actionAllowed = true, alertIfNotReady = true):
 function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: string } {
   const currentState = get(state);
 
+  const model = stores.getClassifier().getModel();
+
   if (currentState.isRecording) return { isReady: false, msg: text('alert.isRecording') };
-  if (currentState.isTesting) return { isReady: false, msg: text('alert.isTesting') };
-  if (currentState.isTraining) return { isReady: false, msg: text('alert.isTraining') };
+  if (model.isTraining()) return { isReady: false, msg: text('alert.isTraining') };
   if (!currentState.isInputConnected && actionAllowed)
     return { isReady: false, msg: text('alert.isNotConnected') };
 
   return { isReady: true, msg: '' };
 }
-
-export const hasSufficientData = (): boolean => {
-  if (!gestures) {
-    return false;
-  }
-  if (gestures.getNumberOfGestures() < 2) {
-    return false;
-  }
-  return !gestures.getGestures().some(gesture => gesture.getRecordings().length < 3);
-};
 
 export const buttonPressed = writable<{ buttonA: 0 | 1; buttonB: 0 | 1 }>({
   buttonA: 0,
@@ -136,6 +128,16 @@ export enum MicrobitInteractions {
   AB,
 }
 
+const defaultModel: ModelInfo = ModelRegistry.NeuralNetwork;
+export const selectedModel = new PersistantWritable<ModelInfo>(
+  defaultModel,
+  'selectedModel',
+);
+
+// TODO: Should probably be elsewhere
+export const prevHighlightedAxis = writable<Axes | undefined>(undefined);
+export const highlightedAxis = writable<Axes | undefined>(undefined);
+
 const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;
 
 export const microbitInteraction = writable<MicrobitInteractions>(
@@ -143,12 +145,13 @@ export const microbitInteraction = writable<MicrobitInteractions>(
 );
 
 /**
- * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium
+ * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium.
+ * This error occurs, when a connection is established, but lost again before listening to the characteristics
  * Refresh the page is the only known solution
  */
-export const onCatastrophicError = () => {
+export const onCatastrophicError = (reconnect?: boolean) => {
   // Set flag to offer reconnect when page reloads
-  if (isInputPatternValid()) {
+  if (isInputPatternValid() && reconnect) {
     CookieManager.setReconnectFlag();
   }
   location.reload();

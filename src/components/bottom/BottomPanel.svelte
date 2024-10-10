@@ -6,18 +6,17 @@
 
 <script lang="ts">
   import { state } from '../../script/stores/uiStore';
-  import LiveGraph from '../graphs/LiveGraph.svelte';
   import { fade } from 'svelte/transition';
   import { t } from '../../i18n';
   import ConnectDialogContainer from '../connection-prompt/ConnectDialogContainer.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
-  import StandardButton from '../StandardButton.svelte';
+  import StandardButton from '../buttons/StandardButton.svelte';
   import { startConnectionProcess } from '../../script/stores/connectDialogStore';
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
   import BaseDialog from '../dialogs/BaseDialog.svelte';
-  import Live3DViewCompatabilityWrapper from '../3d-inspector/View3D.svelte';
   import View3DLive from '../3d-inspector/View3DLive.svelte';
+  import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -45,15 +44,16 @@
 
   {#if !$state.isInputAssigned}
     <!-- No input microbit assigned -->
-    <div class="h-full w-full flex justify-center bg-white">
-      <StandardButton onClick={connectButtonClicked}
-        >{$t('footer.connectButtonNotConnected')}</StandardButton>
+    <div class="h-full w-full flex justify-center items-center bg-white">
+      <StandardButton onClick={connectButtonClicked}>
+        {$t('footer.connectButtonNotConnected')}
+      </StandardButton>
     </div>
   {:else}
     <!-- Input microbit is assigned -->
     <div class="relative w-full h-full">
       <div class="absolute w-full h-full">
-        <LiveGraph width={componentWidth - 160} />
+        <MicrobitLiveGraph width={componentWidth - 160} />
       </div>
       {#if !$state.isInputReady}
         <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->

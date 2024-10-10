@@ -11,6 +11,7 @@
   import ModelPage from '../pages/model/ModelPage.svelte';
   import FilterPage from '../pages/filter/FilterPage.svelte';
   import TrainingPage from '../pages/training/TrainingPage.svelte';
+  import PlaygroundPage from '../pages/PlaygroundPage.svelte';
   import { currentPageComponent } from '../views/currentComponentStore';
   import { currentPath, navigate, Paths, PathType } from './paths';
 
@@ -18,6 +19,8 @@
     switch (path) {
       case Paths.HOME:
         return Homepage;
+      case Paths.PLAYGROUND:
+        return PlaygroundPage;
       case Paths.DATA:
         return DataPage;
       case Paths.TRAINING:

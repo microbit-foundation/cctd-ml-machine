@@ -7,41 +7,41 @@
 <script lang="ts">
   import Gesture from '../components/Gesture.svelte';
   import { state } from '../script/stores/uiStore';
-  import {
-    clearGestures,
-    downloadDataset,
-    loadDatasetFromFile,
-  } from '../script/stores/mlStore';
   import { t } from '../i18n';
   import RecordInformationContent from '../components/datacollection/RecordInformationContent.svelte';
   import StandardDialog from '../components/dialogs/StandardDialog.svelte';
   import MainConnectDialog from '../components/connection-prompt/ConnectDialogContainer.svelte';
   import NewGestureButton from '../components/NewGestureButton.svelte';
-  import StandardButton from '../components/StandardButton.svelte';
+  import StandardButton from '../components/buttons/StandardButton.svelte';
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
-  import PleaseConnectFirst from '../components/PleaseConnectFirst.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
-  import { gestures } from '../script/stores/Stores';
+  import FileUtility from '../script/repository/FileUtility';
+  import { get } from 'svelte/store';
+  import exampleDataset from '../exampleDataset.json';
+  import { GestureData } from '../script/domain/stores/gesture/Gesture';
+  import { stores } from '../script/stores/Stores';
+  import PleaseConnect from '../components/PleaseConnect.svelte';
 
   let isConnectionDialogOpen = false;
+  const gestures = stores.getGestures();
 
   $: hasSomeData = (): boolean => {
     if ($gestures.length === 0) {
       return false;
     }
-    return $gestures.some(gesture => gesture.recordings.length > 0);
+    return $gestures.some((gesture: GestureData) => gesture.recordings.length > 0);
   };
 
   const onClearGestures = () => {
     if (confirm($t('content.data.controlbar.button.clearData.confirm'))) {
-      clearGestures();
+      gestures.clearGestures();
     }
   };
 
   const onDownloadGestures = () => {
-    downloadDataset();
+    FileUtility.downloadDataset(get(gestures));
   };
 
   const onUploadGestures = () => {
@@ -50,6 +50,7 @@
 
   let filePicker: HTMLInputElement;
   onMount(() => {
+    // Todo: Maybe move some of this to the file utility class
     filePicker = document.createElement('input');
     filePicker.type = 'file';
     filePicker.accept = 'application/JSON';
@@ -58,17 +59,26 @@
         return;
       }
       const f = filePicker.files[0];
-      loadDatasetFromFile(f);
+      FileUtility.loadDatasetFromFile(f);
       filePicker.value = ''; // To trick element to trigger onChange if same file selected
     };
     return () => {
       filePicker.remove();
     };
   });
+
+  const importExampleDataset = () => {
+    // Imports 3 gestures, named Shake, Still and Circle (in that order)
+    gestures.importFrom(exampleDataset);
+    // Translate the names, that are originally english
+    gestures.getGestures()[0].setName($t('content.data.noData.exampleName.shake'));
+    gestures.getGestures()[1].setName($t('content.data.noData.exampleName.still'));
+    gestures.getGestures()[2].setName($t('content.data.noData.exampleName.circle'));
+  };
 </script>
 
 <!-- Main pane -->
-<main class="h-full inline-block min-w-full">
+<main class="h-full inline-block min-w-full flex flex-col">
   <div>
     <DataPageControlBar
       clearDisabled={$gestures.length === 0}
@@ -79,7 +89,7 @@
   </div>
   {#if !hasSomeData() && !$state.isInputConnected}
     <div class="mt-4">
-      <PleaseConnectFirst />
+      <PleaseConnect />
     </div>
   {:else}
     <div class="mt-4 ml-3">
@@ -137,6 +147,14 @@
           onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
       {/each}
       <NewGestureButton />
+    </div>
+  {/if}
+  {#if !hasSomeData()}
+    <div class="flex flex-grow"></div>
+    <div class="flex mt-3 mb-3 justify-center">
+      <StandardButton onClick={importExampleDataset}>
+        {$t('content.data.noData.templateDataButton')}
+      </StandardButton>
     </div>
   {/if}
 </main>

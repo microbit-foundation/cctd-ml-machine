@@ -7,37 +7,41 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
   "include": [
     "src/**/*",
-    "src/node_modules/**/*"
+    "src/node_modules/**/*",
   ],
   "exclude": [
     "node_modules/*",
     "__sapper__/*",
     "public/*",
-    "svelte.config.js",
-    "windi.config.js",
-    "src/setup_tests.ts"
+    "prepEnv.js"
   ],
   "compilerOptions": {
-    "module": "ES6",
+    "allowJs": true,
+    "module": "ESNext",
     "lib": [
       "DOM",
-      "ES6",
+      "ESNext",
       "WebWorker"
     ],
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "noImplicitAny": true,
+    "noEmit": true,
     "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
     "importsNotUsedAsValues": "remove",
     "strict": true,
     "verbatimModuleSyntax": false,
     "ignoreDeprecations": "5.0",
     "noFallthroughCasesInSwitch": true,
     "types": [
-      "jest",
-      "svelte"
-    ]
+      "svelte",
+      "node",
+      "vitest/globals"
+    ],
   },
   "files": [
-    "node_modules/jest-expect-message/types/index.d.ts"
+    "./windi.config.js",
+    "./prepEnv.js"
   ]
 }

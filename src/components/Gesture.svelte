@@ -13,30 +13,26 @@
     state,
     microbitInteraction,
     MicrobitInteractions,
-  } from '../script/stores/uiStore';
-  import {
-    addRecording,
     chosenGesture,
-    livedata,
-    type RecordingData,
-    removeRecording,
-    settings,
-  } from '../script/stores/mlStore';
+  } from '../script/stores/uiStore';
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
-  import StandardButton from './StandardButton.svelte';
+  import StandardButton from './buttons/StandardButton.svelte';
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
-  import Gesture from '../script/stores/Gesture';
-  import { gestures } from '../script/stores/Stores';
+  import Gesture from '../script/domain/stores/gesture/Gesture';
+  import { RecordingData } from '../script/domain/stores/gesture/Gestures';
+  import { stores } from '../script/stores/Stores';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
+  const gestures = stores.getGestures();
+  $: liveData = $stores.liveData;
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
-  const recordingDuration = get(settings).duration;
+  const recordingDuration = StaticConfiguration.recordingDuration;
 
   let isThisRecording = false;
 
@@ -59,7 +55,6 @@
     ) {
       return;
     }
-    $state.isPredicting = false;
 
     setTimeout(() => {
       gestures.removeGesture(gesture.getId());
@@ -80,10 +75,10 @@
     let newData: { x: number[]; y: number[]; z: number[] } = { x: [], y: [], z: [] };
 
     // Set timeout to allow recording in 1s
-    const unsubscribe = livedata.subscribe(data => {
-      newData.x.push(data.accelX);
-      newData.y.push(data.accelY);
-      newData.z.push(data.accelZ);
+    const unsubscribe = liveData.subscribe(data => {
+      newData.x.push(data.getVector()[0]);
+      newData.y.push(data.getVector()[1]);
+      newData.z.push(data.getVector()[2]);
     });
 
     // Once duration is over (1000ms default), stop recording
@@ -91,9 +86,9 @@
       $state.isRecording = false;
       isThisRecording = false;
       unsubscribe();
-      if (get(settings).numSamples <= newData.x.length) {
+      if (StaticConfiguration.pollingPredictionSampleSize <= newData.x.length) {
         const recording = { ID: Date.now(), data: newData } as RecordingData;
-        addRecording(gesture.getId(), recording);
+        gesture.addRecording(recording);
       } else {
         alertUser($t('alert.recording.disconnectedDuringRecording'));
       }
@@ -105,8 +100,7 @@
     if (!areActionsAllowed(false)) {
       return;
     }
-    $state.isPredicting = false;
-    removeRecording(gesture.getId(), recording.ID);
+    gesture.removeRecording(recording.ID);
   }
 
   // Selecting this gesture for recording. Updates settings accordingly
@@ -160,7 +154,9 @@
       event.preventDefault();
       alertUser(
         $t('alert.data.classNameLengthAlert', {
-          maxLen: StaticConfiguration.gestureNameMaxLength,
+          values: {
+            maxLen: StaticConfiguration.gestureNameMaxLength,
+          },
         }),
       );
       return false;
@@ -185,14 +181,16 @@
   <div
     class="bg-red-600 h-1.5 rounded-full absolute mt-123px ml-14px"
     style={isThisRecording
-      ? 'transition: ' +
-        /* TODO: Clean this up! : */ (recordingDuration / 1000).toString() +
-        's linear; width: 97%;'
+      ? `transition:  ${(recordingDuration / 1000).toString()}s linear; width: 97%;`
       : 'width:0;'} />
 
   <div class="items-center flex mb-1">
     <!-- Title of gesture-->
     <GestureTilePart mr small>
+      <div
+        class="absolute rounded-full w-3 h-3 m-3"
+        style={`background-color:${gesture.getColor()}`}>
+      </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
         <div
           class="w-40 col-start-2 col-end-5 text-center

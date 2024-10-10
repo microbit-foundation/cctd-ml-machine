@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type ConnectionBehaviour from '../../script/connection-behaviours/ConnectionBehaviour';
+import type ConnectionBehaviour from '../../script/microbit-interfacing/connection-behaviours/ConnectionBehaviour';
 import MicrobitBluetooth from '../../script/microbit-interfacing/MicrobitBluetooth';
 import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
 
@@ -13,7 +13,7 @@ import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
  */
 class SpyConnectionBehaviour implements ConnectionBehaviour {
   onIdentifiedAsOutdated(): void {
-    throw new Error('Method not implemented.');
+    // Empty
   }
   onVersionIdentified(versionNumber: number): void {
     throw new Error('Method not implemented.');

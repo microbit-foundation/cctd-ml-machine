@@ -14,10 +14,12 @@
   $: labels = $liveData.getLabels();
 </script>
 
-{#each input as inputValue, i}
-  <div class="w-16">
-    <p style={'color: ' + StaticConfiguration.liveGraphColors[i] + ';'}>
-      {labels[i]}: {inputValue.toFixed(2)}
-    </p>
-  </div>
-{/each}
+<div class="flex flex-row w-50 justify-between">
+  {#each input as inputValue, i}
+    <div class="w-16">
+      <p style={'color: ' + StaticConfiguration.liveGraphColors[i] + ';'}>
+        {labels[i]}: {inputValue.toFixed(2)}
+      </p>
+    </div>
+  {/each}
+</div>

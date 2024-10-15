@@ -10,9 +10,9 @@
   import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
   import { btPatternInput, btPatternOutput } from '../script/stores/connectionStore';
-  import MBSpecs from '../script/microbit-interfacing/MBSpecs';
   import Microbits from '../script/microbit-interfacing/Microbits';
   import { DeviceRequestStates } from '../script/stores/connectDialogStore';
+  import { MBSpecs } from 'microbyte';
 
   let reconnectText: string;
   let reconnectButtonText: string;
@@ -42,15 +42,13 @@
 
     const connect = () => {
       if (connectState == DeviceRequestStates.INPUT) {
-        return Microbits.assignInput(name);
+        return Microbits.connectInput(name);
       }
-      return Microbits.assignOutput(name);
+      return Microbits.connectOutput(name);
     };
 
-    void connect().then(didSucceed => {
-      if (didSucceed) {
-        $state.offerReconnect = false;
-      }
+    void connect().then(() => {
+      $state.offerReconnect = false;
     });
   };
 </script>

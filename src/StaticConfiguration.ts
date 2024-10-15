@@ -7,8 +7,8 @@
 /**
  * Static configuration values. These values are not expected to change, while the application is running.
  */
+import { MBSpecs } from 'microbyte';
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
-import MBSpecs from './script/microbit-interfacing/MBSpecs';
 import { HexOrigin } from './script/microbit-interfacing/Microbits';
 import { LayersModelTrainingSettings } from './script/mlmodels/LayersModelTrainer';
 

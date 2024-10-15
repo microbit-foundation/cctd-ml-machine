@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import en from './../messages/ui.en.json';
+import en from '../../messages/ui.en.json';
 import * as fs from 'fs';
 import * as path from 'path';
 

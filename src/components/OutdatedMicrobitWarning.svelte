@@ -34,12 +34,12 @@
 
   const expelMicrobit = () => {
     if (Microbits.isInputOutputTheSame()) {
-      Microbits.expelInputAndOutput();
+      Microbits.disconnectInputAndOutput();
     } else {
       if (targetRole === 'INPUT') {
-        Microbits.expelInput();
+        Microbits.disconnectInput();
       } else {
-        Microbits.expelOutput();
+        Microbits.disconnectOutput();
       }
     }
   };

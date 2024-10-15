@@ -8,9 +8,9 @@
  */
 
 import { get } from 'svelte/store';
-import LiveDataBuffer from '../script/domain/LiveDataBuffer';
-import MicrobitAccelerometerLiveData from '../script/livedata/MicrobitAccelerometerData';
-import { stores } from '../script/stores/Stores';
+import LiveDataBuffer from '../../script/domain/LiveDataBuffer';
+import MicrobitAccelerometerLiveData from '../../script/livedata/MicrobitAccelerometerData';
+import { stores } from '../../script/stores/Stores';
 
 describe('Engine behaviour test', () => {
   test('Engine should stop predicting when the LiveData store is set', () => {

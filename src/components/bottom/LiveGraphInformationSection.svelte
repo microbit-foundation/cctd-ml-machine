@@ -6,8 +6,16 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
+  import { Feature, hasFeature } from '../../script/FeatureToggles';
+  import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
+  import { stores } from '../../script/stores/Stores';
   import { state } from '../../script/stores/uiStore';
+  import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
+
+  const liveData = new SmoothedLiveData($stores.liveData, 3);
+  $: input = $liveData.getVector();
+  $: labels = $liveData.getLabels();
 </script>
 
 <div class="flex flex-row">
@@ -25,4 +33,15 @@
     class:text-gray-500={!$state.isInputReady}>
     &#x2022;
   </p>
+  {#if hasFeature(Feature.LIVE_GRAPH_INPUT_VALUES)}
+    <div class="ml-8 flex flex-row w-50 justify-between">
+      {#each input as inputValue, i}
+        <div class="w-16">
+          <p style={'color: ' + StaticConfiguration.liveGraphColors[i] + ';'}>
+            {labels[i]}: {inputValue.toFixed(2)}
+          </p>
+        </div>
+      {/each}
+    </div>
+  {/if}
 </div>

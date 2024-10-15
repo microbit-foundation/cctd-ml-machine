@@ -8,7 +8,6 @@
   import { t } from '../../i18n';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import { state } from '../../script/stores/uiStore';
-  import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
   import BottomPanelLiveDataValues from './BottomPanelLiveDataValues.svelte';
 </script>

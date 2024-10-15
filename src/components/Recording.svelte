@@ -31,14 +31,7 @@
 
 <div class="h-26 w-40 pr-3 pt-1 bg-white relative">
   {#if hide}
-    <div
-      transition:fade
-      class="
-          absolute
-          h-26
-          w-40
-          bg-white
-        " />
+    <div transition:fade class="absolute h-26 w-40 bg-white" />
   {/if}
   <RecordingGraph data={recording.data} />
   <button class="absolute -left-2.8px top-0px outline-none">

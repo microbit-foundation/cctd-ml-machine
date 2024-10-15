@@ -29,7 +29,7 @@
     &#x2022;
   </p>
   {#if hasFeature(Feature.LIVE_GRAPH_INPUT_VALUES)}
-    <div class="ml-8 flex flex-row w-50 justify-between">
+    <div class="ml-8">
       <BottomPanelLiveDataValues />
     </div>
   {/if}

@@ -97,7 +97,7 @@
         <p class="text-sm">
           You can create a hex file on <a
             target="_blank"
-            href="https://makecode.microbit.org/S83658-20131-63602-68476"
+            href="{StaticConfiguration.makecodeFirmwareUrl}"
             class="text-secondary">
             MakeCode
           </a>
@@ -106,3 +106,8 @@
     </div>
   {/if}
 </main>
+
+<!--
+
+            href="https://makecode.microbit.org/S83658-20131-63602-68476"
+-->

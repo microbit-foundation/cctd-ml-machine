@@ -15,9 +15,9 @@
   $: labels = $liveData.getLabels();
 </script>
 
-<div class="flex flex-row w-60 justify-between">
+<div class="flex flex-row w-50 mt-[2px] justify-between">
   {#each input as inputValue, i}
-    <div class="w-16">
+    <div class="w-16 text-sm">
       <p class="whitespace-nowrap" style="color:{StaticConfiguration.liveGraphColors[i]}">
         {labels[i]}: <FixedNumber digits={2} number={inputValue} />
       </p>

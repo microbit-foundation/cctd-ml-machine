@@ -16,7 +16,8 @@
     LinearScale,
     PointElement,
   } from 'chart.js';
-  import RecordingInspector from '../3d-inspector/RecordingInspector.svelte';
+  import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
+    import RecordingGraphPointData from './RecordingGraphPointData.svelte';
 
   export let data: { x: number[]; y: number[]; z: number[] };
 
@@ -223,6 +224,12 @@
   <div class="z-1 h-full w-full absolute">
     {#if !isNaN(hoverIndex)}
       <p
+        style="left: {verticalLineX - 128}px; top:-25px ;pointer-events:none"
+        class="absolute w-40">
+        <RecordingGraphPointData data={getDataByIndex(hoverIndex)} />
+      </p>
+
+      <p
         style="margin-left: {verticalLineX - 20}px; pointer-events:none;"
         class="absolute mt-20 w-10 text-center">
         {hoverIndex}
@@ -231,6 +238,7 @@
 
     <canvas bind:this={canvas} />
   </div>
+  <!-- For 3D view -->
   <RecordingInspector
     dataPoint={getDataByIndex(hoverIndex)}
     position={modalPosition}

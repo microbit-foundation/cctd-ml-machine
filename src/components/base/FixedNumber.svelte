@@ -7,8 +7,8 @@
   export let number: number;
   export let digits: number;
 
-  const isNegative = number < 0;
-  const fixed = Math.abs(number).toFixed(digits);
+  $: isNegative = number < 0;
+  $: fixed = Math.abs(number).toFixed(digits);
 </script>
 
 <span>

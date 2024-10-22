@@ -19,9 +19,7 @@
   {#each input as inputValue, i}
     <div class="w-16">
       <p class="whitespace-nowrap" style="color:{StaticConfiguration.liveGraphColors[i]}">
-        {#key inputValue}
           {labels[i]}: <FixedNumber digits={2} number={inputValue}/>
-        {/key}
       </p>
     </div>
   {/each}

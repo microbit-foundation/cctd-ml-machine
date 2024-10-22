@@ -17,7 +17,7 @@
   const openMakeCodeInNewTab = () => {
     window.open(
       StaticConfiguration.makecodeFirmwareUrl,
-      '_blank', // <- This is what makes it open in a new tab.
+      '_blank',
     );
   };
 </script>

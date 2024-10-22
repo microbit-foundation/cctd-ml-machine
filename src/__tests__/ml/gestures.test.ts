@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { stores } from '../script/stores/Stores';
+import { stores } from '../../script/stores/Stores';
 
 describe('Tests of Gestures', () => {
   beforeEach(() => {

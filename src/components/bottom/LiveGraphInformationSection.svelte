@@ -6,8 +6,10 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
+  import { Feature, hasFeature } from '../../script/FeatureToggles';
   import { state } from '../../script/stores/uiStore';
   import Information from '../information/Information.svelte';
+  import BottomPanelLiveDataValues from './BottomPanelLiveDataValues.svelte';
 </script>
 
 <div class="flex flex-row">
@@ -25,4 +27,9 @@
     class:text-gray-500={!$state.isInputReady}>
     &#x2022;
   </p>
+  {#if hasFeature(Feature.LIVE_GRAPH_INPUT_VALUES)}
+    <div class="ml-8">
+      <BottomPanelLiveDataValues />
+    </div>
+  {/if}
 </div>

@@ -8,7 +8,7 @@
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { stores } from '../../script/stores/Stores';
   import StaticConfiguration from '../../StaticConfiguration';
-    import FixedNumber from '../base/FixedNumber.svelte';
+  import FixedNumber from '../base/FixedNumber.svelte';
 
   const liveData = new SmoothedLiveData($stores.liveData, 3);
   $: input = $liveData.getVector();
@@ -19,7 +19,7 @@
   {#each input as inputValue, i}
     <div class="w-16">
       <p class="whitespace-nowrap" style="color:{StaticConfiguration.liveGraphColors[i]}">
-          {labels[i]}: <FixedNumber digits={2} number={inputValue}/>
+        {labels[i]}: <FixedNumber digits={2} number={inputValue} />
       </p>
     </div>
   {/each}

@@ -17,7 +17,7 @@
     PointElement,
   } from 'chart.js';
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
-    import RecordingGraphPointData from './RecordingGraphPointData.svelte';
+  import RecordingGraphPointData from './RecordingGraphPointData.svelte';
 
   export let data: { x: number[]; y: number[]; z: number[] };
 

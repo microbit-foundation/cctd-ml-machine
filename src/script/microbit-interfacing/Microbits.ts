@@ -250,9 +250,8 @@ class Microbits {
    * Sends a gesture type message, using UART
    * @param value The gesture name
    */
-  public static sendUARTGestureMessageToOutput(value: string) {
-    Logger.log("Microbits", "Sending " + value)
-    this.getOutput().sendMessage(`g${value}`);
+  public static async sendUARTGestureMessageToOutput(value: string) {
+    await this.sendToOutputUart('g', `${value}`);
   }
 
   /**

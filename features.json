@@ -3,5 +3,6 @@
   "knnModel": true,
   "lossGraph": true,
   "makecode": true,
-  "liveGraphInputValues": true
+  "liveGraphInputValues": true,
+  "recordingScrubberValues": true
 }

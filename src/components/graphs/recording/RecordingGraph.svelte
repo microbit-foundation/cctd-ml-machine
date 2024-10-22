@@ -18,6 +18,7 @@
   } from 'chart.js';
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
   import RecordingGraphPointData from './RecordingGraphPointData.svelte';
+  import { Feature, hasFeature } from '../../../script/FeatureToggles';
 
   export let data: { x: number[]; y: number[]; z: number[] };
 
@@ -223,11 +224,13 @@
 <div bind:this={htmlElement} class="h-full w-full relative">
   <div class="z-1 h-full w-full absolute">
     {#if !isNaN(hoverIndex)}
-      <p
-        style="left: {verticalLineX - 128}px; top:-25px ;pointer-events:none"
-        class="absolute w-40">
-        <RecordingGraphPointData data={getDataByIndex(hoverIndex)} />
-      </p>
+      {#if hasFeature(Feature.RECORDING_SCRUBBER_VALUES)}
+        <p
+          style="left: {verticalLineX - 128}px; top:-25px ;pointer-events:none"
+          class="absolute w-40">
+          <RecordingGraphPointData data={getDataByIndex(hoverIndex)} />
+        </p>
+      {/if}
 
       <p
         style="margin-left: {verticalLineX - 20}px; pointer-events:none;"

@@ -251,7 +251,7 @@ class Microbits {
    * @param value The gesture name
    */
   public static async sendUARTGestureMessageToOutput(value: string) {
-    await this.sendToOutputUart("g", `${value}`);
+    await this.sendToOutputUart('g', `${value}`);
   }
 
   /**

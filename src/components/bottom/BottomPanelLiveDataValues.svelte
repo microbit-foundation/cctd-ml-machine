@@ -8,17 +8,20 @@
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { stores } from '../../script/stores/Stores';
   import StaticConfiguration from '../../StaticConfiguration';
+    import FixedNumber from '../base/FixedNumber.svelte';
 
   const liveData = new SmoothedLiveData($stores.liveData, 3);
   $: input = $liveData.getVector();
   $: labels = $liveData.getLabels();
 </script>
 
-<div class="flex flex-row w-50 justify-between">
+<div class="flex flex-row w-60 justify-between">
   {#each input as inputValue, i}
     <div class="w-16">
-      <p style="color:{StaticConfiguration.liveGraphColors[i]}">
-        {labels[i]}: {inputValue.toFixed(2)}
+      <p class="whitespace-nowrap" style="color:{StaticConfiguration.liveGraphColors[i]}">
+        {#key inputValue}
+          {labels[i]}: <FixedNumber digits={2} number={inputValue}/>
+        {/key}
       </p>
     </div>
   {/each}

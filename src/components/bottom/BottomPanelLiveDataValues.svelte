@@ -10,7 +10,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import FixedNumber from '../base/FixedNumber.svelte';
 
-  const liveData = new SmoothedLiveData($stores.liveData, 3);
+  $: liveData = new SmoothedLiveData($stores.liveData, 3);
   $: input = $liveData.getVector();
   $: labels = $liveData.getLabels();
 </script>

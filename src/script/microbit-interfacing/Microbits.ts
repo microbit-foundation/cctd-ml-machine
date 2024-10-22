@@ -251,6 +251,7 @@ class Microbits {
    * @param value The gesture name
    */
   public static sendUARTGestureMessageToOutput(value: string) {
+    Logger.log("Microbits", "Sending " + value)
     this.getOutput().sendMessage(`g${value}`);
   }
 

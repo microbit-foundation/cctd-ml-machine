@@ -4,13 +4,17 @@
  * SPDX-License-Identifier: MIT
  */
 import { Subscriber, Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
-import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
+import AccelerometerClassifierInput, {
+  SingleAxisClassifierInput,
+} from '../mlmodels/AccelerometerClassifierInput';
 import StaticConfiguration from '../../StaticConfiguration';
 import { TimestampedData } from '../domain/LiveDataBuffer';
 import Engine, { EngineData } from '../domain/stores/Engine';
 import Classifier from '../domain/stores/Classifier';
 import LiveData from '../domain/stores/LiveData';
 import { LiveDataVector } from '../domain/stores/LiveDataVector';
+import Logger from '../utils/Logger';
+import ClassifierInput from '../domain/ClassifierInput';
 
 /**
  * The PollingPredictorEngine will predict on the current input with consistent intervals.
@@ -75,15 +79,13 @@ class PollingPredictorEngine implements Engine {
     void this.classifier.classify(input);
   }
 
-  private bufferToInput(): AccelerometerClassifierInput {
+  private bufferToInput(): ClassifierInput {
     const bufferedData = this.getRawDataFromBuffer(
       StaticConfiguration.pollingPredictionSampleSize,
     );
-    const xs = bufferedData.map(data => data.value.getVector()[0]);
-    const ys = bufferedData.map(data => data.value.getVector()[1]);
-    const zs = bufferedData.map(data => data.value.getVector()[2]);
+    const zs = bufferedData.map(data => data.value.getVector()[0]);
     // TODO: Generalize
-    return new AccelerometerClassifierInput(xs, ys, zs);
+    return new SingleAxisClassifierInput(zs);
   }
 
   /**
@@ -96,6 +98,10 @@ class PollingPredictorEngine implements Engine {
         .getSeries(StaticConfiguration.pollingPredictionSampleDuration, sampleSize);
     } catch (_e) {
       if (sampleSize < 8) {
+        Logger.log(
+          'PollingPredictorEngine',
+          'Too few samples available, returning empty array',
+        );
         return []; // The minimum number of points is 8, otherwise the filters will throw an exception
       } else {
         // If too few samples are available, try again with fewer samples

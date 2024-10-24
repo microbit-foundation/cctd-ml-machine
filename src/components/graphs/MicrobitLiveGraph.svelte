@@ -23,16 +23,12 @@
 {#if showhighlit}
   {#key highlightedVectorIndex}
     <LiveGraph
-      minValue={StaticConfiguration.liveGraphValueBounds.min}
-      maxValue={StaticConfiguration.liveGraphValueBounds.max}
+      minValue={StaticConfiguration.liveGraphValueBounds.min + 0.2}
+      maxValue={StaticConfiguration.liveGraphValueBounds.max + 0.2}
       liveData={$stores.liveData}
       highlightVectorIndex={highlightedVectorIndex}
       {width} />
   {/key}
 {:else}
-  <LiveGraph
-    minValue={StaticConfiguration.liveGraphValueBounds.min}
-    maxValue={StaticConfiguration.liveGraphValueBounds.max}
-    liveData={$stores.liveData}
-    {width} />
+  <LiveGraph minValue={-2.2} maxValue={4} liveData={$stores.liveData} {width} />
 {/if}

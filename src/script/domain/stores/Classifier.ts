@@ -40,6 +40,11 @@ class Classifier implements Readable<ClassifierData> {
     const filteredInput = input.getInput(this.filters);
     const predictions = await this.getModel().predict(filteredInput);
     predictions.forEach((confidence, index) => {
+      if (isNaN(confidence)) {
+        throw new Error(
+          `Classifier returned NaN confidence for gesture at index ${index}`,
+        );
+      }
       const gesture = get(this.gestures)[index];
       this.confidenceSetter(gesture.getId(), confidence);
     });

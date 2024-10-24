@@ -43,4 +43,16 @@ class AccelerometerClassifierInput implements ClassifierInput {
   }
 }
 
+export class SingleAxisClassifierInput implements ClassifierInput {
+  constructor(private axis: number[]) {}
+
+  public getInput(filters: Filters): number[] {
+    return [...filters.compute(this.axis)];
+  }
+
+  public getNumberOfSamples(): number {
+    return this.axis.length;
+  }
+}
+
 export default AccelerometerClassifierInput;

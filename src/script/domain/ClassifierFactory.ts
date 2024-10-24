@@ -68,11 +68,7 @@ class ClassifierFactory {
     return recordings.map(recording => {
       const data = recording.data;
       return {
-        value: [
-          ...filters.compute(data.x),
-          ...filters.compute(data.y),
-          ...filters.compute(data.z),
-        ],
+        value: [...filters.compute(data.z)],
       };
     });
   }

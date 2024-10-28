@@ -34,6 +34,7 @@ class InputMicrobitHandler implements MicrobitHandler {
       s.isInputConnected = true;
       s.isRequestingDevice = DeviceRequestStates.NONE;
       s.offerReconnect = false;
+      s.isInputInitializing = false;
       s.isInputReady = true;
       s.isInputAssigned = true; // TODO: Maybe this should just be removed
       return s;
@@ -57,7 +58,21 @@ class InputMicrobitHandler implements MicrobitHandler {
     );
   }
 
+  public onInitializing(): void {
+    Logger.log('InputMicrobitHandler', 'onInitializing');
+    state.update(s => {
+      s.isInputInitializing = true;
+      return s;
+    })
+    clearTimeout(this.reconnectTimeout);
+    const onTimeout = () => onCatastrophicError(false);
+    this.reconnectTimeout = setTimeout(function () {
+      onTimeout();
+    }, StaticConfiguration.reconnectTimeoutDuration);
+  }
+
   public onButtonAPressed(state: MBSpecs.ButtonState): void {
+    Logger.log('InputMicrobitHandler', 'onButtonAPressed', state);
     if (state === MBSpecs.ButtonStates.Released) return;
     buttonPressed.update(obj => {
       obj.buttonA = 1;
@@ -67,6 +82,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onButtonBPressed(state: MBSpecs.ButtonState): void {
+    Logger.log('InputMicrobitHandler', 'onButtonBPressed', state);
     if (state === MBSpecs.ButtonStates.Released) return;
     buttonPressed.update(obj => {
       obj.buttonA = 0;
@@ -99,6 +115,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onDisconnected(): void {
+    Logger.log('InputMicrobitHandler', 'onDisconnected');
     state.update(s => {
       s.isInputConnected = false;
       s.offerReconnect = false;
@@ -135,11 +152,12 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onClosed(): void {
+    Logger.log('InputMicrobitHandler', 'onClosed');
     state.update(s => {
       s.isInputConnected = false;
       s.isInputAssigned = false;
       s.isInputReady = false;
-      //s.offerReconnect = true; // TODO: Maybe this should be implemented
+      s.offerReconnect = true;
       s.reconnectState = DeviceRequestStates.INPUT;
       return s;
     });
@@ -147,16 +165,11 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onConnecting(): void {
-    // Works like this: If the MB manages to connect, wait `reconnectTimeoutDuration` milliseconds
-    // if MB does not call onReady before that expires, refresh the page
-    clearTimeout(this.reconnectTimeout);
-    const onTimeout = () => onCatastrophicError(false); // TODO: Replace false, with a check for presence of a name
-    this.reconnectTimeout = setTimeout(function () {
-      onTimeout();
-    }, StaticConfiguration.reconnectTimeoutDuration);
+    Logger.log('InputMicrobitHandler', 'onConnecting');
   }
 
   public onClosedError(error: Error): void {
+    Logger.log('InputMicrobitHandler', 'onClosedError', error);
     throw new Error('Not sure what to do here');
   }
 }

@@ -41,13 +41,16 @@ class OutputMicrobitHandler implements MicrobitHandler {
     clearTimeout(this.reconnectTimeout);
   }
 
-  public onConnecting() {
-    Logger.log('OutputMicrobitHandler', 'onConnecting');
+  public onInitializing(): void {
     clearTimeout(this.reconnectTimeout);
     const onTimeout = () => onCatastrophicError(false);
     this.reconnectTimeout = setTimeout(function () {
       onTimeout();
     }, StaticConfiguration.reconnectTimeoutDuration);
+  }
+
+  public onConnecting() {
+    Logger.log('OutputMicrobitHandler', 'onConnecting');
   }
 
   public onDisconnected(): void {
@@ -122,7 +125,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
       s.isOutputConnected = false;
       s.isOutputAssigned = false;
       s.isOutputReady = false;
-
+      s.offerReconnect = true;
       s.reconnectState = DeviceRequestStates.OUTPUT;
       return s;
     });

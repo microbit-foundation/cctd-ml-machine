@@ -52,6 +52,7 @@ export const state = writable<{
   isInputAssigned: boolean;
   isOutputAssigned: boolean;
   isOutputReady: boolean;
+  isInputInitializing: boolean;
   isLoading: boolean;
   modelView: ModelView;
   isInputOutdated: boolean;
@@ -69,6 +70,7 @@ export const state = writable<{
   isInputAssigned: false,
   isOutputAssigned: false,
   isOutputReady: false,
+  isInputInitializing: false,
   isLoading: true,
   modelView: ModelView.STACK,
   isInputOutdated: false,

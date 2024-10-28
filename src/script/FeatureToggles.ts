@@ -12,6 +12,8 @@ export enum Feature {
   TITLE = 'title',
   LOSS_GRAPH = 'lossGraph',
   MAKECODE = 'makecode',
+  LIVE_GRAPH_INPUT_VALUES = 'liveGraphInputValues',
+  RECORDING_SCRUBBER_VALUES = 'recordingScrubberValues',
 }
 
 export const hasFeature = (feature: Feature): boolean => {

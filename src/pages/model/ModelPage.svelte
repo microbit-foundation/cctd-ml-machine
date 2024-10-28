@@ -15,10 +15,7 @@
   import ModelPageTileView from './tileview/ModelPageTileView.svelte';
 
   const openMakeCodeInNewTab = () => {
-    window.open(
-      StaticConfiguration.makecodeFirmwareUrl,
-      '_blank', // <- This is what makes it open in a new tab.
-    );
+    window.open(StaticConfiguration.makecodeFirmwareUrl, '_blank');
   };
 </script>
 

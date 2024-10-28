@@ -6,9 +6,9 @@
 import { Readable, Subscriber, Unsubscriber, Writable, derived, get } from 'svelte/store';
 import GestureConfidence from './GestureConfidence';
 import { PersistantGestureData, RecordingData } from './Gestures';
-import MBSpecs from '../../../microbit-interfacing/MBSpecs';
 import { PinTurnOnState } from '../../../../components/output/PinSelectorUtil';
 import BindableValue from '../BindableValue';
+import { MBSpecs } from 'microbyte';
 
 export type GestureID = number;
 

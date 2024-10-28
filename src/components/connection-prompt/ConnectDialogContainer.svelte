@@ -20,9 +20,8 @@
   import ConnectSameDialog from './ConnectSameDialog.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { btPatternInput, btPatternOutput } from '../../script/stores/connectionStore';
-  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
   import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
-  import { onMount } from 'svelte';
+  import { MBSpecs } from 'microbyte';
 
   let flashProgress = 0;
 
@@ -57,15 +56,7 @@
       })
       .catch((e: Error) => {
         // Couldn't find name. Set to manual transfer progress instead
-
         $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
-        /* TODO: Disabled the broken firmware warning for now
-        if (e.message.includes('No valid interfaces found')) {
-          // Edge case, caused by a bad micro:bit firmware
-          $connectionDialogState.connectionState = ConnectDialogStates.BAD_FIRMWARE;
-        } else {
-        }
-*/
       });
   }
 

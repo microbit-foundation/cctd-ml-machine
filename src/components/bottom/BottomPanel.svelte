@@ -55,8 +55,7 @@
       <div class="absolute w-full h-full">
         <MicrobitLiveGraph width={componentWidth - 160} />
       </div>
-      {#if !$state.isInputReady}
-        <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->
+      {#if $state.isInputInitializing}
         <div
           class="absolute w-full h-full flex items-center justify-center text-secondarytext">
           <div class="bg-secondary bg-opacity-80 py-2 px-4 rounded-full" transition:fade>

@@ -97,7 +97,7 @@
         <p class="text-sm">
           You can create a hex file on <a
             target="_blank"
-            href="{StaticConfiguration.makecodeFirmwareUrl}"
+            href={StaticConfiguration.makecodeFirmwareUrl}
             class="text-secondary">
             MakeCode
           </a>

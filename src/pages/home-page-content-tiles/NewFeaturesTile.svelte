@@ -13,21 +13,18 @@
 <p>
   {$t('content.index.newzBodyMakecode')}
 </p>
-<div class="flex justify-center">
-  <ImageSkeleton
-    alt="microbit guide"
-    height={200}
-    src="/imgs/Makecode_integration.png"
-    width={200} />
-</div>
-<p class="mt-4 mb-5">
-  <a class="text-link hover:underline" href="/training/filters"
-    >{$t('content.index.newzBodyViz')}</a>
-</p>
+<br/>
 <div class="flex justify-center">
   <ImageSkeleton
     alt="One of the new visualizations"
-    height={200}
-    src="/imgs/data_rep_viz.png"
-    width={250} />
+    src="/imgs/math_version.png"
+    width={350} />
 </div>
+<br/>
+<p>
+  {$t('content.index.mathVersion')}
+  <a class="text-link hover:underline" href="https://www.math.ml-machine.org/">
+    math.ml-machine.org
+  </a>
+</p>
+

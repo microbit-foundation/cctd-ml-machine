@@ -143,7 +143,7 @@
               small
               outlined={$highlightedAxis !== 0}
               onClick={() => {
-                $highlightedAxis = 0
+                $highlightedAxis = 0;
                 stores.getHighlightedAxis().set(0);
               }}>X</StandardButton>
           </div>
@@ -153,7 +153,7 @@
               small
               outlined={$highlightedAxis !== 1}
               onClick={() => {
-                $highlightedAxis = 1
+                $highlightedAxis = 1;
                 stores.getHighlightedAxis().set(1);
               }}>Y</StandardButton>
           </div>
@@ -163,9 +163,9 @@
               small
               outlined={$highlightedAxis !== 2}
               onClick={() => {
-                $highlightedAxis = 2
+                $highlightedAxis = 2;
                 stores.getHighlightedAxis().set(2);
-                }}>Z</StandardButton>
+              }}>Z</StandardButton>
           </div>
         </div>
         <div class="pl-20 flex flex-col justify-around">

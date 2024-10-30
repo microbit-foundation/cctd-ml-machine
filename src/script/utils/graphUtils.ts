@@ -110,7 +110,7 @@ export const extractAxisFromAccelerometerData = (
     case 2:
       return data.map(val => val.z);
   }
-  throw new Error(`Cannot extract from axis ${axis}`)
+  throw new Error(`Cannot extract from axis ${axis}`);
 };
 
 export const distanceBetween = (point1: Point3D, point2: Point3D): number => {

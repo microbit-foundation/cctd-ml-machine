@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { get, writable } from 'svelte/store';
-import {  selectedModel } from '../../script/stores/uiStore';
+import { selectedModel } from '../../script/stores/uiStore';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
 import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';

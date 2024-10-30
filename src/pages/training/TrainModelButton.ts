@@ -5,10 +5,8 @@
  */
 import { Writable, get } from 'svelte/store';
 import { DropdownOption } from '../../components/buttons/Buttons';
-import { highlightedAxis } from '../../script/stores/uiStore';
 import ModelTrainer from '../../script/domain/ModelTrainer';
 import MLModel from '../../script/domain/MLModel';
-import Axes from '../../script/domain/Axes';
 import { stores } from '../../script/stores/Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
@@ -22,6 +20,7 @@ import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
 import { knnConfig } from '../../script/stores/knnConfig';
 
 const classifier = stores.getClassifier();
+const highlightedAxis = stores.getHighlightedAxis();
 
 export const options: DropdownOption[] = ModelRegistry.getModels().map(model => {
   return {
@@ -36,7 +35,7 @@ export const getModelTrainer = (
 ): ModelTrainer<MLModel> => {
   const currentAxis = get(highlightedAxis);
   if (model.id === ModelRegistry.KNN.id) {
-    const offset = currentAxis === Axes.X ? 0 : currentAxis === Axes.Y ? 1 : 2;
+    const offset = currentAxis === 0 ? 0 : currentAxis === 1 ? 1 : 2; // TODO: Rewrite to use just use the axis as offset directly
     return new KNNNonNormalizedModelTrainer(get(knnConfig).k, data =>
       extractAxisFromTrainingData(data, offset, 3),
     );

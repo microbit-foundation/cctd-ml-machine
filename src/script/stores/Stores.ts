@@ -37,6 +37,7 @@ class Stores implements Readable<StoresType> {
   private classifier: Classifier;
   private gestures: Gestures;
   private confidences: Confidences;
+  private highlightedAxis: Writable<number | undefined>;
 
   public constructor() {
     this.liveData = writable(undefined);
@@ -45,6 +46,7 @@ class Stores implements Readable<StoresType> {
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
+    this.highlightedAxis = writable(undefined);
   }
 
   public subscribe(
@@ -97,6 +99,10 @@ class Stores implements Readable<StoresType> {
 
   public getConfidences(): Confidences {
     return this.confidences;
+  }
+
+  public getHighlightedAxis(): Writable<number | undefined> {
+    return this.highlightedAxis;
   }
 }
 

@@ -7,10 +7,8 @@
 <script lang="ts">
   import { Unsubscriber, derived, get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import Axes from '../../../script/domain/Axes';
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';
-  import { highlightedAxis } from '../../../script/stores/uiStore';
   import arrowCreate from 'arrows-svg';
   import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
@@ -20,6 +18,7 @@
   const classifier = stores.getClassifier();
 
   $: liveData = $stores.liveData;
+  const highlightedAxis = stores.getHighlightedAxis();
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -48,19 +47,19 @@
     });
   };
 
-  const updateArrows = (axis: Axes | undefined) => {
+  const updateArrows = (axis: number | undefined) => {
     if (axis) {
       const getId = (): string => {
-        if ($highlightedAxis === Axes.X) {
+        if ($highlightedAxis === 0) {
           return 'fromX';
         }
-        if ($highlightedAxis === Axes.Y) {
+        if ($highlightedAxis === 1) {
           return 'fromY';
         }
-        if ($highlightedAxis === Axes.Z) {
+        if ($highlightedAxis === 2) {
           return 'fromZ';
         }
-        throw Error('This shouldnt happen');
+        throw Error('Cannot update arrows for axis ' + axis);
       };
       drawArrows(getId());
     }
@@ -83,7 +82,7 @@
       const filteredSeries = stores
         .getClassifier()
         .getFilters()
-        .compute(extractAxisFromAccelerometerData(series, get(highlightedAxis)!));
+        .compute(extractAxisFromAccelerometerData(series, $highlightedAxis!));
       return filteredSeries;
     } catch (e) {
       return Array(classifier.getFilters().count()).fill(0);
@@ -142,22 +141,31 @@
             <StandardButton
               color={StaticConfiguration.liveGraphColors[0]}
               small
-              outlined={$highlightedAxis !== Axes.X}
-              onClick={() => ($highlightedAxis = Axes.X)}>X</StandardButton>
+              outlined={$highlightedAxis !== 0}
+              onClick={() => {
+                $highlightedAxis = 0
+                stores.getHighlightedAxis().set(0);
+              }}>X</StandardButton>
           </div>
           <div class="flex flex-row space-x-2" id="fromY">
             <StandardButton
               color={StaticConfiguration.liveGraphColors[1]}
               small
-              outlined={$highlightedAxis !== Axes.Y}
-              onClick={() => ($highlightedAxis = Axes.Y)}>Y</StandardButton>
+              outlined={$highlightedAxis !== 1}
+              onClick={() => {
+                $highlightedAxis = 1
+                stores.getHighlightedAxis().set(1);
+              }}>Y</StandardButton>
           </div>
           <div class="flex flex-row space-x-2" id="fromZ">
             <StandardButton
               color={StaticConfiguration.liveGraphColors[2]}
               small
-              outlined={$highlightedAxis !== Axes.Z}
-              onClick={() => ($highlightedAxis = Axes.Z)}>Z</StandardButton>
+              outlined={$highlightedAxis !== 2}
+              onClick={() => {
+                $highlightedAxis = 2
+                stores.getHighlightedAxis().set(2);
+                }}>Z</StandardButton>
           </div>
         </div>
         <div class="pl-20 flex flex-col justify-around">

@@ -6,8 +6,7 @@
 import { get } from 'svelte/store';
 import ClassifierInput from '../domain/ClassifierInput';
 import Filters from '../domain/Filters';
-import { highlightedAxis } from '../stores/uiStore';
-import Axes from '../domain/Axes';
+import { stores } from '../stores/Stores';
 
 class AccelerometerClassifierInput implements ClassifierInput {
   constructor(
@@ -18,15 +17,15 @@ class AccelerometerClassifierInput implements ClassifierInput {
 
   public getInput(filters: Filters): number[] {
     // TODO: Bad! How should we go about deciding what axes are provided for prediction when axes are highlighted?
-    const axis = get(highlightedAxis);
+    const axis = get(stores.getHighlightedAxis());
     if (axis) {
-      if (axis === Axes.X) {
+      if (axis === 0) {
         return [...filters.compute(this.xs)];
       }
-      if (axis === Axes.Y) {
+      if (axis === 1) {
         return [...filters.compute(this.ys)];
       }
-      if (axis === Axes.Z) {
+      if (axis === 2) {
         return [...filters.compute(this.zs)];
       }
     }

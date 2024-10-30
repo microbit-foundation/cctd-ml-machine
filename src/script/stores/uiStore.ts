@@ -14,7 +14,6 @@ import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import Gesture from '../domain/stores/gesture/Gesture';
-import Axes from '../domain/Axes';
 import PersistantWritable from '../repository/PersistantWritable';
 import { DropdownOption } from '../../components/buttons/Buttons';
 import { stores } from './Stores';
@@ -135,10 +134,6 @@ export const selectedModel = new PersistantWritable<ModelInfo>(
   defaultModel,
   'selectedModel',
 );
-
-// TODO: Should probably be elsewhere
-export const prevHighlightedAxis = writable<Axes | undefined>(undefined);
-export const highlightedAxis = writable<Axes | undefined>(undefined);
 
 const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB;
 

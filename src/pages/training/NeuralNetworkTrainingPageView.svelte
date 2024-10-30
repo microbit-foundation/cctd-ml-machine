@@ -14,10 +14,10 @@
   import Logger from '../../script/utils/Logger';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import { onMount } from 'svelte';
-  import { highlightedAxis } from '../../script/stores/uiStore';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
+  const highlightedAxis = stores.getHighlightedAxis();
 
   const trainModelClickHandler = () => {
     trainModel(ModelRegistry.NeuralNetwork).then(() => {

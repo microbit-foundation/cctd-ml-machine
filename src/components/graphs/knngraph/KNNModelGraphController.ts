@@ -11,7 +11,6 @@ import {
   MicrobitAccelerometerDataVector,
 } from '../../../script/livedata/MicrobitAccelerometerData';
 import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
-import Axes from '../../../script/domain/Axes';
 import Filters from '../../../script/domain/Filters';
 import { Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
@@ -54,7 +53,7 @@ class KNNModelGraphController {
     origin: { x: number; y: number },
     classId: string,
     colors: string[],
-    axis?: Axes,
+    axis?: number,
   ) {
     this.filters = stores.getClassifier().getFilters();
     this.trainingData = this.trainingDataToPoints();
@@ -229,16 +228,16 @@ class KNNModelGraphController {
   }
 
   // Called whenever any subscribed store is altered
-  private onUpdate(draw: UpdateCall, axis?: Axes) {
+  private onUpdate(draw: UpdateCall, axis?: number) {
     let data: TimestampedData<MicrobitAccelerometerDataVector>[] = draw.data;
 
     const getLiveFilteredData = () => {
       switch (axis) {
-        case Axes.X:
+        case 0:
           return this.filters.compute(data.map(d => d.value.getAccelerometerData().x));
-        case Axes.Y:
+        case 1:
           return this.filters.compute(data.map(d => d.value.getAccelerometerData().y));
-        case Axes.Z:
+        case 2:
           return this.filters.compute(data.map(d => d.value.getAccelerometerData().z));
         default:
           throw new Error("Shouldn't happen");

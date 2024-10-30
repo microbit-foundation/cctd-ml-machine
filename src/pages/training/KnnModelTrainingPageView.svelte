@@ -5,22 +5,19 @@
  -->
 <script lang="ts">
   import { stores } from '../../script/stores/Stores';
-  import { highlightedAxis, state } from '../../script/stores/uiStore';
+  import { state } from '../../script/stores/uiStore';
   import AxesFilterVectorView from '../../components/graphs/knngraph/AxesFilterVectorView.svelte';
   import { trainModel } from './TrainingPage';
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
-  import StaticConfiguration from '../../StaticConfiguration';
-  import Axes from '../../script/domain/Axes';
   import { t } from '../../i18n';
   import { onMount } from 'svelte';
   import { knnConfig } from '../../script/stores/knnConfig';
-  import Logger from '../../script/utils/Logger';
   const classifier = stores.getClassifier();
   const confidences = stores.getConfidences();
   const gestures = stores.getGestures();
-  //const confidences = gestures.getConfidences();
   const filters = classifier.getFilters();
+  const highlightedAxis = stores.getHighlightedAxis();
 
   onMount(() => {
     trainModel(ModelRegistry.KNN);
@@ -28,7 +25,7 @@
   });
   $: {
     if ($highlightedAxis === undefined) {
-      $highlightedAxis = Axes.X;
+      $highlightedAxis = 0;
     }
     if (!$classifier.model.isTrained) {
       trainModel(ModelRegistry.KNN);

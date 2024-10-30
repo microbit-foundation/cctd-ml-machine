@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import Axes from '../domain/Axes';
 import { TrainingData } from '../domain/ModelTrainer';
 import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
@@ -101,16 +100,17 @@ export const extractFilterFromTrainingData = (
 
 export const extractAxisFromAccelerometerData = (
   data: MicrobitAccelerometerData[],
-  axis: Axes,
+  axis: number,
 ) => {
   switch (axis) {
-    case Axes.X:
+    case 0:
       return data.map(val => val.x);
-    case Axes.Y:
+    case 1:
       return data.map(val => val.y);
-    case Axes.Z:
+    case 2:
       return data.map(val => val.z);
   }
+  throw new Error(`Cannot extract from axis ${axis}`)
 };
 
 export const distanceBetween = (point1: Point3D, point2: Point3D): number => {

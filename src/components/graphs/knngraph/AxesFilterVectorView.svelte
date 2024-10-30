@@ -48,15 +48,15 @@
   };
 
   const updateArrows = (axis: number | undefined) => {
-    if (axis) {
+    if (axis !== undefined) {
       const getId = (): string => {
-        if ($highlightedAxis === 0) {
+        if (axis === 0) {
           return 'fromX';
         }
-        if ($highlightedAxis === 1) {
+        if (axis === 1) {
           return 'fromY';
         }
-        if ($highlightedAxis === 2) {
+        if (axis === 2) {
           return 'fromZ';
         }
         throw Error('Cannot update arrows for axis ' + axis);
@@ -134,7 +134,7 @@
 
 <div class:hidden={!$classifier.model.isTrained && !$classifier.model.isTraining}>
   <div>
-    {#if $highlightedAxis}
+    {#if $highlightedAxis !== undefined}
       <div class="flex flex-row space-x-1">
         <div class="flex flex-col justify-evenly">
           <div class="flex flex-row space-x-2" id="fromX">

@@ -72,7 +72,7 @@
   };
 
   $: {
-    if ($highlightedAxis) {
+    if ($highlightedAxis !== undefined) {
       if (get(controller)) {
         get(controller)!.destroy();
       }

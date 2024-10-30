@@ -18,7 +18,7 @@ class AccelerometerClassifierInput implements ClassifierInput {
   public getInput(filters: Filters): number[] {
     // TODO: Bad! How should we go about deciding what axes are provided for prediction when axes are highlighted?
     const axis = get(stores.getHighlightedAxis());
-    if (axis) {
+    if (axis !== undefined) {
       if (axis === 0) {
         return [...filters.compute(this.xs)];
       }

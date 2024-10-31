@@ -13,18 +13,17 @@
 <p>
   {$t('content.index.newzBodyMakecode')}
 </p>
-<br/>
+<br />
 <div class="flex justify-center">
   <ImageSkeleton
     alt="One of the new visualizations"
     src="/imgs/math_version.png"
     width={350} />
 </div>
-<br/>
+<br />
 <p>
   {$t('content.index.mathVersion')}
   <a class="text-link hover:underline" href="https://www.math.ml-machine.org/">
     math.ml-machine.org
   </a>
 </p>
-

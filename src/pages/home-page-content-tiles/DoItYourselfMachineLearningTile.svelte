@@ -39,4 +39,3 @@
 <p>
   {$t('content.index.setupBody2')}
 </p>
-

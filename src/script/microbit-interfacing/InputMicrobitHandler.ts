@@ -63,7 +63,7 @@ class InputMicrobitHandler implements MicrobitHandler {
     state.update(s => {
       s.isInputInitializing = true;
       return s;
-    })
+    });
     clearTimeout(this.reconnectTimeout);
     const onTimeout = () => onCatastrophicError(false);
     this.reconnectTimeout = setTimeout(function () {

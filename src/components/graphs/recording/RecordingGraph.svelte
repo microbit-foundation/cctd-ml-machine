@@ -19,6 +19,7 @@
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
   import RecordingGraphPointData from './RecordingGraphPointData.svelte';
   import { Feature, hasFeature } from '../../../script/FeatureToggles';
+  import { stores } from '../../../script/stores/Stores';
 
   export let data: { x: number[]; y: number[]; z: number[] };
 
@@ -26,8 +27,11 @@
   let hoverIndex = NaN;
   let modalPosition = { x: 0, y: 0 };
   let modalSize = 250;
+
   const verticalLineCol = 'black';
   const verticalLineWidth = 1;
+
+  const highlightedAxis = stores.getHighlightedAxis();
 
   const getDataByIndex = (index: number) => {
     if (isNaN(index)) {

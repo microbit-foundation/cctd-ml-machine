@@ -24,6 +24,7 @@ import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
+import HighlightedAxis from './HighlightedAxis';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector>;
@@ -37,7 +38,7 @@ class Stores implements Readable<StoresType> {
   private classifier: Classifier;
   private gestures: Gestures;
   private confidences: Confidences;
-  private highlightedAxis: Writable<number | undefined>;
+  private highlightedAxis: HighlightedAxis;
 
   public constructor() {
     this.liveData = writable(undefined);
@@ -46,7 +47,7 @@ class Stores implements Readable<StoresType> {
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
-    this.highlightedAxis = writable(undefined);
+    this.highlightedAxis = new HighlightedAxis(this.classifier);
   }
 
   public subscribe(
@@ -101,7 +102,7 @@ class Stores implements Readable<StoresType> {
     return this.confidences;
   }
 
-  public getHighlightedAxis(): Writable<number | undefined> {
+  public getHighlightedAxis(): HighlightedAxis {
     return this.highlightedAxis;
   }
 }

@@ -25,13 +25,14 @@
   $: labels = $liveData.getLabels();
 </script>
 
-<div class="flex flex-row w-50 mt-[2px] justify-between">
+<div class="flex flex-row w-50 mt-[2px] gap-2">
   {#each input as inputValue, i}
-    <div class="w-18 text-sm">
+    <div class="min-w-16 max-w-16 text-sm">
       <p
         on:click={() => clickNumber(i)}
-        class="whitespace-nowrap cursor-pointer select-none hover:border-solid hover:border-secondary px-1 border-1 font-bold rounded-md"
+        class="w-full whitespace-nowrap cursor-pointer select-none hover:border-solid hover:border-secondary px-1 border-1 rounded-md"
         class:border-secondary={$highlightedAxis === i}
+        class:font-bold={$highlightedAxis === i}
         style="color:{StaticConfiguration.liveGraphColors[i]}">
         {labels[i]}: <FixedNumber digits={2} number={inputValue} />
       </p>

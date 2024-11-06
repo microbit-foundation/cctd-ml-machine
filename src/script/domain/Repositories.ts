@@ -5,12 +5,14 @@
  */
 import ClassifierRepository from './ClassifierRepository';
 import GestureRepository from './GestureRepository';
-import Confidences from './stores/Confidences';
+import TrainingDataRepository from './TrainingDataRepository';
 
 interface Repositories {
   getGestureRepository(): GestureRepository;
 
   getClassifierRepository(): ClassifierRepository;
+
+  getTrainingDataRepository(): TrainingDataRepository;
 }
 
 export default Repositories;

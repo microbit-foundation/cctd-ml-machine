@@ -25,6 +25,9 @@ import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
 import HighlightedAxis from './HighlightedAxis';
+import ModelRegistry, { ModelInfo } from '../domain/ModelRegistry';
+import PersistantWritable from '../repository/PersistantWritable';
+import SelectedModel from './SelectedModel';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector>;
@@ -39,6 +42,7 @@ class Stores implements Readable<StoresType> {
   private gestures: Gestures;
   private confidences: Confidences;
   private highlightedAxis: HighlightedAxis;
+  private selectedModel: SelectedModel;
 
   public constructor() {
     this.liveData = writable(undefined);
@@ -47,7 +51,8 @@ class Stores implements Readable<StoresType> {
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
-    this.highlightedAxis = new HighlightedAxis(this.classifier);
+    this.selectedModel = new SelectedModel();
+    this.highlightedAxis = new HighlightedAxis(this.classifier, this.selectedModel);
   }
 
   public subscribe(
@@ -104,6 +109,10 @@ class Stores implements Readable<StoresType> {
 
   public getHighlightedAxis(): HighlightedAxis {
     return this.highlightedAxis;
+  }
+
+  public getSelectedModel(): SelectedModel {
+    return this.selectedModel;
   }
 }
 

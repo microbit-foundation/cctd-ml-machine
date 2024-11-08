@@ -43,7 +43,7 @@ class HighlightedAxis implements Writable<number | undefined> {
   private onChangedAxis() {
     this.classifier.getModel().markAsUntrained();
     if (get(this.selectedModel).id === ModelRegistry.KNN.id) {
-        throw new Error("Not implemented, should retrain model now! Need repository for training data")
+        console.error("Not implemented, should retrain model now! Need repository for training data")
     }
   }
 }

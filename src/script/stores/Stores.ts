@@ -25,8 +25,6 @@ import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
 import HighlightedAxis from './HighlightedAxis';
-import ModelRegistry, { ModelInfo } from '../domain/ModelRegistry';
-import PersistantWritable from '../repository/PersistantWritable';
 import SelectedModel from './SelectedModel';
 
 type StoresType = {

@@ -128,7 +128,7 @@
   export let maxValue: number;
   export let minValue: number;
 
-  let axisColors = StaticConfiguration.liveGraphColors;
+  let axisColors = StaticConfiguration.graphColors;
 
   // Smoothes real-time data by using the 3 most recent data points
   const smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);

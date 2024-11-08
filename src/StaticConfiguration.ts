@@ -58,7 +58,7 @@ class StaticConfiguration {
   };
 
   // Line colors are picked in the order of this array.
-  public static readonly liveGraphColors = [
+  public static readonly graphColors = [
     '#ff606e',
     '#30f09e',
     '#3030ff',

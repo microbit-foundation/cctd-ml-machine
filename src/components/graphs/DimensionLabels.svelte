@@ -55,7 +55,7 @@
     const labels = [];
     for (let i = 0; i < liveData.getSeriesSize(); i++) {
       const label = liveData.getLabels()[i];
-      const color = StaticConfiguration.liveGraphColors[i];
+      const color = StaticConfiguration.graphColors[i];
       labels.push({
         label: label,
         color: color,

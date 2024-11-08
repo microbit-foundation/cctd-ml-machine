@@ -33,7 +33,7 @@
   {#if hide}
     <div transition:fade class="absolute h-26 w-40 bg-white" />
   {/if}
-  <RecordingGraph data={recording.data} />
+  <RecordingGraph labels={['x','y','z']} data={recording.samples} />
   <button class="absolute -left-2.8px top-0px outline-none">
     <div class="relative">
       <i class="z-1 absolute fas fa-circle fa-lg text-white" />

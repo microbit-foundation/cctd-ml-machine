@@ -33,7 +33,7 @@
         class="w-full whitespace-nowrap cursor-pointer select-none hover:border-solid hover:border-secondary px-1 border-1 rounded-md"
         class:border-secondary={$highlightedAxis === i}
         class:font-bold={$highlightedAxis === i}
-        style="color:{StaticConfiguration.liveGraphColors[i]}">
+        style="color:{StaticConfiguration.graphColors[i]}">
         {labels[i]}: <FixedNumber digits={2} number={inputValue} />
       </p>
     </div>

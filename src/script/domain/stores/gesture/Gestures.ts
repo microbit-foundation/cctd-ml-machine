@@ -27,11 +27,10 @@ export type PersistantGestureData = {
 
 export type RecordingData = {
   ID: number;
-  data: {
-    x: number[];
-    y: number[];
-    z: number[];
-  };
+  samples: {
+    vector: number[]
+  }[]
+  labels: string[]
 };
 
 class Gestures implements Readable<GestureData[]> {
@@ -84,7 +83,7 @@ class Gestures implements Readable<GestureData[]> {
     const newId = Date.now();
     const color =
       StaticConfiguration.gestureColors[
-        this.getNumberOfGestures() % StaticConfiguration.gestureColors.length
+      this.getNumberOfGestures() % StaticConfiguration.gestureColors.length
       ];
     return this.addGestureFromPersistedData({
       ID: newId,

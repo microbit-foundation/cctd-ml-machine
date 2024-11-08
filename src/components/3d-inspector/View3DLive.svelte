@@ -30,4 +30,4 @@
   }
 </script>
 
-<View3D {smoothing} {width} {height} dataPoint={liveDataPoint} />
+<View3D {smoothing} {width} {height} sample={liveDataPoint} />

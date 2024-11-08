@@ -31,7 +31,7 @@
   export let minValue: number;
   export let highlightVectorIndex: number | undefined = undefined;
 
-  let axisColors = StaticConfiguration.liveGraphColors;
+  let axisColors = StaticConfiguration.graphColors;
 
   // Smoothes real-time data by using the 3 most recent data points
   let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);

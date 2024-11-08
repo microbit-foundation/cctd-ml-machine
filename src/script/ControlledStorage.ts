@@ -11,7 +11,10 @@ type StoredValue<T> = {
 };
 
 class ControlledStorage {
-  public static readonly localStorageVersion = 2;
+   /**
+   * What storage version should be used? If old user data is expected to be broken, increasing this number will delete all the data the user has in their storage location
+   */
+  public static readonly localStorageVersion = 3;
 
   public static get<T>(key: string): T {
     const storedValue = this.getStoredItem(key);

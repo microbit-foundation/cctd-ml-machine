@@ -129,7 +129,7 @@
 
   function getColorForClass(gestureID: number): string {
     if (gestureID === uniqueLiveDataID) {
-      return StaticConfiguration.liveGraphColors[gestures.getNumberOfGestures()];
+      return StaticConfiguration.graphColors[gestures.getNumberOfGestures()];
     }
 
     return gestures.getGesture(gestureID).getColor();

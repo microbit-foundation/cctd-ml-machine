@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import PersistantWritable from './PersistantWritable';
 import { Readable, Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
 import MLModel from '../domain/MLModel';
@@ -12,7 +13,6 @@ import LocalStorageRepositories from './LocalStorageRepositories';
 import Filters from '../domain/Filters';
 import Filter from '../domain/Filter';
 import FilterTypes, { FilterType } from '../domain/FilterTypes';
-import PersistantWritable from './PersistantWritable';
 import ClassifierRepository from '../domain/ClassifierRepository';
 import Gesture, { GestureID } from '../domain/stores/gesture/Gesture';
 import Classifier from '../domain/stores/Classifier';

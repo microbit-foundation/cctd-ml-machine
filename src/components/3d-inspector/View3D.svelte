@@ -13,13 +13,13 @@
   export let smoothing = false;
   export let width: number;
   export let height: number;
-  export let dataPoint: Vector3;
+  export let sample: Vector3;
 
   const webGlCompatible = $compatibility.webGL;
 </script>
 
 {#if webGlCompatible}
-  <View3DUnsafe {smoothing} {width} {height} {dataPoint} />
+  <View3DUnsafe {smoothing} {width} {height} dataPoint={sample} />
 {:else}
   <div
     class="justify-center items-center align-middle flex text-center"

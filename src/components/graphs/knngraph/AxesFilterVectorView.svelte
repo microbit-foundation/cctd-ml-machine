@@ -139,7 +139,7 @@
         <div class="flex flex-col justify-evenly">
           <div class="flex flex-row space-x-2" id="fromX">
             <StandardButton
-              color={StaticConfiguration.liveGraphColors[0]}
+              color={StaticConfiguration.graphColors[0]}
               small
               outlined={$highlightedAxis !== 0}
               onClick={() => {
@@ -149,7 +149,7 @@
           </div>
           <div class="flex flex-row space-x-2" id="fromY">
             <StandardButton
-              color={StaticConfiguration.liveGraphColors[1]}
+              color={StaticConfiguration.graphColors[1]}
               small
               outlined={$highlightedAxis !== 1}
               onClick={() => {
@@ -159,7 +159,7 @@
           </div>
           <div class="flex flex-row space-x-2" id="fromZ">
             <StandardButton
-              color={StaticConfiguration.liveGraphColors[2]}
+              color={StaticConfiguration.graphColors[2]}
               small
               outlined={$highlightedAxis !== 2}
               onClick={() => {
@@ -180,7 +180,7 @@
         </div>
         <div class="flex flex-col justify-around w-12">
           {#each liveFilteredAxesData as val, index}
-            <p style={`color:${StaticConfiguration.liveGraphColors[index]}`}>
+            <p style={`color:${StaticConfiguration.graphColors[index]}`}>
               {val.toFixed(3)}
             </p>
           {/each}

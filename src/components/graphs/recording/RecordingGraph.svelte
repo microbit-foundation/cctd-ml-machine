@@ -19,29 +19,28 @@
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
   import RecordingGraphPointData from './RecordingGraphPointData.svelte';
   import { Feature, hasFeature } from '../../../script/FeatureToggles';
+  import { RecordingData } from '../../../script/domain/stores/gesture/Gestures';
+  import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../script/stores/Stores';
 
-  export let data: { x: number[]; y: number[]; z: number[] };
+  export let data: RecordingData['samples'];
+  export let labels: RecordingData['labels'];
 
   let verticalLineX = NaN;
   let hoverIndex = NaN;
   let modalPosition = { x: 0, y: 0 };
   let modalSize = 250;
 
+  const highlightedAxis = stores.getHighlightedAxis();
+
   const verticalLineCol = 'black';
   const verticalLineWidth = 1;
 
-  const highlightedAxis = stores.getHighlightedAxis();
-
   const getDataByIndex = (index: number) => {
     if (isNaN(index)) {
-      return { x: 0, y: 0, z: 0 };
+      return [];
     }
-    return {
-      x: data.x[index],
-      y: data.y[index],
-      z: data.z[index],
-    };
+    return data[index].vector;
   };
 
   let htmlElement: HTMLDivElement;
@@ -77,53 +76,51 @@
 
     return { x, y };
   }
-
+  const getLineColor = (axisIndex: number) => {
+    if ($highlightedAxis !== undefined) {
+      if ($highlightedAxis === axisIndex) {
+        return StaticConfiguration.graphColors[axisIndex] + 'ff';
+      } else {
+        return StaticConfiguration.graphColors[axisIndex] + '33';
+      }
+    }
+    return StaticConfiguration.graphColors[axisIndex];
+  };
   function generateSizeOfInspector(rect: DOMRect): number {
     return (window.innerHeight - rect.height) / 2 - inspectorMarginPx;
   }
 
+  type ChartDataset = { x: number; y: number }[];
   function getConfig(): ChartConfiguration<
     keyof ChartTypeRegistry,
     { x: number; y: number }[],
     string
   > {
-    const x: { x: number; y: number }[] = [];
-    const y: { x: number; y: number }[] = [];
-    const z: { x: number; y: number }[] = [];
-    for (let i = 1; i < data.x.length; i++) {
-      x.push({ x: i, y: data.x[i - 1] });
-      y.push({ x: i, y: data.y[i - 1] });
-      z.push({ x: i, y: data.z[i - 1] });
+    const datasets: ChartDataset[] = [];
+    const numberOfAxes = data.length > 0 ? data[0].vector.length : 0;
+
+    for (let i = 0; i < numberOfAxes; i++) {
+      const dataset: ChartDataset = [];
+      data.forEach((e, idx) => {
+        dataset.push({
+          x: idx,
+          y: e.vector[i],
+        });
+      });
+      datasets.push(dataset);
     }
+
     return {
       type: 'line',
       data: {
-        datasets: [
-          {
-            label: 'x',
-            borderColor: 'red',
-            borderWidth: 1,
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            data: x,
-          },
-          {
-            label: 'y',
-            borderColor: 'green',
-            borderWidth: 1,
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            data: y,
-          },
-          {
-            label: 'z',
-            borderColor: 'blue',
-            borderWidth: 1,
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            data: z,
-          },
-        ],
+        datasets: datasets.map((dataset, idx) => ({
+          label: labels[idx],
+          borderColor: getLineColor(idx),
+          borderWidth: 1,
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          data: dataset,
+        })),
       },
       options: {
         responsive: true,
@@ -137,7 +134,7 @@
           x: {
             type: 'linear',
             min: 0,
-            max: data.x.length,
+            max: data[0].vector.length,
             grid: {
               color: '#f3f3f3',
             },
@@ -147,8 +144,8 @@
           },
           y: {
             type: 'linear',
-            min: -2.5,
-            max: 2.5,
+            min: -5.5,
+            max: 6.5,
             grid: {
               color: '#f3f3f3',
             },
@@ -211,16 +208,33 @@
     };
   }
 
-  let canvas: HTMLCanvasElement;
+  let canvas: HTMLCanvasElement | undefined;
+  let chart: Chart | undefined;
+
+  const unsubscribe = highlightedAxis.subscribe(() => {
+    if (chart) {
+      chart.destroy();
+      const context = canvas?.getContext('2d')!;
+      try {
+        chart = new Chart(context, getConfig());
+      } catch (_) {
+        /* Throws an error, but we will ignore it. Due to canvas/context null, but it works fine either way*/
+      }
+    }
+    return () => {
+      if (chart) {
+        chart.destroy();
+      }
+    };
+  });
+
   onMount(() => {
     Chart.unregister(...registerables);
     Chart.register([LinearScale, LineController, PointElement, LineElement]);
-    const chart = new Chart(
-      canvas.getContext('2d') ?? new HTMLCanvasElement(),
-      getConfig(),
-    );
+    const context = canvas?.getContext('2d')!;
+    chart = new Chart(context, getConfig());
     return () => {
-      chart.destroy();
+      unsubscribe();
     };
   });
 </script>
@@ -232,7 +246,7 @@
         <p
           style="left: {verticalLineX - 128}px; top:-25px ;pointer-events:none"
           class="absolute w-40">
-          <RecordingGraphPointData data={getDataByIndex(hoverIndex)} />
+          <RecordingGraphPointData sample={getDataByIndex(hoverIndex)} />
         </p>
       {/if}
 
@@ -247,7 +261,7 @@
   </div>
   <!-- For 3D view -->
   <RecordingInspector
-    dataPoint={getDataByIndex(hoverIndex)}
+    sample={getDataByIndex(hoverIndex)}
     position={modalPosition}
     isOpen={!isNaN(hoverIndex)}
     size={modalSize} />

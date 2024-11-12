@@ -10,14 +10,11 @@
   import ClassifierFactory from '../../../script/domain/ClassifierFactory';
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
   import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
-  import Axes from '../../../script/domain/Axes';
-  import { TrainingData } from '../../../script/domain/ModelTrainer';
-  import { highlightedAxis } from '../../../script/stores/uiStore';
+  import { type TrainingData } from '../../../script/domain/ModelTrainer';
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
   import { stores } from '../../../script/stores/Stores';
   import { get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import Filters from '../../../script/domain/Filters';
   import { FilterType } from '../../../script/domain/FilterTypes';
 
   const classifierFactory = new ClassifierFactory();
@@ -25,6 +22,7 @@
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
   const filters = classifier.getFilters();
+  const highlightedAxis = stores.getHighlightedAxis();
 
   const canvasWidth = 450;
   const canvasHeight = 300;
@@ -40,20 +38,20 @@
   const accelZData = extractAxisFromTrainingData(allData, 2, 3);
 
   const dataGetter = (): TrainingData => {
-    const axis = get(highlightedAxis);
-    if (axis === Axes.X) {
+    const axis = $highlightedAxis;
+    if (axis === 0) {
       return accelXData;
     }
-    if (axis === Axes.Y) {
+    if (axis === 1) {
       return accelYData;
     }
-    if (axis === Axes.Z) {
+    if (axis === 2) {
       return accelZData;
     }
-    throw new Error('Should not happen');
+    throw new Error('Cannot get data for axis ' + axis);
   };
 
-  const initSingle = (axis: Axes) => {
+  const initSingle = (axis: number) => {
     const svgSingle = d3.select('.d3-3d-single');
     const graphColors = [
       ...$gestures.map(data => data.color),
@@ -74,7 +72,7 @@
   };
 
   $: {
-    if ($highlightedAxis) {
+    if ($highlightedAxis !== undefined) {
       if (get(controller)) {
         get(controller)!.destroy();
       }
@@ -88,7 +86,7 @@
   });
 
   onMount(() => {
-    controller.set(initSingle(Axes.X));
+    controller.set(initSingle(0));
     return () => {
       get(controller)?.destroy();
     };

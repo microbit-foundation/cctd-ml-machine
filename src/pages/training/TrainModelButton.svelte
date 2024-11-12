@@ -7,17 +7,14 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import StandardDropdownButton from '../../components/buttons/StandardDropdownButton.svelte';
-  import { DropdownOption } from '../../components/buttons/Buttons';
+  import { type DropdownOption } from '../../components/buttons/Buttons';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import { Writable } from 'svelte/store';
-
-  import { highlightedAxis } from '../../script/stores/uiStore';
+  import { type Writable } from 'svelte/store';
   import { stores } from '../../script/stores/Stores';
   import { options, trainModel } from './TrainModelButton';
-  import Axes from '../../script/domain/Axes';
-  import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
-  import { LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
+  import ModelRegistry, { type ModelInfo } from '../../script/domain/ModelRegistry';
+  import { type LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
@@ -25,6 +22,7 @@
   export let selectedOption: Writable<DropdownOption>;
 
   const classifier = stores.getClassifier();
+  const highlightedAxis = stores.getHighlightedAxis();
 
   const model = classifier.getModel();
 
@@ -59,7 +57,7 @@
 
   $: {
     if ($selectedOption.id === 'KNN' && !$highlightedAxis) {
-      highlightedAxis.set(Axes.X);
+      highlightedAxis.set(0);
     }
     if ($selectedOption.id === 'NN' && $highlightedAxis) {
       highlightedAxis.set(undefined);

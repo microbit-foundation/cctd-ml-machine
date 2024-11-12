@@ -7,8 +7,8 @@ import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
 import {
-  Point3D,
-  Point3DTransformed,
+  type Point3D,
+  type Point3DTransformed,
   distanceBetween,
 } from '../../../script/utils/graphUtils';
 import { stores } from '../../../script/stores/Stores';
@@ -100,13 +100,13 @@ class KNNModelGraphDrawer {
       { x: 1, y: 0, z: 0 },
       'xScale',
       drawConfig,
-      StaticConfiguration.liveGraphColors[0],
+      StaticConfiguration.graphColors[0],
     );
     this.addAxis(
       { x: 0, y: 1, z: 0 },
       'yScale',
       drawConfig,
-      StaticConfiguration.liveGraphColors[1],
+      StaticConfiguration.graphColors[1],
     );
     if (stores.getClassifier().getFilters().count() === 3) {
       // 3d, draw z-axis (forward/backward)
@@ -114,7 +114,7 @@ class KNNModelGraphDrawer {
         { x: 0, y: 0, z: 1 },
         'zScale',
         drawConfig,
-        StaticConfiguration.liveGraphColors[2],
+        StaticConfiguration.graphColors[2],
       );
     }
     const drawablePoints: DrawablePoint[] = [];

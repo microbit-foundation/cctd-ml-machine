@@ -5,13 +5,14 @@
  -->
 
 <script lang="ts">
-  import { selectedModel } from '../../script/stores/uiStore';
   import FiltersList from '../../components/filters/FiltersList.svelte';
   import KnnModelTrainingPageView from './KnnModelTrainingPageView.svelte';
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
+  import { stores } from '../../script/stores/Stores';
 
+  const selectedModel = stores.getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);
 </script>
 

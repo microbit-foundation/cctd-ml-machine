@@ -15,7 +15,7 @@
 </style>
 
 <script lang="ts">
-  import { ComponentType } from 'svelte';
+  import { type ComponentType } from 'svelte';
   import FrontPageContentTile from '../components/FrontPageContentTile.svelte';
   import DoItYourselfMachineLearningTile from './home-page-content-tiles/DoItYourselfMachineLearningTile.svelte';
   import NewFeaturesTile from './home-page-content-tiles/NewFeaturesTile.svelte';

@@ -3,13 +3,14 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { MBSpecs, MicrobitHandler } from 'microbyte';
+import { MBSpecs, type MicrobitHandler } from 'microbyte';
 import { ModelView, onCatastrophicError, state } from '../stores/uiStore';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
 import StaticConfiguration from '../../StaticConfiguration';
 import TypingUtils from '../TypingUtils';
 import Logger from '../utils/Logger';
-import Microbits, { HexOrigin } from './Microbits';
+import Microbits from './Microbits';
+import { HexOrigin } from './HexOrigin';
 
 class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);

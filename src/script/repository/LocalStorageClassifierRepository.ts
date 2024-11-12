@@ -3,21 +3,21 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Writable, derived, get, writable } from 'svelte/store';
+import PersistantWritable from './PersistantWritable';
+import { type Readable, type Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
-import MLModel from '../domain/MLModel';
-import ModelTrainer from '../domain/ModelTrainer';
+import type { MLModel } from '../domain/MLModel';
+import type { ModelTrainer } from '../domain/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
 import LocalStorageRepositories from './LocalStorageRepositories';
 import Filters from '../domain/Filters';
-import Filter from '../domain/Filter';
+import { type Filter } from '../domain/Filter';
 import FilterTypes, { FilterType } from '../domain/FilterTypes';
-import PersistantWritable from './PersistantWritable';
-import ClassifierRepository from '../domain/ClassifierRepository';
-import Gesture, { GestureID } from '../domain/stores/gesture/Gesture';
+import Gesture, { type GestureID } from '../domain/stores/gesture/Gesture';
 import Classifier from '../domain/stores/Classifier';
 import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
 import Confidences from '../domain/stores/Confidences';
+import type { ClassifierRepository } from '../domain/ClassifierRepository';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,

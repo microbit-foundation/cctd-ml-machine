@@ -4,7 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Readable, Subscriber, Unsubscriber, Updater, Writable, get } from 'svelte/store';
+import {
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Updater,
+  type Writable,
+  get,
+} from 'svelte/store';
 
 /**
  * Bindable value is a wrapper that is useful when you want to allow binding of variables in custom stores.

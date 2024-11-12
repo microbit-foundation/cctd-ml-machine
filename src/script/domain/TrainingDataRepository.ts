@@ -3,6 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
-export interface MLModel {
-  predict(filteredData: number[]): Promise<number[]>;
+
+import { type TrainingData } from './ModelTrainer';
+
+export interface TrainingDataRepository {
+  getTrainingData(): TrainingData;
 }

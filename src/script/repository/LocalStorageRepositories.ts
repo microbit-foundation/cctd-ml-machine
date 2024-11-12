@@ -5,13 +5,17 @@
  */
 import LocalStorageGestureRepository from './LocalStorageGestureRepository';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
-import Repositories from '../domain/Repositories';
 import Confidences from '../domain/stores/Confidences';
+import LocalStorageTrainingDataRepository from './LocalStorageTrainingDataRepository';
+import type { Repositories } from '../domain/Repositories';
+import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;
 
   private classifierRepository: LocalStorageClassifierRepository;
+
+  private trainingDataRepository: LocalStorageTrainingDataRepository;
 
   private static instance: LocalStorageRepositories;
 
@@ -24,6 +28,7 @@ class LocalStorageRepositories implements Repositories {
     const confidences = new Confidences();
     this.classifierRepository = new LocalStorageClassifierRepository(confidences);
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
+    this.trainingDataRepository = new LocalStorageTrainingDataRepository();
   }
 
   public static getInstance() {
@@ -36,6 +41,10 @@ class LocalStorageRepositories implements Repositories {
 
   public getClassifierRepository() {
     return this.classifierRepository;
+  }
+
+  public getTrainingDataRepository(): TrainingDataRepository {
+    return this.trainingDataRepository;
   }
 }
 

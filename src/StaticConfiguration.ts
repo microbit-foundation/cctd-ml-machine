@@ -9,8 +9,8 @@
  */
 import { MBSpecs } from 'microbyte';
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
-import { HexOrigin } from './script/microbit-interfacing/Microbits';
-import { LayersModelTrainingSettings } from './script/mlmodels/LayersModelTrainer';
+import { type LayersModelTrainingSettings } from './script/mlmodels/LayersModelTrainer';
+import { HexOrigin } from './script/microbit-interfacing/HexOrigin';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
@@ -58,7 +58,7 @@ class StaticConfiguration {
   };
 
   // Line colors are picked in the order of this array.
-  public static readonly liveGraphColors = [
+  public static readonly graphColors = [
     '#ff606e',
     '#30f09e',
     '#3030ff',

@@ -3,17 +3,16 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { TrainingData } from '../../../script/domain/ModelTrainer';
-import { Writable, derived, get, writable } from 'svelte/store';
-import KNNModelGraphDrawer, { GraphDrawConfig } from './KNNModelGraphDrawer';
+import { type TrainingData } from '../../../script/domain/ModelTrainer';
+import { type Writable, derived, get, writable } from 'svelte/store';
+import KNNModelGraphDrawer, { type GraphDrawConfig } from './KNNModelGraphDrawer';
 import {
-  MicrobitAccelerometerData,
+  type MicrobitAccelerometerData,
   MicrobitAccelerometerDataVector,
 } from '../../../script/livedata/MicrobitAccelerometerData';
-import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
-import Axes from '../../../script/domain/Axes';
+import { type TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Filters from '../../../script/domain/Filters';
-import { Point3D } from '../../../script/utils/graphUtils';
+import { type Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { stores } from '../../../script/stores/Stores';
 import { FilterType } from '../../../script/domain/FilterTypes';
@@ -54,7 +53,7 @@ class KNNModelGraphController {
     origin: { x: number; y: number },
     classId: string,
     colors: string[],
-    axis?: Axes,
+    axis?: number,
   ) {
     this.filters = stores.getClassifier().getFilters();
     this.trainingData = this.trainingDataToPoints();
@@ -229,16 +228,16 @@ class KNNModelGraphController {
   }
 
   // Called whenever any subscribed store is altered
-  private onUpdate(draw: UpdateCall, axis?: Axes) {
+  private onUpdate(draw: UpdateCall, axis?: number) {
     let data: TimestampedData<MicrobitAccelerometerDataVector>[] = draw.data;
 
     const getLiveFilteredData = () => {
       switch (axis) {
-        case Axes.X:
+        case 0:
           return this.filters.compute(data.map(d => d.value.getAccelerometerData().x));
-        case Axes.Y:
+        case 1:
           return this.filters.compute(data.map(d => d.value.getAccelerometerData().y));
-        case Axes.Z:
+        case 2:
           return this.filters.compute(data.map(d => d.value.getAccelerometerData().z));
         default:
           throw new Error("Shouldn't happen");

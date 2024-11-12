@@ -3,10 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-enum Axes {
-  X = 'x',
-  Y = 'y',
-  Z = 'z',
+export enum HexOrigin {
+  UNKNOWN,
+  MAKECODE,
+  PROPRIETARY,
 }
-
-export default Axes;

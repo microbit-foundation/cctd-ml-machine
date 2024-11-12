@@ -10,10 +10,10 @@
   import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
-  import LiveData from '../../script/domain/stores/LiveData';
+  import { type LiveData } from '../../script/domain/stores/LiveData';
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-  import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
+  import { type LiveDataVector } from '../../script/domain/stores/LiveDataVector';
   import { stores } from '../../script/stores/Stores';
 
   /**
@@ -31,7 +31,7 @@
   export let minValue: number;
   export let highlightVectorIndex: number | undefined = undefined;
 
-  let axisColors = StaticConfiguration.liveGraphColors;
+  let axisColors = StaticConfiguration.graphColors;
 
   // Smoothes real-time data by using the 3 most recent data points
   let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);

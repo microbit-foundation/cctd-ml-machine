@@ -6,7 +6,7 @@
 
 <!-- Left-hand side menu -->
 <script lang="ts">
-  import Menus, { MenuProperties } from '../script/navigation/Menus';
+  import Menus, { type MenuProperties } from '../script/navigation/Menus';
   import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
   import Environment from '../script/Environment';

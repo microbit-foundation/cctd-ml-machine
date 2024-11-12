@@ -3,10 +3,16 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Subscriber, Unsubscriber, Writable, get } from 'svelte/store';
-import Filter from './Filter';
+import {
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
+  get,
+} from 'svelte/store';
 import FilterTypes, { FilterType } from './FilterTypes';
 import Logger from '../utils/Logger';
+import type { Filter } from './Filter';
 
 class Filters implements Readable<Filter[]> {
   constructor(private filters: Writable<Filter[]>) {}

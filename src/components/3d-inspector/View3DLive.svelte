@@ -8,7 +8,7 @@
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { stores } from '../../script/stores/Stores';
   import View3D from './View3D.svelte';
-  import { Vector3 } from './View3DUtility';
+  import { type Vector3 } from './View3DUtility';
 
   export let smoothing = false;
   export let width: number;
@@ -30,4 +30,4 @@
   }
 </script>
 
-<View3D {smoothing} {width} {height} dataPoint={liveDataPoint} />
+<View3D {smoothing} {width} {height} sample={liveDataPoint} />

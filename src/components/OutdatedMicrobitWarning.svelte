@@ -8,13 +8,14 @@
   import { horizontalSlide } from '../script/transitions';
   import StandardButton from './buttons/StandardButton.svelte';
   import { t } from '../i18n';
-  import Microbits, { HexOrigin } from '../script/microbit-interfacing/Microbits';
   import {
     ConnectDialogStates,
     DeviceRequestStates,
     connectionDialogState,
   } from '../script/stores/connectDialogStore';
   import StaticConfiguration from '../StaticConfiguration';
+  import Microbits from '../script/microbit-interfacing/Microbits';
+  import { HexOrigin } from '../script/microbit-interfacing/HexOrigin';
   let hasBeenClosed = false;
   export let targetRole: 'INPUT' | 'OUTPUT';
   let showMakeCodeUpdateMessage =

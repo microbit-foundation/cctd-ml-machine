@@ -5,25 +5,27 @@
  */
 
 import {
-  Invalidator,
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
+  type Invalidator,
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
   derived,
   get,
   writable,
 } from 'svelte/store';
-import Repositories from '../domain/Repositories';
+import { type Repositories } from '../domain/Repositories';
 import Classifier from '../domain/stores/Classifier';
-import Engine from '../domain/stores/Engine';
-import LiveData from '../domain/stores/LiveData';
-import { LiveDataVector } from '../domain/stores/LiveDataVector';
 import Gestures from '../domain/stores/gesture/Gestures';
 import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
+import HighlightedAxis from './HighlightedAxis';
+import SelectedModel from './SelectedModel';
+import type { LiveDataVector } from '../domain/stores/LiveDataVector';
+import type { LiveData } from '../domain/stores/LiveData';
+import type { Engine } from '../domain/stores/Engine';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector>;
@@ -37,6 +39,8 @@ class Stores implements Readable<StoresType> {
   private classifier: Classifier;
   private gestures: Gestures;
   private confidences: Confidences;
+  private highlightedAxis: HighlightedAxis;
+  private selectedModel: SelectedModel;
 
   public constructor() {
     this.liveData = writable(undefined);
@@ -45,6 +49,8 @@ class Stores implements Readable<StoresType> {
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
+    this.selectedModel = new SelectedModel();
+    this.highlightedAxis = new HighlightedAxis(this.classifier, this.selectedModel);
   }
 
   public subscribe(
@@ -97,6 +103,14 @@ class Stores implements Readable<StoresType> {
 
   public getConfidences(): Confidences {
     return this.confidences;
+  }
+
+  public getHighlightedAxis(): HighlightedAxis {
+    return this.highlightedAxis;
+  }
+
+  public getSelectedModel(): SelectedModel {
+    return this.selectedModel;
   }
 }
 

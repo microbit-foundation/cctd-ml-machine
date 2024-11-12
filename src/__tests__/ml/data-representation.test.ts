@@ -8,15 +8,15 @@
  */
 
 import LiveDataBuffer from '../../script/domain/LiveDataBuffer';
-import LiveData from '../../script/domain/stores/LiveData';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
 } from '../../script/livedata/MicrobitAccelerometerData';
 import { repeat } from '../testUtils';
 import { get } from 'svelte/store';
-import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
+import { type LiveDataVector } from '../../script/domain/stores/LiveDataVector';
 import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
 import { smoothNewValue } from '../../script/utils/graphUtils';
+import type { LiveData } from '../../script/domain/stores/LiveData';
 
 describe('Data representation tests', () => {
   test('Creating accelerometer live data does not throw', () => {

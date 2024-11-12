@@ -5,7 +5,7 @@
  */
 import { FilterType } from './FilterTypes';
 
-interface Filter {
+export interface Filter {
   filter(inValues: number[]): number;
 
   getType(): FilterType;
@@ -16,5 +16,3 @@ interface Filter {
 
   getMinNumberOfSamples(): number;
 }
-
-export default Filter;

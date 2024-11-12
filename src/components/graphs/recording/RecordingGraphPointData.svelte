@@ -7,14 +7,13 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import FixedNumber from '../../base/FixedNumber.svelte';
 
-  export let data: { x: number; y: number; z: number };
+  export let sample: number[];
 </script>
 
 <span>
-  <span class="mr-1" style="color: {StaticConfiguration.liveGraphColors[0]};"
-    ><FixedNumber digits={2} number={data.x} /></span>
-  <span class="mr-1" style="color: {StaticConfiguration.liveGraphColors[1]};"
-    ><FixedNumber digits={2} number={data.y} /></span>
-  <span style="color: {StaticConfiguration.liveGraphColors[2]};"
-    ><FixedNumber digits={2} number={data.z} /></span>
+  {#each sample as sampleValue, idx}
+    <span class="mr-1" style="color: {StaticConfiguration.graphColors[idx]};">
+      <FixedNumber digits={2} number={sampleValue} />
+    </span>
+  {/each}
 </span>

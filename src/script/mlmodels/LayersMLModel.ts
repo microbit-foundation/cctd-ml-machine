@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { LayersModel } from '@tensorflow/tfjs';
-import MLModel from '../domain/MLModel';
+import { type MLModel } from '../domain/MLModel';
 import * as tf from '@tensorflow/tfjs';
 
 class LayersMLModel implements MLModel {

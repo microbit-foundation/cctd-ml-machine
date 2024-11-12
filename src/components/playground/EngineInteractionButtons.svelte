@@ -26,9 +26,9 @@
     playgroundContext.addMessage(
       'Predicting on random recording of: ' + randGesture.getName(),
     );
-    const xs = randGesture.getRecordings()[0].data.x;
-    const ys = randGesture.getRecordings()[0].data.y;
-    const zs = randGesture.getRecordings()[0].data.z;
+    const xs = randGesture.getRecordings()[0].samples.map(e => e.vector[0]);
+    const ys = randGesture.getRecordings()[0].samples.map(e => e.vector[1]);
+    const zs = randGesture.getRecordings()[0].samples.map(e => e.vector[2]);
     const input = new AccelerometerClassifierInput(xs, ys, zs);
     classifier.classify(input).then(() => {
       playgroundContext.addMessage('Finished predicting');

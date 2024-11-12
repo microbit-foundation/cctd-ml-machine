@@ -1,5 +1,3 @@
-import StaticConfiguration from '../StaticConfiguration';
-
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
  *
@@ -11,7 +9,7 @@ type StoredValue<T> = {
 };
 
 class ControlledStorage {
-   /**
+  /**
    * What storage version should be used? If old user data is expected to be broken, increasing this number will delete all the data the user has in their storage location
    */
   public static readonly localStorageVersion = 3;

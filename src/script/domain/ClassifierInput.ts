@@ -5,10 +5,8 @@
  */
 import Filters from './Filters';
 
-interface ClassifierInput {
+export interface ClassifierInput {
   getInput(filters: Filters): number[];
 
   getNumberOfSamples(): number;
 }
-
-export default ClassifierInput;

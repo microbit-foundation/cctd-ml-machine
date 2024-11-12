@@ -7,8 +7,8 @@ import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
 import {
-  Point3D,
-  Point3DTransformed,
+  type Point3D,
+  type Point3DTransformed,
   distanceBetween,
 } from '../../../script/utils/graphUtils';
 import { stores } from '../../../script/stores/Stores';

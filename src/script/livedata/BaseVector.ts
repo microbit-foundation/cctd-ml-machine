@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { LiveDataVector } from '../domain/stores/LiveDataVector';
+import { type LiveDataVector } from '../domain/stores/LiveDataVector';
 
 class BaseVector implements LiveDataVector {
   public constructor(

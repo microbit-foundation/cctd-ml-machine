@@ -3,16 +3,19 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { get, Unsubscriber, writable, Writable } from 'svelte/store';
+import { get, type Unsubscriber, writable, type Writable } from 'svelte/store';
 import Classifier from '../domain/stores/Classifier';
-import { Subscriber } from 'svelte/motion';
+import { type Subscriber } from 'svelte/motion';
 import SelectedModel from './SelectedModel';
 import ModelRegistry from '../domain/ModelRegistry';
 
 class HighlightedAxis implements Writable<number | undefined> {
   private value: Writable<number | undefined>;
 
-  public constructor(private classifier: Classifier, private selectedModel: SelectedModel) {
+  public constructor(
+    private classifier: Classifier,
+    private selectedModel: SelectedModel,
+  ) {
     this.value = writable(undefined);
   }
 
@@ -43,7 +46,9 @@ class HighlightedAxis implements Writable<number | undefined> {
   private onChangedAxis() {
     this.classifier.getModel().markAsUntrained();
     if (get(this.selectedModel).id === ModelRegistry.KNN.id) {
-        console.error("Not implemented, should retrain model now! Need repository for training data")
+      console.error(
+        'Not implemented, should retrain model now! Need repository for training data',
+      );
     }
   }
 }

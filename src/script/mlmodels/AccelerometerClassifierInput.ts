@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 import { get } from 'svelte/store';
-import ClassifierInput from '../domain/ClassifierInput';
 import Filters from '../domain/Filters';
 import { stores } from '../stores/Stores';
+import type { ClassifierInput } from '../domain/ClassifierInput';
 
 class AccelerometerClassifierInput implements ClassifierInput {
   constructor(

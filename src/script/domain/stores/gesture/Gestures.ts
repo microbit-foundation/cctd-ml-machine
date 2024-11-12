@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
   derived,
   get,
   writable,
 } from 'svelte/store';
-import Gesture, { Confidence, GestureData, GestureID, GestureOutput } from './Gesture';
+import Gesture, { type GestureData, type GestureID, type GestureOutput } from './Gesture';
 import StaticConfiguration from '../../../../StaticConfiguration';
-import GestureRepository from '../../GestureRepository';
-import ClassifierRepository from '../../ClassifierRepository';
+import type { GestureRepository } from '../../GestureRepository';
 
 export type PersistantGestureData = {
   name: string;
@@ -28,9 +27,9 @@ export type PersistantGestureData = {
 export type RecordingData = {
   ID: number;
   samples: {
-    vector: number[]
-  }[]
-  labels: string[]
+    vector: number[];
+  }[];
+  labels: string[];
 };
 
 class Gestures implements Readable<GestureData[]> {
@@ -83,7 +82,7 @@ class Gestures implements Readable<GestureData[]> {
     const newId = Date.now();
     const color =
       StaticConfiguration.gestureColors[
-      this.getNumberOfGestures() % StaticConfiguration.gestureColors.length
+        this.getNumberOfGestures() % StaticConfiguration.gestureColors.length
       ];
     return this.addGestureFromPersistedData({
       ID: newId,

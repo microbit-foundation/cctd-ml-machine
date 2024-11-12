@@ -3,16 +3,16 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { TrainingData } from '../../../script/domain/ModelTrainer';
-import { Writable, derived, get, writable } from 'svelte/store';
-import KNNModelGraphDrawer, { GraphDrawConfig } from './KNNModelGraphDrawer';
+import { type TrainingData } from '../../../script/domain/ModelTrainer';
+import { type Writable, derived, get, writable } from 'svelte/store';
+import KNNModelGraphDrawer, { type GraphDrawConfig } from './KNNModelGraphDrawer';
 import {
-  MicrobitAccelerometerData,
+  type MicrobitAccelerometerData,
   MicrobitAccelerometerDataVector,
 } from '../../../script/livedata/MicrobitAccelerometerData';
-import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
+import { type TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Filters from '../../../script/domain/Filters';
-import { Point3D } from '../../../script/utils/graphUtils';
+import { type Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { stores } from '../../../script/stores/Stores';
 import { FilterType } from '../../../script/domain/FilterTypes';

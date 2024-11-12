@@ -5,10 +5,10 @@
  */
 import LocalStorageGestureRepository from './LocalStorageGestureRepository';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
-import Repositories from '../domain/Repositories';
 import Confidences from '../domain/stores/Confidences';
-import TrainingDataRepository from '../domain/TrainingDataRepository';
 import LocalStorageTrainingDataRepository from './LocalStorageTrainingDataRepository';
+import type { Repositories } from '../domain/Repositories';
+import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;

@@ -11,8 +11,8 @@
   import { state } from '../../script/stores/uiStore';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import FilterGraphLimits from '../../script/utils/FilterLimits';
-  import { GestureData } from '../../script/domain/stores/gesture/Gesture';
-  import { RecordingData } from '../../script/domain/stores/gesture/Gestures';
+  import { type GestureData } from '../../script/domain/stores/gesture/Gesture';
+  import { type RecordingData } from '../../script/domain/stores/gesture/Gestures';
   import StaticConfiguration from '../../StaticConfiguration';
   import { stores } from '../../script/stores/Stores';
 
@@ -182,9 +182,9 @@
       }
       gestureClassObject.recordings.map((recording: RecordingData) => {
         const ID = recording.ID;
-        const x = filterFunction(recording.data.x);
-        const y = filterFunction(recording.data.y);
-        const z = filterFunction(recording.data.z);
+        const x = filterFunction(recording.samples.map(e => e.vector[0]));
+        const y = filterFunction(recording.samples.map(e => e.vector[1]));
+        const z = filterFunction(recording.samples.map(e => e.vector[2]));
         recordings.push({ ID, gestureClassName, gestureClassID, x, y, z });
       });
     });

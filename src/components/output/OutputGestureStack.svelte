@@ -27,7 +27,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
-  import Gesture, { SoundData } from '../../script/domain/stores/gesture/Gesture';
+  import Gesture, { type SoundData } from '../../script/domain/stores/gesture/Gesture';
   import { stores } from '../../script/stores/Stores';
   import { MBSpecs } from 'microbyte';
 

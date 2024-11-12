@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
   derived,
   get,
   writable,
 } from 'svelte/store';
-import { TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
-import MLModel from '../MLModel';
-import ModelTrainer from '../ModelTrainer';
+import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
+import type { MLModel } from '../MLModel';
+import type { ModelTrainer } from '../ModelTrainer';
 
 export enum TrainingStatus {
   Untrained,

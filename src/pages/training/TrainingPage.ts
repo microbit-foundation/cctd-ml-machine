@@ -10,9 +10,9 @@ import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
 import { stores } from '../../script/stores/Stores';
 import CookieManager from '../../script/CookieManager';
 import { appInsights } from '../../appInsights';
-import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
+import ModelRegistry, { type ModelInfo } from '../../script/domain/ModelRegistry';
 import LayersModelTrainer, {
-  LossTrainingIteration,
+  type LossTrainingIteration,
 } from '../../script/mlmodels/LayersModelTrainer';
 import { knnConfig } from '../../script/stores/knnConfig';
 import Logger from '../../script/utils/Logger';

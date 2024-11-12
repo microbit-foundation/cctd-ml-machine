@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { Unsubscriber, derived, get } from 'svelte/store';
+  import { type Unsubscriber, derived, get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';

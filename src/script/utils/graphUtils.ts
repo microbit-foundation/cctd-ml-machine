@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { TrainingData } from '../domain/ModelTrainer';
-import { MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
+import { type TrainingData } from '../domain/ModelTrainer';
+import { type MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
 export type Point3D = {
   x: number;

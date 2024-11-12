@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { MBSpecs, MicrobitHandler } from 'microbyte';
+import { MBSpecs, type MicrobitHandler } from 'microbyte';
 import Logger from '../utils/Logger';
 import { ModelView, buttonPressed, onCatastrophicError, state } from '../stores/uiStore';
 import TypingUtils from '../TypingUtils';
@@ -15,7 +15,8 @@ import MicrobitAccelerometerLiveData, {
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import StaticConfiguration from '../../StaticConfiguration';
 import { DeviceRequestStates } from '../stores/connectDialogStore';
-import Microbits, { HexOrigin } from './Microbits';
+import Microbits from './Microbits';
+import { HexOrigin } from './HexOrigin';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);

@@ -3,7 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
+import {
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
+  writable,
+} from 'svelte/store';
 export type PlaygroundContextData = {
   messages: any[];
 };

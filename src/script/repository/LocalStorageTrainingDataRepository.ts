@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { TrainingData } from "../domain/ModelTrainer";
-import TrainingDataRepository from "../domain/TrainingDataRepository";
+import { type TrainingData } from '../domain/ModelTrainer';
+import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 
 class LocalStorageTrainingDataRepository implements TrainingDataRepository {
-    getTrainingData(): TrainingData {
-        throw new Error("Method not implemented.");
-    }
+  getTrainingData(): TrainingData {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export default LocalStorageTrainingDataRepository;

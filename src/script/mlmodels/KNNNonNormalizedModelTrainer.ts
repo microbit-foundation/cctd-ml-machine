@@ -3,9 +3,10 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import ModelTrainer, { TrainingData } from '../domain/ModelTrainer';
+import type { ModelTrainer, TrainingData } from '../domain/ModelTrainer';
 import Logger from '../utils/Logger';
-import KNNNonNormalizedMLModel, { LabelledPoint } from './KNNNonNormalizedMLModel';
+import type { LabelledPoint } from './KNNNonNormalizedMLModel';
+import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
 
 /**
  * Trains a K-Nearest Neighbour model. Unlike the version provided by tensorflow, the points are not normalized

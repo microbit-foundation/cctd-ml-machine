@@ -17,12 +17,7 @@ import {
 import Logger from '../utils/Logger';
 import OutputMicrobitHandler from './OutputMicrobitHandler';
 import CombinedMicrobitHandler from './CombinedMicrobitHandler';
-
-export enum HexOrigin {
-  UNKNOWN,
-  MAKECODE,
-  PROPRIETARY,
-}
+import { HexOrigin } from './HexOrigin';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
 

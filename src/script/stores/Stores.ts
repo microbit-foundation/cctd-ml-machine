@@ -5,20 +5,17 @@
  */
 
 import {
-  Invalidator,
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
+  type Invalidator,
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
   derived,
   get,
   writable,
 } from 'svelte/store';
-import Repositories from '../domain/Repositories';
+import { type Repositories } from '../domain/Repositories';
 import Classifier from '../domain/stores/Classifier';
-import Engine from '../domain/stores/Engine';
-import LiveData from '../domain/stores/LiveData';
-import { LiveDataVector } from '../domain/stores/LiveDataVector';
 import Gestures from '../domain/stores/gesture/Gestures';
 import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
@@ -26,6 +23,9 @@ import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
 import HighlightedAxis from './HighlightedAxis';
 import SelectedModel from './SelectedModel';
+import type { LiveDataVector } from '../domain/stores/LiveDataVector';
+import type { LiveData } from '../domain/stores/LiveData';
+import type { Engine } from '../domain/stores/Engine';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector>;

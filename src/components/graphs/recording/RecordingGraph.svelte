@@ -9,8 +9,8 @@
   import {
     Chart,
     registerables,
-    ChartConfiguration,
-    ChartTypeRegistry,
+    type ChartConfiguration,
+    type ChartTypeRegistry,
     LineController,
     LineElement,
     LinearScale,
@@ -19,7 +19,7 @@
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
   import RecordingGraphPointData from './RecordingGraphPointData.svelte';
   import { Feature, hasFeature } from '../../../script/FeatureToggles';
-  import { RecordingData } from '../../../script/domain/stores/gesture/Gestures';
+  import { type RecordingData } from '../../../script/domain/stores/gesture/Gestures';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../script/stores/Stores';
 

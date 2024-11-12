@@ -3,21 +3,21 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Writable, get } from 'svelte/store';
-import { DropdownOption } from '../../components/buttons/Buttons';
-import ModelTrainer from '../../script/domain/ModelTrainer';
-import MLModel from '../../script/domain/MLModel';
+import { type Writable, get } from 'svelte/store';
+import { type DropdownOption } from '../../components/buttons/Buttons';
 import { stores } from '../../script/stores/Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
 import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
 import LayersModelTrainer, {
-  LossTrainingIteration,
+  type LossTrainingIteration,
 } from '../../script/mlmodels/LayersModelTrainer';
 import { FilterType } from '../../script/domain/FilterTypes';
 import Filters from '../../script/domain/Filters';
-import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
+import ModelRegistry, { type ModelInfo } from '../../script/domain/ModelRegistry';
 import { knnConfig } from '../../script/stores/knnConfig';
+import type { ModelTrainer } from '../../script/domain/ModelTrainer';
+import type { MLModel } from '../../script/domain/MLModel';
 
 const classifier = stores.getClassifier();
 const highlightedAxis = stores.getHighlightedAxis();

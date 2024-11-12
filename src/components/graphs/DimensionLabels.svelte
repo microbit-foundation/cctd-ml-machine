@@ -16,7 +16,7 @@
   import type { Unsubscriber } from 'svelte/store';
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-  import { LiveDataVector } from '../../script/domain/stores/LiveDataVector';
+  import { type LiveDataVector } from '../../script/domain/stores/LiveDataVector';
 
   type LabelData = {
     id: number;

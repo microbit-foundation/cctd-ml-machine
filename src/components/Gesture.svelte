@@ -22,8 +22,9 @@
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
   import Gesture from '../script/domain/stores/gesture/Gesture';
-  import { RecordingData } from '../script/domain/stores/gesture/Gestures';
+  import { type RecordingData } from '../script/domain/stores/gesture/Gestures';
   import { stores } from '../script/stores/Stores';
+  import { lab } from 'd3';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -72,11 +73,14 @@
     isThisRecording = true;
 
     // New array for data
-    let newData: RecordingData['data'] = []
+    let newData: RecordingData['samples'] = [];
+
+    let labels: string[] = [];
 
     // Set timeout to allow recording in 1s
     const unsubscribe = liveData.subscribe(data => {
-      newData.push(data.getVector());
+      newData.push({ vector: data.getVector() });
+      labels = data.getLabels();
     });
 
     // Once duration is over (1000ms default), stop recording
@@ -85,7 +89,16 @@
       isThisRecording = false;
       unsubscribe();
       if (StaticConfiguration.pollingPredictionSampleSize <= newData.length) {
-        const recording = { ID: Date.now(), data: newData };
+        if (labels.length === 0) {
+          throw new Error(
+            'No labels were present during the recording, was this a mistake?',
+          );
+        }
+        const recording: RecordingData = {
+          ID: Date.now(),
+          samples: newData,
+          labels: labels,
+        };
         gesture.addRecording(recording);
       } else {
         alertUser($t('alert.recording.disconnectedDuringRecording'));

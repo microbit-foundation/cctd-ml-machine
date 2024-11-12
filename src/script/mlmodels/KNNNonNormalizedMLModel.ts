@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import MLModel from '../domain/MLModel';
-import { Point3D, distanceBetween } from '../utils/graphUtils';
+import type { MLModel } from '../domain/MLModel';
+import { type Point3D, distanceBetween } from '../utils/graphUtils';
 
 export type LabelledPoint = {
   classIndex: number;

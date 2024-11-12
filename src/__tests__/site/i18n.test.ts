@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { get } from 'svelte/store';
-import { MockInstance } from 'vitest';
+import { type MockInstance } from 'vitest';
 import { spyOn } from '@vitest/spy';
 
 describe('Initialization tests', () => {

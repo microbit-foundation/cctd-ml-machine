@@ -7,7 +7,7 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import FixedNumber from '../../base/FixedNumber.svelte';
 
-  export let sample: number[]; 
+  export let sample: number[];
 </script>
 
 <span>

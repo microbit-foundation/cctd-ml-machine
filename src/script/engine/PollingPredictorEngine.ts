@@ -3,14 +3,21 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Subscriber, Unsubscriber, Writable, derived, get, writable } from 'svelte/store';
+import {
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
+  derived,
+  get,
+  writable,
+} from 'svelte/store';
 import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import StaticConfiguration from '../../StaticConfiguration';
-import { TimestampedData } from '../domain/LiveDataBuffer';
-import Engine, { EngineData } from '../domain/stores/Engine';
+import { type TimestampedData } from '../domain/LiveDataBuffer';
 import Classifier from '../domain/stores/Classifier';
-import LiveData from '../domain/stores/LiveData';
-import { LiveDataVector } from '../domain/stores/LiveDataVector';
+import { type LiveDataVector } from '../domain/stores/LiveDataVector';
+import type { Engine, EngineData } from '../domain/stores/Engine';
+import type { LiveData } from '../domain/stores/LiveData';
 
 /**
  * The PollingPredictorEngine will predict on the current input with consistent intervals.

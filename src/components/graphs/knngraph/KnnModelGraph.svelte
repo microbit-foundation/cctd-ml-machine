@@ -10,7 +10,7 @@
   import ClassifierFactory from '../../../script/domain/ClassifierFactory';
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
   import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
-  import { TrainingData } from '../../../script/domain/ModelTrainer';
+  import { type TrainingData } from '../../../script/domain/ModelTrainer';
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
   import { stores } from '../../../script/stores/Stores';
   import { get } from 'svelte/store';

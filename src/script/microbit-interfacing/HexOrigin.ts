@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-export interface MLModel {
-  predict(filteredData: number[]): Promise<number[]>;
+export enum HexOrigin {
+  UNKNOWN,
+  MAKECODE,
+  PROPRIETARY,
 }

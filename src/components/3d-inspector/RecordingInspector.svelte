@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import View3D from './View3D.svelte';
-  import { Vector3 } from './View3DUtility';
+  import { type Vector3 } from './View3DUtility';
 
   export let sample: number[];
   export let position: { x: number; y: number };

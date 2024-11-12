@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { TrainingData } from "./ModelTrainer";
+import { type TrainingData } from './ModelTrainer';
 
-interface TrainingDataRepository {
-    getTrainingData(): TrainingData;
+export interface TrainingDataRepository {
+  getTrainingData(): TrainingData;
 }
-
-export default TrainingDataRepository;

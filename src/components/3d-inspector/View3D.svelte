@@ -8,7 +8,7 @@
   import { t } from '../../i18n';
   import { compatibility } from '../../script/stores/uiStore';
   import View3DUnsafe from './View3DUnsafe.svelte';
-  import { Vector3 } from './View3DUtility';
+  import { type Vector3 } from './View3DUtility';
 
   export let smoothing = false;
   export let width: number;

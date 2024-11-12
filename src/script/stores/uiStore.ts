@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Writable, derived, get, writable } from 'svelte/store';
+import { type Writable, derived, get, writable } from 'svelte/store';
 import {
   type CompatibilityStatus,
   checkCompatibility,

@@ -17,7 +17,8 @@
   const confidences = stores.getConfidences();
   const gestures = stores.getGestures();
   const filters = classifier.getFilters();
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxis = stores.getHighlightedAxes();
+  const availableAxes = stores.getAvailableAxes();
 
   onMount(() => {
     trainModel(ModelRegistry.KNN);
@@ -25,7 +26,7 @@
   });
   $: {
     if ($highlightedAxis === undefined) {
-      $highlightedAxis = 0;
+      $highlightedAxis = [$availableAxes[0]];
     }
     if (!$classifier.model.isTrained) {
       trainModel(ModelRegistry.KNN);

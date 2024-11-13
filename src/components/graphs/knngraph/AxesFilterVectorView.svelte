@@ -18,7 +18,7 @@
   const classifier = stores.getClassifier();
 
   $: liveData = $stores.liveData;
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxis = stores.getHighlightedAxes();
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -144,7 +144,7 @@
               outlined={$highlightedAxis !== 0}
               onClick={() => {
                 $highlightedAxis = 0;
-                stores.getHighlightedAxis().set(0);
+                stores.getHighlightedAxes().set(0);
               }}>X</StandardButton>
           </div>
           <div class="flex flex-row space-x-2" id="fromY">
@@ -154,7 +154,7 @@
               outlined={$highlightedAxis !== 1}
               onClick={() => {
                 $highlightedAxis = 1;
-                stores.getHighlightedAxis().set(1);
+                stores.getHighlightedAxes().set(1);
               }}>Y</StandardButton>
           </div>
           <div class="flex flex-row space-x-2" id="fromZ">
@@ -164,7 +164,7 @@
               outlined={$highlightedAxis !== 2}
               onClick={() => {
                 $highlightedAxis = 2;
-                stores.getHighlightedAxis().set(2);
+                stores.getHighlightedAxes().set(2);
               }}>Z</StandardButton>
           </div>
         </div>

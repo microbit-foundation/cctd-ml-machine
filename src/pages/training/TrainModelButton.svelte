@@ -15,6 +15,7 @@
   import { options, trainModel } from './TrainModelButton';
   import ModelRegistry, { type ModelInfo } from '../../script/domain/ModelRegistry';
   import { type LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
+    import type { M } from 'vite/dist/node/types.d-aGj9QkWt';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;
@@ -22,7 +23,8 @@
   export let selectedOption: Writable<DropdownOption>;
 
   const classifier = stores.getClassifier();
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxis = stores.getHighlightedAxes();
+  const availableAxes = stores.getAvailableAxes();
 
   const model = classifier.getModel();
 
@@ -57,10 +59,10 @@
 
   $: {
     if ($selectedOption.id === 'KNN' && !$highlightedAxis) {
-      highlightedAxis.set(0);
+      highlightedAxis.set([$availableAxes[0]]);
     }
     if ($selectedOption.id === 'NN' && $highlightedAxis) {
-      highlightedAxis.set(undefined);
+      highlightedAxis.set([]);
     }
   }
 </script>

@@ -10,7 +10,7 @@
   import { stores } from '../../script/stores/Stores';
   import LiveGraph from './LiveGraph.svelte';
 
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxis = stores.getHighlightedAxes();
   export let width: number;
   $: showhighlit = hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined;
   console.log(hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined);

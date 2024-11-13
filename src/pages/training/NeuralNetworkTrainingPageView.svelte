@@ -17,7 +17,7 @@
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxis = stores.getHighlightedAxes();
 
   const trainModelClickHandler = () => {
     trainModel(ModelRegistry.NeuralNetwork).then(() => {

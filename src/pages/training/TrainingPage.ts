@@ -26,8 +26,9 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
   });
 };
 
+
 const trainNNModel = async () => {
-  stores.getHighlightedAxis().set(undefined);
+  stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
   loss.set([]);
   const modelTrainer = new LayersModelTrainer(
     StaticConfiguration.layersModelTrainingSettings,
@@ -37,12 +38,13 @@ const trainNNModel = async () => {
 };
 
 const trainKNNModel = async () => {
-  if (get(stores.getHighlightedAxis()) === undefined) {
-    stores.getHighlightedAxis().set(0);
+  // If not exactly 1 axis is highlighted, then set that to be highlighted, fix it later
+  if (get(stores.getHighlightedAxes()).length !== 1) {
+    stores.getHighlightedAxes().set([get(stores.getAvailableAxes())[0]]);
   }
-  const currentAxis = get(stores.getHighlightedAxis());
+  const currentAxis = get(stores.getHighlightedAxes())[0];
   // TODO: Rewrite offset to use the axis directly instead
-  const offset = currentAxis === 0 ? 0 : currentAxis === 1 ? 1 : 2;
+  const offset = currentAxis.index === 0 ? 0 : currentAxis.index === 1 ? 1 : 2;
   const modelTrainer = new KNNNonNormalizedModelTrainer(
     get(knnConfig).k,
     data => {

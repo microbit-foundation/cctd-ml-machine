@@ -33,6 +33,8 @@
 
   let axisColors = StaticConfiguration.graphColors;
 
+  const highlightedAxes = stores.getHighlightedAxes();
+
   // Smoothes real-time data by using the 3 most recent data points
   let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
   let cnt = 0;
@@ -70,14 +72,7 @@
     });
 
     lines.forEach((line, index) => {
-      let opaque = true;
-      if (highlightVectorIndex !== undefined) {
-        if (index === highlightVectorIndex) {
-          opaque = true;
-        } else {
-          opaque = false;
-        }
-      }
+      const opaque = highlightedAxes.isAxisIndexHighlighted(index);
       const color = axisColors[index] + (opaque ? 'ff' : '30');
       chart!.addTimeSeries(line, {
         lineWidth,

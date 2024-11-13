@@ -7,4 +7,4 @@
 export type Axis = {
   index: number;
   label: string;
-}
+};

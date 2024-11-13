@@ -42,6 +42,23 @@ class HighlightedAxes implements Writable<Axis[]> {
     return this.value.subscribe(run, invalidate);
   }
 
+  public toggleAxis(axis: Axis) {
+    if (
+      !!get(this.value).find(val => val.label === axis.label && val.index === axis.index)
+    ) {
+      this.value.set(get(this.value).filter(e => e.index !== axis.index));
+    } else {
+      this.value.set([...get(this.value), axis]);
+    }
+  }
+
+  public isAxisHighlighted(axis: Axis) {
+    return !!get(this.value).find(e => e.index === axis.index && e.label === axis.label);
+  }
+
+  public isAxisIndexHighlighted(index: number) {
+    return !!get(this.value).find(e => e.index === index);
+  }
   /**
    * When the axis that has been selected is EXPLICITLY different from before
    */

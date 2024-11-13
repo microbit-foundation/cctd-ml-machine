@@ -31,7 +31,7 @@
   let modalPosition = { x: 0, y: 0 };
   let modalSize = 250;
 
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxis = stores.getHighlightedAxes();
 
   const verticalLineCol = 'black';
   const verticalLineWidth = 1;

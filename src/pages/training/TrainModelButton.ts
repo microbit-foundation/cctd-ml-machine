@@ -20,7 +20,7 @@ import type { ModelTrainer } from '../../script/domain/ModelTrainer';
 import type { MLModel } from '../../script/domain/MLModel';
 
 const classifier = stores.getClassifier();
-const highlightedAxis = stores.getHighlightedAxis();
+const highlightedAxis = stores.getHighlightedAxes();
 
 export const options: DropdownOption[] = ModelRegistry.getModels().map(model => {
   return {
@@ -33,14 +33,14 @@ export const getModelTrainer = (
   model: ModelInfo,
   onTrainingIteration: (iteration: LossTrainingIteration) => void,
 ): ModelTrainer<MLModel> => {
-  const currentAxis = get(highlightedAxis);
+  const currentAxis = get(highlightedAxis)[0];
   if (model.id === ModelRegistry.KNN.id) {
-    const offset = currentAxis === 0 ? 0 : currentAxis === 1 ? 1 : 2; // TODO: Rewrite to use just use the axis as offset directly
+    const offset = currentAxis.index === 0 ? 0 : currentAxis.index === 1 ? 1 : 2; // TODO: Rewrite to use just use the axis as offset directly
     return new KNNNonNormalizedModelTrainer(get(knnConfig).k, data =>
       extractAxisFromTrainingData(data, offset, 3),
     );
   }
-  highlightedAxis.set(undefined);
+  highlightedAxis.set([]);
 
   return new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, h => {
     onTrainingIteration(h);

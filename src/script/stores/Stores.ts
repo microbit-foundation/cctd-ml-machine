@@ -58,9 +58,8 @@ class Stores implements Readable<StoresType> {
     this.availableAxes = new AvailableAxes(this.liveData);
     this.availableAxes.subscribe(newAxes => {
       this.highlightedAxis.set(newAxes);
-    })
+    });
   }
-
 
   public subscribe(
     run: Subscriber<StoresType>,
@@ -114,7 +113,7 @@ class Stores implements Readable<StoresType> {
     return this.confidences;
   }
 
-  public getHighlightedAxis(): HighlightedAxes {
+  public getHighlightedAxes(): HighlightedAxes {
     return this.highlightedAxis;
   }
 

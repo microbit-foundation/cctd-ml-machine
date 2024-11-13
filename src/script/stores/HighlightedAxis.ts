@@ -8,34 +8,36 @@ import Classifier from '../domain/stores/Classifier';
 import { type Subscriber } from 'svelte/motion';
 import SelectedModel from './SelectedModel';
 import ModelRegistry from '../domain/ModelRegistry';
+import type { Axis } from './Axis';
 
-class HighlightedAxis implements Writable<number | undefined> {
-  private value: Writable<number | undefined>;
+class HighlightedAxes implements Writable<Axis[]> {
+  private value: Writable<Axis[]>;
 
   public constructor(
     private classifier: Classifier,
     private selectedModel: SelectedModel,
   ) {
-    this.value = writable(undefined);
+    this.value = writable([]);
   }
 
-  public set(value: number | undefined): void {
+  public set(value: Axis[]): void {
     if (get(this.value) !== value) {
       this.onChangedAxis();
     }
     this.value.set(value);
   }
 
-  public update(updater: (state: number | undefined) => number | undefined): void {
+  public update(updater: (state: Axis[]) => Axis[]): void {
     const beforeValue = get(this.value);
     const updatedValue = updater(beforeValue);
     if (beforeValue === updatedValue) {
       this.onChangedAxis();
     }
   }
+
   public subscribe(
-    run: Subscriber<number | undefined>,
-    invalidate?: (value?: number | undefined) => void,
+    run: Subscriber<Axis[]>,
+    invalidate?: (value?: Axis[]) => void,
   ): Unsubscriber {
     return this.value.subscribe(run, invalidate);
   }
@@ -53,4 +55,4 @@ class HighlightedAxis implements Writable<number | undefined> {
   }
 }
 
-export default HighlightedAxis;
+export default HighlightedAxes;

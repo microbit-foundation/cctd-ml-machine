@@ -21,15 +21,18 @@ import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
-import HighlightedAxis from './HighlightedAxis';
+import HighlightedAxes from './HighlightedAxis';
 import SelectedModel from './SelectedModel';
 import type { LiveDataVector } from '../domain/stores/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import type { Engine } from '../domain/stores/Engine';
+import type { Axis } from './Axis';
+import AvailableAxes from './AvailableAxes';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector>;
 };
+
 /**
  * Stores is a container object, that allows for management of global stores.
  */
@@ -39,8 +42,9 @@ class Stores implements Readable<StoresType> {
   private classifier: Classifier;
   private gestures: Gestures;
   private confidences: Confidences;
-  private highlightedAxis: HighlightedAxis;
+  private highlightedAxis: HighlightedAxes;
   private selectedModel: SelectedModel;
+  private availableAxes: AvailableAxes;
 
   public constructor() {
     this.liveData = writable(undefined);
@@ -50,8 +54,13 @@ class Stores implements Readable<StoresType> {
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
     this.selectedModel = new SelectedModel();
-    this.highlightedAxis = new HighlightedAxis(this.classifier, this.selectedModel);
+    this.highlightedAxis = new HighlightedAxes(this.classifier, this.selectedModel);
+    this.availableAxes = new AvailableAxes(this.liveData);
+    this.availableAxes.subscribe(newAxes => {
+      this.highlightedAxis.set(newAxes);
+    })
   }
+
 
   public subscribe(
     run: Subscriber<StoresType>,
@@ -105,12 +114,16 @@ class Stores implements Readable<StoresType> {
     return this.confidences;
   }
 
-  public getHighlightedAxis(): HighlightedAxis {
+  public getHighlightedAxis(): HighlightedAxes {
     return this.highlightedAxis;
   }
 
   public getSelectedModel(): SelectedModel {
     return this.selectedModel;
+  }
+
+  public getAvailableAxes(): Readable<Axis[]> {
+    return this.availableAxes;
   }
 }
 

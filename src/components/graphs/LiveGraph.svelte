@@ -29,7 +29,6 @@
   export let liveData: LiveData<LiveDataVector>;
   export let maxValue: number;
   export let minValue: number;
-  export let highlightVectorIndex: number | undefined = undefined;
 
   let axisColors = StaticConfiguration.graphColors;
 

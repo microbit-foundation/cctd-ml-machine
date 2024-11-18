@@ -77,16 +77,13 @@
     return { x, y };
   }
   const getLineColor = (axisIndex: number) => {
-    if ($highlightedAxis !== undefined) {
-      if ($highlightedAxis === axisIndex) {
-        return StaticConfiguration.graphColors[axisIndex] + 'ff';
-      } else {
-        return StaticConfiguration.graphColors[axisIndex] + '33';
-      }
+    if ($highlightedAxis.find(e => e.index === axisIndex) != undefined) {
+      return StaticConfiguration.graphColors[axisIndex] + 'ff';
     }
-    return StaticConfiguration.graphColors[axisIndex];
+    return StaticConfiguration.graphColors[axisIndex] + '33';
   };
-  function generateSizeOfInspector(rect: DOMRect): number {
+
+  const generateSizeOfInspector = (rect: DOMRect): number => {
     return (window.innerHeight - rect.height) / 2 - inspectorMarginPx;
   }
 

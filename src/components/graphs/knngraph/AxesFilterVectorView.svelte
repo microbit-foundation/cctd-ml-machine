@@ -14,11 +14,13 @@
   import { vectorArrows } from './AxesFilterVector';
   import { stores } from '../../../script/stores/Stores';
   import { asAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
+  import type { Axis } from '../../../script/stores/Axis';
 
   const classifier = stores.getClassifier();
 
   $: liveData = $stores.liveData;
   const highlightedAxis = stores.getHighlightedAxes();
+  const availableAxes = stores.getAvailableAxes();
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -47,27 +49,17 @@
     });
   };
 
-  const updateArrows = (axis: number | undefined) => {
-    if (axis !== undefined) {
-      const getId = (): string => {
-        if (axis === 0) {
-          return 'fromX';
-        }
-        if (axis === 1) {
-          return 'fromY';
-        }
-        if (axis === 2) {
-          return 'fromZ';
-        }
-        throw Error('Cannot update arrows for axis ' + axis);
-      };
-      drawArrows(getId());
+  const updateArrows = (axes: Axis[]) => {
+    if (axes.length !== 1) {
+      throw new Error('Cannot handle more or less than 1 axis!');
     }
+    const axis = axes[0];
+    drawArrows(`from${axis.label}`);
   };
 
   const getVectorValue = () => {
-    if (!get(highlightedAxis)) {
-      return Array(classifier.getFilters().count()).fill(0);
+    if ($highlightedAxis.length !== 1) {
+      throw new Error('Cannot handle more or less than 1 axis!');
     }
     try {
       const seriesTimestamped = liveData
@@ -82,7 +74,7 @@
       const filteredSeries = stores
         .getClassifier()
         .getFilters()
-        .compute(extractAxisFromAccelerometerData(series, $highlightedAxis!));
+        .compute(extractAxisFromAccelerometerData(series, $highlightedAxis[0]!.index));
       return filteredSeries;
     } catch (e) {
       return Array(classifier.getFilters().count()).fill(0);
@@ -137,36 +129,17 @@
     {#if $highlightedAxis !== undefined}
       <div class="flex flex-row space-x-1">
         <div class="flex flex-col justify-evenly">
-          <div class="flex flex-row space-x-2" id="fromX">
-            <StandardButton
-              color={StaticConfiguration.graphColors[0]}
-              small
-              outlined={$highlightedAxis !== 0}
-              onClick={() => {
-                $highlightedAxis = 0;
-                stores.getHighlightedAxes().set(0);
-              }}>X</StandardButton>
-          </div>
-          <div class="flex flex-row space-x-2" id="fromY">
-            <StandardButton
-              color={StaticConfiguration.graphColors[1]}
-              small
-              outlined={$highlightedAxis !== 1}
-              onClick={() => {
-                $highlightedAxis = 1;
-                stores.getHighlightedAxes().set(1);
-              }}>Y</StandardButton>
-          </div>
-          <div class="flex flex-row space-x-2" id="fromZ">
-            <StandardButton
-              color={StaticConfiguration.graphColors[2]}
-              small
-              outlined={$highlightedAxis !== 2}
-              onClick={() => {
-                $highlightedAxis = 2;
-                stores.getHighlightedAxes().set(2);
-              }}>Z</StandardButton>
-          </div>
+          {#each $availableAxes as axis}
+            <div class="flex flex-row space-x-2" id="from{axis.label}">
+              <StandardButton
+                color={StaticConfiguration.graphColors[axis.index]}
+                small
+                outlined={$highlightedAxis.find(e => e.index === axis.index) != undefined}
+                onClick={() => {
+                  $highlightedAxis = [axis];
+                }}>{axis.label}</StandardButton>
+            </div>
+          {/each}
         </div>
         <div class="pl-20 flex flex-col justify-around">
           {#each $filters as filter, index}

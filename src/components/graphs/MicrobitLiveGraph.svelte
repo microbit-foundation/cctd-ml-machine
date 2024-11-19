@@ -10,12 +10,7 @@
   import LiveGraph from './LiveGraph.svelte';
 
   const highlightedAxes = stores.getHighlightedAxes();
-  const availableAxes = stores.getAvailableAxes();
   export let width: number;
-  $: graphKey = $highlightedAxes.map(e => `${e.index}`).join('-');
-  console.log($availableAxes);
-  console.log('hi', $highlightedAxes);
-  $: console.log('gk', graphKey);
 </script>
 
 {#key $highlightedAxes.map(e => `${e.index}`).join('-')}

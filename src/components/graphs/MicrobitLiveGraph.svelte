@@ -10,21 +10,18 @@
   import LiveGraph from './LiveGraph.svelte';
 
   const highlightedAxes = stores.getHighlightedAxes();
+  const availableAxes = stores.getAvailableAxes();
   export let width: number;
+  $: graphKey = $highlightedAxes.map(e => `${e.index}`).join('-');
+  console.log($availableAxes);
+  console.log('hi', $highlightedAxes);
+  $: console.log('gk', graphKey);
 </script>
 
-{#if $highlightedAxes.length === 3}
-  {#key $highlightedAxes}
-    <LiveGraph
-      minValue={StaticConfiguration.liveGraphValueBounds.min}
-      maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      liveData={$stores.liveData}
-      {width} />
-  {/key}
-{:else}
+{#key $highlightedAxes.map(e => `${e.index}`).join('-')}
   <LiveGraph
     minValue={StaticConfiguration.liveGraphValueBounds.min}
     maxValue={StaticConfiguration.liveGraphValueBounds.max}
     liveData={$stores.liveData}
     {width} />
-{/if}
+{/key}

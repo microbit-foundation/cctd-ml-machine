@@ -39,7 +39,7 @@ class AvailableAxes implements Readable<Axis[]> {
 
   private listenToLiveData(liveData?: LiveData<LiveDataVector>): Unsubscriber {
     if (!liveData) {
-      return () => {};
+      return () => { };
     }
     return liveData.subscribe(e => {
       const axes = e.getLabels().map((label, index) => ({

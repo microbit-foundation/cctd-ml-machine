@@ -26,7 +26,6 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
   });
 };
 
-
 const trainNNModel = async () => {
   stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
   loss.set([]);

@@ -85,7 +85,7 @@
 
   const generateSizeOfInspector = (rect: DOMRect): number => {
     return (window.innerHeight - rect.height) / 2 - inspectorMarginPx;
-  }
+  };
 
   type ChartDataset = { x: number; y: number }[];
   function getConfig(): ChartConfiguration<

@@ -15,7 +15,7 @@
   import { options, trainModel } from './TrainModelButton';
   import ModelRegistry, { type ModelInfo } from '../../script/domain/ModelRegistry';
   import { type LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
-    import type { M } from 'vite/dist/node/types.d-aGj9QkWt';
+  import type { M } from 'vite/dist/node/types.d-aGj9QkWt';
 
   export let onTrainingIteration: (iteration: LossTrainingIteration) => void;
   export let onClick: () => void;

@@ -24,7 +24,7 @@
   type TimeSeriesWithData = TimeSeries & { data: number[][] };
   const classifier = stores.getClassifier();
 
-  console.log("asdf")
+  console.log('asdf');
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
   export let liveData: LiveData<LiveDataVector>;

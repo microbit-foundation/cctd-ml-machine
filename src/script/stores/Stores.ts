@@ -88,7 +88,11 @@ class Stores implements Readable<StoresType> {
     if (this.engine) {
       this.engine.stop();
     }
-    this.engine = new PollingPredictorEngine(this.classifier, liveDataStore);
+    this.engine = new PollingPredictorEngine(
+      this.classifier,
+      liveDataStore,
+      this.highlightedAxis,
+    );
     return get(this.liveData) as T;
   }
 

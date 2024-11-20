@@ -11,13 +11,14 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import AccelerometerClassifierInput from '../mlmodels/AccelerometerClassifierInput';
 import StaticConfiguration from '../../StaticConfiguration';
 import { type TimestampedData } from '../domain/LiveDataBuffer';
 import Classifier from '../domain/stores/Classifier';
 import { type LiveDataVector } from '../domain/stores/LiveDataVector';
 import type { Engine, EngineData } from '../domain/stores/Engine';
 import type { LiveData } from '../domain/stores/LiveData';
+import type HighlightedAxes from '../stores/HighlightedAxis';
+import { ClassifierInput } from '../domain/ClassifierInput';
 
 /**
  * The PollingPredictorEngine will predict on the current input with consistent intervals.
@@ -29,6 +30,7 @@ class PollingPredictorEngine implements Engine {
   constructor(
     private classifier: Classifier,
     private liveData: LiveData<LiveDataVector>,
+    private highlightedAxes: HighlightedAxes,
   ) {
     this.isRunning = writable(true);
     this.startPolling();
@@ -82,15 +84,14 @@ class PollingPredictorEngine implements Engine {
     void this.classifier.classify(input);
   }
 
-  private bufferToInput(): AccelerometerClassifierInput {
+  private bufferToInput(): ClassifierInput {
     const bufferedData = this.getRawDataFromBuffer(
       StaticConfiguration.pollingPredictionSampleSize,
     );
-    const xs = bufferedData.map(data => data.value.getVector()[0]);
-    const ys = bufferedData.map(data => data.value.getVector()[1]);
-    const zs = bufferedData.map(data => data.value.getVector()[2]);
-    // TODO: Generalize
-    return new AccelerometerClassifierInput(xs, ys, zs);
+    const sampleVectors = bufferedData
+      .map(e => e.value)
+      .filter((sample, idx) => this.highlightedAxes.isAxisIndexHighlighted(idx));
+    return new ClassifierInput(sampleVectors);
   }
 
   /**

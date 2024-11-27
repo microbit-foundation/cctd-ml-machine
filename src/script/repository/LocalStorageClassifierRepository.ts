@@ -18,6 +18,7 @@ import Classifier from '../domain/stores/Classifier';
 import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
 import Confidences from '../domain/stores/Confidences';
 import type { ClassifierRepository } from '../domain/ClassifierRepository';
+import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
@@ -30,7 +31,10 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
   private static persistedFilters: PersistantWritable<FilterType[]>;
   private classifierFactory: ClassifierFactory;
 
-  constructor(private confidences: Confidences) {
+  constructor(
+    private confidences: Confidences,
+    private trainingDataRepository: TrainingDataRepository,
+  ) {
     LocalStorageClassifierRepository.mlModel = writable(undefined);
     LocalStorageClassifierRepository.persistedFilters = new PersistantWritable(
       FilterTypes.toIterable(),
@@ -62,12 +66,13 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
    * See getTrainerConsumer() and getClassifier()
    */
   private async trainModel<T extends MLModel>(trainer: ModelTrainer<T>): Promise<void> {
-    const gestureRepository =
-      LocalStorageRepositories.getInstance().getGestureRepository();
+    /*
     const trainingData = this.classifierFactory.buildTrainingData(
       get(gestureRepository),
       LocalStorageClassifierRepository.filters,
-    );
+    );*/
+
+    const trainingData = this.trainingDataRepository.getTrainingData();
     const model = await trainer.trainModel(trainingData);
     LocalStorageClassifierRepository.mlModel.set(model);
   }
@@ -83,7 +88,8 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
     this.confidences.setConfidence(gestureId, confidence);
   }
 
-  private getFilters(): Writable<Filter[]> {
+  // TODO: Replace with a repository see GitHub issue !557
+  public getFilters(): Writable<Filter[]> {
     // Create and fetch a persistant store
     const derivedStore = derived(
       [LocalStorageClassifierRepository.persistedFilters],

@@ -13,17 +13,18 @@
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import Logger from '../../script/utils/Logger';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
-  import { onMount } from 'svelte';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
-  const highlightedAxis = stores.getHighlightedAxes();
+  const highlightedAxes = stores.getHighlightedAxes();
 
   const trainModelClickHandler = () => {
     trainModel(ModelRegistry.NeuralNetwork).then(() => {
       Logger.log('NeuralNetworkTrainingPageView', 'Model trained');
     });
   };
+
+  $: console.log($highlightedAxes);
 
   $: trainButtonSimpleLabel = !$model.hasModel
     ? 'menu.trainer.trainModelButtonSimple'
@@ -44,7 +45,9 @@
       <p class="text-2xl">{$t('menu.trainer.TrainingFinished')}</p>
       <p class="text-lg mt-4 mb-4">{$t('menu.trainer.TrainingFinished.body')}</p>
     {/if}
-    <StandardButton onClick={trainModelClickHandler}>
+    <StandardButton
+      disabled={$highlightedAxes.length === 0}
+      onClick={trainModelClickHandler}>
       {$t(trainButtonSimpleLabel)}
     </StandardButton>
   {/if}

@@ -35,7 +35,6 @@
 <script lang="ts">
   import TypingUtils from './../../script/TypingUtils';
   import windi from './../../../windi.config.js';
-  import { SvelteComponent } from 'svelte';
 
   type variants =
     | 'secondary'
@@ -67,24 +66,43 @@
   const colorParam = isKey ? bgColors[disabled ? 'disabled' : color] : color;
 </script>
 
-<div>
-  <button
-    {disabled}
-    style="--color: {colorParam}
+{#if disabled}
+  <div>
+    <button
+      {disabled}
+      style="--border-width: {bold ? '2px' : '1px'}"
+      class="outline-none rounded-full"
+      class:shadow-md={shadows}
+      class:bg-disabled={true}
+      class:font-bold={bold}
+      class:small
+      class:normal={!small}
+      class:outlined
+      class:cursor-default={disabled}
+      on:click={onClick}>
+      <div class="flex flex-row justify-between justify-center items-center">
+        <slot />
+      </div>
+    </button>
+  </div>
+{:else}
+  <div>
+    <button
+      style="--color: {colorParam}
     ; --border-width: {bold ? '2px' : '1px'}"
-    class="outline-none rounded-full"
-    class:shadow-md={shadows}
-    class:font-bold={bold}
-    class:small
-    class:normal={!small}
-    class:outlined
-    class:filled={!outlined}
-    class:fillOnHover={fillOnHover && !disabled}
-    class:cursor-pointer={!disabled}
-    class:cursor-default={disabled}
-    on:click={onClick}>
-    <div class="flex flex-row justify-between justify-center items-center">
-      <slot />
-    </div>
-  </button>
-</div>
+      class="outline-none rounded-full"
+      class:shadow-md={shadows}
+      class:font-bold={bold}
+      class:small
+      class:normal={!small}
+      class:outlined
+      class:filled={!outlined}
+      class:fillOnHover
+      class:cursor-pointer={!disabled}
+      on:click={onClick}>
+      <div class="flex flex-row justify-between justify-center items-center">
+        <slot />
+      </div>
+    </button>
+  </div>
+{/if}

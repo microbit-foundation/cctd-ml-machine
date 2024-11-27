@@ -33,14 +33,18 @@ export const getModelTrainer = (
   model: ModelInfo,
   onTrainingIteration: (iteration: LossTrainingIteration) => void,
 ): ModelTrainer<MLModel> => {
-  const currentAxis = get(highlightedAxis)[0];
+  const currentAxes = get(highlightedAxis);
   if (model.id === ModelRegistry.KNN.id) {
-    const offset = currentAxis.index === 0 ? 0 : currentAxis.index === 1 ? 1 : 2; // TODO: Rewrite to use just use the axis as offset directly
+    if (currentAxes.length !== 1) {
+      throw new Error(
+        `Does not support ${currentAxes.length} highlighted axes when running KNN model. Only exactly 1 is supported`,
+      );
+    }
+    const currentAxis = currentAxes[0];
     return new KNNNonNormalizedModelTrainer(get(knnConfig).k, data =>
-      extractAxisFromTrainingData(data, offset, 3),
+      extractAxisFromTrainingData(data, currentAxis.index, 3),
     );
   }
-  highlightedAxis.set([]);
 
   return new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, h => {
     onTrainingIteration(h);

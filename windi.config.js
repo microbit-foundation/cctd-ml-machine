@@ -10,17 +10,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#3a3a3a',
+        primary: '#2B5EA7',
         primarytext: '#000000',
-        secondary: '#a0a0a0',
+        secondary: '#2CCAC0',
         secondarytext: '#FFFFFF',
         info: '#98A2B3',
         backgrounddark: '#F5F5F5',
         backgroundlight: '#ffffff',
         infolight: '#93c5fd',
         link: '#258aff',
-        warning: '#ffaaaa',
-        disabled: '#8892A3',
+        warning: '#FF7777',
+        disabled: '#acb0ac',
         primaryborder: '#E5E7EB',
         infobglight: '#E7E5E4',
         infobgdark: '#57534E',

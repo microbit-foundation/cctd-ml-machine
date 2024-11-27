@@ -27,7 +27,7 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
 };
 
 const trainNNModel = async () => {
-  stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
+  //stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
   loss.set([]);
   const modelTrainer = new LayersModelTrainer(
     StaticConfiguration.layersModelTrainingSettings,

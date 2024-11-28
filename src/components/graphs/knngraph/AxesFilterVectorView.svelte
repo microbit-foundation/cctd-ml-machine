@@ -14,7 +14,7 @@
   import { vectorArrows } from './AxesFilterVector';
   import { stores } from '../../../script/stores/Stores';
   import { asAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
-  import type { Axis } from '../../../script/stores/Axis';
+  import type { Axis } from '../../../script/domain/Axis';
 
   const classifier = stores.getClassifier();
 

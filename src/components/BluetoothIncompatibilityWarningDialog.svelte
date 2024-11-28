@@ -5,10 +5,11 @@
  -->
 
 <script lang="ts">
-  import { WebBluetoothCompatibility } from '../script/compatibility/CompatibilityList';
   import { t } from '../i18n';
   import StandardDialog from './dialogs/StandardDialog.svelte';
   import { isBluetoothWarningDialogOpen } from '../script/stores/uiStore';
+    import { usbCompatibilityList } from '../script/compatibility/CompatibilityList';
+
 </script>
 
 <StandardDialog
@@ -38,10 +39,10 @@
           </tr>
         </thead>
         <tbody>
-          {#each WebBluetoothCompatibility.getSupportedBrowsers() as browser}
+          {#each usbCompatibilityList as browser}
             <tr class="border-solid border-b-1">
               <td>{browser.browser}</td>
-              <td class="text-right">v{String(browser.version)}</td>
+              <td class="text-right">v{browser.version}</td>
             </tr>
           {/each}
         </tbody>

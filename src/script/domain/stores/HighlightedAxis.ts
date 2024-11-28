@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 import { get, type Unsubscriber, writable, type Writable } from 'svelte/store';
-import Classifier from '../domain/stores/Classifier';
+import Classifier from './Classifier';
 import { type Subscriber } from 'svelte/motion';
-import SelectedModel from './SelectedModel';
-import ModelRegistry from '../domain/ModelRegistry';
-import type { Axis } from './Axis';
+import SelectedModel from '../../stores/SelectedModel';
+import ModelRegistry from '../ModelRegistry';
+import type { Axis } from '../Axis';
 
 class HighlightedAxes implements Writable<Axis[]> {
   private value: Writable<Axis[]>;

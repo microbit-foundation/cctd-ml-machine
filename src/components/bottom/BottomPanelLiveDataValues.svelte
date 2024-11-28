@@ -7,7 +7,7 @@
 <script lang="ts">
   import { derived } from 'svelte/store';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-  import type { Axis } from '../../script/stores/Axis';
+  import type { Axis } from '../../script/domain/Axis';
   import { stores } from '../../script/stores/Stores';
   import StaticConfiguration from '../../StaticConfiguration';
   import FixedNumber from '../base/FixedNumber.svelte';

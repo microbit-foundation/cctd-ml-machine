@@ -17,7 +17,7 @@ import Classifier from '../domain/stores/Classifier';
 import { type LiveDataVector } from '../domain/stores/LiveDataVector';
 import type { Engine, EngineData } from '../domain/stores/Engine';
 import type { LiveData } from '../domain/stores/LiveData';
-import type HighlightedAxes from '../stores/HighlightedAxis';
+import type HighlightedAxes from '../domain/stores/HighlightedAxis';
 import { ClassifierInput } from '../domain/ClassifierInput';
 
 /**

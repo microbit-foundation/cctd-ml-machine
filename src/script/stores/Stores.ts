@@ -21,13 +21,13 @@ import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
-import HighlightedAxes from './HighlightedAxis';
+import HighlightedAxes from '../domain/stores/HighlightedAxis';
 import SelectedModel from './SelectedModel';
 import type { LiveDataVector } from '../domain/stores/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import type { Engine } from '../domain/stores/Engine';
-import type { Axis } from './Axis';
-import AvailableAxes from './AvailableAxes';
+import type { Axis } from '../domain/Axis';
+import AvailableAxes from '../domain/stores/AvailableAxes';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector>;

@@ -6,10 +6,10 @@ import {
   type Unsubscriber,
   type Writable,
 } from 'svelte/store';
-import type { Axis } from './Axis';
-import type { LiveData } from '../domain/stores/LiveData';
-import type { LiveDataVector } from '../domain/stores/LiveDataVector';
-import Logger from '../utils/Logger';
+import type { Axis } from '../Axis';
+import type { LiveData } from './LiveData';
+import type { LiveDataVector } from './LiveDataVector';
+import Logger from '../../utils/Logger';
 
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors

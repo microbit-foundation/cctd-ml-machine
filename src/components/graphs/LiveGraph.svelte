@@ -5,7 +5,6 @@
  -->
 
 <script lang="ts">
-  import { state } from '../../script/stores/uiStore';
   import { onMount } from 'svelte';
   import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
@@ -14,7 +13,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { type LiveDataVector } from '../../script/domain/stores/LiveDataVector';
-  import { stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../script/stores/Stores';
 
   /**
    * TimesSeries, but with the data array added.

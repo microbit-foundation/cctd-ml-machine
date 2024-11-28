@@ -10,7 +10,6 @@
     alertUser,
     buttonPressed,
     areActionsAllowed,
-    state,
     microbitInteraction,
     MicrobitInteractions,
     chosenGesture,
@@ -23,8 +22,7 @@
   import StaticConfiguration from '../StaticConfiguration';
   import Gesture from '../script/domain/stores/gesture/Gesture';
   import { type RecordingData } from '../script/domain/stores/gesture/Gestures';
-  import { stores } from '../script/stores/Stores';
-  import { lab } from 'd3';
+  import { state, stores } from '../script/stores/Stores';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;

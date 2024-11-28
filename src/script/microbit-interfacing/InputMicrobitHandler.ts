@@ -5,16 +5,15 @@
  */
 import { MBSpecs, type MicrobitHandler } from 'microbyte';
 import Logger from '../utils/Logger';
-import { ModelView, buttonPressed, onCatastrophicError, state } from '../stores/uiStore';
+import {  buttonPressed, onCatastrophicError } from '../stores/uiStore';
 import TypingUtils from '../TypingUtils';
 import { get } from 'svelte/store';
-import { stores } from '../stores/Stores';
+import { DeviceRequestStates, ModelView, state, stores } from '../stores/Stores';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
 } from '../livedata/MicrobitAccelerometerData';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import StaticConfiguration from '../../StaticConfiguration';
-import { DeviceRequestStates } from '../stores/connectDialogStore';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
 

@@ -24,9 +24,9 @@
   import ContactUsControlBarButton from '../components/control-bar/control-bar-items/ContactUsControlBarButton.svelte';
   import SelectLanguageControlBarDropdown from '../components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
   import { t } from '../i18n';
-  import { state } from '../script/stores/uiStore';
   import Environment from '../script/Environment';
   import DevTools from '../components/DevTools.svelte';
+    import { state } from '../script/stores/Stores';
 
   type ContentTile = { tile: ComponentType; spanColumns: number };
   // Just add the content titles you wish to put on front page, in the order you wish them to be there

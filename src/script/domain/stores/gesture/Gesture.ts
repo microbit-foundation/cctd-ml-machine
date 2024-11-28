@@ -62,7 +62,7 @@ class Gesture implements Readable<GestureData> {
   }
 
   public getRecordings(): RecordingData[] {
-    return get(this.store).recordings;
+    return get(this.store)?.recordings ?? [];
   }
 
   public getOutput(): GestureOutput {

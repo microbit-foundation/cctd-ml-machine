@@ -39,16 +39,13 @@ const trainNNModel = async () => {
 const trainKNNModel = async () => {
   // If not exactly 1 axis is highlighted, then set that to be highlighted, fix it later
   if (get(stores.getHighlightedAxes()).length !== 1) {
-    stores.getHighlightedAxes().set([get(stores.getAvailableAxes())[0]]);
+    throw new Error("Cannot train KNN model. Must have exactly 1 axis selected")
   }
   const currentAxis = get(stores.getHighlightedAxes())[0];
-  // TODO: Rewrite offset to use the axis directly instead
-  const offset = currentAxis.index === 0 ? 0 : currentAxis.index === 1 ? 1 : 2;
   const modelTrainer = new KNNNonNormalizedModelTrainer(
     get(knnConfig).k,
     data => {
-      const extractedData = extractAxisFromTrainingData(data, offset, 3);
-      Logger.log('TrainingPage', 'Extracted data: \n' + JSON.stringify(extractedData));
+      const extractedData = extractAxisFromTrainingData(data, currentAxis.index, 3);
       return extractedData;
     }, // 3 assumes 3 axis
   );

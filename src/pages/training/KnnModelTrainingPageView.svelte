@@ -4,8 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { stores } from '../../script/stores/Stores';
-  import { state } from '../../script/stores/uiStore';
+  import { state, stores } from '../../script/stores/Stores';
   import AxesFilterVectorView from '../../components/graphs/knngraph/AxesFilterVectorView.svelte';
   import { trainModel } from './TrainingPage';
   import ModelRegistry from '../../script/domain/ModelRegistry';
@@ -22,7 +21,6 @@
 
   onMount(() => {
     trainModel(ModelRegistry.KNN);
-    return () => unsubscribe();
   });
   $: {
     if ($highlightedAxis === undefined) {
@@ -32,10 +30,6 @@
       trainModel(ModelRegistry.KNN);
     }
   }
-
-  const unsubscribe = highlightedAxis.subscribe(axis => {
-    trainModel(ModelRegistry.KNN);
-  });
 
   const noOfRecordings = $gestures.reduce(
     (acc, gesture) => acc + gesture.recordings.length,

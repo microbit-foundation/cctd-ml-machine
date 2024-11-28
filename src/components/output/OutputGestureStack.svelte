@@ -23,12 +23,11 @@
   import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from '../GestureTilePart.svelte';
   import PinSelector from './PinSelector.svelte';
-  import { state } from '../../script/stores/uiStore';
   import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import Gesture, { type SoundData } from '../../script/domain/stores/gesture/Gesture';
-  import { stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../script/stores/Stores';
   import { MBSpecs } from 'microbyte';
 
   const gestures = stores.getGestures();

@@ -7,12 +7,11 @@
 <script lang="ts">
   import { horizontalSlide } from '../script/transitions';
   import StandardButton from '../components/buttons/StandardButton.svelte';
-  import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
   import { btPatternInput, btPatternOutput } from '../script/stores/connectionStore';
   import Microbits from '../script/microbit-interfacing/Microbits';
-  import { DeviceRequestStates } from '../script/stores/connectDialogStore';
   import { MBSpecs } from 'microbyte';
+    import { DeviceRequestStates, state } from '../script/stores/Stores';
 
   let reconnectText: string;
   let reconnectButtonText: string;

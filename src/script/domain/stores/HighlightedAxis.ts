@@ -3,12 +3,14 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { get, type Unsubscriber, writable, type Writable } from 'svelte/store';
+import { get, type Readable, type Unsubscriber, writable, type Writable } from 'svelte/store';
 import Classifier from './Classifier';
 import { type Subscriber } from 'svelte/motion';
 import SelectedModel from '../../stores/SelectedModel';
 import ModelRegistry from '../ModelRegistry';
 import type { Axis } from '../Axis';
+import { trainModel } from '../../../pages/training/TrainingPage';
+import type { ApplicationState } from '../../stores/Stores';
 
 class HighlightedAxes implements Writable<Axis[]> {
   private value: Writable<Axis[]>;
@@ -16,6 +18,7 @@ class HighlightedAxes implements Writable<Axis[]> {
   public constructor(
     private classifier: Classifier,
     private selectedModel: SelectedModel,
+    private applicationState: Readable<ApplicationState>
   ) {
     this.value = writable([]);
   }
@@ -62,12 +65,10 @@ class HighlightedAxes implements Writable<Axis[]> {
   /**
    * When the axis that has been selected is EXPLICITLY different from before
    */
-  private onChangedAxis() {
+  private async onChangedAxis() {
     this.classifier.getModel().markAsUntrained();
-    if (get(this.selectedModel).id === ModelRegistry.KNN.id) {
-      console.error(
-        'Not implemented, should retrain model now! Need repository for training data',
-      );
+    if (get(this.selectedModel).id === ModelRegistry.KNN.id && get(this.applicationState).isInputConnected) {
+        await trainModel(ModelRegistry.KNN);
     }
   }
 }

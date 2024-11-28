@@ -6,7 +6,7 @@
 <script lang="ts">
   import { ClassifierInput } from '../../script/domain/ClassifierInput';
   import Gesture from '../../script/domain/stores/gesture/Gesture';
-  import BaseVector from '../../script/livedata/BaseVector';
+  import BaseVector from '../../script/domain/BaseVector';
   import { stores } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';
   import TrainKnnModelButton from './TrainKNNModelButton.svelte';

@@ -7,11 +7,12 @@
 <!-- Use as a container for items that are supposed to be at the top of the DOM. -->
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import { message, state } from '../script/stores/uiStore';
+  import { message } from '../script/stores/uiStore';
   import ReconnectPrompt from '../components/ReconnectPrompt.svelte';
   import OutdatedMicrobitWarning from '../components/OutdatedMicrobitWarning.svelte';
   import { isInputPatternValid } from '../script/stores/connectionStore';
   import FilterListFilterPreview from '../components/filters/FilterListFilterPreview.svelte';
+    import { state } from '../script/stores/Stores';
 
   // Helps show error messages on top of page
   let latestMessage = '';

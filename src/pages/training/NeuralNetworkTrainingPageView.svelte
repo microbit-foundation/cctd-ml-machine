@@ -46,6 +46,7 @@
       <p class="text-lg mt-4 mb-4">{$t('menu.trainer.TrainingFinished.body')}</p>
     {/if}
     <StandardButton
+      disabledTooltip={$t('menu.trainer.SelectMoreAxes')}
       disabled={$highlightedAxes.length === 0}
       onClick={trainModelClickHandler}>
       {$t(trainButtonSimpleLabel)}

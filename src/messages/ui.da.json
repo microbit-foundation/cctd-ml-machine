@@ -125,6 +125,7 @@
   "menu.trainer.noFilters": "Du har ikke valgt nogle filtre. Der skal mindst være valgt 1 filter for at kunne træne en model",
   "menu.trainer.isTrainingModelButton": "Træner model...",
   "menu.trainer.knn.onlyTwoFilters": "For at kunne se visualisering skal du vælge præcist 2 filtre",
+  "menu.trainer.SelectMoreAxes": "For at træne en model, skal du vælge mindst én akse.",
   "menu.model.helpHeading": "Model",
   "menu.model.helpBody": "Modellen kan bruges i et interaktivt system. Her bruger vi den trænede model til at forudsige bevægelser. Du kan tilslutte endnu en micro:bit og få den til at reagere på de bevægelser du laver.",
   "menu.model.noModel": "Ingen model",

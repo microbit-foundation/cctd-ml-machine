@@ -35,6 +35,7 @@
 <script lang="ts">
   import TypingUtils from './../../script/TypingUtils';
   import windi from './../../../windi.config.js';
+  import Tooltip from '../base/Tooltip.svelte';
 
   type variants =
     | 'secondary'
@@ -53,6 +54,7 @@
   export let fillOnHover = false;
   export let bold = true;
   export let shadows = true;
+  export let disabledTooltip: string | undefined = undefined;
 
   const bgColors: { [key in variants]: string } = {
     primary: windi.theme.extend.colors.primary,
@@ -67,7 +69,7 @@
 </script>
 
 {#if disabled}
-  <div>
+  <Tooltip title={disabledTooltip}>
     <button
       {disabled}
       style="--border-width: {bold ? '2px' : '1px'}"
@@ -84,25 +86,23 @@
         <slot />
       </div>
     </button>
-  </div>
+  </Tooltip>
 {:else}
-  <div>
-    <button
-      style="--color: {colorParam}
+  <button
+    style="--color: {colorParam}
     ; --border-width: {bold ? '2px' : '1px'}"
-      class="outline-none rounded-full"
-      class:shadow-md={shadows}
-      class:font-bold={bold}
-      class:small
-      class:normal={!small}
-      class:outlined
-      class:filled={!outlined}
-      class:fillOnHover
-      class:cursor-pointer={!disabled}
-      on:click={onClick}>
-      <div class="flex flex-row justify-between justify-center items-center">
-        <slot />
-      </div>
-    </button>
-  </div>
+    class="outline-none rounded-full"
+    class:shadow-md={shadows}
+    class:font-bold={bold}
+    class:small
+    class:normal={!small}
+    class:outlined
+    class:filled={!outlined}
+    class:fillOnHover
+    class:cursor-pointer={!disabled}
+    on:click={onClick}>
+    <div class="flex flex-row justify-between justify-center items-center">
+      <slot />
+    </div>
+  </button>
 {/if}

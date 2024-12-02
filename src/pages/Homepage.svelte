@@ -39,10 +39,11 @@
 				<p class="text-lg mb-2 font-semibold">
 					{$t("content.index.videoHeading")}
 				</p>
-				<!-- svelte-ignore a11y-media-has-caption -->
-				<video class="h-[300px] self-center" controls width=450 poster="imgs/data-trainer-thumpnail.png">
-					<source src="https://datatraener0dr0media-euno.streaming.media.azure.net/18233c69-2bc3-4b1b-9e2d-249e37b56307/Ultrabit_01_Introvideo_Datatræneren.mp4" type="video/mp4">
-				</video>
+				<p>
+					{$t("content.index.videoBody")} <a href="https://www.dr.dk/skole/ultrabit/udskoling/elevoevelse-med-bbc-microbit-skjulte-moenstre-i-data" target="_blank">Link</a>
+				</p>
+				<br>
+				<img src="imgs/data-trainer-thumpnail.png" alt="gg">
 			</div>
 		</div>
 	</div>
@@ -56,4 +57,9 @@
             "a b"
             "a c";
     }
+
+	a {
+	color: blue;
+	text-decoration: underline;
+	}
 </style>

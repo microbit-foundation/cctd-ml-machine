@@ -93,7 +93,7 @@
     { x: number; y: number }[],
     string
   > {
-    const datasets: ChartDataset[] = getRecordingChartDatasets(data)
+    const datasets: ChartDataset[] = getRecordingChartDatasets(data);
 
     return {
       type: 'line',

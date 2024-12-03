@@ -22,6 +22,7 @@
   import { type RecordingData } from '../../../script/domain/stores/gesture/Gestures';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../script/stores/Stores';
+  import { getRecordingChartDatasets, type ChartDataset } from './RecordingGraph';
 
   export let data: RecordingData['samples'];
   export let labels: RecordingData['labels'];
@@ -87,25 +88,12 @@
     return (window.innerHeight - rect.height) / 2 - inspectorMarginPx;
   };
 
-  type ChartDataset = { x: number; y: number }[];
   function getConfig(): ChartConfiguration<
     keyof ChartTypeRegistry,
     { x: number; y: number }[],
     string
   > {
-    const datasets: ChartDataset[] = [];
-    const numberOfAxes = data.length > 0 ? data[0].vector.length : 0;
-
-    for (let i = 0; i < numberOfAxes; i++) {
-      const dataset: ChartDataset = [];
-      data.forEach((e, idx) => {
-        dataset.push({
-          x: idx,
-          y: e.vector[i],
-        });
-      });
-      datasets.push(dataset);
-    }
+    const datasets: ChartDataset[] = getRecordingChartDatasets(data)
 
     return {
       type: 'line',
@@ -131,7 +119,7 @@
           x: {
             type: 'linear',
             min: 0,
-            max: data[0].vector.length,
+            max: datasets[0].length,
             grid: {
               color: '#f3f3f3',
             },

@@ -20,14 +20,19 @@
   const availableAxes = stores.getAvailableAxes();
 
   onMount(() => {
-    trainModel(ModelRegistry.KNN);
+    if ($highlightedAxis.length === 1) {
+      trainModel(ModelRegistry.KNN);
+    }
   });
+
   $: {
     if ($highlightedAxis === undefined) {
       $highlightedAxis = [$availableAxes[0]];
     }
     if (!$classifier.model.isTrained) {
-      trainModel(ModelRegistry.KNN);
+      if ($highlightedAxis.length === 1) {
+        trainModel(ModelRegistry.KNN);
+      }
     }
   }
 
@@ -91,7 +96,7 @@
       {/each}
     </div>
   </div>
-  {#if $filters.length == 2}
+  {#if $filters.length == 2 && $classifier.model.isTrained}
     <KnnModelGraph />
   {:else}
     <div class="max-w-[450px] flex flex-col justify-center">

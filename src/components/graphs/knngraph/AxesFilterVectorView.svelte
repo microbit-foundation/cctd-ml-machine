@@ -51,7 +51,7 @@
 
   const updateArrows = (axes: Axis[]) => {
     if (axes.length !== 1) {
-      throw new Error('Cannot handle more or less than 1 axis!');
+      return;
     }
     const axis = axes[0];
     drawArrows(`from${axis.label}`);
@@ -62,6 +62,9 @@
       throw new Error('Cannot handle more or less than 1 axis!');
     }
     try {
+      if (!liveData) {
+        throw new Error('Live data is not set yet, handle the error here');
+      }
       const seriesTimestamped = liveData
         .getBuffer()
         .getSeries(
@@ -81,14 +84,22 @@
     }
   };
 
-  let liveFilteredAxesData: number[] = getVectorValue();
+  let liveFilteredAxesData: number[] =
+    $highlightedAxis.length !== 1 ? [] : getVectorValue();
 
   let valueInterval: NodeJS.Timeout = setInterval(() => {}, 100);
 
   const init = () => {
+    if ($highlightedAxis.length !== 1) {
+      if ($availableAxes.length > 0) {
+        $highlightedAxis = [$availableAxes[0]];
+      }
+    }
     denit();
     valueInterval = setInterval(() => {
-      liveFilteredAxesData = getVectorValue();
+      if ($highlightedAxis.length === 1) {
+        liveFilteredAxesData = getVectorValue();
+      }
     }, 250);
 
     setTimeout(

@@ -75,8 +75,8 @@
     if ($highlightedAxes.length === 1) {
       if (get(controller)) {
         get(controller)!.destroy();
+        controller.set(initSingle($highlightedAxes[0].index));
       }
-      controller.set(initSingle($highlightedAxes[0].index));
     }
   }
 
@@ -86,7 +86,9 @@
   });
 
   onMount(() => {
-    controller.set(initSingle(0));
+    if ($highlightedAxes.length === 1) {
+      controller.set(initSingle(0));
+    }
     return () => {
       get(controller)?.destroy();
     };

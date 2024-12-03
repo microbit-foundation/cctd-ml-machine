@@ -30,7 +30,7 @@ import type { Axis } from '../domain/Axis';
 import AvailableAxes from '../domain/stores/AvailableAxes';
 
 type StoresType = {
-  liveData: LiveData<LiveDataVector>;
+  liveData: LiveData<LiveDataVector> | undefined;
 };
 
 /**
@@ -66,11 +66,6 @@ class Stores implements Readable<StoresType> {
     invalidate?: Invalidator<StoresType> | undefined,
   ): Unsubscriber {
     return derived([this.liveData], stores => {
-      if (!stores[0]) {
-        throw new Error(
-          'Cannot subscribe to stores, livedata is null or undefined, set it using setLiveData(...) first',
-        );
-      }
       return {
         liveData: stores[0],
       };

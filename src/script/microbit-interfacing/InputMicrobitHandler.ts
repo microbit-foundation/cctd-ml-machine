@@ -5,7 +5,7 @@
  */
 import { MBSpecs, type MicrobitHandler } from 'microbyte';
 import Logger from '../utils/Logger';
-import {  buttonPressed, onCatastrophicError } from '../stores/uiStore';
+import { buttonPressed, onCatastrophicError } from '../stores/uiStore';
 import TypingUtils from '../TypingUtils';
 import { get } from 'svelte/store';
 import { DeviceRequestStates, ModelView, state, stores } from '../stores/Stores';
@@ -49,13 +49,16 @@ class InputMicrobitHandler implements MicrobitHandler {
     const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
 
-    get(stores).liveData.put(
-      new MicrobitAccelerometerDataVector({
-        x: accelX,
-        y: accelY,
-        z: accelZ,
-      }),
-    );
+    const liveDataStore = get(stores).liveData;
+    if (liveDataStore !== undefined) {
+      liveDataStore.put(
+        new MicrobitAccelerometerDataVector({
+          x: accelX,
+          y: accelY,
+          z: accelZ,
+        }),
+      );
+    }
   }
 
   public onInitializing(): void {

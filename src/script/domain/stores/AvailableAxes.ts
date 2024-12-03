@@ -32,7 +32,7 @@ class AvailableAxes implements Readable<Axis[]> {
 
 
   private getInitalAxes(gestures: Gestures) {
-    /*if (gestures.getGestures().length > 0) {
+    if (gestures.getGestures().length > 0) {
       const recordings = gestures.getGestures()[0].getRecordings();
       if (recordings.length > 0) {
         Logger.log("Available Axes", "Found default available axes in recordings", recordings[0].labels)
@@ -40,8 +40,8 @@ class AvailableAxes implements Readable<Axis[]> {
           index,
           label
         } as Axis))
-      }
-    }*/
+      } 
+    }
     return [];
   }
   public subscribe(

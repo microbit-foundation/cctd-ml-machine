@@ -17,10 +17,12 @@
 
   let liveDataPoint: Vector3 = { x: 0, y: 0, z: 0 };
 
-  $: smoothedLiveData = new SmoothedLiveData($stores.liveData, 3);
+  $: smoothedLiveData = $stores.liveData
+    ? new SmoothedLiveData($stores.liveData, 3)
+    : undefined;
 
   $: {
-    if (!freeze) {
+    if (!freeze && $smoothedLiveData !== undefined) {
       liveDataPoint = {
         x: $smoothedLiveData.getVector()[0],
         y: $smoothedLiveData.getVector()[1],

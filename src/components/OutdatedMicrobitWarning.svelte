@@ -10,12 +10,12 @@
   import { t } from '../i18n';
   import {
     ConnectDialogStates,
-    DeviceRequestStates,
     connectionDialogState,
   } from '../script/stores/connectDialogStore';
   import StaticConfiguration from '../StaticConfiguration';
   import Microbits from '../script/microbit-interfacing/Microbits';
   import { HexOrigin } from '../script/microbit-interfacing/HexOrigin';
+  import { DeviceRequestStates } from '../script/stores/Stores';
   let hasBeenClosed = false;
   export let targetRole: 'INPUT' | 'OUTPUT';
   let showMakeCodeUpdateMessage =

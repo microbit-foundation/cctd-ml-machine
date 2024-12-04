@@ -22,10 +22,14 @@
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
   const filters = classifier.getFilters();
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxes = stores.getHighlightedAxes();
 
   const canvasWidth = 450;
   const canvasHeight = 300;
+
+  if ($highlightedAxes.length !== 1) {
+    throw new Error('KNN model graph only supports a single highlighted axis');
+  }
 
   // Cache training data to avoid fetching them again and again
   const allData = classifierFactory.buildTrainingData(
@@ -38,14 +42,14 @@
   const accelZData = extractAxisFromTrainingData(allData, 2, 3);
 
   const dataGetter = (): TrainingData => {
-    const axis = $highlightedAxis;
-    if (axis === 0) {
+    const axis = $highlightedAxes[0];
+    if (axis.index === 0) {
       return accelXData;
     }
-    if (axis === 1) {
+    if (axis.index === 1) {
       return accelYData;
     }
-    if (axis === 2) {
+    if (axis.index === 2) {
       return accelZData;
     }
     throw new Error('Cannot get data for axis ' + axis);
@@ -72,11 +76,9 @@
   };
 
   $: {
-    if ($highlightedAxis !== undefined) {
-      if (get(controller)) {
-        get(controller)!.destroy();
-      }
-      controller.set(initSingle($highlightedAxis));
+    if (get(controller)) {
+      get(controller)!.destroy();
+      controller.set(initSingle($highlightedAxes[0].index));
     }
   }
 
@@ -86,7 +88,9 @@
   });
 
   onMount(() => {
-    controller.set(initSingle(0));
+    if ($highlightedAxes.length === 1) {
+      controller.set(initSingle(0));
+    }
     return () => {
       get(controller)?.destroy();
     };

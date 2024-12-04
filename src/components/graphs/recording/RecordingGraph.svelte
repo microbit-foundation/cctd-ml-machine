@@ -22,6 +22,7 @@
   import { type RecordingData } from '../../../script/domain/stores/gesture/Gestures';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../script/stores/Stores';
+  import { getRecordingChartDatasets, type ChartDataset } from './RecordingGraph';
 
   export let data: RecordingData['samples'];
   export let labels: RecordingData['labels'];
@@ -31,7 +32,7 @@
   let modalPosition = { x: 0, y: 0 };
   let modalSize = 250;
 
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxis = stores.getHighlightedAxes();
 
   const verticalLineCol = 'black';
   const verticalLineWidth = 1;
@@ -77,38 +78,22 @@
     return { x, y };
   }
   const getLineColor = (axisIndex: number) => {
-    if ($highlightedAxis !== undefined) {
-      if ($highlightedAxis === axisIndex) {
-        return StaticConfiguration.graphColors[axisIndex] + 'ff';
-      } else {
-        return StaticConfiguration.graphColors[axisIndex] + '33';
-      }
+    if ($highlightedAxis.find(e => e.index === axisIndex) != undefined) {
+      return StaticConfiguration.graphColors[axisIndex] + 'ff';
     }
-    return StaticConfiguration.graphColors[axisIndex];
+    return StaticConfiguration.graphColors[axisIndex] + '33';
   };
-  function generateSizeOfInspector(rect: DOMRect): number {
-    return (window.innerHeight - rect.height) / 2 - inspectorMarginPx;
-  }
 
-  type ChartDataset = { x: number; y: number }[];
+  const generateSizeOfInspector = (rect: DOMRect): number => {
+    return (window.innerHeight - rect.height) / 2 - inspectorMarginPx;
+  };
+
   function getConfig(): ChartConfiguration<
     keyof ChartTypeRegistry,
     { x: number; y: number }[],
     string
   > {
-    const datasets: ChartDataset[] = [];
-    const numberOfAxes = data.length > 0 ? data[0].vector.length : 0;
-
-    for (let i = 0; i < numberOfAxes; i++) {
-      const dataset: ChartDataset = [];
-      data.forEach((e, idx) => {
-        dataset.push({
-          x: idx,
-          y: e.vector[i],
-        });
-      });
-      datasets.push(dataset);
-    }
+    const datasets: ChartDataset[] = getRecordingChartDatasets(data);
 
     return {
       type: 'line',
@@ -134,7 +119,7 @@
           x: {
             type: 'linear',
             min: 0,
-            max: data[0].vector.length,
+            max: datasets[0].length,
             grid: {
               color: '#f3f3f3',
             },

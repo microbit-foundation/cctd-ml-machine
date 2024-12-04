@@ -7,8 +7,7 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import TypingUtils from '../../script/TypingUtils';
-  import { stores } from '../../script/stores/Stores';
-  import { state } from '../../script/stores/uiStore';
+  import { state, stores } from '../../script/stores/Stores';
   import StandardButton from '../buttons/StandardButton.svelte';
 
   export let onOutputDisconnectButtonClicked: () => void;

@@ -11,8 +11,7 @@ import {
   type Point3DTransformed,
   distanceBetween,
 } from '../../../script/utils/graphUtils';
-import { stores } from '../../../script/stores/Stores';
-import { state } from '../../../script/stores/uiStore';
+import { state, stores } from '../../../script/stores/Stores';
 import { get } from 'svelte/store';
 import { knnConfig } from '../../../script/stores/knnConfig';
 

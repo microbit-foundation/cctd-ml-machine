@@ -10,7 +10,7 @@
   $: liveDataStore = $stores.liveData;
   let utilization = 0;
   setInterval(() => {
-    utilization = liveDataStore.getBuffer().getBufferUtilization();
+    utilization = liveDataStore?.getBuffer().getBufferUtilization() ?? 0;
   }, 1000);
 </script>
 

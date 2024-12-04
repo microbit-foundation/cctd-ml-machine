@@ -125,6 +125,7 @@
   "menu.trainer.noFilters": "No filters have been selected. You must enable at least 1 filter in order to train a model",
   "menu.trainer.isTrainingModelButton": "Training model",
   "menu.trainer.knn.onlyTwoFilters": "In order to visualize the data, you need to select exactly two filters",
+  "menu.trainer.SelectMoreAxes": "To train a model, select at least one axis to train the model on.",
   "menu.model.helpHeading": "Model",
   "menu.model.helpBody": "The model can be used in an interactive system. Here we use the trained model to predict gestures. You can connect another micro:bit and make it respond to the predicted gestures.",
   "menu.model.noModel": "No model",

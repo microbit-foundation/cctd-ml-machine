@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { Axis } from '../domain/Axis';
 import { type TrainingData } from '../domain/ModelTrainer';
 import { type MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
@@ -54,6 +55,34 @@ export const extractAxisFromTrainingData = (
             value: sample.value.filter(
               (_val, index) => index >= startIndex && index < stopIndex,
             ),
+          };
+        }),
+      };
+    }),
+  };
+};
+
+/**
+ * Training data has a flattened datastructure. This can be used to extract multiple axes from the dataset
+ */
+export const extractAxesFromTrainingData = (
+  trainingData: TrainingData,
+  axes: Axis[],
+  noOfAxes: number,
+): TrainingData => {
+  return {
+    classes: trainingData.classes.map(clazz => {
+      return {
+        samples: clazz.samples.map(sample => {
+          return {
+            value: axes.flatMap(axis => {
+              const noOfFilters = sample.value.length / noOfAxes;
+              const startIndex = noOfFilters * axis.index;
+              const stopIndex = startIndex + noOfFilters;
+              return sample.value.filter(
+                (_val, index) => index >= startIndex && index < stopIndex,
+              );
+            }),
           };
         }),
       };

@@ -142,22 +142,27 @@ class KNNModelGraphController {
     try {
       const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
       const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      liveData = get(stores)
-        .liveData.getBuffer()
-        .getSeries(sampleDuration, sampleSize)
-        .map(el => {
-          if (el.value.getSize() != 3) {
-            throw new Error("Couldn't convert vector to accelerometer data vector");
-          }
-          return {
-            ...el,
-            value: new MicrobitAccelerometerDataVector({
-              x: el.value.getVector()[0],
-              y: el.value.getVector()[1],
-              z: el.value.getVector()[2],
-            }),
-          };
-        });
+      const liveDataStore = get(stores).liveData;
+      if (liveDataStore !== undefined) {
+        liveData = liveDataStore
+          .getBuffer()
+          .getSeries(sampleDuration, sampleSize)
+          .map(el => {
+            if (el.value.getSize() != 3) {
+              throw new Error("Couldn't convert vector to accelerometer data vector");
+            }
+            return {
+              ...el,
+              value: new MicrobitAccelerometerDataVector({
+                x: el.value.getVector()[0],
+                y: el.value.getVector()[1],
+                z: el.value.getVector()[2],
+              }),
+            };
+          });
+      } else {
+        liveData = [];
+      }
       this.liveDataRecords.push(liveData);
       if (this.liveDataRecords.length > this.liveDataRecordsSize) {
         this.liveDataRecords.shift();

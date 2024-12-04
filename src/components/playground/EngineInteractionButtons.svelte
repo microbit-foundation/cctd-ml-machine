@@ -4,8 +4,9 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+  import { ClassifierInput } from '../../script/domain/ClassifierInput';
   import Gesture from '../../script/domain/stores/gesture/Gesture';
-  import AccelerometerClassifierInput from '../../script/mlmodels/AccelerometerClassifierInput';
+  import BaseVector from '../../script/domain/BaseVector';
   import { stores } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';
   import TrainKnnModelButton from './TrainKNNModelButton.svelte';
@@ -29,7 +30,13 @@
     const xs = randGesture.getRecordings()[0].samples.map(e => e.vector[0]);
     const ys = randGesture.getRecordings()[0].samples.map(e => e.vector[1]);
     const zs = randGesture.getRecordings()[0].samples.map(e => e.vector[2]);
-    const input = new AccelerometerClassifierInput(xs, ys, zs);
+    const input = new ClassifierInput(
+      randGesture
+        .getRecordings()[0]
+        .samples.map(
+          e => new BaseVector(e.vector, randGesture.getRecordings()[0].labels),
+        ),
+    );
     classifier.classify(input).then(() => {
       playgroundContext.addMessage('Finished predicting');
     });

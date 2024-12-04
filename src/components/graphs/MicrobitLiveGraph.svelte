@@ -6,29 +6,19 @@
 
 <script lang="ts">
   import StaticConfiguration from '../../StaticConfiguration';
-  import { Feature, hasFeature } from '../../script/FeatureToggles';
   import { stores } from '../../script/stores/Stores';
   import LiveGraph from './LiveGraph.svelte';
 
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxes = stores.getHighlightedAxes();
   export let width: number;
-  $: showhighlit = hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined;
-  console.log(hasFeature(Feature.KNN_MODEL) && $highlightedAxis !== undefined);
 </script>
 
-{#if showhighlit}
-  {#key $highlightedAxis}
+{#if $stores.liveData !== undefined}
+  {#key $highlightedAxes.map(e => `${e.index}`).join('-')}
     <LiveGraph
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
       liveData={$stores.liveData}
-      highlightVectorIndex={$highlightedAxis}
       {width} />
   {/key}
-{:else}
-  <LiveGraph
-    minValue={StaticConfiguration.liveGraphValueBounds.min}
-    maxValue={StaticConfiguration.liveGraphValueBounds.max}
-    liveData={$stores.liveData}
-    {width} />
 {/if}

@@ -5,7 +5,6 @@
  -->
 
 <script lang="ts">
-  import { state } from '../../script/stores/uiStore';
   import { onMount } from 'svelte';
   import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
@@ -14,7 +13,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { type LiveDataVector } from '../../script/domain/stores/LiveDataVector';
-  import { stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../script/stores/Stores';
 
   /**
    * TimesSeries, but with the data array added.
@@ -29,9 +28,10 @@
   export let liveData: LiveData<LiveDataVector>;
   export let maxValue: number;
   export let minValue: number;
-  export let highlightVectorIndex: number | undefined = undefined;
 
   let axisColors = StaticConfiguration.graphColors;
+
+  const highlightedAxes = stores.getHighlightedAxes();
 
   // Smoothes real-time data by using the 3 most recent data points
   let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
@@ -41,7 +41,9 @@
   // Without it, reconnecting would cause the component to use an outdated reference of the liveData store.
   stores.subscribe(e => {
     cnt++; // The cnt variable is the key that will force the dimension labels to update
-    smoothedLiveData = new SmoothedLiveData(e.liveData, 3);
+    if (e.liveData !== undefined) {
+      smoothedLiveData = new SmoothedLiveData(e.liveData, 3);
+    }
   });
 
   var canvas: HTMLCanvasElement | undefined = undefined;
@@ -70,14 +72,7 @@
     });
 
     lines.forEach((line, index) => {
-      let opaque = true;
-      if (highlightVectorIndex !== undefined) {
-        if (index === highlightVectorIndex) {
-          opaque = true;
-        } else {
-          opaque = false;
-        }
-      }
+      const opaque = highlightedAxes.isAxisIndexHighlighted(index);
       const color = axisColors[index] + (opaque ? 'ff' : '30');
       chart!.addTimeSeries(line, {
         lineWidth,

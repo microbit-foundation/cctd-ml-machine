@@ -10,10 +10,12 @@
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
-  import { stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../script/stores/Stores';
+  import PleaseConnect from '../../components/PleaseConnect.svelte';
 
   const selectedModel = stores.getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);
+  const highlightedAxis = stores.getHighlightedAxes();
 </script>
 
 <div class="flex flex-col h-full justify-center">
@@ -21,10 +23,15 @@
     {#if showFilterList}
       <FiltersList />
     {/if}
-    {#if $selectedModel.id === ModelRegistry.KNN.id}
+    {#if $selectedModel.id === ModelRegistry.KNN.id && $state.isInputConnected}
       <KnnModelTrainingPageView />
     {:else if $selectedModel.id === ModelRegistry.NeuralNetwork.id}
       <NeuralNetworkTrainingPageView />
     {/if}
   </div>
 </div>
+{#if !$state.isInputConnected}
+  <div class="mt-5">
+    <PleaseConnect />
+  </div>
+{/if}

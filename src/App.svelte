@@ -36,7 +36,7 @@
   import Router from './router/Router.svelte';
   import { Feature, getFeature } from './script/FeatureToggles';
   import { welcomeLog } from './script/utils/Logger';
-    import { DeviceRequestStates, state } from './script/stores/Stores';
+  import { DeviceRequestStates, state } from './script/stores/Stores';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {

@@ -12,7 +12,7 @@
   import OutdatedMicrobitWarning from '../components/OutdatedMicrobitWarning.svelte';
   import { isInputPatternValid } from '../script/stores/connectionStore';
   import FilterListFilterPreview from '../components/filters/FilterListFilterPreview.svelte';
-    import { state } from '../script/stores/Stores';
+  import { state } from '../script/stores/Stores';
 
   // Helps show error messages on top of page
   let latestMessage = '';

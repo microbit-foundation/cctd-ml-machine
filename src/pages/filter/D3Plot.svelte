@@ -143,6 +143,9 @@
   }
 
   function createLiveData() {
+    if (!liveData) {
+      return undefined;
+    }
     const liveD = liveData
       .getBuffer()
       .getSeries(

@@ -16,7 +16,7 @@
   import BaseDialog from '../dialogs/BaseDialog.svelte';
   import View3DLive from '../3d-inspector/View3DLive.svelte';
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
-    import { state } from '../../script/stores/Stores';
+  import { state } from '../../script/stores/Stores';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;

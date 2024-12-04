@@ -76,6 +76,9 @@
     let labels: string[] = [];
 
     // Set timeout to allow recording in 1s
+    if (!liveData) {
+      return;
+    }
     const unsubscribe = liveData.subscribe(data => {
       newData.push({ vector: data.getVector() });
       labels = data.getLabels();

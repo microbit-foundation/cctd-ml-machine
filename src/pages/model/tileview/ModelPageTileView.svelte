@@ -6,10 +6,7 @@
 
 <script lang="ts">
   import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
-  import {
-    areActionsAllowed,
-    buttonPressed,
-  } from '../../../script/stores/uiStore';
+  import { areActionsAllowed, buttonPressed } from '../../../script/stores/uiStore';
   import { onMount } from 'svelte';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';

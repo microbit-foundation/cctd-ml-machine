@@ -6,7 +6,10 @@
 import { get, writable } from 'svelte/store';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
-import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
+import {
+  extractAxesFromTrainingData,
+  extractAxisFromTrainingData,
+} from '../../script/utils/graphUtils';
 import { stores } from '../../script/stores/Stores';
 import CookieManager from '../../script/CookieManager';
 import { appInsights } from '../../appInsights';
@@ -16,6 +19,7 @@ import LayersModelTrainer, {
 } from '../../script/mlmodels/LayersModelTrainer';
 import { knnConfig } from '../../script/stores/knnConfig';
 import Logger from '../../script/utils/Logger';
+import { axisBottom } from 'd3';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 
@@ -37,18 +41,12 @@ const trainNNModel = async () => {
 };
 
 const trainKNNModel = async () => {
-  // If not exactly 1 axis is highlighted, then set that to be highlighted, fix it later
-  if (get(stores.getHighlightedAxes()).length !== 1) {
-    throw new Error("Cannot train KNN model. Must have exactly 1 axis selected")
-  }
-  const currentAxis = get(stores.getHighlightedAxes())[0];
-  const modelTrainer = new KNNNonNormalizedModelTrainer(
-    get(knnConfig).k,
-    data => {
-      const extractedData = extractAxisFromTrainingData(data, currentAxis.index, 3);
-      return extractedData;
-    }, // 3 assumes 3 axis
-  );
+  const noOfAxes = get(stores.getAvailableAxes()).length;
+  const axes = get(stores.getHighlightedAxes());
+  const modelTrainer = new KNNNonNormalizedModelTrainer(get(knnConfig).k, data => {
+    const extractedData = extractAxesFromTrainingData(data, axes, noOfAxes);
+    return extractedData;
+  });
   await stores.getClassifier().getModel().train(modelTrainer);
 };
 

@@ -46,7 +46,7 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
 
   constructor() {
     this.store = writable();
-    this.referenceStoreGetter = () => null!
+    this.referenceStoreGetter = () => null!;
     /*
     this.store = writable({
       intervalSpeed: this.getInitialIntervalValue(),

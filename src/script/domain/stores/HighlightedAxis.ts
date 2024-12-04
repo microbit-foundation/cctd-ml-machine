@@ -3,7 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { get, type Readable, type Unsubscriber, writable, type Writable } from 'svelte/store';
+import {
+  get,
+  type Readable,
+  type Unsubscriber,
+  writable,
+  type Writable,
+} from 'svelte/store';
 import Classifier from './Classifier';
 import { type Subscriber } from 'svelte/motion';
 import SelectedModel from '../../stores/SelectedModel';
@@ -11,16 +17,17 @@ import ModelRegistry from '../ModelRegistry';
 import type { Axis } from '../Axis';
 import { trainModel } from '../../../pages/training/TrainingPage';
 import type { ApplicationState } from '../../stores/Stores';
+import PersistantWritable from '../../repository/PersistantWritable';
 
 class HighlightedAxes implements Writable<Axis[]> {
-  private value: Writable<Axis[]>;
+  private value: PersistantWritable<Axis[]>;
 
   public constructor(
     private classifier: Classifier,
     private selectedModel: SelectedModel,
-    private applicationState: Readable<ApplicationState>
+    private applicationState: Readable<ApplicationState>,
   ) {
-    this.value = writable([]);
+    this.value = new PersistantWritable([], 'highlightedAxes');
   }
 
   public set(value: Axis[]): void {
@@ -67,8 +74,11 @@ class HighlightedAxes implements Writable<Axis[]> {
    */
   private async onChangedAxis() {
     this.classifier.getModel().markAsUntrained();
-    if (get(this.selectedModel).id === ModelRegistry.KNN.id && get(this.applicationState).isInputConnected) {
-        await trainModel(ModelRegistry.KNN);
+    if (
+      get(this.selectedModel).id === ModelRegistry.KNN.id &&
+      get(this.applicationState).isInputConnected
+    ) {
+      await trainModel(ModelRegistry.KNN);
     }
   }
 }

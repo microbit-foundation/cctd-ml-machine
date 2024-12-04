@@ -20,7 +20,7 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import Logger from '../../../script/utils/Logger';
   import { MBSpecs } from 'microbyte';
-    import { DeviceRequestStates, state } from '../../../script/stores/Stores';
+  import { DeviceRequestStates, state } from '../../../script/stores/Stores';
 
   // callbacks
   export let deviceState: DeviceRequestStates;

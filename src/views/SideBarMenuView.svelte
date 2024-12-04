@@ -11,7 +11,7 @@
   import { get } from 'svelte/store';
   import { Paths, currentPath, navigate } from '../router/paths';
   import { Feature, getFeature } from '../script/FeatureToggles';
-    import { state } from '../script/stores/Stores';
+  import { state } from '../script/stores/Stores';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;

@@ -23,7 +23,6 @@
   type TimeSeriesWithData = TimeSeries & { data: number[][] };
   const classifier = stores.getClassifier();
 
-  console.log('asdf');
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
   export let liveData: LiveData<LiveDataVector>;
@@ -42,7 +41,9 @@
   // Without it, reconnecting would cause the component to use an outdated reference of the liveData store.
   stores.subscribe(e => {
     cnt++; // The cnt variable is the key that will force the dimension labels to update
-    smoothedLiveData = new SmoothedLiveData(e.liveData, 3);
+    if (e.liveData !== undefined) {
+      smoothedLiveData = new SmoothedLiveData(e.liveData, 3);
+    }
   });
 
   var canvas: HTMLCanvasElement | undefined = undefined;

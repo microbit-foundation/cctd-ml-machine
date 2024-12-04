@@ -13,10 +13,12 @@
   export let width: number;
 </script>
 
-{#key $highlightedAxes.map(e => `${e.index}`).join('-')}
-  <LiveGraph
-    minValue={StaticConfiguration.liveGraphValueBounds.min}
-    maxValue={StaticConfiguration.liveGraphValueBounds.max}
-    liveData={$stores.liveData}
-    {width} />
-{/key}
+{#if $stores.liveData !== undefined}
+  {#key $highlightedAxes.map(e => `${e.index}`).join('-')}
+    <LiveGraph
+      minValue={StaticConfiguration.liveGraphValueBounds.min}
+      maxValue={StaticConfiguration.liveGraphValueBounds.max}
+      liveData={$stores.liveData}
+      {width} />
+  {/key}
+{/if}

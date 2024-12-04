@@ -54,7 +54,11 @@ class Stores implements Readable<StoresType> {
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
     this.selectedModel = new SelectedModel();
-    this.highlightedAxis = new HighlightedAxes(this.classifier, this.selectedModel, applicationState);
+    this.highlightedAxis = new HighlightedAxes(
+      this.classifier,
+      this.selectedModel,
+      applicationState,
+    );
     this.availableAxes = new AvailableAxes(this.liveData, this.gestures);
     this.availableAxes.subscribe(newAxes => {
       this.highlightedAxis.set(newAxes);

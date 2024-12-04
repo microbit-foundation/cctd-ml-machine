@@ -6,9 +6,7 @@
 /// <reference types="w3c-web-usb" />
 
 import Bowser from 'bowser';
-import {
-  nonAllowedPlatforms,
-} from './CompatibilityList';
+import { nonAllowedPlatforms } from './CompatibilityList';
 import Environment from '../Environment';
 
 export type CompatibilityStatus = {
@@ -32,19 +30,21 @@ export const checkCompatibility = async (): Promise<CompatibilityStatus> => {
   if (!browserVersion) {
     return { bluetooth: false, usb: false, platformAllowed: true, webGL: webGL };
   }
-  
-  const bluetoothNavigator = navigator.bluetooth
-  const isBluetoothSupported = bluetoothNavigator && await navigator.bluetooth.getAvailability();
+
+  const bluetoothNavigator = navigator.bluetooth;
+  const isBluetoothSupported =
+    bluetoothNavigator && (await navigator.bluetooth.getAvailability());
 
   const usbNavigator = navigator.usb;
-  const isUsbSupported = !!usbNavigator
+  const isUsbSupported = !!usbNavigator;
   let platformType = browser.getPlatform().type;
 
   // If platform won't report what it is, just assume desktop (ChromeOS doesnt report it)
   if (platformType == undefined) {
     platformType = 'desktop';
   }
-  const isPlatformAllowed = Environment.isInDevelopment || !nonAllowedPlatforms.includes(platformType);
+  const isPlatformAllowed =
+    Environment.isInDevelopment || !nonAllowedPlatforms.includes(platformType);
 
   return {
     bluetooth: isBluetoothSupported,
@@ -52,4 +52,4 @@ export const checkCompatibility = async (): Promise<CompatibilityStatus> => {
     platformAllowed: isPlatformAllowed,
     webGL: webGL,
   };
-}
+};

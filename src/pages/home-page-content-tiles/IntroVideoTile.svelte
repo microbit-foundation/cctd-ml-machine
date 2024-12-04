@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-    import { state } from '../../script/stores/Stores';
+  import { state } from '../../script/stores/Stores';
 </script>
 
 <p class="text-lg mb-2 font-semibold">

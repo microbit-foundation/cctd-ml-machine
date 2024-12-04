@@ -10,12 +10,12 @@
   import LiveDataBufferUtilizationPercentage from '../components/playground/LiveDataBufferUtilizationPercentage.svelte';
   import StoresDisplay from '../components/playground/StoresDisplay.svelte';
   import EngineInteractionButtons from '../components/playground/EngineInteractionButtons.svelte';
-    import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
 
   let isPlaygroundActive = false;
   onMount(() => {
     isPlaygroundActive = true;
-  })
+  });
 </script>
 
 {#if isPlaygroundActive}

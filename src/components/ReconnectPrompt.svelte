@@ -11,7 +11,7 @@
   import { btPatternInput, btPatternOutput } from '../script/stores/connectionStore';
   import Microbits from '../script/microbit-interfacing/Microbits';
   import { MBSpecs } from 'microbyte';
-    import { DeviceRequestStates, state } from '../script/stores/Stores';
+  import { DeviceRequestStates, state } from '../script/stores/Stores';
 
   let reconnectText: string;
   let reconnectButtonText: string;

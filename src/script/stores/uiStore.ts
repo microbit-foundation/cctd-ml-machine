@@ -18,8 +18,9 @@ import { state, stores } from './Stores';
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
-export const compatibility: Writable<CompatibilityStatus> =
-  writable(await checkCompatibility());
+export const compatibility: Writable<CompatibilityStatus> = writable(
+  await checkCompatibility(),
+);
 
 export const chosenGesture = writable<Gesture | null>(null);
 

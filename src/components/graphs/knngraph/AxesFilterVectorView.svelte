@@ -57,10 +57,7 @@
     drawArrows(`from${axis.label}`);
   };
 
-  const getVectorValue = () => {
-    if ($highlightedAxis.length !== 1) {
-      throw new Error('Cannot handle more or less than 1 axis!');
-    }
+  const getVectorValues = () => {
     try {
       if (!liveData) {
         throw new Error('Live data is not set yet, handle the error here');
@@ -74,32 +71,26 @@
       const series = seriesTimestamped.map(s =>
         asAccelerometerData(s.value).getAccelerometerData(),
       );
-      const filteredSeries = stores
-        .getClassifier()
-        .getFilters()
-        .compute(extractAxisFromAccelerometerData(series, $highlightedAxis[0]!.index));
+      const filteredSeries = $highlightedAxis.flatMap(axis =>
+        stores
+          .getClassifier()
+          .getFilters()
+          .compute(extractAxisFromAccelerometerData(series, axis.index)),
+      );
       return filteredSeries;
     } catch (e) {
       return Array(classifier.getFilters().count()).fill(0);
     }
   };
 
-  let liveFilteredAxesData: number[] =
-    $highlightedAxis.length !== 1 ? [] : getVectorValue();
+  let liveFilteredAxesData: number[] = getVectorValues();
 
   let valueInterval: NodeJS.Timeout = setInterval(() => {}, 100);
 
   const init = () => {
-    if ($highlightedAxis.length !== 1) {
-      if ($availableAxes.length > 0) {
-        $highlightedAxis = [$availableAxes[0]];
-      }
-    }
     denit();
     valueInterval = setInterval(() => {
-      if ($highlightedAxis.length === 1) {
-        liveFilteredAxesData = getVectorValue();
-      }
+      liveFilteredAxesData = getVectorValues();
     }, 250);
 
     setTimeout(
@@ -145,30 +136,42 @@
               <StandardButton
                 color={StaticConfiguration.graphColors[axis.index]}
                 small
-                outlined={$highlightedAxis.find(e => e.index === axis.index) != undefined}
+                outlined={$highlightedAxis.find(e => e.index === axis.index) ===
+                  undefined}
                 onClick={() => {
                   $highlightedAxis = [axis];
-                }}>{axis.label}</StandardButton>
+                }}>
+                {axis.label}
+              </StandardButton>
             </div>
           {/each}
         </div>
-        <div class="pl-20 flex flex-col justify-around">
-          {#each $filters as filter, index}
-            <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
-          {/each}
-        </div>
-        <div class="flex flex-col justify-around">
-          {#each $filters as _}
-            <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />
-          {/each}
-        </div>
-        <div class="flex flex-col justify-around w-12">
-          {#each liveFilteredAxesData as val, index}
-            <p style={`color:${StaticConfiguration.graphColors[index]}`}>
-              {val.toFixed(3)}
-            </p>
-          {/each}
-        </div>
+        {#if $highlightedAxis.length === 1}
+          <div class="pl-20 flex flex-col justify-around">
+            {#each $filters as filter, index}
+              <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
+            {/each}
+          </div>
+          <div class="flex flex-col justify-around">
+            {#each $filters as _}
+              <img
+                src={'imgs/right_arrow_blue.svg'}
+                alt="right arrow icon"
+                width="20px" />
+            {/each}
+          </div>
+          <div class="flex flex-col justify-around w-12">
+            {#each liveFilteredAxesData as val, index}
+              <p style={`color:${StaticConfiguration.graphColors[index]}`}>
+                {val.toFixed(3)}
+              </p>
+            {/each}
+          </div>
+        {:else}
+          <div>
+            <p>Hello world</p>
+          </div>
+        {/if}
       </div>
     {/if}
   </div>

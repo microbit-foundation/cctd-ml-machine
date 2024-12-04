@@ -27,6 +27,10 @@
   const canvasWidth = 450;
   const canvasHeight = 300;
 
+  if ($highlightedAxes.length !== 1) {
+    throw new Error('KNN model graph only supports a single highlighted axis');
+  }
+
   // Cache training data to avoid fetching them again and again
   const allData = classifierFactory.buildTrainingData(
     gestures.getGestures(),
@@ -72,11 +76,9 @@
   };
 
   $: {
-    if ($highlightedAxes.length === 1) {
-      if (get(controller)) {
-        get(controller)!.destroy();
-        controller.set(initSingle($highlightedAxes[0].index));
-      }
+    if (get(controller)) {
+      get(controller)!.destroy();
+      controller.set(initSingle($highlightedAxes[0].index));
     }
   }
 

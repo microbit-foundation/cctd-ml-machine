@@ -19,8 +19,8 @@
     highlightedAxes.toggleAxis(axis);
   };
 
-  $: liveData = new SmoothedLiveData($stores.liveData, 3);
-  $: input = $liveData.getVector();
+  $: liveData = $stores.liveData ? new SmoothedLiveData($stores.liveData, 3) : undefined;
+  $: input = $liveData ? $liveData.getVector() : undefined;
   $: axes = derived([highlightedAxes, availableAxes], stores => {
     const highlighted = stores[0];
     return stores[1].map(e => ({
@@ -39,7 +39,7 @@
         class:border-secondary={axis.isHighlighted}
         class:font-bold={axis.isHighlighted}
         style="color:{StaticConfiguration.graphColors[axis.index]}">
-        {axis.label}: <FixedNumber digits={2} number={input[axis.index]} />
+        {axis.label}: <FixedNumber digits={2} number={input ? input[axis.index] : 0} />
       </p>
     </div>
   {/each}

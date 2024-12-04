@@ -6,10 +6,7 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import {
-    areActionsAllowed,
-    buttonPressed,
-  } from '../../../script/stores/uiStore';
+  import { areActionsAllowed, buttonPressed } from '../../../script/stores/uiStore';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import MediaQuery from '../../../components/MediaQuery.svelte';
   import OutputGesture from '../../../components/output/OutputGesture.svelte';

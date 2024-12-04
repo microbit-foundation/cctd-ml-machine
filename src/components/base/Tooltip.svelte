@@ -35,5 +35,9 @@
 </div>
 
 {#if isHovered && !!title}
-  <div style="top: {y}px; left: {x}px;" class="absolute p-1 rounded-sm bg-white shadow-md border-1 border-solid">{title}</div>
+  <div
+    style="top: {y}px; left: {x}px;"
+    class="absolute p-1 rounded-sm bg-white shadow-md border-1 border-solid">
+    {title}
+  </div>
 {/if}

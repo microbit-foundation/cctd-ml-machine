@@ -10,7 +10,7 @@
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
-    import { ModelView, state } from '../../script/stores/Stores';
+  import { ModelView, state } from '../../script/stores/Stores';
   import ModelPageStackView from './stackview/ModelPageStackView.svelte';
   import ModelPageTileView from './tileview/ModelPageTileView.svelte';
 

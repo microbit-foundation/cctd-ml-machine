@@ -20,8 +20,11 @@ import type Gestures from './gesture/Gestures';
 class AvailableAxes implements Readable<Axis[]> {
   private value: Writable<Axis[]>;
 
-  constructor(liveData: Readable<LiveData<LiveDataVector> | undefined>, gestures: Gestures) {
-    this.value = writable(this.getInitalAxes(gestures))
+  constructor(
+    liveData: Readable<LiveData<LiveDataVector> | undefined>,
+    gestures: Gestures,
+  ) {
+    this.value = writable(this.getInitalAxes(gestures));
     liveData.subscribe(data => {
       const unsubscriber = this.listenToLiveData(data);
       return () => {
@@ -30,17 +33,23 @@ class AvailableAxes implements Readable<Axis[]> {
     });
   }
 
-
   private getInitalAxes(gestures: Gestures) {
     if (gestures.getGestures().length > 0) {
       const recordings = gestures.getGestures()[0].getRecordings();
       if (recordings.length > 0) {
-        Logger.log("Available Axes", "Found default available axes in recordings", recordings[0].labels)
-        return recordings[0].labels.map((label, index) => ({
-          index,
-          label
-        } as Axis))
-      } 
+        Logger.log(
+          'Available Axes',
+          'Found default available axes in recordings',
+          recordings[0].labels,
+        );
+        return recordings[0].labels.map(
+          (label, index) =>
+            ({
+              index,
+              label,
+            }) as Axis,
+        );
+      }
     }
     return [];
   }
@@ -53,7 +62,7 @@ class AvailableAxes implements Readable<Axis[]> {
 
   private listenToLiveData(liveData?: LiveData<LiveDataVector>): Unsubscriber {
     if (!liveData) {
-      return () => { };
+      return () => {};
     }
     return liveData.subscribe(e => {
       const axes = e.getLabels().map((label, index) => ({

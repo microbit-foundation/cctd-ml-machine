@@ -14,18 +14,18 @@ export const nonAllowedPlatforms = ['mobile', 'tablet', 'tv'];
 export const usbCompatibilityList = [
   {
     browser: Bowser.BROWSER_MAP.chrome,
-    version: "56.*",
+    version: '56.*',
   },
   {
     browser: Bowser.BROWSER_MAP.chromium,
-    version: "56.*",
+    version: '56.*',
   },
   {
     browser: Bowser.BROWSER_MAP.edge,
-    version: "79.*",
+    version: '79.*',
   },
   {
     browser: Bowser.BROWSER_MAP.opera,
-    version: "43.*",
-  }
+    version: '43.*',
+  },
 ];

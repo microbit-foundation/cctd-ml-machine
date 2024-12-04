@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { MBSpecs, type MicrobitHandler } from 'microbyte';
-import { onCatastrophicError  } from '../stores/uiStore';
+import { onCatastrophicError } from '../stores/uiStore';
 import StaticConfiguration from '../../StaticConfiguration';
 import TypingUtils from '../TypingUtils';
 import Logger from '../utils/Logger';

@@ -24,9 +24,4 @@
   {:else}
     <TrainingPageModelView />
   {/if}
-  {#if !$state.isInputConnected}
-    <div class="mt-5">
-      <PleaseConnect />
-    </div>
-  {/if}
 </div>

@@ -6,10 +6,6 @@
 import { get, writable } from 'svelte/store';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
-import {
-  extractAxesFromTrainingData,
-  extractAxisFromTrainingData,
-} from '../../script/utils/graphUtils';
 import { stores } from '../../script/stores/Stores';
 import CookieManager from '../../script/CookieManager';
 import { appInsights } from '../../appInsights';
@@ -19,7 +15,6 @@ import LayersModelTrainer, {
 } from '../../script/mlmodels/LayersModelTrainer';
 import { knnConfig } from '../../script/stores/knnConfig';
 import Logger from '../../script/utils/Logger';
-import { axisBottom } from 'd3';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 
@@ -41,12 +36,7 @@ const trainNNModel = async () => {
 };
 
 const trainKNNModel = async () => {
-  const noOfAxes = get(stores.getAvailableAxes()).length;
-  const axes = get(stores.getHighlightedAxes());
-  const modelTrainer = new KNNNonNormalizedModelTrainer(get(knnConfig).k, data => {
-    const extractedData = extractAxesFromTrainingData(data, axes, noOfAxes);
-    return extractedData;
-  });
+  const modelTrainer = new KNNNonNormalizedModelTrainer(get(knnConfig).k);
   await stores.getClassifier().getModel().train(modelTrainer);
 };
 

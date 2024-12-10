@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import type BaseVector from '../domain/BaseVector';
 import type { ModelTrainer, TrainingData } from '../domain/ModelTrainer';
 import Logger from '../utils/Logger';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
@@ -15,26 +16,17 @@ class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLMod
   // TODO: dataFilterer is mostly for the highlighted axis use-case, should it be more generic, or stay here?
   constructor(
     private k: number,
-    private dataFilterer?: (allData: TrainingData) => TrainingData,
   ) {}
 
   public trainModel(trainingData: TrainingData): Promise<KNNNonNormalizedMLModel> {
-    Logger.log('KNNNonNormalizedModelTrainer', 'Training model');
-    if (this.dataFilterer) {
-      Logger.log('KNNNonNormalizedModelTrainer', 'Filtering training data');
-      trainingData = this.dataFilterer(trainingData);
-    } else {
-      Logger.log('KNNNonNormalizedModelTrainer', 'No data filtering');
-    }
+    Logger.log('KNNNonNormalizedModelTrainer', 'Training KNN model');
     const points: LabelledPoint[] = [];
 
     trainingData.classes.forEach((gestureClass, labelIndex) => {
       gestureClass.samples.forEach(sample => {
         points.push({
           classIndex: labelIndex,
-          x: sample.value[0],
-          y: sample.value[1],
-          z: sample.value.length > 2 ? sample.value[2] : 0,
+          vector: sample.value
         });
       });
     });

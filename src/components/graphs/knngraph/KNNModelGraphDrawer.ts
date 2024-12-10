@@ -66,8 +66,9 @@ class KNNModelGraphDrawer {
       // Draw lines from live point to the nearest neighbours
       const predictedPoints = [...this.drawnTrainingPoints]
         .sort((a, b) => {
-          const aDist = distanceBetween(drawableLivePoint.pointTransformed, a);
-          const bDist = distanceBetween(drawableLivePoint.pointTransformed, b);
+          const drawableLivePointVector = [drawableLivePoint.pointTransformed.x, drawableLivePoint.pointTransformed.y,drawableLivePoint.pointTransformed.z]
+          const aDist = distanceBetween(drawableLivePointVector, [a.x, a.y, a.z]);
+          const bDist = distanceBetween(drawableLivePointVector, [b.x, b.y, b.z]);
           return aDist - bDist;
         })
         .slice(0, get(knnConfig).k);

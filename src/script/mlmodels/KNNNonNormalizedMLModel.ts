@@ -5,11 +5,13 @@
  */
 
 import type { MLModel } from '../domain/MLModel';
-import { type Point3D, distanceBetween } from '../utils/graphUtils';
+import { distanceBetween } from '../utils/graphUtils';
+import Logger from '../utils/Logger';
 
 export type LabelledPoint = {
   classIndex: number;
-} & Point3D;
+  vector: number[];
+};
 
 /**
  * Represents a KNN model, in which points are not normalized and retain their raw values
@@ -19,17 +21,16 @@ class KNNNonNormalizedMLModel implements MLModel {
     private k: number,
     private noOfClasses: number,
     private points: LabelledPoint[],
-  ) {}
+  ) {
+    Logger.log("KNNNonNormalizedMLModel", "New KNN model was initialized")
+  }
 
-  predict(filteredData: number[]): Promise<number[]> {
-    // Transform live-data to Point3D type
-    const predictedPoint: Point3D = this.getPredictedPoint(filteredData);
-
+  public predict(filteredData: number[]): Promise<number[]> {
     // Sort points by distance to live-data point
     const orderedPoints = [...this.points];
     orderedPoints.sort((a, b) => {
-      const aDist = distanceBetween(predictedPoint, a);
-      const bDist = distanceBetween(predictedPoint, b);
+      const aDist = distanceBetween(filteredData, a.vector);
+      const bDist = distanceBetween(filteredData, b.vector)
       return aDist - bDist;
     });
 
@@ -47,14 +48,6 @@ class KNNNonNormalizedMLModel implements MLModel {
     }
 
     return Promise.resolve(confidences);
-  }
-
-  private getPredictedPoint(filteredData: number[]): Point3D {
-    return {
-      x: filteredData[0],
-      y: filteredData[1],
-      z: filteredData.length > 2 ? filteredData[2] : 0,
-    };
   }
 }
 

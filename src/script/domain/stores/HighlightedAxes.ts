@@ -18,9 +18,10 @@ import type { Axis } from '../Axis';
 import { trainModel } from '../../../pages/training/TrainingPage';
 import type { ApplicationState } from '../../stores/Stores';
 import PersistantWritable from '../../repository/PersistantWritable';
+import Logger from '../../utils/Logger';
 
 class HighlightedAxes implements Writable<Axis[]> {
-  private value: PersistantWritable<Axis[]>;
+  private value: PersistantWritable<Axis[]>; // Use this.set instead of this.value.set!
 
   public constructor(
     private classifier: Classifier,
@@ -30,19 +31,23 @@ class HighlightedAxes implements Writable<Axis[]> {
     this.value = new PersistantWritable([], 'highlightedAxes');
   }
 
-  public set(value: Axis[]): void {
-    if (get(this.value) !== value) {
-      this.onChangedAxis();
+  public set(newValue: Axis[]): void {
+    const beforeValue = get(this.value);
+    this.value.set(newValue)
+
+    const isNewDifferentFromBefore = () =>
+      newValue.length !== beforeValue.length ||
+      newValue.find(axis => beforeValue.find(e => e.index === axis.index) === undefined) !== undefined
+
+    if (isNewDifferentFromBefore()) {
+      this.onChangedAxes();
     }
-    this.value.set(value);
   }
 
   public update(updater: (state: Axis[]) => Axis[]): void {
     const beforeValue = get(this.value);
     const updatedValue = updater(beforeValue);
-    if (beforeValue === updatedValue) {
-      this.onChangedAxis();
-    }
+    this.set(updatedValue);
   }
 
   public subscribe(
@@ -56,9 +61,9 @@ class HighlightedAxes implements Writable<Axis[]> {
     if (
       !!get(this.value).find(val => val.label === axis.label && val.index === axis.index)
     ) {
-      this.value.set(get(this.value).filter(e => e.index !== axis.index));
+      this.set(get(this.value).filter(e => e.index !== axis.index));
     } else {
-      this.value.set([...get(this.value), axis]);
+      this.set([...get(this.value), axis]);
     }
   }
 
@@ -72,12 +77,14 @@ class HighlightedAxes implements Writable<Axis[]> {
   /**
    * When the axis that has been selected is EXPLICITLY different from before
    */
-  private async onChangedAxis() {
+  private async onChangedAxes() {
+    Logger.log("HighlightedAxes", "New axes detected")
     this.classifier.getModel().markAsUntrained();
     if (
       get(this.selectedModel).id === ModelRegistry.KNN.id &&
       get(this.applicationState).isInputConnected
     ) {
+      Logger.log("HighlightedAxes", "Retraining KNN model due to axes changed")
       await trainModel(ModelRegistry.KNN);
     }
   }

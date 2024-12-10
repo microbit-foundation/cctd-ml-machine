@@ -17,7 +17,7 @@
   const filters = classifier.getFilters();
   const highlightedAxis = stores.getHighlightedAxes();
 
-  $: {
+   $: {
     if (!$classifier.model.isTrained) {
       trainModel(ModelRegistry.KNN);
     }

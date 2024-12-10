@@ -7,7 +7,7 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
-  import { state } from '../../script/stores/uiStore';
+  import { state } from '../../script/stores/Stores';
   import Information from '../information/Information.svelte';
   import BottomPanelLiveDataValues from './BottomPanelLiveDataValues.svelte';
 </script>

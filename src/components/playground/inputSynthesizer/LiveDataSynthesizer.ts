@@ -13,7 +13,7 @@ import {
 } from 'svelte/store';
 import { stores } from '../../../script/stores/Stores';
 import { SyntheticLiveData } from './SyntheticLiveData ';
-import BaseVector from '../../../script/livedata/BaseVector';
+import BaseVector from '../../../script/domain/BaseVector';
 
 type LiveDataSynthesizerOptions = {
   intervalSpeed: number;
@@ -45,6 +45,9 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
   private referenceStoreGetter: () => SyntheticLiveData;
 
   constructor() {
+    this.store = writable();
+    this.referenceStoreGetter = () => null!;
+    /*
     this.store = writable({
       intervalSpeed: this.getInitialIntervalValue(),
       speeds: [this.getInitialSineSpeed()],
@@ -53,6 +56,7 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
     } as LiveDataSynthesizerOptions);
     stores.setLiveData(new SyntheticLiveData([letters[0]]));
     this.referenceStoreGetter = () => get(stores).liveData as SyntheticLiveData;
+*/
   }
 
   public subscribe(

@@ -26,9 +26,12 @@ class LocalStorageRepositories implements Repositories {
     }
     LocalStorageRepositories.instance = this;
     const confidences = new Confidences();
-    this.classifierRepository = new LocalStorageClassifierRepository(confidences);
+    this.trainingDataRepository = new LocalStorageTrainingDataRepository(this);
+    this.classifierRepository = new LocalStorageClassifierRepository(
+      confidences,
+      this.trainingDataRepository,
+    );
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
-    this.trainingDataRepository = new LocalStorageTrainingDataRepository();
   }
 
   public static getInstance() {

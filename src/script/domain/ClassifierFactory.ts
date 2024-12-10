@@ -68,7 +68,6 @@ class ClassifierFactory {
   private buildFilteredSamples(recordings: RecordingData[], filters: Filters) {
     return recordings.map(recording => {
       const data = recording.samples;
-      Logger.log('ClassifierFactory', data);
       return {
         value: [
           ...filters.compute(data.map(e => e.vector[0])),

@@ -10,17 +10,17 @@ import {
   checkCompatibility,
 } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
-import { DeviceRequestStates } from './connectDialogStore';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import Gesture from '../domain/stores/gesture/Gesture';
-import { stores } from './Stores';
+import { state, stores } from './Stores';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
 
-export const compatibility: Writable<CompatibilityStatus> =
-  writable(checkCompatibility());
+export const compatibility: Writable<CompatibilityStatus> = writable(
+  await checkCompatibility(),
+);
 
 export const chosenGesture = writable<Gesture | null>(null);
 
@@ -28,50 +28,6 @@ export const isBluetoothWarningDialogOpen = derived(
   compatibility,
   stores => !stores.bluetooth,
 );
-
-export enum ModelView {
-  TILE,
-  STACK,
-}
-
-// Store current state to prevent error prone actions
-export const state = writable<{
-  isRequestingDevice: DeviceRequestStates;
-  isFlashingDevice: boolean;
-  isRecording: boolean;
-  isInputConnected: boolean;
-  isOutputConnected: boolean;
-  offerReconnect: boolean;
-  requestDeviceWasCancelled: boolean;
-  reconnectState: DeviceRequestStates;
-  isInputReady: boolean;
-  isInputAssigned: boolean;
-  isOutputAssigned: boolean;
-  isOutputReady: boolean;
-  isInputInitializing: boolean;
-  isLoading: boolean;
-  modelView: ModelView;
-  isInputOutdated: boolean;
-  isOutputOutdated: boolean;
-}>({
-  isRequestingDevice: DeviceRequestStates.NONE,
-  isFlashingDevice: false,
-  isRecording: false,
-  isInputConnected: false,
-  isOutputConnected: false,
-  offerReconnect: false,
-  requestDeviceWasCancelled: false,
-  reconnectState: DeviceRequestStates.NONE,
-  isInputReady: false,
-  isInputAssigned: false,
-  isOutputAssigned: false,
-  isOutputReady: false,
-  isInputInitializing: false,
-  isLoading: true,
-  modelView: ModelView.STACK,
-  isInputOutdated: false,
-  isOutputOutdated: false,
-});
 
 // Message store to propagate allow all components to inform users.
 export const message = writable<{ warning: boolean; text: string }>({

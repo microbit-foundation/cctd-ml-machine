@@ -5,9 +5,8 @@
  -->
 
 <script lang="ts">
-  import { state } from '../../script/stores/uiStore';
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
-  import { stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../script/stores/Stores';
   import TrainingPageTabs from './TrainingPageTabs.svelte';
   import TrainingPageModelView from './TrainingPageModelView.svelte';
   import InsufficientData from './InsufficientData.svelte';
@@ -24,10 +23,5 @@
     <InsufficientData />
   {:else}
     <TrainingPageModelView />
-  {/if}
-  {#if !$state.isInputConnected}
-    <div class="mt-5">
-      <PleaseConnect />
-    </div>
   {/if}
 </div>

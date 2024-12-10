@@ -15,13 +15,13 @@
   import {
     ConnectDialogStates,
     connectionDialogState,
-    DeviceRequestStates,
   } from '../../script/stores/connectDialogStore';
   import ConnectSameDialog from './ConnectSameDialog.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import { btPatternInput, btPatternOutput } from '../../script/stores/connectionStore';
   import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
   import { MBSpecs } from 'microbyte';
+  import { DeviceRequestStates } from '../../script/stores/Stores';
 
   let flashProgress = 0;
 

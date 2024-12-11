@@ -49,7 +49,7 @@
         plugins: {
           title: {
             display: true,
-            text: $t('content.trianer.lossGraph.title'),
+            text: $t('content.trainer.lossGraph.title'),
             padding: {
               top: 10,
               bottom: 30,

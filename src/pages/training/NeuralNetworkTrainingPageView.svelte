@@ -52,7 +52,7 @@
       {$t(trainButtonSimpleLabel)}
     </StandardButton>
   {/if}
-  {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && $model.isTrained}
+  {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && ($model.isTrained || $model.isTraining)}
     <LossGraph {loss} maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />
   {/if}
 </div>

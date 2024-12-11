@@ -69,8 +69,7 @@
   const importExampleDataset = () => {
     // Imports 3 gestures, named Shake, Still and Circle (in that order)
 
-    throw new Error('Not implemented yet');
-    // gestures.importFrom(exampleDataset);
+    gestures.importFrom(exampleDataset);
     // Translate the names, that are originally english
     gestures.getGestures()[0].setName($t('content.data.noData.exampleName.shake'));
     gestures.getGestures()[1].setName($t('content.data.noData.exampleName.still'));

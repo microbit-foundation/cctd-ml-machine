@@ -69,12 +69,9 @@ class PollingPredictorEngine implements Engine {
 
   private predict() {
     if (!this.classifier.getModel().isTrained()) {
-
-    console.log("NotTrained")
       return;
     }
     if (!get(this.isRunning)) {
-    console.log("notRunning")
       return;
     }
     const input = this.bufferToInput();
@@ -84,7 +81,6 @@ class PollingPredictorEngine implements Engine {
     );
     if (numberOfSamples < requiredNumberOfSamples) {
 
-    console.log("not enough data", numberOfSamples, requiredNumberOfSamples)
       return;
     }
     void this.classifier.classify(input);

@@ -78,4 +78,9 @@
       </div>
     {/if}
   </div>
+{:else}
+<div class="flex flex-grow flex-col justify-center items-center">
+  <p class="text-lg max-w-120">{$t("content.trainer.knn.selectOneAxis")}</p>
+
+</div>
 {/if}

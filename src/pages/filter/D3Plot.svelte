@@ -20,6 +20,7 @@
 
   $: showLive = $state.isInputConnected;
   $: liveData = $stores.liveData;
+  const highlightedAxes = stores.getHighlightedAxes();
 
   const gestures = stores.getGestures();
 
@@ -273,6 +274,11 @@
       .append('text')
       .style('text-anchor', 'middle')
       .style('font-size', '20px')
+      .style('text-decoration', (axis: Axis) =>
+        $highlightedAxes.find(e => e.label.toLocaleLowerCase() === axis)
+          ? 'none'
+          : 'line-through',
+      )
       .style('fill', function (axis: Axis) {
         if (axis === 'x') return '#f9808e';
         if (axis === 'y') return '#80f98e';

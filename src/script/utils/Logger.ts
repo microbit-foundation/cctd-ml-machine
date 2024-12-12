@@ -8,12 +8,10 @@ import { get } from 'svelte/store';
 import Environment from '../Environment';
 import PersistantWritable from '../repository/PersistantWritable';
 
-const nsStore = new PersistantWritable(false, "dev_ns")
+const nsStore = new PersistantWritable(false, 'dev_ns');
 
 class Logger {
-  constructor(private origin: any) {
-
-  }
+  constructor(private origin: any) {}
 
   public log(message: any, ...params: any[]) {
     Logger.log(this.origin, message, params);
@@ -35,7 +33,6 @@ class Logger {
   }
 }
 
-
 export const welcomeLog = () => {
   if (
     !Environment.isInDevelopment ||
@@ -55,13 +52,13 @@ if (!(window as typeof window & { ns: boolean }).ns) {
   Object.assign(window, {
     ns: get(nsStore),
     ds: () => {
-      console.log("Disabled stacktraces, enable again using es()")
-      nsStore.set(true)
+      console.log('Disabled stacktraces, enable again using es()');
+      nsStore.set(true);
     },
     es: () => {
-      console.log("Enabled stacktraces")
-      nsStore.set(false)
-    }
+      console.log('Enabled stacktraces');
+      nsStore.set(false);
+    },
   });
 }
 

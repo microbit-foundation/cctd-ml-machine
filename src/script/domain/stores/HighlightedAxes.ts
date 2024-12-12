@@ -33,11 +33,13 @@ class HighlightedAxes implements Writable<Axis[]> {
 
   public set(newValue: Axis[]): void {
     const beforeValue = get(this.value);
-    this.value.set(newValue)
+    this.value.set(newValue);
 
     const isNewDifferentFromBefore = () =>
       newValue.length !== beforeValue.length ||
-      newValue.find(axis => beforeValue.find(e => e.index === axis.index) === undefined) !== undefined
+      newValue.find(
+        axis => beforeValue.find(e => e.index === axis.index) === undefined,
+      ) !== undefined;
 
     if (isNewDifferentFromBefore()) {
       this.onChangedAxes();
@@ -78,13 +80,13 @@ class HighlightedAxes implements Writable<Axis[]> {
    * When the axis that has been selected is EXPLICITLY different from before
    */
   private async onChangedAxes() {
-    Logger.log("HighlightedAxes", "New axes detected")
+    Logger.log('HighlightedAxes', 'New axes detected');
     this.classifier.getModel().markAsUntrained();
     if (
       get(this.selectedModel).id === ModelRegistry.KNN.id &&
       get(this.applicationState).isInputConnected
     ) {
-      Logger.log("HighlightedAxes", "Retraining KNN model due to axes changed")
+      Logger.log('HighlightedAxes', 'Retraining KNN model due to axes changed');
       await trainModel(ModelRegistry.KNN);
     }
   }

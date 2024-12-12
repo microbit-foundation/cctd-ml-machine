@@ -142,19 +142,22 @@ export const extractAxisFromAccelerometerData = (
   throw new Error(`Cannot extract from axis ${axis}`);
 };
 
-export const  distanceBetween = (p1: number[], p2: number[]): number => {
+export const distanceBetween = (p1: number[], p2: number[]): number => {
   // Check if both points have the same dimension
   if (p1.length !== p2.length) {
-      throw new Error("Points must have the same dimension. Got elements of size: " + [p1.length, p2.length].join(" / "));
+    throw new Error(
+      'Points must have the same dimension. Got elements of size: ' +
+        [p1.length, p2.length].join(' / '),
+    );
   }
 
   // Calculate the distance using the Euclidean formula
   const squaredDifferences = p1.map((coord, index) => {
-      const difference = coord - p2[index];
-      return difference ** 2;
+    const difference = coord - p2[index];
+    return difference ** 2;
   });
 
   const sumOfSquares = squaredDifferences.reduce((sum, value) => sum + value, 0);
 
   return Math.sqrt(sumOfSquares);
-}
+};

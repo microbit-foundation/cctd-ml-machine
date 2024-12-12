@@ -27,7 +27,7 @@ class Classifier implements Readable<ClassifierData> {
     private gestures: Readable<Gesture[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ) {
-    Logger.log("classifier", "Initialized classifier")
+    Logger.log('classifier', 'Initialized classifier');
   }
 
   public subscribe(

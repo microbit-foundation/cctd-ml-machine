@@ -17,7 +17,7 @@
   const filters = classifier.getFilters();
   const highlightedAxis = stores.getHighlightedAxes();
 
-   $: {
+  $: {
     if (!$classifier.model.isTrained) {
       trainModel(ModelRegistry.KNN);
     }
@@ -79,8 +79,7 @@
     {/if}
   </div>
 {:else}
-<div class="flex flex-grow flex-col justify-center items-center">
-  <p class="text-lg max-w-120">{$t("content.trainer.knn.selectOneAxis")}</p>
-
-</div>
+  <div class="flex flex-grow flex-col justify-center items-center">
+    <p class="text-lg max-w-120">{$t('content.trainer.knn.selectOneAxis')}</p>
+  </div>
 {/if}

@@ -167,10 +167,6 @@
               </p>
             {/each}
           </div>
-        {:else}
-          <div>
-            <p>Hello world</p>
-          </div>
         {/if}
       </div>
     {/if}

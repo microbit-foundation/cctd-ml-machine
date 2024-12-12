@@ -80,7 +80,6 @@ class PollingPredictorEngine implements Engine {
       ...get(this.classifier.getFilters()).map(filter => filter.getMinNumberOfSamples()),
     );
     if (numberOfSamples < requiredNumberOfSamples) {
-
       return;
     }
     void this.classifier.classify(input);
@@ -90,8 +89,17 @@ class PollingPredictorEngine implements Engine {
     const bufferedData = this.getRawDataFromBuffer(
       StaticConfiguration.pollingPredictionSampleSize,
     );
-    const sampleVectors = bufferedData
-      .map(e => new BaseVector(e.value.getVector().filter((vecVal, vecIdx) => this.highlightedAxes.isAxisIndexHighlighted(vecIdx)), e.value.getLabels()));
+    const sampleVectors = bufferedData.map(
+      e =>
+        new BaseVector(
+          e.value
+            .getVector()
+            .filter((vecVal, vecIdx) =>
+              this.highlightedAxes.isAxisIndexHighlighted(vecIdx),
+            ),
+          e.value.getLabels(),
+        ),
+    );
     return new ClassifierInput(sampleVectors);
   }
 

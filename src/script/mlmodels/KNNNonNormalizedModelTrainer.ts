@@ -14,9 +14,7 @@ import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
  */
 class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLModel> {
   // TODO: dataFilterer is mostly for the highlighted axis use-case, should it be more generic, or stay here?
-  constructor(
-    private k: number,
-  ) {}
+  constructor(private k: number) {}
 
   public trainModel(trainingData: TrainingData): Promise<KNNNonNormalizedMLModel> {
     Logger.log('KNNNonNormalizedModelTrainer', 'Training KNN model');
@@ -26,7 +24,7 @@ class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLMod
       gestureClass.samples.forEach(sample => {
         points.push({
           classIndex: labelIndex,
-          vector: sample.value
+          vector: sample.value,
         });
       });
     });

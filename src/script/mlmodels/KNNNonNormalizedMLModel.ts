@@ -22,7 +22,7 @@ class KNNNonNormalizedMLModel implements MLModel {
     private noOfClasses: number,
     private points: LabelledPoint[],
   ) {
-    Logger.log("KNNNonNormalizedMLModel", "New KNN model was initialized")
+    Logger.log('KNNNonNormalizedMLModel', 'New KNN model was initialized');
   }
 
   public predict(filteredData: number[]): Promise<number[]> {
@@ -30,7 +30,7 @@ class KNNNonNormalizedMLModel implements MLModel {
     const orderedPoints = [...this.points];
     orderedPoints.sort((a, b) => {
       const aDist = distanceBetween(filteredData, a.vector);
-      const bDist = distanceBetween(filteredData, b.vector)
+      const bDist = distanceBetween(filteredData, b.vector);
       return aDist - bDist;
     });
 

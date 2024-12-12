@@ -9,7 +9,6 @@
   import { t } from '../../../i18n';
   import { onDestroy, onMount } from 'svelte';
   import StandardButton from '../../buttons/StandardButton.svelte';
-  import { state } from '../../../script/stores/uiStore';
   import {
     btPatternInput,
     btPatternOutput,
@@ -18,11 +17,10 @@
   import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
-  import { DeviceRequestStates } from '../../../script/stores/connectDialogStore';
-  import Environment from '../../../script/Environment';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Logger from '../../../script/utils/Logger';
   import { MBSpecs } from 'microbyte';
+  import { DeviceRequestStates, state } from '../../../script/stores/Stores';
 
   // callbacks
   export let deviceState: DeviceRequestStates;

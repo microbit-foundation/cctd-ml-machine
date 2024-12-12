@@ -14,11 +14,13 @@
   import { vectorArrows } from './AxesFilterVector';
   import { stores } from '../../../script/stores/Stores';
   import { asAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
+  import type { Axis } from '../../../script/domain/Axis';
 
   const classifier = stores.getClassifier();
 
   $: liveData = $stores.liveData;
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxis = stores.getHighlightedAxes();
+  const availableAxes = stores.getAvailableAxes();
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -47,29 +49,19 @@
     });
   };
 
-  const updateArrows = (axis: number | undefined) => {
-    if (axis !== undefined) {
-      const getId = (): string => {
-        if (axis === 0) {
-          return 'fromX';
-        }
-        if (axis === 1) {
-          return 'fromY';
-        }
-        if (axis === 2) {
-          return 'fromZ';
-        }
-        throw Error('Cannot update arrows for axis ' + axis);
-      };
-      drawArrows(getId());
+  const updateArrows = (axes: Axis[]) => {
+    if (axes.length !== 1) {
+      return;
     }
+    const axis = axes[0];
+    drawArrows(`from${axis.label}`);
   };
 
-  const getVectorValue = () => {
-    if (!get(highlightedAxis)) {
-      return Array(classifier.getFilters().count()).fill(0);
-    }
+  const getVectorValues = () => {
     try {
+      if (!liveData) {
+        throw new Error('Live data is not set yet, handle the error here');
+      }
       const seriesTimestamped = liveData
         .getBuffer()
         .getSeries(
@@ -79,24 +71,26 @@
       const series = seriesTimestamped.map(s =>
         asAccelerometerData(s.value).getAccelerometerData(),
       );
-      const filteredSeries = stores
-        .getClassifier()
-        .getFilters()
-        .compute(extractAxisFromAccelerometerData(series, $highlightedAxis!));
+      const filteredSeries = $highlightedAxis.flatMap(axis =>
+        stores
+          .getClassifier()
+          .getFilters()
+          .compute(extractAxisFromAccelerometerData(series, axis.index)),
+      );
       return filteredSeries;
     } catch (e) {
       return Array(classifier.getFilters().count()).fill(0);
     }
   };
 
-  let liveFilteredAxesData: number[] = getVectorValue();
+  let liveFilteredAxesData: number[] = getVectorValues();
 
   let valueInterval: NodeJS.Timeout = setInterval(() => {}, 100);
 
   const init = () => {
     denit();
     valueInterval = setInterval(() => {
-      liveFilteredAxesData = getVectorValue();
+      liveFilteredAxesData = getVectorValues();
     }, 250);
 
     setTimeout(
@@ -137,54 +131,43 @@
     {#if $highlightedAxis !== undefined}
       <div class="flex flex-row space-x-1">
         <div class="flex flex-col justify-evenly">
-          <div class="flex flex-row space-x-2" id="fromX">
-            <StandardButton
-              color={StaticConfiguration.graphColors[0]}
-              small
-              outlined={$highlightedAxis !== 0}
-              onClick={() => {
-                $highlightedAxis = 0;
-                stores.getHighlightedAxis().set(0);
-              }}>X</StandardButton>
-          </div>
-          <div class="flex flex-row space-x-2" id="fromY">
-            <StandardButton
-              color={StaticConfiguration.graphColors[1]}
-              small
-              outlined={$highlightedAxis !== 1}
-              onClick={() => {
-                $highlightedAxis = 1;
-                stores.getHighlightedAxis().set(1);
-              }}>Y</StandardButton>
-          </div>
-          <div class="flex flex-row space-x-2" id="fromZ">
-            <StandardButton
-              color={StaticConfiguration.graphColors[2]}
-              small
-              outlined={$highlightedAxis !== 2}
-              onClick={() => {
-                $highlightedAxis = 2;
-                stores.getHighlightedAxis().set(2);
-              }}>Z</StandardButton>
-          </div>
-        </div>
-        <div class="pl-20 flex flex-col justify-around">
-          {#each $filters as filter, index}
-            <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
+          {#each $availableAxes as axis}
+            <div class="flex flex-row space-x-2" id="from{axis.label}">
+              <StandardButton
+                color={StaticConfiguration.graphColors[axis.index]}
+                small
+                outlined={$highlightedAxis.find(e => e.index === axis.index) ===
+                  undefined}
+                onClick={() => {
+                  $highlightedAxis = [axis];
+                }}>
+                {axis.label}
+              </StandardButton>
+            </div>
           {/each}
         </div>
-        <div class="flex flex-col justify-around">
-          {#each $filters as _}
-            <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />
-          {/each}
-        </div>
-        <div class="flex flex-col justify-around w-12">
-          {#each liveFilteredAxesData as val, index}
-            <p style={`color:${StaticConfiguration.graphColors[index]}`}>
-              {val.toFixed(3)}
-            </p>
-          {/each}
-        </div>
+        {#if $highlightedAxis.length === 1}
+          <div class="pl-20 flex flex-col justify-around">
+            {#each $filters as filter, index}
+              <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
+            {/each}
+          </div>
+          <div class="flex flex-col justify-around">
+            {#each $filters as _}
+              <img
+                src={'imgs/right_arrow_blue.svg'}
+                alt="right arrow icon"
+                width="20px" />
+            {/each}
+          </div>
+          <div class="flex flex-col justify-around w-12">
+            {#each liveFilteredAxesData as val, index}
+              <p style={`color:${StaticConfiguration.graphColors[index]}`}>
+                {val.toFixed(3)}
+              </p>
+            {/each}
+          </div>
+        {/if}
       </div>
     {/if}
   </div>

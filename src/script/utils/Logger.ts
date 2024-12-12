@@ -4,7 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { get } from 'svelte/store';
 import Environment from '../Environment';
+import PersistantWritable from '../repository/PersistantWritable';
+
+const nsStore = new PersistantWritable(false, 'dev_ns');
+
 class Logger {
   constructor(private origin: any) {}
 
@@ -23,10 +28,11 @@ class Logger {
       welcomeLog();
     }
     const outputMessage = `[${origin}] ${message} ${params}`;
-    !(window as typeof window & { ns: boolean }).ns && console.trace(outputMessage);
-    (window as typeof window & { ns: boolean }).ns && console.log(outputMessage);
+    !get(nsStore) && console.trace(outputMessage);
+    get(nsStore) && console.log(outputMessage);
   }
 }
+
 export const welcomeLog = () => {
   if (
     !Environment.isInDevelopment ||
@@ -36,15 +42,23 @@ export const welcomeLog = () => {
   }
   console.log(`⚙️ Development Mode :
   Welcome to the ML-Machine development mode. 
-  To disable stacktrace in logs, type ns=true or ns() in console
+  To disable stacktrace in logs, ds() in console.
+  To Enable again stacktraces using es().
   If you experience any bugs, please report them at https://github.com/microbit-foundation/cctd-ml-machine/issues`);
   Object.assign(window, { hasLogged: true });
 };
 
 if (!(window as typeof window & { ns: boolean }).ns) {
   Object.assign(window, {
-    ns: false,
-    ds: () => ((window as typeof window & { ns: boolean }).ns = true),
+    ns: get(nsStore),
+    ds: () => {
+      console.log('Disabled stacktraces, enable again using es()');
+      nsStore.set(true);
+    },
+    es: () => {
+      console.log('Enabled stacktraces');
+      nsStore.set(false);
+    },
   });
 }
 

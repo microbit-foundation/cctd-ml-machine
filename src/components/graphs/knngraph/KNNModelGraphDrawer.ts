@@ -11,8 +11,7 @@ import {
   type Point3DTransformed,
   distanceBetween,
 } from '../../../script/utils/graphUtils';
-import { stores } from '../../../script/stores/Stores';
-import { state } from '../../../script/stores/uiStore';
+import { state, stores } from '../../../script/stores/Stores';
 import { get } from 'svelte/store';
 import { knnConfig } from '../../../script/stores/knnConfig';
 
@@ -67,8 +66,13 @@ class KNNModelGraphDrawer {
       // Draw lines from live point to the nearest neighbours
       const predictedPoints = [...this.drawnTrainingPoints]
         .sort((a, b) => {
-          const aDist = distanceBetween(drawableLivePoint.pointTransformed, a);
-          const bDist = distanceBetween(drawableLivePoint.pointTransformed, b);
+          const drawableLivePointVector = [
+            drawableLivePoint.pointTransformed.x,
+            drawableLivePoint.pointTransformed.y,
+            drawableLivePoint.pointTransformed.z,
+          ];
+          const aDist = distanceBetween(drawableLivePointVector, [a.x, a.y, a.z]);
+          const bDist = distanceBetween(drawableLivePointVector, [b.x, b.y, b.z]);
           return aDist - bDist;
         })
         .slice(0, get(knnConfig).k);

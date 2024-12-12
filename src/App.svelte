@@ -28,15 +28,15 @@
   import BottomBarMenuView from './views/BottomBarMenuView.svelte';
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
   import { fade } from 'svelte/transition';
-  import { compatibility, state } from './script/stores/uiStore';
+  import { compatibility } from './script/stores/uiStore';
   import LoadingSpinner from './components/LoadingSpinner.svelte';
   import IncompatiblePlatformView from './views/IncompatiblePlatformView.svelte';
   import BluetoothIncompatibilityWarningDialog from './components/BluetoothIncompatibilityWarningDialog.svelte';
   import CookieManager from './script/CookieManager';
-  import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Router from './router/Router.svelte';
   import { Feature, getFeature } from './script/FeatureToggles';
   import { welcomeLog } from './script/utils/Logger';
+  import { DeviceRequestStates, state } from './script/stores/Stores';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {

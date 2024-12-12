@@ -6,7 +6,6 @@
 
 <script lang="ts">
   import Gesture from '../components/Gesture.svelte';
-  import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
   import RecordInformationContent from '../components/datacollection/RecordInformationContent.svelte';
   import StandardDialog from '../components/dialogs/StandardDialog.svelte';
@@ -21,7 +20,7 @@
   import { get } from 'svelte/store';
   import exampleDataset from '../exampleDataset.json';
   import { type GestureData } from '../script/domain/stores/gesture/Gesture';
-  import { stores } from '../script/stores/Stores';
+  import { state, stores } from '../script/stores/Stores';
   import PleaseConnect from '../components/PleaseConnect.svelte';
 
   let isConnectionDialogOpen = false;
@@ -70,8 +69,7 @@
   const importExampleDataset = () => {
     // Imports 3 gestures, named Shake, Still and Circle (in that order)
 
-    throw new Error('Not implemented yet');
-    // gestures.importFrom(exampleDataset);
+    gestures.importFrom(exampleDataset);
     // Translate the names, that are originally english
     gestures.getGestures()[0].setName($t('content.data.noData.exampleName.shake'));
     gestures.getGestures()[1].setName($t('content.data.noData.exampleName.still'));

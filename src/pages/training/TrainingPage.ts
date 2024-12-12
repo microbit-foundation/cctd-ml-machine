@@ -6,7 +6,6 @@
 import { get, writable } from 'svelte/store';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
-import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
 import { stores } from '../../script/stores/Stores';
 import CookieManager from '../../script/CookieManager';
 import { appInsights } from '../../appInsights';
@@ -27,7 +26,7 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
 };
 
 const trainNNModel = async () => {
-  stores.getHighlightedAxis().set(undefined);
+  //stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
   loss.set([]);
   const modelTrainer = new LayersModelTrainer(
     StaticConfiguration.layersModelTrainingSettings,
@@ -37,20 +36,7 @@ const trainNNModel = async () => {
 };
 
 const trainKNNModel = async () => {
-  if (get(stores.getHighlightedAxis()) === undefined) {
-    stores.getHighlightedAxis().set(0);
-  }
-  const currentAxis = get(stores.getHighlightedAxis());
-  // TODO: Rewrite offset to use the axis directly instead
-  const offset = currentAxis === 0 ? 0 : currentAxis === 1 ? 1 : 2;
-  const modelTrainer = new KNNNonNormalizedModelTrainer(
-    get(knnConfig).k,
-    data => {
-      const extractedData = extractAxisFromTrainingData(data, offset, 3);
-      Logger.log('TrainingPage', 'Extracted data: \n' + JSON.stringify(extractedData));
-      return extractedData;
-    }, // 3 assumes 3 axis
-  );
+  const modelTrainer = new KNNNonNormalizedModelTrainer(get(knnConfig).k);
   await stores.getClassifier().getModel().train(modelTrainer);
 };
 

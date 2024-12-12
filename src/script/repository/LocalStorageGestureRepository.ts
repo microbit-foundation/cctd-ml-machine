@@ -109,7 +109,6 @@ class LocalStorageGestureRepository implements GestureRepository {
 
   private buildGesture(persistedData: PersistantGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
-    // TODO: The classifier object should be accessed through the repository, not the store. This cannot be done until the classifier is cached.
     const onRecordingsChanged = () => stores.getClassifier().getModel().markAsUntrained();
 
     if (!this.classifierRepository.hasGestureConfidence(get(store).ID)) {

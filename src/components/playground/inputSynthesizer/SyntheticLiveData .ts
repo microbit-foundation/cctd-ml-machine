@@ -13,7 +13,7 @@ import {
 } from 'svelte/store';
 import LiveDataBuffer from '../../../script/domain/LiveDataBuffer';
 import { type LiveData } from '../../../script/domain/stores/LiveData';
-import BaseVector from '../../../script/livedata/BaseVector';
+import BaseVector from '../../../script/domain/BaseVector';
 
 export class SyntheticLiveData implements LiveData<BaseVector> {
   private store: Writable<BaseVector>;

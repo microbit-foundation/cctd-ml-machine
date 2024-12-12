@@ -8,19 +8,19 @@
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
-  import { state } from '../../script/stores/uiStore';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import FilterGraphLimits from '../../script/utils/FilterLimits';
   import { type GestureData } from '../../script/domain/stores/gesture/Gesture';
   import { type RecordingData } from '../../script/domain/stores/gesture/Gestures';
   import StaticConfiguration from '../../StaticConfiguration';
-  import { stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../script/stores/Stores';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
 
   $: showLive = $state.isInputConnected;
   $: liveData = $stores.liveData;
+  const highlightedAxes = stores.getHighlightedAxes();
 
   const gestures = stores.getGestures();
 
@@ -144,6 +144,9 @@
   }
 
   function createLiveData() {
+    if (!liveData) {
+      return undefined;
+    }
     const liveD = liveData
       .getBuffer()
       .getSeries(
@@ -271,6 +274,11 @@
       .append('text')
       .style('text-anchor', 'middle')
       .style('font-size', '20px')
+      .style('text-decoration', (axis: Axis) =>
+        $highlightedAxes.find(e => e.label.toLocaleLowerCase() === axis)
+          ? 'none'
+          : 'line-through',
+      )
       .style('fill', function (axis: Axis) {
         if (axis === 'x') return '#f9808e';
         if (axis === 'y') return '#80f98e';

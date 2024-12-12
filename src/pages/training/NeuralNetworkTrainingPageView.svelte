@@ -13,17 +13,18 @@
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import Logger from '../../script/utils/Logger';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
-  import { onMount } from 'svelte';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
-  const highlightedAxis = stores.getHighlightedAxis();
+  const highlightedAxes = stores.getHighlightedAxes();
 
   const trainModelClickHandler = () => {
     trainModel(ModelRegistry.NeuralNetwork).then(() => {
       Logger.log('NeuralNetworkTrainingPageView', 'Model trained');
     });
   };
+
+  $: console.log($highlightedAxes);
 
   $: trainButtonSimpleLabel = !$model.hasModel
     ? 'menu.trainer.trainModelButtonSimple'
@@ -44,11 +45,14 @@
       <p class="text-2xl">{$t('menu.trainer.TrainingFinished')}</p>
       <p class="text-lg mt-4 mb-4">{$t('menu.trainer.TrainingFinished.body')}</p>
     {/if}
-    <StandardButton onClick={trainModelClickHandler}>
+    <StandardButton
+      disabledTooltip={$t('menu.trainer.SelectMoreAxes')}
+      disabled={$highlightedAxes.length === 0}
+      onClick={trainModelClickHandler}>
       {$t(trainButtonSimpleLabel)}
     </StandardButton>
   {/if}
-  {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && $model.isTrained}
+  {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && ($model.isTrained || $model.isTraining)}
     <LossGraph {loss} maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />
   {/if}
 </div>

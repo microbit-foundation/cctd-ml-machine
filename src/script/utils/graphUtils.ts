@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { Axis } from '../domain/Axis';
 import { type TrainingData } from '../domain/ModelTrainer';
 import { type MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
@@ -54,6 +55,34 @@ export const extractAxisFromTrainingData = (
             value: sample.value.filter(
               (_val, index) => index >= startIndex && index < stopIndex,
             ),
+          };
+        }),
+      };
+    }),
+  };
+};
+
+/**
+ * Training data has a flattened datastructure. This can be used to extract multiple axes from the dataset
+ */
+export const extractAxesFromTrainingData = (
+  trainingData: TrainingData,
+  axes: Axis[],
+  noOfAxes: number,
+): TrainingData => {
+  return {
+    classes: trainingData.classes.map(clazz => {
+      return {
+        samples: clazz.samples.map(sample => {
+          return {
+            value: axes.flatMap(axis => {
+              const noOfFilters = sample.value.length / noOfAxes;
+              const startIndex = noOfFilters * axis.index;
+              const stopIndex = startIndex + noOfFilters;
+              return sample.value.filter(
+                (_val, index) => index >= startIndex && index < stopIndex,
+              );
+            }),
           };
         }),
       };
@@ -113,13 +142,22 @@ export const extractAxisFromAccelerometerData = (
   throw new Error(`Cannot extract from axis ${axis}`);
 };
 
-export const distanceBetween = (point1: Point3D, point2: Point3D): number => {
-  const { x: x1, y: y1, z: z1 } = point1;
-  const { x: x2, y: y2, z: z2 } = point2;
+export const distanceBetween = (p1: number[], p2: number[]): number => {
+  // Check if both points have the same dimension
+  if (p1.length !== p2.length) {
+    throw new Error(
+      'Points must have the same dimension. Got elements of size: ' +
+        [p1.length, p2.length].join(' / '),
+    );
+  }
 
-  const [dx, dy, dz] = [x2 - x1, y2 - y1, z2 - z1];
+  // Calculate the distance using the Euclidean formula
+  const squaredDifferences = p1.map((coord, index) => {
+    const difference = coord - p2[index];
+    return difference ** 2;
+  });
 
-  const squaredDistance = dx ** 2 + dy ** 2 + dz ** 2;
+  const sumOfSquares = squaredDifferences.reduce((sum, value) => sum + value, 0);
 
-  return Math.sqrt(squaredDistance);
+  return Math.sqrt(sumOfSquares);
 };

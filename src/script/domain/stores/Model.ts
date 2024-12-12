@@ -102,12 +102,12 @@ class Model implements Readable<ModelData> {
    *
    * Use if you have to, but see `classifier.classify()` first
    */
-  public async predict(inputData: number[]): Promise<number[]> {
+  public async predict(filteredData: number[]): Promise<number[]> {
     const mlModel = get(this.mlModel);
     if (!mlModel) {
       throw new Error('Cannot predict, no MLModel has been specified');
     }
-    return await mlModel.predict(inputData);
+    return await mlModel.predict(filteredData);
   }
 
   public subscribe(

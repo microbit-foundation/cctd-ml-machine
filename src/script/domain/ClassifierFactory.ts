@@ -11,7 +11,6 @@ import { type TrainerConsumer } from '../repository/LocalStorageClassifierReposi
 import Gesture, { type GestureID } from './stores/gesture/Gesture';
 import Model from './stores/Model';
 import { type RecordingData } from './stores/gesture/Gestures';
-import Logger from '../utils/Logger';
 import type { MLModel } from './MLModel';
 
 class ClassifierFactory {

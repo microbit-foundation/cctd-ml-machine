@@ -19,6 +19,8 @@ import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
 import Confidences from '../domain/stores/Confidences';
 import type { ClassifierRepository } from '../domain/ClassifierRepository';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type Snackbar from '../../components/snackbar/Snackbar';
+import { t } from '../../i18n';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
@@ -34,6 +36,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
   constructor(
     private confidences: Confidences,
     private trainingDataRepository: TrainingDataRepository,
+    private snackbar: Snackbar
   ) {
     LocalStorageClassifierRepository.mlModel = writable(undefined);
     LocalStorageClassifierRepository.persistedFilters = new PersistantWritable(
@@ -74,6 +77,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
 
     const trainingData = this.trainingDataRepository.getTrainingData();
     const model = await trainer.trainModel(trainingData);
+    this.snackbar.sendMessage(get(t)("snackbar.modeltrained"))
     LocalStorageClassifierRepository.mlModel.set(model);
   }
 

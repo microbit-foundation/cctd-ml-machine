@@ -15,6 +15,7 @@ import {
 import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
 import type { MLModel } from '../MLModel';
 import type { ModelTrainer } from '../ModelTrainer';
+import type Snackbar from '../../../components/snackbar/Snackbar';
 
 export enum TrainingStatus {
   Untrained,

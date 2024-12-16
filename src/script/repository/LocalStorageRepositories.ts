@@ -9,6 +9,7 @@ import Confidences from '../domain/stores/Confidences';
 import LocalStorageTrainingDataRepository from './LocalStorageTrainingDataRepository';
 import type { Repositories } from '../domain/Repositories';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type Snackbar from '../../components/snackbar/Snackbar';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;
@@ -19,7 +20,7 @@ class LocalStorageRepositories implements Repositories {
 
   private static instance: LocalStorageRepositories;
 
-  constructor() {
+  constructor(snackbar: Snackbar) {
     if (LocalStorageRepositories.instance) {
       // Singleton
       throw new Error('Could not instantiate repository. It is already instantiated!');
@@ -30,6 +31,7 @@ class LocalStorageRepositories implements Repositories {
     this.classifierRepository = new LocalStorageClassifierRepository(
       confidences,
       this.trainingDataRepository,
+      snackbar
     );
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }

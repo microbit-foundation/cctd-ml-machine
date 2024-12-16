@@ -1,3 +1,8 @@
+<!--
+  (c) 2023, center for computational thinking and design at aarhus university and contributors
+ 
+  spdx-license-identifier: mit
+ -->
 <script lang="ts">
   import { slide } from 'svelte/transition';
     import { stores } from '../../script/stores/Stores';

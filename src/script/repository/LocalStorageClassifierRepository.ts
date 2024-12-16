@@ -59,6 +59,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
       (gestureId: GestureID, confidence: number) => {
         this.setGestureConfidence(gestureId, confidence);
       },
+      this.snackbar
     );
 
     return classifier;

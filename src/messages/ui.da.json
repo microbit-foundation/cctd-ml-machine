@@ -222,5 +222,8 @@
   "popup.outdatedmicrobit.text.mkcd": "Åben den nyeste MakeCode skabelon for at bruge den opdaterede MakeCode extension.",
   "popup.outdatedmicrobit.button.later": "Senere",
   "popup.outdatedmicrobit.button.update": "Opdatér nu",
-  "popup.outdatedmicrobit.button.update.mkcd": "Åben MakeCode"
+  "popup.outdatedmicrobit.button.update.mkcd": "Åben MakeCode",
+  "snackbar.axischanged.NNInvalid": "De markerede akser blev ændret, modellen er ugyldig. Træn en ny model.",
+  "snackbar.filtersChanged.modelInvalid": "De valgte filtre blev ændret, modellen er ugyldig. Træn en ny model.",
+  "snackbar.modeltrained": "En ny model blev trænet"
 }

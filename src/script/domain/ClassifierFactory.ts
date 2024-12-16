@@ -11,8 +11,9 @@ import { type TrainerConsumer } from '../repository/LocalStorageClassifierReposi
 import Gesture, { type GestureID } from './stores/gesture/Gesture';
 import Model from './stores/Model';
 import { type RecordingData } from './stores/gesture/Gestures';
-import Logger from '../utils/Logger';
 import type { MLModel } from './MLModel';
+import type Snackbar from '../../components/snackbar/Snackbar';
+import { t } from '../../i18n';
 
 class ClassifierFactory {
   public buildClassifier(
@@ -21,6 +22,7 @@ class ClassifierFactory {
     filters: Filters,
     gestures: Readable<Gesture[]>,
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
+    snackbar: Snackbar
   ): Classifier {
     const classifier = new Classifier(
       this.buildModel(trainerConsumer, model),
@@ -30,6 +32,9 @@ class ClassifierFactory {
     );
     filters.subscribe(() => {
       // Filters has changed
+      if (classifier.getModel().isTrained()) {
+        snackbar.sendMessage(get(t)("snackbar.filtersChanged.modelInvalid"))
+      }
       classifier.getModel().markAsUntrained();
     });
     const noOfGesturesStore = writable(0);

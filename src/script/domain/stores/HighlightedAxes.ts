@@ -7,7 +7,6 @@ import {
   get,
   type Readable,
   type Unsubscriber,
-  writable,
   type Writable,
 } from 'svelte/store';
 import Classifier from './Classifier';
@@ -19,6 +18,8 @@ import { trainModel } from '../../../pages/training/TrainingPage';
 import type { ApplicationState } from '../../stores/Stores';
 import PersistantWritable from '../../repository/PersistantWritable';
 import Logger from '../../utils/Logger';
+import type Snackbar from '../../../components/snackbar/Snackbar';
+import { t } from '../../../i18n';
 
 class HighlightedAxes implements Writable<Axis[]> {
   private value: PersistantWritable<Axis[]>; // Use this.set instead of this.value.set!
@@ -27,6 +28,7 @@ class HighlightedAxes implements Writable<Axis[]> {
     private classifier: Classifier,
     private selectedModel: SelectedModel,
     private applicationState: Readable<ApplicationState>,
+    private snackbar: Snackbar,
   ) {
     this.value = new PersistantWritable([], 'highlightedAxes');
   }
@@ -76,12 +78,19 @@ class HighlightedAxes implements Writable<Axis[]> {
   public isAxisIndexHighlighted(index: number) {
     return !!get(this.value).find(e => e.index === index);
   }
+
   /**
    * When the axis that has been selected is EXPLICITLY different from before
    */
   private async onChangedAxes() {
     Logger.log('HighlightedAxes', 'New axes detected');
+
+    if (get(this.selectedModel).id === ModelRegistry.NeuralNetwork.id && this.classifier.getModel().isTrained()) {
+      this.snackbar.sendMessage(get(t)("snackbar.axischanged.NNInvalid"))
+    }
+
     this.classifier.getModel().markAsUntrained();
+
     if (
       get(this.selectedModel).id === ModelRegistry.KNN.id &&
       get(this.applicationState).isInputConnected

@@ -24,8 +24,6 @@
     });
   };
 
-  $: console.log($highlightedAxes);
-
   $: trainButtonSimpleLabel = !$model.hasModel
     ? 'menu.trainer.trainModelButtonSimple'
     : 'menu.trainer.trainNewModelButtonSimple';

@@ -222,5 +222,8 @@
   "popup.outdatedmicrobit.text.mkcd": "Open the newest MakeCode template to use the updated extension.",
   "popup.outdatedmicrobit.button.later": "Later",
   "popup.outdatedmicrobit.button.update": "Update now",
-  "popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode"
+  "popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode",
+  "snackbar.axischanged.NNInvalid": "Highlighted axes was changed, the model is invalid. Train another model.",
+  "snackbar.filtersChanged.modelInvalid": "The selected filters were changed, the model is invalid. Train another model.",
+  "snackbar.modeltrained": "A new model was trained"
 }

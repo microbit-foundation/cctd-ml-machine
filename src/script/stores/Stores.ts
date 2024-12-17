@@ -38,7 +38,6 @@ type StoresType = {
  * Stores is a container object, that allows for management of global stores.
  */
 class Stores implements Readable<StoresType> {
-  
   private liveData: Writable<LiveData<LiveDataVector> | undefined>;
   private engine: Engine | undefined;
   private classifier: Classifier;
@@ -50,7 +49,7 @@ class Stores implements Readable<StoresType> {
   private snackbar: Snackbar;
 
   public constructor(private applicationState: Readable<ApplicationState>) {
-    this.snackbar = new Snackbar()
+    this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
     this.engine = undefined;
     const repositories: Repositories = new LocalStorageRepositories(this.snackbar);
@@ -62,7 +61,7 @@ class Stores implements Readable<StoresType> {
       this.classifier,
       this.selectedModel,
       applicationState,
-      this.snackbar
+      this.snackbar,
     );
     this.availableAxes = new AvailableAxes(this.liveData, this.gestures);
     this.availableAxes.subscribe(newAxes => {

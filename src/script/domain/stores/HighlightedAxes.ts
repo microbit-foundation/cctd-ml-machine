@@ -3,12 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import {
-  get,
-  type Readable,
-  type Unsubscriber,
-  type Writable,
-} from 'svelte/store';
+import { get, type Readable, type Unsubscriber, type Writable } from 'svelte/store';
 import Classifier from './Classifier';
 import { type Subscriber } from 'svelte/motion';
 import SelectedModel from '../../stores/SelectedModel';
@@ -85,8 +80,11 @@ class HighlightedAxes implements Writable<Axis[]> {
   private async onChangedAxes() {
     Logger.log('HighlightedAxes', 'New axes detected');
 
-    if (get(this.selectedModel).id === ModelRegistry.NeuralNetwork.id && this.classifier.getModel().isTrained()) {
-      this.snackbar.sendMessage(get(t)("snackbar.axischanged.NNInvalid"))
+    if (
+      get(this.selectedModel).id === ModelRegistry.NeuralNetwork.id &&
+      this.classifier.getModel().isTrained()
+    ) {
+      this.snackbar.sendMessage(get(t)('snackbar.axischanged.NNInvalid'));
     }
 
     this.classifier.getModel().markAsUntrained();

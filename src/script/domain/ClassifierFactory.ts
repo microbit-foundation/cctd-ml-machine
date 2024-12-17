@@ -22,7 +22,7 @@ class ClassifierFactory {
     filters: Filters,
     gestures: Readable<Gesture[]>,
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
-    snackbar: Snackbar
+    snackbar: Snackbar,
   ): Classifier {
     const classifier = new Classifier(
       this.buildModel(trainerConsumer, model),
@@ -33,7 +33,7 @@ class ClassifierFactory {
     filters.subscribe(() => {
       // Filters has changed
       if (classifier.getModel().isTrained()) {
-        snackbar.sendMessage(get(t)("snackbar.filtersChanged.modelInvalid"))
+        snackbar.sendMessage(get(t)('snackbar.filtersChanged.modelInvalid'));
       }
       classifier.getModel().markAsUntrained();
     });

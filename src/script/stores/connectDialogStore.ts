@@ -26,7 +26,7 @@ export const connectionDialogState = writable<{
 }>({
   connectionState: ConnectDialogStates.NONE,
   deviceState: DeviceRequestStates.NONE,
-  retryUsb: false
+  retryUsb: false,
 });
 
 export const startConnectionProcess = (): void => {

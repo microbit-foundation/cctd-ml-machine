@@ -37,7 +37,7 @@
   import { Feature, getFeature } from './script/FeatureToggles';
   import { welcomeLog } from './script/utils/Logger';
   import { DeviceRequestStates, state } from './script/stores/Stores';
-  import SnackbarView from "./components/snackbar/SnackbarView.svelte";
+  import SnackbarView from './components/snackbar/SnackbarView.svelte';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {
@@ -50,7 +50,7 @@
 </script>
 
 <Router>
-  <SnackbarView/>
+  <SnackbarView />
   {#if !$compatibility.platformAllowed}
     <!-- Denies mobile users access to the platform -->
     <IncompatiblePlatformView />

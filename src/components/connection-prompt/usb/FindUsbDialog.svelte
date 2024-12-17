@@ -10,14 +10,15 @@
   import Microbits from '../../../script/microbit-interfacing/Microbits';
 
   export let onFoundUsb: () => void;
-  export let onUsbLinkError: () => void;
+  export let manualDownloadClick: () => void;
+  let retryUsb = false;
 
   function onFindUsbClick() {
     Microbits.linkMicrobit()
       .then(() => onFoundUsb())
       .catch((e: Error) => {
+        retryUsb = true;
         console.log(e);
-        onUsbLinkError();
       });
   }
 
@@ -41,6 +42,15 @@
         <p>
           {$t('connectMB.usb.body2')}
         </p>
+        {#if retryUsb}
+          <p class="mt-2 text-red-400">
+            {$t('connectMB.usb.retry1')}
+          <span on:click={manualDownloadClick} class="hover:cursor-pointer text-red-500 underline">
+            {$t('connectMB.usb.retryLink')}
+          </span>
+            {$t('connectMB.usb.retry2')}
+          </p>
+        {/if}
       {/if}
     </div>
     <div class="flex justify-center">

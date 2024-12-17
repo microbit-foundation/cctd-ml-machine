@@ -11,20 +11,20 @@
   import Microbits from '../../../../script/microbit-interfacing/Microbits';
   import ImageSkeleton from '../../../skeletonloading/ImageSkeleton.svelte';
   import Bowser from 'bowser';
-    import StaticConfiguration from '../../../../StaticConfiguration';
+  import StaticConfiguration from '../../../../StaticConfiguration';
 
   export let onConnectBluetoothClick: () => void;
   /**
    * Downloads the universal HEX on the users' computer.
    */
-  const  downloadFirmware = () => {
+  const downloadFirmware = () => {
     const a = document.createElement('a');
     a.href = Microbits.hexFiles.universal;
     a.download = StaticConfiguration.downloadedHexFilename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  }
+  };
   onMount(() => downloadFirmware());
 
   const browser = Bowser.getParser(window.navigator.userAgent);

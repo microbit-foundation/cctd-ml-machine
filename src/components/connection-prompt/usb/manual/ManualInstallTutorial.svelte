@@ -11,10 +11,21 @@
   import Microbits from '../../../../script/microbit-interfacing/Microbits';
   import ImageSkeleton from '../../../skeletonloading/ImageSkeleton.svelte';
   import Bowser from 'bowser';
+    import StaticConfiguration from '../../../../StaticConfiguration';
 
   export let onConnectBluetoothClick: () => void;
-
-  onMount(() => Microbits.downloadFirmware());
+  /**
+   * Downloads the universal HEX on the users' computer.
+   */
+  const  downloadFirmware = () => {
+    const a = document.createElement('a');
+    a.href = Microbits.hexFiles.universal;
+    a.download = StaticConfiguration.downloadedHexFilename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+  onMount(() => downloadFirmware());
 
   const browser = Bowser.getParser(window.navigator.userAgent);
   const osName = browser.getOS().name ?? 'unknown';
@@ -46,7 +57,7 @@
     </p>
     <p
       class="hover:cursor-pointer text-red-500 underline"
-      on:click={() => Microbits.downloadFirmware()}>
+      on:click={() => downloadFirmware()}>
       {$t('connectMB.usb.manual.manualDownloadLink')}
     </p>
   </div>

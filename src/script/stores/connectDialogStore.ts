@@ -22,9 +22,11 @@ export enum ConnectDialogStates {
 export const connectionDialogState = writable<{
   connectionState: ConnectDialogStates;
   deviceState: DeviceRequestStates;
+  retryUsb: boolean;
 }>({
   connectionState: ConnectDialogStates.NONE,
   deviceState: DeviceRequestStates.NONE,
+  retryUsb: false
 });
 
 export const startConnectionProcess = (): void => {

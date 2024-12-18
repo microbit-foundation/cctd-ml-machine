@@ -3,10 +3,10 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import ModelTrainer, { TrainingData } from '../domain/ModelTrainer';
 import KNNMLModel from './KNNMLModel';
 import * as tf from '@tensorflow/tfjs';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
+import type { ModelTrainer, TrainingData } from '../domain/ModelTrainer';
 
 /**
  * Trains a K-Nearest Neighbour model

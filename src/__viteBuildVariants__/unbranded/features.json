@@ -2,5 +2,7 @@
   "title": "Learning tool",
   "knnModel": true,
   "lossGraph": true,
-  "makecode": true
+  "makecode": true,
+  "liveGraphInputValues": true,
+  "recordingScrubberValues": true
 }

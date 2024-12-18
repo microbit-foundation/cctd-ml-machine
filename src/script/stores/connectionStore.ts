@@ -5,19 +5,19 @@
  */
 
 import { get, type Writable } from 'svelte/store';
-import { persistantWritable } from './storeUtil';
-import MBSpecs from '../microbit-interfacing/MBSpecs';
+import { MBSpecs } from 'microbyte';
+import PersistantWritable from '../repository/PersistantWritable';
 // Todo: Rename file to a more appropriate name
 // Pattern for connecting to input microbit
-export const btPatternInput: Writable<boolean[]> = persistantWritable<boolean[]>(
-  'btPatternInput',
+export const btPatternInput: Writable<boolean[]> = new PersistantWritable<boolean[]>(
   Array<boolean>(25).fill(false),
+  'btPatternInput',
 );
 
 // Pattern for connecting to output microbit
-export const btPatternOutput: Writable<boolean[]> = persistantWritable<boolean[]>(
-  'btPatternOutput',
+export const btPatternOutput: Writable<boolean[]> = new PersistantWritable<boolean[]>(
   Array<boolean>(25).fill(false),
+  'btPatternOutput',
 );
 
 export const isInputPatternValid = () => {

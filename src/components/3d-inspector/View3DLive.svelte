@@ -8,7 +8,7 @@
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { stores } from '../../script/stores/Stores';
   import View3D from './View3D.svelte';
-  import { Vector3 } from './View3DUtility';
+  import { type Vector3 } from './View3DUtility';
 
   export let smoothing = false;
   export let width: number;
@@ -17,10 +17,12 @@
 
   let liveDataPoint: Vector3 = { x: 0, y: 0, z: 0 };
 
-  $: smoothedLiveData = new SmoothedLiveData($stores.liveData, 3);
+  $: smoothedLiveData = $stores.liveData
+    ? new SmoothedLiveData($stores.liveData, 3)
+    : undefined;
 
   $: {
-    if (!freeze) {
+    if (!freeze && $smoothedLiveData !== undefined) {
       liveDataPoint = {
         x: $smoothedLiveData.getVector()[0],
         y: $smoothedLiveData.getVector()[1],
@@ -30,4 +32,4 @@
   }
 </script>
 
-<View3D {smoothing} {width} {height} dataPoint={liveDataPoint} />
+<View3D {smoothing} {width} {height} sample={liveDataPoint} />

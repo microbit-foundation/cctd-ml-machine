@@ -4,12 +4,18 @@
  * SPDX-License-Identifier: MIT
  */
 import ControlledStorage from '../ControlledStorage';
-import { Subscriber, Unsubscriber, Writable, get, writable } from 'svelte/store';
+import {
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
+  get,
+  writable,
+} from 'svelte/store';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
-import GestureRepository from '../domain/GestureRepository';
 import Gesture from '../domain/stores/gesture/Gesture';
-import { PersistantGestureData } from '../domain/stores/gesture/Gestures';
+import { type PersistantGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
+import type { GestureRepository } from '../domain/GestureRepository';
 
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
@@ -103,7 +109,6 @@ class LocalStorageGestureRepository implements GestureRepository {
 
   private buildGesture(persistedData: PersistantGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
-    // TODO: The classifier object should be accessed through the repository, not the store. This cannot be done until the classifier is cached.
     const onRecordingsChanged = () => stores.getClassifier().getModel().markAsUntrained();
 
     if (!this.classifierRepository.hasGestureConfidence(get(store).ID)) {

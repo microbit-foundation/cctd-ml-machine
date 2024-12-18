@@ -54,8 +54,9 @@
   "content.trainer.failure.body": "The training did not result in a usable model. The reason for this is most likely the data used for training. If the data for different classes are too similar, this can result in issues in the training process.",
   "content.trainer.failure.todo": "Return to the data page and change your data.",
   "content.trainer.controlbar.filters": "Filters",
-  "content.trianer.lossGraph.title": "Loss over time",
+  "content.trainer.lossGraph.title": "Loss over time",
   "content.trainer.knn.neighbours": "Neighbours",
+  "content.trainer.knn.selectOneAxis": "To enable visualization, enable exactly two filters, and select a single axis to use for prediction.",
   "content.filters.NoDataHeader": "No available data",
   "content.filters.NoDataBody": "Go to the Data page to collect data samples.",
   "content.filters.max.title": "Max values",
@@ -124,6 +125,7 @@
   "menu.trainer.noFilters": "No filters have been selected. You must enable at least 1 filter in order to train a model",
   "menu.trainer.isTrainingModelButton": "Training model",
   "menu.trainer.knn.onlyTwoFilters": "In order to visualize the data, you need to select exactly two filters",
+  "menu.trainer.SelectMoreAxes": "To train a model, select at least one axis to train the model on.",
   "menu.model.helpHeading": "Model",
   "menu.model.helpBody": "The model can be used in an interactive system. Here we use the trained model to predict gestures. You can connect another micro:bit and make it respond to the predicted gestures.",
   "menu.model.noModel": "No model",
@@ -157,6 +159,9 @@
   "connectMB.usb.header": "DOWNLOAD PROGRAM TO MICRO:BIT",
   "connectMB.usb.body1": "Connect your micro:bit using a USB-cable and click 'Next'",
   "connectMB.usb.body2": "Click 'Find USB unit' and select 'BBC micro:bit CMSIS-DAP' or 'DAPLink CMSIS-DAP' from the popup that appears",
+  "connectMB.usb.retry1": "A USB unit wasn't found. You can try again or click ",
+  "connectMB.usb.retryLink": "here",
+  "connectMB.usb.retry2": " to download manually.",
   "connectMB.usb.button1": "Next",
   "connectMB.usb.button2": "Find USB unit",
   "connectMB.usb.pleaseWait": "Please wait. Downloading program to the micro:bit",
@@ -219,5 +224,8 @@
   "popup.outdatedmicrobit.text.mkcd": "Open the newest MakeCode template to use the updated extension.",
   "popup.outdatedmicrobit.button.later": "Later",
   "popup.outdatedmicrobit.button.update": "Update now",
-  "popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode"
+  "popup.outdatedmicrobit.button.update.mkcd": "Open MakeCode",
+  "snackbar.axischanged.NNInvalid": "Highlighted axes was changed, the model is invalid. Train another model.",
+  "snackbar.filtersChanged.modelInvalid": "The selected filters were changed, the model is invalid. Train another model.",
+  "snackbar.modeltrained": "A new model was trained"
 }

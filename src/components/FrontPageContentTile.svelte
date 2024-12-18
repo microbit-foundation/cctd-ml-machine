@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { ComponentType } from 'svelte';
+  import { type ComponentType } from 'svelte';
 
   export let contentComponent: ComponentType;
   export let fillColumns: number = 1;

@@ -7,8 +7,8 @@
 <script lang="ts">
   import {
     Chart,
-    ChartConfiguration,
-    ChartTypeRegistry,
+    type ChartConfiguration,
+    type ChartTypeRegistry,
     LineController,
     LineElement,
     LinearScale,
@@ -20,8 +20,8 @@
   import { t } from '../../i18n';
 
   import { onMount } from 'svelte';
-  import { Readable } from 'svelte/store';
-  import { LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
+  import { type Readable } from 'svelte/store';
+  import { type LossTrainingIteration } from '../../script/mlmodels/LayersModelTrainer';
 
   export let loss: Readable<LossTrainingIteration[]>;
   export let maxX: number | undefined = undefined;
@@ -49,7 +49,7 @@
         plugins: {
           title: {
             display: true,
-            text: $t('content.trianer.lossGraph.title'),
+            text: $t('content.trainer.lossGraph.title'),
             padding: {
               top: 10,
               bottom: 30,

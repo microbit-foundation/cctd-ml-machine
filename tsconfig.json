@@ -29,9 +29,8 @@
     "noEmit": true,
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
-    "importsNotUsedAsValues": "remove",
     "strict": true,
-    "verbatimModuleSyntax": false,
+    "verbatimModuleSyntax": true,
     "ignoreDeprecations": "5.0",
     "noFallthroughCasesInSwitch": true,
     "types": [

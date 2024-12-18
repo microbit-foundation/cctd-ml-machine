@@ -3,11 +3,18 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Subscriber, Unsubscriber, derived, get } from 'svelte/store';
+import {
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  derived,
+  get,
+} from 'svelte/store';
 import Filters from '../Filters';
-import ClassifierInput from '../ClassifierInput';
-import Model, { ModelData } from './Model';
-import Gesture, { GestureID } from './gesture/Gesture';
+import Model, { type ModelData } from './Model';
+import Gesture, { type GestureID } from './gesture/Gesture';
+import type { ClassifierInput } from '../ClassifierInput';
+import Logger from '../../utils/Logger';
 
 type ClassifierData = {
   model: ModelData;
@@ -19,7 +26,9 @@ class Classifier implements Readable<ClassifierData> {
     private filters: Filters,
     private gestures: Readable<Gesture[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
-  ) {}
+  ) {
+    Logger.log('classifier', 'Initialized classifier');
+  }
 
   public subscribe(
     run: Subscriber<ClassifierData>,

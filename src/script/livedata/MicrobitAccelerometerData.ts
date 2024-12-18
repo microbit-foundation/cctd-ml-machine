@@ -3,10 +3,15 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Subscriber, Unsubscriber, Writable, get, writable } from 'svelte/store';
+import {
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
+  writable,
+} from 'svelte/store';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
-import LiveData from '../domain/stores/LiveData';
-import { LiveDataVector } from '../domain/stores/LiveDataVector';
+import type { LiveDataVector } from '../domain/stores/LiveDataVector';
+import type { LiveData } from '../domain/stores/LiveData';
 
 export type MicrobitAccelerometerData = {
   x: number;

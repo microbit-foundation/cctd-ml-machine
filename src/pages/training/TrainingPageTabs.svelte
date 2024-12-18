@@ -9,8 +9,10 @@
   import { navigate, Paths } from '../../router/paths';
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
-  import { selectedModel } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
+  import { stores } from '../../script/stores/Stores';
+
+  const selectedModel = stores.getSelectedModel();
 
   const showTabBar = hasFeature(Feature.KNN_MODEL);
   if (!showTabBar) {

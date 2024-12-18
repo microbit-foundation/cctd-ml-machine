@@ -5,10 +5,9 @@
  -->
 
 <script lang="ts">
-  import { state } from '../script/stores/uiStore';
   import { t } from '../i18n';
   import Gesture from '../script/domain/stores/gesture/Gesture';
-  import { stores } from '../script/stores/Stores';
+  import { state, stores } from '../script/stores/Stores';
 
   const gestures = stores.getGestures();
   const bestPrediction = gestures.getBestPrediction();

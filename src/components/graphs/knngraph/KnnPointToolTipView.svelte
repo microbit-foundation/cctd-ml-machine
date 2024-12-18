@@ -36,7 +36,7 @@
   style={`top:${position.y}px; left:${position.x}px;border-color:${borderColor}`}>
   {#each content.values as val, index}
     {#if val}<!--val may be undefined for 2d knn graph-->
-      <p style={`color:${StaticConfiguration.liveGraphColors[index]}`}>
+      <p style={`color:${StaticConfiguration.graphColors[index]}`}>
         {val?.toFixed(2)}
       </p>
     {/if}

@@ -25,7 +25,8 @@ You can find the version on the main branch at [main.ML-Machine.org](https://mai
 
 ### Running the application locally
 
-Alternatively the application can be run locally on your computer without compromising the capabilities of the software.
+#### Using NodeJS
+Alternatively the application can be run locally on your computer without compromising the capabilities of the software.c
 
 1. Ensure you have [nodejs](https://nodejs.org/) and the package manager [npm](https://www.npmjs.com/)
 2. Download or clone this repository
@@ -35,6 +36,21 @@ Alternatively the application can be run locally on your computer without compro
 
 List of commands can be found below.
 
+#### Using Docker
+
+Either build the dockerfile and run it
+```
+docker build -t ml-machine .
+docker run -d -p 5174:8080 ml-machine
+```
+
+Or you can use the docker-compose.yml file we have provided
+
+```
+docker compose up -d
+```
+
+Access the application from http://localhost:5174/
 
 ### ```npm run dev```
 

@@ -3,12 +3,19 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Subscriber, Unsubscriber, Writable, derived, get } from 'svelte/store';
+import {
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
+  derived,
+  get,
+} from 'svelte/store';
 import GestureConfidence from './GestureConfidence';
-import { PersistantGestureData, RecordingData } from './Gestures';
-import MBSpecs from '../../../microbit-interfacing/MBSpecs';
+import { type PersistantGestureData, type RecordingData } from './Gestures';
 import { PinTurnOnState } from '../../../../components/output/PinSelectorUtil';
 import BindableValue from '../BindableValue';
+import { MBSpecs } from 'microbyte';
 
 export type GestureID = number;
 
@@ -55,7 +62,7 @@ class Gesture implements Readable<GestureData> {
   }
 
   public getRecordings(): RecordingData[] {
-    return get(this.store).recordings;
+    return get(this.store)?.recordings ?? [];
   }
 
   public getOutput(): GestureOutput {

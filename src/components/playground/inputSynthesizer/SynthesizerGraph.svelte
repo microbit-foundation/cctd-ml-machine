@@ -103,12 +103,12 @@
 
 <script lang="ts">
   import { SmoothieChart, TimeSeries } from 'smoothie';
-  import LiveData from '../../../script/domain/stores/LiveData';
-  import { LiveDataVector } from '../../../script/domain/stores/LiveDataVector';
+  import { type LiveData } from '../../../script/domain/stores/LiveData';
+  import { type LiveDataVector } from '../../../script/domain/stores/LiveDataVector';
   import StaticConfiguration from '../../../StaticConfiguration';
   import SmoothedLiveData from '../../../script/livedata/SmoothedLiveData';
   import { onDestroy, onMount } from 'svelte';
-  import { Unsubscriber } from 'svelte/motion';
+  import { type Unsubscriber } from 'svelte/motion';
   import DimensionLabels from '../../graphs/DimensionLabels.svelte';
   import liveDataSynthesizer from './LiveDataSynthesizer';
   import { stores } from '../../../script/stores/Stores';
@@ -128,7 +128,7 @@
   export let maxValue: number;
   export let minValue: number;
 
-  let axisColors = StaticConfiguration.liveGraphColors;
+  let axisColors = StaticConfiguration.graphColors;
 
   // Smoothes real-time data by using the 3 most recent data points
   const smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);

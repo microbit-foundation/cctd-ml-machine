@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import ModelTrainer, { TrainingData } from '../domain/ModelTrainer';
+import type { ModelTrainer, TrainingData } from '../domain/ModelTrainer';
 import LayersMLModel from './LayersMLModel';
 import * as tf from '@tensorflow/tfjs';
 export type LayersModelTrainingSettings = {

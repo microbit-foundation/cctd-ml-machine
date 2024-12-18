@@ -4,17 +4,18 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
   derived,
   get,
   writable,
 } from 'svelte/store';
-import { TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
-import MLModel from '../MLModel';
-import ModelTrainer from '../ModelTrainer';
+import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
+import type { MLModel } from '../MLModel';
+import type { ModelTrainer } from '../ModelTrainer';
+import type Snackbar from '../../../components/snackbar/Snackbar';
 
 export enum TrainingStatus {
   Untrained,
@@ -102,12 +103,12 @@ class Model implements Readable<ModelData> {
    *
    * Use if you have to, but see `classifier.classify()` first
    */
-  public async predict(inputData: number[]): Promise<number[]> {
+  public async predict(filteredData: number[]): Promise<number[]> {
     const mlModel = get(this.mlModel);
     if (!mlModel) {
       throw new Error('Cannot predict, no MLModel has been specified');
     }
-    return await mlModel.predict(inputData);
+    return await mlModel.predict(filteredData);
   }
 
   public subscribe(

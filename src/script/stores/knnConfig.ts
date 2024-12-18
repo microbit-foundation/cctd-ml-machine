@@ -3,13 +3,16 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { persistantWritable } from './storeUtil';
 import StaticConfiguration from '../../StaticConfiguration';
+import PersistantWritable from '../repository/PersistantWritable';
 
 export type KNNSettings = {
   k: number;
 };
 
-export const knnConfig = persistantWritable<KNNSettings>('knnConfig', {
-  k: StaticConfiguration.defaultKnnNeighbourCount,
-});
+export const knnConfig = new PersistantWritable(
+  {
+    k: StaticConfiguration.defaultKnnNeighbourCount,
+  },
+  'knnConfig',
+);

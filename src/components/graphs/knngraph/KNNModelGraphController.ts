@@ -3,17 +3,16 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { TrainingData } from '../../../script/domain/ModelTrainer';
-import { Writable, derived, get, writable } from 'svelte/store';
-import KNNModelGraphDrawer, { GraphDrawConfig } from './KNNModelGraphDrawer';
+import { type TrainingData } from '../../../script/domain/ModelTrainer';
+import { type Writable, derived, get, writable } from 'svelte/store';
+import KNNModelGraphDrawer, { type GraphDrawConfig } from './KNNModelGraphDrawer';
 import {
-  MicrobitAccelerometerData,
+  type MicrobitAccelerometerData,
   MicrobitAccelerometerDataVector,
 } from '../../../script/livedata/MicrobitAccelerometerData';
-import { TimestampedData } from '../../../script/domain/LiveDataBuffer';
-import Axes from '../../../script/domain/Axes';
+import { type TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Filters from '../../../script/domain/Filters';
-import { Point3D } from '../../../script/utils/graphUtils';
+import { type Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { stores } from '../../../script/stores/Stores';
 import { FilterType } from '../../../script/domain/FilterTypes';
@@ -54,7 +53,7 @@ class KNNModelGraphController {
     origin: { x: number; y: number },
     classId: string,
     colors: string[],
-    axis?: Axes,
+    axis?: number,
   ) {
     this.filters = stores.getClassifier().getFilters();
     this.trainingData = this.trainingDataToPoints();
@@ -143,22 +142,27 @@ class KNNModelGraphController {
     try {
       const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
       const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      liveData = get(stores)
-        .liveData.getBuffer()
-        .getSeries(sampleDuration, sampleSize)
-        .map(el => {
-          if (el.value.getSize() != 3) {
-            throw new Error("Couldn't convert vector to accelerometer data vector");
-          }
-          return {
-            ...el,
-            value: new MicrobitAccelerometerDataVector({
-              x: el.value.getVector()[0],
-              y: el.value.getVector()[1],
-              z: el.value.getVector()[2],
-            }),
-          };
-        });
+      const liveDataStore = get(stores).liveData;
+      if (liveDataStore !== undefined) {
+        liveData = liveDataStore
+          .getBuffer()
+          .getSeries(sampleDuration, sampleSize)
+          .map(el => {
+            if (el.value.getSize() != 3) {
+              throw new Error("Couldn't convert vector to accelerometer data vector");
+            }
+            return {
+              ...el,
+              value: new MicrobitAccelerometerDataVector({
+                x: el.value.getVector()[0],
+                y: el.value.getVector()[1],
+                z: el.value.getVector()[2],
+              }),
+            };
+          });
+      } else {
+        liveData = [];
+      }
       this.liveDataRecords.push(liveData);
       if (this.liveDataRecords.length > this.liveDataRecordsSize) {
         this.liveDataRecords.shift();
@@ -229,16 +233,16 @@ class KNNModelGraphController {
   }
 
   // Called whenever any subscribed store is altered
-  private onUpdate(draw: UpdateCall, axis?: Axes) {
+  private onUpdate(draw: UpdateCall, axis?: number) {
     let data: TimestampedData<MicrobitAccelerometerDataVector>[] = draw.data;
 
     const getLiveFilteredData = () => {
       switch (axis) {
-        case Axes.X:
+        case 0:
           return this.filters.compute(data.map(d => d.value.getAccelerometerData().x));
-        case Axes.Y:
+        case 1:
           return this.filters.compute(data.map(d => d.value.getAccelerometerData().y));
-        case Axes.Z:
+        case 2:
           return this.filters.compute(data.map(d => d.value.getAccelerometerData().z));
         default:
           throw new Error("Shouldn't happen");

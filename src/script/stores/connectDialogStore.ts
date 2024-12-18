@@ -5,13 +5,8 @@
  */
 
 import { get, writable } from 'svelte/store';
-import { state } from './uiStore';
+import { DeviceRequestStates, state } from './Stores';
 
-export enum DeviceRequestStates {
-  NONE,
-  INPUT,
-  OUTPUT,
-}
 export enum ConnectDialogStates {
   NONE, // No connection in progress -> Dialog box closed
   START, // Initial box with choice between usb installation and bluetooth connection
@@ -27,9 +22,11 @@ export enum ConnectDialogStates {
 export const connectionDialogState = writable<{
   connectionState: ConnectDialogStates;
   deviceState: DeviceRequestStates;
+  retryUsb: boolean;
 }>({
   connectionState: ConnectDialogStates.NONE,
   deviceState: DeviceRequestStates.NONE,
+  retryUsb: false,
 });
 
 export const startConnectionProcess = (): void => {

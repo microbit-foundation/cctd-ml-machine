@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { tensor } from '@tensorflow/tfjs';
-import MLModel from '../domain/MLModel';
+import { type MLModel } from '../domain/MLModel';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
 
 class KNNMLModel implements MLModel {

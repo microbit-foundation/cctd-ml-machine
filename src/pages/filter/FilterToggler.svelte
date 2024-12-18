@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import Information from '../../components/information/Information.svelte';
-  import Filter from '../../script/domain/Filter';
+  import { type Filter } from '../../script/domain/Filter';
   import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
   import { stores } from '../../script/stores/Stores';
   import D3Plot from './D3Plot.svelte';

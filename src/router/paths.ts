@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { writable, Writable, get, derived } from 'svelte/store';
+import { writable, type Writable, get, derived } from 'svelte/store';
 
 export const Paths = {
   HOME: '/',

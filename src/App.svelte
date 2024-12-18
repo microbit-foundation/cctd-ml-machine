@@ -38,6 +38,7 @@
   import { welcomeLog } from './script/utils/Logger';
   import { DeviceRequestStates, state } from './script/stores/Stores';
   import SnackbarView from './components/snackbar/SnackbarView.svelte';
+  import MediaQuery from './components/MediaQuery.svelte';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {
@@ -69,9 +70,17 @@
       <BluetoothIncompatibilityWarningDialog />
 
       <!-- SIDE BAR -->
-      <div class="h-full flex min-w-75 max-w-75">
-        <SideBarMenuView />
-      </div>
+      <MediaQuery query="(max-width: 1500px)" let:matches={isSmall}>
+        {#if isSmall}
+          <div class="h-full flex min-w-65 max-w-65">
+            <SideBarMenuView />
+          </div>
+        {:else}
+          <div class="h-full flex min-w-75 max-w-75">
+            <SideBarMenuView />
+          </div>
+        {/if}
+      </MediaQuery>
 
       <div
         class="h-full w-full overflow-y-hidden overflow-x-auto

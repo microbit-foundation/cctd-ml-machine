@@ -35,20 +35,21 @@
   <!-- flush top bar -->
   <div class="h-12 shadow-md w-full flex justify-center">
     <MediaQuery query="(max-width: 1500px)" let:matches={isSmall}>
-        <p class="text-secondarytext font-extrabold self-center"
+      <p
+        class="text-secondarytext font-extrabold self-center"
         class:text-3xl={!isSmall}
         class:text-2xl={isSmall}>
-          {getFeature(Feature.TITLE)}
-        </p>
-        <div class="text-white self-center ml-4 focus:outline-none">
-          <button
-            class="rounded hover:bg-white
+        {getFeature(Feature.TITLE)}
+      </p>
+      <div class="text-white self-center ml-4 focus:outline-none">
+        <button
+          class="rounded hover:bg-white
 						   hover:bg-opacity-10 duration-100
 						   select-none outline-none"
-            on:click={() => navigate(Paths.HOME)}>
-            <i class="fas fa-home text-2xl outline-none" />
-          </button>
-        </div>
+          on:click={() => navigate(Paths.HOME)}>
+          <i class="fas fa-home text-2xl outline-none" />
+        </button>
+      </div>
     </MediaQuery>
   </div>
 

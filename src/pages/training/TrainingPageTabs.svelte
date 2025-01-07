@@ -11,6 +11,7 @@
   import { Feature, hasFeature } from '../../script/FeatureToggles';
   import { t } from '../../i18n';
   import { stores } from '../../script/stores/Stores';
+  import StandardDropdownButton from '../../components/buttons/StandardDropdownButton.svelte';
 
   const selectedModel = stores.getSelectedModel();
 
@@ -32,24 +33,33 @@
 
 {#if showTabBar}
   <ControlBar expanded shadows={false}>
-    <div class="flex flex-row flex-grow h-full">
-      <!--Left controlbar-->
-      <div
-        on:click={onSelectNeuralNetwork}
-        class:to-secondary={isSelected('NN')}
-        class:to-primary={!isSelected('NN')}
-        class:shadow-md={!isSelected('NN')}
-        class="flex flex-col border-l-2 border-b-2 border-secondary justify-center cursor-pointer h-full self-center flex-1 bg-gradient-to-r via-primary from-primary text-secondarytext">
-        <p class="text-center font-bold">Neural Network</p>
+    <div class="flex justify-between flex-row flex-grow h-full px-2">
+      <div>
+        <p>Hello</p>
       </div>
-      <!--Right controlbar-->
-      <div
-        on:click={onSelectKnn}
-        class:to-secondary={isSelected('KNN')}
-        class:to-primary={!isSelected('KNN')}
-        class:shadow-md={!isSelected('KNN')}
-        class="flex border-r-2 border-b-2 border-secondary flex-col justify-center cursor-pointer h-full self-center flex-1 bg-gradient-to-l via-primary from-primary text-secondarytext">
-        <p class="text-center font-bold">KNN Model</p>
+      <div class="flex flex-row gap-2 justify-center">
+        <div class="flex flex-col justify-center">
+          <StandardDropdownButton
+            fillOnHover
+            outlined={!isSelected(ModelRegistry.NeuralNetwork.id)}
+            small>
+            <p>Neural Network</p>
+            <div slot="content">
+              <p>Hello world</p>
+            </div>
+          </StandardDropdownButton>
+        </div>
+        <div class="flex flex-col justify-center">
+          <StandardDropdownButton
+            fillOnHover
+            outlined={!isSelected(ModelRegistry.KNN.id)}
+            small>
+            <p>KNN Model</p>
+            <div slot="content">
+              <p>Hello world</p>
+            </div>
+          </StandardDropdownButton>
+        </div>
       </div>
     </div>
   </ControlBar>

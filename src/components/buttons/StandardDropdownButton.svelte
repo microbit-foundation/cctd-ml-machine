@@ -5,19 +5,14 @@
  -->
 
 <style>
-  .contTextNormal {
-    padding: 12px 36px 12px 40px;
+  .normal {
+    padding: 12px 40px;
+    font-size: 16px;
   }
-  .contTextSmall {
-    padding: 1px 1px 1px 1px;
+  .small {
+    padding: 1px 10px;
+    font-size: 14px;
   }
-  .contIconNormal {
-    padding: 12px 20px 12px 12px;
-  }
-  .contIconSmall {
-    padding: 1px 1px 1px 1px;
-  }
-
   .outlined {
     color: var(--color);
     border-style: solid;
@@ -26,41 +21,43 @@
   }
   .filled {
     background-color: var(--color);
+    border-width: var(--border-width);
+    border-color: transparent;
     opacity: 1;
     color: white;
   }
-  .hoverable:hover {
-    filter: brightness(95%);
+  .fillOnHover:hover {
+    background-color: var(--color);
+    opacity: 1;
+    color: white;
     transition-duration: 300ms;
   }
 </style>
 
 <script lang="ts">
+  import TypingUtils from './../../script/TypingUtils';
   import windi from './../../../windi.config.js';
-  import TypingUtils from '../../script/TypingUtils';
-  import { type DropdownOption } from './Buttons';
-  type variants = 'secondary' | 'primary' | 'warning' | 'info' | 'infolight' | 'disabled';
+  import Tooltip from '../base/Tooltip.svelte';
+  import { fade } from 'svelte/transition';
 
-  export let options: DropdownOption[];
-  export let defaultOptionSelected: DropdownOption | undefined = undefined;
-  export let buttonText: string | undefined = undefined;
+  type variants =
+    | 'secondary'
+    | 'primary'
+    | 'warning'
+    | 'info'
+    | 'infolight'
+    | 'disabled'
+    | string;
 
   export let color: variants = 'secondary';
   export let onClick: (e: Event) => void = TypingUtils.emptyFunction;
-  export let onSelect: (option: DropdownOption) => void = TypingUtils.emptyFunction;
   export let disabled = false;
   export let small = false;
   export let outlined = false;
+  export let fillOnHover = false;
   export let bold = true;
   export let shadows = true;
-
-  let isDropdownOpen = false;
-
-  if (!options || options.length == 0) {
-    throw new Error('Cannot create dropdown button without options!');
-  }
-
-  let selectedOption = defaultOptionSelected ? defaultOptionSelected : options[0];
+  export let disabledTooltip: string | undefined = undefined;
 
   const bgColors: { [key in variants]: string } = {
     primary: windi.theme.extend.colors.primary,
@@ -70,93 +67,76 @@
     infolight: windi.theme.extend.colors.infolight,
     disabled: windi.theme.extend.colors.disabled,
   };
+  const isKey = Object.keys(bgColors).includes(color);
+  const colorParam = isKey ? bgColors[disabled ? 'disabled' : color] : color;
+  let hoverTimeout: NodeJS.Timeout | undefined;
 
-  const toggleDropDown = () => {
-    isDropdownOpen = !isDropdownOpen;
-  };
-
-  const optionClickHandler = (option: DropdownOption) => {
-    if (isDropdownOpen) {
-      toggleDropDown();
+  let isDropdownOpen = false;
+  const handleHoverEnter = () => {
+    isDropdownOpen = true;
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
     }
-    selectedOption = option;
-    onSelect(selectedOption);
   };
-
-  const dropDownButtonClickHandler = () => {
-    if (disabled) {
+  const handleHoverExit = () => {
+    hoverTimeout = setTimeout(() => {
       isDropdownOpen = false;
-      return;
-    }
-    toggleDropDown();
+    }, 200);
   };
 </script>
 
-<div class="flex flex-row justify-center place-items-center">
-  <div class="relative flex">
+<div class="relative">
+  {#if disabled}
+    <Tooltip title={disabledTooltip}>
+      <button
+        {disabled}
+        style="--border-width: {bold ? '2px' : '1px'}"
+        class="outline-none rounded-full"
+        class:shadow-md={shadows}
+        class:bg-disabled={true}
+        class:font-bold={bold}
+        class:small
+        class:normal={!small}
+        class:outlined
+        class:cursor-default={disabled}
+        on:click={onClick}>
+        <div class="flex flex-row justify-between justify-center items-center">
+          <slot />
+        </div>
+      </button>
+    </Tooltip>
+  {:else}
     <button
-      {disabled}
-      style="--color: {bgColors[disabled ? 'disabled' : color]}
-  ; --border-width: {bold ? '2px' : '1px'}"
-      class="rounded-l-full"
+      style="--color: {colorParam}
+    ; --border-width: {bold ? '2px' : '1px'}"
+      class="outline-none rounded-full"
       class:shadow-md={shadows}
       class:font-bold={bold}
+      class:small
+      class:normal={!small}
       class:outlined
       class:filled={!outlined}
-      class:hoverable={!disabled}
+      class:fillOnHover
       class:cursor-pointer={!disabled}
-      class:cursor-default={disabled}
+      on:mouseenter={handleHoverEnter}
+      on:mouseleave={handleHoverExit}
       on:click={onClick}>
-      <div class="flex flex-row justify-center items-center">
-        <div class:contTextSmall={small} class:contTextNormal={!small}>
-          {buttonText ? buttonText : selectedOption.label}
+      <div class="flex flex-row justify-between justify-center items-center">
+        <slot />
+        <div class="flex flex-col justify-center pl-2">
+          <i class="fa fa-chevron-down pt-0.25" />
         </div>
       </div>
     </button>
-    <button
-      class:contIconSmall={small}
-      class:contIconNormal={!small}
-      style="--color: {bgColors[disabled ? 'disabled' : color]}
-      ; --border-width: {bold ? '2px' : '1px'}"
-      class:font-bold={bold}
-      class:shadow-md={shadows}
-      class:outlined
-      class:filled={!outlined}
-      class:hoverable={!disabled}
-      class:cursor-pointer={!disabled}
-      class:cursor-default={disabled}
-      on:click={dropDownButtonClickHandler}
-      class="relative rounded-r-full h-full">
-      <i class="fas fa-solid fa-chevron-down" />
-      <div
-        style="--color: {bgColors[disabled ? 'disabled' : color]}
-      ; --border-width: {bold ? '2px' : '1px'}"
-        class:outlined
-        class:hidden={outlined}
-        class:filled={!outlined}
-        class="absolute h-full w-2 bottom-0 -left-1" />
-    </button>
+  {/if}
+  {#if isDropdownOpen}
     <div
-      class:opacity-0={!isDropdownOpen}
-      class:opacity-100={isDropdownOpen}
-      style="--color: {bgColors[disabled ? 'disabled' : color]}"
-      class="absolute duration-90 outlined transition-hidden right-2 top-12 rounded-md">
-      {#each options as option, index}
-        <p
-          on:click={() => {
-            if (!isDropdownOpen) return;
-            optionClickHandler(option);
-          }}
-          style="--color: {bgColors[disabled ? 'disabled' : color]}"
-          class:rounded-t={index === 0}
-          class:rounded-b={index === options.length - 1}
-          class:bg-backgroundlight={outlined}
-          class:cursor-pointer={isDropdownOpen}
-          class:filled={!outlined}
-          class="p-2 hoverable select-none">
-          {option.label}
-        </p>
-      {/each}
+      on:mouseenter={handleHoverEnter}
+      on:mouseleave={handleHoverExit}
+      transition:fade={{ duration: 100 }}
+      style="--color: {colorParam}; background-color: var(--color)"
+      class="absolute top-7 right-1 p-1 px-2 text-secondarytext text-xs">
+      <slot name="content" />
     </div>
-  </div>
+  {/if}
 </div>

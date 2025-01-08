@@ -135,7 +135,7 @@
       on:mouseleave={handleHoverExit}
       transition:fade={{ duration: 100 }}
       style="--color: {colorParam}; background-color: var(--color)"
-      class="absolute top-7 right-1 p-1 px-2 text-secondarytext text-xs">
+      class="absolute top-7 right-1 p-1 px-2 text-secondarytext text-xs rounded-md shadow-md">
       <slot name="content" />
     </div>
   {/if}

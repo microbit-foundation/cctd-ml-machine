@@ -9,7 +9,7 @@
  */
 import { MBSpecs } from 'microbyte';
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
-import { type LayersModelTrainingSettings } from './script/mlmodels/LayersModelTrainer';
+import { type LayersModelTrainingSettings as NeuralNetworkModelTrainerSettings } from './script/mlmodels/LayersModelTrainer';
 import { HexOrigin } from './script/microbit-interfacing/HexOrigin';
 
 class StaticConfiguration {
@@ -126,7 +126,7 @@ class StaticConfiguration {
   /**
    * The neural network training settings
    */
-  public static readonly layersModelTrainingSettings: LayersModelTrainingSettings = {
+  public static readonly defaultNeuralNetworkSettings: NeuralNetworkModelTrainerSettings = {
     noOfEpochs: 80,
     batchSize: 16,
     learningRate: 0.5,

@@ -29,7 +29,7 @@ const trainNNModel = async () => {
   //stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
   loss.set([]);
   const modelTrainer = new LayersModelTrainer(
-    StaticConfiguration.layersModelTrainingSettings,
+    StaticConfiguration.defaultNeuralNetworkSettings,
     trainingIterationHandler,
   );
   await stores.getClassifier().getModel().train(modelTrainer);

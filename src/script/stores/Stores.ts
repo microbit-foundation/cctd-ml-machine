@@ -29,6 +29,7 @@ import type { Engine } from '../domain/stores/Engine';
 import type { Axis } from '../domain/Axis';
 import AvailableAxes from '../domain/stores/AvailableAxes';
 import Snackbar from '../../components/snackbar/Snackbar';
+import NeuralNetworkSettings from '../domain/stores/NeuralNetworkSettings';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -47,8 +48,10 @@ class Stores implements Readable<StoresType> {
   private selectedModel: SelectedModel;
   private availableAxes: AvailableAxes;
   private snackbar: Snackbar;
+  private neuralNetworkSettings: NeuralNetworkSettings;
 
   public constructor(private applicationState: Readable<ApplicationState>) {
+    this.neuralNetworkSettings = new NeuralNetworkSettings();
     this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
     this.engine = undefined;
@@ -135,6 +138,10 @@ class Stores implements Readable<StoresType> {
   public getSnackbar() {
     return this.snackbar;
   }
+
+  public getNeuralNetworkSettings() {
+    return this.neuralNetworkSettings;
+  }
 }
 
 export enum DeviceRequestStates {
@@ -186,5 +193,4 @@ export const state = writable<ApplicationState>({
   isOutputOutdated: false,
 });
 
-// TODO: It really should be the other way around. The ApplicationState should be depending on the Stores object, since it contains the internals
 export const stores = new Stores(state);

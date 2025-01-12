@@ -48,7 +48,7 @@
     on:blur={() => {
       handleChange();
     }}
-    class="min-w-10 max-w-10 text-center border-solid border-1 px-2 bg-primary border-primaryborder" />
+    class="min-w-14 max-w-14 text-center border-solid border-1 px-2 bg-primary border-primaryborder" />
   <span
     class="border-solid border-1 border-l-0 bg-primary rounded-r-md
     px-1 font-bold select-none cursor-pointer border-primaryborder

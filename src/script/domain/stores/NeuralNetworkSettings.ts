@@ -1,4 +1,4 @@
-import { writable, type Invalidator, type Readable, type Subscriber, type Unsubscriber, type Writable } from "svelte/store";
+import { get, writable, type Invalidator, type Readable, type Subscriber, type Unsubscriber, type Writable } from "svelte/store";
 import type { LayersModelTrainingSettings } from "../../mlmodels/LayersModelTrainer";
 import StaticConfiguration from "../../../StaticConfiguration";
 
@@ -7,6 +7,7 @@ class NeuralNetworkSettings implements Readable<LayersModelTrainingSettings> {
     private store: Writable<LayersModelTrainingSettings>;
     public constructor() {
         this.store = writable(StaticConfiguration.defaultNeuralNetworkSettings)
+        console.log(get(this.store));
     }
 
     public subscribe(run: Subscriber<LayersModelTrainingSettings>, invalidate?: Invalidator<LayersModelTrainingSettings> | undefined): Unsubscriber {

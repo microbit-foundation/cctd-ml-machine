@@ -17,6 +17,7 @@
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
   const highlightedAxes = stores.getHighlightedAxes();
+  const neuralNetworkSettings = stores.getNeuralNetworkSettings();
 
   const trainModelClickHandler = () => {
     trainModel(ModelRegistry.NeuralNetwork).then(() => {
@@ -51,6 +52,6 @@
     </StandardButton>
   {/if}
   {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && ($model.isTrained || $model.isTraining)}
-    <LossGraph {loss} maxX={StaticConfiguration.layersModelTrainingSettings.noOfEpochs} />
+    <LossGraph {loss} maxX={$neuralNetworkSettings.noOfEpochs} />
   {/if}
 </div>

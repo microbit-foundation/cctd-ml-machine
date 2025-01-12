@@ -9,21 +9,25 @@
   const color = windi.theme.extend.colors.primary;
   const neuralNetworkSettings = stores.getNeuralNetworkSettings();
   let learningRateSliderValue = $neuralNetworkSettings.learningRate;
+  let validationSplitSliderValue = $neuralNetworkSettings.validationSplit;
 
   $: {
     neuralNetworkSettings.setLearningRate(learningRateSliderValue);
+  }
+  $: {
+    neuralNetworkSettings.setValidationSplit(validationSplitSliderValue);
   }
 </script>
 
 <StandardDropdownButton fillOnHover outlined={!isSelected} small>
   <p>KNN Model</p>
 
-  <div slot="content">
+  <div slot="content" class="pb-2">
     <div class="flex flex-col">
       <div class="grid gap-1 grid-cols-[1fr,1fr]">
         <p class="whitespace-nowrap content-center">Learning rate</p>
         <div
-          class="w-25 flex flex-col justify-center"
+          class="w-30 flex flex-col justify-center"
           style="font-size:0.6rem; --range-handle-inactive: {color}; --range-handle: {color}; --range-handle-focus: {color}">
           <RangeSlider
             bind:value={learningRateSliderValue}
@@ -38,19 +42,41 @@
         <div class="justify-self-center">
           <NumberSelector
             min={1}
-            max={400}
+            max={1000}
             defaultValue={$neuralNetworkSettings.noOfEpochs}
             onChange={val => neuralNetworkSettings.setNoOfEpochs(val)} />
         </div>
- 
+
         <p class="whitespace-nowrap content-center">Nodes</p>
         <div class="justify-self-center">
           <NumberSelector
             min={1}
-            max={30}
+            max={200}
             defaultValue={$neuralNetworkSettings.noOfUnits}
             onChange={val => neuralNetworkSettings.setNoOfUnits(val)} />
         </div>
+
+        <p class="whitespace-nowrap content-center">Batch size</p>
+        <div class="justify-self-center">
+          <NumberSelector
+            min={1}
+            max={30}
+            defaultValue={$neuralNetworkSettings.batchSize}
+            onChange={val => neuralNetworkSettings.setBatchSize(val)} />
+        </div>
+
+        <!-- <p class="whitespace-nowrap content-center">Validation Split</p>
+        <div
+          class="w-30 flex flex-col justify-center"
+          style="font-size:0.6rem; --range-handle-inactive: {color}; --range-handle: {color}; --range-handle-focus: {color}">
+          <RangeSlider
+            bind:value={validationSplitSliderValue}
+            min={0.01}
+            max={0.8}
+            float
+            step={0.01}
+            springValues={{ damping: 0.9, stiffness: 0.5, precision: 0.1 }} />
+        </div> -->
       </div>
     </div>
   </div>

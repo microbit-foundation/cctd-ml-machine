@@ -15,6 +15,7 @@ import LayersModelTrainer, {
 } from '../../script/mlmodels/LayersModelTrainer';
 import { knnConfig } from '../../script/stores/knnConfig';
 import Logger from '../../script/utils/Logger';
+import SelectedModel from '../../script/stores/SelectedModel';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 
@@ -61,3 +62,7 @@ const trackModelEvent = () => {
     });
   }
 };
+
+export const selectModel = (model: ModelInfo) => {
+  stores.getSelectedModel().set(model);
+}

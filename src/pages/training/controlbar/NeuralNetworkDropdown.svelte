@@ -4,6 +4,8 @@
   import windi from './../../../../windi.config.js';
   import NumberSelector from '../../../components/NumberSelector.svelte';
   import { stores } from '../../../script/stores/Stores.js';
+    import ModelRegistry from '../../../script/domain/ModelRegistry.js';
+    import { selectModel } from '../TrainingPage.js';
 
   export let isSelected: boolean;
   const color = windi.theme.extend.colors.primary;
@@ -19,8 +21,8 @@
   }
 </script>
 
-<StandardDropdownButton fillOnHover outlined={!isSelected} small>
-  <p>KNN Model</p>
+<StandardDropdownButton onClick={() => {selectModel(ModelRegistry.NeuralNetwork)}} fillOnHover outlined={!isSelected} small>
+  <p>Neural Network</p>
 
   <div slot="content" class="pb-2">
     <div class="flex flex-col">

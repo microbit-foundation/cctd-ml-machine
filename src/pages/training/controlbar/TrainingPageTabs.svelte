@@ -36,7 +36,7 @@
   <ControlBar expanded shadows={false}>
     <div class="flex justify-between flex-row flex-grow h-full px-2">
       <div>
-        <p>Hello</p>
+        <p>Control-Panel WIP!</p>
       </div>
       <div class="flex flex-row gap-2 justify-center">
         <div class="flex flex-col justify-center">

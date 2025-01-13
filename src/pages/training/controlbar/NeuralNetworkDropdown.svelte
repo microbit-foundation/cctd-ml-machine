@@ -1,11 +1,16 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
 <script lang="ts">
   import RangeSlider from 'svelte-range-slider-pips';
   import StandardDropdownButton from '../../../components/buttons/StandardDropdownButton.svelte';
   import windi from './../../../../windi.config.js';
   import NumberSelector from '../../../components/NumberSelector.svelte';
   import { stores } from '../../../script/stores/Stores.js';
-    import ModelRegistry from '../../../script/domain/ModelRegistry.js';
-    import { selectModel } from '../TrainingPage.js';
+  import ModelRegistry from '../../../script/domain/ModelRegistry.js';
+  import { selectModel } from '../TrainingPage.js';
 
   export let isSelected: boolean;
   const color = windi.theme.extend.colors.primary;
@@ -21,15 +26,21 @@
   }
 </script>
 
-<StandardDropdownButton onClick={() => {selectModel(ModelRegistry.NeuralNetwork)}} fillOnHover outlined={!isSelected} small>
+<StandardDropdownButton
+  onClick={() => {
+    selectModel(ModelRegistry.NeuralNetwork);
+  }}
+  fillOnHover
+  outlined={!isSelected}
+  small>
   <p>Neural Network</p>
 
   <div slot="content" class="pb-2">
     <div class="flex flex-col">
-      <div class="grid gap-1 grid-cols-[1fr,1fr]">
+      <div class="grid gap-1 gap-x-2 grid-cols-[1fr,1fr]">
         <p class="whitespace-nowrap content-center">Learning rate</p>
         <div
-          class="w-30 flex flex-col justify-center"
+          class="flex flex-col justify-center"
           style="font-size:0.6rem; --range-handle-inactive: {color}; --range-handle: {color}; --range-handle-focus: {color}">
           <RangeSlider
             bind:value={learningRateSliderValue}
@@ -41,7 +52,7 @@
         </div>
 
         <p class="whitespace-nowrap content-center">Epochs</p>
-        <div class="justify-self-center">
+        <div class="justify-self-center px-2">
           <NumberSelector
             min={1}
             max={1000}

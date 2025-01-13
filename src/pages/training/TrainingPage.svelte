@@ -10,7 +10,7 @@
   import TrainingPageModelView from './TrainingPageModelView.svelte';
   import InsufficientData from './InsufficientData.svelte';
   import PleaseConnect from '../../components/PleaseConnect.svelte';
-    import TrainingPageTabs from './controlbar/TrainingPageTabs.svelte';
+  import TrainingPageTabs from './controlbar/TrainingPageTabs.svelte';
 
   const gestures = stores.getGestures();
   const sufficientData = gestures.hasSufficientData();

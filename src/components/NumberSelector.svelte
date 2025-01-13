@@ -1,3 +1,8 @@
+<!--
+  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
 <script lang="ts">
   export let min: number | undefined = undefined;
   export let max: number | undefined = undefined;
@@ -48,7 +53,7 @@
     on:blur={() => {
       handleChange();
     }}
-    class="min-w-14 max-w-14 text-center border-solid border-1 px-2 bg-primary border-primaryborder" />
+    class="max-w-20 text-center border-solid border-1 px-2 bg-primary border-primaryborder" />
   <span
     class="border-solid border-1 border-l-0 bg-primary rounded-r-md
     px-1 font-bold select-none cursor-pointer border-primaryborder

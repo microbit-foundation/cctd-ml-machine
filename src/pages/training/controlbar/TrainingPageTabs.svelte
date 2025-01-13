@@ -11,8 +11,8 @@
   import { Feature, hasFeature } from '../../../script/FeatureToggles';
   import { t } from '../../../i18n';
   import { stores } from '../../../script/stores/Stores';
-    import NeuralNetworkDropdown from './NeuralNetworkDropdown.svelte';
-    import KnnModelDropdown from './KNNModelDropdown.svelte';
+  import NeuralNetworkDropdown from './NeuralNetworkDropdown.svelte';
+  import KnnModelDropdown from './KNNModelDropdown.svelte';
 
   const selectedModel = stores.getSelectedModel();
 
@@ -21,12 +21,6 @@
     $selectedModel = ModelRegistry.NeuralNetwork;
   }
 
-  const onSelectNeuralNetwork = () => {
-    $selectedModel = ModelRegistry.NeuralNetwork;
-  };
-  const onSelectKnn = () => {
-    $selectedModel = ModelRegistry.KNN;
-  };
   $: isSelected = (id: string) => {
     return $selectedModel.id === id;
   };
@@ -34,16 +28,14 @@
 
 {#if showTabBar}
   <ControlBar expanded shadows={false}>
-    <div class="flex justify-between flex-row flex-grow h-full px-2">
-      <div>
-        <p>Control-Panel WIP!</p>
-      </div>
+    <div class="flex justify-end flex-row flex-grow h-full px-2">
       <div class="flex flex-row gap-2 justify-center">
         <div class="flex flex-col justify-center">
-          <NeuralNetworkDropdown isSelected={isSelected(ModelRegistry.NeuralNetwork.id)}/>
+          <NeuralNetworkDropdown
+            isSelected={isSelected(ModelRegistry.NeuralNetwork.id)} />
         </div>
         <div class="flex flex-col justify-center">
-          <KnnModelDropdown isSelected={isSelected(ModelRegistry.KNN.id)}/>
+          <KnnModelDropdown isSelected={isSelected(ModelRegistry.KNN.id)} />
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ import {
   type Unsubscriber,
   type Writable,
 } from 'svelte/store';
-import ModelRegistry, { type ModelInfo } from '../domain/ModelRegistry';
+import ModelRegistry, { type ModelInfo } from './ModelRegistry';
 import PersistantWritable from '../repository/PersistantWritable';
 
 class SelectedModel implements Writable<ModelInfo> {

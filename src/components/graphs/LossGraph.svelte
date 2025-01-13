@@ -51,8 +51,8 @@
             display: true,
             text: $t('content.trainer.lossGraph.title'),
             padding: {
-              top: 10,
-              bottom: 30,
+              top: 15,
+              bottom: 10,
             },
           },
         },
@@ -73,7 +73,6 @@
           y: {
             type: 'linear',
             min: 0,
-            max: 1,
             grid: {
               color: '#f3f3f3',
             },

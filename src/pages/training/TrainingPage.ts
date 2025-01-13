@@ -5,7 +5,6 @@
  */
 import { get, writable } from 'svelte/store';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
-import StaticConfiguration from '../../StaticConfiguration';
 import { stores } from '../../script/stores/Stores';
 import CookieManager from '../../script/CookieManager';
 import { appInsights } from '../../appInsights';
@@ -13,7 +12,6 @@ import ModelRegistry, { type ModelInfo } from '../../script/domain/ModelRegistry
 import LayersModelTrainer, {
   type LossTrainingIteration,
 } from '../../script/mlmodels/LayersModelTrainer';
-import { knnConfig } from '../../script/stores/knnConfig';
 import Logger from '../../script/utils/Logger';
 
 export const loss = writable<LossTrainingIteration[]>([]);
@@ -29,14 +27,16 @@ const trainNNModel = async () => {
   //stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
   loss.set([]);
   const modelTrainer = new LayersModelTrainer(
-    StaticConfiguration.layersModelTrainingSettings,
+    get(stores.getNeuralNetworkSettings()),
     trainingIterationHandler,
   );
   await stores.getClassifier().getModel().train(modelTrainer);
 };
 
 const trainKNNModel = async () => {
-  const modelTrainer = new KNNNonNormalizedModelTrainer(get(knnConfig).k);
+  const modelTrainer = new KNNNonNormalizedModelTrainer(
+    get(stores.getKNNModelSettings()).k,
+  );
   await stores.getClassifier().getModel().train(modelTrainer);
 };
 
@@ -60,4 +60,8 @@ const trackModelEvent = () => {
       },
     });
   }
+};
+
+export const selectModel = (model: ModelInfo) => {
+  stores.getSelectedModel().set(model);
 };

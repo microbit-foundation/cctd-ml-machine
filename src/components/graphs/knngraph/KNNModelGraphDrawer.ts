@@ -13,7 +13,6 @@ import {
 } from '../../../script/utils/graphUtils';
 import { state, stores } from '../../../script/stores/Stores';
 import { get } from 'svelte/store';
-import { knnConfig } from '../../../script/stores/knnConfig';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -75,7 +74,7 @@ class KNNModelGraphDrawer {
           const bDist = distanceBetween(drawableLivePointVector, [b.x, b.y, b.z]);
           return aDist - bDist;
         })
-        .slice(0, get(knnConfig).k);
+        .slice(0, get(stores.getKNNModelSettings()).k);
 
       const lines = this.svg.selectAll(`line.points-class`).data(predictedPoints);
       lines

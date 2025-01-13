@@ -6,7 +6,7 @@
 import { get, type Readable, type Unsubscriber, type Writable } from 'svelte/store';
 import Classifier from './Classifier';
 import { type Subscriber } from 'svelte/motion';
-import SelectedModel from '../../stores/SelectedModel';
+import SelectedModel from '../SelectedModel';
 import ModelRegistry from '../ModelRegistry';
 import type { Axis } from '../Axis';
 import { trainModel } from '../../../pages/training/TrainingPage';

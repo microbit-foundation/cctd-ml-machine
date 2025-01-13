@@ -10,12 +10,13 @@
   import ModelRegistry from '../../script/domain/ModelRegistry';
   import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
   import { t } from '../../i18n';
-  import { knnConfig } from '../../script/stores/knnConfig';
   import PredictionLegend from './PredictionLegend.svelte';
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
   const filters = classifier.getFilters();
   const highlightedAxis = stores.getHighlightedAxes();
+
+  const knnModelSettings = stores.getKNNModelSettings();
 
   $: {
     if (!$classifier.model.isTrained) {
@@ -29,13 +30,13 @@
   );
   const maxK = noOfRecordings;
   const changeK = (amount: number) => {
-    const newVal = Math.max($knnConfig.k + amount, 1);
-    knnConfig.set({ k: newVal });
+    const newVal = Math.max($knnModelSettings.k + amount, 1);
+    knnModelSettings.setK(newVal);
     trainModel(ModelRegistry.KNN);
   };
   $: {
-    if ($knnConfig.k > maxK) {
-      knnConfig.set({ k: maxK });
+    if ($knnModelSettings.k > maxK) {
+      knnModelSettings.setK(maxK);
     }
   }
 </script>
@@ -59,7 +60,7 @@
           </div>
         </div>
         <p class="text-md content-center">
-          {$knnConfig.k}
+          {$knnModelSettings.k}
           {$t('content.trainer.knn.neighbours')}
         </p>
       </div>

@@ -7,9 +7,11 @@
 <style>
   .normal {
     padding: 12px 40px;
+    font-size: 16px;
   }
   .small {
     padding: 1px 10px;
+    font-size: 14px;
   }
   .outlined {
     color: var(--color);

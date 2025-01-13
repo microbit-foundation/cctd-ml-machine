@@ -7,10 +7,10 @@
 <script lang="ts">
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
   import { state, stores } from '../../script/stores/Stores';
-  import TrainingPageTabs from './TrainingPageTabs.svelte';
   import TrainingPageModelView from './TrainingPageModelView.svelte';
   import InsufficientData from './InsufficientData.svelte';
   import PleaseConnect from '../../components/PleaseConnect.svelte';
+  import TrainingPageTabs from './controlbar/TrainingPageTabs.svelte';
 
   const gestures = stores.getGestures();
   const sufficientData = gestures.hasSufficientData();

@@ -25,6 +25,7 @@
 
   let isConnectionDialogOpen = false;
   const gestures = stores.getGestures();
+  const availableAxes = stores.getAvailableAxes();
 
   $: hasSomeData = (): boolean => {
     if ($gestures.length === 0) {
@@ -74,6 +75,7 @@
     gestures.getGestures()[0].setName($t('content.data.noData.exampleName.shake'));
     gestures.getGestures()[1].setName($t('content.data.noData.exampleName.still'));
     gestures.getGestures()[2].setName($t('content.data.noData.exampleName.circle'));
+    availableAxes.loadFromGestures();
   };
 </script>
 

@@ -134,7 +134,7 @@ class Stores implements Readable<StoresType> {
     return this.selectedModel;
   }
 
-  public getAvailableAxes(): Readable<Axis[]> {
+  public getAvailableAxes(): AvailableAxes {
     return this.availableAxes;
   }
 

@@ -22,9 +22,9 @@ class AvailableAxes implements Readable<Axis[]> {
 
   constructor(
     liveData: Readable<LiveData<LiveDataVector> | undefined>,
-    gestures: Gestures,
+    private gestures: Gestures,
   ) {
-    this.value = writable(this.getInitalAxes(gestures));
+    this.value = writable(this.getAxesFromGestures(gestures));
     liveData.subscribe(data => {
       const unsubscriber = this.listenToLiveData(data);
       return () => {
@@ -33,7 +33,7 @@ class AvailableAxes implements Readable<Axis[]> {
     });
   }
 
-  private getInitalAxes(gestures: Gestures) {
+  private getAxesFromGestures(gestures: Gestures) {
     if (gestures.getGestures().length > 0) {
       const recordings = gestures.getGestures()[0].getRecordings();
       if (recordings.length > 0) {
@@ -53,6 +53,11 @@ class AvailableAxes implements Readable<Axis[]> {
     }
     return [];
   }
+
+  public loadFromGestures() {
+    this.value.set(this.getAxesFromGestures(this.gestures));
+  }
+
   public subscribe(
     run: Subscriber<Axis[]>,
     invalidate?: (value?: Axis[]) => void,

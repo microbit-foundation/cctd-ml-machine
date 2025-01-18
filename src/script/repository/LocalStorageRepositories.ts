@@ -10,6 +10,8 @@ import LocalStorageTrainingDataRepository from './LocalStorageTrainingDataReposi
 import type { Repositories } from '../domain/Repositories';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type Snackbar from '../../components/snackbar/Snackbar';
+import { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
+import type { FiltersRepository } from '../domain/FiltersRepository';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;
@@ -17,6 +19,8 @@ class LocalStorageRepositories implements Repositories {
   private classifierRepository: LocalStorageClassifierRepository;
 
   private trainingDataRepository: LocalStorageTrainingDataRepository;
+
+  private filtersRepository: LocalStorageFiltersRepository;
 
   private static instance: LocalStorageRepositories;
 
@@ -27,11 +31,16 @@ class LocalStorageRepositories implements Repositories {
     }
     LocalStorageRepositories.instance = this;
     const confidences = new Confidences();
-    this.trainingDataRepository = new LocalStorageTrainingDataRepository(this);
+    this.filtersRepository = new LocalStorageFiltersRepository();
+    this.trainingDataRepository = new LocalStorageTrainingDataRepository(
+      this,
+      this.filtersRepository,
+    );
     this.classifierRepository = new LocalStorageClassifierRepository(
       confidences,
       this.trainingDataRepository,
       snackbar,
+      this.filtersRepository,
     );
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }
@@ -50,6 +59,10 @@ class LocalStorageRepositories implements Repositories {
 
   public getTrainingDataRepository(): TrainingDataRepository {
     return this.trainingDataRepository;
+  }
+
+  public getFiltersRepository(): FiltersRepository {
+    return this.filtersRepository;
   }
 }
 

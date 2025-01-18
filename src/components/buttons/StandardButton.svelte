@@ -57,6 +57,7 @@
   export let bold = true;
   export let shadows = true;
   export let disabledTooltip: string | undefined = undefined;
+  export let icon: string | undefined = undefined;
 
   const bgColors: { [key in variants]: string } = {
     primary: windi.theme.extend.colors.primary,
@@ -86,6 +87,9 @@
       on:click={onClick}>
       <div class="flex flex-row justify-between justify-center items-center">
         <slot />
+        {#if icon}
+          <img alt="" class="max-h-6 ml-2 -mr-3" src={icon} />
+        {/if}
       </div>
     </button>
   </Tooltip>
@@ -105,6 +109,9 @@
     on:click={onClick}>
     <div class="flex flex-row justify-between justify-center items-center">
       <slot />
+      {#if icon}
+        <img alt="" class="max-h-6 ml-2 -mr-3" src={icon} />
+      {/if}
     </div>
   </button>
 {/if}

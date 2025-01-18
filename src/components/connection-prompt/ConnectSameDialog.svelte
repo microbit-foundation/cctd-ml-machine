@@ -27,7 +27,7 @@
         {$t('connectMB.outputMB.same')}
       </h1>
 
-      <StandardButton>{$t('connectMB.outputMB.sameButton')}</StandardButton>
+      <StandardButton icon="/imgs/microbit_icon.png">{$t('connectMB.outputMB.sameButton')}</StandardButton>
     </div>
     <div
       class="hover:cursor-pointer ml-2 border-gray-200 border border-solid rounded-lg p-6 shadow-lg"
@@ -36,7 +36,9 @@
         {$t('connectMB.outputMB.different')}
       </h1>
 
-      <StandardButton>{$t('connectMB.outputMB.otherButton')}</StandardButton>
+      <StandardButton icon="/imgs/microbit_icon_two.png">
+        {$t('connectMB.outputMB.otherButton')}
+      </StandardButton>
     </div>
   </div>
 </main>

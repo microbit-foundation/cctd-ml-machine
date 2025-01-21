@@ -97,7 +97,11 @@ class PollingPredictorEngine implements Engine {
             .filter((vecVal, vecIdx) =>
               this.highlightedAxes.isAxisIndexHighlighted(vecIdx),
             ),
-          e.value.getLabels(),
+          e.value
+            .getLabels()
+            .filter((labelVal, vecIdx) =>
+              this.highlightedAxes.isAxisIndexHighlighted(vecIdx),
+            ),
         ),
     );
     return new ClassifierInput(sampleVectors);

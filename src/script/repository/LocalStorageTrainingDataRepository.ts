@@ -11,17 +11,18 @@ import type { Repositories } from '../domain/Repositories';
 import type { RecordingData } from '../domain/stores/gesture/Gestures';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import { stores } from '../stores/Stores';
+import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 
 class LocalStorageTrainingDataRepository implements TrainingDataRepository {
-  constructor(private repositories: Repositories) {}
+  constructor(private repositories: Repositories, private filtersRepository: LocalStorageFiltersRepository) { }
 
   public getTrainingData(): TrainingData {
     const gestures = get(this.repositories.getGestureRepository());
 
-    const filters = this.repositories.getClassifierRepository().getFilters();
+    const filters = this.filtersRepository.getFilters();
     const classes = gestures.map(gesture => {
       return {
-        samples: this.buildFilteredSamples(gesture.getRecordings(), new Filters(filters)),
+        samples: this.buildFilteredSamples(gesture.getRecordings(), filters),
       };
     });
 

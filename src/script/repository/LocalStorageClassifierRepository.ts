@@ -11,7 +11,6 @@ import type { ModelTrainer } from '../domain/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
 import LocalStorageRepositories from './LocalStorageRepositories';
 import Filters from '../domain/Filters';
-import { type Filter } from '../domain/Filter';
 import FilterTypes, { FilterType } from '../domain/FilterTypes';
 import Gesture, { type GestureID } from '../domain/stores/gesture/Gesture';
 import Classifier from '../domain/stores/Classifier';
@@ -21,29 +20,23 @@ import type { ClassifierRepository } from '../domain/ClassifierRepository';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type Snackbar from '../../components/snackbar/Snackbar';
 import { t } from '../../i18n';
+import type { FiltersRepository } from '../domain/FiltersRepository';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
 ) => Promise<void>;
 
 class LocalStorageClassifierRepository implements ClassifierRepository {
-  private static readonly PERSISTANT_FILTERS_KEY = 'filters';
   private static mlModel: Writable<MLModel | undefined>;
-  private static filters: Filters;
-  private static persistedFilters: PersistantWritable<FilterType[]>;
   private classifierFactory: ClassifierFactory;
 
   constructor(
     private confidences: Confidences,
     private trainingDataRepository: TrainingDataRepository,
     private snackbar: Snackbar,
+    private filtersRepository: FiltersRepository,
   ) {
     LocalStorageClassifierRepository.mlModel = writable(undefined);
-    LocalStorageClassifierRepository.persistedFilters = new PersistantWritable(
-      FilterTypes.toIterable(),
-      LocalStorageClassifierRepository.PERSISTANT_FILTERS_KEY,
-    );
-    LocalStorageClassifierRepository.filters = new Filters(this.getFilters());
     this.classifierFactory = new ClassifierFactory();
   }
 
@@ -54,7 +47,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
     const classifier = this.classifierFactory.buildClassifier(
       LocalStorageClassifierRepository.mlModel,
       this.getTrainerConsumer(),
-      LocalStorageClassifierRepository.filters,
+      this.filtersRepository.getFilters(),
       gestureRepository,
       (gestureId: GestureID, confidence: number) => {
         this.setGestureConfidence(gestureId, confidence);
@@ -91,32 +84,6 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
       throw new Error('Cannot set gesture confidence. Must be in the range 0.0-1.0');
     }
     this.confidences.setConfidence(gestureId, confidence);
-  }
-
-  // TODO: Replace with a repository see GitHub issue !557
-  public getFilters(): Writable<Filter[]> {
-    // Create and fetch a persistant store
-    const derivedStore = derived(
-      [LocalStorageClassifierRepository.persistedFilters],
-      stores => {
-        const persistedFilters = stores[0];
-        return persistedFilters.map(persistedFilter =>
-          FilterTypes.createFilter(persistedFilter),
-        );
-      },
-    );
-    // Convert a store of type 'FilterType' to type 'filter'.
-    return {
-      subscribe: derivedStore.subscribe,
-      set: newFiltersArray =>
-        LocalStorageClassifierRepository.persistedFilters.set(
-          newFiltersArray.map(newFilter => newFilter.getType()),
-        ),
-      update: updater => {
-        const updatedStore = updater(get(derivedStore)).map(filter => filter.getType());
-        LocalStorageClassifierRepository.persistedFilters.set(updatedStore);
-      },
-    };
   }
 
   public getGestureConfidence(gestureId: number): GestureConfidence {

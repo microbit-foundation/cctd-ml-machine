@@ -5,6 +5,7 @@
  */
 
 import type { ClassifierRepository } from './ClassifierRepository';
+import type { FiltersRepository } from './FiltersRepository';
 import type { GestureRepository } from './GestureRepository';
 import type { TrainingDataRepository } from './TrainingDataRepository';
 
@@ -14,4 +15,6 @@ export interface Repositories {
   getClassifierRepository(): ClassifierRepository;
 
   getTrainingDataRepository(): TrainingDataRepository;
+
+  getFiltersRepository(): FiltersRepository;
 }

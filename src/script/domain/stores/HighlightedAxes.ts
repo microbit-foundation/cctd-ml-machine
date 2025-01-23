@@ -3,7 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { derived, get, type Readable, type Unsubscriber, type Writable } from 'svelte/store';
+import {
+  derived,
+  get,
+  type Readable,
+  type Unsubscriber,
+  type Writable,
+} from 'svelte/store';
 import Classifier from './Classifier';
 import { type Subscriber } from 'svelte/motion';
 import SelectedModel from '../SelectedModel';
@@ -54,7 +60,7 @@ class HighlightedAxes implements Writable<Axis[]> {
     invalidate?: (value?: Axis[]) => void,
   ): Unsubscriber {
     return derived([this.value], ([store]) => {
-      return [...store].toSorted((a, b) => a.index - b.index)
+      return [...store].toSorted((a, b) => a.index - b.index);
     }).subscribe(run, invalidate);
   }
 

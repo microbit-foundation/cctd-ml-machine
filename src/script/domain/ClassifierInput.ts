@@ -13,17 +13,11 @@ export class ClassifierInput {
     if (this.samples.length === 0) {
       return [];
     }
-
     const vectorSize = this.samples[0].getSize();
-    const inputUnfiltered: number[][] = new Array(vectorSize).fill([]);
 
-    this.samples.forEach(smpl =>
-      smpl.getVector().forEach((k, idx) => {
-        inputUnfiltered[idx].push(k);
-      }),
-    );
-
-    return inputUnfiltered.flatMap(e => filters.compute(e));
+    return Array.from({ length: vectorSize }, (_, i) =>
+      filters.compute(this.samples.map(e => e.getVector()[i])),
+    ).flat();
   }
 
   public getNumberOfSamples(): number {

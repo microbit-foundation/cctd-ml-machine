@@ -14,7 +14,10 @@ import { stores } from '../stores/Stores';
 import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 
 class LocalStorageTrainingDataRepository implements TrainingDataRepository {
-  constructor(private repositories: Repositories, private filtersRepository: LocalStorageFiltersRepository) { }
+  constructor(
+    private repositories: Repositories,
+    private filtersRepository: LocalStorageFiltersRepository,
+  ) {}
 
   public getTrainingData(): TrainingData {
     const gestures = get(this.repositories.getGestureRepository());

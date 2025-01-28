@@ -12,9 +12,10 @@ import PersistantWritable from './script/repository/PersistantWritable';
 
 register('en', () => import('./messages/ui.en.json'));
 register('da', () => import('./messages/ui.da.json'));
+register('de', () => import('./messages/ui.de.json'));
 
 const initialLocale = browserLang({
-  languages: ['en', 'da'],
+  languages: ['en', 'da', 'de'],
   fallback: 'en',
 });
 

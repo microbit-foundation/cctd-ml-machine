@@ -22,7 +22,7 @@ class ClassifierFactory {
     filters: Filters,
     gestures: Readable<Gesture[]>,
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
-    snackbar: Snackbar,
+    snackbar: Snackbar, // Maybe an event could be fired instead of passing the snackbar around
   ): Classifier {
     const classifier = new Classifier(
       this.buildModel(trainerConsumer, model),

@@ -30,13 +30,13 @@
     const xs = randGesture.getRecordings()[0].samples.map(e => e.vector[0]);
     const ys = randGesture.getRecordings()[0].samples.map(e => e.vector[1]);
     const zs = randGesture.getRecordings()[0].samples.map(e => e.vector[2]);
-    const input = new ClassifierInput(
-      randGesture
-        .getRecordings()[0]
-        .samples.map(
-          e => new BaseVector(e.vector, randGesture.getRecordings()[0].labels),
-        ),
-    );
+
+    const labels = randGesture.getRecordings()[0].labels;
+    const bufferedData = randGesture.getRecordings()[0].samples.map(e => e.vector);
+
+    const sampleVectors = bufferedData.map(e => new BaseVector(e, labels));
+
+    const input = new ClassifierInput(sampleVectors);
     classifier.classify(input).then(() => {
       playgroundContext.addMessage('Finished predicting');
     });

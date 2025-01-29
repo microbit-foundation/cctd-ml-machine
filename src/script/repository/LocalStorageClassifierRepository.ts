@@ -79,6 +79,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
     return <T extends MLModel>(trainer: ModelTrainer<T>) => this.trainModel(trainer);
   }
 
+  /* TODO: feels wrong to have this in the classifier repository, maybe? Shouldn't confidence relate to gestures? */
   public setGestureConfidence(gestureId: GestureID, confidence: number) {
     if (confidence < 0 || confidence > 1) {
       throw new Error('Cannot set gesture confidence. Must be in the range 0.0-1.0');

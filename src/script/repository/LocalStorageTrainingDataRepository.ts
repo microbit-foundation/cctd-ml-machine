@@ -34,13 +34,18 @@ class LocalStorageTrainingDataRepository implements TrainingDataRepository {
     };
   }
 
-  private buildFilteredSamples(recordings: RecordingData[], filters: Filters) {
+  private buildFilteredSamples(
+    recordings: RecordingData[],
+    filters: Filters,
+  ): { value: number[] }[] {
     return recordings.map(recording => {
       const data = recording.samples;
       const highlightedAxes = get(stores.getHighlightedAxes());
       const value = highlightedAxes
         .toSorted((a, b) => a.index - b.index)
-        .flatMap(e => filters.compute(data.map(d => d.vector[e.index])));
+        .flatMap(e => {
+          return filters.compute(data.map(d => d.vector[e.index]));
+        });
       return {
         value: value,
       };

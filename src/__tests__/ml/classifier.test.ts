@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import BaseVector from '../../script/domain/BaseVector';
 import { ClassifierInput } from '../../script/domain/ClassifierInput';
 import Filters from '../../script/domain/Filters';
@@ -15,6 +15,14 @@ import { stores } from '../../script/stores/Stores';
 import TestMLModelTrainer from '../mocks/mlmodel/TestMLModelTrainer';
 import type { Filter } from '../../script/domain/Filter';
 import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
+import ClassifierFactory from '../../script/domain/ClassifierFactory';
+import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
+import StaticConfiguration from '../../StaticConfiguration';
+import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
+import TestGestureRepository from '../mocks/TestGestureRepository';
+import Confidences from '../../script/domain/stores/Confidences';
+import Snackbar from '../../components/snackbar/Snackbar';
+import { repeat } from '../testUtils';
 
 describe('Classifier tests', () => {
   test('Changing matrix does not mark model as untrained', async () => {
@@ -103,5 +111,187 @@ describe('Classifier tests', () => {
       // y value max/min
       20, 2,
     ]);
+  });
+
+  test('Classifying Should Not Throw', async () => {
+    const vectors = [
+      new BaseVector([1, 2, 4], ['x', 'y', 'z']),
+      new BaseVector([4, 8, 16], ['x', 'y', 'z']),
+      new BaseVector([10, 20, 40], ['x', 'y', 'z']),
+    ];
+    const classifierInput = new ClassifierInput(vectors);
+    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
+    const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
+    const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+    const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
+
+    let iterations = 0;
+
+    const trainingData = new TestTrainingDataRepository().getTrainingData();
+    const trainedModel = await new LayersModelTrainer(
+      StaticConfiguration.defaultNeuralNetworkSettings,
+      () => (iterations += 1),
+    ).trainModel(trainingData);
+    const model = writable(trainedModel);
+
+    const gestureRepository = new TestGestureRepository();
+    gestureRepository.addGesture({
+      color: 'blue',
+      ID: 1,
+      name: 'test',
+      output: {},
+      recordings: [],
+    });
+    gestureRepository.addGesture({
+      color: 'blue',
+      ID: 2,
+      name: 'test',
+      output: {},
+      recordings: [],
+    });
+    gestureRepository.addGesture({
+      color: 'blue',
+      ID: 3,
+      name: 'test',
+      output: {},
+      recordings: [],
+    });
+
+    const confidences = new Confidences();
+    const classifier = new ClassifierFactory().buildClassifier(
+      model,
+      async () => void 0,
+      filters,
+      gestureRepository,
+      (gestureId, confidence) => confidences.setConfidence(gestureId, confidence),
+      new Snackbar(),
+    );
+
+    expect(async () => await classifier.classify(classifierInput)).not.throws();
+  });
+
+  test('Classifier should set confidence', async () => {
+    const vectors = [
+      new BaseVector([1, 2, 4], ['x', 'y', 'z']),
+      new BaseVector([4, 8, 16], ['x', 'y', 'z']),
+      new BaseVector([10, 20, 40], ['x', 'y', 'z']),
+    ];
+    const classifierInput = new ClassifierInput(vectors);
+    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
+    const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
+    const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+    const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
+
+    let iterations = 0;
+
+    const trainingData = new TestTrainingDataRepository().getTrainingData();
+    const trainedModel = await new LayersModelTrainer(
+      StaticConfiguration.defaultNeuralNetworkSettings,
+      () => (iterations += 1),
+    ).trainModel(trainingData);
+    const model = writable(trainedModel);
+
+    const gestureRepository = new TestGestureRepository();
+    gestureRepository.addGesture({
+      color: 'blue',
+      ID: 1,
+      name: 'test',
+      output: {},
+      recordings: [],
+    });
+    gestureRepository.addGesture({
+      color: 'blue',
+      ID: 2,
+      name: 'test',
+      output: {},
+      recordings: [],
+    });
+    gestureRepository.addGesture({
+      color: 'blue',
+      ID: 3,
+      name: 'test',
+      output: {},
+      recordings: [],
+    });
+
+    const confidences = new Confidences();
+
+    const classifier = new ClassifierFactory().buildClassifier(
+      model,
+      async () => void 0,
+      filters,
+      gestureRepository,
+      (gestureId, confidence) => confidences.setConfidence(gestureId, confidence),
+      new Snackbar(),
+    );
+
+    await classifier.classify(classifierInput);
+
+    expect(get(confidences).size).toBe(3);
+  });
+
+  test('Classifier should correctly classify', async () => {
+    const vectors = [
+      new BaseVector([1, 2, 4], ['x', 'y', 'z']),
+      new BaseVector([4, 8, 16], ['x', 'y', 'z']),
+      new BaseVector([10, 20, 40], ['x', 'y', 'z']),
+    ];
+    const classifierInput = new ClassifierInput(vectors);
+    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
+    const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
+    const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+    const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
+
+    let iterations = 0;
+
+    const trainingData = new TestTrainingDataRepository().getTrainingData();
+    const trainedModel = await new LayersModelTrainer(
+      StaticConfiguration.defaultNeuralNetworkSettings,
+      () => (iterations += 1),
+    ).trainModel(trainingData);
+    const model = writable(trainedModel);
+
+    const gestureRepository = new TestGestureRepository();
+    gestureRepository.addGesture({
+      color: 'blue',
+      ID: 1,
+      name: 'test',
+      output: {},
+      recordings: [],
+    });
+    gestureRepository.addGesture({
+      color: 'blue',
+      ID: 2,
+      name: 'test',
+      output: {},
+      recordings: [],
+    });
+    gestureRepository.addGesture({
+      color: 'blue',
+      ID: 3,
+      name: 'test',
+      output: {},
+      recordings: [],
+    });
+
+    const confidences = new Confidences();
+
+    const classifier = new ClassifierFactory().buildClassifier(
+      model,
+      async () => void 0,
+      filters,
+      gestureRepository,
+      (gestureId, confidence) => confidences.setConfidence(gestureId, confidence),
+      new Snackbar(),
+    );
+
+    // This is based on known correct results
+    await classifier.classify(classifierInput)
+
+    expect(get(confidences).get(1)).toBeCloseTo(0);
+    expect(get(confidences).get(2)).toBeCloseTo(0);
+    expect(get(confidences).get(3)).toBeCloseTo(1);
+  }, {
+    repeats: 20, retry: 2
   });
 });

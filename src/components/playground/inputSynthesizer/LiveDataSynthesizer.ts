@@ -45,15 +45,16 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
   private referenceStoreGetter: () => SyntheticLiveData;
 
   constructor() {
-    this.store = writable();
-    this.referenceStoreGetter = () => null!;
-    /*
     this.store = writable({
       intervalSpeed: this.getInitialIntervalValue(),
       speeds: [this.getInitialSineSpeed()],
       isActive: false,
       noOfAxes: 1,
     } as LiveDataSynthesizerOptions);
+    //stores.setLiveData(new SyntheticLiveData(["x", "y", "z", "w"]))
+    this.referenceStoreGetter = () => get(stores).liveData as SyntheticLiveData;
+    /*
+
     stores.setLiveData(new SyntheticLiveData([letters[0]]));
     this.referenceStoreGetter = () => get(stores).liveData as SyntheticLiveData;
 */

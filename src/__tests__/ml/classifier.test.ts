@@ -99,7 +99,7 @@ describe('Classifier tests', () => {
     const filters: Filters = new Filters(writable([filterMax, filterMin]));
     expect(input.getInput(filters)).toStrictEqual([
       // x value max/min
-      1, 10,
+      10, 1,
       // y value max/min
       20, 2,
     ]);

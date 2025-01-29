@@ -230,68 +230,73 @@ describe('Classifier tests', () => {
     expect(get(confidences).size).toBe(3);
   });
 
-  test('Classifier should correctly classify', async () => {
-    const vectors = [
-      new BaseVector([1, 2, 4], ['x', 'y', 'z']),
-      new BaseVector([4, 8, 16], ['x', 'y', 'z']),
-      new BaseVector([10, 20, 40], ['x', 'y', 'z']),
-    ];
-    const classifierInput = new ClassifierInput(vectors);
-    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
-    const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
-    const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
-    const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
+  test(
+    'Classifier should correctly classify',
+    async () => {
+      const vectors = [
+        new BaseVector([1, 2, 4], ['x', 'y', 'z']),
+        new BaseVector([4, 8, 16], ['x', 'y', 'z']),
+        new BaseVector([10, 20, 40], ['x', 'y', 'z']),
+      ];
+      const classifierInput = new ClassifierInput(vectors);
+      const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
+      const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
+      const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+      const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
 
-    let iterations = 0;
+      let iterations = 0;
 
-    const trainingData = new TestTrainingDataRepository().getTrainingData();
-    const trainedModel = await new LayersModelTrainer(
-      StaticConfiguration.defaultNeuralNetworkSettings,
-      () => (iterations += 1),
-    ).trainModel(trainingData);
-    const model = writable(trainedModel);
+      const trainingData = new TestTrainingDataRepository().getTrainingData();
+      const trainedModel = await new LayersModelTrainer(
+        StaticConfiguration.defaultNeuralNetworkSettings,
+        () => (iterations += 1),
+      ).trainModel(trainingData);
+      const model = writable(trainedModel);
 
-    const gestureRepository = new TestGestureRepository();
-    gestureRepository.addGesture({
-      color: 'blue',
-      ID: 1,
-      name: 'test',
-      output: {},
-      recordings: [],
-    });
-    gestureRepository.addGesture({
-      color: 'blue',
-      ID: 2,
-      name: 'test',
-      output: {},
-      recordings: [],
-    });
-    gestureRepository.addGesture({
-      color: 'blue',
-      ID: 3,
-      name: 'test',
-      output: {},
-      recordings: [],
-    });
+      const gestureRepository = new TestGestureRepository();
+      gestureRepository.addGesture({
+        color: 'blue',
+        ID: 1,
+        name: 'test',
+        output: {},
+        recordings: [],
+      });
+      gestureRepository.addGesture({
+        color: 'blue',
+        ID: 2,
+        name: 'test',
+        output: {},
+        recordings: [],
+      });
+      gestureRepository.addGesture({
+        color: 'blue',
+        ID: 3,
+        name: 'test',
+        output: {},
+        recordings: [],
+      });
 
-    const confidences = new Confidences();
+      const confidences = new Confidences();
 
-    const classifier = new ClassifierFactory().buildClassifier(
-      model,
-      async () => void 0,
-      filters,
-      gestureRepository,
-      (gestureId, confidence) => confidences.setConfidence(gestureId, confidence),
-      new Snackbar(),
-    );
+      const classifier = new ClassifierFactory().buildClassifier(
+        model,
+        async () => void 0,
+        filters,
+        gestureRepository,
+        (gestureId, confidence) => confidences.setConfidence(gestureId, confidence),
+        new Snackbar(),
+      );
 
-    // This is based on known correct results
-    await classifier.classify(classifierInput)
+      // This is based on known correct results
+      await classifier.classify(classifierInput);
 
-    expect(get(confidences).get(1)).toBeCloseTo(0);
-    expect(get(confidences).get(2)).toBeCloseTo(0);
-    expect(get(confidences).get(3)).toBeCloseTo(1);
-  }, {
-    repeats: 20, retry: 2
-  });
+      expect(get(confidences).get(1)).toBeCloseTo(0);
+      expect(get(confidences).get(2)).toBeCloseTo(0);
+      expect(get(confidences).get(3)).toBeCloseTo(1);
+    },
+    {
+      repeats: 20,
+      retry: 2,
+    },
+  );
 });

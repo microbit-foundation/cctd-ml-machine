@@ -14,7 +14,7 @@ class KNNMLModel implements MLModel {
   ) {}
   public async predict(filteredData: number[]): Promise<number[]> {
     const inputTensor = tensor(filteredData);
-    console.warn(filteredData)
+    console.warn(filteredData);
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call

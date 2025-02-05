@@ -13,6 +13,7 @@ import {
 } from '../../../script/utils/graphUtils';
 import { state, stores } from '../../../script/stores/Stores';
 import { get } from 'svelte/store';
+import * as d3 from "d3";
 
 export type GraphDrawConfig = {
   xRot: number;

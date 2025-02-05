@@ -26,6 +26,9 @@
     opacity: 1;
     color: white;
   }
+  .filled:hover {
+    opacity: 85%;
+  }
   .fillOnHover:hover {
     background-color: var(--color);
     opacity: 1;

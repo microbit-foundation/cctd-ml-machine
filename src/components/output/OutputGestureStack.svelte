@@ -23,13 +23,12 @@
   import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
   import GestureTilePart from '../GestureTilePart.svelte';
   import PinSelector from './PinSelector.svelte';
-  import { state } from '../../script/stores/uiStore';
   import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
-  import MBSpecs from '../../script/microbit-interfacing/MBSpecs';
-  import Gesture, { SoundData } from '../../script/domain/stores/gesture/Gesture';
-  import { stores } from '../../script/stores/Stores';
+  import Gesture, { type SoundData } from '../../script/domain/stores/gesture/Gesture';
+  import { state, stores } from '../../script/stores/Stores';
+  import { MBSpecs } from 'microbyte';
 
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
@@ -104,7 +103,7 @@
   }
 
   function setOutputPin(on: boolean) {
-    if (!Microbits.isOutputReady()) {
+    if (!Microbits.isOutputConnected()) {
       return;
     }
 
@@ -133,11 +132,11 @@
     if (selectedSound === undefined) {
       return;
     }
-    if (!Microbits.isOutputAssigned()) {
+    if (!Microbits.isOutputConnected()) {
       return;
     }
 
-    if (Microbits.getAssignedOutput().getVersion() === 1) {
+    if (Microbits.getOutput().getLastVersion() === 1) {
       const sound = new Audio(selectedSound.path);
       void sound.play();
     } else {

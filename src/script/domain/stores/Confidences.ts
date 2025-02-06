@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
   get,
   writable,
 } from 'svelte/store';
-import { GestureID } from './gesture/Gesture';
+import { type GestureID } from './gesture/Gesture';
 
 type GestureConfidenceMap = Map<GestureID, number>;
 

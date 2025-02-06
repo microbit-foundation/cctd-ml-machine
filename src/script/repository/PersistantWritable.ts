@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  Invalidator,
-  Subscriber,
-  Unsubscriber,
-  Updater,
-  Writable,
+  type Invalidator,
+  type Subscriber,
+  type Unsubscriber,
+  type Updater,
+  type Writable,
   get,
   writable,
 } from 'svelte/store';

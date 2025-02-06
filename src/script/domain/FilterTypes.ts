@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import Filter from '../domain/Filter';
 import MaxFilter from '../filters/MaxFilter';
 import MeanFilter from '../filters/MeanFilter';
 import MinFilter from '../filters/MinFilter';
@@ -12,6 +11,7 @@ import RootMeanSquareFilter from '../filters/RootMeanSquareFilter';
 import StandardDeviationFilter from '../filters/StandardDeviationFilter';
 import TotalAccFilter from '../filters/TotalAccFilter';
 import ZeroCrossingRateFilter from '../filters/ZeroCrossingRateFilter';
+import type { Filter } from './Filter';
 
 export enum FilterType {
   MAX,

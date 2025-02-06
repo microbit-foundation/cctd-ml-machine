@@ -5,13 +5,12 @@
  -->
 
 <script lang="ts">
-  import { state } from '../../script/stores/uiStore';
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
-  import { stores } from '../../script/stores/Stores';
-  import TrainingPageTabs from './TrainingPageTabs.svelte';
+  import { state, stores } from '../../script/stores/Stores';
   import TrainingPageModelView from './TrainingPageModelView.svelte';
   import InsufficientData from './InsufficientData.svelte';
   import PleaseConnect from '../../components/PleaseConnect.svelte';
+  import TrainingPageTabs from './controlbar/TrainingPageTabs.svelte';
 
   const gestures = stores.getGestures();
   const sufficientData = gestures.hasSufficientData();
@@ -24,10 +23,5 @@
     <InsufficientData />
   {:else}
     <TrainingPageModelView />
-  {/if}
-  {#if !$state.isInputConnected}
-    <div class="mt-5">
-      <PleaseConnect />
-    </div>
   {/if}
 </div>

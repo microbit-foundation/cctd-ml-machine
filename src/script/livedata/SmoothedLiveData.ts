@@ -3,12 +3,12 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Subscriber, Unsubscriber, derived } from 'svelte/store';
+import { type Readable, type Subscriber, type Unsubscriber, derived } from 'svelte/store';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
-import LiveData from '../domain/stores/LiveData';
-import { LiveDataVector } from '../domain/stores/LiveDataVector';
-import BaseVector from './BaseVector';
+import { type LiveDataVector } from '../domain/stores/LiveDataVector';
+import BaseVector from '../domain/BaseVector';
+import type { LiveData } from '../domain/stores/LiveData';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.

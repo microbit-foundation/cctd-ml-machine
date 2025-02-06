@@ -3,14 +3,14 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable } from 'svelte/store';
+import { type Readable } from 'svelte/store';
 import LiveDataBuffer from '../LiveDataBuffer';
-import { LiveDataVector } from './LiveDataVector';
+import { type LiveDataVector } from './LiveDataVector';
 
 /**
  * A container for real-time data. Uses a LiveDataBuffer to store data points.
  */
-interface LiveData<T extends LiveDataVector> extends Readable<T> {
+export interface LiveData<T extends LiveDataVector> extends Readable<T> {
   /**
    * Inserts a new data point to the LiveData object
    */
@@ -32,5 +32,3 @@ interface LiveData<T extends LiveDataVector> extends Readable<T> {
    */
   getLabels(): string[];
 }
-
-export default LiveData;

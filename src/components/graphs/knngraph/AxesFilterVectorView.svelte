@@ -5,21 +5,22 @@
  -->
 
 <script lang="ts">
-  import { Unsubscriber, derived, get } from 'svelte/store';
+  import { type Unsubscriber, derived, get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import Axes from '../../../script/domain/Axes';
   import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';
-  import { highlightedAxis } from '../../../script/stores/uiStore';
   import arrowCreate from 'arrows-svg';
   import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
   import { stores } from '../../../script/stores/Stores';
   import { asAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
+  import type { Axis } from '../../../script/domain/Axis';
 
   const classifier = stores.getClassifier();
 
   $: liveData = $stores.liveData;
+  const highlightedAxis = stores.getHighlightedAxes();
+  const availableAxes = stores.getAvailableAxes();
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -48,29 +49,19 @@
     });
   };
 
-  const updateArrows = (axis: Axes | undefined) => {
-    if (axis) {
-      const getId = (): string => {
-        if ($highlightedAxis === Axes.X) {
-          return 'fromX';
-        }
-        if ($highlightedAxis === Axes.Y) {
-          return 'fromY';
-        }
-        if ($highlightedAxis === Axes.Z) {
-          return 'fromZ';
-        }
-        throw Error('This shouldnt happen');
-      };
-      drawArrows(getId());
+  const updateArrows = (axes: Axis[]) => {
+    if (axes.length !== 1) {
+      return;
     }
+    const axis = axes[0];
+    drawArrows(`from${axis.label}`);
   };
 
-  const getVectorValue = () => {
-    if (!get(highlightedAxis)) {
-      return Array(classifier.getFilters().count()).fill(0);
-    }
+  const getVectorValues = () => {
     try {
+      if (!liveData) {
+        throw new Error('Live data is not set yet, handle the error here');
+      }
       const seriesTimestamped = liveData
         .getBuffer()
         .getSeries(
@@ -80,24 +71,26 @@
       const series = seriesTimestamped.map(s =>
         asAccelerometerData(s.value).getAccelerometerData(),
       );
-      const filteredSeries = stores
-        .getClassifier()
-        .getFilters()
-        .compute(extractAxisFromAccelerometerData(series, get(highlightedAxis)!));
+      const filteredSeries = $highlightedAxis.flatMap(axis =>
+        stores
+          .getClassifier()
+          .getFilters()
+          .compute(extractAxisFromAccelerometerData(series, axis.index)),
+      );
       return filteredSeries;
     } catch (e) {
       return Array(classifier.getFilters().count()).fill(0);
     }
   };
 
-  let liveFilteredAxesData: number[] = getVectorValue();
+  let liveFilteredAxesData: number[] = getVectorValues();
 
   let valueInterval: NodeJS.Timeout = setInterval(() => {}, 100);
 
   const init = () => {
     denit();
     valueInterval = setInterval(() => {
-      liveFilteredAxesData = getVectorValue();
+      liveFilteredAxesData = getVectorValues();
     }, 250);
 
     setTimeout(
@@ -135,48 +128,46 @@
 
 <div class:hidden={!$classifier.model.isTrained && !$classifier.model.isTraining}>
   <div>
-    {#if $highlightedAxis}
+    {#if $highlightedAxis !== undefined}
       <div class="flex flex-row space-x-1">
         <div class="flex flex-col justify-evenly">
-          <div class="flex flex-row space-x-2" id="fromX">
-            <StandardButton
-              color={StaticConfiguration.liveGraphColors[0]}
-              small
-              outlined={$highlightedAxis !== Axes.X}
-              onClick={() => ($highlightedAxis = Axes.X)}>X</StandardButton>
-          </div>
-          <div class="flex flex-row space-x-2" id="fromY">
-            <StandardButton
-              color={StaticConfiguration.liveGraphColors[1]}
-              small
-              outlined={$highlightedAxis !== Axes.Y}
-              onClick={() => ($highlightedAxis = Axes.Y)}>Y</StandardButton>
-          </div>
-          <div class="flex flex-row space-x-2" id="fromZ">
-            <StandardButton
-              color={StaticConfiguration.liveGraphColors[2]}
-              small
-              outlined={$highlightedAxis !== Axes.Z}
-              onClick={() => ($highlightedAxis = Axes.Z)}>Z</StandardButton>
-          </div>
-        </div>
-        <div class="pl-20 flex flex-col justify-around">
-          {#each $filters as filter, index}
-            <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
+          {#each $availableAxes as axis}
+            <div class="flex flex-row space-x-2" id="from{axis.label}">
+              <StandardButton
+                color={StaticConfiguration.graphColors[axis.index]}
+                small
+                outlined={$highlightedAxis.find(e => e.index === axis.index) ===
+                  undefined}
+                onClick={() => {
+                  $highlightedAxis = [axis];
+                }}>
+                {axis.label}
+              </StandardButton>
+            </div>
           {/each}
         </div>
-        <div class="flex flex-col justify-around">
-          {#each $filters as _}
-            <img src={'imgs/right_arrow_blue.svg'} alt="right arrow icon" width="20px" />
-          {/each}
-        </div>
-        <div class="flex flex-col justify-around w-12">
-          {#each liveFilteredAxesData as val, index}
-            <p style={`color:${StaticConfiguration.liveGraphColors[index]}`}>
-              {val.toFixed(3)}
-            </p>
-          {/each}
-        </div>
+        {#if $highlightedAxis.length === 1}
+          <div class="pl-20 flex flex-col justify-around">
+            {#each $filters as filter, index}
+              <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
+            {/each}
+          </div>
+          <div class="flex flex-col justify-around">
+            {#each $filters as _}
+              <img
+                src={'imgs/right_arrow_blue.svg'}
+                alt="right arrow icon"
+                width="20px" />
+            {/each}
+          </div>
+          <div class="flex flex-col justify-around w-12">
+            {#each liveFilteredAxesData as val, index}
+              <p style={`color:${StaticConfiguration.graphColors[index]}`}>
+                {val.toFixed(3)}
+              </p>
+            {/each}
+          </div>
+        {/if}
       </div>
     {/if}
   </div>

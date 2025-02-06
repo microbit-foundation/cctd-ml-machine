@@ -7,7 +7,6 @@
 <script lang="ts">
   import { t } from '../../../i18n';
   import StandardButton from '../../buttons/StandardButton.svelte';
-  import { state } from '../../../script/stores/uiStore';
   import {
     ConnectDialogStates,
     connectionDialogState,

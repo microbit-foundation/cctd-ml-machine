@@ -5,7 +5,6 @@
  -->
 
 <script lang="ts">
-  import { state } from '../../script/stores/uiStore';
   import { fade } from 'svelte/transition';
   import { t } from '../../i18n';
   import ConnectDialogContainer from '../connection-prompt/ConnectDialogContainer.svelte';
@@ -17,6 +16,7 @@
   import BaseDialog from '../dialogs/BaseDialog.svelte';
   import View3DLive from '../3d-inspector/View3DLive.svelte';
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
+  import { state } from '../../script/stores/Stores';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -26,11 +26,11 @@
   };
 
   const inputDisconnectButtonClicked = () => {
-    Microbits.expelInputAndOutput();
+    Microbits.disconnectInputAndOutput();
   };
 
   const outputDisconnectButtonClicked = () => {
-    Microbits.expelOutput();
+    Microbits.disconnectOutput();
   };
 
   let isLive3DOpen = false;
@@ -55,8 +55,7 @@
       <div class="absolute w-full h-full">
         <MicrobitLiveGraph width={componentWidth - 160} />
       </div>
-      {#if !$state.isInputReady}
-        <!-- Input is not ready, but is assigned (Must be either reconnecting or have lost connection entirely) -->
+      {#if $state.isInputInitializing}
         <div
           class="absolute w-full h-full flex items-center justify-center text-secondarytext">
           <div class="bg-secondary bg-opacity-80 py-2 px-4 rounded-full" transition:fade>

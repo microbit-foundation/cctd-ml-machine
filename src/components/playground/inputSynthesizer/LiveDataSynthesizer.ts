@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
   get,
   writable,
 } from 'svelte/store';
 import { stores } from '../../../script/stores/Stores';
 import { SyntheticLiveData } from './SyntheticLiveData ';
-import BaseVector from '../../../script/livedata/BaseVector';
+import BaseVector from '../../../script/domain/BaseVector';
 
 type LiveDataSynthesizerOptions = {
   intervalSpeed: number;
@@ -51,8 +51,13 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
       isActive: false,
       noOfAxes: 1,
     } as LiveDataSynthesizerOptions);
+    //stores.setLiveData(new SyntheticLiveData(["x", "y", "z", "w"]))
+    this.referenceStoreGetter = () => get(stores).liveData as SyntheticLiveData;
+    /*
+
     stores.setLiveData(new SyntheticLiveData([letters[0]]));
     this.referenceStoreGetter = () => get(stores).liveData as SyntheticLiveData;
+*/
   }
 
   public subscribe(

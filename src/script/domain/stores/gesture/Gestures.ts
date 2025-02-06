@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  Readable,
-  Subscriber,
-  Unsubscriber,
-  Writable,
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  type Writable,
   derived,
   get,
   writable,
 } from 'svelte/store';
-import Gesture, { Confidence, GestureData, GestureID, GestureOutput } from './Gesture';
+import Gesture, { type GestureData, type GestureID, type GestureOutput } from './Gesture';
 import StaticConfiguration from '../../../../StaticConfiguration';
-import GestureRepository from '../../GestureRepository';
-import ClassifierRepository from '../../ClassifierRepository';
+import type { GestureRepository } from '../../GestureRepository';
 
 export type PersistantGestureData = {
   name: string;
@@ -27,11 +26,10 @@ export type PersistantGestureData = {
 
 export type RecordingData = {
   ID: number;
-  data: {
-    x: number[];
-    y: number[];
-    z: number[];
-  };
+  samples: {
+    vector: number[];
+  }[];
+  labels: string[];
 };
 
 class Gestures implements Readable<GestureData[]> {

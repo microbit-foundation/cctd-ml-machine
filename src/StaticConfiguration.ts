@@ -7,10 +7,10 @@
 /**
  * Static configuration values. These values are not expected to change, while the application is running.
  */
+import { MBSpecs } from 'microbyte';
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
-import MBSpecs from './script/microbit-interfacing/MBSpecs';
-import { HexOrigin } from './script/microbit-interfacing/Microbits';
-import { LayersModelTrainingSettings } from './script/mlmodels/LayersModelTrainer';
+import { type LayersModelTrainingSettings as NeuralNetworkModelTrainerSettings } from './script/mlmodels/LayersModelTrainer';
+import { HexOrigin } from './script/microbit-interfacing/HexOrigin';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
@@ -58,7 +58,7 @@ class StaticConfiguration {
   };
 
   // Line colors are picked in the order of this array.
-  public static readonly liveGraphColors = [
+  public static readonly graphColors = [
     '#ff606e',
     '#30f09e',
     '#3030ff',
@@ -126,13 +126,14 @@ class StaticConfiguration {
   /**
    * The neural network training settings
    */
-  public static readonly layersModelTrainingSettings: LayersModelTrainingSettings = {
-    noOfEpochs: 80,
-    batchSize: 16,
-    learningRate: 0.5,
-    validationSplit: 0.1,
-    noOfUnits: 16, // size of hidden layer
-  };
+  public static readonly defaultNeuralNetworkSettings: NeuralNetworkModelTrainerSettings =
+    {
+      noOfEpochs: 80,
+      batchSize: 16,
+      learningRate: 0.5,
+      validationSplit: 0.1,
+      noOfUnits: 16, // size of hidden layer
+    };
 
   /**
    * How many samples should the KNN model use for prediction? i.e the k-value.

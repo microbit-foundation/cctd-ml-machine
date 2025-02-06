@@ -9,7 +9,7 @@ import { writable } from 'svelte/store';
 import GestureMenu from '../../menus/DataMenu.svelte';
 import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
-import { Paths, PathType } from '../../router/paths';
+import { Paths, type PathType } from '../../router/paths';
 
 export type MenuProperties = {
   title: string;

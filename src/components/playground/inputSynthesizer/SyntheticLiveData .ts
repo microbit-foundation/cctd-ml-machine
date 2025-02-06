@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  Subscriber,
-  Invalidator,
-  Unsubscriber,
-  Writable,
+  type Subscriber,
+  type Invalidator,
+  type Unsubscriber,
+  type Writable,
   writable,
   get,
 } from 'svelte/store';
 import LiveDataBuffer from '../../../script/domain/LiveDataBuffer';
-import LiveData from '../../../script/domain/stores/LiveData';
-import BaseVector from '../../../script/livedata/BaseVector';
+import { type LiveData } from '../../../script/domain/stores/LiveData';
+import BaseVector from '../../../script/domain/BaseVector';
 
 export class SyntheticLiveData implements LiveData<BaseVector> {
   private store: Writable<BaseVector>;

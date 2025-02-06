@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { tensor } from '@tensorflow/tfjs';
-import MLModel from '../domain/MLModel';
+import { type MLModel } from '../domain/MLModel';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
 
 class KNNMLModel implements MLModel {
@@ -14,6 +14,7 @@ class KNNMLModel implements MLModel {
   ) {}
   public async predict(filteredData: number[]): Promise<number[]> {
     const inputTensor = tensor(filteredData);
+    console.warn(filteredData);
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call

@@ -6,7 +6,7 @@
 
 import { writable } from 'svelte/store';
 import * as THREE from 'three';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { type GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 // TODO: Why is this a class? No methods mutates object state, and
 // only one method uses class state.

@@ -4,19 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 import { get, writable } from 'svelte/store';
-import { highlightedAxis, selectedModel } from '../../script/stores/uiStore';
-import Axes from '../../script/domain/Axes';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
-import StaticConfiguration from '../../StaticConfiguration';
-import { extractAxisFromTrainingData } from '../../script/utils/graphUtils';
 import { stores } from '../../script/stores/Stores';
 import CookieManager from '../../script/CookieManager';
 import { appInsights } from '../../appInsights';
-import ModelRegistry, { ModelInfo } from '../../script/domain/ModelRegistry';
+import ModelRegistry, { type ModelInfo } from '../../script/domain/ModelRegistry';
 import LayersModelTrainer, {
-  LossTrainingIteration,
+  type LossTrainingIteration,
 } from '../../script/mlmodels/LayersModelTrainer';
-import { knnConfig } from '../../script/stores/knnConfig';
 import Logger from '../../script/utils/Logger';
 
 export const loss = writable<LossTrainingIteration[]>([]);
@@ -29,28 +24,18 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
 };
 
 const trainNNModel = async () => {
-  highlightedAxis.set(undefined);
+  //stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
   loss.set([]);
   const modelTrainer = new LayersModelTrainer(
-    StaticConfiguration.layersModelTrainingSettings,
+    get(stores.getNeuralNetworkSettings()),
     trainingIterationHandler,
   );
   await stores.getClassifier().getModel().train(modelTrainer);
 };
 
 const trainKNNModel = async () => {
-  if (get(highlightedAxis) === undefined) {
-    highlightedAxis.set(Axes.X);
-  }
-  const currentAxis = get(highlightedAxis);
-  const offset = currentAxis === Axes.X ? 0 : currentAxis === Axes.Y ? 1 : 2;
   const modelTrainer = new KNNNonNormalizedModelTrainer(
-    get(knnConfig).k,
-    data => {
-      const extractedData = extractAxisFromTrainingData(data, offset, 3);
-      Logger.log('TrainingPage', 'Extracted data: \n' + JSON.stringify(extractedData));
-      return extractedData;
-    }, // 3 assumes 3 axis
+    get(stores.getKNNModelSettings()).k,
   );
   await stores.getClassifier().getModel().train(modelTrainer);
 };
@@ -71,8 +56,12 @@ const trackModelEvent = () => {
     appInsights.trackEvent({
       name: 'ModelTrained',
       properties: {
-        modelType: get(selectedModel).id,
+        modelType: get(stores.getSelectedModel()).id,
       },
     });
   }
+};
+
+export const selectModel = (model: ModelInfo) => {
+  stores.getSelectedModel().set(model);
 };

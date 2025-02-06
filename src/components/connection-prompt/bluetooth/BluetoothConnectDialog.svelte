@@ -5,12 +5,10 @@
  -->
 
 <script lang="ts">
-  import MBSpecs from '../../../script/microbit-interfacing/MBSpecs';
   import PatternMatrix from '../../PatternMatrix.svelte';
   import { t } from '../../../i18n';
   import { onDestroy, onMount } from 'svelte';
   import StandardButton from '../../buttons/StandardButton.svelte';
-  import { state } from '../../../script/stores/uiStore';
   import {
     btPatternInput,
     btPatternOutput,
@@ -19,10 +17,10 @@
   import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
-  import { DeviceRequestStates } from '../../../script/stores/connectDialogStore';
-  import Environment from '../../../script/Environment';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Logger from '../../../script/utils/Logger';
+  import { MBSpecs } from 'microbyte';
+  import { DeviceRequestStates, state } from '../../../script/stores/Stores';
 
   // callbacks
   export let deviceState: DeviceRequestStates;
@@ -49,24 +47,19 @@
     attemptToConnect(name);
   };
 
-  const attemptToConnect = (name?: string) => {
+  const attemptToConnect = async (name?: string) => {
     timeoutProgress.set(0);
     if (isConnecting) {
       // Safeguard to prevent trying to connect multiple times at once
       return;
     }
     isConnecting = true;
-    const connectionResult = () => {
+    const connectionResult = async () => {
+      Logger.log('BluetoothConnectDialog', 'Attempting to connect to micro:bit');
       if (deviceState == DeviceRequestStates.INPUT) {
-        if (name) {
-          return Microbits.assignInput(name);
-        }
-        return Microbits.assignInputNoName();
+        await Microbits.connectInput(name);
       } else {
-        if (name) {
-          return Microbits.assignOutput(name);
-        }
-        return Microbits.assignOutputNoName();
+        await Microbits.connectOutput(name);
       }
     };
 
@@ -75,20 +68,16 @@
       timeouted.set(true);
     }, StaticConfiguration.connectTimeoutDuration);
 
-    void connectionResult()
-      .then(didSucceed => {
-        clearTimeout(connectTimeout);
-        timeouted.set(false);
-        Logger.log('BluetoothConnectDialog', 'Connection result:', didSucceed);
-        if (didSucceed) {
-          onBluetoothConnected();
-        } else {
-          isConnecting = false;
-        }
-      })
-      .catch(e => {
-        console.error(e);
-      });
+    try {
+      await connectionResult();
+      clearTimeout(connectTimeout);
+      timeouted.set(false);
+      onBluetoothConnected();
+    } catch (error) {
+      Logger.log('BluetoothConnectDialog', 'Failed to connect to micro:bit', error);
+    } finally {
+      isConnecting = false;
+    }
   };
 
   function connectOnEnterClick(event: KeyboardEvent): void {

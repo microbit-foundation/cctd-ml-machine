@@ -10,15 +10,12 @@
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import { Feature, hasFeature } from '../../script/FeatureToggles';
-  import { ModelView, state } from '../../script/stores/uiStore';
+  import { ModelView, state } from '../../script/stores/Stores';
   import ModelPageStackView from './stackview/ModelPageStackView.svelte';
   import ModelPageTileView from './tileview/ModelPageTileView.svelte';
 
   const openMakeCodeInNewTab = () => {
-    window.open(
-      StaticConfiguration.makecodeFirmwareUrl,
-      '_blank', // <- This is what makes it open in a new tab.
-    );
+    window.open(StaticConfiguration.makecodeFirmwareUrl, '_blank');
   };
 </script>
 

@@ -3,14 +3,18 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import ClassifierRepository from './ClassifierRepository';
-import GestureRepository from './GestureRepository';
-import Confidences from './stores/Confidences';
 
-interface Repositories {
+import type { ClassifierRepository } from './ClassifierRepository';
+import type { FiltersRepository } from './FiltersRepository';
+import type { GestureRepository } from './GestureRepository';
+import type { TrainingDataRepository } from './TrainingDataRepository';
+
+export interface Repositories {
   getGestureRepository(): GestureRepository;
 
   getClassifierRepository(): ClassifierRepository;
-}
 
-export default Repositories;
+  getTrainingDataRepository(): TrainingDataRepository;
+
+  getFiltersRepository(): FiltersRepository;
+}

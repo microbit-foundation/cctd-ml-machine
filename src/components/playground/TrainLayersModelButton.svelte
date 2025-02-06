@@ -17,7 +17,10 @@
     playgroundContext.addMessage('training model...');
     model
       .train(
-        new LayersModelTrainer(StaticConfiguration.layersModelTrainingSettings, () => {}),
+        new LayersModelTrainer(
+          StaticConfiguration.defaultNeuralNetworkSettings,
+          () => {},
+        ),
       )
       .then(() => {
         playgroundContext.addMessage('Finished training!');

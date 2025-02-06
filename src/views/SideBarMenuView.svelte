@@ -6,13 +6,13 @@
 
 <!-- Left-hand side menu -->
 <script lang="ts">
-  import Menus, { MenuProperties } from '../script/navigation/Menus';
+  import Menus, { type MenuProperties } from '../script/navigation/Menus';
   import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
-  import Environment from '../script/Environment';
   import { Paths, currentPath, navigate } from '../router/paths';
-  import { state } from '../script/stores/uiStore';
   import { Feature, getFeature } from '../script/FeatureToggles';
+  import { state } from '../script/stores/Stores';
+  import MediaQuery from '../components/MediaQuery.svelte';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;
@@ -34,18 +34,23 @@
   class="bg-gradient-to-b from-primary to-secondary relative flex flex-col w-full shadow-2xl">
   <!-- flush top bar -->
   <div class="h-12 shadow-md w-full flex justify-center">
-    <p class="text-secondarytext font-extrabold self-center text-3xl">
-      {getFeature(Feature.TITLE)}
-    </p>
-    <div class="text-white self-center ml-4 focus:outline-none">
-      <button
-        class="rounded hover:bg-white
+    <MediaQuery query="(max-width: 1500px)" let:matches={isSmall}>
+      <p
+        class="text-secondarytext font-extrabold self-center"
+        class:text-3xl={!isSmall}
+        class:text-2xl={isSmall}>
+        {getFeature(Feature.TITLE)}
+      </p>
+      <div class="text-white self-center ml-4 focus:outline-none">
+        <button
+          class="rounded hover:bg-white
 						   hover:bg-opacity-10 duration-100
 						   select-none outline-none"
-        on:click={() => navigate(Paths.HOME)}>
-        <i class="fas fa-home text-2xl outline-none" />
-      </button>
-    </div>
+          on:click={() => navigate(Paths.HOME)}>
+          <i class="fas fa-home text-2xl outline-none" />
+        </button>
+      </div>
+    </MediaQuery>
   </div>
 
   <!-- Menu -->

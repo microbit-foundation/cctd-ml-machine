@@ -89,12 +89,17 @@
           <div class="mb-2" />
         </div>
       </div>
-      <div class="flex w-2/5 flex-row mr-4 justify-center">
-        <StandardButton onClick={acceptClicked}
-          >{$t('cookies.banner.buttons.accept')}</StandardButton>
-        <div class="mr-4" />
-        <StandardButton color="warning" onClick={rejectClicked}
-          >{$t('cookies.banner.buttons.reject')}</StandardButton>
+      <div class="flex w-2/5 flex-row mr-4 gap-4 justify-center">
+        <div class="self-center">
+          <StandardButton onClick={acceptClicked}>
+            {$t('cookies.banner.buttons.accept')}
+          </StandardButton>
+        </div>
+        <div class="self-center">
+          <StandardButton color="warning" onClick={rejectClicked}>
+            {$t('cookies.banner.buttons.reject')}
+          </StandardButton>
+        </div>
       </div>
     </div>
   </div>

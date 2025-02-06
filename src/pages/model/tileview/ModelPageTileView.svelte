@@ -5,18 +5,13 @@
  -->
 
 <script lang="ts">
-  import { get } from 'svelte/store';
   import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
-  import {
-    areActionsAllowed,
-    buttonPressed,
-    state,
-  } from '../../../script/stores/uiStore';
+  import { areActionsAllowed, buttonPressed } from '../../../script/stores/uiStore';
   import { onMount } from 'svelte';
   import Microbits from '../../../script/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { stores } from '../../../script/stores/Stores';
+  import { state, stores } from '../../../script/stores/Stores';
 
   const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation
@@ -97,7 +92,7 @@
         <p class="text-sm">
           You can create a hex file on <a
             target="_blank"
-            href="https://makecode.microbit.org/S83658-20131-63602-68476"
+            href={StaticConfiguration.makecodeFirmwareUrl}
             class="text-secondary">
             MakeCode
           </a>
@@ -106,3 +101,8 @@
     </div>
   {/if}
 </main>
+
+<!--
+
+            href="https://makecode.microbit.org/S83658-20131-63602-68476"
+-->

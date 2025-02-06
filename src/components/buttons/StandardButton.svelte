@@ -7,9 +7,11 @@
 <style>
   .normal {
     padding: 12px 40px;
+    font-size: 16px;
   }
   .small {
     padding: 1px 10px;
+    font-size: 14px;
   }
   .outlined {
     color: var(--color);
@@ -24,6 +26,9 @@
     opacity: 1;
     color: white;
   }
+  .filled:hover {
+    opacity: 85%;
+  }
   .fillOnHover:hover {
     background-color: var(--color);
     opacity: 1;
@@ -35,7 +40,7 @@
 <script lang="ts">
   import TypingUtils from './../../script/TypingUtils';
   import windi from './../../../windi.config.js';
-  import { SvelteComponent } from 'svelte';
+  import Tooltip from '../base/Tooltip.svelte';
 
   type variants =
     | 'secondary'
@@ -54,6 +59,8 @@
   export let fillOnHover = false;
   export let bold = true;
   export let shadows = true;
+  export let disabledTooltip: string | undefined = undefined;
+  export let icon: string | undefined = undefined;
 
   const bgColors: { [key in variants]: string } = {
     primary: windi.theme.extend.colors.primary,
@@ -67,9 +74,30 @@
   const colorParam = isKey ? bgColors[disabled ? 'disabled' : color] : color;
 </script>
 
-<div>
+{#if disabled}
+  <Tooltip title={disabledTooltip}>
+    <button
+      {disabled}
+      style="--border-width: {bold ? '2px' : '1px'}"
+      class="outline-none rounded-full"
+      class:shadow-md={shadows}
+      class:bg-disabled={true}
+      class:font-bold={bold}
+      class:small
+      class:normal={!small}
+      class:outlined
+      class:cursor-default={disabled}
+      on:click={onClick}>
+      <div class="flex flex-row justify-between justify-center items-center">
+        <slot />
+        {#if icon}
+          <img alt="" class="max-h-6 ml-2 -mr-3" src={icon} />
+        {/if}
+      </div>
+    </button>
+  </Tooltip>
+{:else}
   <button
-    {disabled}
     style="--color: {colorParam}
     ; --border-width: {bold ? '2px' : '1px'}"
     class="outline-none rounded-full"
@@ -79,12 +107,14 @@
     class:normal={!small}
     class:outlined
     class:filled={!outlined}
-    class:fillOnHover={fillOnHover && !disabled}
+    class:fillOnHover
     class:cursor-pointer={!disabled}
-    class:cursor-default={disabled}
     on:click={onClick}>
     <div class="flex flex-row justify-between justify-center items-center">
       <slot />
+      {#if icon}
+        <img alt="" class="max-h-6 ml-2 -mr-3" src={icon} />
+      {/if}
     </div>
   </button>
-</div>
+{/if}

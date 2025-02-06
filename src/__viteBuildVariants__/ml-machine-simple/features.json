@@ -2,5 +2,7 @@
   "title": "ML-Machine",
   "knnModel": false,
   "lossGraph": false,
-  "makecode": false
+  "makecode": false,
+  "liveGraphInputValues": false,
+  "recordingScrubberValues": false
 }

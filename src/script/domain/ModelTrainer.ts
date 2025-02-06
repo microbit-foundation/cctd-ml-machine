@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import MLModel from './MLModel';
+
+import type { MLModel } from './MLModel';
 
 export type TrainingData = {
   classes: {
@@ -13,8 +14,6 @@ export type TrainingData = {
   }[];
 };
 
-interface ModelTrainer<T extends MLModel> {
+export interface ModelTrainer<T extends MLModel> {
   trainModel(trainingData: TrainingData): Promise<T>;
 }
-
-export default ModelTrainer;

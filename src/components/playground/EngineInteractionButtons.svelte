@@ -4,8 +4,9 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+  import { ClassifierInput } from '../../script/domain/ClassifierInput';
   import Gesture from '../../script/domain/stores/gesture/Gesture';
-  import AccelerometerClassifierInput from '../../script/mlmodels/AccelerometerClassifierInput';
+  import BaseVector from '../../script/domain/BaseVector';
   import { stores } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';
   import TrainKnnModelButton from './TrainKNNModelButton.svelte';
@@ -26,10 +27,16 @@
     playgroundContext.addMessage(
       'Predicting on random recording of: ' + randGesture.getName(),
     );
-    const xs = randGesture.getRecordings()[0].data.x;
-    const ys = randGesture.getRecordings()[0].data.y;
-    const zs = randGesture.getRecordings()[0].data.z;
-    const input = new AccelerometerClassifierInput(xs, ys, zs);
+    const xs = randGesture.getRecordings()[0].samples.map(e => e.vector[0]);
+    const ys = randGesture.getRecordings()[0].samples.map(e => e.vector[1]);
+    const zs = randGesture.getRecordings()[0].samples.map(e => e.vector[2]);
+
+    const labels = randGesture.getRecordings()[0].labels;
+    const bufferedData = randGesture.getRecordings()[0].samples.map(e => e.vector);
+
+    const sampleVectors = bufferedData.map(e => new BaseVector(e, labels));
+
+    const input = new ClassifierInput(sampleVectors);
     classifier.classify(input).then(() => {
       playgroundContext.addMessage('Finished predicting');
     });

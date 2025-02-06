@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import Filter from '../domain/Filter';
+import type { Filter } from '../domain/Filter';
 import { FilterType } from '../domain/FilterTypes';
 
 abstract class FilterWithMaths implements Filter {

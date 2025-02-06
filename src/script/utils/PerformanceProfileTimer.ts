@@ -27,7 +27,7 @@ class PerformanceProfileTimer {
       throw new Error('Timer wasnt started! You must call start first with the same id!');
     }
     console.log(
-      id + ' took ' + (Date.now() - PerformanceProfileTimer.timerMap.get(id)!) + 'ms',
+      `${id} took ${Date.now() - PerformanceProfileTimer.timerMap.get(id)!} ms`,
     );
   }
 }

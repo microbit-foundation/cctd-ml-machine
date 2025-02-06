@@ -128,11 +128,9 @@
   // Camera distance and position is updated and lastly three.JS renders a new frame
   function updateFrame() {
     if (microbitModel === undefined) {
-      // TODO: If microbit model can ever be undefined, it has the wrong type
       return;
     }
     if (canvas === undefined) {
-      // TODO: If canvas can ever be undefined, it has the wrong type
       return;
     }
 

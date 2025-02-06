@@ -54,8 +54,9 @@
   "content.trainer.failure.body": "Træningen resulterede ikke i en brugbar model. Grunden til dette ligger sandsynligvis i dataet. Hvis dataet i forskellige klasser minder for meget om hinanden, kan dette resultere i nogle forskellige problemer i træningsprocessen, der ikke gør det muligt at træne modellen ordentligt.",
   "content.trainer.failure.todo": "Gå tilbage til datasiden og ændr i din data.",
   "content.trainer.controlbar.filters": "Filtre",
-  "content.trianer.lossGraph.title": "Loss over tid",
+  "content.trainer.lossGraph.title": "Loss over tid",
   "content.trainer.knn.neighbours": "Naboer",
+  "content.trainer.knn.selectOneAxis": "For at visualisere modelle, vælg præcis to filtre og en enkel akse, som du ønsker at bruge i modellen.",
   "content.filters.NoDataHeader": "Der er ikke noget data",
   "content.filters.NoDataBody": "Gå til Data-siden for at indsamle data.",
   "content.filters.max.title": "Maksværdier",
@@ -124,6 +125,7 @@
   "menu.trainer.noFilters": "Du har ikke valgt nogle filtre. Der skal mindst være valgt 1 filter for at kunne træne en model",
   "menu.trainer.isTrainingModelButton": "Træner model...",
   "menu.trainer.knn.onlyTwoFilters": "For at kunne se visualisering skal du vælge præcist 2 filtre",
+  "menu.trainer.SelectMoreAxes": "For at træne en model, skal du vælge mindst én akse.",
   "menu.model.helpHeading": "Model",
   "menu.model.helpBody": "Modellen kan bruges i et interaktivt system. Her bruger vi den trænede model til at forudsige bevægelser. Du kan tilslutte endnu en micro:bit og få den til at reagere på de bevægelser du laver.",
   "menu.model.noModel": "Ingen model",
@@ -157,6 +159,9 @@
   "connectMB.usb.header": "DOWNLOAD PROGRAM TIL BBC MICRO:BIT",
   "connectMB.usb.body1": "Tilslut din BBC micro:bit med USB-kabel og tryk på 'næste'",
   "connectMB.usb.body2": "Tryk 'Find USB-enhed' og vælg 'BBC micro:bit CMSIS-DAP' eller 'DAPLink CMSIS-DAP' fra popup-beskeden som kommer",
+  "connectMB.usb.retry1": "En USB enhed blev ikke fundet. Du kan prøve igen eller trykke ",
+  "connectMB.usb.retryLink": "her",
+  "connectMB.usb.retry2": " for at downloade manuelt.",
   "connectMB.usb.button1": "Næste",
   "connectMB.usb.button2": "Find USB-enhed",
   "connectMB.usb.pleaseWait": "Vent venligst. Downloader program til micro:bit'en",
@@ -219,5 +224,8 @@
   "popup.outdatedmicrobit.text.mkcd": "Åben den nyeste MakeCode skabelon for at bruge den opdaterede MakeCode extension.",
   "popup.outdatedmicrobit.button.later": "Senere",
   "popup.outdatedmicrobit.button.update": "Opdatér nu",
-  "popup.outdatedmicrobit.button.update.mkcd": "Åben MakeCode"
+  "popup.outdatedmicrobit.button.update.mkcd": "Åben MakeCode",
+  "snackbar.axischanged.NNInvalid": "De markerede akser blev ændret, modellen er ugyldig. Træn en ny model.",
+  "snackbar.filtersChanged.modelInvalid": "De valgte filtre blev ændret, modellen er ugyldig. Træn en ny model.",
+  "snackbar.modeltrained": "En ny model blev trænet"
 }

@@ -4,11 +4,23 @@
  * SPDX-License-Identifier: MIT
  */
 import Filters from './Filters';
+import type { LiveDataVector } from './stores/LiveDataVector';
 
-interface ClassifierInput {
-  getInput(filters: Filters): number[];
+export class ClassifierInput {
+  public constructor(private samples: LiveDataVector[]) {}
 
-  getNumberOfSamples(): number;
+  public getInput(filters: Filters): number[] {
+    if (this.samples.length === 0) {
+      return [];
+    }
+    const vectorSize = this.samples[0].getSize();
+
+    return Array.from({ length: vectorSize }, (_, i) =>
+      filters.compute(this.samples.map(e => e.getVector()[i])),
+    ).flat();
+  }
+
+  public getNumberOfSamples(): number {
+    return this.samples.length;
+  }
 }
-
-export default ClassifierInput;

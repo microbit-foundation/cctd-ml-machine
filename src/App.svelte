@@ -22,28 +22,24 @@
 </style>
 
 <script lang="ts">
-  import ConnectionBehaviours from './script/microbit-interfacing/connection-behaviours/ConnectionBehaviours';
-  import InputBehaviour from './script/microbit-interfacing/connection-behaviours/InputBehaviour';
-  import OutputBehaviour from './script/microbit-interfacing/connection-behaviours/OutputBehaviour';
   import OverlayView from './views/OverlayView.svelte';
   import SideBarMenuView from './views/SideBarMenuView.svelte';
   import PageContentView from './views/PageContentView.svelte';
   import BottomBarMenuView from './views/BottomBarMenuView.svelte';
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
   import { fade } from 'svelte/transition';
-  import { compatibility, state } from './script/stores/uiStore';
+  import { compatibility } from './script/stores/uiStore';
   import LoadingSpinner from './components/LoadingSpinner.svelte';
   import IncompatiblePlatformView from './views/IncompatiblePlatformView.svelte';
   import BluetoothIncompatibilityWarningDialog from './components/BluetoothIncompatibilityWarningDialog.svelte';
   import CookieManager from './script/CookieManager';
-  import { DeviceRequestStates } from './script/stores/connectDialogStore';
   import Router from './router/Router.svelte';
   import { Feature, getFeature } from './script/FeatureToggles';
   import { welcomeLog } from './script/utils/Logger';
+  import { DeviceRequestStates, state } from './script/stores/Stores';
+  import SnackbarView from './components/snackbar/SnackbarView.svelte';
+  import MediaQuery from './components/MediaQuery.svelte';
   welcomeLog();
-
-  ConnectionBehaviours.setInputBehaviour(new InputBehaviour());
-  ConnectionBehaviours.setOutputBehaviour(new OutputBehaviour());
 
   if (CookieManager.isReconnectFlagSet()) {
     $state.offerReconnect = true;
@@ -55,6 +51,7 @@
 </script>
 
 <Router>
+  <SnackbarView />
   {#if !$compatibility.platformAllowed}
     <!-- Denies mobile users access to the platform -->
     <IncompatiblePlatformView />
@@ -73,9 +70,17 @@
       <BluetoothIncompatibilityWarningDialog />
 
       <!-- SIDE BAR -->
-      <div class="h-full flex min-w-75 max-w-75">
-        <SideBarMenuView />
-      </div>
+      <MediaQuery query="(max-width: 1500px)" let:matches={isSmall}>
+        {#if isSmall}
+          <div class="h-full flex min-w-65 max-w-65">
+            <SideBarMenuView />
+          </div>
+        {:else}
+          <div class="h-full flex min-w-75 max-w-75">
+            <SideBarMenuView />
+          </div>
+        {/if}
+      </MediaQuery>
 
       <div
         class="h-full w-full overflow-y-hidden overflow-x-auto

@@ -5,24 +5,43 @@
  */
 import LocalStorageGestureRepository from './LocalStorageGestureRepository';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
-import Repositories from '../domain/Repositories';
 import Confidences from '../domain/stores/Confidences';
+import LocalStorageTrainingDataRepository from './LocalStorageTrainingDataRepository';
+import type { Repositories } from '../domain/Repositories';
+import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type Snackbar from '../../components/snackbar/Snackbar';
+import { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
+import type { FiltersRepository } from '../domain/FiltersRepository';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;
 
   private classifierRepository: LocalStorageClassifierRepository;
 
+  private trainingDataRepository: LocalStorageTrainingDataRepository;
+
+  private filtersRepository: LocalStorageFiltersRepository;
+
   private static instance: LocalStorageRepositories;
 
-  constructor() {
+  constructor(snackbar: Snackbar) {
     if (LocalStorageRepositories.instance) {
       // Singleton
       throw new Error('Could not instantiate repository. It is already instantiated!');
     }
     LocalStorageRepositories.instance = this;
     const confidences = new Confidences();
-    this.classifierRepository = new LocalStorageClassifierRepository(confidences);
+    this.filtersRepository = new LocalStorageFiltersRepository();
+    this.trainingDataRepository = new LocalStorageTrainingDataRepository(
+      this,
+      this.filtersRepository,
+    );
+    this.classifierRepository = new LocalStorageClassifierRepository(
+      confidences,
+      this.trainingDataRepository,
+      snackbar,
+      this.filtersRepository,
+    );
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }
 
@@ -36,6 +55,14 @@ class LocalStorageRepositories implements Repositories {
 
   public getClassifierRepository() {
     return this.classifierRepository;
+  }
+
+  public getTrainingDataRepository(): TrainingDataRepository {
+    return this.trainingDataRepository;
+  }
+
+  public getFiltersRepository(): FiltersRepository {
+    return this.filtersRepository;
   }
 }
 

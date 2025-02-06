@@ -3,15 +3,17 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Readable, Writable, get, writable } from 'svelte/store';
+import { type Readable, type Writable, get, writable } from 'svelte/store';
 import Classifier from './stores/Classifier';
 import Filters from './Filters';
-import { TrainingData } from './ModelTrainer';
-import MLModel from './MLModel';
-import { TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
-import Gesture, { GestureID } from './stores/gesture/Gesture';
+import { type TrainingData } from './ModelTrainer';
+import { type TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
+import Gesture, { type GestureID } from './stores/gesture/Gesture';
 import Model from './stores/Model';
-import { RecordingData } from './stores/gesture/Gestures';
+import { type RecordingData } from './stores/gesture/Gestures';
+import type { MLModel } from './MLModel';
+import type Snackbar from '../../components/snackbar/Snackbar';
+import { t } from '../../i18n';
 
 class ClassifierFactory {
   public buildClassifier(
@@ -20,6 +22,7 @@ class ClassifierFactory {
     filters: Filters,
     gestures: Readable<Gesture[]>,
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
+    snackbar: Snackbar, // Maybe an event could be fired instead of passing the snackbar around
   ): Classifier {
     const classifier = new Classifier(
       this.buildModel(trainerConsumer, model),
@@ -29,6 +32,9 @@ class ClassifierFactory {
     );
     filters.subscribe(() => {
       // Filters has changed
+      if (classifier.getModel().isTrained()) {
+        snackbar.sendMessage(get(t)('snackbar.filtersChanged.modelInvalid'));
+      }
       classifier.getModel().markAsUntrained();
     });
     const noOfGesturesStore = writable(0);
@@ -66,12 +72,12 @@ class ClassifierFactory {
 
   private buildFilteredSamples(recordings: RecordingData[], filters: Filters) {
     return recordings.map(recording => {
-      const data = recording.data;
+      const data = recording.samples;
       return {
         value: [
-          ...filters.compute(data.x),
-          ...filters.compute(data.y),
-          ...filters.compute(data.z),
+          ...filters.compute(data.map(e => e.vector[0])),
+          ...filters.compute(data.map(e => e.vector[1])),
+          ...filters.compute(data.map(e => e.vector[2])),
         ],
       };
     });

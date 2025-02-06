@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 import { get } from 'svelte/store';
-import Filter from '../domain/Filter';
 import { FilterType } from '../domain/FilterTypes';
 import { t } from 'svelte-i18n';
+import type { Filter } from '../domain/Filter';
 
 class TotalAccFilter implements Filter {
   public getName(): string {
@@ -19,7 +19,7 @@ class TotalAccFilter implements Filter {
     return FilterType.ACC;
   }
   public filter(inValues: number[]): number {
-    return inValues.reduce((a, b) => a + Math.abs(b));
+    return inValues.reduce((a, b) => a + Math.abs(b), 0);
   }
   public getMinNumberOfSamples(): number {
     return 2;

@@ -81,7 +81,7 @@
     if ($highlightedAxis.find(e => e.index === axisIndex) != undefined) {
       return StaticConfiguration.graphColors[axisIndex] + 'ff';
     }
-    return StaticConfiguration.graphColors[axisIndex] + '33';
+    return StaticConfiguration.graphColors[axisIndex] + '00';
   };
 
   const generateSizeOfInspector = (rect: DOMRect): number => {
@@ -228,11 +228,7 @@
   <div class="z-1 h-full w-full absolute">
     {#if !isNaN(hoverIndex)}
       {#if hasFeature(Feature.RECORDING_SCRUBBER_VALUES)}
-        <p
-          style="left: {verticalLineX - 128}px; top:-25px ;pointer-events:none"
-          class="absolute w-40">
-          <RecordingGraphPointData sample={getDataByIndex(hoverIndex)} />
-        </p>
+          <RecordingGraphPointData offest={verticalLineX} sample={getDataByIndex(hoverIndex)} />
       {/if}
 
       <p

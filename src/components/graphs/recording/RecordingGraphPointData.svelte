@@ -21,7 +21,8 @@
 </script>
 
 <p
-  style="left: calc({offest}px - {42 * noOfHighlightedAxes}px); top:-25px ;pointer-events:none"
+  style="left: calc({offest}px - {42 *
+    noOfHighlightedAxes}px); top:-25px ;pointer-events:none"
   class="absolute w-40">
   <span>
     {#each sample as sampleValue, idx}

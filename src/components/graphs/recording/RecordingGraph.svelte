@@ -228,7 +228,9 @@
   <div class="z-1 h-full w-full absolute">
     {#if !isNaN(hoverIndex)}
       {#if hasFeature(Feature.RECORDING_SCRUBBER_VALUES)}
-          <RecordingGraphPointData offest={verticalLineX} sample={getDataByIndex(hoverIndex)} />
+        <RecordingGraphPointData
+          offest={verticalLineX}
+          sample={getDataByIndex(hoverIndex)} />
       {/if}
 
       <p

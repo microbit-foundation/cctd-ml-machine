@@ -37,7 +37,9 @@
         on:click={() => clickNumber(axis)}
         class="w-full font-bold whitespace-nowrap cursor-pointer select-none hover:border-solid hover:border-secondary px-1 border-1 rounded-md"
         class:border-secondary={axis.isHighlighted}
-        style="background-color:{StaticConfiguration.graphColors[axis.index]}{axis.isHighlighted ? 'ff' : '11'}">
+        style="background-color:{StaticConfiguration.graphColors[
+          axis.index
+        ]}{axis.isHighlighted ? 'ff' : '11'}">
         {axis.label}: <FixedNumber digits={2} number={input ? input[axis.index] : 0} />
       </p>
     </div>

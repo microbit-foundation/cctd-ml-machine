@@ -73,7 +73,7 @@
 
     lines.forEach((line, index) => {
       const opaque = highlightedAxes.isAxisIndexHighlighted(index);
-      const color = axisColors[index] + (opaque ? 'ff' : "00");
+      const color = axisColors[index] + (opaque ? 'ff' : '00');
       chart!.addTimeSeries(line, {
         lineWidth,
         strokeStyle: color,

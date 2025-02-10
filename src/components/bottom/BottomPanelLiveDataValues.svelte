@@ -32,13 +32,12 @@
 
 <div class="flex flex-row w-50 mt-[2px] gap-2">
   {#each $axes as axis}
-    <div class="min-w-16 max-w-16 text-sm">
+    <div class="min-w-18 max-w-18 text-sm">
       <p
         on:click={() => clickNumber(axis)}
-        class="w-full whitespace-nowrap cursor-pointer select-none hover:border-solid hover:border-secondary px-1 border-1 rounded-md"
+        class="w-full font-bold whitespace-nowrap cursor-pointer select-none hover:border-solid hover:border-secondary px-1 border-1 rounded-md"
         class:border-secondary={axis.isHighlighted}
-        class:font-bold={axis.isHighlighted}
-        style="color:{StaticConfiguration.graphColors[axis.index]}">
+        style="background-color:{StaticConfiguration.graphColors[axis.index]}{axis.isHighlighted ? 'ff' : '11'}">
         {axis.label}: <FixedNumber digits={2} number={input ? input[axis.index] : 0} />
       </p>
     </div>

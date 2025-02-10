@@ -13,10 +13,11 @@
 
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
-  import type { Unsubscriber } from 'svelte/store';
+  import { derived, type Unsubscriber } from 'svelte/store';
   import StaticConfiguration from '../../StaticConfiguration';
   import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
   import { type LiveDataVector } from '../../script/domain/stores/LiveDataVector';
+  import { stores } from '../../script/stores/Stores';
 
   type LabelData = {
     id: number;
@@ -82,31 +83,38 @@
   }
 
   function fixOverlappingLabels() {
-    labels.sort((a, b) => {
+    const sortedLabels = labels.toSorted((a, b) => {
       return a.arrowHeight - b.arrowHeight;
     });
-    for (let i = 1; i < labels.length; i++) {
-      const element = labels[i];
-      const previousLabel = labels[i - 1];
+    for (let i = 1; i < sortedLabels.length; i++) {
+      const element = sortedLabels[i];
+      const previousLabel = sortedLabels[i - 1];
       if (element.textHeight < previousLabel.textHeight + CHARACTER_HEIGHT) {
         // Label is overlapping, push it down.
         element.textHeight = previousLabel.textHeight + CHARACTER_HEIGHT;
       }
     }
   }
+
+  const highlightedAxes = stores.getHighlightedAxes();
+  const labelEnabled = derived(highlightedAxes, axes => {
+    return labels.map((_, idx) => axes.find(axis => axis.index === idx) !== undefined);
+  });
 </script>
 
 {#if !hidden}
   <div class="h-40 w-6 relative">
-    {#each labels as label}
-      <div
-        class="absolute arrowLeft -m-3.5"
-        style="bottom: {label.arrowHeight}px; border-right-color: {label.color};" />
-      <p
-        class="absolute ml-3 text-xl"
-        style="bottom: {label.textHeight}px; color: {label.color};">
-        {label.label}
-      </p>
+    {#each labels as label, idx}
+      {#if $labelEnabled[idx]}
+        <div
+          class="absolute arrowLeft -m-3.5"
+          style="bottom: {label.arrowHeight}px; border-right-color: {label.color};" />
+        <p
+          class="absolute ml-3 text-xl"
+          style="bottom: {label.textHeight}px; color: {label.color};">
+          {label.label}
+        </p>
+      {/if}
     {/each}
   </div>
 {/if}

@@ -13,7 +13,6 @@ import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
  * Trains a K-Nearest Neighbour model. Unlike the version provided by tensorflow, the points are not normalized
  */
 class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLModel> {
-  // TODO: dataFilterer is mostly for the highlighted axis use-case, should it be more generic, or stay here?
   constructor(private k: number) {}
 
   public trainModel(trainingData: TrainingData): Promise<KNNNonNormalizedMLModel> {

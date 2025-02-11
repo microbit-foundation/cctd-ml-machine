@@ -12,6 +12,9 @@
 
   export let isSelected: boolean;
   const knnModelSettings = stores.getKNNModelSettings();
+  const handleCheckboxEvent = (event: any) => {
+    knnModelSettings.setNormalized(event.target.checked);
+  };
 </script>
 
 <StandardDropdownButton
@@ -33,6 +36,13 @@
             max={30}
             defaultValue={$knnModelSettings.k}
             onChange={val => knnModelSettings.setK(val)} />
+        </div>
+        <p class="whitespace-nowrap content-center">Normalize</p>
+        <div class="justify-self-center">
+          <input
+            type="checkbox"
+            checked={$knnModelSettings.normalized}
+            on:click={handleCheckboxEvent} />
         </div>
       </div>
     </div>

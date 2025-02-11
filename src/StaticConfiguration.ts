@@ -139,5 +139,10 @@ class StaticConfiguration {
    * How many samples should the KNN model use for prediction? i.e the k-value.
    */
   public static readonly defaultKnnNeighbourCount = 3;
+
+  /**
+   * Whether the knn model should be normalized by default
+   */
+  public static readonly knnNormalizedDefault = false;
 }
 export default StaticConfiguration;

@@ -9,7 +9,6 @@
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
-import KNNModelTrainer from '../../script/mlmodels/KNNModelTrainer';
 import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
 
 describe('ML Model tests', async () => {

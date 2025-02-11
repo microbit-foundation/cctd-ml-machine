@@ -4,7 +4,6 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type { MouseEventHandler } from 'svelte/elements';
   import StandardDropdownButton from '../../../components/buttons/StandardDropdownButton.svelte';
   import NumberSelector from '../../../components/NumberSelector.svelte';
   import ModelRegistry from '../../../script/domain/ModelRegistry';

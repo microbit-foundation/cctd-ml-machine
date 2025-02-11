@@ -28,6 +28,10 @@
       ...e,
     }));
   });
+
+  const getBackgroundColor = (axis: { isHighlighted: boolean } & Axis) => {
+    return `${StaticConfiguration.graphColors[axis.index]}${axis.isHighlighted ? 'ff' : '11'}`;
+  };
 </script>
 
 <div class="flex flex-row w-50 mt-[2px] gap-2">
@@ -37,9 +41,7 @@
         on:click={() => clickNumber(axis)}
         class="w-full font-bold whitespace-nowrap cursor-pointer select-none hover:border-solid hover:border-secondary px-1 border-1 rounded-md"
         class:border-secondary={axis.isHighlighted}
-        style="background-color:{StaticConfiguration.graphColors[
-          axis.index
-        ]}{axis.isHighlighted ? 'ff' : '11'}">
+        style="background-color:{getBackgroundColor(axis)}">
         {axis.label}: <FixedNumber digits={2} number={input ? input[axis.index] : 0} />
       </p>
     </div>

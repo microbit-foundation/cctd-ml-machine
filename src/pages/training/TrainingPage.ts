@@ -13,6 +13,9 @@ import LayersModelTrainer, {
   type LossTrainingIteration,
 } from '../../script/mlmodels/LayersModelTrainer';
 import Logger from '../../script/utils/Logger';
+import KNNModelTrainer from '../../script/mlmodels/KNNModelTrainer';
+import type { ModelTrainer } from '../../script/domain/ModelTrainer';
+import type { MLModel } from '../../script/domain/MLModel';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 
@@ -24,8 +27,7 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
 };
 
 const trainNNModel = async () => {
-  //stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
-  loss.set([]);
+  loss.set([]); // Reset the loss graph
   const modelTrainer = new LayersModelTrainer(
     get(stores.getNeuralNetworkSettings()),
     trainingIterationHandler,
@@ -34,10 +36,15 @@ const trainNNModel = async () => {
 };
 
 const trainKNNModel = async () => {
-  const modelTrainer = new KNNNonNormalizedModelTrainer(
-    get(stores.getKNNModelSettings()).k,
-  );
-  await stores.getClassifier().getModel().train(modelTrainer);
+  const knnSettings = get(stores.getKNNModelSettings());
+  const getKNNModelTrainer = (): ModelTrainer<MLModel> => {
+    if (knnSettings.normalized) {
+      return new KNNModelTrainer(knnSettings.k);
+    } else {
+      return new KNNNonNormalizedModelTrainer(knnSettings.k);
+    }
+  };
+  await stores.getClassifier().getModel().train(getKNNModelTrainer());
 };
 
 export const trainModel = async (model: ModelInfo) => {

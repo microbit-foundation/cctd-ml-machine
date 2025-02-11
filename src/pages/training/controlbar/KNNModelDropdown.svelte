@@ -4,6 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+  import type { MouseEventHandler } from 'svelte/elements';
   import StandardDropdownButton from '../../../components/buttons/StandardDropdownButton.svelte';
   import NumberSelector from '../../../components/NumberSelector.svelte';
   import ModelRegistry from '../../../script/domain/ModelRegistry';
@@ -12,6 +13,10 @@
 
   export let isSelected: boolean;
   const knnModelSettings = stores.getKNNModelSettings();
+  $: console.log($knnModelSettings.normalized);
+  const handleCheckboxEvent = (event: any) => {
+    knnModelSettings.setNormalized(event.target.checked);
+  };
 </script>
 
 <StandardDropdownButton
@@ -33,6 +38,13 @@
             max={30}
             defaultValue={$knnModelSettings.k}
             onChange={val => knnModelSettings.setK(val)} />
+        </div>
+        <p class="whitespace-nowrap content-center">Normalize</p>
+        <div class="justify-self-center">
+          <input
+            type="checkbox"
+            checked={$knnModelSettings.normalized}
+            on:click={handleCheckboxEvent} />
         </div>
       </div>
     </div>

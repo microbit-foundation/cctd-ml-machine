@@ -13,7 +13,6 @@ class KNNMLModel implements MLModel {
     private model: knnClassifier.KNNClassifier,
     private k: number,
   ) {
-
     Logger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
   }
   public async predict(filteredData: number[]): Promise<number[]> {

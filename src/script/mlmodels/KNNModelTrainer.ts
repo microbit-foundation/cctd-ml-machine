@@ -12,9 +12,7 @@ import type { ModelTrainer, TrainingData } from '../domain/ModelTrainer';
  * Trains a K-Nearest Neighbour model
  */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
-  constructor(
-    private k: number,
-  ) {}
+  constructor(private k: number) {}
   public trainModel(trainingData: TrainingData): Promise<KNNMLModel> {
     const knn: knnClassifier.KNNClassifier = knnClassifier.create();
 

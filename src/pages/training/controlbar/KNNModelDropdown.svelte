@@ -13,7 +13,6 @@
 
   export let isSelected: boolean;
   const knnModelSettings = stores.getKNNModelSettings();
-  $: console.log($knnModelSettings.normalized);
   const handleCheckboxEvent = (event: any) => {
     knnModelSettings.setNormalized(event.target.checked);
   };

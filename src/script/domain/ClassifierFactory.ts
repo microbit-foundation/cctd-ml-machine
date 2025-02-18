@@ -14,6 +14,7 @@ import { type RecordingData } from './stores/gesture/Gestures';
 import type { MLModel } from './MLModel';
 import type Snackbar from '../../components/snackbar/Snackbar';
 import { t } from '../../i18n';
+import BaseVector from './BaseVector';
 
 class ClassifierFactory {
   public buildClassifier(
@@ -74,11 +75,11 @@ class ClassifierFactory {
     return recordings.map(recording => {
       const data = recording.samples;
       return {
-        value: [
+        value: new BaseVector([
           ...filters.compute(data.map(e => e.vector[0])),
           ...filters.compute(data.map(e => e.vector[1])),
           ...filters.compute(data.map(e => e.vector[2])),
-        ],
+        ]),
       };
     });
   }

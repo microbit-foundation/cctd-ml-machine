@@ -63,14 +63,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
    * See getTrainerConsumer() and getClassifier()
    */
   private async trainModel<T extends MLModel>(trainer: ModelTrainer<T>): Promise<void> {
-    /*
-    const trainingData = this.classifierFactory.buildTrainingData(
-      get(gestureRepository),
-      LocalStorageClassifierRepository.filters,
-    );*/
-
-    const trainingData = this.trainingDataRepository.getTrainingData();
-    const model = await trainer.trainModel(trainingData);
+    const model = await trainer.trainModel(this.trainingDataRepository);
     this.snackbar.sendMessage(get(t)('snackbar.modeltrained'));
     LocalStorageClassifierRepository.mlModel.set(model);
   }

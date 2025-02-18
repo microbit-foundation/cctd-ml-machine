@@ -7,8 +7,9 @@ import { type Readable, type Subscriber, type Unsubscriber, derived } from 'svel
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
 import { type LiveDataVector } from '../domain/stores/LiveDataVector';
-import BaseVector from '../domain/BaseVector';
+import BaseLiveDataVector from '../domain/BaseLiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
+import BaseVector from '../domain/BaseVector';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.
@@ -79,14 +80,14 @@ class SmoothedLiveData<T extends LiveDataVector> implements LiveData<LiveDataVec
         return referenceData;
       }
 
-      const newVector: LiveDataVector = new BaseVector(
-        [...referenceData.getVector()],
+      const newVector: LiveDataVector = new BaseLiveDataVector(
+        new BaseVector([...referenceData.getValue()]),
         referenceData.getLabels(),
       );
 
-      for (let i = 0; i < newVector.getVector().length; i++) {
-        const values = oldValues.map(val => val!.getVector()[i]);
-        newVector.getVector()[i] = smoothNewValue(...values);
+      for (let i = 0; i < newVector.getValue().length; i++) {
+        const values = oldValues.map(val => val!.getValue()[i]);
+        newVector.getValue()[i] = smoothNewValue(...values);
       }
       return newVector;
     });

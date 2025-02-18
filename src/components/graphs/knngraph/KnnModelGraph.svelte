@@ -23,6 +23,7 @@
   const gestures = stores.getGestures();
   const filters = classifier.getFilters();
   const highlightedAxes = stores.getHighlightedAxes();
+  const modelSettings = stores.getKNNModelSettings()
 
   const canvasWidth = 450;
   const canvasHeight = 300;
@@ -70,6 +71,7 @@
       { x: canvasWidth / 2, y: canvasHeight / 2 },
       'd3-3d-single-',
       graphColors,
+      modelSettings,
       axis,
     );
     return controller;

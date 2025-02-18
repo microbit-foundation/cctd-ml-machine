@@ -19,6 +19,7 @@ import type { Engine, EngineData } from '../domain/stores/Engine';
 import type { LiveData } from '../domain/stores/LiveData';
 import type HighlightedAxes from '../domain/stores/HighlightedAxes';
 import { ClassifierInput } from '../domain/ClassifierInput';
+import BaseLiveDataVector from '../domain/BaseLiveDataVector';
 import BaseVector from '../domain/BaseVector';
 
 /**
@@ -91,12 +92,11 @@ class PollingPredictorEngine implements Engine {
     );
     const sampleVectors = bufferedData.map(
       e =>
-        new BaseVector(
-          e.value
-            .getVector()
+        new BaseLiveDataVector(
+          new BaseVector(e.value.getValue()
             .filter((vecVal, vecIdx) =>
               this.highlightedAxes.isAxisIndexHighlighted(vecIdx),
-            ),
+            )),
           e.value
             .getLabels()
             .filter((labelVal, vecIdx) =>

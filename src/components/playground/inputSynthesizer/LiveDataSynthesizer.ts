@@ -13,7 +13,7 @@ import {
 } from 'svelte/store';
 import { stores } from '../../../script/stores/Stores';
 import { SyntheticLiveData } from './SyntheticLiveData ';
-import BaseVector from '../../../script/domain/BaseVector';
+import BaseLiveDataVector from '../../../script/domain/BaseLiveDataVector';
 
 type LiveDataSynthesizerOptions = {
   intervalSpeed: number;
@@ -122,7 +122,7 @@ class LiveDataSynthesizer implements Readable<LiveDataSynthesizerOptions> {
     let newVector = new Array(get(this.store).noOfAxes).fill(0);
     newVector = newVector.map((x, i) => Math.sin(val * get(this.store).speeds[i]));
     const vectorLetters = letters.slice(0, newVector.length);
-    const newValue = new BaseVector(newVector, vectorLetters);
+    const newValue = new BaseLiveDataVector(newVector, vectorLetters);
 
     this.referenceStoreGetter().put(newValue);
   }

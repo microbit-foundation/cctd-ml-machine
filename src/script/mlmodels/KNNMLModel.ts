@@ -3,37 +3,50 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { tensor } from '@tensorflow/tfjs';
 import { type MLModel } from '../domain/MLModel';
-import * as knnClassifier from '@tensorflow-models/knn-classifier';
 import Logger from '../utils/Logger';
+import type { LabelledPoint } from './KNNNonNormalizedMLModel';
+import { distanceBetween } from '../utils/graphUtils';
+import type { Vector } from '../domain/Vector';
 
 class KNNMLModel implements MLModel {
   constructor(
-    private model: knnClassifier.KNNClassifier,
     private k: number,
+    private noOfClasses: number,
+    private points: LabelledPoint[],
+    private dataMean: Vector,
+    private stdDeviation: Vector,
   ) {
     Logger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
   }
-  public async predict(filteredData: number[]): Promise<number[]> {
-    const inputTensor = tensor(filteredData);
 
-    try {
-      const prediction = await this.model.predictClass(inputTensor, this.k);
-      const classes = Object.getOwnPropertyNames(prediction.confidences);
-      const confidences: number[] = [];
+  public async predict(filteredData: Vector): Promise<number[]> {
+    // Sort points by distance to live-data point
+    const orderedPoints = [...this.points];
+    orderedPoints.sort((a, b) => {
+      const aDist = distanceBetween(filteredData, a.vector);
+      const bDist = distanceBetween(filteredData, b.vector);
+      return aDist - bDist;
+    });
 
-      for (let i = 0; i < classes.length; i++) {
-        const clazz = classes[i];
-        const confidence = prediction.confidences[clazz];
-        confidences.push(confidence as number);
-      }
-
-      return Promise.resolve(confidences);
-    } catch (err) {
-      console.error('Prediction error: ', err);
-      return Promise.reject(err);
+    // Find the nearest gesture class indices
+    const neighbours = [];
+    for (let i = 0; i < this.k; i++) {
+      const neighbour = orderedPoints[i];
+      neighbours.push(neighbour.classIndex);
     }
+
+    // Compute the confidences and create the confidences array.
+    const confidences = [];
+    for (let i = 0; i < this.noOfClasses; i++) {
+      confidences.push(neighbours.filter(e => e === i).length / this.k);
+    }
+
+    return Promise.resolve(confidences);
+  }
+
+  public static normalizePoint(point: Vector, mean: Vector, stdDeviation: Vector) {
+    return point.subtract(mean).divide(stdDeviation);
   }
 }
 

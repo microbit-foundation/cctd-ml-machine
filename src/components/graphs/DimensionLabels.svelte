@@ -40,7 +40,7 @@
   onMount(() => {
     unsubscribeFromLiveData = liveData.subscribe(data => {
       const dataInArray = [];
-      for (const num of data.getVector()) {
+      for (const num of data.getValue()) {
         dataInArray.push(num);
       }
       updateDimensionLabels(dataInArray);

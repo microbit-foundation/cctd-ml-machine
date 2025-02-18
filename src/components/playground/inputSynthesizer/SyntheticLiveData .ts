@@ -13,20 +13,20 @@ import {
 } from 'svelte/store';
 import LiveDataBuffer from '../../../script/domain/LiveDataBuffer';
 import { type LiveData } from '../../../script/domain/stores/LiveData';
-import BaseVector from '../../../script/domain/BaseVector';
+import BaseLiveDataVector from '../../../script/domain/BaseLiveDataVector';
 
-export class SyntheticLiveData implements LiveData<BaseVector> {
-  private store: Writable<BaseVector>;
-  private buffer: LiveDataBuffer<BaseVector>;
+export class SyntheticLiveData implements LiveData<BaseLiveDataVector> {
+  private store: Writable<BaseLiveDataVector>;
+  private buffer: LiveDataBuffer<BaseLiveDataVector>;
   public constructor(labels: string[]) {
-    this.store = writable(new BaseVector(new Array(labels.length).fill(0), labels));
+    this.store = writable(new BaseLiveDataVector(new Array(labels.length).fill(0), labels));
     this.buffer = new LiveDataBuffer(200);
   }
-  put(data: BaseVector): void {
+  put(data: BaseLiveDataVector): void {
     this.store.set(data);
     this.buffer.addValue(data);
   }
-  getBuffer(): LiveDataBuffer<BaseVector> {
+  getBuffer(): LiveDataBuffer<BaseLiveDataVector> {
     return this.buffer;
   }
   getSeriesSize(): number {
@@ -36,8 +36,8 @@ export class SyntheticLiveData implements LiveData<BaseVector> {
     return get(this.store).getLabels();
   }
   subscribe(
-    run: Subscriber<BaseVector>,
-    invalidate?: Invalidator<BaseVector> | undefined,
+    run: Subscriber<BaseLiveDataVector>,
+    invalidate?: Invalidator<BaseLiveDataVector> | undefined,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

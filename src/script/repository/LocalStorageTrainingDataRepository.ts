@@ -12,6 +12,9 @@ import type { RecordingData } from '../domain/stores/gesture/Gestures';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import { stores } from '../stores/Stores';
 import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
+import type { Vector } from '../domain/Vector';
+import BaseVector from '../domain/BaseVector';
+import { getMean, getStandardDeviation } from '../utils/Math';
 
 class LocalStorageTrainingDataRepository implements TrainingDataRepository {
   constructor(
@@ -34,10 +37,20 @@ class LocalStorageTrainingDataRepository implements TrainingDataRepository {
     };
   }
 
+  public getTrainingDataStdDeviation(): Vector {
+    const trainingData = this.getTrainingData().classes.flatMap(e => e.samples.map(e => e.value))
+    return getStandardDeviation(trainingData);
+  }
+
+  public getTrainingDataMean(): Vector {
+    const trainingData = this.getTrainingData().classes.flatMap(e => e.samples.map(e => e.value))
+    return getMean(trainingData);
+  }
+
   private buildFilteredSamples(
     recordings: RecordingData[],
     filters: Filters,
-  ): { value: number[] }[] {
+  ): { value: Vector }[] {
     return recordings.map(recording => {
       const data = recording.samples;
       const highlightedAxes = get(stores.getHighlightedAxes());
@@ -47,7 +60,7 @@ class LocalStorageTrainingDataRepository implements TrainingDataRepository {
           return filters.compute(data.map(d => d.vector[e.index]));
         });
       return {
-        value: value,
+        value: new BaseVector(value),
       };
     });
   }

@@ -20,7 +20,7 @@
   };
 
   $: liveData = $stores.liveData ? new SmoothedLiveData($stores.liveData, 3) : undefined;
-  $: input = $liveData ? $liveData.getVector() : undefined;
+  $: input = $liveData ? $liveData.getValue() : undefined;
   $: axes = derived([highlightedAxes, availableAxes], stores => {
     const highlighted = stores[0];
     return stores[1].map(e => ({

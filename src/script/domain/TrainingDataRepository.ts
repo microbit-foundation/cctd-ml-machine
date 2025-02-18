@@ -5,7 +5,10 @@
  */
 
 import { type TrainingData } from './ModelTrainer';
+import type { Vector } from './Vector';
 
 export interface TrainingDataRepository {
   getTrainingData(): TrainingData;
+  getTrainingDataMean(): Vector;
+  getTrainingDataStdDeviation(): Vector;
 }

@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-export interface LiveDataVector {
-  getVector(): number[];
+import type { Vector } from "../Vector";
 
-  getSize(): number;
-
+export interface LiveDataVector extends Vector {
   getLabels(): string[];
 }

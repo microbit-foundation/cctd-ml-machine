@@ -3,8 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type BaseVector from '../domain/BaseVector';
+import type BaseLiveDataVector from '../domain/BaseLiveDataVector';
 import type { ModelTrainer, TrainingData } from '../domain/ModelTrainer';
+import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import Logger from '../utils/Logger';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
@@ -15,8 +16,9 @@ import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
 class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLModel> {
   constructor(private k: number) {}
 
-  public trainModel(trainingData: TrainingData): Promise<KNNNonNormalizedMLModel> {
+  public trainModel(trainingDataRepository: TrainingDataRepository): Promise<KNNNonNormalizedMLModel> {
     Logger.log('KNNNonNormalizedModelTrainer', 'Training KNN model');
+    const trainingData = trainingDataRepository.getTrainingData();
     const points: LabelledPoint[] = [];
 
     trainingData.classes.forEach((gestureClass, labelIndex) => {

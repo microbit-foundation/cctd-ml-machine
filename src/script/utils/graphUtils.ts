@@ -5,7 +5,9 @@
  */
 
 import type { Axis } from '../domain/Axis';
+import BaseVector from '../domain/BaseVector';
 import { type TrainingData } from '../domain/ModelTrainer';
+import type { Vector } from '../domain/Vector';
 import { type MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
 export type Point3D = {
@@ -48,13 +50,14 @@ export const extractAxisFromTrainingData = (
     classes: trainingData.classes.map(clazz => {
       return {
         samples: clazz.samples.map(sample => {
-          const noOfFilters = sample.value.length / noOfAxes;
+          const noOfFilters = sample.value.getSize() / noOfAxes;
           const startIndex = noOfFilters * axisOffset;
           const stopIndex = startIndex + noOfFilters;
-          return {
-            value: sample.value.filter(
+          const filteredVectorValues = sample.value.getValue().filter(
               (_val, index) => index >= startIndex && index < stopIndex,
-            ),
+            )
+          return {
+            value: new BaseVector(filteredVectorValues),
           };
         }),
       };
@@ -74,15 +77,16 @@ export const extractAxesFromTrainingData = (
     classes: trainingData.classes.map(clazz => {
       return {
         samples: clazz.samples.map(sample => {
-          return {
-            value: axes.flatMap(axis => {
-              const noOfFilters = sample.value.length / noOfAxes;
+          const filteredVectorValues = axes.flatMap(axis => {
+              const noOfFilters = sample.value.getSize() / noOfAxes;
               const startIndex = noOfFilters * axis.index;
               const stopIndex = startIndex + noOfFilters;
-              return sample.value.filter(
+              return sample.value.getValue().filter(
                 (_val, index) => index >= startIndex && index < stopIndex,
               );
-            }),
+            })
+          return {
+            value: new BaseVector(filteredVectorValues)
           };
         }),
       };
@@ -114,12 +118,12 @@ export const extractFilterFromTrainingData = (
       return {
         samples: clazz.samples.map(sample => {
           const filterValues = [];
-          for (let i = noOfAxes * filterIndex; i < sample.value.length; i += noOfAxes) {
-            const element = sample.value[i];
+          for (let i = noOfAxes * filterIndex; i < sample.value.getSize(); i += noOfAxes) {
+            const element = sample.value.getValue()[i];
             filterValues.push(element);
           }
           return {
-            value: filterValues,
+            value: new BaseVector(filterValues),
           };
         }),
       };
@@ -142,18 +146,18 @@ export const extractAxisFromAccelerometerData = (
   throw new Error(`Cannot extract from axis ${axis}`);
 };
 
-export const distanceBetween = (p1: number[], p2: number[]): number => {
+export const distanceBetween = (p1: Vector, p2: Vector): number => {
   // Check if both points have the same dimension
-  if (p1.length !== p2.length) {
+  if (p1.getSize() !== p2.getSize()) {
     throw new Error(
       'Points must have the same dimension. Got elements of size: ' +
-        [p1.length, p2.length].join(' / '),
+      [p1.getSize(), p2.getSize()].join(' / '),
     );
   }
 
   // Calculate the distance using the Euclidean formula
-  const squaredDifferences = p1.map((coord, index) => {
-    const difference = coord - p2[index];
+  const squaredDifferences = p1.getValue().map((coord, index) => {
+    const difference = coord - p2.getValue()[index];
     return difference ** 2;
   });
 

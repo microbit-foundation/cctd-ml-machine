@@ -21,8 +21,11 @@ interface KNNModelSettingsType {
   k: number;
   normalized: boolean;
 }
+
 class KNNModelSettings implements Readable<KNNModelSettingsType> {
+
   private store: Writable<KNNModelSettingsType>;
+
   public constructor(private selectedModel: SelectedModel) {
     this.store = writable({
       k: StaticConfiguration.defaultKnnNeighbourCount,
@@ -55,6 +58,10 @@ class KNNModelSettings implements Readable<KNNModelSettingsType> {
     if (get(this.selectedModel).id === ModelRegistry.KNN.id) {
       trainModel(ModelRegistry.KNN);
     }
+  }
+
+  public isNormalized() {
+    return get(this.store).normalized
   }
 }
 

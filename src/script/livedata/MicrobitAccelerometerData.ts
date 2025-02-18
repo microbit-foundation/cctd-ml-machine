@@ -12,6 +12,8 @@ import {
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import type { LiveDataVector } from '../domain/stores/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
+import type { Vector } from '../domain/Vector';
+import BaseVector from '../domain/BaseVector';
 
 export type MicrobitAccelerometerData = {
   x: number;
@@ -24,9 +26,9 @@ export const asAccelerometerData = (input: LiveDataVector) => {
     throw new Error('Cannot cast input as accelerometer data, size is not 3');
   }
   const data = new MicrobitAccelerometerDataVector({
-    x: input.getVector()[0],
-    y: input.getVector()[1],
-    z: input.getVector()[2],
+    x: input.getValue()[0],
+    y: input.getValue()[1],
+    z: input.getValue()[2],
   });
 
   input.getLabels().forEach((label, index) => {
@@ -38,21 +40,51 @@ export const asAccelerometerData = (input: LiveDataVector) => {
 };
 
 export class MicrobitAccelerometerDataVector implements LiveDataVector {
-  public constructor(private data: MicrobitAccelerometerData) {}
+  public constructor(private data: MicrobitAccelerometerData) { }
 
   public getLabels(): string[] {
     return ['X', 'Y', 'Z'];
   }
   public getSize(): number {
-    return this.getVector().length;
+    return this.getValue().length;
   }
 
-  public getVector(): number[] {
+  public getValue(): number[] {
     return [this.data.x, this.data.y, this.data.z];
   }
 
   public getAccelerometerData(): MicrobitAccelerometerData {
     return this.data;
+  }
+
+  public divide(vector: Vector): MicrobitAccelerometerDataVector {
+    const baseVec = new BaseVector(this.getValue());
+    const divided = baseVec.divide(vector);
+    return new MicrobitAccelerometerDataVector({
+      x: divided.getValue()[0],
+      y: divided.getValue()[1],
+      z: divided.getValue()[2],
+    })
+  }
+
+  public add(vector: Vector): MicrobitAccelerometerDataVector {
+    const baseVec = new BaseVector(this.getValue());
+    const divided = baseVec.add(vector);
+    return new MicrobitAccelerometerDataVector({
+      x: divided.getValue()[0],
+      y: divided.getValue()[1],
+      z: divided.getValue()[2],
+    })
+  }
+
+  public subtract(vector: Vector): MicrobitAccelerometerDataVector {
+    const baseVec = new BaseVector(this.getValue());
+    const divided = baseVec.subtract(vector);
+    return new MicrobitAccelerometerDataVector({
+      x: divided.getValue()[0],
+      y: divided.getValue()[1],
+      z: divided.getValue()[2],
+    })
   }
 }
 

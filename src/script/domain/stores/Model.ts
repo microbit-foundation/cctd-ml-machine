@@ -15,7 +15,7 @@ import {
 import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
 import type { MLModel } from '../MLModel';
 import type { ModelTrainer } from '../ModelTrainer';
-import type Snackbar from '../../../components/snackbar/Snackbar';
+import BaseVector from '../BaseVector';
 
 export enum TrainingStatus {
   Untrained,
@@ -108,7 +108,7 @@ class Model implements Readable<ModelData> {
     if (!mlModel) {
       throw new Error('Cannot predict, no MLModel has been specified');
     }
-    return await mlModel.predict(filteredData);
+    return await mlModel.predict(new BaseVector(filteredData));
   }
 
   public subscribe(

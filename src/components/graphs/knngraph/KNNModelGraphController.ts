@@ -12,13 +12,18 @@ import {
 } from '../../../script/livedata/MicrobitAccelerometerData';
 import { type TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Filters from '../../../script/domain/Filters';
-import { type Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { stores } from '../../../script/stores/Stores';
 import { FilterType } from '../../../script/domain/FilterTypes';
+import type KNNModelSettings from '../../../script/domain/stores/KNNModelSettings';
+import type { Vector } from '../../../script/domain/Vector';
+import KNNMLModel from '../../../script/mlmodels/KNNMLModel';
+import BaseVector from '../../../script/domain/BaseVector';
+import { getMean, getStandardDeviation } from '../../../script/utils/Math';
+import type { Point3D } from '../../../script/utils/graphUtils';
 
 type SampleData = {
-  value: number[];
+  value: Vector;
 };
 
 type UpdateCall = {
@@ -40,6 +45,8 @@ class KNNModelGraphController {
   private scale: Writable<number>;
   private graphDrawer: KNNModelGraphDrawer;
   private trainingData: Point3D[][][];
+  private trainingDataMean: Vector;
+  private trainingDataStdDeviation: Vector;
   private filters: Filters;
   private drawInterval;
   private redrawTrainingData = false; // Only draw training data when rotation/scale/origin changes
@@ -53,8 +60,11 @@ class KNNModelGraphController {
     origin: { x: number; y: number },
     classId: string,
     colors: string[],
+    private knnModelSettings: KNNModelSettings,
     axis?: number,
   ) {
+    this.trainingDataStdDeviation = this.getTrainingDataDeviation()
+    this.trainingDataMean = this.getTrainingDataMean();
     this.filters = stores.getClassifier().getFilters();
     this.trainingData = this.trainingDataToPoints();
     this.graphDrawer = new KNNModelGraphDrawer(svg, classId);
@@ -114,17 +124,36 @@ class KNNModelGraphController {
     this.unsubscriber();
   }
 
+  private getTrainingDataMean(): Vector {
+    const data = this.trainingDataGetter();
+    const points = data.classes.flatMap(clazz => clazz.samples.map(e => e.value));
+    return getMean(points);
+  }
+
+  private getTrainingDataDeviation(): Vector {
+    const data = this.trainingDataGetter();
+    const points = data.classes.flatMap(clazz => clazz.samples.map(e => e.value));
+    return getStandardDeviation(points);
+  }
+
   private trainingDataToPoints(): Point3D[][][] {
     const data = this.trainingDataGetter();
     return data.classes.map(clazz => this.classToPoints(clazz));
   }
 
   private classToPoints(clazz: { samples: SampleData[] }): Point3D[][] {
-    return clazz.samples.map(sample => this.sampleToPoints(sample));
+    const points = clazz.samples.map(e => e.value)
+    if (!this.knnModelSettings.isNormalized()) {
+      return points.map(p => this.sampleToPoints(p));
+    }
+    const stdDev = this.trainingDataStdDeviation;
+    const mean = this.trainingDataMean;
+    const normalized = points.map(p => KNNMLModel.normalizePoint(p, mean, stdDev));
+    return normalized.map(e => this.sampleToPoints(e))
   }
 
-  private sampleToPoints(sample: SampleData): Point3D[] {
-    return [this.arrayToPoint(sample.value)];
+  private sampleToPoints(sample: Vector): Point3D[] {
+    return [this.vectorToPoint(sample)];
   }
 
   private getControllerData(): {
@@ -154,9 +183,9 @@ class KNNModelGraphController {
             return {
               ...el,
               value: new MicrobitAccelerometerDataVector({
-                x: el.value.getVector()[0],
-                y: el.value.getVector()[1],
-                z: el.value.getVector()[2],
+                x: el.value.getValue()[0],
+                y: el.value.getValue()[1],
+                z: el.value.getValue()[2],
               }),
             };
           });
@@ -226,9 +255,9 @@ class KNNModelGraphController {
     const sum = (nums: number[]): number => nums.reduce((pre, cur) => cur + pre, 0);
 
     return {
-      x: sum(data.map(e => e.getVector()[0])),
-      y: sum(data.map(e => e.getVector()[1])),
-      z: sum(data.map(e => e.getVector()[2])),
+      x: sum(data.map(e => e.getValue()[0])),
+      y: sum(data.map(e => e.getValue()[1])),
+      z: sum(data.map(e => e.getValue()[2])),
     };
   }
 
@@ -252,8 +281,15 @@ class KNNModelGraphController {
     try {
       // Some filters throw when no filters data is available
       const liveData = getLiveFilteredData();
-      this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
-    } catch (_ignored) {}
+      const getLiveDataVec = () => {
+        const vec = new BaseVector(liveData);
+        if (!this.knnModelSettings.isNormalized()) {
+          return vec; 
+        }
+        return KNNMLModel.normalizePoint(vec, this.trainingDataMean, this.trainingDataStdDeviation);
+      }
+      this.graphDrawer.drawLiveData(draw.config, this.vectorToPoint(getLiveDataVec()));
+    } catch (_ignored) { }
 
     if (this.redrawTrainingData) {
       const drawData: Point3D[][][] = [...this.trainingData];
@@ -262,23 +298,14 @@ class KNNModelGraphController {
     }
   }
 
-  private arrayToPoint(numsIn: number[]): Point3D {
-    const nums = [...numsIn];
+  private vectorToPoint(vec: Vector): Point3D {
+    const nums = vec.getValue();
     if (this.filters.count() === 2) {
-      nums[2] = 0; // Set z-value to 0
+      nums[2] = 0;
     }
 
-    let [x, y, z] = nums; //this.normalizeVector(nums);
-
+    let [x, y, z] = nums;
     return { x, y, z };
-  }
-
-  private normalizeVector(nums: number[]): number[] {
-    const magnitude = Math.sqrt(nums.reduce((prev, cur) => prev + Math.pow(cur, 2), 0));
-    if (magnitude === 0) {
-      throw new Error('Cannot normalize vector, magnitude is 0!');
-    }
-    return nums.map(el => el / magnitude);
   }
 }
 export const controller = writable<KNNModelGraphController | undefined>(undefined);

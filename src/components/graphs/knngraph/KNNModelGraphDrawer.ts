@@ -14,6 +14,8 @@ import {
 import { state, stores } from '../../../script/stores/Stores';
 import { get } from 'svelte/store';
 import * as d3 from 'd3';
+import BaseVector from '../../../script/domain/BaseVector';
+import type { Vector } from '../../../script/domain/Vector';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -46,13 +48,12 @@ class KNNModelGraphDrawer {
     if (isNaN(drawData.y)) {
       return;
     }
-    const pointTransformer = this.getPointTransformer(drawConfig);
     const color = drawConfig.colors.slice(-1)[0]; // Fetch the last element of the colors array
     if (!color) {
       throw new Error('No color available for live data');
     }
     const drawableLivePoint: DrawablePoint = {
-      pointTransformed: pointTransformer(drawData),
+      pointTransformed: this.transformPoint(drawConfig, drawData),
       color,
       id: `live`,
     };
@@ -66,13 +67,13 @@ class KNNModelGraphDrawer {
       // Draw lines from live point to the nearest neighbours
       const predictedPoints = [...this.drawnTrainingPoints]
         .sort((a, b) => {
-          const drawableLivePointVector = [
+          const drawableLivePointVector: Vector = new BaseVector([
             drawableLivePoint.pointTransformed.x,
             drawableLivePoint.pointTransformed.y,
             drawableLivePoint.pointTransformed.z,
-          ];
-          const aDist = distanceBetween(drawableLivePointVector, [a.x, a.y, a.z]);
-          const bDist = distanceBetween(drawableLivePointVector, [b.x, b.y, b.z]);
+          ]);
+          const aDist = distanceBetween(drawableLivePointVector, new BaseVector([a.x, a.y, a.z]));
+          const bDist = distanceBetween(drawableLivePointVector, new BaseVector([b.x, b.y, b.z]));
           return aDist - bDist;
         })
         .slice(0, get(stores.getKNNModelSettings()).k);
@@ -123,14 +124,12 @@ class KNNModelGraphDrawer {
     }
     const drawablePoints: DrawablePoint[] = [];
 
-    const pointTransformer = this.getPointTransformer(drawConfig);
-
     // Add points
     drawData.forEach((clazz, classIndex) => {
       clazz.forEach((sample, exampleIndex) => {
         sample.forEach((axisValue, axisIndex) => {
           const color = drawConfig.colors[classIndex];
-          const transformedPoint: Point3DTransformed = pointTransformer(axisValue);
+          const transformedPoint: Point3DTransformed = this.transformPoint(drawConfig, axisValue);
           this.drawnTrainingPoints.push(transformedPoint);
           drawablePoints.push({
             pointTransformed: transformedPoint,
@@ -294,6 +293,11 @@ class KNNModelGraphDrawer {
       .attr('d', grid3d.draw);
 
     grid.exit().remove();
+  }
+
+  private transformPoint(drawConfig: GraphDrawConfig, point: Point3D) {
+    const transformer = this.getPointTransformer(drawConfig);
+    return transformer(point);
   }
 
   private getPointTransformer(

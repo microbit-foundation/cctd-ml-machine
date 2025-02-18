@@ -162,7 +162,7 @@
   const addDataToGraphLines = (data: LiveDataVector) => {
     const t = new Date().getTime();
     let i = 0;
-    for (const num of data.getVector()) {
+    for (const num of data.getValue()) {
       const line: TimeSeriesWithData = lines[i];
       if (!line) {
         break;

@@ -5,12 +5,13 @@
  */
 
 import type { MLModel } from '../domain/MLModel';
+import type { Vector } from '../domain/Vector';
 import { distanceBetween } from '../utils/graphUtils';
 import Logger from '../utils/Logger';
 
 export type LabelledPoint = {
   classIndex: number;
-  vector: number[];
+  vector: Vector;
 };
 
 /**
@@ -25,7 +26,7 @@ class KNNNonNormalizedMLModel implements MLModel {
     Logger.log('KNNNonNormalizedMLModel', 'New KNN model was initialized');
   }
 
-  public predict(filteredData: number[]): Promise<number[]> {
+  public predict(filteredData: Vector): Promise<number[]> {
     // Sort points by distance to live-data point
     const orderedPoints = [...this.points];
     orderedPoints.sort((a, b) => {

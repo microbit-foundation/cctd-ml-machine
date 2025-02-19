@@ -4,13 +4,16 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { knnGraphPointsStore } from '../../components/graphs/knngraph/KnnModelGraph';
 import type { MLModel } from '../domain/MLModel';
+import Vector from '../domain/Vector';
+import { stores } from '../stores/Stores';
 import { distanceBetween } from '../utils/graphUtils';
 import Logger from '../utils/Logger';
 
 export type LabelledPoint = {
   classIndex: number;
-  vector: number[];
+  vector: Vector;
 };
 
 /**
@@ -26,11 +29,17 @@ class KNNNonNormalizedMLModel implements MLModel {
   }
 
   public predict(filteredData: number[]): Promise<number[]> {
+    const filteredDataVec = new Vector(filteredData);
+    knnGraphPointsStore.update(s => {
+      s.livePoint = filteredDataVec;
+      return s;
+    })
+
     // Sort points by distance to live-data point
     const orderedPoints = [...this.points];
     orderedPoints.sort((a, b) => {
-      const aDist = distanceBetween(filteredData, a.vector);
-      const bDist = distanceBetween(filteredData, b.vector);
+      const aDist = distanceBetween(filteredData, a.vector.getValues());
+      const bDist = distanceBetween(filteredData, b.vector.getValues());
       return aDist - bDist;
     });
 

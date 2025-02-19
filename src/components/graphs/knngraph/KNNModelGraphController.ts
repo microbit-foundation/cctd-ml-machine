@@ -16,6 +16,7 @@ import { type Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { stores } from '../../../script/stores/Stores';
 import { FilterType } from '../../../script/domain/FilterTypes';
+import { knnGraphPointsStore } from './KnnModelGraph';
 
 type SampleData = {
   value: number[];
@@ -251,9 +252,10 @@ class KNNModelGraphController {
 
     try {
       // Some filters throw when no filters data is available
-      const liveData = getLiveFilteredData();
-      this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
-    } catch (_ignored) {}
+      const liveData = get(knnGraphPointsStore).livePoint
+      //const liveData = getLiveFilteredData();
+      this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData?.getValues() ?? [0, 0, 0]));
+    } catch (_ignored) { }
 
     if (this.redrawTrainingData) {
       const drawData: Point3D[][][] = [...this.trainingData];

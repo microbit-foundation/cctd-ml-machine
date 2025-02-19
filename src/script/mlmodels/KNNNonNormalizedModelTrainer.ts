@@ -3,8 +3,10 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type BaseVector from '../domain/BaseVector';
+import { knnGraphPointsStore } from '../../components/graphs/knngraph/KnnModelGraph';
 import type { ModelTrainer, TrainingData } from '../domain/ModelTrainer';
+import Vector from '../domain/Vector';
+import { stores } from '../stores/Stores';
 import Logger from '../utils/Logger';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
@@ -13,7 +15,7 @@ import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
  * Trains a K-Nearest Neighbour model. Unlike the version provided by tensorflow, the points are not normalized
  */
 class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLModel> {
-  constructor(private k: number) {}
+  constructor(private k: number) { }
 
   public trainModel(trainingData: TrainingData): Promise<KNNNonNormalizedMLModel> {
     Logger.log('KNNNonNormalizedModelTrainer', 'Training KNN model');
@@ -23,9 +25,14 @@ class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLMod
       gestureClass.samples.forEach(sample => {
         points.push({
           classIndex: labelIndex,
-          vector: sample.value,
+          vector: new Vector(sample.value),
         });
       });
+    });
+
+    knnGraphPointsStore.update(s => {
+      s.trainingPoints = points.map(e => e.vector);
+      return s;
     });
 
     return Promise.resolve(

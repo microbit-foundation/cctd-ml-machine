@@ -21,6 +21,7 @@ import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type Snackbar from '../../components/snackbar/Snackbar';
 import { t } from '../../i18n';
 import type { FiltersRepository } from '../domain/FiltersRepository';
+import type PredictedPointLiveData from '../livedata/PredictedPointLiveData';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
@@ -35,6 +36,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
     private trainingDataRepository: TrainingDataRepository,
     private snackbar: Snackbar,
     private filtersRepository: FiltersRepository,
+    private predictedPointData: PredictedPointLiveData,
   ) {
     LocalStorageClassifierRepository.mlModel = writable(undefined);
     this.classifierFactory = new ClassifierFactory();
@@ -53,6 +55,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
         this.setGestureConfidence(gestureId, confidence);
       },
       this.snackbar,
+      this.predictedPointData,
     );
 
     return classifier;

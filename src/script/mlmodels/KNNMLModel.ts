@@ -13,7 +13,7 @@ class KNNMLModel implements MLModel {
   constructor(
     private k: number,
     private noOfClasses: number,
-    private points: LabelledPoint[],
+    private points: LabelledPoint[], // Should already be normalized to save on CPU
     private dataMean: Vector,
     private stdDeviation: Vector,
   ) {
@@ -21,11 +21,14 @@ class KNNMLModel implements MLModel {
   }
 
   public async predict(filteredData: Vector): Promise<number[]> {
+    const filteredDataNormalized = KNNMLModel.normalizePoint(filteredData, this.dataMean, this.stdDeviation);
+    console.log("PRED", filteredDataNormalized)
+
     // Sort points by distance to live-data point
     const orderedPoints = [...this.points];
     orderedPoints.sort((a, b) => {
-      const aDist = distanceBetween(filteredData, a.vector);
-      const bDist = distanceBetween(filteredData, b.vector);
+      const aDist = distanceBetween(filteredDataNormalized, a.vector);
+      const bDist = distanceBetween(filteredDataNormalized, b.vector);
       return aDist - bDist;
     });
 

@@ -80,7 +80,7 @@
       return;
     }
     const unsubscribe = liveData.subscribe(data => {
-      newData.push({ vector: data.getVector() });
+      newData.push({ vector: data.getValue() });
       labels = data.getLabels();
     });
 

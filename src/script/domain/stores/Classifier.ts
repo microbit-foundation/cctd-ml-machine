@@ -15,6 +15,9 @@ import Model, { type ModelData } from './Model';
 import Gesture, { type GestureID } from './gesture/Gesture';
 import type { ClassifierInput } from '../ClassifierInput';
 import Logger from '../../utils/Logger';
+import BaseVector from '../BaseVector';
+import type PredictedPointLiveData from '../../livedata/PredictedPointLiveData';
+import BaseLiveDataVector from '../BaseLiveDataVector';
 
 type ClassifierData = {
   model: ModelData;
@@ -26,6 +29,7 @@ class Classifier implements Readable<ClassifierData> {
     private filters: Filters,
     private gestures: Readable<Gesture[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
+    private predictedPointData: PredictedPointLiveData
   ) {
     Logger.log('classifier', 'Initialized classifier');
   }
@@ -46,7 +50,8 @@ class Classifier implements Readable<ClassifierData> {
    * Takes in a ClassifierInput object and updates the GestureConfidence store of each Gesture
    */
   public async classify(input: ClassifierInput): Promise<void> {
-    const filteredInput = input.getInput(this.filters);
+    const filteredInput = new BaseVector(input.getInput(this.filters));
+    this.predictedPointData.put(new BaseLiveDataVector(filteredInput, []));
     const predictions = await this.getModel().predict(filteredInput);
     predictions.forEach((confidence, index) => {
       const gesture = get(this.gestures)[index];

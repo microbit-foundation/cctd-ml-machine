@@ -12,6 +12,7 @@ import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type Snackbar from '../../components/snackbar/Snackbar';
 import { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import type { FiltersRepository } from '../domain/FiltersRepository';
+import type PredictedPointLiveData from '../livedata/PredictedPointLiveData';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;
@@ -24,7 +25,7 @@ class LocalStorageRepositories implements Repositories {
 
   private static instance: LocalStorageRepositories;
 
-  constructor(snackbar: Snackbar) {
+  constructor(snackbar: Snackbar, predictedPointData: PredictedPointLiveData) {
     if (LocalStorageRepositories.instance) {
       // Singleton
       throw new Error('Could not instantiate repository. It is already instantiated!');
@@ -41,6 +42,7 @@ class LocalStorageRepositories implements Repositories {
       this.trainingDataRepository,
       snackbar,
       this.filtersRepository,
+      predictedPointData
     );
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }

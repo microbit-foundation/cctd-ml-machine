@@ -171,7 +171,7 @@ class KNNModelGraphController {
     try {
       const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
       const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      const liveDataStore = get(stores).liveData;
+      const liveDataStore = stores.getPredictedPointData();
       if (liveDataStore !== undefined) {
         liveData = liveDataStore
           .getBuffer()
@@ -283,10 +283,13 @@ class KNNModelGraphController {
       const liveData = getLiveFilteredData();
       const getLiveDataVec = () => {
         const vec = new BaseVector(liveData);
+        return vec;
         if (!this.knnModelSettings.isNormalized()) {
           return vec; 
         }
-        return KNNMLModel.normalizePoint(vec, this.trainingDataMean, this.trainingDataStdDeviation);
+        const normalizedVec = KNNMLModel.normalizePoint(vec, this.trainingDataMean, this.trainingDataStdDeviation);
+        console.log("CTRL", normalizedVec)
+        return normalizedVec;
       }
       this.graphDrawer.drawLiveData(draw.config, this.vectorToPoint(getLiveDataVec()));
     } catch (_ignored) { }

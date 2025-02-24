@@ -25,7 +25,9 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
     private settings: LayersModelTrainingSettings,
     private onFitIteration: (h: LossTrainingIteration) => void,
   ) {}
-  public async trainModel(trainingDataRepository: TrainingDataRepository): Promise<LayersMLModel> {
+  public async trainModel(
+    trainingDataRepository: TrainingDataRepository,
+  ): Promise<LayersMLModel> {
     const trainingData = trainingDataRepository.getTrainingData();
     // Fetch data
     const features: Array<number[]> = [];

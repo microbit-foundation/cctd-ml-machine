@@ -33,9 +33,13 @@ describe('ML Model tests', async () => {
       const trainingData = new TestTrainingDataRepository();
       const knnModel = await new KNNNonNormalizedModelTrainer(2).trainModel(trainingData);
 
-      const prediction1 = await knnModel.predict(new BaseVector([0, 0, 0, 0, 0, 0, 0, 0, 0]));
+      const prediction1 = await knnModel.predict(
+        new BaseVector([0, 0, 0, 0, 0, 0, 0, 0, 0]),
+      );
       expect(prediction1).toStrictEqual([0, 1, 0]);
-      const prediction2 = await knnModel.predict(new BaseVector([1, 1, 0, 0, 0, -2, 0, -3, 0]));
+      const prediction2 = await knnModel.predict(
+        new BaseVector([1, 1, 0, 0, 0, -2, 0, -3, 0]),
+      );
       expect(prediction2).toStrictEqual([0.5, 0, 0.5]);
     });
   });

@@ -50,8 +50,8 @@ describe('Data representation tests', () => {
       20,
     );
 
-    expect(() => get(liveData).getVector()).not.toThrow();
-    expect(get(liveData).getVector()).toEqual([1, 2, 3]);
+    expect(() => get(liveData).getValue()).not.toThrow();
+    expect(get(liveData).getValue()).toEqual([1, 2, 3]);
   });
 
   test('Test smoothed values', () => {
@@ -65,16 +65,16 @@ describe('Data representation tests', () => {
     liveData.put(point1);
     liveData.put(point2);
 
-    expect(get(smoothLiveData).getVector()[0]).toBeCloseTo(
-      smoothNewValue(point2.getVector()[0], point1.getVector()[0]),
+    expect(get(smoothLiveData).getValue()[0]).toBeCloseTo(
+      smoothNewValue(point2.getValue()[0], point1.getValue()[0]),
       10,
     );
-    expect(get(smoothLiveData).getVector()[1]).toBeCloseTo(
-      smoothNewValue(point2.getVector()[1], point1.getVector()[1]),
+    expect(get(smoothLiveData).getValue()[1]).toBeCloseTo(
+      smoothNewValue(point2.getValue()[1], point1.getValue()[1]),
       10,
     );
-    expect(get(smoothLiveData).getVector()[2]).toBeCloseTo(
-      smoothNewValue(point2.getVector()[2], point1.getVector()[2]),
+    expect(get(smoothLiveData).getValue()[2]).toBeCloseTo(
+      smoothNewValue(point2.getValue()[2], point1.getValue()[2]),
       10,
     );
   });

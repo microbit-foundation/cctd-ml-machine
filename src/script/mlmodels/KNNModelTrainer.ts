@@ -4,26 +4,37 @@
  * SPDX-License-Identifier: MIT
  */
 import KNNMLModel from './KNNMLModel';
-import * as tf from '@tensorflow/tfjs';
-import * as knnClassifier from '@tensorflow-models/knn-classifier';
-import type { ModelTrainer, TrainingData } from '../domain/ModelTrainer';
+import type { ModelTrainer } from '../domain/ModelTrainer';
+import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type { LabelledPoint } from './KNNNonNormalizedMLModel';
+import { knnTrainingDataPoints } from '../../components/graphs/knngraph/KnnModelGraph';
 
 /**
  * Trains a K-Nearest Neighbour model
  */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
   constructor(private k: number) {}
-  public trainModel(trainingData: TrainingData): Promise<KNNMLModel> {
-    const knn: knnClassifier.KNNClassifier = knnClassifier.create();
+  public trainModel(trainingDataRepository: TrainingDataRepository): Promise<KNNMLModel> {
+    const trainingData = trainingDataRepository.getTrainingData();
+    const mean = trainingDataRepository.getTrainingDataMean();
+    const stdDev = trainingDataRepository.getTrainingDataStdDeviation();
 
-    trainingData.classes.forEach((gestureClass, index) => {
+    const points: LabelledPoint[] = [];
+
+    trainingData.classes.forEach((gestureClass, labelIndex) => {
       gestureClass.samples.forEach(sample => {
-        const example: tf.Tensor = tf.tensor(sample.value);
-        knn.addExample(example, index);
+        points.push({
+          classIndex: labelIndex,
+          vector: KNNMLModel.normalizePoint(sample.value, mean, stdDev),
+        });
       });
     });
 
-    return Promise.resolve(new KNNMLModel(knn, this.k));
+    knnTrainingDataPoints.set(points);
+
+    return Promise.resolve(
+      new KNNMLModel(this.k, trainingData.classes.length, points, mean, stdDev),
+    );
   }
 }
 

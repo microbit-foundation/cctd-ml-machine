@@ -15,7 +15,8 @@ import {
 import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
 import type { MLModel } from '../MLModel';
 import type { ModelTrainer } from '../ModelTrainer';
-import type Snackbar from '../../../components/snackbar/Snackbar';
+import BaseVector from '../BaseVector';
+import type { Vector } from '../Vector';
 
 export enum TrainingStatus {
   Untrained,
@@ -103,7 +104,7 @@ class Model implements Readable<ModelData> {
    *
    * Use if you have to, but see `classifier.classify()` first
    */
-  public async predict(filteredData: number[]): Promise<number[]> {
+  public async predict(filteredData: Vector): Promise<number[]> {
     const mlModel = get(this.mlModel);
     if (!mlModel) {
       throw new Error('Cannot predict, no MLModel has been specified');

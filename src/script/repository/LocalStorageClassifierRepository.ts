@@ -21,6 +21,7 @@ import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type Snackbar from '../../components/snackbar/Snackbar';
 import { t } from '../../i18n';
 import type { FiltersRepository } from '../domain/FiltersRepository';
+import type PredictedPointLiveData from '../livedata/PredictedPointLiveData';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
@@ -63,14 +64,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
    * See getTrainerConsumer() and getClassifier()
    */
   private async trainModel<T extends MLModel>(trainer: ModelTrainer<T>): Promise<void> {
-    /*
-    const trainingData = this.classifierFactory.buildTrainingData(
-      get(gestureRepository),
-      LocalStorageClassifierRepository.filters,
-    );*/
-
-    const trainingData = this.trainingDataRepository.getTrainingData();
-    const model = await trainer.trainModel(trainingData);
+    const model = await trainer.trainModel(this.trainingDataRepository);
     this.snackbar.sendMessage(get(t)('snackbar.modeltrained'));
     LocalStorageClassifierRepository.mlModel.set(model);
   }

@@ -8,7 +8,7 @@
  */
 
 import { get, writable } from 'svelte/store';
-import BaseVector from '../../script/domain/BaseVector';
+import BaseLiveDataVector from '../../script/domain/BaseLiveDataVector';
 import { ClassifierInput } from '../../script/domain/ClassifierInput';
 import Filters from '../../script/domain/Filters';
 import { stores } from '../../script/stores/Stores';
@@ -22,7 +22,7 @@ import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import TestGestureRepository from '../mocks/TestGestureRepository';
 import Confidences from '../../script/domain/stores/Confidences';
 import Snackbar from '../../components/snackbar/Snackbar';
-import { repeat } from '../testUtils';
+import BaseVector from '../../script/domain/BaseVector';
 
 describe('Classifier tests', () => {
   test('Changing matrix does not mark model as untrained', async () => {
@@ -57,9 +57,9 @@ describe('Classifier tests', () => {
 
   test('Classifier input should be correct size', () => {
     const vectors = [
-      new BaseVector([1, 1, 1], ['x', 'y', 'z']),
-      new BaseVector([2, 2, 2], ['x', 'y', 'z']),
-      new BaseVector([3, 3, 3], ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([1, 1, 1]), ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([2, 2, 2]), ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([3, 3, 3]), ['x', 'y', 'z']),
     ];
     const input = new ClassifierInput(vectors);
     const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
@@ -71,8 +71,8 @@ describe('Classifier tests', () => {
 
   test('Max Filter should return max of two vectors', () => {
     const vectors = [
-      new BaseVector([1, 2, 3], ['x', 'y', 'z']),
-      new BaseVector([4, 5, 6], ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([1, 2, 3]), ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([4, 5, 6]), ['x', 'y', 'z']),
     ];
     const input = new ClassifierInput(vectors);
     const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
@@ -82,9 +82,9 @@ describe('Classifier tests', () => {
 
   test('Filters should correctly consider all vectors 1d', () => {
     const vectors = [
-      new BaseVector([1], ['x']),
-      new BaseVector([4], ['x']),
-      new BaseVector([10], ['x']),
+      new BaseLiveDataVector(new BaseVector([1]), ['x']),
+      new BaseLiveDataVector(new BaseVector([4]), ['x']),
+      new BaseLiveDataVector(new BaseVector([10]), ['x']),
     ];
     const input = new ClassifierInput(vectors);
     const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
@@ -97,9 +97,9 @@ describe('Classifier tests', () => {
 
   test('Filters should correctly consider all vectors 2d', () => {
     const vectors = [
-      new BaseVector([1, 2], ['x', 'y']),
-      new BaseVector([4, 8], ['x', 'y']),
-      new BaseVector([10, 20], ['x', 'y']),
+      new BaseLiveDataVector(new BaseVector([1, 2]), ['x', 'y']),
+      new BaseLiveDataVector(new BaseVector([4, 8]), ['x', 'y']),
+      new BaseLiveDataVector(new BaseVector([10, 20]), ['x', 'y']),
     ];
     const input = new ClassifierInput(vectors);
     const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
@@ -115,9 +115,9 @@ describe('Classifier tests', () => {
 
   test('Classifying Should Not Throw', async () => {
     const vectors = [
-      new BaseVector([1, 2, 4], ['x', 'y', 'z']),
-      new BaseVector([4, 8, 16], ['x', 'y', 'z']),
-      new BaseVector([10, 20, 40], ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([1, 2, 4]), ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([4, 8, 16]), ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([10, 20, 40]), ['x', 'y', 'z']),
     ];
     const classifierInput = new ClassifierInput(vectors);
     const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
@@ -127,7 +127,7 @@ describe('Classifier tests', () => {
 
     let iterations = 0;
 
-    const trainingData = new TestTrainingDataRepository().getTrainingData();
+    const trainingData = new TestTrainingDataRepository();
     const trainedModel = await new LayersModelTrainer(
       StaticConfiguration.defaultNeuralNetworkSettings,
       () => (iterations += 1),
@@ -172,9 +172,9 @@ describe('Classifier tests', () => {
 
   test('Classifier should set confidence', async () => {
     const vectors = [
-      new BaseVector([1, 2, 4], ['x', 'y', 'z']),
-      new BaseVector([4, 8, 16], ['x', 'y', 'z']),
-      new BaseVector([10, 20, 40], ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([1, 2, 4]), ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([4, 8, 16]), ['x', 'y', 'z']),
+      new BaseLiveDataVector(new BaseVector([10, 20, 40]), ['x', 'y', 'z']),
     ];
     const classifierInput = new ClassifierInput(vectors);
     const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
@@ -184,7 +184,7 @@ describe('Classifier tests', () => {
 
     let iterations = 0;
 
-    const trainingData = new TestTrainingDataRepository().getTrainingData();
+    const trainingData = new TestTrainingDataRepository();
     const trainedModel = await new LayersModelTrainer(
       StaticConfiguration.defaultNeuralNetworkSettings,
       () => (iterations += 1),
@@ -234,9 +234,9 @@ describe('Classifier tests', () => {
     'Classifier should correctly classify',
     async () => {
       const vectors = [
-        new BaseVector([1, 2, 4], ['x', 'y', 'z']),
-        new BaseVector([4, 8, 16], ['x', 'y', 'z']),
-        new BaseVector([10, 20, 40], ['x', 'y', 'z']),
+        new BaseLiveDataVector(new BaseVector([1, 2, 4]), ['x', 'y', 'z']),
+        new BaseLiveDataVector(new BaseVector([4, 8, 16]), ['x', 'y', 'z']),
+        new BaseLiveDataVector(new BaseVector([10, 20, 40]), ['x', 'y', 'z']),
       ];
       const classifierInput = new ClassifierInput(vectors);
       const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
@@ -246,7 +246,7 @@ describe('Classifier tests', () => {
 
       let iterations = 0;
 
-      const trainingData = new TestTrainingDataRepository().getTrainingData();
+      const trainingData = new TestTrainingDataRepository();
       const trainedModel = await new LayersModelTrainer(
         StaticConfiguration.defaultNeuralNetworkSettings,
         () => (iterations += 1),

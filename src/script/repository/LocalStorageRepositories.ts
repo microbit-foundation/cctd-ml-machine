@@ -12,6 +12,7 @@ import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type Snackbar from '../../components/snackbar/Snackbar';
 import { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import type { FiltersRepository } from '../domain/FiltersRepository';
+import type PredictedPointLiveData from '../livedata/PredictedPointLiveData';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;

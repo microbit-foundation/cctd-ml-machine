@@ -4,24 +4,56 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { type LiveDataVector } from './stores/LiveDataVector';
+import type { Vector } from './Vector';
 
-class BaseVector implements LiveDataVector {
-  public constructor(
-    private numbers: number[],
-    private labels: string[],
-  ) {}
-
-  public getLabels(): string[] {
-    return this.labels;
-  }
+class BaseVector implements Vector {
+  constructor(private values: number[]) {}
 
   public getSize(): number {
-    return this.numbers.length;
+    return this.values.length;
   }
 
-  public getVector(): number[] {
-    return this.numbers;
+  public getValue(): number[] {
+    return this.values;
+  }
+
+  public divide(vector: Vector): BaseVector {
+    if (this.getSize() !== vector.getSize()) {
+      throw new Error(
+        `Attempted to divide two vectors of unequal size. Vector1 size: ${this.getSize()} - Vector2 size: ${vector.getSize()}`,
+      );
+    }
+    const v1 = this.getValue();
+    const v2 = vector.getValue();
+
+    const vn = v1.map((val, inx) => val / v2[inx]);
+    return new BaseVector(vn);
+  }
+
+  public subtract(vector: Vector): BaseVector {
+    if (this.getSize() !== vector.getSize()) {
+      throw new Error(
+        `Attempted to subtract two vectors of unequal size. Vector1 size: ${this.getSize()} - Vector2 size: ${vector.getSize()}`,
+      );
+    }
+    const v1 = this.getValue();
+    const v2 = vector.getValue();
+
+    const vn = v1.map((val, inx) => val - v2[inx]);
+    return new BaseVector(vn);
+  }
+
+  public add(vector: Vector): BaseVector {
+    if (this.getSize() !== vector.getSize()) {
+      throw new Error(
+        `Attempted to add two vectors of unequal size. Vector1 size: ${this.getSize()} - Vector2 size: ${vector.getSize()}`,
+      );
+    }
+    const v1 = this.getValue();
+    const v2 = vector.getValue();
+
+    const vn = v1.map((val, inx) => val + v2[inx]);
+    return new BaseVector(vn);
   }
 }
 

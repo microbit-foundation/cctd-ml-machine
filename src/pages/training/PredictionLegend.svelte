@@ -10,7 +10,7 @@
   const confidences = stores.getConfidences();
 </script>
 
-{#each $gestures as gesture, index}
+{#each $gestures as gesture}
   <div class="flex flex-row justify-between">
     <div class="flex flex-row">
       <div class="flex flex-col justify-center mr-1">

@@ -6,14 +6,11 @@
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
-import {
-  type Point3D,
-  type Point3DTransformed,
-  distanceBetween,
-} from '../../../script/utils/graphUtils';
+import { type Point3D, type Point3DTransformed } from '../../../script/utils/graphUtils';
 import { state, stores } from '../../../script/stores/Stores';
 import { get } from 'svelte/store';
 import * as d3 from 'd3';
+import { knnNeighbours } from './KnnModelGraph';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -46,13 +43,12 @@ class KNNModelGraphDrawer {
     if (isNaN(drawData.y)) {
       return;
     }
-    const pointTransformer = this.getPointTransformer(drawConfig);
     const color = drawConfig.colors.slice(-1)[0]; // Fetch the last element of the colors array
     if (!color) {
       throw new Error('No color available for live data');
     }
     const drawableLivePoint: DrawablePoint = {
-      pointTransformed: pointTransformer(drawData),
+      pointTransformed: this.transformPoint(drawConfig, drawData),
       color,
       id: `live`,
     };
@@ -60,22 +56,21 @@ class KNNModelGraphDrawer {
       return; // May happen if the model has just been trained.
     }
 
+    const predictedVectorPoints = get(knnNeighbours).map(e => e.vector);
+    const transformedPredictedPoints: Point3DTransformed[] = predictedVectorPoints.map(
+      point =>
+        this.transformPoint(drawConfig, {
+          x: point.getValue()[0],
+          y: point.getValue()[1],
+          z: 0,
+        }),
+    );
+
     if (get(state).isInputReady) {
       this.addPoint(drawableLivePoint, 'live');
 
       // Draw lines from live point to the nearest neighbours
-      const predictedPoints = [...this.drawnTrainingPoints]
-        .sort((a, b) => {
-          const drawableLivePointVector = [
-            drawableLivePoint.pointTransformed.x,
-            drawableLivePoint.pointTransformed.y,
-            drawableLivePoint.pointTransformed.z,
-          ];
-          const aDist = distanceBetween(drawableLivePointVector, [a.x, a.y, a.z]);
-          const bDist = distanceBetween(drawableLivePointVector, [b.x, b.y, b.z]);
-          return aDist - bDist;
-        })
-        .slice(0, get(stores.getKNNModelSettings()).k);
+      const predictedPoints = [...transformedPredictedPoints];
 
       const lines = this.svg.selectAll(`line.points-class`).data(predictedPoints);
       lines
@@ -94,8 +89,7 @@ class KNNModelGraphDrawer {
     }
   };
 
-  public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][][]) {
-    // this.svg.selectAll('*').remove(); // clear svg for redraw
+  public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][]) {
     // Add grid
     this.addGrid(drawConfig);
 
@@ -123,20 +117,19 @@ class KNNModelGraphDrawer {
     }
     const drawablePoints: DrawablePoint[] = [];
 
-    const pointTransformer = this.getPointTransformer(drawConfig);
-
     // Add points
     drawData.forEach((clazz, classIndex) => {
       clazz.forEach((sample, exampleIndex) => {
-        sample.forEach((axisValue, axisIndex) => {
-          const color = drawConfig.colors[classIndex];
-          const transformedPoint: Point3DTransformed = pointTransformer(axisValue);
-          this.drawnTrainingPoints.push(transformedPoint);
-          drawablePoints.push({
-            pointTransformed: transformedPoint,
-            color,
-            id: `${classIndex}-${exampleIndex}-${axisIndex}`,
-          });
+        const color = drawConfig.colors[classIndex];
+        const transformedPoint: Point3DTransformed = this.transformPoint(
+          drawConfig,
+          sample,
+        );
+        this.drawnTrainingPoints.push(transformedPoint);
+        drawablePoints.push({
+          pointTransformed: transformedPoint,
+          color,
+          id: `${classIndex}-${exampleIndex}`,
         });
       });
     });
@@ -245,21 +238,7 @@ class KNNModelGraphDrawer {
     axis.exit().remove();
   }
 
-  /**
-   * Returns the label by using index to find element in list of gestures
-   */
-  private getLabel(dataIndex: number) {
-    try {
-      const gestureList = stores.getGestures().getGestures();
-      return gestureList[dataIndex].getName();
-    } catch (error) {
-      // Index out of bounds indicates either an error or live data.
-      return 'Live';
-    }
-  }
-
   private addGrid(drawConfig: GraphDrawConfig) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const grid3d = this.getGridTransformer(drawConfig);
     const xGrid = [];
     const j = 30;
@@ -272,12 +251,9 @@ class KNNModelGraphDrawer {
         }
       }
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     const gridData = grid3d(xGrid);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
     const grid = this.svg.selectAll('path.grid').data(gridData, (d: any) => d.id);
-
     grid
       .enter()
       .append('path')
@@ -294,6 +270,11 @@ class KNNModelGraphDrawer {
       .attr('d', grid3d.draw);
 
     grid.exit().remove();
+  }
+
+  private transformPoint(drawConfig: GraphDrawConfig, point: Point3D) {
+    const transformer = this.getPointTransformer(drawConfig);
+    return transformer(point);
   }
 
   private getPointTransformer(

@@ -7,17 +7,12 @@
   import { onMount } from 'svelte';
   import KNNModelGraphController, { controller } from './KNNModelGraphController';
   import * as d3 from 'd3';
-  import ClassifierFactory from '../../../script/domain/ClassifierFactory';
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
-  import { extractAxisFromTrainingData } from '../../../script/utils/graphUtils';
-  import { type TrainingData } from '../../../script/domain/ModelTrainer';
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
   import { stores } from '../../../script/stores/Stores';
   import { get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { FilterType } from '../../../script/domain/FilterTypes';
-
-  const classifierFactory = new ClassifierFactory();
 
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
@@ -31,31 +26,7 @@
     throw new Error('KNN model graph only supports a single highlighted axis');
   }
 
-  // Cache training data to avoid fetching them again and again
-  const allData = classifierFactory.buildTrainingData(
-    gestures.getGestures(),
-    classifier.getFilters(),
-  );
-
-  const accelXData = extractAxisFromTrainingData(allData, 0, 3);
-  const accelYData = extractAxisFromTrainingData(allData, 1, 3);
-  const accelZData = extractAxisFromTrainingData(allData, 2, 3);
-
-  const dataGetter = (): TrainingData => {
-    const axis = $highlightedAxes[0];
-    if (axis.index === 0) {
-      return accelXData;
-    }
-    if (axis.index === 1) {
-      return accelYData;
-    }
-    if (axis.index === 2) {
-      return accelZData;
-    }
-    throw new Error('Cannot get data for axis ' + axis);
-  };
-
-  const initSingle = (axis: number) => {
+  const initSingle = () => {
     const svgSingle = d3.select('.d3-3d-single');
     const graphColors = [
       ...$gestures.map(data => data.color),
@@ -66,11 +37,9 @@
     }
     const controller = new KNNModelGraphController(
       svgSingle,
-      () => dataGetter(),
       { x: canvasWidth / 2, y: canvasHeight / 2 },
       'd3-3d-single-',
       graphColors,
-      axis,
     );
     return controller;
   };
@@ -78,7 +47,7 @@
   $: {
     if (get(controller)) {
       get(controller)!.destroy();
-      controller.set(initSingle($highlightedAxes[0].index));
+      controller.set(initSingle());
     }
   }
 
@@ -89,7 +58,7 @@
 
   onMount(() => {
     if ($highlightedAxes.length === 1) {
-      controller.set(initSingle(0));
+      controller.set(initSingle());
     }
     return () => {
       get(controller)?.destroy();

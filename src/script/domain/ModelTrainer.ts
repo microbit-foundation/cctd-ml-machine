@@ -5,15 +5,17 @@
  */
 
 import type { MLModel } from './MLModel';
+import type { TrainingDataRepository } from './TrainingDataRepository';
+import type { Vector } from './Vector';
 
 export type TrainingData = {
   classes: {
     samples: {
-      value: number[];
+      value: Vector;
     }[];
   }[];
 };
 
 export interface ModelTrainer<T extends MLModel> {
-  trainModel(trainingData: TrainingData): Promise<T>;
+  trainModel(trainingDataRepository: TrainingDataRepository): Promise<T>;
 }

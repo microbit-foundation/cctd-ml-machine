@@ -12,18 +12,15 @@ import {
 } from '../../../script/livedata/MicrobitAccelerometerData';
 import { type TimestampedData } from '../../../script/domain/LiveDataBuffer';
 import Filters from '../../../script/domain/Filters';
-import { type Point3D } from '../../../script/utils/graphUtils';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { stores } from '../../../script/stores/Stores';
 import { FilterType } from '../../../script/domain/FilterTypes';
-
-type SampleData = {
-  value: number[];
-};
+import BaseVector from '../../../script/domain/BaseVector';
+import type { Point3D } from '../../../script/utils/graphUtils';
+import { knnCurrentPoint, knnTrainingDataPoints } from './KnnModelGraph';
 
 type UpdateCall = {
   config: GraphDrawConfig;
-  data: TimestampedData<MicrobitAccelerometerDataVector>[];
 };
 
 /**
@@ -39,24 +36,18 @@ class KNNModelGraphController {
   private origin: Writable<{ x: number; y: number }>;
   private scale: Writable<number>;
   private graphDrawer: KNNModelGraphDrawer;
-  private trainingData: Point3D[][][];
   private filters: Filters;
-  private drawInterval;
   private redrawTrainingData = false; // Only draw training data when rotation/scale/origin changes
   private unsubscriber;
-  private liveDataRecordsSize = 3;
-  private liveDataRecords: TimestampedData<MicrobitAccelerometerDataVector>[][] = []; // Used to 'smoothe' live data point. Expected to contain a few points(liveDataRecordsSize), and points are replaced at each update
+  private currentPointUnsubscriber;
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-    private trainingDataGetter: () => TrainingData,
     origin: { x: number; y: number },
     classId: string,
     colors: string[],
-    axis?: number,
   ) {
     this.filters = stores.getClassifier().getFilters();
-    this.trainingData = this.trainingDataToPoints();
     this.graphDrawer = new KNNModelGraphDrawer(svg, classId);
     this.rotationX = writable(3);
     this.rotationY = writable(0.5);
@@ -65,21 +56,16 @@ class KNNModelGraphController {
     this.origin = writable(origin);
     this.graphColors = colors;
 
-    const noOfPoints = this.trainingData
-      .map(el => el.length)
-      .reduce((prev, cur) => prev + cur);
-    const updateRate = 50 + noOfPoints / 2;
-
     // To avoid redrawing data, only flag the training data to be drawn if any of these stores are altered
     this.unsubscriber = derived(
       [this.rotationX, this.rotationY, this.rotationZ, this.scale, this.origin],
       () => ({}), // We don't need to use the values to anything. We just do this instead of subscribing to each store individually
     ).subscribe(() => (this.redrawTrainingData = true));
 
-    this.drawInterval = setInterval(() => {
+    this.currentPointUnsubscriber = knnCurrentPoint.subscribe(() => {
       const controllerData = this.getControllerData();
-      this.onUpdate(controllerData, axis);
-    }, updateRate);
+      this.onUpdate(controllerData);
+    });
   }
 
   public setOrigin(x: number, y: number) {
@@ -110,67 +96,18 @@ class KNNModelGraphController {
   }
 
   public destroy() {
-    clearTimeout(this.drawInterval);
     this.unsubscriber();
+    this.currentPointUnsubscriber();
   }
 
-  private trainingDataToPoints(): Point3D[][][] {
-    const data = this.trainingDataGetter();
-    return data.classes.map(clazz => this.classToPoints(clazz));
-  }
-
-  private classToPoints(clazz: { samples: SampleData[] }): Point3D[][] {
-    return clazz.samples.map(sample => this.sampleToPoints(sample));
-  }
-
-  private sampleToPoints(sample: SampleData): Point3D[] {
-    return [this.arrayToPoint(sample.value)];
-  }
-
-  private getControllerData(): {
-    config: GraphDrawConfig;
-    data: TimestampedData<MicrobitAccelerometerDataVector>[];
-  } {
+  private getControllerData(): { config: GraphDrawConfig } {
     const classifier = stores.getClassifier();
     const xRot = get(this.rotationX);
     const yRot = get(this.rotationY);
     const zRot = get(this.rotationZ);
     const scale = get(this.scale);
     const origin = get(this.origin);
-    let liveData: TimestampedData<MicrobitAccelerometerDataVector>[] = [];
 
-    try {
-      const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
-      const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      const liveDataStore = get(stores).liveData;
-      if (liveDataStore !== undefined) {
-        liveData = liveDataStore
-          .getBuffer()
-          .getSeries(sampleDuration, sampleSize)
-          .map(el => {
-            if (el.value.getSize() != 3) {
-              throw new Error("Couldn't convert vector to accelerometer data vector");
-            }
-            return {
-              ...el,
-              value: new MicrobitAccelerometerDataVector({
-                x: el.value.getVector()[0],
-                y: el.value.getVector()[1],
-                z: el.value.getVector()[2],
-              }),
-            };
-          });
-      } else {
-        liveData = [];
-      }
-      this.liveDataRecords.push(liveData);
-      if (this.liveDataRecords.length > this.liveDataRecordsSize) {
-        this.liveDataRecords.shift();
-      }
-      liveData = this.calculateLiveDataRecordsAverage();
-    } catch (error) {
-      liveData = [];
-    }
     // Given as input to the draw function
     return {
       config: {
@@ -181,105 +118,50 @@ class KNNModelGraphController {
         scale,
         colors: this.graphColors,
       },
-      data: liveData,
-    };
-  }
-
-  private calculateLiveDataRecordsAverage(): TimestampedData<MicrobitAccelerometerDataVector>[] {
-    const noOfRecords = this.liveDataRecords.length;
-    const vals = this.liveDataRecords.map(e => e.map(e => e.value));
-    const samples1 = vals[0];
-    const samples2 = vals[1];
-    const samples3 = vals[2];
-
-    const combined = samples1.map((sample, index) =>
-      this.divAccelData(
-        this.sumAccelData([sample, samples2[index], samples3[index]]),
-        noOfRecords,
-      ),
-    );
-
-    return combined.map(e => ({
-      timestamp: 0, // ignored
-      value: new MicrobitAccelerometerDataVector(e),
-    }));
-  }
-
-  private divAccelData(
-    data: MicrobitAccelerometerData,
-    div: number,
-  ): MicrobitAccelerometerData {
-    if (div === 0) {
-      throw new Error('Cannot divide by 0');
-    }
-
-    return {
-      x: data.x / div,
-      y: data.y / div,
-      z: data.z / div,
-    };
-  }
-
-  private sumAccelData(
-    data: MicrobitAccelerometerDataVector[],
-  ): MicrobitAccelerometerData {
-    const sum = (nums: number[]): number => nums.reduce((pre, cur) => cur + pre, 0);
-
-    return {
-      x: sum(data.map(e => e.getVector()[0])),
-      y: sum(data.map(e => e.getVector()[1])),
-      z: sum(data.map(e => e.getVector()[2])),
     };
   }
 
   // Called whenever any subscribed store is altered
-  private onUpdate(draw: UpdateCall, axis?: number) {
-    let data: TimestampedData<MicrobitAccelerometerDataVector>[] = draw.data;
-
-    const getLiveFilteredData = () => {
-      switch (axis) {
-        case 0:
-          return this.filters.compute(data.map(d => d.value.getAccelerometerData().x));
-        case 1:
-          return this.filters.compute(data.map(d => d.value.getAccelerometerData().y));
-        case 2:
-          return this.filters.compute(data.map(d => d.value.getAccelerometerData().z));
-        default:
-          throw new Error("Shouldn't happen");
-      }
-    };
-
+  private onUpdate(draw: UpdateCall) {
     try {
       // Some filters throw when no filters data is available
-      const liveData = getLiveFilteredData();
-      this.graphDrawer.drawLiveData(draw.config, this.arrayToPoint(liveData));
+      const liveDataVec = get(knnCurrentPoint) ?? new BaseVector([0, 0, 0]);
+      this.graphDrawer.drawLiveData(draw.config, {
+        x: liveDataVec.getValue()[0],
+        y: liveDataVec.getValue()[1],
+        z: 0, // Unsupported for now
+      });
     } catch (_ignored) {}
 
     if (this.redrawTrainingData) {
-      const drawData: Point3D[][][] = [...this.trainingData];
-      this.redrawTrainingData = false;
-      this.graphDrawer.draw(draw.config, drawData);
+      this.redrawTrainingData = false; // Won't redraw next time until flag is set
+      const groupedByIndex = this.getTrainingDataPoints();
+      this.graphDrawer.draw(draw.config, groupedByIndex);
     }
   }
 
-  private arrayToPoint(numsIn: number[]): Point3D {
-    const nums = [...numsIn];
-    if (this.filters.count() === 2) {
-      nums[2] = 0; // Set z-value to 0
+  private getTrainingDataPoints = () => {
+    const trainingDataPointsFromTrainer = get(knnTrainingDataPoints);
+    const groupedByClass = Object.groupBy(
+      trainingDataPointsFromTrainer,
+      e => e.classIndex,
+    );
+    const groupedByIndex: Point3D[][] = [];
+    for (const key in groupedByClass) {
+      groupedByIndex.push(
+        groupedByClass[key]!.map(e => {
+          return {
+            x: e.vector.getValue()[0],
+            y: e.vector.getValue()[1],
+            z: 0,
+          } as Point3D;
+        }),
+      );
     }
-
-    let [x, y, z] = nums; //this.normalizeVector(nums);
-
-    return { x, y, z };
-  }
-
-  private normalizeVector(nums: number[]): number[] {
-    const magnitude = Math.sqrt(nums.reduce((prev, cur) => prev + Math.pow(cur, 2), 0));
-    if (magnitude === 0) {
-      throw new Error('Cannot normalize vector, magnitude is 0!');
-    }
-    return nums.map(el => el / magnitude);
-  }
+    return groupedByIndex;
+  };
 }
+
 export const controller = writable<KNNModelGraphController | undefined>(undefined);
+
 export default KNNModelGraphController;

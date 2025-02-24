@@ -24,9 +24,9 @@
   $: {
     if (!freeze && $smoothedLiveData !== undefined) {
       liveDataPoint = {
-        x: $smoothedLiveData.getVector()[0],
-        y: $smoothedLiveData.getVector()[1],
-        z: $smoothedLiveData.getVector()[2],
+        x: $smoothedLiveData.getValue()[0],
+        y: $smoothedLiveData.getValue()[1],
+        z: $smoothedLiveData.getValue()[2],
       };
     }
   }

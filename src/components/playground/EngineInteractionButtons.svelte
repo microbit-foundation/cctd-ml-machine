@@ -4,9 +4,10 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+  import BaseLiveDataVector from '../../script/domain/BaseLiveDataVector';
+  import BaseVector from '../../script/domain/BaseVector';
   import { ClassifierInput } from '../../script/domain/ClassifierInput';
   import Gesture from '../../script/domain/stores/gesture/Gesture';
-  import BaseVector from '../../script/domain/BaseVector';
   import { stores } from '../../script/stores/Stores';
   import playgroundContext from './PlaygroundContext';
   import TrainKnnModelButton from './TrainKNNModelButton.svelte';
@@ -34,7 +35,9 @@
     const labels = randGesture.getRecordings()[0].labels;
     const bufferedData = randGesture.getRecordings()[0].samples.map(e => e.vector);
 
-    const sampleVectors = bufferedData.map(e => new BaseVector(e, labels));
+    const sampleVectors = bufferedData
+      .map(e => new BaseVector(e))
+      .map(e => new BaseLiveDataVector(e, labels));
 
     const input = new ClassifierInput(sampleVectors);
     classifier.classify(input).then(() => {

@@ -155,9 +155,9 @@
       )
       .map(d => d.value);
 
-    const xs = liveD.map(d => d!.getVector()[0]);
-    const ys = liveD.map(d => d!.getVector()[1]);
-    const zs = liveD.map(d => d!.getVector()[2]);
+    const xs = liveD.map(d => d!.getValue()[0]);
+    const ys = liveD.map(d => d!.getValue()[1]);
+    const zs = liveD.map(d => d!.getValue()[2]);
 
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {

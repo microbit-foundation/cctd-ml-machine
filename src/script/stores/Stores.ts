@@ -26,7 +26,6 @@ import SelectedModel from '../domain/SelectedModel';
 import type { LiveDataVector } from '../domain/stores/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import type { Engine } from '../domain/stores/Engine';
-import type { Axis } from '../domain/Axis';
 import AvailableAxes from '../domain/stores/AvailableAxes';
 import Snackbar from '../../components/snackbar/Snackbar';
 import NeuralNetworkSettings from '../domain/stores/NeuralNetworkSettings';

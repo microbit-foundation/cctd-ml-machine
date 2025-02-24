@@ -29,7 +29,6 @@ class Classifier implements Readable<ClassifierData> {
     private filters: Filters,
     private gestures: Readable<Gesture[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
-    private predictedPointData: PredictedPointLiveData
   ) {
     Logger.log('classifier', 'Initialized classifier');
   }
@@ -51,7 +50,6 @@ class Classifier implements Readable<ClassifierData> {
    */
   public async classify(input: ClassifierInput): Promise<void> {
     const filteredInput = new BaseVector(input.getInput(this.filters));
-    this.predictedPointData.put(new BaseLiveDataVector(filteredInput, []));
     const predictions = await this.getModel().predict(filteredInput);
     predictions.forEach((confidence, index) => {
       const gesture = get(this.gestures)[index];

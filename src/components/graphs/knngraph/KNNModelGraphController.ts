@@ -21,6 +21,7 @@ import KNNMLModel from '../../../script/mlmodels/KNNMLModel';
 import BaseVector from '../../../script/domain/BaseVector';
 import { getMean, getStandardDeviation } from '../../../script/utils/Math';
 import type { Point3D } from '../../../script/utils/graphUtils';
+import { knnCurrentPoint, knnTrainingDataPoints } from './KnnModelGraph';
 
 type SampleData = {
   value: Vector;
@@ -171,7 +172,7 @@ class KNNModelGraphController {
     try {
       const sampleDuration = StaticConfiguration.pollingPredictionSampleDuration;
       const sampleSize = StaticConfiguration.pollingPredictionSampleSize;
-      const liveDataStore = stores.getPredictedPointData();
+      const liveDataStore = get(stores).liveData
       if (liveDataStore !== undefined) {
         liveData = liveDataStore
           .getBuffer()
@@ -280,24 +281,32 @@ class KNNModelGraphController {
 
     try {
       // Some filters throw when no filters data is available
-      const liveData = getLiveFilteredData();
-      const getLiveDataVec = () => {
-        const vec = new BaseVector(liveData);
-        return vec;
-        if (!this.knnModelSettings.isNormalized()) {
-          return vec; 
-        }
-        const normalizedVec = KNNMLModel.normalizePoint(vec, this.trainingDataMean, this.trainingDataStdDeviation);
-        console.log("CTRL", normalizedVec)
-        return normalizedVec;
-      }
-      this.graphDrawer.drawLiveData(draw.config, this.vectorToPoint(getLiveDataVec()));
+      const liveDataVec = get(knnCurrentPoint) ?? new BaseVector([0, 0, 0]);
+      this.graphDrawer.drawLiveData(draw.config, {
+        x: liveDataVec.getValue()[0],
+        y: liveDataVec.getValue()[1],
+        z: 0 // Unsupported for now
+      });
     } catch (_ignored) { }
 
     if (this.redrawTrainingData) {
       const drawData: Point3D[][][] = [...this.trainingData];
       this.redrawTrainingData = false;
-      this.graphDrawer.draw(draw.config, drawData);
+
+      const trainingDataPointsFromTrainer = get(knnTrainingDataPoints)
+      const groupedByClass = Object.groupBy(trainingDataPointsFromTrainer, e => e.classIndex)
+      const groupedByIndex: Point3D[][] = []
+      for (const key in groupedByClass) {
+        groupedByIndex.push(groupedByClass[key]!.map(e => {
+          return {
+            x: e.vector.getValue()[0],
+            y: e.vector.getValue()[1],
+            z: 0
+          } as Point3D
+        }))
+      }
+
+      this.graphDrawer.draw(draw.config, groupedByIndex);
     }
   }
 

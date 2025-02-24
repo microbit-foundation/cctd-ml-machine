@@ -25,7 +25,7 @@ class LocalStorageRepositories implements Repositories {
 
   private static instance: LocalStorageRepositories;
 
-  constructor(snackbar: Snackbar, predictedPointData: PredictedPointLiveData) {
+  constructor(snackbar: Snackbar) {
     if (LocalStorageRepositories.instance) {
       // Singleton
       throw new Error('Could not instantiate repository. It is already instantiated!');
@@ -41,8 +41,7 @@ class LocalStorageRepositories implements Repositories {
       confidences,
       this.trainingDataRepository,
       snackbar,
-      this.filtersRepository,
-      predictedPointData
+      this.filtersRepository
     );
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }

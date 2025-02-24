@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { knnCurrentPoint, knnNeighbours } from '../../components/graphs/knngraph/KnnModelGraph';
 import type { MLModel } from '../domain/MLModel';
 import type { Vector } from '../domain/Vector';
 import { distanceBetween } from '../utils/graphUtils';
@@ -27,6 +28,8 @@ class KNNNonNormalizedMLModel implements MLModel {
   }
 
   public predict(filteredData: Vector): Promise<number[]> {
+    knnCurrentPoint.set(filteredData);
+
     // Sort points by distance to live-data point
     const orderedPoints = [...this.points];
     orderedPoints.sort((a, b) => {
@@ -39,13 +42,14 @@ class KNNNonNormalizedMLModel implements MLModel {
     const neighbours = [];
     for (let i = 0; i < this.k; i++) {
       const neighbour = orderedPoints[i];
-      neighbours.push(neighbour.classIndex);
+      neighbours.push(neighbour);
     }
 
+    knnNeighbours.set(neighbours);
     // Compute the confidences and create the confidences array.
     const confidences = [];
     for (let i = 0; i < this.noOfClasses; i++) {
-      confidences.push(neighbours.filter(e => e === i).length / this.k);
+      confidences.push(neighbours.map(e => e.classIndex).filter(e => e === i).length / this.k);
     }
 
     return Promise.resolve(confidences);

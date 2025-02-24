@@ -30,8 +30,6 @@ import AvailableAxes from '../domain/stores/AvailableAxes';
 import Snackbar from '../../components/snackbar/Snackbar';
 import NeuralNetworkSettings from '../domain/stores/NeuralNetworkSettings';
 import KNNModelSettings from '../domain/stores/KNNModelSettings';
-import PredictedPointLiveData from '../livedata/PredictedPointLiveData';
-import LiveDataBuffer from '../domain/LiveDataBuffer';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -52,15 +50,13 @@ class Stores implements Readable<StoresType> {
   private snackbar: Snackbar;
   private neuralNetworkSettings: NeuralNetworkSettings;
   private knnModelSettings: KNNModelSettings;
-  private predictedInput: PredictedPointLiveData;
 
   public constructor(private applicationState: Readable<ApplicationState>) {
     this.neuralNetworkSettings = new NeuralNetworkSettings();
     this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
-    this.predictedInput = new PredictedPointLiveData(new LiveDataBuffer(3))
     this.engine = undefined;
-    const repositories: Repositories = new LocalStorageRepositories(this.snackbar, this.predictedInput);
+    const repositories: Repositories = new LocalStorageRepositories(this.snackbar);
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
@@ -151,10 +147,6 @@ class Stores implements Readable<StoresType> {
 
   public getKNNModelSettings() {
     return this.knnModelSettings;
-  }
-
-  public getPredictedPointData() {
-    return this.predictedInput;
   }
 }
 

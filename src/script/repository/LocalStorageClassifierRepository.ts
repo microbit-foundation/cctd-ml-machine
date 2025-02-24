@@ -36,7 +36,6 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
     private trainingDataRepository: TrainingDataRepository,
     private snackbar: Snackbar,
     private filtersRepository: FiltersRepository,
-    private predictedPointData: PredictedPointLiveData,
   ) {
     LocalStorageClassifierRepository.mlModel = writable(undefined);
     this.classifierFactory = new ClassifierFactory();
@@ -55,7 +54,6 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
         this.setGestureConfidence(gestureId, confidence);
       },
       this.snackbar,
-      this.predictedPointData,
     );
 
     return classifier;

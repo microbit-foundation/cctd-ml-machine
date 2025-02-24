@@ -16,6 +16,7 @@ import { get } from 'svelte/store';
 import * as d3 from 'd3';
 import BaseVector from '../../../script/domain/BaseVector';
 import type { Vector } from '../../../script/domain/Vector';
+import { knnNeighbours } from './KnnModelGraph';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -42,7 +43,7 @@ class KNNModelGraphDrawer {
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) {}
+  ) { }
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {
@@ -61,22 +62,19 @@ class KNNModelGraphDrawer {
       return; // May happen if the model has just been trained.
     }
 
+    const predictedVectorPoints = get(knnNeighbours).map(e => e.vector)
+    const transformedPredictedPoints: Point3DTransformed[] = predictedVectorPoints.map(point => this.transformPoint(drawConfig, {
+      x: point.getValue()[0],
+      y: point.getValue()[1],
+      z: 0
+    }));
+
+
     if (get(state).isInputReady) {
       this.addPoint(drawableLivePoint, 'live');
 
       // Draw lines from live point to the nearest neighbours
-      const predictedPoints = [...this.drawnTrainingPoints]
-        .sort((a, b) => {
-          const drawableLivePointVector: Vector = new BaseVector([
-            drawableLivePoint.pointTransformed.x,
-            drawableLivePoint.pointTransformed.y,
-            drawableLivePoint.pointTransformed.z,
-          ]);
-          const aDist = distanceBetween(drawableLivePointVector, new BaseVector([a.x, a.y, a.z]));
-          const bDist = distanceBetween(drawableLivePointVector, new BaseVector([b.x, b.y, b.z]));
-          return aDist - bDist;
-        })
-        .slice(0, get(stores.getKNNModelSettings()).k);
+      const predictedPoints = [...transformedPredictedPoints];
 
       const lines = this.svg.selectAll(`line.points-class`).data(predictedPoints);
       lines
@@ -95,8 +93,7 @@ class KNNModelGraphDrawer {
     }
   };
 
-  public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][][]) {
-    // this.svg.selectAll('*').remove(); // clear svg for redraw
+  public draw(drawConfig: GraphDrawConfig, drawData: Point3D[][]) {
     // Add grid
     this.addGrid(drawConfig);
 
@@ -127,15 +124,13 @@ class KNNModelGraphDrawer {
     // Add points
     drawData.forEach((clazz, classIndex) => {
       clazz.forEach((sample, exampleIndex) => {
-        sample.forEach((axisValue, axisIndex) => {
-          const color = drawConfig.colors[classIndex];
-          const transformedPoint: Point3DTransformed = this.transformPoint(drawConfig, axisValue);
-          this.drawnTrainingPoints.push(transformedPoint);
-          drawablePoints.push({
-            pointTransformed: transformedPoint,
-            color,
-            id: `${classIndex}-${exampleIndex}-${axisIndex}`,
-          });
+        const color = drawConfig.colors[classIndex];
+        const transformedPoint: Point3DTransformed = this.transformPoint(drawConfig, sample);
+        this.drawnTrainingPoints.push(transformedPoint);
+        drawablePoints.push({
+          pointTransformed: transformedPoint,
+          color,
+          id: `${classIndex}-${exampleIndex}`,
         });
       });
     });
@@ -244,21 +239,7 @@ class KNNModelGraphDrawer {
     axis.exit().remove();
   }
 
-  /**
-   * Returns the label by using index to find element in list of gestures
-   */
-  private getLabel(dataIndex: number) {
-    try {
-      const gestureList = stores.getGestures().getGestures();
-      return gestureList[dataIndex].getName();
-    } catch (error) {
-      // Index out of bounds indicates either an error or live data.
-      return 'Live';
-    }
-  }
-
   private addGrid(drawConfig: GraphDrawConfig) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const grid3d = this.getGridTransformer(drawConfig);
     const xGrid = [];
     const j = 30;
@@ -271,12 +252,9 @@ class KNNModelGraphDrawer {
         }
       }
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     const gridData = grid3d(xGrid);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
     const grid = this.svg.selectAll('path.grid').data(gridData, (d: any) => d.id);
-
     grid
       .enter()
       .append('path')

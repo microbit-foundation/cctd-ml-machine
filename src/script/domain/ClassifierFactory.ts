@@ -25,14 +25,12 @@ class ClassifierFactory {
     gestures: Readable<Gesture[]>,
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
     snackbar: Snackbar, // Maybe an event could be fired instead of passing the snackbar around
-    predictedPointData: PredictedPointLiveData,
   ): Classifier {
     const classifier = new Classifier(
       this.buildModel(trainerConsumer, model),
       filters,
       gestures,
       confidenceSetter,
-      predictedPointData,
     );
     filters.subscribe(() => {
       // Filters has changed

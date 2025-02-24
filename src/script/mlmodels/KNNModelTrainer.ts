@@ -7,6 +7,7 @@ import KNNMLModel from './KNNMLModel';
 import type { ModelTrainer } from '../domain/ModelTrainer';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
+import { knnTrainingDataPoints } from '../../components/graphs/knngraph/KnnModelGraph';
 
 /**
  * Trains a K-Nearest Neighbour model
@@ -28,6 +29,8 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
         });
       });
     });
+
+    knnTrainingDataPoints.set(points);
 
     return Promise.resolve(new KNNMLModel(this.k, trainingData.classes.length, points, mean, stdDev));
   }

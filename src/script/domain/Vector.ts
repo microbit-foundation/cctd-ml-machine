@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 export interface Vector {
-    getSize(): number;
+  getSize(): number;
 
-    getValue(): number[];
+  getValue(): number[];
 
-    divide(vector: Vector): Vector;
+  divide(vector: Vector): Vector;
 
-    subtract(vector: Vector): Vector;
+  subtract(vector: Vector): Vector;
 
-    add(vector: Vector): Vector;
+  add(vector: Vector): Vector;
 }

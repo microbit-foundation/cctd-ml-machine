@@ -41,7 +41,7 @@ class LocalStorageRepositories implements Repositories {
       confidences,
       this.trainingDataRepository,
       snackbar,
-      this.filtersRepository
+      this.filtersRepository,
     );
     this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
   }

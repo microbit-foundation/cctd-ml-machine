@@ -16,7 +16,9 @@ import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
 class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLModel> {
   constructor(private k: number) {}
 
-  public trainModel(trainingDataRepository: TrainingDataRepository): Promise<KNNNonNormalizedMLModel> {
+  public trainModel(
+    trainingDataRepository: TrainingDataRepository,
+  ): Promise<KNNNonNormalizedMLModel> {
     Logger.log('KNNNonNormalizedModelTrainer', 'Training KNN model');
     const trainingData = trainingDataRepository.getTrainingData();
     const points: LabelledPoint[] = [];

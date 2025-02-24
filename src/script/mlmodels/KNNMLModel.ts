@@ -8,7 +8,10 @@ import Logger from '../utils/Logger';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import { distanceBetween } from '../utils/graphUtils';
 import type { Vector } from '../domain/Vector';
-import { knnCurrentPoint, knnNeighbours } from '../../components/graphs/knngraph/KnnModelGraph';
+import {
+  knnCurrentPoint,
+  knnNeighbours,
+} from '../../components/graphs/knngraph/KnnModelGraph';
 
 class KNNMLModel implements MLModel {
   constructor(
@@ -22,7 +25,11 @@ class KNNMLModel implements MLModel {
   }
 
   public async predict(filteredData: Vector): Promise<number[]> {
-    const filteredDataNormalized = KNNMLModel.normalizePoint(filteredData, this.dataMean, this.stdDeviation);
+    const filteredDataNormalized = KNNMLModel.normalizePoint(
+      filteredData,
+      this.dataMean,
+      this.stdDeviation,
+    );
     knnCurrentPoint.set(filteredDataNormalized);
 
     // Sort points by distance to live-data point
@@ -45,7 +52,9 @@ class KNNMLModel implements MLModel {
     // Compute the confidences and create the confidences array.
     const confidences = [];
     for (let i = 0; i < this.noOfClasses; i++) {
-      confidences.push(neighbours.map(e => e.classIndex).filter(e => e === i).length / this.k);
+      confidences.push(
+        neighbours.map(e => e.classIndex).filter(e => e === i).length / this.k,
+      );
     }
 
     return Promise.resolve(confidences);

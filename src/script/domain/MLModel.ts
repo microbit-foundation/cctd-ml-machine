@@ -1,4 +1,4 @@
-import type { Vector } from "./Vector";
+import type { Vector } from './Vector';
 
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors

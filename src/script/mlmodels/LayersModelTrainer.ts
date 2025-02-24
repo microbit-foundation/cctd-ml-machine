@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { ModelTrainer, TrainingData } from '../domain/ModelTrainer';
+import type { ModelTrainer } from '../domain/ModelTrainer';
+import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import LayersMLModel from './LayersMLModel';
 import * as tf from '@tensorflow/tfjs';
 export type LayersModelTrainingSettings = {
@@ -24,7 +25,8 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
     private settings: LayersModelTrainingSettings,
     private onFitIteration: (h: LossTrainingIteration) => void,
   ) {}
-  public async trainModel(trainingData: TrainingData): Promise<LayersMLModel> {
+  public async trainModel(trainingDataRepository: TrainingDataRepository): Promise<LayersMLModel> {
+    const trainingData = trainingDataRepository.getTrainingData();
     // Fetch data
     const features: Array<number[]> = [];
     const labels: Array<number[]> = [];
@@ -32,7 +34,7 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
 
     trainingData.classes.forEach((gestureClass, index) => {
       gestureClass.samples.forEach(sample => {
-        features.push(sample.value);
+        features.push(sample.value.getValue());
 
         const label: number[] = new Array(numberOfClasses) as number[];
         label.fill(0, 0, numberOfClasses);
@@ -45,7 +47,7 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
     const tensorLabels = tf.tensor(labels);
 
     // Find the shape by looking at the first data point
-    const inputShape = [trainingData.classes[0].samples[0].value.length];
+    const inputShape = [trainingData.classes[0].samples[0].value.getSize()];
 
     const input = tf.input({ shape: inputShape });
     const normalizer = tf.layers.batchNormalization().apply(input);

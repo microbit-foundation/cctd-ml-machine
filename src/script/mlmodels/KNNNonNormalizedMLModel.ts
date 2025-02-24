@@ -4,7 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { knnCurrentPoint, knnNeighbours } from '../../components/graphs/knngraph/KnnModelGraph';
+import {
+  knnCurrentPoint,
+  knnNeighbours,
+} from '../../components/graphs/knngraph/KnnModelGraph';
 import type { MLModel } from '../domain/MLModel';
 import type { Vector } from '../domain/Vector';
 import { distanceBetween } from '../utils/graphUtils';
@@ -49,7 +52,9 @@ class KNNNonNormalizedMLModel implements MLModel {
     // Compute the confidences and create the confidences array.
     const confidences = [];
     for (let i = 0; i < this.noOfClasses; i++) {
-      confidences.push(neighbours.map(e => e.classIndex).filter(e => e === i).length / this.k);
+      confidences.push(
+        neighbours.map(e => e.classIndex).filter(e => e === i).length / this.k,
+      );
     }
 
     return Promise.resolve(confidences);

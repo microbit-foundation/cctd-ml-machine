@@ -6,16 +6,10 @@
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
-import {
-  type Point3D,
-  type Point3DTransformed,
-  distanceBetween,
-} from '../../../script/utils/graphUtils';
+import { type Point3D, type Point3DTransformed } from '../../../script/utils/graphUtils';
 import { state, stores } from '../../../script/stores/Stores';
 import { get } from 'svelte/store';
 import * as d3 from 'd3';
-import BaseVector from '../../../script/domain/BaseVector';
-import type { Vector } from '../../../script/domain/Vector';
 import { knnNeighbours } from './KnnModelGraph';
 
 export type GraphDrawConfig = {
@@ -43,7 +37,7 @@ class KNNModelGraphDrawer {
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     private classId: string,
-  ) { }
+  ) {}
 
   public drawLiveData = (drawConfig: GraphDrawConfig, drawData: Point3D) => {
     if (isNaN(drawData.y)) {
@@ -62,13 +56,15 @@ class KNNModelGraphDrawer {
       return; // May happen if the model has just been trained.
     }
 
-    const predictedVectorPoints = get(knnNeighbours).map(e => e.vector)
-    const transformedPredictedPoints: Point3DTransformed[] = predictedVectorPoints.map(point => this.transformPoint(drawConfig, {
-      x: point.getValue()[0],
-      y: point.getValue()[1],
-      z: 0
-    }));
-
+    const predictedVectorPoints = get(knnNeighbours).map(e => e.vector);
+    const transformedPredictedPoints: Point3DTransformed[] = predictedVectorPoints.map(
+      point =>
+        this.transformPoint(drawConfig, {
+          x: point.getValue()[0],
+          y: point.getValue()[1],
+          z: 0,
+        }),
+    );
 
     if (get(state).isInputReady) {
       this.addPoint(drawableLivePoint, 'live');
@@ -125,7 +121,10 @@ class KNNModelGraphDrawer {
     drawData.forEach((clazz, classIndex) => {
       clazz.forEach((sample, exampleIndex) => {
         const color = drawConfig.colors[classIndex];
-        const transformedPoint: Point3DTransformed = this.transformPoint(drawConfig, sample);
+        const transformedPoint: Point3DTransformed = this.transformPoint(
+          drawConfig,
+          sample,
+        );
         this.drawnTrainingPoints.push(transformedPoint);
         drawablePoints.push({
           pointTransformed: transformedPoint,

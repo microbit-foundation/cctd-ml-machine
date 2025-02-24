@@ -93,10 +93,13 @@ class PollingPredictorEngine implements Engine {
     const sampleVectors = bufferedData.map(
       e =>
         new BaseLiveDataVector(
-          new BaseVector(e.value.getValue()
-            .filter((vecVal, vecIdx) =>
-              this.highlightedAxes.isAxisIndexHighlighted(vecIdx),
-            )),
+          new BaseVector(
+            e.value
+              .getValue()
+              .filter((vecVal, vecIdx) =>
+                this.highlightedAxes.isAxisIndexHighlighted(vecIdx),
+              ),
+          ),
           e.value
             .getLabels()
             .filter((labelVal, vecIdx) =>

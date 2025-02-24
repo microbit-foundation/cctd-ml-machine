@@ -38,12 +38,16 @@ class LocalStorageTrainingDataRepository implements TrainingDataRepository {
   }
 
   public getTrainingDataStdDeviation(): Vector {
-    const trainingData = this.getTrainingData().classes.flatMap(e => e.samples.map(e => e.value))
+    const trainingData = this.getTrainingData().classes.flatMap(e =>
+      e.samples.map(e => e.value),
+    );
     return getStandardDeviation(trainingData);
   }
 
   public getTrainingDataMean(): Vector {
-    const trainingData = this.getTrainingData().classes.flatMap(e => e.samples.map(e => e.value))
+    const trainingData = this.getTrainingData().classes.flatMap(e =>
+      e.samples.map(e => e.value),
+    );
     return getMean(trainingData);
   }
 

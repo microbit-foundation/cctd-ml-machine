@@ -53,9 +53,9 @@ export const extractAxisFromTrainingData = (
           const noOfFilters = sample.value.getSize() / noOfAxes;
           const startIndex = noOfFilters * axisOffset;
           const stopIndex = startIndex + noOfFilters;
-          const filteredVectorValues = sample.value.getValue().filter(
-              (_val, index) => index >= startIndex && index < stopIndex,
-            )
+          const filteredVectorValues = sample.value
+            .getValue()
+            .filter((_val, index) => index >= startIndex && index < stopIndex);
           return {
             value: new BaseVector(filteredVectorValues),
           };
@@ -78,15 +78,15 @@ export const extractAxesFromTrainingData = (
       return {
         samples: clazz.samples.map(sample => {
           const filteredVectorValues = axes.flatMap(axis => {
-              const noOfFilters = sample.value.getSize() / noOfAxes;
-              const startIndex = noOfFilters * axis.index;
-              const stopIndex = startIndex + noOfFilters;
-              return sample.value.getValue().filter(
-                (_val, index) => index >= startIndex && index < stopIndex,
-              );
-            })
+            const noOfFilters = sample.value.getSize() / noOfAxes;
+            const startIndex = noOfFilters * axis.index;
+            const stopIndex = startIndex + noOfFilters;
+            return sample.value
+              .getValue()
+              .filter((_val, index) => index >= startIndex && index < stopIndex);
+          });
           return {
-            value: new BaseVector(filteredVectorValues)
+            value: new BaseVector(filteredVectorValues),
           };
         }),
       };
@@ -118,7 +118,11 @@ export const extractFilterFromTrainingData = (
       return {
         samples: clazz.samples.map(sample => {
           const filterValues = [];
-          for (let i = noOfAxes * filterIndex; i < sample.value.getSize(); i += noOfAxes) {
+          for (
+            let i = noOfAxes * filterIndex;
+            i < sample.value.getSize();
+            i += noOfAxes
+          ) {
             const element = sample.value.getValue()[i];
             filterValues.push(element);
           }
@@ -151,7 +155,7 @@ export const distanceBetween = (p1: Vector, p2: Vector): number => {
   if (p1.getSize() !== p2.getSize()) {
     throw new Error(
       'Points must have the same dimension. Got elements of size: ' +
-      [p1.getSize(), p2.getSize()].join(' / '),
+        [p1.getSize(), p2.getSize()].join(' / '),
     );
   }
 

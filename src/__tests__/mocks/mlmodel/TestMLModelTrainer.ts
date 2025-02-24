@@ -3,12 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { ModelTrainer, TrainingData } from '../../../script/domain/ModelTrainer';
+import type { ModelTrainer } from '../../../script/domain/ModelTrainer';
+import type { TrainingDataRepository } from '../../../script/domain/TrainingDataRepository';
 import TestMLModel from './TestMLModel';
 
 class TestMLModelTrainer implements ModelTrainer<TestMLModel> {
   constructor(private numberOfGestures: number) {}
-  public trainModel(trainingData: TrainingData): Promise<TestMLModel> {
+  public trainModel(trainingData: TrainingDataRepository): Promise<TestMLModel> {
     return Promise.resolve(new TestMLModel(this.numberOfGestures));
   }
 }

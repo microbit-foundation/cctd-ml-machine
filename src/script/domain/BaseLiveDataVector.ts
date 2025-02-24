@@ -11,7 +11,7 @@ class BaseLiveDataVector implements LiveDataVector {
   public constructor(
     private base: BaseVector,
     private labels: string[],
-  ) { }
+  ) {}
 
   public getLabels(): string[] {
     return this.labels;
@@ -26,17 +26,17 @@ class BaseLiveDataVector implements LiveDataVector {
   }
 
   public add(vector: BaseLiveDataVector): BaseLiveDataVector {
-    const vecBase = new BaseVector(vector.getValue())
+    const vecBase = new BaseVector(vector.getValue());
     return new BaseLiveDataVector(this.base.add(vecBase), this.labels);
   }
 
   public subtract(vector: BaseLiveDataVector): BaseLiveDataVector {
-    const vecBase = new BaseVector(vector.getValue())
+    const vecBase = new BaseVector(vector.getValue());
     return new BaseLiveDataVector(this.base.subtract(vecBase), this.labels);
   }
 
   public divide(vector: BaseLiveDataVector): BaseLiveDataVector {
-    const vecBase = new BaseVector(vector.getValue())
+    const vecBase = new BaseVector(vector.getValue());
     return new BaseLiveDataVector(this.base.divide(vecBase), this.labels);
   }
 }

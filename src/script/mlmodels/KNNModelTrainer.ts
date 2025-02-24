@@ -32,7 +32,9 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
 
     knnTrainingDataPoints.set(points);
 
-    return Promise.resolve(new KNNMLModel(this.k, trainingData.classes.length, points, mean, stdDev));
+    return Promise.resolve(
+      new KNNMLModel(this.k, trainingData.classes.length, points, mean, stdDev),
+    );
   }
 }
 

@@ -11,10 +11,10 @@ import type { Vector } from '../../script/domain/Vector';
 
 class TestTrainingDataRepository implements TrainingDataRepository {
   getTrainingDataMean(): Vector {
-    throw new Error("Not implemented");
+    throw new Error('Not implemented');
   }
   getTrainingDataStdDeviation(): Vector {
-    throw new Error("Not implemented")
+    throw new Error('Not implemented');
   }
   constructor() {}
   getTrainingData(): TrainingData {

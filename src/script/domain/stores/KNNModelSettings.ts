@@ -23,7 +23,6 @@ interface KNNModelSettingsType {
 }
 
 class KNNModelSettings implements Readable<KNNModelSettingsType> {
-
   private store: Writable<KNNModelSettingsType>;
 
   public constructor(private selectedModel: SelectedModel) {
@@ -61,7 +60,7 @@ class KNNModelSettings implements Readable<KNNModelSettingsType> {
   }
 
   public isNormalized() {
-    return get(this.store).normalized
+    return get(this.store).normalized;
   }
 }
 

@@ -14,12 +14,15 @@ import {
 import LiveDataBuffer from '../../../script/domain/LiveDataBuffer';
 import { type LiveData } from '../../../script/domain/stores/LiveData';
 import BaseLiveDataVector from '../../../script/domain/BaseLiveDataVector';
+import BaseVector from '../../../script/domain/BaseVector';
 
 export class SyntheticLiveData implements LiveData<BaseLiveDataVector> {
   private store: Writable<BaseLiveDataVector>;
   private buffer: LiveDataBuffer<BaseLiveDataVector>;
   public constructor(labels: string[]) {
-    this.store = writable(new BaseLiveDataVector(new Array(labels.length).fill(0), labels));
+    this.store = writable(
+      new BaseLiveDataVector(new BaseVector(new Array(labels.length).fill(0)), labels),
+    );
     this.buffer = new LiveDataBuffer(200);
   }
   put(data: BaseLiveDataVector): void {

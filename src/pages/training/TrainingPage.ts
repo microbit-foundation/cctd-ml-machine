@@ -16,6 +16,8 @@ import Logger from '../../script/utils/Logger';
 import KNNModelTrainer from '../../script/mlmodels/KNNModelTrainer';
 import type { ModelTrainer } from '../../script/domain/ModelTrainer';
 import type { MLModel } from '../../script/domain/MLModel';
+import { knnCurrentPoint } from '../../components/graphs/knngraph/KnnModelGraph';
+import { mode } from 'd3';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 
@@ -69,6 +71,9 @@ const trackModelEvent = () => {
   }
 };
 
-export const selectModel = (model: ModelInfo) => {
+export const selectModel = async (model: ModelInfo) => {
+  if (model.id === ModelRegistry.KNN.id) {
+    await trainKNNModel()
+  }
   stores.getSelectedModel().set(model);
 };

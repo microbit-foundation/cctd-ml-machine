@@ -15,10 +15,10 @@
   import { stores } from '../../../script/stores/Stores';
   import { asAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
   import type { Axis } from '../../../script/domain/Axis';
+    import { knnCurrentPoint } from './KnnModelGraph';
 
   const classifier = stores.getClassifier();
 
-  $: liveData = $stores.liveData;
   const highlightedAxis = stores.getHighlightedAxes();
   const availableAxes = stores.getAvailableAxes();
 
@@ -57,42 +57,12 @@
     drawArrows(`from${axis.label}`);
   };
 
-  const getVectorValues = () => {
-    try {
-      if (!liveData) {
-        throw new Error('Live data is not set yet, handle the error here');
-      }
-      const seriesTimestamped = liveData
-        .getBuffer()
-        .getSeries(
-          StaticConfiguration.pollingPredictionSampleDuration,
-          StaticConfiguration.pollingPredictionSampleSize,
-        );
-      const series = seriesTimestamped.map(s =>
-        asAccelerometerData(s.value).getAccelerometerData(),
-      );
-      const filteredSeries = $highlightedAxis.flatMap(axis =>
-        stores
-          .getClassifier()
-          .getFilters()
-          .compute(extractAxisFromAccelerometerData(series, axis.index)),
-      );
-      return filteredSeries;
-    } catch (e) {
-      return Array(classifier.getFilters().count()).fill(0);
-    }
-  };
-
-  let liveFilteredAxesData: number[] = getVectorValues();
+  $: liveFilteredAxesData = $knnCurrentPoint?.getValue() ?? [];
 
   let valueInterval: NodeJS.Timeout = setInterval(() => {}, 100);
 
   const init = () => {
     denit();
-    valueInterval = setInterval(() => {
-      liveFilteredAxesData = getVectorValues();
-    }, 250);
-
     setTimeout(
       () => {
         // We set a timeout to fix a graphical issue, that relates to the resizing of DOM elements

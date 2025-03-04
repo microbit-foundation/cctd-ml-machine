@@ -73,7 +73,7 @@ const trackModelEvent = () => {
 
 export const selectModel = async (model: ModelInfo) => {
   if (model.id === ModelRegistry.KNN.id) {
-    await trainKNNModel()
+    await trainKNNModel();
   }
   stores.getSelectedModel().set(model);
 };

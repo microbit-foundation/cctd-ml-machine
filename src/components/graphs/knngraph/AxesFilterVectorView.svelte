@@ -15,7 +15,7 @@
   import { stores } from '../../../script/stores/Stores';
   import { asAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
   import type { Axis } from '../../../script/domain/Axis';
-    import { knnCurrentPoint } from './KnnModelGraph';
+  import { knnCurrentPoint } from './KnnModelGraph';
 
   const classifier = stores.getClassifier();
 

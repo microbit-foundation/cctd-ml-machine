@@ -132,6 +132,8 @@
   "menu.model.connectOutputButton": "Connect output micro:bit",
   "menu.model.disconnect": "Disconnect output micro:bit",
   "menu.model.connectInputMicrobit": "Connect micro:bit",
+  "menu.validate.helpHeading": "Validate",
+  "menu.validate.helpBody": "Create a validation set and validate how well your model work.",
   "popup.connectMB.main.bluetooth.subtitle": "Connect using Bluetooth",
   "popup.connectMB.bluetooth.heading": "Connect using Bluetooth",
   "popup.connectMB.bluetooth.cancelledConnection": "You cancelled the connection process. Try again, if you wish to proceed.",

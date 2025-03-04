@@ -9,6 +9,7 @@ import { writable } from 'svelte/store';
 import GestureMenu from '../../menus/DataMenu.svelte';
 import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
+import ValidateMenu from '../../menus/ValidateMenu.svelte';
 import { Paths, type PathType } from '../../router/paths';
 
 export type MenuProperties = {
@@ -42,6 +43,15 @@ class Menus {
       expandedButtonContent: NewTrainerMenu,
       navigationPath: Paths.TRAINING,
       additionalExpandPaths: [Paths.FILTERS],
+    },
+    {
+      title: 'menu.validate.helpHeading',
+      infoBubbleTitle: 'menu.validate.helpHeading',
+      infoBubbleContent: 'menu.validate.helpBody',
+      collapsedButtonContent: undefined,
+      expandedButtonContent: ValidateMenu,
+      navigationPath: Paths.VALIDATE,
+      additionalExpandPaths: [],
     },
     {
       title: 'menu.model.helpHeading',

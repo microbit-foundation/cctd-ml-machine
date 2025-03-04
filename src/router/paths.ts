@@ -11,6 +11,7 @@ export const Paths = {
   PLAYGROUND: 'playground',
   DATA: 'data',
   TRAINING: 'training',
+  VALIDATE: 'validate',
   MODEL: 'model',
   FILTERS: 'training/filters',
 } as const;

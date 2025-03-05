@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { type GestureData } from '../domain/stores/gesture/Gesture';
-import { type PersistantGestureData } from '../domain/stores/gesture/Gestures';
+import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
 
 class FileUtility {
@@ -16,7 +16,7 @@ class FileUtility {
       }
       const contents = e.target.result;
       if (typeof contents === 'string') {
-        stores.getGestures().importFrom(JSON.parse(contents) as PersistantGestureData[]);
+        stores.getGestures().importFrom(JSON.parse(contents) as PersistedGestureData[]);
       }
     };
     reader.readAsText(file as Blob);

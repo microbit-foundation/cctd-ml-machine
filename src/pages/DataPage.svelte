@@ -18,14 +18,13 @@
   import { onMount } from 'svelte';
   import FileUtility from '../script/repository/FileUtility';
   import { get } from 'svelte/store';
-  import exampleDataset from '../exampleDataset.json';
   import { type GestureData } from '../script/domain/stores/gesture/Gesture';
   import { state, stores } from '../script/stores/Stores';
   import PleaseConnect from '../components/PleaseConnect.svelte';
+    import { importExampleDataset } from './data/DataPage';
 
   let isConnectionDialogOpen = false;
   const gestures = stores.getGestures();
-  const availableAxes = stores.getAvailableAxes();
 
   $: hasSomeData = (): boolean => {
     if ($gestures.length === 0) {
@@ -67,20 +66,11 @@
     };
   });
 
-  const importExampleDataset = () => {
-    // Imports 3 gestures, named Shake, Still and Circle (in that order)
 
-    gestures.importFrom(exampleDataset);
-    // Translate the names, that are originally english
-    gestures.getGestures()[0].setName($t('content.data.noData.exampleName.shake'));
-    gestures.getGestures()[1].setName($t('content.data.noData.exampleName.still'));
-    gestures.getGestures()[2].setName($t('content.data.noData.exampleName.circle'));
-    availableAxes.loadFromGestures();
-  };
 </script>
 
 <!-- Main pane -->
-<main class="h-full inline-block min-w-full flex flex-col">
+<main class="h-full inline-block min-w-full max-w-full flex flex-col">
   <div>
     <DataPageControlBar
       clearDisabled={$gestures.length === 0}
@@ -94,7 +84,7 @@
       <PleaseConnect />
     </div>
   {:else}
-    <div class="mt-4 ml-3">
+    <div class="mt-4 ml-3 overflow-x-auto">
       <StandardDialog
         isOpen={isConnectionDialogOpen}
         onClose={() => (isConnectionDialogOpen = false)}>

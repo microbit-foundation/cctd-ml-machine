@@ -12,7 +12,7 @@ import {
   get,
 } from 'svelte/store';
 import GestureConfidence from './GestureConfidence';
-import { type PersistantGestureData, type RecordingData } from './Gestures';
+import { type PersistedGestureData, type RecordingData } from './Gestures';
 import { PinTurnOnState } from '../../../../components/output/PinSelectorUtil';
 import BindableValue from '../BindableValue';
 import { MBSpecs } from 'microbyte';
@@ -25,7 +25,7 @@ export type Confidence = {
   isConfident: boolean;
 };
 
-export type GestureData = PersistantGestureData & { confidence: Confidence };
+export type GestureData = PersistedGestureData & { confidence: Confidence };
 
 export type GestureOutput = {
   matrix?: boolean[];
@@ -43,7 +43,7 @@ class Gesture implements Readable<GestureData> {
   private store: Readable<GestureData>;
 
   constructor(
-    private persistedData: Writable<PersistantGestureData>,
+    private persistedData: Writable<PersistedGestureData>,
     private gestureConfidence: GestureConfidence,
     private onRecordingsChanged: () => void,
   ) {

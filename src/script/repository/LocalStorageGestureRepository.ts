@@ -13,7 +13,7 @@ import {
 } from 'svelte/store';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
 import Gesture from '../domain/stores/gesture/Gesture';
-import { type PersistantGestureData } from '../domain/stores/gesture/Gestures';
+import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
 import type { GestureRepository } from '../domain/GestureRepository';
 
@@ -46,7 +46,7 @@ class LocalStorageGestureRepository implements GestureRepository {
     this.saveCurrentGestures();
   }
 
-  public addGesture(gestureData: PersistantGestureData): Gesture {
+  public addGesture(gestureData: PersistedGestureData): Gesture {
     const gesture = this.buildGesture(gestureData);
     LocalStorageGestureRepository.gestureStore.update(arr => {
       arr.push(gesture);
@@ -64,8 +64,8 @@ class LocalStorageGestureRepository implements GestureRepository {
   }
 
   private buildPersistedGestureStore(
-    gestureData: PersistantGestureData,
-  ): Writable<PersistantGestureData> {
+    gestureData: PersistedGestureData,
+  ): Writable<PersistedGestureData> {
     const store = writable(gestureData);
 
     return {
@@ -86,10 +86,10 @@ class LocalStorageGestureRepository implements GestureRepository {
   private saveCurrentGestures() {
     const gestures = get(LocalStorageGestureRepository.gestureStore);
     const data = gestures.map(gesture => this.getPersistantValues(gesture));
-    ControlledStorage.set<PersistantGestureData[]>(this.LOCAL_STORAGE_KEY, data);
+    ControlledStorage.set<PersistedGestureData[]>(this.LOCAL_STORAGE_KEY, data);
   }
 
-  private getPersistantValues(gesture: Gesture): PersistantGestureData {
+  private getPersistantValues(gesture: Gesture): PersistedGestureData {
     return {
       ID: gesture.getId(),
       name: gesture.getName(),
@@ -100,14 +100,14 @@ class LocalStorageGestureRepository implements GestureRepository {
   }
 
   private getPersistedGestures(): Gesture[] {
-    const resultFromFetch: PersistantGestureData[] = this.getPersistedData();
+    const resultFromFetch: PersistedGestureData[] = this.getPersistedData();
     return resultFromFetch.map((persistedData, index) => {
       const gesture = this.buildGesture(persistedData);
       return gesture;
     });
   }
 
-  private buildGesture(persistedData: PersistantGestureData) {
+  private buildGesture(persistedData: PersistedGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
     const onRecordingsChanged = () => stores.getClassifier().getModel().markAsUntrained();
 
@@ -119,11 +119,11 @@ class LocalStorageGestureRepository implements GestureRepository {
     return new Gesture(store, confidence, onRecordingsChanged);
   }
 
-  private getPersistedData(): PersistantGestureData[] {
+  private getPersistedData(): PersistedGestureData[] {
     if (!ControlledStorage.hasValid(this.LOCAL_STORAGE_KEY)) {
       return [];
     }
-    const storedData = ControlledStorage.get<PersistantGestureData[]>(
+    const storedData = ControlledStorage.get<PersistedGestureData[]>(
       this.LOCAL_STORAGE_KEY,
     );
     return storedData;

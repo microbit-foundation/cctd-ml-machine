@@ -13,7 +13,7 @@ import {
 } from 'svelte/store';
 import type { GestureRepository } from '../../script/domain/GestureRepository';
 import Gesture from '../../script/domain/stores/gesture/Gesture';
-import type { PersistantGestureData } from '../../script/domain/stores/gesture/Gestures';
+import type { PersistedGestureData } from '../../script/domain/stores/gesture/Gestures';
 import GestureConfidence from '../../script/domain/stores/gesture/GestureConfidence';
 
 class TestGestureRepository implements GestureRepository {
@@ -31,7 +31,7 @@ class TestGestureRepository implements GestureRepository {
     this.gestures.set([]);
   }
 
-  addGesture(gestureData: PersistantGestureData): Gesture {
+  addGesture(gestureData: PersistedGestureData): Gesture {
     const gesture = new Gesture(
       writable(gestureData),
       new GestureConfidence(0.5, writable(0)),

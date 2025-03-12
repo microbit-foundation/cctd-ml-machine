@@ -14,7 +14,7 @@
   <div>
     <ValidationPageControlBar />
   </div>
-  <div class="p-2 overflow-x-auto flex-grow">
+  <div class="overflow-x-auto flex-grow">
     <ValidationPageMainContent />
   </div>
 </main>

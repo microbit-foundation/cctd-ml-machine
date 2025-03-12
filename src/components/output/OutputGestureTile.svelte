@@ -18,7 +18,7 @@
   // IMPORT AND DEFAULTS
   import { t } from '../../i18n';
   import Gesture from '../../script/domain/stores/gesture/Gesture';
-  import GestureTilePart from '../GestureTilePart.svelte';
+  import GestureCard from '../GestureCard.svelte';
   import Information from '../information/Information.svelte';
 
   // Variables for component
@@ -37,7 +37,7 @@
   });
 </script>
 
-<GestureTilePart>
+<GestureCard>
   <div class="items-center h-full my-auto justify-between flex p-2">
     <div
       class="w-36 text-center font-semibold rounded-xl
@@ -91,4 +91,4 @@
       </div>
     </div>
   </div>
-</GestureTilePart>
+</GestureCard>

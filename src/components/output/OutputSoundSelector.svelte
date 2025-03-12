@@ -7,7 +7,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { t } from '../../i18n';
-  import GestureTilePart from '../GestureTilePart.svelte';
+  import GestureCard from '../GestureCard.svelte';
 
   export let onSoundSelection: (
     sound: { name: string; path: string; id: string } | undefined,
@@ -82,7 +82,7 @@
   });
 </script>
 
-<GestureTilePart ml>
+<GestureCard ml>
   <div class="w-146px h-full cursor-pointer relative" on:click={onToggleSound}>
     <div class="w-full h-full text-center text-80px">
       <i class="fa fa-volume-up absolute text-secondary left-6.5 top-6" />
@@ -106,4 +106,4 @@
       </select>
     {/if}
   </div>
-</GestureTilePart>
+</GestureCard>

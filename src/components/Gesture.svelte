@@ -21,8 +21,8 @@
   import GestureTilePart from './GestureTilePart.svelte';
   import StaticConfiguration from '../StaticConfiguration';
   import Gesture from '../script/domain/stores/gesture/Gesture';
-  import { type RecordingData } from '../script/domain/stores/gesture/Gestures';
   import { state, stores } from '../script/stores/Stores';
+  import type { RecordingData } from '../script/domain/RecordingData';
 
   // Variables for component
   export let onNoMicrobitSelect: () => void;
@@ -187,7 +187,7 @@
   }
 </script>
 
-<main class="flex-row flex mb-2">
+<div class="flex-row flex">
   <!-- Recordingbar to show recording-progress -->
 
   <div
@@ -196,7 +196,7 @@
       ? `transition:  ${(recordingDuration / 1000).toString()}s linear; width: 97%;`
       : 'width:0;'} />
 
-  <div class="items-center flex mb-1">
+  <div class="items-center flex relative">
     <!-- Title of gesture-->
     <GestureTilePart mr small>
       <div
@@ -273,4 +273,4 @@
       </GestureTilePart>
     {/if}
   </div>
-</main>
+</div>

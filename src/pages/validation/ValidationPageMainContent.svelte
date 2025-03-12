@@ -1,42 +1,71 @@
 <script lang="ts">
   import RecordInformationContent from '../../components/datacollection/RecordInformationContent.svelte';
   import Information from '../../components/information/Information.svelte';
-  import { stores } from '../../script/stores/Stores';
-  import { hasSomeData } from '../data/DataPage';
+  import { state, stores } from '../../script/stores/Stores';
   import ValidationGestureNameCard from './ValidationGestureNameCard.svelte';
   import { t } from '../../i18n';
+  import { chosenGesture } from '../../script/stores/uiStore';
+  import StandardButton from '../../components/buttons/StandardButton.svelte';
+    import GestureCard from '../../components/GestureCard.svelte';
+    import type Gesture from '../../script/domain/stores/gesture/Gesture';
+    import ValidationPageInformationLabels from './ValidationPageInformationLabels.svelte';
 
   const gestures = stores.getGestures();
+  export let onNoMicrobitSelect: () => void;
+
+  const selectClicked = (gesture: Gesture): void => {
+    if (!$state.isInputConnected) {
+      chosenGesture.update(gesture => {
+        gesture = null;
+        return gesture;
+      });
+      onNoMicrobitSelect();
+      return;
+    }
+    chosenGesture.update(chosen => {
+      if (chosen === gesture) {
+        chosen = null;
+      } else {
+        chosen = gesture;
+      }
+      return chosen;
+    });
+  }
+
+
+
+
 </script>
 
-<div class="p-4 gap-2 grid grid-cols-[max(200px,20%)_140px_1fr]">
-  <div class="left-3 flex col-start-1">
-    <Information
-      isLightTheme={false}
-      iconText={"translate-!!-"+ $t('content.data.classification')}
-      titleText={$t('content.data.classHelpHeader')}
-      bodyText={$t('content.data.classHelpBody')} />
-  </div>
+<div class="p-3 gap-2 grid grid-cols-[max(200px,20%)_140px_1fr]">
 
-  <div class="left-60 flex col-start-2">
-    <Information isLightTheme={false} iconText={$t('content.data.choice')}>
-      <RecordInformationContent isLightTheme={false} />
-    </Information>
-  </div>
+  <ValidationPageInformationLabels/>
 
-  {#if $hasSomeData}
-    <div class="left-92 flex col-start-3">
-      <Information
-        isLightTheme={false}
-        iconText={$t('content.data.data')}
-        titleText={$t('content.data.data')}
-        bodyText={$t('content.data.dataDescription')} />
-    </div>
-  {/if}
-
-  {#each $gestures as gesture}
+  {#each stores.getGestures().getGestures() as gesture}
     <div class="col-start-1">
-      <ValidationGestureNameCard gesture={gestures.getGesture(gesture.ID)} />
+      <ValidationGestureNameCard gesture={gestures.getGesture(gesture.getId())} />
     </div>
+
+    <GestureCard small>
+      {#if $chosenGesture?.getId() !== gesture.getId()}
+        <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked(gesture)}>
+          <div class="w-full text-center">
+            <i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext" />
+          </div>
+          <p class="w-full text-center">
+            {$t('content.data.addData')}
+          </p>
+        </div>
+      {:else}
+        <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked(gesture)}>
+          <div class="w-full text-center">
+            <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" />
+          </div>
+          <StandardButton onClick={() => {}} small shadows={false} outlined fillOnHover>
+            {$t('content.data.record')}
+          </StandardButton>
+        </div>
+      {/if}
+</GestureCard>
   {/each}
 </div>

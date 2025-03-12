@@ -24,7 +24,6 @@
   import { state, stores } from '../script/stores/Stores';
   import type { RecordingData } from '../script/domain/RecordingData';
 
-  // Variables for component
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
   const gestures = stores.getGestures();

@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { RecordingData } from '../../../script/domain/stores/gesture/Gestures';
+
+import type { RecordingData } from "../../../script/domain/RecordingData";
 
 export type ChartDataset = { x: number; y: number }[];
 export const getRecordingChartDatasets = (

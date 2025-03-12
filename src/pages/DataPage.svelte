@@ -72,7 +72,7 @@
       {onUploadGestures} />
   </div>
 
-  <div class="overflow-x-auto p-2 flex-grow">
+  <div class="overflow-x-auto p-3 flex-grow">
     {#if !$hasSomeData}
       {#if !$state.isInputConnected}
         <DataPageNoData />
@@ -84,7 +84,7 @@
         </StandardButton>
       </div>
     {:else}
-        <DataPageWithData />
+      <DataPageWithData />
     {/if}
   </div>
 </main>

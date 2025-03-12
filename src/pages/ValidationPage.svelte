@@ -5,17 +5,16 @@
  -->
 
 <script lang="ts">
-    import ValidationPageControlBar from './validation/ValidationPageControlBar.svelte';
-    import ValidationPageMainContent from './validation/ValidationPageMainContent.svelte';
+  import ValidationPageControlBar from './validation/ValidationPageControlBar.svelte';
+  import ValidationPageMainContent from './validation/ValidationPageMainContent.svelte';
 </script>
 
 <!-- Main pane -->
 <main class="min-w-full flex flex-col max-w-full min-h-full">
   <div>
-    <ValidationPageControlBar/>
+    <ValidationPageControlBar />
   </div>
   <div class="p-2 overflow-x-auto flex-grow">
-    <ValidationPageMainContent/>
+    <ValidationPageMainContent />
   </div>
 </main>
-

@@ -12,10 +12,11 @@ import {
   get,
 } from 'svelte/store';
 import GestureConfidence from './GestureConfidence';
-import { type PersistedGestureData, type RecordingData } from './Gestures';
 import { PinTurnOnState } from '../../../../components/output/PinSelectorUtil';
 import BindableValue from '../BindableValue';
 import { MBSpecs } from 'microbyte';
+import type { PersistedGestureData } from './Gestures';
+import type { RecordingData } from '../../RecordingData';
 
 export type GestureID = number;
 

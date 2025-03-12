@@ -1,4 +1,4 @@
-export type RecordingData = {
+export interface RecordingData {
   ID: number;
   samples: {
     vector: number[];

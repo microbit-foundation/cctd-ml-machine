@@ -11,31 +11,43 @@
   <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
   </div>
-<div class="min-w-40 w-40 min-h-20 h-20">
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
-  </div><div class="min-w-40 w-40 min-h-20 h-20">
+  </div>
+  <div class="min-w-40 w-40 min-h-20 h-20">
     <RecordingGraph {recording} />
   </div>
 </div>

@@ -132,6 +132,8 @@
     "menu.model.connectOutputButton": "Ausgabe-micro:bit verbinden",
     "menu.model.disconnect": "Eingabe-micro:bit verbinden",
     "menu.model.connectInputMicrobit": "micro:bit verbinden",
+    "menu.validate.helpHeading": "Validieren",
+    "menu.validate.helpBody": "Erstellen Sie einen Validierungssatz und überprüfen Sie, wie gut Ihr Modell funktioniert.",
     "popup.connectMB.main.bluetooth.subtitle": "Verbindung über Bluetooth",
     "popup.connectMB.bluetooth.heading": "Verbindung über Bluetooth",
     "popup.connectMB.bluetooth.cancelledConnection": "Die Verbindung wurde abgebrochen. Zur Fortsetzung des Vorgangs bitte erneut versuchen.",

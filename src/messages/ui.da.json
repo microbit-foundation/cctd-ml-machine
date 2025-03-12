@@ -132,6 +132,8 @@
   "menu.model.connectOutputButton": "Tilslut output-micro:bit",
   "menu.model.disconnect": "Frakobl output-micro:bit",
   "menu.model.connectInputMicrobit": "Tilkobl micro:bit",
+  "menu.validate.helpHeading": "Validér",
+  "menu.validate.helpBody": "Lav et validerings dataset for at se hvor god din model er.",
   "popup.connectMB.main.bluetooth.subtitle": "Tilslut med Bluetooth",
   "popup.connectMB.bluetooth.heading": "Tilslut med Bluetooth",
   "popup.connectMB.bluetooth.cancelledConnection": "Du anullerede forbindelses-processen. Prøv igen hvis du ønsker at fortsætte.",

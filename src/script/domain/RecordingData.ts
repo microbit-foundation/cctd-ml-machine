@@ -1,5 +1,5 @@
 export interface RecordingSample {
-    vector: number[];
+  vector: number[];
 }
 export interface RecordingData {
   ID: number;

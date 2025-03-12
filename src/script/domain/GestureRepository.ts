@@ -5,14 +5,14 @@
  */
 import { type Readable } from 'svelte/store';
 import Gesture from './stores/gesture/Gesture';
-import { type PersistantGestureData } from './stores/gesture/Gestures';
+import { type PersistedGestureData } from './stores/gesture/Gestures';
 
 export interface GestureRepository extends Readable<Gesture[]> {
   getGesture(gestureId: number): Gesture;
 
   clearGestures(): void;
 
-  addGesture(gestureData: PersistantGestureData): Gesture;
+  addGesture(gestureData: PersistedGestureData): Gesture;
 
   removeGesture(gestureId: number): void;
 }

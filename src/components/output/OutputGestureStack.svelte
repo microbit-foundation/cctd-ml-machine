@@ -21,7 +21,7 @@
   import OutputSoundSelector from './OutputSoundSelector.svelte';
   import Microbits from '../../script/microbit-interfacing/Microbits';
   import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
-  import GestureTilePart from '../GestureTilePart.svelte';
+  import GestureCard from '../GestureCard.svelte';
   import PinSelector from './PinSelector.svelte';
   import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
@@ -192,7 +192,7 @@
 
 <main class="mb-4 items-center flex flex-row">
   <!-- NAMES AND CONFIDENCE METER -->
-  <GestureTilePart>
+  <GestureCard>
     <div
       class="absolute rounded-full w-3 h-3 m-3"
       style={`background-color:${gesture.getColor()}`}>
@@ -244,7 +244,7 @@
           isLightTheme={false} />
       </div>
     </div>
-  </GestureTilePart>
+  </GestureCard>
 
   <!-- ARROW -->
   <div class="text-center w-15">

@@ -30,6 +30,7 @@ import AvailableAxes from '../domain/stores/AvailableAxes';
 import Snackbar from '../../components/snackbar/Snackbar';
 import NeuralNetworkSettings from '../domain/stores/NeuralNetworkSettings';
 import KNNModelSettings from '../domain/stores/KNNModelSettings';
+import ValidationSets from '../domain/stores/ValidationSets';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -50,8 +51,10 @@ class Stores implements Readable<StoresType> {
   private snackbar: Snackbar;
   private neuralNetworkSettings: NeuralNetworkSettings;
   private knnModelSettings: KNNModelSettings;
+  private validationSets: ValidationSets;
 
   public constructor(private applicationState: Readable<ApplicationState>) {
+    this.validationSets = new ValidationSets();
     this.neuralNetworkSettings = new NeuralNetworkSettings();
     this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
@@ -147,6 +150,10 @@ class Stores implements Readable<StoresType> {
 
   public getKNNModelSettings() {
     return this.knnModelSettings;
+  }
+
+  public getValidationSets() {
+    return this.validationSets;
   }
 }
 

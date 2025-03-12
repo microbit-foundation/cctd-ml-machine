@@ -8,13 +8,13 @@ import { get } from 'svelte/store';
 import Filters from '../domain/Filters';
 import { type TrainingData } from '../domain/ModelTrainer';
 import type { Repositories } from '../domain/Repositories';
-import type { RecordingData } from '../domain/stores/gesture/Gestures';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import { stores } from '../stores/Stores';
 import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import type { Vector } from '../domain/Vector';
 import BaseVector from '../domain/BaseVector';
 import { getMean, getStandardDeviation } from '../utils/Math';
+import type { RecordingData } from '../domain/RecordingData';
 
 class LocalStorageTrainingDataRepository implements TrainingDataRepository {
   constructor(

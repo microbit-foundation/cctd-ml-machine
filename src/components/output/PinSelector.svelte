@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import GestureTilePart from './../GestureTilePart.svelte';
+  import GestureCard from '../GestureCard.svelte';
   import StaticConfiguration from '../../StaticConfiguration';
   import { PinTurnOnState } from './PinSelectorUtil';
   import { t } from '../../i18n';
@@ -46,7 +46,7 @@
   }
 </script>
 
-<GestureTilePart>
+<GestureCard>
   <div class="flex flex-row">
     {#each MBSpecs.IO_PIN_LAYOUT as currentPin}
       {#if includes(StaticConfiguration.supportedPins, currentPin)}
@@ -127,4 +127,4 @@
       {/if}
     </div>
   </div>
-</GestureTilePart>
+</GestureCard>

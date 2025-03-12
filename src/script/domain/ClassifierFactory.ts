@@ -10,12 +10,11 @@ import { type TrainingData } from './ModelTrainer';
 import { type TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
 import Gesture, { type GestureID } from './stores/gesture/Gesture';
 import Model from './stores/Model';
-import { type RecordingData } from './stores/gesture/Gestures';
 import type { MLModel } from './MLModel';
 import type Snackbar from '../../components/snackbar/Snackbar';
 import { t } from '../../i18n';
 import BaseVector from './BaseVector';
-import type PredictedPointLiveData from '../livedata/PredictedPointLiveData';
+import type { RecordingData } from './RecordingData';
 
 class ClassifierFactory {
   public buildClassifier(

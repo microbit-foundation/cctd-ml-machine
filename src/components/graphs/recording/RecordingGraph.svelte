@@ -19,13 +19,14 @@
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
   import RecordingGraphPointData from './RecordingGraphPointData.svelte';
   import { Feature, hasFeature } from '../../../script/FeatureToggles';
-  import { type RecordingData } from '../../../script/domain/stores/gesture/Gestures';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../script/stores/Stores';
   import { getRecordingChartDatasets, type ChartDataset } from './RecordingGraph';
+  import type { RecordingData } from '../../../script/domain/RecordingData';
 
-  export let data: RecordingData['samples'];
-  export let labels: RecordingData['labels'];
+  export let recording: RecordingData;
+  const samples = recording.samples;
+  const labels = recording.labels;
 
   let verticalLineX = NaN;
   let hoverIndex = NaN;
@@ -41,7 +42,7 @@
     if (isNaN(index)) {
       return [];
     }
-    return data[index].vector;
+    return samples[index].vector;
   };
 
   let htmlElement: HTMLDivElement;
@@ -93,7 +94,7 @@
     { x: number; y: number }[],
     string
   > {
-    const datasets: ChartDataset[] = getRecordingChartDatasets(data);
+    const datasets: ChartDataset[] = getRecordingChartDatasets(samples);
 
     return {
       type: 'line',

@@ -5,6 +5,9 @@
  -->
 
 <script lang="ts">
+  import ControlBar from '../../components/control-bar/ControlBar.svelte';
 </script>
 
-<div></div>
+<ControlBar>
+  <p>validation page yea - put something here maybe</p>
+</ControlBar>

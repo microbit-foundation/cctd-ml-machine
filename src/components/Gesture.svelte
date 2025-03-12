@@ -18,13 +18,12 @@
   import { t } from '../i18n';
   import StandardButton from './buttons/StandardButton.svelte';
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
-  import GestureTilePart from './GestureTilePart.svelte';
+  import GestureCard from './GestureCard.svelte';
   import StaticConfiguration from '../StaticConfiguration';
   import Gesture from '../script/domain/stores/gesture/Gesture';
-  import { type RecordingData } from '../script/domain/stores/gesture/Gestures';
   import { state, stores } from '../script/stores/Stores';
+  import type { RecordingData } from '../script/domain/RecordingData';
 
-  // Variables for component
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
   const gestures = stores.getGestures();
@@ -187,7 +186,7 @@
   }
 </script>
 
-<main class="flex-row flex mb-2">
+<div class="flex-row flex">
   <!-- Recordingbar to show recording-progress -->
 
   <div
@@ -196,9 +195,9 @@
       ? `transition:  ${(recordingDuration / 1000).toString()}s linear; width: 97%;`
       : 'width:0;'} />
 
-  <div class="items-center flex mb-1">
+  <div class="items-center flex relative">
     <!-- Title of gesture-->
-    <GestureTilePart mr small>
+    <GestureCard mr small>
       <div
         class="absolute rounded-full w-3 h-3 m-3"
         style={`background-color:${gesture.getColor()}`}>
@@ -221,9 +220,9 @@
             on:click={removeClicked} />
         </button>
       </div>
-    </GestureTilePart>
+    </GestureCard>
 
-    <GestureTilePart small mr elevated={$chosenGesture === gesture}>
+    <GestureCard small mr elevated={$chosenGesture === gesture}>
       {#if $chosenGesture !== gesture}
         <div class="text-center w-35 cursor-pointer" on:click={selectClicked}>
           <div class="w-full text-center">
@@ -246,18 +245,18 @@
             fillOnHover>{$t('content.data.record')}</StandardButton>
         </div>
       {/if}
-    </GestureTilePart>
+    </GestureCard>
     <!-- Show recording for each recording -->
     {#if $gesture.recordings.length > 0}
-      <GestureTilePart small>
+      <GestureCard small>
         <div class="flex p-2 h-30">
           {#each $gesture.recordings as recording (String($gesture.ID) + String(recording.ID))}
             <Recording {recording} onDelete={deleteRecording} />
           {/each}
         </div>
-      </GestureTilePart>
+      </GestureCard>
     {:else if $chosenGesture === gesture}
-      <GestureTilePart small>
+      <GestureCard small>
         <div class="relative float-left text-left h-30 w-60 justify-start flex">
           <div class="text-left float-left mt-auto mb-auto ml-3">
             <ImageSkeleton
@@ -270,7 +269,7 @@
             {$t('content.index.recordButtonDescription')}
           </p>
         </div>
-      </GestureTilePart>
+      </GestureCard>
     {/if}
   </div>
-</main>
+</div>

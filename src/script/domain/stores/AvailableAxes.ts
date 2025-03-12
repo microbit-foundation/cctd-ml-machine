@@ -1,16 +1,16 @@
+import type { Axis } from '../Axis';
 import {
-  get,
-  writable,
+  type Writable,
   type Readable,
+  writable,
   type Subscriber,
   type Unsubscriber,
-  type Writable,
+  get,
 } from 'svelte/store';
-import type { Axis } from '../Axis';
 import type { LiveData } from './LiveData';
 import type { LiveDataVector } from './LiveDataVector';
-import Logger from '../../utils/Logger';
 import type Gestures from './gesture/Gestures';
+import Logger from '../../utils/Logger';
 
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
@@ -43,7 +43,7 @@ class AvailableAxes implements Readable<Axis[]> {
           recordings[0].labels,
         );
         return recordings[0].labels.map(
-          (label, index) =>
+          (label: string, index: number) =>
             ({
               index,
               label,

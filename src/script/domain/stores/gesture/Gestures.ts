@@ -15,21 +15,14 @@ import {
 import Gesture, { type GestureData, type GestureID, type GestureOutput } from './Gesture';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import type { GestureRepository } from '../../GestureRepository';
+import type { RecordingData } from '../../RecordingData';
 
-export type PersistantGestureData = {
+export type PersistedGestureData = {
   name: string;
   ID: GestureID;
   recordings: RecordingData[];
   output: GestureOutput;
   color: string;
-};
-
-export type RecordingData = {
-  ID: number;
-  samples: {
-    vector: number[];
-  }[];
-  labels: string[];
 };
 
 class Gestures implements Readable<GestureData[]> {
@@ -97,7 +90,7 @@ class Gestures implements Readable<GestureData[]> {
     this.repository.removeGesture(gestureId);
   }
 
-  public importFrom(gestureData: PersistantGestureData[]) {
+  public importFrom(gestureData: PersistedGestureData[]) {
     this.clearGestures();
     gestureData.forEach(data => this.addGestureFromPersistedData(data));
   }
@@ -129,7 +122,7 @@ class Gestures implements Readable<GestureData[]> {
     );
   }
 
-  private addGestureFromPersistedData(gestureData: PersistantGestureData): Gesture {
+  private addGestureFromPersistedData(gestureData: PersistedGestureData): Gesture {
     return this.repository.addGesture(gestureData);
   }
 

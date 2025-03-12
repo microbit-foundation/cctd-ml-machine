@@ -9,7 +9,6 @@
   import MicrobitAccelerometerDataSynthesizer from '../components/playground/inputSynthesizer/LiveDataSynthesizer.svelte';
   import LiveDataBufferUtilizationPercentage from '../components/playground/LiveDataBufferUtilizationPercentage.svelte';
   import StoresDisplay from '../components/playground/StoresDisplay.svelte';
-  import EngineInteractionButtons from '../components/playground/EngineInteractionButtons.svelte';
   import { onMount } from 'svelte';
 
   let isPlaygroundActive = false;
@@ -24,7 +23,6 @@
       <StoresDisplay />
       <div class="flex-grow" />
       <div class="flex flex-col w-100">
-        <EngineInteractionButtons />
         <PlaygroundLog />
       </div>
     </div>

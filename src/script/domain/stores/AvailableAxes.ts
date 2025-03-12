@@ -1,10 +1,16 @@
-import type { Axis } from "../Axis";
-import { type Writable, type Readable, writable, type Subscriber, type Unsubscriber, get } from "svelte/store";
-import type { LiveData } from "./LiveData";
-import type { LiveDataVector } from "./LiveDataVector";
-import type Gestures from "./gesture/Gestures";
-import Logger from "../../utils/Logger";
-
+import type { Axis } from '../Axis';
+import {
+  type Writable,
+  type Readable,
+  writable,
+  type Subscriber,
+  type Unsubscriber,
+  get,
+} from 'svelte/store';
+import type { LiveData } from './LiveData';
+import type { LiveDataVector } from './LiveDataVector';
+import type Gestures from './gesture/Gestures';
+import Logger from '../../utils/Logger';
 
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors

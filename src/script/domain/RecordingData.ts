@@ -4,4 +4,4 @@ export interface RecordingData {
     vector: number[];
   }[];
   labels: string[];
-};
+}

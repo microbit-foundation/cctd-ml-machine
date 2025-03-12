@@ -13,7 +13,7 @@
   import { type GestureData } from '../../script/domain/stores/gesture/Gesture';
   import StaticConfiguration from '../../StaticConfiguration';
   import { state, stores } from '../../script/stores/Stores';
-        import type { RecordingData } from '../../script/domain/RecordingData';
+  import type { RecordingData } from '../../script/domain/RecordingData';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;

@@ -9,12 +9,14 @@
   import type Gesture from '../../script/domain/stores/gesture/Gesture';
   import { chosenGesture } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
-  import { state } from '../../script/stores/Stores';
+  import { state, stores } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { startRecording } from '../../script/utils/Recording';
 
   export let gesture: Gesture;
+  const validationSets = stores.getValidationSets();
   export let onNoMicrobitSelect: () => void;
+
   const selectClicked = (gesture: Gesture): void => {
     if (!$state.isInputConnected) {
       chosenGesture.update(gesture => {
@@ -33,6 +35,7 @@
       return chosen;
     });
   };
+
 </script>
 
 <GestureCard small>
@@ -53,7 +56,9 @@
       <StandardButton
         onClick={e => {
           e.stopPropagation();
-          startRecording(E => console.log(E));
+          startRecording(recording => {
+            validationSets.addRecording(gesture.getId(), recording)
+          });
         }}
         small
         shadows={false}

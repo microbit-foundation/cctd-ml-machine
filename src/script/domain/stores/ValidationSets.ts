@@ -27,17 +27,17 @@ class ValidationSets implements Readable<ValidationSet[]> {
 
   public addRecording(
     gestureId: GestureID,
-    samples: RecordingSample[],
-    labels: string[],
+    recording: RecordingData
   ) {
     this.validationSets.update(sets => {
+      if (sets.findIndex(e => e.gestureId === gestureId) === -1) {
+        sets.push({
+          gestureId: gestureId,
+          recordings: []
+        })
+      }
       return sets.map(set => {
         if (gestureId === set.gestureId) {
-          const recording: RecordingData = {
-            ID: Date.now(),
-            labels,
-            samples,
-          };
           return {
             gestureId,
             recordings: [...set.recordings, recording],

@@ -5,23 +5,14 @@
  -->
 
 <script lang="ts">
-  import Gesture from '../components/Gesture.svelte';
   import { t } from '../i18n';
-  import RecordInformationContent from '../components/datacollection/RecordInformationContent.svelte';
-  import StandardDialog from '../components/dialogs/StandardDialog.svelte';
-  import MainConnectDialog from '../components/connection-prompt/ConnectDialogContainer.svelte';
-  import NewGestureButton from '../components/NewGestureButton.svelte';
   import StandardButton from '../components/buttons/StandardButton.svelte';
-  import { startConnectionProcess } from '../script/stores/connectDialogStore';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
-  import Information from '../components/information/Information.svelte';
   import { onMount } from 'svelte';
   import FileUtility from '../script/repository/FileUtility';
   import { get } from 'svelte/store';
-  import { type GestureData } from '../script/domain/stores/gesture/Gesture';
   import { state, stores } from '../script/stores/Stores';
   import { hasSomeData, importExampleDataset } from './data/DataPage';
-  import NoDataPage from './data/DataPageNoData.svelte';
   import DataPageNoData from './data/DataPageNoData.svelte';
   import DataPageWithData from './data/DataPageWithData.svelte';
 

@@ -11,10 +11,29 @@ import PersistantWritable from '../repository/PersistantWritable';
 const nsStore = new PersistantWritable(false, 'dev_ns');
 
 class Logger {
-  constructor(private origin: any) {}
+  constructor(private origin: any) { }
 
   public log(message: any, ...params: any[]) {
     Logger.log(this.origin, message, params);
+  }
+
+  public warn(message: any, ...params: any[]) {
+    Logger.warn(this.origin, message, params);
+  }
+
+  /**
+   * Logs a message in development environment
+   */
+  public static warn(origin: any, message: any, ...params: any[]) {
+    if (!Environment.isInDevelopment) {
+      return;
+    }
+    if (!(window as typeof window & { hasLogged: boolean }).hasLogged) {
+      welcomeLog();
+    }
+    const outputMessage = `[${origin}] ${message} ${params}`;
+    !get(nsStore) && console.trace(outputMessage);
+    get(nsStore) && console.warn(outputMessage);
   }
 
   /**

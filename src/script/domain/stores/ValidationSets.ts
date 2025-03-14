@@ -5,6 +5,7 @@
  */
 
 import {
+  derived,
   get,
   writable,
   type Invalidator,
@@ -45,6 +46,19 @@ class ValidationSets implements Readable<ValidationSet[]> {
         return set;
       });
     });
+  }
+
+  public getForGesture(gestureId: GestureID): Readable<ValidationSet> {
+    return derived(this.validationSets, sets => {
+      const idx = sets.findIndex(e => e.gestureId === gestureId)
+      if (idx === -1) {
+        return {
+          gestureId: gestureId,
+          recordings: []
+        }
+      }
+      return sets[idx];
+    })
   }
 
   public getValidationSets(): ValidationSet[] {

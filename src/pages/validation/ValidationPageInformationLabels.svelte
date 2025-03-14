@@ -11,7 +11,7 @@
   import { hasSomeData } from '../data/DataPage';
 </script>
 
-<!-- Layout based on parent grid container -->
+<!-- Layout based on parent display:grid container -->
 <div class="left-3 flex col-start-1">
   <Information
     isLightTheme={false}

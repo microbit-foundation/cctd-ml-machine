@@ -23,7 +23,7 @@
   import Gesture from '../script/domain/stores/gesture/Gesture';
   import { state, stores } from '../script/stores/Stores';
   import type { RecordingData } from '../script/domain/RecordingData';
-    import { startRecording } from '../script/utils/Recording';
+  import { startRecording } from '../script/utils/Recording';
 
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
@@ -67,7 +67,8 @@
       return;
     }
     isThisRecording = true;
-    startRecording((recording) => {
+    startRecording(recording => {
+      isThisRecording = false;
       gesture.addRecording(recording);
     });
   }

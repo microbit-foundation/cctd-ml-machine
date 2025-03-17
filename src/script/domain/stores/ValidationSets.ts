@@ -25,16 +25,13 @@ class ValidationSets implements Readable<ValidationSet[]> {
     this.validationSets = writable([]);
   }
 
-  public addRecording(
-    gestureId: GestureID,
-    recording: RecordingData
-  ) {
+  public addRecording(gestureId: GestureID, recording: RecordingData) {
     this.validationSets.update(sets => {
       if (sets.findIndex(e => e.gestureId === gestureId) === -1) {
         sets.push({
           gestureId: gestureId,
-          recordings: []
-        })
+          recordings: [],
+        });
       }
       return sets.map(set => {
         if (gestureId === set.gestureId) {
@@ -50,15 +47,15 @@ class ValidationSets implements Readable<ValidationSet[]> {
 
   public getForGesture(gestureId: GestureID): Readable<ValidationSet> {
     return derived(this.validationSets, sets => {
-      const idx = sets.findIndex(e => e.gestureId === gestureId)
+      const idx = sets.findIndex(e => e.gestureId === gestureId);
       if (idx === -1) {
         return {
           gestureId: gestureId,
-          recordings: []
-        }
+          recordings: [],
+        };
       }
       return sets[idx];
-    })
+    });
   }
 
   public getValidationSets(): ValidationSet[] {

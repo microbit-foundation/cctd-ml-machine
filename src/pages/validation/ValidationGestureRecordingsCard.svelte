@@ -8,11 +8,11 @@
   import GestureCard from '../../components/GestureCard.svelte';
   import Recording from '../../components/Recording.svelte';
   import type Gesture from '../../script/domain/stores/gesture/Gesture';
-    import { stores } from '../../script/stores/Stores';
+  import { stores } from '../../script/stores/Stores';
 
   export let gesture: Gesture;
   const validationSet = stores.getValidationSets().getForGesture(gesture.getId());
-  $: recordings = $validationSet.recordings
+  $: recordings = $validationSet.recordings;
 </script>
 
 <GestureCard small>

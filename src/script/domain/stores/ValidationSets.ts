@@ -16,13 +16,14 @@ import {
 } from 'svelte/store';
 import type { ValidationSet } from '../ValidationSet';
 import type { GestureID } from './gesture/Gesture';
-import type { RecordingData, RecordingSample } from '../RecordingData';
+import type { RecordingData } from '../RecordingData';
+import PersistantWritable from '../../repository/PersistantWritable';
 
 class ValidationSets implements Readable<ValidationSet[]> {
   private validationSets: Writable<ValidationSet[]>;
 
   public constructor() {
-    this.validationSets = writable([]);
+    this.validationSets = new PersistantWritable([], "validation_set");
   }
 
   public addRecording(gestureId: GestureID, recording: RecordingData) {
@@ -56,6 +57,15 @@ class ValidationSets implements Readable<ValidationSet[]> {
       }
       return sets[idx];
     });
+  }
+
+  public removeValidationRecording(recordingId: number): void {
+    this.validationSets.update(sets => {
+      return sets.map(set => ({
+        ...set,
+        recordings: set.recordings.filter(recording => recording.ID !== recordingId),
+      }))
+    })
   }
 
   public getValidationSets(): ValidationSet[] {

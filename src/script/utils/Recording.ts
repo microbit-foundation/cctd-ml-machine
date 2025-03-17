@@ -53,7 +53,7 @@ export const startRecording = (onFinished: (recording: RecordingData) => void) =
     }
 
     const recording: RecordingData = {
-      ID: Date.now(),
+      ID: recordingId,
       samples: samples,
       labels: labels,
     };

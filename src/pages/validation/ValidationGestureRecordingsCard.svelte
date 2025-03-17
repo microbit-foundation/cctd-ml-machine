@@ -11,16 +11,22 @@
   import { stores } from '../../script/stores/Stores';
 
   export let gesture: Gesture;
+
+  const validationSets = stores.getValidationSets();
   const validationSet = stores.getValidationSets().getForGesture(gesture.getId());
+
   $: recordings = $validationSet.recordings;
 </script>
 
 <GestureCard small>
   <div class="flex flex-row h-full items-center pl-2">
     {#each recordings as recording}
-      <Recording
-        {recording}
-        onDelete={recording => gesture.removeRecording(recording.ID)} />
+      {#key recording.ID}
+        <Recording
+          {recording}
+          onDelete={recording =>
+            validationSets.removeValidationRecording(recording.ID)} />
+      {/key}
     {/each}
   </div>
 </GestureCard>

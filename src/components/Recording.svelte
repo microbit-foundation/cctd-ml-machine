@@ -8,6 +8,7 @@
   import { fade } from 'svelte/transition';
   import RecordingGraph from './graphs/recording/RecordingGraph.svelte';
   import type { RecordingData } from '../script/domain/RecordingData';
+  import { onMount } from 'svelte';
 
   // get recording from mother prop
   export let recording: RecordingData;
@@ -32,8 +33,11 @@
 <div class="h-26 w-40 pr-3 pt-1 bg-white relative">
   {#if hide}
     <div transition:fade class="absolute h-26 w-40 bg-white" />
+  {:else}
+    <div transition:fade class="absolute h-26 w-40 bg-white">
+      <RecordingGraph {recording} />
+    </div>
   {/if}
-  <RecordingGraph {recording} />
   <button class="absolute -left-2.8px top-0px outline-none">
     <div class="relative">
       <i class="z-1 absolute fas fa-circle fa-lg text-white" />

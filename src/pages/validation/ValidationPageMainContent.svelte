@@ -26,6 +26,7 @@
     <div class="col-start-2">
       <ValidationGestureSelectGestureCard {gesture} {onNoMicrobitSelect} />
     </div>
+
     <div class="col-start-3">
       <ValidationGestureRecordingsCard {gesture} />
     </div>

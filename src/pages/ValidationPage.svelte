@@ -12,6 +12,7 @@
   import StandardButton from '../components/buttons/StandardButton.svelte';
   import { startConnectionProcess } from '../script/stores/connectDialogStore';
   import ConnectDialogContainer from '../components/connection-prompt/ConnectDialogContainer.svelte';
+  import ValidationPageActionContent from './validation/ValidationPageActionContent.svelte';
 
   let isConnectionDialogOpen = false;
 </script>
@@ -21,9 +22,17 @@
   <div>
     <ValidationPageControlBar />
   </div>
-  <div class="overflow-x-auto flex-grow">
-    <ValidationPageMainContent
-      onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
+  <div>
+    <!-- 50px for controlbar, 160px for bottom graph, 28px for split view  -->
+    <div
+      class="overflow-x-auto flex-grow overflow-y-auto"
+      style="height: calc(100vh - 48px - 160px - 184px);">
+      <ValidationPageMainContent
+        onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
+    </div>
+    <div class="flex-grow h-46">
+      <ValidationPageActionContent />
+    </div>
   </div>
 
   <StandardDialog

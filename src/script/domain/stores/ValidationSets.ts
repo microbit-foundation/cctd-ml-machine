@@ -23,7 +23,7 @@ class ValidationSets implements Readable<ValidationSet[]> {
   private validationSets: Writable<ValidationSet[]>;
 
   public constructor() {
-    this.validationSets = new PersistantWritable([], "validation_set");
+    this.validationSets = new PersistantWritable([], 'validation_set');
   }
 
   public addRecording(gestureId: GestureID, recording: RecordingData) {
@@ -64,8 +64,8 @@ class ValidationSets implements Readable<ValidationSet[]> {
       return sets.map(set => ({
         ...set,
         recordings: set.recordings.filter(recording => recording.ID !== recordingId),
-      }))
-    })
+      }));
+    });
   }
 
   public getValidationSets(): ValidationSet[] {

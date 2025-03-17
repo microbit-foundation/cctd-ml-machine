@@ -8,7 +8,7 @@
   import { fade } from 'svelte/transition';
   import RecordingGraph from './graphs/recording/RecordingGraph.svelte';
   import type { RecordingData } from '../script/domain/RecordingData';
-    import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
 
   // get recording from mother prop
   export let recording: RecordingData;
@@ -28,7 +28,6 @@
       onDelete(recording);
     }, 450);
   }
-  
 </script>
 
 <div class="h-26 w-40 pr-3 pt-1 bg-white relative">

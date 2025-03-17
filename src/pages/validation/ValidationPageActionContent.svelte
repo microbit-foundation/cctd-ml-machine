@@ -5,11 +5,10 @@
  -->
 
 <script lang="ts">
-    import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
-    import BaseVector from '../../script/domain/BaseVector';
-    import { ClassifierInput } from '../../script/domain/ClassifierInput';
-  import type { ValidationSet } from '../../script/domain/ValidationSet';
+  import BaseVector from '../../script/domain/BaseVector';
+  import { ClassifierInput } from '../../script/domain/ClassifierInput';
   import { stores } from '../../script/stores/Stores';
 
   const gestures = stores.getGestures();
@@ -22,17 +21,17 @@
   const v = async () => {
     $validationSets.map(e => {
       return e.recordings.map(async r => {
-        const recordingSamples = r.samples.map(v => new BaseVector(v.vector))
-        const classifierInput = new ClassifierInput(recordingSamples)
-        const x = await model.predict(new BaseVector(classifierInput.getInput(filters)))
-        console.log(x)
+        const recordingSamples = r.samples.map(v => new BaseVector(v.vector));
+        const classifierInput = new ClassifierInput(recordingSamples);
+        const x = await model.predict(new BaseVector(classifierInput.getInput(filters)));
+        console.log(x);
       });
     });
   };
 
   onMount(() => {
     v();
-  })
+  });
 </script>
 
 <div class="bg-white h-full flex flex-row">

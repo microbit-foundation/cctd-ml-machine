@@ -23,14 +23,13 @@
     <ValidationPageControlBar />
   </div>
   <div>
-    <!-- 50px for controlbar, 160px for bottom graph, 28px for split view  -->
     <div
       class="overflow-x-auto flex-grow overflow-y-auto"
-      style="height: calc(100vh - 48px - 160px - 184px);">
+      style="height: calc(100vh - 48px - 160px - 152px);">
       <ValidationPageMainContent
         onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
     </div>
-    <div class="flex-grow h-46">
+    <div class="flex-grow h-38">
       <ValidationPageActionContent />
     </div>
   </div>

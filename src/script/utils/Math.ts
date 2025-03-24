@@ -51,3 +51,19 @@ export const getMean = (vectors: Vector[]): Vector => {
   }
   return new BaseVector(mean);
 };
+
+export const findLargestIndex = (arr: number[]) => {
+  if (arr.length === 0) return -1; // Handle empty array case
+
+  let maxIndex = 0;
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > arr[maxIndex]) {
+      maxIndex = i;
+    }
+  }
+  return maxIndex;
+};
+
+export const transposeMatrix = (matrix: number[][]) => {
+  return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
+};

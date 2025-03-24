@@ -5,60 +5,51 @@
  -->
 
 <script lang="ts">
-  import { onMount } from 'svelte';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import BaseVector from '../../script/domain/BaseVector';
-  import { ClassifierInput } from '../../script/domain/ClassifierInput';
   import { stores } from '../../script/stores/Stores';
+  import { writable } from 'svelte/store';
+  import ValidationMatrix from './ValidationMatrix.svelte';
+  import {
+    createValidationMatrix,
+    evaluateValidationSet,
+    type ValidationResult,
+  } from './ValidationPage';
 
   const gestures = stores.getGestures();
   const validationSets = stores.getValidationSets();
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
   const filters = classifier.getFilters();
-  $: gestureIds = $gestures.map(gesture => gesture.ID);
+  const validationResults = writable<ValidationResult>([]);
 
-  const v = async () => {
-    $validationSets.map(e => {
-      return e.recordings.map(async r => {
-        const recordingSamples = r.samples.map(v => new BaseVector(v.vector));
-        const classifierInput = new ClassifierInput(recordingSamples);
-        const x = await model.predict(new BaseVector(classifierInput.getInput(filters)));
-        console.log(x);
-      });
-    });
+  let autoUpdate = false;
+
+  $: {
+    if ($model.isTrained && autoUpdate) {
+      evaluateValidationSet($validationSets, model, filters).then(results =>
+        validationResults.set(results),
+      );
+    }
+  }
+
+  const handleEvaluateValidationSets = () => {
+    evaluateValidationSet($validationSets, model, filters).then(results =>
+      validationResults.set(results),
+    );
   };
 
-  onMount(() => {
-    v();
-  });
+  $: matrix = createValidationMatrix($validationResults, $gestures);
 </script>
 
-<div class="bg-white h-full flex flex-row">
+<div class="bg-white h-full flex flex-row justify-evenly">
   <div class="pl-2 flex flex-col justify-center">
-    <StandardButton>Test</StandardButton>
+    <div class="flex flex-row gap-2 justify-center">
+      <p>Auto-update:</p>
+      <input type="checkbox" bind:checked={autoUpdate} />
+    </div>
+    <StandardButton onClick={handleEvaluateValidationSets}>Test</StandardButton>
   </div>
-  <div class="flex flex-col justify-center">
-    <table>
-      <thead>
-        <tr>
-          {#each $gestures as gesture}
-            <td>{gesture.name}</td>
-          {/each}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          {#each $gestures as gesture}
-            <td>{gesture.name}</td>
-          {/each}
-        </tr>
-        <tr>
-          {#each $gestures as gesture}
-            <td>{gesture.name}</td>
-          {/each}
-        </tr>
-      </tbody>
-    </table>
+  <div class="flex flex-col justify-center text-center">
+    <ValidationMatrix {matrix} />
   </div>
 </div>

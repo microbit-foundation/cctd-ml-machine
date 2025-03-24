@@ -28,13 +28,13 @@
   };
 </script>
 
-  <div
-    on:focus={() => {}}
-    on:mouseover={mouseOver}
-    on:mouseleave={mouseLeave}
-    on:mousemove={mouseMove}>
-    <slot />
-  </div>
+<div
+  on:focus={() => {}}
+  on:mouseover={mouseOver}
+  on:mouseleave={mouseLeave}
+  on:mousemove={mouseMove}>
+  <slot />
+</div>
 
 {#if !disabled}
   {#if isHovered && !!title}

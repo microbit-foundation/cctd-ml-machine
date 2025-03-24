@@ -48,8 +48,12 @@
       <p>Auto-update:</p>
       <input type="checkbox" bind:checked={autoUpdate} />
     </div>
-    <Tooltip disabled={$model.isTrained} offset={{x:-80, y:-60}} title="(translate)You must train a model first!">
-      <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}>Test</StandardButton>
+    <Tooltip
+      disabled={$model.isTrained}
+      offset={{ x: -80, y: -60 }}
+      title="(translate)You must train a model first!">
+      <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}
+        >Test</StandardButton>
     </Tooltip>
   </div>
   <div class="flex flex-col justify-center text-center">

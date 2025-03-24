@@ -14,6 +14,7 @@
     evaluateValidationSet,
     type ValidationResult,
   } from './ValidationPage';
+  import Tooltip from '../../components/base/Tooltip.svelte';
 
   const gestures = stores.getGestures();
   const validationSets = stores.getValidationSets();
@@ -47,7 +48,9 @@
       <p>Auto-update:</p>
       <input type="checkbox" bind:checked={autoUpdate} />
     </div>
-    <StandardButton onClick={handleEvaluateValidationSets}>Test</StandardButton>
+    <Tooltip disabled={$model.isTrained} offset={{x:-80, y:-60}} title="(translate)You must train a model first!">
+      <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}>Test</StandardButton>
+    </Tooltip>
   </div>
   <div class="flex flex-col justify-center text-center">
     <ValidationMatrix {matrix} />

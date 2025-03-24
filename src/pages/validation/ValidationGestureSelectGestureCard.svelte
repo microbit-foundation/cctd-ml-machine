@@ -39,11 +39,15 @@
   };
 </script>
 
-<div
-  class="bg-red-600 h-1.5 rounded-full absolute mt-123px ml-14px left-0"
-  style={isThisRecording
-    ? `transition:  ${(StaticConfiguration.recordingDuration / 1000).toString()}s linear; width: 97%;`
-    : 'width:0;'} />
+<div class="relative w-[calc(100vw-320px)] left-[-220px]">
+  <div class="absolute w-full left-0">
+    <div
+      class="bg-red-600 h-1.5 rounded-full absolute mt-123px ml-14px left-0"
+      style={isThisRecording
+        ? `transition:  ${(StaticConfiguration.recordingDuration / 1000).toString()}s linear; width: 97%;`
+        : 'width:0;'} />
+  </div>
+</div>
 <GestureCard small>
   {#if $chosenGesture?.getId() !== gesture.getId()}
     <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked(gesture)}>

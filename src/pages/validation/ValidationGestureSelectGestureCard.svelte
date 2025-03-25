@@ -19,6 +19,7 @@
   import { startRecording } from '../../script/utils/Recording';
   import StaticConfiguration from '../../StaticConfiguration';
   import { get } from 'svelte/store';
+    import Logger from '../../script/utils/Logger';
 
   export let gesture: Gesture;
   const validationSets = stores.getValidationSets();
@@ -51,6 +52,7 @@
     }
 
     if (isThisRecording) {
+      Logger.warn("ValidationGestureSelectGestureCard", "Already recording")
       return;
     }
     isThisRecording = true;
@@ -76,8 +78,8 @@
     }
   };
 
+  let declaring = true;
   $: {
-    let declaring = true;
     // Handle button press recordings. When first mounting, declare is true, therefore it won't call, only subsequently will this happen
     if (!declaring) {
       // Do not call when component is mounted

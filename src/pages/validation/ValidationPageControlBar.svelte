@@ -5,9 +5,24 @@
  -->
 
 <script lang="ts">
+    import StandardButton from '../../components/buttons/StandardButton.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
+    import { stores } from '../../script/stores/Stores';
+  const validationSets = stores.getValidationSets();
+  $: isClearDisabled = $validationSets.length === 0;
+  const clearValidationSets = () => validationSets.clear();
 </script>
 
 <ControlBar>
-  <p>validation page yea - put something here maybe</p>
+  <StandardButton
+    fillOnHover
+    small
+    disabled={isClearDisabled}
+    onClick={clearValidationSets}
+    bold={false}
+    outlined
+    shadows={false}
+    color={'primary'}>
+    Clear validation sets
+  </StandardButton>
 </ControlBar>

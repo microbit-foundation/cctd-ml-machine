@@ -72,6 +72,10 @@ class ValidationSets implements Readable<ValidationSet[]> {
     return get(this.validationSets);
   }
 
+  public clear(): void {
+    this.validationSets.set([]);
+  }
+
   public subscribe(
     run: Subscriber<ValidationSet[]>,
     invalidate?: Invalidator<ValidationSet[]> | undefined,

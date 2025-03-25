@@ -7,12 +7,18 @@
 <script lang="ts">
   import GestureCard from '../../components/GestureCard.svelte';
   import type Gesture from '../../script/domain/stores/gesture/Gesture';
-  import { chosenGesture } from '../../script/stores/uiStore';
+  import {
+    buttonPressed,
+    chosenGesture,
+    microbitInteraction,
+    MicrobitInteractions,
+  } from '../../script/stores/uiStore';
   import { t } from '../../i18n';
   import { state, stores } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { startRecording } from '../../script/utils/Recording';
   import StaticConfiguration from '../../StaticConfiguration';
+  import { get } from 'svelte/store';
 
   export let gesture: Gesture;
   const validationSets = stores.getValidationSets();
@@ -37,6 +43,49 @@
       return chosen;
     });
   };
+
+  const createRecording = (buttons?: { buttonA: 0 | 1; buttonB: 0 | 1 }) => {
+    // Make sure only *this* gesture get's the recording indicator
+    if (gesture.getId() !== $chosenGesture?.getId()) {
+      return;
+    }
+
+    if (isThisRecording) {
+      return;
+    }
+    isThisRecording = true;
+    const addRecording = () => {
+      startRecording(recording => {
+        isThisRecording = false;
+        validationSets.addRecording(gesture.getId(), recording);
+      });
+    };
+
+    if (!buttons) {
+      addRecording();
+      return;
+    }
+
+    const triggerButton = get(microbitInteraction);
+    if (
+      triggerButton === MicrobitInteractions.AB ||
+      (buttons.buttonA && triggerButton === MicrobitInteractions.A) ||
+      (buttons.buttonB && triggerButton === MicrobitInteractions.B)
+    ) {
+      addRecording();
+    }
+  };
+
+  $: {
+    let declaring = true;
+    // Handle button press recordings. When first mounting, declare is true, therefore it won't call, only subsequently will this happen
+    if (!declaring) {
+      // Do not call when component is mounted
+      createRecording($buttonPressed);
+    } else {
+      declaring = false;
+    }
+  }
 </script>
 
 <div class="relative w-[calc(100vw-320px)] left-[-220px]">
@@ -66,11 +115,7 @@
       <StandardButton
         onClick={e => {
           e.stopPropagation();
-          isThisRecording = true;
-          startRecording(recording => {
-            isThisRecording = false;
-            validationSets.addRecording(gesture.getId(), recording);
-          });
+          createRecording();
         }}
         small
         shadows={false}

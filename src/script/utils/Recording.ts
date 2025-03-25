@@ -13,7 +13,7 @@ import { alertUser } from '../stores/uiStore';
 import { t } from '../../i18n';
 
 export const startRecording = (onFinished: (recording: RecordingData) => void) => {
-  console.log("Starting Recording")
+  console.log('Starting Recording');
   if (get(state).isRecording) {
     Logger.warn('Recording', 'Failed to start recording, already recording');
     return;

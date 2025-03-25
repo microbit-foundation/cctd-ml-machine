@@ -19,7 +19,7 @@
   import { startRecording } from '../../script/utils/Recording';
   import StaticConfiguration from '../../StaticConfiguration';
   import { get } from 'svelte/store';
-    import Logger from '../../script/utils/Logger';
+  import Logger from '../../script/utils/Logger';
 
   export let gesture: Gesture;
   const validationSets = stores.getValidationSets();
@@ -52,7 +52,7 @@
     }
 
     if (isThisRecording) {
-      Logger.warn("ValidationGestureSelectGestureCard", "Already recording")
+      Logger.warn('ValidationGestureSelectGestureCard', 'Already recording');
       return;
     }
     isThisRecording = true;

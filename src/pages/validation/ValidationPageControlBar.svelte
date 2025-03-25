@@ -5,9 +5,9 @@
  -->
 
 <script lang="ts">
-    import StandardButton from '../../components/buttons/StandardButton.svelte';
+  import StandardButton from '../../components/buttons/StandardButton.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
-    import { stores } from '../../script/stores/Stores';
+  import { stores } from '../../script/stores/Stores';
   const validationSets = stores.getValidationSets();
   $: isClearDisabled = $validationSets.length === 0;
   const clearValidationSets = () => validationSets.clear();

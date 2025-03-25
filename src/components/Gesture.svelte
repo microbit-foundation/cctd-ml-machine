@@ -107,10 +107,10 @@
   // Assess whether settings match with button-clicked.
   // If so, the gesture calls the recording function.
   function triggerButtonsClicked(buttons: { buttonA: 0 | 1; buttonB: 0 | 1 }): void {
-    const triggerButton = get(microbitInteraction);
     if ($chosenGesture !== gesture) {
       return;
     }
+    const triggerButton = get(microbitInteraction);
     if (
       triggerButton === MicrobitInteractions.AB ||
       (buttons.buttonA && triggerButton === MicrobitInteractions.A) ||

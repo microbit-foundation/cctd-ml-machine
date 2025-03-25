@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { get } from 'svelte/store';
 import BaseVector from '../../script/domain/BaseVector';
 import { ClassifierInput } from '../../script/domain/ClassifierInput';
 import type Filters from '../../script/domain/Filters';
 import type { MLModel } from '../../script/domain/MLModel';
 import type { GestureData } from '../../script/domain/stores/gesture/Gesture';
 import type { ValidationSet } from '../../script/domain/ValidationSet';
+import { microbitInteraction, MicrobitInteractions } from '../../script/stores/uiStore';
 import { findLargestIndex, transposeMatrix } from '../../script/utils/Math';
 
 export type ValidationResult = { prediction: number[]; gestureIdx: number }[][];

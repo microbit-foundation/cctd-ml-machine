@@ -10,6 +10,7 @@
   import ValidationPageInformationLabels from './ValidationPageInformationLabels.svelte';
   import ValidationGestureSelectGestureCard from './ValidationGestureSelectGestureCard.svelte';
   import ValidationGestureRecordingsCard from './ValidationGestureRecordingsCard.svelte';
+  import ValidationPageRecordingIndicator from './ValidationPageRecordingIndicator.svelte';
 
   const gestures = stores.getGestures();
   export let onNoMicrobitSelect: () => void;
@@ -24,6 +25,7 @@
     </div>
 
     <div class="col-start-2">
+      <ValidationPageRecordingIndicator gestureId={gesture.getId()} />
       <ValidationGestureSelectGestureCard {gesture} {onNoMicrobitSelect} />
     </div>
 

@@ -17,14 +17,16 @@
   import { state, stores } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { startRecording } from '../../script/utils/Recording';
-  import StaticConfiguration from '../../StaticConfiguration';
   import { get } from 'svelte/store';
   import Logger from '../../script/utils/Logger';
 
   export let gesture: Gesture;
-  const validationSets = stores.getValidationSets();
   export let onNoMicrobitSelect: () => void;
-  let isThisRecording = false;
+
+  const validationSets = stores.getValidationSets();
+  const recorder = stores.getRecorder();
+
+  $: isThisRecording = $recorder.recordingGesture === gesture.getId();
 
   const selectClicked = (gesture: Gesture): void => {
     if (!$state.isInputConnected) {
@@ -55,10 +57,8 @@
       Logger.warn('ValidationGestureSelectGestureCard', 'Already recording');
       return;
     }
-    isThisRecording = true;
     const addRecording = () => {
-      startRecording(recording => {
-        isThisRecording = false;
+      recorder.startRecording(gesture.getId(), recording => {
         validationSets.addRecording(gesture.getId(), recording);
       });
     };
@@ -90,15 +90,6 @@
   }
 </script>
 
-<div class="relative w-[calc(100vw-320px)] left-[-220px]">
-  <div class="absolute w-full left-0">
-    <div
-      class="bg-red-600 h-1.5 rounded-full absolute mt-123px ml-14px left-0"
-      style={isThisRecording
-        ? `transition:  ${(StaticConfiguration.recordingDuration / 1000).toString()}s linear; width: 97%;`
-        : 'width:0;'} />
-  </div>
-</div>
 <GestureCard small>
   {#if $chosenGesture?.getId() !== gesture.getId()}
     <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked(gesture)}>

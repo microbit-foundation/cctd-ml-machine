@@ -31,6 +31,7 @@ import Snackbar from '../../components/snackbar/Snackbar';
 import NeuralNetworkSettings from '../domain/stores/NeuralNetworkSettings';
 import KNNModelSettings from '../domain/stores/KNNModelSettings';
 import ValidationSets from '../domain/stores/ValidationSets';
+import { Recorder } from '../domain/stores/Recorder';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -52,12 +53,14 @@ class Stores implements Readable<StoresType> {
   private neuralNetworkSettings: NeuralNetworkSettings;
   private knnModelSettings: KNNModelSettings;
   private validationSets: ValidationSets;
+  private recorder: Recorder;
 
   public constructor(private applicationState: Readable<ApplicationState>) {
     this.validationSets = new ValidationSets();
     this.neuralNetworkSettings = new NeuralNetworkSettings();
     this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
+    this.recorder = new Recorder();
     this.engine = undefined;
     const repositories: Repositories = new LocalStorageRepositories(this.snackbar);
     this.classifier = repositories.getClassifierRepository().getClassifier();
@@ -152,8 +155,12 @@ class Stores implements Readable<StoresType> {
     return this.knnModelSettings;
   }
 
-  public getValidationSets() {
+  public getValidationSets(): ValidationSets {
     return this.validationSets;
+  }
+
+  public getRecorder(): Recorder {
+    return this.recorder;
   }
 }
 

@@ -59,6 +59,10 @@ class ValidationSets implements Readable<ValidationSet[]> {
     });
   }
 
+  public count(): number {
+    return get(this.validationSets).reduce((pre, cur) => pre + cur.recordings.length, 0);
+  }
+
   public removeValidationRecording(recordingId: number): void {
     this.validationSets.update(sets => {
       return sets.map(set => ({

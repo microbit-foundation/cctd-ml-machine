@@ -12,8 +12,10 @@ import Logger from './Logger';
 import { alertUser } from '../stores/uiStore';
 import { t } from '../../i18n';
 
+/**
+ * @deprecated Will be removed in the future. Use store.getRecorder().startRecording(...) instead.
+ */
 export const startRecording = (onFinished: (recording: RecordingData) => void) => {
-  console.log('Starting Recording');
   if (get(state).isRecording) {
     Logger.warn('Recording', 'Failed to start recording, already recording');
     return;

@@ -4,17 +4,37 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { get } from 'svelte/store';
 import BaseVector from '../../script/domain/BaseVector';
 import { ClassifierInput } from '../../script/domain/ClassifierInput';
 import type Filters from '../../script/domain/Filters';
+import Matrix from '../../script/domain/Matrix';
 import type { MLModel } from '../../script/domain/MLModel';
 import type { GestureData } from '../../script/domain/stores/gesture/Gesture';
 import type { ValidationSet } from '../../script/domain/ValidationSet';
-import { microbitInteraction, MicrobitInteractions } from '../../script/stores/uiStore';
-import { findLargestIndex, transposeMatrix } from '../../script/utils/Math';
+import { findLargestIndex } from '../../script/utils/Math';
 
 export type ValidationResult = { prediction: number[]; gestureIdx: number }[][];
+
+export interface ValidationSetMatrix {
+  matrix: Matrix<number>;
+  accurateResults: number;
+}
+
+export const createValidationMatrixVisual = (
+  validationResult: ValidationResult,
+  gestures: GestureData[],
+): ValidationSetMatrix => {
+  const matrixRaw = createValidationMatrix(validationResult, gestures);
+
+  const accurateResults = gestures.reduce(
+    (pre, cur, idx) => pre + matrixRaw.getValues()[idx][idx],
+    0,
+  );
+  return {
+    matrix: matrixRaw,
+    accurateResults: accurateResults,
+  };
+};
 
 export const evaluateValidationSet = async (
   validationSets: ValidationSet[],
@@ -44,7 +64,7 @@ export const createValidationMatrix = (
     gestureIdx: number;
   }[][],
   gestures: GestureData[],
-) => {
+): Matrix<number> => {
   const matrix = gestures.map((_, row) => {
     const results = validationResults[row];
     if (!results) {
@@ -56,5 +76,5 @@ export const createValidationMatrix = (
       }, 0);
     });
   });
-  return transposeMatrix(matrix);
+  return new Matrix(matrix).transposed();
 };

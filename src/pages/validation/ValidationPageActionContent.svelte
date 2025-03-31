@@ -7,12 +7,13 @@
 <script lang="ts">
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { stores } from '../../script/stores/Stores';
-  import { writable } from 'svelte/store';
+  import { derived, writable, type Readable } from 'svelte/store';
   import ValidationMatrix from './ValidationMatrix.svelte';
   import {
-    createValidationMatrix,
+    createValidationMatrixVisual,
     evaluateValidationSet,
     type ValidationResult,
+    type ValidationSetMatrix,
   } from './ValidationPage';
   import Tooltip from '../../components/base/Tooltip.svelte';
 
@@ -39,7 +40,17 @@
     );
   };
 
-  $: matrix = createValidationMatrix($validationResults, $gestures);
+  const showPercentages = writable(true);
+
+  const validationSetMatrix: Readable<ValidationSetMatrix> = derived(
+    [validationResults, gestures, showPercentages],
+    stores => {
+      const [valRes, gests] = stores;
+      return createValidationMatrixVisual(valRes, gests);
+    },
+  );
+
+  $: totalAccuracy = $validationSetMatrix.accurateResults / validationSets.count();
 </script>
 
 <div class="bg-white h-full flex flex-row justify-evenly">
@@ -52,11 +63,30 @@
       disabled={$model.isTrained}
       offset={{ x: -80, y: -60 }}
       title="(translate)You must train a model first!">
-      <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}
-        >Test</StandardButton>
+      <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}>
+        Test
+      </StandardButton>
     </Tooltip>
   </div>
+
   <div class="flex flex-col justify-center text-center">
-    <ValidationMatrix {matrix} />
+    <div class="flex">
+      <div class="flex gap-2">
+        <div class="flex flex-row self-center">
+          <p>Percentage:</p>
+        </div>
+        <input type="checkbox" bind:checked={$showPercentages} />
+      </div>
+      <ValidationMatrix
+        validationSetMatrix={$validationSetMatrix}
+        showPercentages={$showPercentages} />
+    </div>
+  </div>
+  <div class="flex flex-col justify-center">
+    {#if !isNaN(totalAccuracy)}
+      Accuracy: {(totalAccuracy * 100).toFixed(1)} %
+    {:else}
+      Accuracy: -
+    {/if}
   </div>
 </div>

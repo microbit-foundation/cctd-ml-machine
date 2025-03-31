@@ -77,7 +77,9 @@
         </div>
         <input type="checkbox" bind:checked={$showPercentages} />
       </div>
-      <ValidationMatrix validationSetMatrix={$validationSetMatrix} showPercentages={$showPercentages} />
+      <ValidationMatrix
+        validationSetMatrix={$validationSetMatrix}
+        showPercentages={$showPercentages} />
     </div>
   </div>
   <div class="flex flex-col justify-center">

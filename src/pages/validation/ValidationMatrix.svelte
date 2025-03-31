@@ -52,7 +52,7 @@
         {#each matrix.getRow(rowIdx) as val}
           <td class="border-1">
             {#if showPercentages}
-              {isNaN(val) ? '-' : (val * 100).toFixed(0) + "%"}
+              {isNaN(val) ? '-' : (val * 100).toFixed(0) + '%'}
             {:else}
               {val}
             {/if}

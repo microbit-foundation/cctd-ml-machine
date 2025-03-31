@@ -7,11 +7,13 @@
 <script lang="ts">
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { stores } from '../../script/stores/Stores';
-  import { writable } from 'svelte/store';
+  import { derived, writable, type Readable } from 'svelte/store';
   import ValidationMatrix from './ValidationMatrix.svelte';
   import {
     createValidationMatrix,
+    createValidationMatrixVisual,
     evaluateValidationSet,
+    type ValidationMatrixVisual,
     type ValidationResult,
   } from './ValidationPage';
   import Tooltip from '../../components/base/Tooltip.svelte';
@@ -39,7 +41,16 @@
     );
   };
 
-  $: matrix = createValidationMatrix($validationResults, $gestures);
+  const showPercentages = writable(true);
+
+  const matrixVisual: Readable<ValidationMatrixVisual> = derived(
+    [validationResults, gestures, showPercentages],
+    stores => {
+      const [valRes, gests, asPercentage] = stores;
+      return createValidationMatrixVisual(valRes, gests, asPercentage);
+    },
+  );
+  $: totalAccuracy = $matrixVisual.accurateResults / validationSets.count();
 </script>
 
 <div class="bg-white h-full flex flex-row justify-evenly">
@@ -52,11 +63,28 @@
       disabled={$model.isTrained}
       offset={{ x: -80, y: -60 }}
       title="(translate)You must train a model first!">
-      <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}
-        >Test</StandardButton>
+      <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}>
+        Test
+      </StandardButton>
     </Tooltip>
   </div>
+
   <div class="flex flex-col justify-center text-center">
-    <ValidationMatrix {matrix} />
+    <div class="flex">
+      <div class="flex gap-2">
+        <div class="flex flex-row self-center">
+          <p>Percentage:</p>
+        </div>
+        <input type="checkbox" bind:checked={$showPercentages} />
+      </div>
+      <ValidationMatrix matrix={$matrixVisual.matrix} />
+    </div>
+  </div>
+  <div class="flex flex-col justify-center">
+    {#if !isNaN(totalAccuracy)}
+      Accuracy: {(totalAccuracy * 100).toFixed(1)} %
+    {:else}
+      Accuracy: -
+    {/if}
   </div>
 </div>

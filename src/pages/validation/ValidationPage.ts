@@ -4,17 +4,54 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { get } from 'svelte/store';
 import BaseVector from '../../script/domain/BaseVector';
 import { ClassifierInput } from '../../script/domain/ClassifierInput';
 import type Filters from '../../script/domain/Filters';
 import type { MLModel } from '../../script/domain/MLModel';
 import type { GestureData } from '../../script/domain/stores/gesture/Gesture';
 import type { ValidationSet } from '../../script/domain/ValidationSet';
-import { microbitInteraction, MicrobitInteractions } from '../../script/stores/uiStore';
-import { findLargestIndex, transposeMatrix } from '../../script/utils/Math';
+import { findLargestIndex, getColumns, transposeMatrix } from '../../script/utils/Math';
 
 export type ValidationResult = { prediction: number[]; gestureIdx: number }[][];
+
+export interface ValidationMatrixVisual {
+  matrix: (number | string)[][];
+  accurateResults: number;
+}
+
+export const createValidationMatrixVisual = (
+  validationResult: ValidationResult,
+  gestures: GestureData[],
+  showPercentages: boolean,
+): ValidationMatrixVisual => {
+  const matrixRaw = createValidationMatrix(validationResult, gestures);
+  const getMatrix = () => {
+    if (!showPercentages) {
+      return matrixRaw;
+    }
+    const columnSums: number[] = gestures.map((gesture, gestureIdx) => {
+      return getColumns(matrixRaw, gestureIdx).reduce((pre, cur) => pre + cur, 0);
+    });
+    return matrixRaw.map((matrixRow, rowIdx) => {
+      return matrixRow.map((matrixColumn, columnIdx) => {
+        const percentage = matrixColumn / columnSums[columnIdx];
+        if (isNaN(percentage)) {
+          return '-';
+        }
+        return (percentage * 100).toFixed(0) + '%';
+      });
+    });
+  };
+
+  const accurateResults = gestures.reduce(
+    (pre, cur, idx) => pre + matrixRaw[idx][idx],
+    0,
+  );
+  return {
+    matrix: getMatrix(),
+    accurateResults: accurateResults,
+  };
+};
 
 export const evaluateValidationSet = async (
   validationSets: ValidationSet[],

@@ -8,7 +8,8 @@
   import { stores } from '../../script/stores/Stores';
 
   const gestures = stores.getGestures();
-  export let matrix: number[][];
+
+  export let matrix: (number | string)[][];
 </script>
 
 <table>

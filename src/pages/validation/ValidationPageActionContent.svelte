@@ -10,11 +10,10 @@
   import { derived, writable, type Readable } from 'svelte/store';
   import ValidationMatrix from './ValidationMatrix.svelte';
   import {
-    createValidationMatrix,
     createValidationMatrixVisual,
     evaluateValidationSet,
-    type ValidationMatrixVisual,
     type ValidationResult,
+    type ValidationSetMatrix,
   } from './ValidationPage';
   import Tooltip from '../../components/base/Tooltip.svelte';
 
@@ -43,14 +42,15 @@
 
   const showPercentages = writable(true);
 
-  const matrixVisual: Readable<ValidationMatrixVisual> = derived(
+  const validationSetMatrix: Readable<ValidationSetMatrix> = derived(
     [validationResults, gestures, showPercentages],
     stores => {
-      const [valRes, gests, asPercentage] = stores;
-      return createValidationMatrixVisual(valRes, gests, asPercentage);
+      const [valRes, gests] = stores;
+      return createValidationMatrixVisual(valRes, gests);
     },
   );
-  $: totalAccuracy = $matrixVisual.accurateResults / validationSets.count();
+
+  $: totalAccuracy = $validationSetMatrix.accurateResults / validationSets.count();
 </script>
 
 <div class="bg-white h-full flex flex-row justify-evenly">
@@ -77,7 +77,7 @@
         </div>
         <input type="checkbox" bind:checked={$showPercentages} />
       </div>
-      <ValidationMatrix matrix={$matrixVisual.matrix} />
+      <ValidationMatrix validationSetMatrix={$validationSetMatrix} showPercentages={$showPercentages} />
     </div>
   </div>
   <div class="flex flex-col justify-center">

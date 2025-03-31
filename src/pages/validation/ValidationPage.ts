@@ -7,48 +7,31 @@
 import BaseVector from '../../script/domain/BaseVector';
 import { ClassifierInput } from '../../script/domain/ClassifierInput';
 import type Filters from '../../script/domain/Filters';
+import Matrix from '../../script/domain/Matrix';
 import type { MLModel } from '../../script/domain/MLModel';
 import type { GestureData } from '../../script/domain/stores/gesture/Gesture';
 import type { ValidationSet } from '../../script/domain/ValidationSet';
-import { findLargestIndex, getColumns, transposeMatrix } from '../../script/utils/Math';
+import { findLargestIndex } from '../../script/utils/Math';
 
 export type ValidationResult = { prediction: number[]; gestureIdx: number }[][];
 
-export interface ValidationMatrixVisual {
-  matrix: (number | string)[][];
+export interface ValidationSetMatrix {
+  matrix: Matrix<number>;
   accurateResults: number;
 }
 
 export const createValidationMatrixVisual = (
   validationResult: ValidationResult,
   gestures: GestureData[],
-  showPercentages: boolean,
-): ValidationMatrixVisual => {
+): ValidationSetMatrix => {
   const matrixRaw = createValidationMatrix(validationResult, gestures);
-  const getMatrix = () => {
-    if (!showPercentages) {
-      return matrixRaw;
-    }
-    const columnSums: number[] = gestures.map((gesture, gestureIdx) => {
-      return getColumns(matrixRaw, gestureIdx).reduce((pre, cur) => pre + cur, 0);
-    });
-    return matrixRaw.map((matrixRow, rowIdx) => {
-      return matrixRow.map((matrixColumn, columnIdx) => {
-        const percentage = matrixColumn / columnSums[columnIdx];
-        if (isNaN(percentage)) {
-          return '-';
-        }
-        return (percentage * 100).toFixed(0) + '%';
-      });
-    });
-  };
 
   const accurateResults = gestures.reduce(
-    (pre, cur, idx) => pre + matrixRaw[idx][idx],
+    (pre, cur, idx) => pre + matrixRaw.getValues()[idx][idx],
     0,
   );
   return {
-    matrix: getMatrix(),
+    matrix: matrixRaw,
     accurateResults: accurateResults,
   };
 };
@@ -81,7 +64,7 @@ export const createValidationMatrix = (
     gestureIdx: number;
   }[][],
   gestures: GestureData[],
-) => {
+): Matrix<number> => {
   const matrix = gestures.map((_, row) => {
     const results = validationResults[row];
     if (!results) {
@@ -93,5 +76,5 @@ export const createValidationMatrix = (
       }, 0);
     });
   });
-  return transposeMatrix(matrix);
+  return new Matrix(matrix).transposed();
 };

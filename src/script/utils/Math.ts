@@ -1,11 +1,12 @@
-import BaseVector from '../domain/BaseVector';
-import type { Vector } from '../domain/Vector';
-
 /**
  * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
+
+import BaseVector from '../domain/BaseVector';
+import type { Vector } from '../domain/Vector';
+
 export const getStandardDeviation = (vectors: Vector[]): Vector => {
   const input = vectors.map(e => e.getValue());
   const n = input.length;
@@ -62,19 +63,4 @@ export const findLargestIndex = (arr: number[]) => {
     }
   }
   return maxIndex;
-};
-
-export const transposeMatrix = (matrix: any[][]) => {
-  return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
-};
-
-export const getColumns = (matrix: any[][], columnIndex: number) => {
-  return matrix.map((row, rowIdx) => {
-    if (row.length <= columnIndex) {
-      throw new Error(
-        `Cannot get columns for matrix ${matrix} there's not enough columns (${columnIndex}) in row ${rowIdx}`,
-      );
-    }
-    return row[columnIndex];
-  });
 };

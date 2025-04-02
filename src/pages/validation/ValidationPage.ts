@@ -76,5 +76,5 @@ export const createValidationMatrix = (
       }, 0);
     });
   });
-  return new Matrix(matrix).transposed();
+  return new Matrix(matrix);
 };

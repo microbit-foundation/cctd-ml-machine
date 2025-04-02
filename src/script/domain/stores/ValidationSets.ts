@@ -7,7 +7,6 @@
 import {
   derived,
   get,
-  writable,
   type Invalidator,
   type Readable,
   type Subscriber,
@@ -18,12 +17,18 @@ import type { ValidationSet } from '../ValidationSet';
 import type { GestureID } from './gesture/Gesture';
 import type { RecordingData } from '../RecordingData';
 import PersistantWritable from '../../repository/PersistantWritable';
+import type Gestures from './gesture/Gestures';
 
 class ValidationSets implements Readable<ValidationSet[]> {
   private validationSets: Writable<ValidationSet[]>;
 
-  public constructor() {
+  public constructor(private gestures: Gestures) {
     this.validationSets = new PersistantWritable([], 'validation_set');
+    gestures.subscribe(gestureStore => {
+      this.validationSets.update(sets => {
+        return sets.filter(set => gestureStore.findIndex(gest => gest.ID === set.gestureId) !== -1)
+      })
+    })
   }
 
   public addRecording(gestureId: GestureID, recording: RecordingData) {
@@ -34,7 +39,8 @@ class ValidationSets implements Readable<ValidationSet[]> {
           recordings: [],
         });
       }
-      return sets.map(set => {
+
+      const result = sets.map(set => {
         if (gestureId === set.gestureId) {
           return {
             gestureId,
@@ -43,7 +49,9 @@ class ValidationSets implements Readable<ValidationSet[]> {
         }
         return set;
       });
+      return result;
     });
+    this.sortSetsAccordingToGestures();
   }
 
   public getForGesture(gestureId: GestureID): Readable<ValidationSet> {
@@ -73,7 +81,7 @@ class ValidationSets implements Readable<ValidationSet[]> {
   }
 
   public getValidationSets(): ValidationSet[] {
-    return get(this.validationSets);
+    return get(this);
   }
 
   public clear(): void {
@@ -84,7 +92,25 @@ class ValidationSets implements Readable<ValidationSet[]> {
     run: Subscriber<ValidationSet[]>,
     invalidate?: Invalidator<ValidationSet[]> | undefined,
   ): Unsubscriber {
-    return this.validationSets.subscribe(run, invalidate);
+    return derived([this.validationSets, this.gestures], stores => {
+      const [sets, gestures] = stores;
+      return gestures.map(gesture => {
+        const recordingsIndex = sets.findIndex(set => set.gestureId === gesture.ID);
+        const resultSet: ValidationSet = {
+          gestureId: gesture.ID,
+          recordings: recordingsIndex !== -1 ? sets[recordingsIndex].recordings : []
+        }
+        return resultSet;
+      })
+    }).subscribe(run, invalidate);
+  }
+
+  private sortSetsAccordingToGestures() {
+    const idOrder = Object.fromEntries(get(this.gestures).map((gesture, idx) => [gesture.ID, idx]))
+    this.validationSets.update(result => {
+      result.sort((a, b) => idOrder[a.gestureId] - idOrder[b.gestureId])
+      return result
+    })
   }
 }
 

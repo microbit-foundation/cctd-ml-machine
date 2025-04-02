@@ -32,6 +32,7 @@ import NeuralNetworkSettings from '../domain/stores/NeuralNetworkSettings';
 import KNNModelSettings from '../domain/stores/KNNModelSettings';
 import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
+import ValidationResults from '../domain/stores/ValidationResults';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -53,10 +54,10 @@ class Stores implements Readable<StoresType> {
   private neuralNetworkSettings: NeuralNetworkSettings;
   private knnModelSettings: KNNModelSettings;
   private validationSets: ValidationSets;
+  private validationResults: ValidationResults;
   private recorder: Recorder;
 
   public constructor(private applicationState: Readable<ApplicationState>) {
-    this.validationSets = new ValidationSets();
     this.neuralNetworkSettings = new NeuralNetworkSettings();
     this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
@@ -78,6 +79,8 @@ class Stores implements Readable<StoresType> {
     this.availableAxes.subscribe(newAxes => {
       this.highlightedAxis.set(newAxes);
     });
+    this.validationSets = new ValidationSets(this.gestures);
+    this.validationResults = new ValidationResults(this.validationSets, this.classifier);
   }
 
   public subscribe(
@@ -157,6 +160,10 @@ class Stores implements Readable<StoresType> {
 
   public getValidationSets(): ValidationSets {
     return this.validationSets;
+  }
+
+  public getValidationResults(): ValidationResults {
+    return this.validationResults;
   }
 
   public getRecorder(): Recorder {

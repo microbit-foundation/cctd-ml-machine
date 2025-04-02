@@ -11,8 +11,6 @@
   import ValidationMatrix from './ValidationMatrix.svelte';
   import {
     createValidationMatrixVisual,
-    evaluateValidationSet,
-    type ValidationResult,
     type ValidationSetMatrix,
   } from './ValidationPage';
   import Tooltip from '../../components/base/Tooltip.svelte';
@@ -21,23 +19,18 @@
   const validationSets = stores.getValidationSets();
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
-  const filters = classifier.getFilters();
-  const validationResults = writable<ValidationResult>([]);
+  const validationResults = stores.getValidationResults();
 
   const autoUpdate = writable(false);
 
   $: {
     if ($model.isTrained && autoUpdate) {
-      evaluateValidationSet($validationSets, model, filters).then(results =>
-        validationResults.set(results),
-      );
+      handleEvaluateValidationSets();
     }
   }
 
   const handleEvaluateValidationSets = () => {
-    evaluateValidationSet($validationSets, model, filters).then(results =>
-      validationResults.set(results),
-    );
+      validationResults.evaluateValidationSet();
   };
 
   const showPercentages = writable(false);

@@ -14,15 +14,15 @@
   export let validationSetMatrix: ValidationSetMatrix;
   export let showPercentages: boolean;
 
-  $: columnSums = $gestures.map((_, gestureIdx) => {
+  $: rowSums = $gestures.map((_, gestureIdx) => {
     return validationSetMatrix.matrix
-      .getColumn(gestureIdx)
+      .getRow(gestureIdx)
       .reduce((pre, cur) => pre + cur, 0);
   });
   $: percentageMatrix = new Matrix(
     validationSetMatrix.matrix.getValues().map((row, rowIdx) => {
-      return row.map((col, colIdx) => {
-        return col / columnSums[colIdx];
+      return row.map(col => {
+        return col / rowSums[rowIdx];
       });
     }),
   );
@@ -49,8 +49,8 @@
     {#each $gestures as gesture, rowIdx}
       <tr>
         <td class="border-l-1 pl-2 border-1">{gesture.name}</td>
-        {#each matrix.getRow(rowIdx) as val}
-          <td class="border-1">
+        {#each matrix.getRow(rowIdx) as val, colIdx}
+          <td class="border-1" class:bg-green-50={rowIdx === colIdx}>
             {#if showPercentages}
               {isNaN(val) ? '-' : (val * 100).toFixed(0) + '%'}
             {:else}

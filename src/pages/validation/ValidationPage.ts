@@ -4,16 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import BaseVector from '../../script/domain/BaseVector';
-import { ClassifierInput } from '../../script/domain/ClassifierInput';
-import type Filters from '../../script/domain/Filters';
 import Matrix from '../../script/domain/Matrix';
-import type { MLModel } from '../../script/domain/MLModel';
 import type { GestureData } from '../../script/domain/stores/gesture/Gesture';
-import type { ValidationSet } from '../../script/domain/ValidationSet';
-import { findLargestIndex } from '../../script/utils/Math';
+import type { ValidationResult } from '../../script/domain/stores/ValidationResults';
 
-export type ValidationResult = { prediction: number[]; gestureIdx: number }[][];
 
 export interface ValidationSetMatrix {
   matrix: Matrix<number>;
@@ -34,28 +28,6 @@ export const createValidationMatrixVisual = (
     matrix: matrixRaw,
     accurateResults: accurateResults,
   };
-};
-
-export const evaluateValidationSet = async (
-  validationSets: ValidationSet[],
-  model: MLModel,
-  filters: Filters,
-) => {
-  const setEvaluations = validationSets.map(async set => {
-    const recordingEvaluations = set.recordings.map(async rec => {
-      const samples = rec.samples.map(sample => new BaseVector(sample.vector));
-      const classifierInput = new ClassifierInput(samples);
-      return await model.predict(new BaseVector(classifierInput.getInput(filters)));
-    });
-
-    const predictions = await Promise.all(recordingEvaluations);
-
-    return predictions.map(pred => ({
-      gestureIdx: findLargestIndex(pred),
-      prediction: pred,
-    }));
-  });
-  return await Promise.all(setEvaluations);
 };
 
 export const createValidationMatrix = (

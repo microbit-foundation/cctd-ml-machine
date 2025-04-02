@@ -26,9 +26,11 @@ class ValidationSets implements Readable<ValidationSet[]> {
     this.validationSets = new PersistantWritable([], 'validation_set');
     gestures.subscribe(gestureStore => {
       this.validationSets.update(sets => {
-        return sets.filter(set => gestureStore.findIndex(gest => gest.ID === set.gestureId) !== -1)
-      })
-    })
+        return sets.filter(
+          set => gestureStore.findIndex(gest => gest.ID === set.gestureId) !== -1,
+        );
+      });
+    });
   }
 
   public addRecording(gestureId: GestureID, recording: RecordingData) {
@@ -98,19 +100,21 @@ class ValidationSets implements Readable<ValidationSet[]> {
         const recordingsIndex = sets.findIndex(set => set.gestureId === gesture.ID);
         const resultSet: ValidationSet = {
           gestureId: gesture.ID,
-          recordings: recordingsIndex !== -1 ? sets[recordingsIndex].recordings : []
-        }
+          recordings: recordingsIndex !== -1 ? sets[recordingsIndex].recordings : [],
+        };
         return resultSet;
-      })
+      });
     }).subscribe(run, invalidate);
   }
 
   private sortSetsAccordingToGestures() {
-    const idOrder = Object.fromEntries(get(this.gestures).map((gesture, idx) => [gesture.ID, idx]))
+    const idOrder = Object.fromEntries(
+      get(this.gestures).map((gesture, idx) => [gesture.ID, idx]),
+    );
     this.validationSets.update(result => {
-      result.sort((a, b) => idOrder[a.gestureId] - idOrder[b.gestureId])
-      return result
-    })
+      result.sort((a, b) => idOrder[a.gestureId] - idOrder[b.gestureId]);
+      return result;
+    });
   }
 }
 

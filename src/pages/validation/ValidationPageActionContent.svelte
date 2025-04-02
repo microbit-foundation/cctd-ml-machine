@@ -30,7 +30,7 @@
   }
 
   const handleEvaluateValidationSets = () => {
-      validationResults.evaluateValidationSet();
+    validationResults.evaluateValidationSet();
   };
 
   const showPercentages = writable(false);

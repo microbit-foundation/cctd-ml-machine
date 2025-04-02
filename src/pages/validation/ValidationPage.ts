@@ -8,7 +8,6 @@ import Matrix from '../../script/domain/Matrix';
 import type { GestureData } from '../../script/domain/stores/gesture/Gesture';
 import type { ValidationResult } from '../../script/domain/stores/ValidationResults';
 
-
 export interface ValidationSetMatrix {
   matrix: Matrix<number>;
   accurateResults: number;

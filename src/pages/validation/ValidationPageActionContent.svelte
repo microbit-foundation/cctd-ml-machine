@@ -24,7 +24,7 @@
   const filters = classifier.getFilters();
   const validationResults = writable<ValidationResult>([]);
 
-  let autoUpdate = false;
+  const autoUpdate = writable(false);
 
   $: {
     if ($model.isTrained && autoUpdate) {
@@ -40,7 +40,7 @@
     );
   };
 
-  const showPercentages = writable(true);
+  const showPercentages = writable(false);
 
   const validationSetMatrix: Readable<ValidationSetMatrix> = derived(
     [validationResults, gestures, showPercentages],
@@ -57,7 +57,7 @@
   <div class="pl-2 flex flex-col justify-center">
     <div class="flex flex-row gap-2 justify-center">
       <p>Auto-update:</p>
-      <input type="checkbox" bind:checked={autoUpdate} />
+      <input type="checkbox" bind:checked={$autoUpdate} />
     </div>
     <Tooltip
       disabled={$model.isTrained}

@@ -15,7 +15,7 @@
   const validationSets = stores.getValidationSets();
   const validationSet = stores.getValidationSets().getForGesture(gesture.getId());
   const results = stores.getValidationResults();
-  const gestures = stores.getGestures()
+  const gestures = stores.getGestures();
 
   $: gestureIdx = $gestures.findIndex(gest => gest.ID === gesture.getId());
   $: recordings = $validationSet.recordings;
@@ -27,7 +27,10 @@
     {#each recordings as recording, idx}
       {#key recording.ID}
         <Recording
-          dotColor={predictedGestures[idx]?.color}
+          dot={predictedGestures[idx] ? {
+            color: predictedGestures[idx]?.color,
+            gesture: predictedGestures[idx].ID,
+          } : undefined}
           {recording}
           onDelete={recording =>
             validationSets.removeValidationRecording(recording.ID)} />

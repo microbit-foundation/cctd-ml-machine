@@ -24,14 +24,18 @@ import type { RecordingData } from '../RecordingData';
 import type Gesture from './gesture/Gesture';
 import type { GestureID } from './gesture/Gesture';
 
-export type ValidationResult = { prediction: number[]; gestureIdx: number, recordingId: number }[][];
+export type ValidationResult = {
+  prediction: number[];
+  gestureIdx: number;
+  recordingId: number;
+}[][];
 class ValidationResults implements Readable<ValidationResult> {
   private store: Writable<ValidationResult>;
 
   public constructor(
     private validationSets: ValidationSets,
     private classifier: Classifier,
-    private gestures: Gestures
+    private gestures: Gestures,
   ) {
     this.store = writable([]);
   }
@@ -54,8 +58,8 @@ class ValidationResults implements Readable<ValidationResult> {
           .predict(new BaseVector(classifierInput.getInput(filters)));
         return {
           recordingId: rec.ID,
-          prediction
-        }
+          prediction,
+        };
       });
 
       const predictions = await Promise.all(recordingEvaluations);
@@ -63,29 +67,34 @@ class ValidationResults implements Readable<ValidationResult> {
       return predictions.map(pred => ({
         gestureIdx: findLargestIndex(pred.prediction),
         prediction: pred.prediction,
-        recordingId: pred.recordingId
+        recordingId: pred.recordingId,
       }));
     });
     const evaluations = await Promise.all(setEvaluations);
     this.store.set(evaluations);
   }
 
-  public getForGesture(gestureId: GestureID): Readable<{ prediction: number[]; gestureIdx: number, recordingId: number }[]> {
-    const index = this.gestures.getGestures().findIndex(gesture => gesture.getId() === gestureId);
+  public getForGesture(
+    gestureId: GestureID,
+  ): Readable<{ prediction: number[]; gestureIdx: number; recordingId: number }[]> {
+    const index = this.gestures
+      .getGestures()
+      .findIndex(gesture => gesture.getId() === gestureId);
     return derived([this.store], stores => {
       const [resultStore] = stores;
       return resultStore[index];
-    })
+    });
   }
 
   public getEvaluatedGesture(recordingId: number): Gesture | undefined {
-    const x = get(this.store).find(pred => pred.findIndex(rec => rec.recordingId === recordingId) !== -1)?.find(e => e.recordingId === recordingId);
+    const x = get(this.store)
+      .find(pred => pred.findIndex(rec => rec.recordingId === recordingId) !== -1)
+      ?.find(e => e.recordingId === recordingId);
     if (!x) {
       return undefined;
     }
-    return this.gestures.getGestures()[x.gestureIdx]
+    return this.gestures.getGestures()[x.gestureIdx];
   }
-
 }
 
 export default ValidationResults;

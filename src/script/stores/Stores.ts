@@ -80,7 +80,11 @@ class Stores implements Readable<StoresType> {
       this.highlightedAxis.set(newAxes);
     });
     this.validationSets = new ValidationSets(this.gestures);
-    this.validationResults = new ValidationResults(this.validationSets, this.classifier, this.gestures);
+    this.validationResults = new ValidationResults(
+      this.validationSets,
+      this.classifier,
+      this.gestures,
+    );
   }
 
   public subscribe(

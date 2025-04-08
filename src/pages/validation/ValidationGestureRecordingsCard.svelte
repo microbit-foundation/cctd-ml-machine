@@ -27,10 +27,12 @@
     {#each recordings as recording, idx}
       {#key recording.ID}
         <Recording
-          dot={predictedGestures[idx] ? {
-            color: predictedGestures[idx]?.color,
-            gesture: predictedGestures[idx].ID,
-          } : undefined}
+          dot={predictedGestures[idx]
+            ? {
+                color: predictedGestures[idx]?.color,
+                gesture: predictedGestures[idx].ID,
+              }
+            : undefined}
           {recording}
           onDelete={recording =>
             validationSets.removeValidationRecording(recording.ID)} />

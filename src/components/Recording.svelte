@@ -8,11 +8,12 @@
   import { fade } from 'svelte/transition';
   import RecordingGraph from './graphs/recording/RecordingGraph.svelte';
   import type { RecordingData } from '../script/domain/RecordingData';
-  import { onMount } from 'svelte';
 
   // get recording from mother prop
   export let recording: RecordingData;
   export let onDelete: (recording: RecordingData) => void;
+  export let dotColor: string | undefined;
+  console.log(dotColor);
 
   let hide = false;
 
@@ -31,6 +32,9 @@
 </script>
 
 <div class="h-26 w-40 pr-3 pt-1 bg-white relative">
+  {#if dotColor !== undefined}
+    <div class="absolute top-2 right-2 w-3 h-3 z-2 rounded-full pointer-events-none" style="background-color: {dotColor};" />
+  {/if}
   {#if hide}
     <div transition:fade class="absolute h-26 w-40 bg-white" />
   {:else}

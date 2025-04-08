@@ -14,15 +14,20 @@
 
   const validationSets = stores.getValidationSets();
   const validationSet = stores.getValidationSets().getForGesture(gesture.getId());
+  const results = stores.getValidationResults();
+  const gestures = stores.getGestures()
 
+  $: gestureIdx = $gestures.findIndex(gest => gest.ID === gesture.getId());
   $: recordings = $validationSet.recordings;
+  $: predictedGestures = ($results[gestureIdx] ?? []).map(a => $gestures[a.gestureIdx]);
 </script>
 
 <GestureCard small>
   <div class="flex flex-row h-full items-center pl-2">
-    {#each recordings as recording}
+    {#each recordings as recording, idx}
       {#key recording.ID}
         <Recording
+          dotColor={predictedGestures[idx]?.color}
           {recording}
           onDelete={recording =>
             validationSets.removeValidationRecording(recording.ID)} />

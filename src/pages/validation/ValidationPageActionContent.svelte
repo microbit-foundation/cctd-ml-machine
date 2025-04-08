@@ -24,7 +24,7 @@
   const autoUpdate = writable(false);
 
   $: {
-    if ($model.isTrained && autoUpdate) {
+    if ($model.isTrained && $autoUpdate) {
       handleEvaluateValidationSets();
     }
   }

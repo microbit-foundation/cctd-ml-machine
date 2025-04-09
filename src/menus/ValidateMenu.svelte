@@ -11,6 +11,10 @@
 </script>
 
 <div class="w-full text-center justify-center pt-5 pb-7">
-  <p class="text-4xl mb-4">{($accuracy * 100).toFixed(1)}%</p>
+  {#if !isNaN($accuracy)}
+    <p class="text-4xl mb-4">{($accuracy * 100).toFixed(1)}%</p>
+  {:else}
+    <p class="text-4xl mb-4">-</p>
+  {/if}
   <p class="text-xl">Accuracy</p>
 </div>

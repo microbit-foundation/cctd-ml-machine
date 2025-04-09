@@ -11,6 +11,7 @@ import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
 import ValidateMenu from '../../menus/ValidateMenu.svelte';
 import { Paths, type PathType } from '../../router/paths';
+import { Feature, hasFeature } from '../FeatureToggles';
 
 export type MenuProperties = {
   title: string;
@@ -26,42 +27,72 @@ export type MenuProperties = {
  * Wrapper for the menu logic, use navigation if possible, this is for fine-grained control of menus.
  */
 class Menus {
-  private static menuStore = writable<MenuProperties[]>([
-    {
-      title: 'menu.data.helpHeading',
-      infoBubbleTitle: 'menu.data.helpHeading',
-      infoBubbleContent: 'menu.data.helpBody',
-      collapsedButtonContent: undefined,
-      expandedButtonContent: GestureMenu,
-      navigationPath: Paths.DATA,
-    },
-    {
-      title: 'menu.trainer.helpHeading',
-      infoBubbleTitle: 'menu.trainer.helpHeading',
-      infoBubbleContent: 'menu.trainer.helpBody',
-      collapsedButtonContent: undefined,
-      expandedButtonContent: NewTrainerMenu,
-      navigationPath: Paths.TRAINING,
-      additionalExpandPaths: [Paths.FILTERS],
-    },
-    {
-      title: 'menu.validate.helpHeading',
-      infoBubbleTitle: 'menu.validate.helpHeading',
-      infoBubbleContent: 'menu.validate.helpBody',
-      collapsedButtonContent: undefined,
-      expandedButtonContent: ValidateMenu,
-      navigationPath: Paths.VALIDATE,
-      additionalExpandPaths: [],
-    },
-    {
-      title: 'menu.model.helpHeading',
-      infoBubbleTitle: 'menu.model.helpHeading',
-      infoBubbleContent: 'menu.model.helpBody',
-      collapsedButtonContent: undefined,
-      expandedButtonContent: NewModelMenu,
-      navigationPath: Paths.MODEL,
-    },
-  ]);
+  private static menuStore = writable<MenuProperties[]>(
+    hasFeature(Feature.MODEL_VALIDATION)
+      ? [
+          {
+            title: 'menu.data.helpHeading',
+            infoBubbleTitle: 'menu.data.helpHeading',
+            infoBubbleContent: 'menu.data.helpBody',
+            collapsedButtonContent: undefined,
+            expandedButtonContent: GestureMenu,
+            navigationPath: Paths.DATA,
+          },
+          {
+            title: 'menu.trainer.helpHeading',
+            infoBubbleTitle: 'menu.trainer.helpHeading',
+            infoBubbleContent: 'menu.trainer.helpBody',
+            collapsedButtonContent: undefined,
+            expandedButtonContent: NewTrainerMenu,
+            navigationPath: Paths.TRAINING,
+            additionalExpandPaths: [Paths.FILTERS],
+          },
+          {
+            title: 'menu.validate.helpHeading',
+            infoBubbleTitle: 'menu.validate.helpHeading',
+            infoBubbleContent: 'menu.validate.helpBody',
+            collapsedButtonContent: undefined,
+            expandedButtonContent: ValidateMenu,
+            navigationPath: Paths.VALIDATE,
+            additionalExpandPaths: [],
+          },
+          {
+            title: 'menu.model.helpHeading',
+            infoBubbleTitle: 'menu.model.helpHeading',
+            infoBubbleContent: 'menu.model.helpBody',
+            collapsedButtonContent: undefined,
+            expandedButtonContent: NewModelMenu,
+            navigationPath: Paths.MODEL,
+          },
+        ]
+      : [
+          {
+            title: 'menu.data.helpHeading',
+            infoBubbleTitle: 'menu.data.helpHeading',
+            infoBubbleContent: 'menu.data.helpBody',
+            collapsedButtonContent: undefined,
+            expandedButtonContent: GestureMenu,
+            navigationPath: Paths.DATA,
+          },
+          {
+            title: 'menu.trainer.helpHeading',
+            infoBubbleTitle: 'menu.trainer.helpHeading',
+            infoBubbleContent: 'menu.trainer.helpBody',
+            collapsedButtonContent: undefined,
+            expandedButtonContent: NewTrainerMenu,
+            navigationPath: Paths.TRAINING,
+            additionalExpandPaths: [Paths.FILTERS],
+          },
+          {
+            title: 'menu.model.helpHeading',
+            infoBubbleTitle: 'menu.model.helpHeading',
+            infoBubbleContent: 'menu.model.helpBody',
+            collapsedButtonContent: undefined,
+            expandedButtonContent: NewModelMenu,
+            navigationPath: Paths.MODEL,
+          },
+        ],
+  );
 
   public static getMenuStore() {
     return this.menuStore;

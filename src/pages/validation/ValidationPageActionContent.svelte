@@ -20,11 +20,12 @@
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
   const validationResults = stores.getValidationResults();
+  const accuracy = validationResults.getAccuracy();
 
   const autoUpdate = writable(false);
 
   $: {
-    if ($model.isTrained && $autoUpdate) {
+    if ($model.isTrained && $autoUpdate && $validationSets.length) {
       handleEvaluateValidationSets();
     }
   }
@@ -39,11 +40,12 @@
     [validationResults, gestures, showPercentages],
     stores => {
       const [valRes, gests] = stores;
-      return createValidationMatrixVisual(valRes, gests);
+      const matrix = createValidationMatrixVisual(valRes, gests);
+      const accuracy = matrix.accurateResults / validationSets.count();
+      validationResults.setAccuracy(accuracy);
+      return matrix;
     },
   );
-
-  $: totalAccuracy = $validationSetMatrix.accurateResults / validationSets.count();
 </script>
 
 <div class="bg-white h-full flex flex-row justify-evenly">
@@ -76,8 +78,8 @@
     </div>
   </div>
   <div class="flex flex-col justify-center">
-    {#if !isNaN(totalAccuracy)}
-      Accuracy: {(totalAccuracy * 100).toFixed(1)} %
+    {#if !isNaN($accuracy)}
+      Accuracy: {($accuracy * 100).toFixed(1)} %
     {:else}
       Accuracy: -
     {/if}

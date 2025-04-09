@@ -20,7 +20,6 @@ import BaseVector from '../BaseVector';
 import { ClassifierInput } from '../ClassifierInput';
 import { findLargestIndex } from '../../utils/Math';
 import type Gestures from './gesture/Gestures';
-import type { RecordingData } from '../RecordingData';
 import type Gesture from './gesture/Gesture';
 import type { GestureID } from './gesture/Gesture';
 
@@ -31,6 +30,7 @@ export type ValidationResult = {
 }[][];
 class ValidationResults implements Readable<ValidationResult> {
   private store: Writable<ValidationResult>;
+  private accuracy: Writable<number>;
 
   public constructor(
     private validationSets: ValidationSets,
@@ -38,6 +38,7 @@ class ValidationResults implements Readable<ValidationResult> {
     private gestures: Gestures,
   ) {
     this.store = writable([]);
+    this.accuracy = writable(0);
   }
 
   public subscribe(
@@ -84,6 +85,14 @@ class ValidationResults implements Readable<ValidationResult> {
       const [resultStore] = stores;
       return resultStore[index];
     });
+  }
+
+  public getAccuracy(): Readable<number> {
+    return this.accuracy;
+  }
+
+  public setAccuracy(acc: number): void {
+    this.accuracy.set(acc);
   }
 
   public getEvaluatedGesture(recordingId: number): Gesture | undefined {

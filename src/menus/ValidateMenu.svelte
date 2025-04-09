@@ -5,6 +5,12 @@
  -->
 
 <script lang="ts">
+  import { stores } from '../script/stores/Stores';
+
+  const accuracy = stores.getValidationResults().getAccuracy();
 </script>
 
-<div></div>
+<div class="w-full text-center justify-center pt-5 pb-7">
+  <p class="text-4xl mb-4">{($accuracy * 100).toFixed(1)}%</p>
+  <p class="text-xl">Accuracy</p>
+</div>

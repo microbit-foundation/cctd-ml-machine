@@ -14,7 +14,7 @@
   // get recording from mother prop
   export let recording: RecordingData;
   export let onDelete: (recording: RecordingData) => void;
-  export let dot: { gesture: GestureID; color: string } | undefined;
+  export let dot: { gesture: GestureID; color: string } | undefined = undefined;
 
   $: dotGesture = dot?.gesture
     ? stores.getGestures().getGesture(dot?.gesture)

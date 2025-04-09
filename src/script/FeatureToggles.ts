@@ -14,6 +14,7 @@ export enum Feature {
   MAKECODE = 'makecode',
   LIVE_GRAPH_INPUT_VALUES = 'liveGraphInputValues',
   RECORDING_SCRUBBER_VALUES = 'recordingScrubberValues',
+  MODEL_VALIDATION = 'modelValidation',
 }
 
 export const hasFeature = (feature: Feature): boolean => {

@@ -11,11 +11,11 @@
   export let gesture: Gesture;
 </script>
 
-<GestureCard small>
+<GestureCard validationPage small>
   <div class="self-center px-4 flex flex-col h-full relative justify-center">
     <div>
       <div
-        class="flex-grow text-center font-semibold rounded-xl border border-gray-300 border-solid px-4">
+        class="flex-grow text-center font-semibold rounded-xl border bg-white bg-opacity-85 border-primaryborderaccent border-solid px-4">
         <p>{$gesture.name}</p>
       </div>
     </div>

@@ -37,7 +37,7 @@
   let isDotHovered = false;
 </script>
 
-<div class="h-26 w-40 pr-3 pt-1 bg-white relative">
+<div class="h-28 w-40 pr-3 pt-1 relative rounded-md">
   {#if dot !== undefined}
     <div
       class="absolute px-1 py-0.5 border-1 border-secondary rounded-md shadow-md bg-white top-[-28px] right-0 z-3"
@@ -53,7 +53,7 @@
   {#if hide}
     <div transition:fade class="absolute h-26 w-40 bg-white" />
   {:else}
-    <div transition:fade class="absolute h-26 w-40 bg-white">
+    <div transition:fade class="absolute h-26 w-40 bg-white rounded-md">
       <RecordingGraph {recording} />
     </div>
   {/if}

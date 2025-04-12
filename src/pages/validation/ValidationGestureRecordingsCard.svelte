@@ -22,8 +22,8 @@
   $: predictedGestures = ($results[gestureIdx] ?? []).map(a => $gestures[a.gestureIdx]);
 </script>
 
-<GestureCard small>
-  <div class="flex flex-row h-full items-center pl-2">
+<GestureCard validationPage={true} small>
+  <div class="flex flex-row h-full gap-1 items-center pl-2">
     {#each recordings as recording, idx}
       {#key recording.ID}
         <Recording

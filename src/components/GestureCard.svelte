@@ -9,10 +9,16 @@
   export let mr = false;
   export let ml = false;
   export let small = false;
+  export let validationPage = false;
 </script>
 
 <div
-  class="border-1 border-primaryborder border-solid rounded-xl bg-backgroundlight"
+  class="border-1 border-solid rounded-xl"
+  class:border-primaryborder={!validationPage}
+  class:border-primaryborderaccent={validationPage}
+  class:bg-backgroundlight={!validationPage}
+  class:bg-primaryaccent={validationPage}
+  class:bg-opacity-20={validationPage}
   class:h-30={small}
   class:h-36={!small}
   class:shadow-md={elevated}

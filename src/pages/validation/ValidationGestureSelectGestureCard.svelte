@@ -16,7 +16,6 @@
   import { t } from '../../i18n';
   import { state, stores } from '../../script/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import { startRecording } from '../../script/utils/Recording';
   import { get } from 'svelte/store';
   import Logger from '../../script/utils/Logger';
 
@@ -90,7 +89,7 @@
   }
 </script>
 
-<GestureCard small>
+<GestureCard validationPage small>
   {#if $chosenGesture?.getId() !== gesture.getId()}
     <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked(gesture)}>
       <div class="w-full text-center">

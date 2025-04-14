@@ -124,7 +124,10 @@ class Gestures implements Readable<GestureData[]> {
   }
 
   private addGestureFromPersistedData(gestureData: PersistedGestureData): Gesture {
-    Logger.log("Gestures", `Adding gesture from persistedData ${gestureData.name} (id:${gestureData.ID})`)
+    Logger.log(
+      'Gestures',
+      `Adding gesture from persistedData ${gestureData.name} (id:${gestureData.ID})`,
+    );
     return this.repository.addGesture(gestureData);
   }
 

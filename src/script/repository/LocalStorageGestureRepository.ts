@@ -53,7 +53,10 @@ class LocalStorageGestureRepository implements GestureRepository {
       arr.push(gesture);
       return arr;
     });
-    Logger.log("LocalStorageGestureRepository", `Saving all ${get(LocalStorageGestureRepository.gestureStore).length} gestures`)
+    Logger.log(
+      'LocalStorageGestureRepository',
+      `Saving all ${get(LocalStorageGestureRepository.gestureStore).length} gestures`,
+    );
     this.saveCurrentGestures();
     return gesture;
   }

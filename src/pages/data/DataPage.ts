@@ -23,7 +23,7 @@ export const importExampleDataset = () => {
   availableAxes.loadFromGestures();
 };
 
-export const hasSomeData = derived(stores.getGestures(), gestures => {
+export const hasSomeRecordingData = derived(stores.getGestures(), gestures => {
   if (gestures.length === 0) {
     return false;
   }

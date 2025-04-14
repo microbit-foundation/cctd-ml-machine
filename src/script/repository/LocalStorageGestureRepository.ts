@@ -16,6 +16,7 @@ import Gesture from '../domain/stores/gesture/Gesture';
 import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
 import type { GestureRepository } from '../domain/GestureRepository';
+import Logger from '../utils/Logger';
 
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
@@ -52,6 +53,7 @@ class LocalStorageGestureRepository implements GestureRepository {
       arr.push(gesture);
       return arr;
     });
+    Logger.log("LocalStorageGestureRepository", `Saving all ${get(LocalStorageGestureRepository.gestureStore).length} gestures`)
     this.saveCurrentGestures();
     return gesture;
   }

@@ -6,13 +6,12 @@
 
 <script lang="ts">
   import { t } from '../i18n';
-  import StandardButton from '../components/buttons/StandardButton.svelte';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import { onMount } from 'svelte';
   import FileUtility from '../script/repository/FileUtility';
   import { get } from 'svelte/store';
-  import { state, stores } from '../script/stores/Stores';
-  import { hasSomeData, importExampleDataset } from './data/DataPage';
+  import { stores } from '../script/stores/Stores';
+  import { hasSomeRecordingData } from './data/DataPage';
   import DataPageNoData from './data/DataPageNoData.svelte';
   import DataPageWithData from './data/DataPageWithData.svelte';
 
@@ -63,17 +62,9 @@
       {onUploadGestures} />
   </div>
 
-  <div class="overflow-x-auto p-3 flex-grow">
-    {#if !$hasSomeData}
-      {#if !$state.isInputConnected}
-        <DataPageNoData />
-      {/if}
-      <div class="flex flex-grow"></div>
-      <div class="flex mt-3 mb-3 justify-center">
-        <StandardButton onClick={importExampleDataset}>
-          {$t('content.data.noData.templateDataButton')}
-        </StandardButton>
-      </div>
+  <div class="overflow-x-auto p-3 flex-grow flex">
+    {#if !$hasSomeRecordingData && !$gestures.length}
+      <DataPageNoData />
     {:else}
       <DataPageWithData />
     {/if}

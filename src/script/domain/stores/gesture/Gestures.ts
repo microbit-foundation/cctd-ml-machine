@@ -16,6 +16,7 @@ import Gesture, { type GestureData, type GestureID, type GestureOutput } from '.
 import StaticConfiguration from '../../../../StaticConfiguration';
 import type { GestureRepository } from '../../GestureRepository';
 import type { RecordingData } from '../../RecordingData';
+import Logger from '../../../utils/Logger';
 
 export type PersistedGestureData = {
   name: string;
@@ -123,6 +124,7 @@ class Gestures implements Readable<GestureData[]> {
   }
 
   private addGestureFromPersistedData(gestureData: PersistedGestureData): Gesture {
+    Logger.log("Gestures", `Adding gesture from persistedData ${gestureData.name} (id:${gestureData.ID})`)
     return this.repository.addGesture(gestureData);
   }
 

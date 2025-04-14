@@ -8,7 +8,7 @@
   import RecordInformationContent from '../../components/datacollection/RecordInformationContent.svelte';
   import Information from '../../components/information/Information.svelte';
   import { t } from '../../i18n';
-  import { hasSomeData } from '../data/DataPage';
+    import { hasSomeRecordingData } from '../data/DataPage';
 </script>
 
 <!-- Layout based on parent display:grid container -->
@@ -26,7 +26,7 @@
   </Information>
 </div>
 
-{#if $hasSomeData}
+{#if $hasSomeRecordingData}
   <div class="left-92 flex col-start-3">
     <Information
       isLightTheme={false}

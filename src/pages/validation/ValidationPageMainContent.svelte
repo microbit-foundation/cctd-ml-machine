@@ -46,7 +46,10 @@
   <div class="p-3 flex flex-col justify-center items-center min-h-full">
     <div class="flex flex-col gap-4 max-w-400px">
       <p class="text-lg font-bold">No gestures...</p>
-      <p class="">You haven't added any gestures yet. Go to the data step in the menu to the left and add some.</p>
+      <p class="">
+        You haven't added any gestures yet. Go to the data step in the menu to the left
+        and add some.
+      </p>
     </div>
   </div>
 {/if}

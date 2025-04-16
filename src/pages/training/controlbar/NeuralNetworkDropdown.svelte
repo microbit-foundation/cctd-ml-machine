@@ -45,7 +45,7 @@
           <RangeSlider
             bind:value={learningRateSliderValue}
             min={0.01}
-            max={1.5}
+            max={1.0}
             float
             step={0.01}
             springValues={{ damping: 0.9, stiffness: 0.5, precision: 0.1 }} />

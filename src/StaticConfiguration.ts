@@ -130,7 +130,7 @@ class StaticConfiguration {
     {
       noOfEpochs: 80,
       batchSize: 16,
-      learningRate: 0.5,
+      learningRate: 0.1,
       validationSplit: 0.1,
       noOfUnits: 16, // size of hidden layer
     };

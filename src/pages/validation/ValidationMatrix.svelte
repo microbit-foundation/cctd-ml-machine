@@ -8,6 +8,7 @@
   import Matrix from '../../script/domain/Matrix';
   import { stores } from '../../script/stores/Stores';
   import type { ValidationSetMatrix } from './ValidationPage';
+  import { t } from '../../i18n';
 
   const gestures = stores.getGestures();
 
@@ -32,16 +33,17 @@
 <table>
   <thead>
     <tr>
-      <td colspan="2"> </td><td colspan={$gestures.length}>Predicted</td>
+      <td colspan="2"> </td><td colspan={$gestures.length}
+        >{$t('content.validation.matrix.predicted')}</td>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td rowspan={$gestures.length + 1} class="write-vertical-right pt-[1.5em]">
-        Actual
+        {$t('content.validation.matrix.actual')}
       </td>
       <td />
-      {#each $gestures as gesture, idx}
+      {#each $gestures as gesture}
         <td class="w-20 border-1">{gesture.name}</td>
       {/each}
     </tr>

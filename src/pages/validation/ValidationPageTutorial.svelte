@@ -8,7 +8,7 @@
   import GestureCard from '../../components/GestureCard.svelte';
   import MediaQuery from '../../components/MediaQuery.svelte';
   import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
-  import { t } from '../../i18n';
+  import { t, tr } from '../../i18n';
 </script>
 
 <GestureCard small>
@@ -28,10 +28,11 @@
 
     <MediaQuery query="(max-width: 1365px)" let:matches={isSmall}>
       <div class="self-center">
-        <p class="font-bold">Validation sets</p>
+        <p class="font-bold">
+          {$tr('content.validation.tutorial.title')}
+        </p>
         <p class:text-xs={isSmall} class="text-sm">
-          Create a separate dataset to evaluate the performance of your model. The model
-          will not be trained on this data.
+          {$tr('content.validation.tutorial.description')}
         </p>
       </div>
     </MediaQuery>

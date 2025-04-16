@@ -14,6 +14,7 @@
   import { isValidationSetEmpty } from './ValidationPage';
   import ValidationPageTutorial from './ValidationPageTutorial.svelte';
   import { chosenGesture } from '../../script/stores/uiStore';
+  import { tr } from '../../i18n';
 
   const gestures = stores.getGestures();
   export let onNoMicrobitSelect: () => void;
@@ -45,10 +46,11 @@
 {:else}
   <div class="p-3 flex flex-col justify-center items-center min-h-full">
     <div class="flex flex-col gap-4 max-w-400px">
-      <p class="text-lg font-bold">No gestures...</p>
+      <p class="text-lg font-bold">
+        {$tr('content.validation.noGestures.title')}
+      </p>
       <p class="">
-        You haven't added any gestures yet. Go to the data step in the menu to the left
-        and add some.
+        {$tr('content.validation.noGestures.description')}
       </p>
     </div>
   </div>

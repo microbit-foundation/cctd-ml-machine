@@ -14,6 +14,7 @@
     type ValidationSetMatrix,
   } from './ValidationPage';
   import Tooltip from '../../components/base/Tooltip.svelte';
+  import { tr } from '../../i18n';
 
   const gestures = stores.getGestures();
   const validationSets = stores.getValidationSets();
@@ -51,7 +52,9 @@
 <div class="bg-white h-full flex flex-row justify-evenly">
   <div class="pl-2 flex flex-col justify-center">
     <div class="flex flex-row gap-2 justify-center">
-      <p>Auto-update:</p>
+      <p>
+        {$tr('content.validation.testButton.autoUpdate')}:
+      </p>
       <input type="checkbox" bind:checked={$autoUpdate} />
     </div>
     <Tooltip
@@ -59,7 +62,7 @@
       offset={{ x: -80, y: -60 }}
       title="(translate)You must train a model first!">
       <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}>
-        Test
+        {$tr('content.validation.testButton.test')}
       </StandardButton>
     </Tooltip>
   </div>
@@ -68,7 +71,7 @@
     <div class="flex">
       <div class="flex gap-2">
         <div class="flex flex-row self-center">
-          <p>Percentage:</p>
+          <p>{$tr('content.validation.percentage')}:</p>
         </div>
         <input type="checkbox" bind:checked={$showPercentages} />
       </div>
@@ -79,9 +82,9 @@
   </div>
   <div class="flex flex-col justify-center">
     {#if !isNaN($accuracy)}
-      Accuracy: {($accuracy * 100).toFixed(1)} %
+      {$tr('content.validation.accuracy')}: {($accuracy * 100).toFixed(1)} %
     {:else}
-      Accuracy: -
+      {$tr('content.validation.accuracy')}: -
     {/if}
   </div>
 </div>

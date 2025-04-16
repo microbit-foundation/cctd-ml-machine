@@ -15,9 +15,9 @@
 <div class="left-3 flex col-start-1">
   <Information
     isLightTheme={false}
-    iconText={'translate-!!-' + $t('content.data.classification')}
+    iconText={$t('content.data.classification')}
     titleText={$t('content.data.classHelpHeader')}
-    bodyText={$t('content.data.classHelpBody')} />
+    bodyText={$t('content.validation.infobox.classesContent')} />
 </div>
 
 <div class="left-60 flex col-start-2">

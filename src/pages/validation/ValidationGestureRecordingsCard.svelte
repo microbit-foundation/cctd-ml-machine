@@ -7,6 +7,7 @@
 <script lang="ts">
   import GestureCard from '../../components/GestureCard.svelte';
   import Recording from '../../components/Recording.svelte';
+  import type { GestureID } from '../../script/domain/stores/gesture/Gesture';
   import type Gesture from '../../script/domain/stores/gesture/Gesture';
   import { stores } from '../../script/stores/Stores';
 
@@ -20,6 +21,24 @@
   $: gestureIdx = $gestures.findIndex(gest => gest.ID === gesture.getId());
   $: recordings = $validationSet.recordings;
   $: predictedGestures = ($results[gestureIdx] ?? []).map(a => $gestures[a.gestureIdx]);
+
+  const getDot = (
+    idx: number,
+  ):
+    | {
+        gesture: GestureID;
+        color: string;
+      }
+    | undefined => {
+    const prediction = predictedGestures[idx];
+    if (!prediction) {
+      return undefined;
+    }
+    return {
+      color: predictedGestures[idx]?.color,
+      gesture: predictedGestures[idx].ID,
+    };
+  };
 </script>
 
 <GestureCard validationPage={true} small>
@@ -27,12 +46,7 @@
     {#each recordings as recording, idx}
       {#key recording.ID}
         <Recording
-          dot={predictedGestures[idx]
-            ? {
-                color: predictedGestures[idx]?.color,
-                gesture: predictedGestures[idx].ID,
-              }
-            : undefined}
+          dot={getDot(idx)}
           {recording}
           onDelete={recording =>
             validationSets.removeValidationRecording(recording.ID)} />

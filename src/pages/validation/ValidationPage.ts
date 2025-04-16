@@ -22,7 +22,7 @@ export const createValidationMatrixVisual = (
   const matrixRaw = createValidationMatrix(validationResult, gestures);
 
   const accurateResults = gestures.reduce(
-    (pre, cur, idx) => pre + matrixRaw.getValues()[idx][idx],
+    (pre, _, idx) => pre + matrixRaw.getValues()[idx][idx],
     0,
   );
   return {

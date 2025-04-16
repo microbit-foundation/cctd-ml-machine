@@ -5,10 +5,13 @@
  */
 
 import { init, locale, register } from 'svelte-i18n';
+import { t as translate } from 'svelte-i18n';
 export { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
 import browserLang from 'browser-lang';
 import PersistantWritable from './script/repository/PersistantWritable';
+
+export const tr = translate; // make intellisense a little better
 
 register('en', () => import('./messages/ui.en.json'));
 register('da', () => import('./messages/ui.da.json'));

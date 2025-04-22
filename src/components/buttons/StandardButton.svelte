@@ -61,6 +61,7 @@
   export let shadows = true;
   export let disabledTooltip: string | undefined = undefined;
   export let icon: string | undefined = undefined;
+  export let colorOverride: string | undefined = undefined;
 
   const bgColors: { [key in variants]: string } = {
     primary: windi.theme.extend.colors.primary,
@@ -71,7 +72,10 @@
     disabled: windi.theme.extend.colors.disabled,
   };
   const isKey = Object.keys(bgColors).includes(color);
-  const colorParam = isKey ? bgColors[disabled ? 'disabled' : color] : color;
+  let colorParam = isKey ? bgColors[disabled ? 'disabled' : color] : color;
+  if (colorOverride) {
+    colorParam = colorOverride;
+  }
 </script>
 
 {#if disabled}

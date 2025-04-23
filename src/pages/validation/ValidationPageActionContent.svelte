@@ -75,14 +75,21 @@
         </div>
         <input type="checkbox" bind:checked={$showPercentages} />
       </div>
-      <ValidationMatrix
-        validationSetMatrix={$validationSetMatrix}
-        showPercentages={$showPercentages} />
+      <div class="mx-2 max-h-37 max-w-180 overflow-y-auto">
+        <ValidationMatrix
+          validationSetMatrix={$validationSetMatrix}
+          showPercentages={$showPercentages} />
+      </div>
     </div>
   </div>
   <div class="flex flex-col justify-center">
     {#if !isNaN($accuracy)}
-      {$tr('content.validation.accuracy')}: {($accuracy * 100).toFixed(1)} %
+      <p>
+        {$tr('content.validation.accuracy')}:
+      </p>
+      <p class="text-center">
+        {($accuracy * 100).toFixed(1)} %
+      </p>
     {:else}
       {$tr('content.validation.accuracy')}: -
     {/if}

@@ -17,6 +17,10 @@ class LiveDataBuffer<T extends LiveDataVector> {
     this.buffer = new Array<TimestampedData<T> | null>(maxLen).fill(null);
   }
 
+  public isEmpty(): boolean {
+    return this.bufferPtr === 0;
+  }
+
   public addValue(value: T) {
     const bufferIndex = this.getBufferIndex();
     this.bufferPtr++;

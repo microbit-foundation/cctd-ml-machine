@@ -21,15 +21,7 @@
   $: gestureIdx = $gestures.findIndex(gest => gest.ID === gesture.getId());
   $: recordings = $validationSet.recordings;
   $: predictedGestures = ($results[gestureIdx] ?? []).map(a => $gestures[a.gestureIdx]);
-
-  const getDot = (
-    idx: number,
-  ):
-    | {
-        gesture: GestureID;
-        color: string;
-      }
-    | undefined => {
+  $: dots = $results.map((_, idx) => {
     const prediction = predictedGestures[idx];
     if (!prediction) {
       return undefined;
@@ -38,7 +30,7 @@
       color: predictedGestures[idx]?.color,
       gesture: predictedGestures[idx].ID,
     };
-  };
+  });
 </script>
 
 <GestureCard validationPage={true} small>
@@ -46,7 +38,7 @@
     {#each recordings as recording, idx}
       {#key recording.ID}
         <Recording
-          dot={getDot(idx)}
+          dot={dots[idx]}
           {recording}
           onDelete={recording =>
             validationSets.removeValidationRecording(recording.ID)} />

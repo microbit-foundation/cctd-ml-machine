@@ -143,16 +143,14 @@
 
   let unsubscribeFromData: Unsubscriber | undefined;
 
-  let hasMoreThan1DataPoint = false;
   // If state is connected. Start updating the graph whenever there is new data
   // From the Micro:Bit
   function updateCanvas(isConnected: boolean) {
     if (isConnected || !unsubscribeFromData) {
       unsubscribeFromData = smoothedLiveData.subscribe(data => {
-        if (hasMoreThan1DataPoint) {
+        if (!liveData.getBuffer().isEmpty()) {
           addDataToGraphLines(data);
         }
-        hasMoreThan1DataPoint = true;
       });
 
       // Else if we're currently subscribed to data. Unsubscribe.

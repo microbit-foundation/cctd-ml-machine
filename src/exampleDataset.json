@@ -2273,7 +2273,7 @@
       }
     ],
     "output": {},
-    "color": "#FCA311",
+    "color": "#a6cee3",
     "confidence": {
       "currentConfidence": 0,
       "requiredConfidence": 0.8,
@@ -4842,7 +4842,7 @@
       }
     ],
     "output": {},
-    "color": "#00ff81",
+    "color": "#b15928",
     "confidence": {
       "currentConfidence": 0,
       "requiredConfidence": 0.8,
@@ -7975,7 +7975,7 @@
       }
     ],
     "output": {},
-    "color": "#b1e400",
+    "color": "#b2df8a",
     "confidence": {
       "currentConfidence": 0,
       "requiredConfidence": 0.8,

@@ -71,14 +71,18 @@ class StaticConfiguration {
 
   // Colors to assign to gestures, useful for identifying gestures on graphs.
   public static readonly gestureColors = [
-    '#FCA311',
-    '#00ff81',
-    '#b1e400',
-    '#ADFCF9',
-    '#89A894',
-    '#4B644A',
-    '#49393B',
-    '#341C1C',
+    '#a6cee3',
+    '#1f78b4',
+    '#b2df8a',
+    '#33a02c',
+    '#fb9a99',
+    '#e31a1c',
+    '#fdbf6f',
+    '#ff7f00',
+    '#cab2d6',
+    '#6a3d9a',
+    '#ffff99',
+    '#b15928',
   ];
 
   // What will the min and max y-values on the livegraph be?

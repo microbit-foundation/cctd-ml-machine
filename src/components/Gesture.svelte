@@ -24,6 +24,7 @@
   import { state, stores } from '../script/stores/Stores';
   import type { RecordingData } from '../script/domain/RecordingData';
   import { startRecording } from '../script/utils/Recording';
+  import GestureDot from './GestureDot.svelte';
 
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
@@ -165,9 +166,8 @@
   <div class="items-center flex relative">
     <!-- Title of gesture-->
     <GestureCard mr small>
-      <div
-        class="absolute rounded-full w-3 h-3 m-3"
-        style={`background-color:${gesture.getColor()}`}>
+      <div class="p-2 absolute">
+        <GestureDot {gesture} />
       </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
         <div

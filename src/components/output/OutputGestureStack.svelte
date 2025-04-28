@@ -29,6 +29,7 @@
   import Gesture, { type SoundData } from '../../script/domain/stores/gesture/Gesture';
   import { state, stores } from '../../script/stores/Stores';
   import { MBSpecs } from 'microbyte';
+  import GestureDot from '../GestureDot.svelte';
 
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
@@ -193,9 +194,8 @@
 <main class="mb-4 items-center flex flex-row">
   <!-- NAMES AND CONFIDENCE METER -->
   <GestureCard>
-    <div
-      class="absolute rounded-full w-3 h-3 m-3"
-      style={`background-color:${gesture.getColor()}`}>
+    <div class="absolute p-3">
+      <GestureDot {gesture} />
     </div>
     <div class="items-center flex p-2">
       <div

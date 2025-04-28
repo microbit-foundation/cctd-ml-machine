@@ -10,6 +10,7 @@
   import type { RecordingData } from '../script/domain/RecordingData';
   import type { GestureID } from '../script/domain/stores/gesture/Gesture';
   import { stores } from '../script/stores/Stores';
+  import GestureDot from './GestureDot.svelte';
 
   // get recording from mother prop
   export let recording: RecordingData;
@@ -38,17 +39,10 @@
 </script>
 
 <div class="h-28 w-40 pr-3 pt-1 relative rounded-md">
-  {#if dot !== undefined}
-    <div
-      class="absolute px-1 py-0.5 border-1 border-secondary rounded-md shadow-md bg-white top-[-28px] right-0 z-3"
-      class:hidden={!isDotHovered}>
-      <p>{dotGesture?.getName()}</p>
+  {#if dotGesture !== undefined}
+    <div class="absolute px-1 py-0.5 z-3 right-1 top-2">
+      <GestureDot gesture={dotGesture} />
     </div>
-    <div
-      on:mouseenter={() => (isDotHovered = true)}
-      on:mouseleave={() => (isDotHovered = false)}
-      class="absolute top-2 right-2 w-3 h-3 z-2 rounded-full"
-      style="background-color: {dot.color};" />
   {/if}
   {#if hide}
     <div transition:fade class="absolute h-26 w-40 bg-white" />

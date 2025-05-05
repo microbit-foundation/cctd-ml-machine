@@ -6,6 +6,7 @@
 
 <script lang="ts">
   import GestureCard from '../../components/GestureCard.svelte';
+  import GestureDot from '../../components/GestureDot.svelte';
   import type Gesture from '../../script/domain/stores/gesture/Gesture';
 
   export let gesture: Gesture;
@@ -20,9 +21,8 @@
       </div>
     </div>
     <!-- DOT -->
-    <div
-      class="absolute rounded-full w-3 h-3 m-3 top-0 left-0"
-      style={`background-color:${gesture.getColor()}`}>
+    <div class="absolute top-3 left-3">
+      <GestureDot {gesture} />
     </div>
   </div>
 </GestureCard>

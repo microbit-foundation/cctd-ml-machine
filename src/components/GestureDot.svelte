@@ -14,9 +14,9 @@
 </script>
 
 <div
-  class="absolute border-1 border-secondary rounded-md shadow-md bg-white top-[-24px]"
+  class="absolute border-1 border-secondary rounded-md shadow-md bg-white top-[-28px]"
   class:hidden={!isDotHovered}>
-  <p>{name}</p>
+  <p class="px-2">{name}</p>
 </div>
 <div
   on:mouseenter={() => (isDotHovered = true)}

@@ -166,7 +166,7 @@
   <div class="items-center flex relative">
     <!-- Title of gesture-->
     <GestureCard mr small>
-      <div class="p-2 absolute">
+      <div class="top-3 left-3 absolute">
         <GestureDot {gesture} />
       </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">

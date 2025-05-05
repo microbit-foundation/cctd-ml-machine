@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -33,7 +33,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    setupFiles: ['./src/setup_tests.ts'],
+    setupFiles: ['./src/__tests__/setup_tests.ts'],
     poolOptions: {
       threads: {
         // threads disabled for now due to https://github.com/vitest-dev/vitest/issues/1982

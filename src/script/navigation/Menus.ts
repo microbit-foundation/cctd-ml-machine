@@ -10,8 +10,8 @@ import GestureMenu from '../../menus/DataMenu.svelte';
 import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
 import NewModelMenu from '../../menus/ModelMenu.svelte';
 import ValidateMenu from '../../menus/ValidateMenu.svelte';
-import { Paths, type PathType } from '../../router/paths';
 import { Feature, hasFeature } from '../FeatureToggles';
+import { Paths, type PathType } from '../../router/Router';
 
 export type MenuProperties = {
   title: string;

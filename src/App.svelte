@@ -1,5 +1,5 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -22,15 +22,10 @@
 </style>
 
 <script lang="ts">
-  import OverlayView from './views/OverlayView.svelte';
-  import SideBarMenuView from './views/SideBarMenuView.svelte';
-  import PageContentView from './views/PageContentView.svelte';
-  import BottomBarMenuView from './views/BottomBarMenuView.svelte';
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
   import { fade } from 'svelte/transition';
   import { compatibility } from './script/stores/uiStore';
   import LoadingSpinner from './components/LoadingSpinner.svelte';
-  import IncompatiblePlatformView from './views/IncompatiblePlatformView.svelte';
   import BluetoothIncompatibilityWarningDialog from './components/BluetoothIncompatibilityWarningDialog.svelte';
   import CookieManager from './script/CookieManager';
   import Router from './router/Router.svelte';
@@ -39,6 +34,11 @@
   import { DeviceRequestStates, state } from './script/stores/Stores';
   import SnackbarView from './components/snackbar/SnackbarView.svelte';
   import MediaQuery from './components/MediaQuery.svelte';
+  import IncompatiblePlatformView from './components/views/IncompatiblePlatformView.svelte';
+  import OverlayView from './components/views/OverlayView.svelte';
+  import SideBarMenuView from './components/views/SideBarMenuView.svelte';
+  import BottomBarMenuView from './components/views/BottomBarMenuView.svelte';
+  import PageContentView from './components/views/PageContentView.svelte';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {

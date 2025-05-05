@@ -2,13 +2,13 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
-import da from '../../messages/ui.da.json';
-import en from '../../messages/ui.en.json';
-import de from '../../messages/ui.de.json';
+import da from '../../assets/messages/ui.da.json';
+import en from '../../assets/messages/ui.en.json';
+import de from '../../assets/messages/ui.de.json';
 
 describe('Translation tests', () => {
   test('Should be same number of translations', () => {

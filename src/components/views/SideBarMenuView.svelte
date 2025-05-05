@@ -1,18 +1,19 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <!-- Left-hand side menu -->
 <script lang="ts">
-  import Menus, { type MenuProperties } from '../script/navigation/Menus';
-  import MenuButton from '../menus/MenuButton.svelte';
   import { get } from 'svelte/store';
-  import { Paths, currentPath, navigate } from '../router/paths';
-  import { Feature, getFeature } from '../script/FeatureToggles';
-  import { state } from '../script/stores/Stores';
-  import MediaQuery from '../components/MediaQuery.svelte';
+  import type { MenuProperties } from '../../script/navigation/Menus';
+  import { currentPath, navigate, Paths } from '../../router/Router';
+  import { state } from '../../script/stores/Stores';
+  import MediaQuery from '../MediaQuery.svelte';
+  import { Feature, getFeature } from '../../script/FeatureToggles';
+  import Menus from '../../script/navigation/Menus';
+  import MenuButton from '../../menus/MenuButton.svelte';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;

@@ -13,8 +13,8 @@
   import TrainingPage from '../pages/training/TrainingPage.svelte';
   import PlaygroundPage from '../pages/PlaygroundPage.svelte';
   import ValidationPage from '../pages/ValidationPage.svelte';
-  import { currentPageComponent } from '../views/currentComponentStore';
-  import { currentPath, navigate, Paths, type PathType } from './paths';
+  import { currentPath, navigate, Paths, type PathType } from './Router';
+  import { currentPageComponent } from '../components/views/currentComponentStore';
 
   function getRoutedComponent(path: PathType) {
     switch (path) {

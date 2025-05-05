@@ -1,11 +1,11 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script>
-  import { t } from '../i18n';
+  import { t } from '../../i18n';
 </script>
 
 <main class="h-screen w-screen bg-secondary flex flex-col justify-center items-center">

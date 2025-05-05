@@ -2,12 +2,12 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-import en from '../../messages/ui.en.json';
+import en from './../../assets/messages/ui.en.json';
 import * as fs from 'fs';
 import * as path from 'path';
 

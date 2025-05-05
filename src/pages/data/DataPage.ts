@@ -5,7 +5,7 @@
  */
 
 import { stores } from '../../script/stores/Stores';
-import exampleDataset from '../../exampleDataset.json';
+import exampleDataset from '../../assets/exampleDataset.json';
 import { t } from '../../i18n';
 import { derived, get } from 'svelte/store';
 import type { GestureData } from '../../script/domain/stores/gesture/Gesture';

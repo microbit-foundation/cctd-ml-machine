@@ -5,8 +5,8 @@
  -->
 
 <script lang="ts">
-    import { tr } from '../../../i18n';
-    import { compatibility } from '../../../lib/stores/uiStore';
+  import { tr } from '../../../i18n';
+  import { compatibility } from '../../../lib/stores/uiStore';
   import View3DUnsafe from './View3DUnsafe.svelte';
   import { type Vector3 } from './View3DUtility';
 

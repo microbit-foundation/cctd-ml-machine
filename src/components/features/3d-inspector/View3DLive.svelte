@@ -5,8 +5,8 @@
  -->
 
 <script lang="ts">
-    import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
-    import { stores } from '../../../lib/stores/Stores';
+  import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
+  import { stores } from '../../../lib/stores/Stores';
   import View3D from './View3D.svelte';
   import { type Vector3 } from './View3DUtility';
 

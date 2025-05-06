@@ -5,8 +5,7 @@
  -->
 
 <script lang="ts">
-    import BottomPanel from "../features/bottom/BottomPanel.svelte";
-
+  import BottomPanel from '../features/bottom/BottomPanel.svelte';
 </script>
 
 <BottomPanel />

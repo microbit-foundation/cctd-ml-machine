@@ -5,11 +5,10 @@
  -->
 
 <script lang="ts">
-    import { tr } from "../../../i18n";
-    import { state, stores } from "../../../lib/stores/Stores";
-    import TypingUtils from "../../../lib/TypingUtils";
-    import StandardButton from "../../buttons/StandardButton.svelte";
-
+  import { tr } from '../../../i18n';
+  import { state, stores } from '../../../lib/stores/Stores';
+  import TypingUtils from '../../../lib/TypingUtils';
+  import StandardButton from '../../buttons/StandardButton.svelte';
 
   export let onOutputDisconnectButtonClicked: () => void;
   export let onOutputConnectButtonClicked: () => void;

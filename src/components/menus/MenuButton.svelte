@@ -12,7 +12,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-    import Information from '../ui/information/Information.svelte';
+  import Information from '../ui/information/Information.svelte';
 
   export let title: string;
   export let helpTitle: string;

@@ -6,11 +6,11 @@
 
 <script lang="ts">
   import { derived } from 'svelte/store';
-    import { stores } from '../../../lib/stores/Stores';
-    import StaticConfiguration from '../../../StaticConfiguration';
-    import type { Axis } from '../../../lib/domain/Axis';
-    import FixedNumber from '../../base/FixedNumber.svelte';
-    import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
+  import { stores } from '../../../lib/stores/Stores';
+  import StaticConfiguration from '../../../StaticConfiguration';
+  import type { Axis } from '../../../lib/domain/Axis';
+  import FixedNumber from '../../base/FixedNumber.svelte';
+  import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
 
   const highlightedAxes = stores.getHighlightedAxes();
   const availableAxes = stores.getAvailableAxes();

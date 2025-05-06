@@ -9,11 +9,11 @@
   import { locale, locales } from 'svelte-i18n';
   import { onMount } from 'svelte';
   import CookieDescriptionOverlay from './CookieDescriptionOverlay.svelte';
-    import CookieManager from '../../../lib/CookieManager';
-    import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
-    import StandardDialog from '../../ui/dialogs/StandardDialog.svelte';
-    import StandardButton from '../../buttons/StandardButton.svelte';
-    import { tr } from '../../../i18n';
+  import CookieManager from '../../../lib/CookieManager';
+  import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
+  import StandardDialog from '../../ui/dialogs/StandardDialog.svelte';
+  import StandardButton from '../../buttons/StandardButton.svelte';
+  import { tr } from '../../../i18n';
 
   let isCookieDialogOpen: boolean;
   let isDescriptionDialogOpen = false;

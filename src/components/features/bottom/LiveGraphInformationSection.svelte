@@ -5,10 +5,10 @@
  -->
 
 <script lang="ts">
-    import { tr } from '../../../i18n';
-    import { Feature, hasFeature } from '../../../lib/FeatureToggles';
-    import { state } from '../../../lib/stores/Stores';
-    import Information from '../../ui/information/Information.svelte';
+  import { tr } from '../../../i18n';
+  import { Feature, hasFeature } from '../../../lib/FeatureToggles';
+  import { state } from '../../../lib/stores/Stores';
+  import Information from '../../ui/information/Information.svelte';
   import BottomPanelLiveDataValues from './BottomPanelLiveDataValues.svelte';
 </script>
 

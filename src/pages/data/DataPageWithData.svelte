@@ -14,7 +14,7 @@
   import Gesture from '../../components/Gesture.svelte';
   import NewGestureButton from '../../components/NewGestureButton.svelte';
   import { stores } from '../../lib/stores/Stores';
-    import Information from '../../components/ui/information/Information.svelte';
+  import Information from '../../components/ui/information/Information.svelte';
 
   let isConnectionDialogOpen = false;
   const gestures = stores.getGestures();

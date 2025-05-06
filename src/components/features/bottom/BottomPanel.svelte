@@ -8,15 +8,15 @@
   import { fade } from 'svelte/transition';
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
-    import { tr } from '../../../i18n';
-    import ConnectDialogContainer from '../../connection-prompt/ConnectDialogContainer.svelte';
-    import { state } from '../../../lib/stores/Stores';
-    import { startConnectionProcess } from '../../../lib/stores/connectDialogStore';
-    import Microbits from '../../../lib/microbit-interfacing/Microbits';
-    import StandardButton from '../../buttons/StandardButton.svelte';
-    import MicrobitLiveGraph from '../../graphs/MicrobitLiveGraph.svelte';
-    import View3DLive from '../3d-inspector/View3DLive.svelte';
-    import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
+  import { tr } from '../../../i18n';
+  import ConnectDialogContainer from '../../connection-prompt/ConnectDialogContainer.svelte';
+  import { state } from '../../../lib/stores/Stores';
+  import { startConnectionProcess } from '../../../lib/stores/connectDialogStore';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
+  import StandardButton from '../../buttons/StandardButton.svelte';
+  import MicrobitLiveGraph from '../../graphs/MicrobitLiveGraph.svelte';
+  import View3DLive from '../3d-inspector/View3DLive.svelte';
+  import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;

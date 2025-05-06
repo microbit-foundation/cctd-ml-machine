@@ -11,7 +11,7 @@
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import { state, stores } from '../../lib/stores/Stores';
   import PleaseConnect from '../../components/PleaseConnect.svelte';
-    import FiltersList from '../../components/features/filters/FiltersList.svelte';
+  import FiltersList from '../../components/features/filters/FiltersList.svelte';
 
   const selectedModel = stores.getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);

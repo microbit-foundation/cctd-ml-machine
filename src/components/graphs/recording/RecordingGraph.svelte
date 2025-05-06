@@ -22,7 +22,7 @@
   import { stores } from '../../../lib/stores/Stores';
   import { getRecordingChartDatasets, type ChartDataset } from './RecordingGraph';
   import type { RecordingData } from '../../../lib/domain/RecordingData';
-    import RecordingInspector from '../../features/3d-inspector/RecordingInspector.svelte';
+  import RecordingInspector from '../../features/3d-inspector/RecordingInspector.svelte';
 
   export let recording: RecordingData;
   const samples = recording.samples;

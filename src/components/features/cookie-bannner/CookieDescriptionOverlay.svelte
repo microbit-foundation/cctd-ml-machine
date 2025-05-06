@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { slide } from 'svelte/transition';
-    import { tr } from '../../../i18n';
+  import { tr } from '../../../i18n';
 
   const cookies = [
     {

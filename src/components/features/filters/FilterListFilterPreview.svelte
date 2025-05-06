@@ -4,8 +4,8 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-    import FilterTypes, { FilterType } from '../../../lib/domain/FilterTypes';
-    import D3Plot from '../../../pages/filter/D3Plot.svelte';
+  import FilterTypes, { FilterType } from '../../../lib/domain/FilterTypes';
+  import D3Plot from '../../../pages/filter/D3Plot.svelte';
   import { highlightedFilter, anchorElement, showHighlighted } from './FilterList';
 
   $: top = $anchorElement?.getBoundingClientRect().top ?? 0;

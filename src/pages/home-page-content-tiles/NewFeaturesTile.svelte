@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
+  import ImageSkeleton from '../../components/ui/skeletonloading/ImageSkeleton.svelte';
 </script>
 
 <p class="text-lg mb-2 font-semibold">{$t('content.index.newzHeading')}</p>

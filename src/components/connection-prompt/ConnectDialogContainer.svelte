@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import StandardDialog from '../dialogs/StandardDialog.svelte';
+  import StandardDialog from '../ui/dialogs/StandardDialog.svelte';
   import BluetoothConnectDialog from './bluetooth/BluetoothConnectDialog.svelte';
   import StartDialog from './StartDialog.svelte';
   import DoneDownloadingDialog from './usb/DoneDownloadingDialog.svelte';

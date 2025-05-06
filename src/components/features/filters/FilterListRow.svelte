@@ -4,9 +4,10 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { Paths, navigate } from '../../router/Router';
-  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
-  import { stores } from '../../lib/stores/Stores';
+    import type { FilterType } from '../../../lib/domain/FilterTypes';
+    import FilterTypes from '../../../lib/domain/FilterTypes';
+    import { stores } from '../../../lib/stores/Stores';
+    import { navigate, Paths } from '../../../router/Router';
   import {
     highlightedFilter,
     showHighlighted,

@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
+  import ImageSkeleton from '../ui/skeletonloading/ImageSkeleton.svelte';
   import { stores } from '../../lib/stores/Stores';
 
   const model = stores.getClassifier().getModel();

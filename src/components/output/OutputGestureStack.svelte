@@ -20,11 +20,11 @@
   import { t } from '../../i18n';
   import OutputSoundSelector from './OutputSoundSelector.svelte';
   import Microbits from '../../lib/microbit-interfacing/Microbits';
-  import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
+  import ImageSkeleton from '../ui/skeletonloading/ImageSkeleton.svelte';
   import GestureCard from '../GestureCard.svelte';
   import PinSelector from './PinSelector.svelte';
   import StaticConfiguration from '../../StaticConfiguration';
-  import Information from '../information/Information.svelte';
+  import Information from '../ui/information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import Gesture, { type SoundData } from '../../lib/domain/stores/gesture/Gesture';
   import { state, stores } from '../../lib/stores/Stores';

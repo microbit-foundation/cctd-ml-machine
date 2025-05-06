@@ -5,17 +5,16 @@
  -->
 
 <script lang="ts">
-  import FiltersList from '../../components/filters/FiltersList.svelte';
   import KnnModelTrainingPageView from './KnnModelTrainingPageView.svelte';
   import ModelRegistry from '../../lib/domain/ModelRegistry';
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import { state, stores } from '../../lib/stores/Stores';
   import PleaseConnect from '../../components/PleaseConnect.svelte';
+    import FiltersList from '../../components/features/filters/FiltersList.svelte';
 
   const selectedModel = stores.getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);
-  const highlightedAxis = stores.getHighlightedAxes();
 </script>
 
 <div class="flex flex-col h-full justify-center">

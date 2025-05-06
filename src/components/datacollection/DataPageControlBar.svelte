@@ -1,12 +1,12 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
-  import ControlBar from '../control-bar/ControlBar.svelte';
-  import ExpandableControlBarMenu from '../control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
+  import ControlBar from '../ui/control-bar/ControlBar.svelte';
+  import ExpandableControlBarMenu from '../ui/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import StandardButton from '../buttons/StandardButton.svelte';
   import { t } from '../../i18n';
 

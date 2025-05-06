@@ -20,9 +20,9 @@
   import DoItYourselfMachineLearningTile from './home-page-content-tiles/DoItYourselfMachineLearningTile.svelte';
   import NewFeaturesTile from './home-page-content-tiles/NewFeaturesTile.svelte';
   import WhatIsMachineLearningTile from './home-page-content-tiles/WhatIsMachineLearningTile.svelte';
-  import ControlBar from '../components/control-bar/ControlBar.svelte';
-  import ContactUsControlBarButton from '../components/control-bar/control-bar-items/ContactUsControlBarButton.svelte';
-  import SelectLanguageControlBarDropdown from '../components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
+  import ControlBar from '../components/ui/control-bar/ControlBar.svelte';
+  import ContactUsControlBarButton from '../components/ui/control-bar/control-bar-items/ContactUsControlBarButton.svelte';
+  import SelectLanguageControlBarDropdown from '../components/ui/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
   import { t } from '../i18n';
   import Environment from '../lib/Environment';
   import DevTools from '../components/DevTools.svelte';

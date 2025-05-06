@@ -7,8 +7,8 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import * as THREE from 'three';
-  import Smoother from '../../lib/utils/Smoother';
   import Live3DUtility, { type Vector3 } from './View3DUtility';
+    import Smoother from '../../../lib/utils/Smoother';
 
   // TODO: The file has a lot of hardcoded (somewhat arbitrary) number values. Go through them and check if a refactor is in order
 

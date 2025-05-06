@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
+  import ImageSkeleton from '../../components/ui/skeletonloading/ImageSkeleton.svelte';
 
   const MLStepsContent: { image: string; text: string }[] = [
     {

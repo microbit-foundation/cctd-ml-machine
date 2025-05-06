@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import FilterToggler from './FilterToggler.svelte';
-  import ControlBar from '../../components/control-bar/ControlBar.svelte';
+  import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import { t } from '../../i18n';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';

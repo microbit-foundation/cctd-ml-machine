@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import ControlBar from '../../components/control-bar/ControlBar.svelte';
+  import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import { tr } from '../../i18n';
   import { stores } from '../../lib/stores/Stores';
   const validationSets = stores.getValidationSets();

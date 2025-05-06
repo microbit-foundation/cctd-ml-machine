@@ -1,5 +1,5 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -16,13 +16,13 @@
     LinearScale,
     PointElement,
   } from 'chart.js';
-  import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
   import RecordingGraphPointData from './RecordingGraphPointData.svelte';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../lib/stores/Stores';
   import { getRecordingChartDatasets, type ChartDataset } from './RecordingGraph';
   import type { RecordingData } from '../../../lib/domain/RecordingData';
+    import RecordingInspector from '../../features/3d-inspector/RecordingInspector.svelte';
 
   export let recording: RecordingData;
   const samples = recording.samples;

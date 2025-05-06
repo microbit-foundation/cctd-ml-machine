@@ -9,7 +9,7 @@
   import { onMount } from 'svelte';
   import StandardButton from '../../../buttons/StandardButton.svelte';
   import Microbits from '../../../../lib/microbit-interfacing/Microbits';
-  import ImageSkeleton from '../../../skeletonloading/ImageSkeleton.svelte';
+  import ImageSkeleton from '../../../ui/skeletonloading/ImageSkeleton.svelte';
   import Bowser from 'bowser';
   import StaticConfiguration from '../../../../StaticConfiguration';
 

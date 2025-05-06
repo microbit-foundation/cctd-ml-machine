@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
+  import StandardDialog from '../../components/ui/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
 
   import { TrainingStatus } from '../../lib/domain/stores/Model';

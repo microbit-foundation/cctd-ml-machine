@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import StandardDialog from '../components/dialogs/StandardDialog.svelte';
+  import StandardDialog from '../components/ui/dialogs/StandardDialog.svelte';
   import ValidationPageControlBar from './validation/ValidationPageControlBar.svelte';
   import ValidationPageMainContent from './validation/ValidationPageMainContent.svelte';
   import { t } from '../i18n';

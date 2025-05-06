@@ -19,7 +19,7 @@
   import { t } from '../../i18n';
   import Gesture from '../../lib/domain/stores/gesture/Gesture';
   import GestureCard from '../GestureCard.svelte';
-  import Information from '../information/Information.svelte';
+  import Information from '../ui/information/Information.svelte';
 
   // Variables for component
   export let gesture: Gesture;

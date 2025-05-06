@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import Information from '../../../components/information/Information.svelte';
+  import Information from '../../../components/ui/information/Information.svelte';
   import OutputGesture from '../../../components/output/OutputGesture.svelte';
   import { t } from './../../../i18n';
   import { state, stores } from '../../../lib/stores/Stores';

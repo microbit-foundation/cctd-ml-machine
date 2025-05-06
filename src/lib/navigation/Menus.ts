@@ -5,13 +5,13 @@
  */
 
 import { SvelteComponent } from 'svelte';
-import { writable } from 'svelte/store';
 import DataMenu from './../../components/menus/DataMenu.svelte';
 import NewTrainerMenu from './../../components/menus/TrainingMenu.svelte';
 import ModelMenu from './../../components/menus/ModelMenu.svelte';
 import ValidateMenu from './../../components/menus/ValidateMenu.svelte';
-import { Feature, hasFeature } from '../FeatureToggles';
 import { Paths, type PathType } from '../../router/Router';
+import { Feature, hasFeature } from '../FeatureToggles';
+import { writable } from 'svelte/store';
 
 export type MenuProperties = {
   title: string;

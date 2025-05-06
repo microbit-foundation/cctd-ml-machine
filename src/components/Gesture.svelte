@@ -1,5 +1,5 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -17,7 +17,7 @@
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
   import StandardButton from './buttons/StandardButton.svelte';
-  import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
+  import ImageSkeleton from './ui/skeletonloading/ImageSkeleton.svelte';
   import GestureCard from './GestureCard.svelte';
   import StaticConfiguration from '../StaticConfiguration';
   import Gesture from '../lib/domain/stores/gesture/Gesture';

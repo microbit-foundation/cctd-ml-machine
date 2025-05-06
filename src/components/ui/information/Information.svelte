@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { getInfoBoxColors } from './InformationComponentUtility';
+  import { getInfoBoxColors } from './Information';
 
   export let underlineIconText = true;
   export let boxOffset: { x: number; y: number } = { x: 0, y: 0 };

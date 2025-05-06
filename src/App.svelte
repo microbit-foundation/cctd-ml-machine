@@ -22,7 +22,6 @@
 </style>
 
 <script lang="ts">
-  import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
   import { fade } from 'svelte/transition';
   import { compatibility } from './lib/stores/uiStore';
   import LoadingSpinner from './components/LoadingSpinner.svelte';
@@ -39,6 +38,7 @@
   import SideBarMenuView from './components/views/SideBarMenuView.svelte';
   import BottomBarMenuView from './components/views/BottomBarMenuView.svelte';
   import PageContentView from './components/views/PageContentView.svelte';
+    import CookieBanner from './components/features/cookie-bannner/CookieBanner.svelte';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {

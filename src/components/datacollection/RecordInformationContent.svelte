@@ -1,13 +1,13 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
-  import { getInfoBoxColors } from '../information/InformationComponentUtility';
+  import ImageSkeleton from '../ui/skeletonloading/ImageSkeleton.svelte';
+  import { getInfoBoxColors } from '../ui/information/Information';
   export let isLightTheme = true;
 
   const colors = getInfoBoxColors(isLightTheme);

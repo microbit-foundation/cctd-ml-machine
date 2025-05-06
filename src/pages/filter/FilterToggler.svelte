@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import Information from '../../components/information/Information.svelte';
+  import Information from '../../components/ui/information/Information.svelte';
   import { type Filter } from '../../lib/domain/Filter';
   import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
   import { stores } from '../../lib/stores/Stores';

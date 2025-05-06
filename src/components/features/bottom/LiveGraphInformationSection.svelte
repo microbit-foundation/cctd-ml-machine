@@ -5,18 +5,18 @@
  -->
 
 <script lang="ts">
-  import { t } from '../../i18n';
-  import { Feature, hasFeature } from '../../lib/FeatureToggles';
-  import { state } from '../../lib/stores/Stores';
-  import Information from '../information/Information.svelte';
+    import { tr } from '../../../i18n';
+    import { Feature, hasFeature } from '../../../lib/FeatureToggles';
+    import { state } from '../../../lib/stores/Stores';
+    import Information from '../../ui/information/Information.svelte';
   import BottomPanelLiveDataValues from './BottomPanelLiveDataValues.svelte';
 </script>
 
 <div class="flex flex-row">
   <div>
     <Information
-      titleText={$t('footer.helpHeader')}
-      bodyText={$t('footer.helpContent')}
+      titleText={$tr('footer.helpHeader')}
+      bodyText={$tr('footer.helpContent')}
       isLightTheme={false}
       boxOffset={{ x: 25, y: -150 }} />
   </div>

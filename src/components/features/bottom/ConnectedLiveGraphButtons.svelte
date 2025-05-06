@@ -5,10 +5,11 @@
  -->
 
 <script lang="ts">
-  import { t } from '../../i18n';
-  import TypingUtils from '../../lib/TypingUtils';
-  import { state, stores } from '../../lib/stores/Stores';
-  import StandardButton from '../buttons/StandardButton.svelte';
+    import { tr } from "../../../i18n";
+    import { state, stores } from "../../../lib/stores/Stores";
+    import TypingUtils from "../../../lib/TypingUtils";
+    import StandardButton from "../../buttons/StandardButton.svelte";
+
 
   export let onOutputDisconnectButtonClicked: () => void;
   export let onOutputConnectButtonClicked: () => void;
@@ -25,7 +26,7 @@
       {#if !$state.isOutputConnected || $state.isOutputReady}
         <!-- Output MB is not in the connection process -->
         <StandardButton onClick={onOutputDisconnectButtonClicked} color="warning"
-          >{$t('menu.model.disconnect')}</StandardButton>
+          >{$tr('menu.model.disconnect')}</StandardButton>
       {:else}
         <StandardButton onClick={TypingUtils.emptyFunction} color="disabled">
           <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
@@ -33,7 +34,7 @@
       {/if}
     {:else}
       <StandardButton onClick={onOutputConnectButtonClicked}>
-        {$t('menu.model.connectOutputButton')}
+        {$tr('menu.model.connectOutputButton')}
       </StandardButton>
     {/if}
   {/if}
@@ -41,7 +42,7 @@
     {#if !$state.isInputConnected || $state.isInputReady}
       <!-- Input MB is not in the connection process -->
       <StandardButton onClick={onInputDisconnectButtonClicked} color="warning"
-        >{$t('footer.disconnectButton')}</StandardButton>
+        >{$tr('footer.disconnectButton')}</StandardButton>
     {:else}
       <StandardButton onClick={TypingUtils.emptyFunction} color="disabled">
         <img alt="loading" src="/imgs/loadingspinner.gif" style="height:24px" />

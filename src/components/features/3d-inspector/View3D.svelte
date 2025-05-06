@@ -5,8 +5,8 @@
  -->
 
 <script lang="ts">
-  import { t } from '../../i18n';
-  import { compatibility } from '../../lib/stores/uiStore';
+    import { tr } from '../../../i18n';
+    import { compatibility } from '../../../lib/stores/uiStore';
   import View3DUnsafe from './View3DUnsafe.svelte';
   import { type Vector3 } from './View3DUtility';
 
@@ -25,7 +25,7 @@
     class="justify-center items-center align-middle flex text-center"
     style="height: {height}px; width: {width}px;">
     <div style="height: min-content">
-      {$t('compatibility.webgl.notSupported')}
+      {$tr('compatibility.webgl.notSupported')}
     </div>
   </div>
 {/if}

@@ -6,17 +6,17 @@
 
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import { t } from '../../i18n';
-  import ConnectDialogContainer from '../connection-prompt/ConnectDialogContainer.svelte';
-  import Microbits from '../../lib/microbit-interfacing/Microbits';
-  import StandardButton from '../buttons/StandardButton.svelte';
-  import { startConnectionProcess } from '../../lib/stores/connectDialogStore';
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
-  import BaseDialog from '../dialogs/BaseDialog.svelte';
-  import View3DLive from '../3d-inspector/View3DLive.svelte';
-  import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
-  import { state } from '../../lib/stores/Stores';
+    import { tr } from '../../../i18n';
+    import ConnectDialogContainer from '../../connection-prompt/ConnectDialogContainer.svelte';
+    import { state } from '../../../lib/stores/Stores';
+    import { startConnectionProcess } from '../../../lib/stores/connectDialogStore';
+    import Microbits from '../../../lib/microbit-interfacing/Microbits';
+    import StandardButton from '../../buttons/StandardButton.svelte';
+    import MicrobitLiveGraph from '../../graphs/MicrobitLiveGraph.svelte';
+    import View3DLive from '../3d-inspector/View3DLive.svelte';
+    import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -46,7 +46,7 @@
     <!-- No input microbit assigned -->
     <div class="h-full w-full flex justify-center items-center bg-white">
       <StandardButton onClick={connectButtonClicked}>
-        {$t('footer.connectButtonNotConnected')}
+        {$tr('footer.connectButtonNotConnected')}
       </StandardButton>
     </div>
   {:else}
@@ -59,7 +59,7 @@
         <div
           class="absolute w-full h-full flex items-center justify-center text-secondarytext">
           <div class="bg-secondary bg-opacity-80 py-2 px-4 rounded-full" transition:fade>
-            <h1>{$t('footer.reconnecting')}</h1>
+            <h1>{$tr('footer.reconnecting')}</h1>
           </div>
         </div>
       {/if}

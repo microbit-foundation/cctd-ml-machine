@@ -1,5 +1,5 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -11,8 +11,8 @@
 </style>
 
 <script lang="ts">
-  import { t } from '../i18n';
-  import Information from '../components/information/Information.svelte';
+  import { t } from '../../i18n';
+  import Information from '../../components/information/Information.svelte';
 
   export let title: string;
   export let helpTitle: string;

@@ -1,15 +1,15 @@
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
 import { SvelteComponent } from 'svelte';
 import { writable } from 'svelte/store';
-import GestureMenu from '../../menus/DataMenu.svelte';
-import NewTrainerMenu from '../../menus/TrainingMenu.svelte';
-import NewModelMenu from '../../menus/ModelMenu.svelte';
-import ValidateMenu from '../../menus/ValidateMenu.svelte';
+import DataMenu from './../../components/menus/DataMenu.svelte';
+import NewTrainerMenu from './../../components/menus/TrainingMenu.svelte';
+import ModelMenu from './../../components/menus/ModelMenu.svelte';
+import ValidateMenu from './../../components/menus/ValidateMenu.svelte';
 import { Feature, hasFeature } from '../FeatureToggles';
 import { Paths, type PathType } from '../../router/Router';
 
@@ -35,7 +35,7 @@ class Menus {
             infoBubbleTitle: 'menu.data.helpHeading',
             infoBubbleContent: 'menu.data.helpBody',
             collapsedButtonContent: undefined,
-            expandedButtonContent: GestureMenu,
+            expandedButtonContent: DataMenu,
             navigationPath: Paths.DATA,
           },
           {
@@ -61,7 +61,7 @@ class Menus {
             infoBubbleTitle: 'menu.model.helpHeading',
             infoBubbleContent: 'menu.model.helpBody',
             collapsedButtonContent: undefined,
-            expandedButtonContent: NewModelMenu,
+            expandedButtonContent: ModelMenu,
             navigationPath: Paths.MODEL,
           },
         ]
@@ -71,7 +71,7 @@ class Menus {
             infoBubbleTitle: 'menu.data.helpHeading',
             infoBubbleContent: 'menu.data.helpBody',
             collapsedButtonContent: undefined,
-            expandedButtonContent: GestureMenu,
+            expandedButtonContent: DataMenu,
             navigationPath: Paths.DATA,
           },
           {
@@ -88,7 +88,7 @@ class Menus {
             infoBubbleTitle: 'menu.model.helpHeading',
             infoBubbleContent: 'menu.model.helpBody',
             collapsedButtonContent: undefined,
-            expandedButtonContent: NewModelMenu,
+            expandedButtonContent: ModelMenu,
             navigationPath: Paths.MODEL,
           },
         ],

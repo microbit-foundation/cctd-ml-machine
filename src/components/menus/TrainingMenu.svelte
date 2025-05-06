@@ -1,13 +1,13 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
-  import { t } from '../i18n';
-  import ImageSkeleton from '../components/skeletonloading/ImageSkeleton.svelte';
-  import { stores } from '../lib/stores/Stores';
+  import { t } from '../../i18n';
+  import ImageSkeleton from '../../components/skeletonloading/ImageSkeleton.svelte';
+  import { stores } from '../../lib/stores/Stores';
 
   const model = stores.getClassifier().getModel();
 </script>

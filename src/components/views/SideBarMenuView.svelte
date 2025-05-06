@@ -13,7 +13,7 @@
   import MediaQuery from '../MediaQuery.svelte';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
   import Menus from '../../lib/navigation/Menus';
-  import MenuButton from '../../menus/MenuButton.svelte';
+    import MenuButton from '../menus/MenuButton.svelte';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;

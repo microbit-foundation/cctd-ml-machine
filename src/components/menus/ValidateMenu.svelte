@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { stores } from '../lib/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
 
   const accuracy = stores.getValidationResults().getAccuracy();
 </script>

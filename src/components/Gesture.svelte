@@ -13,17 +13,17 @@
     microbitInteraction,
     MicrobitInteractions,
     chosenGesture,
-  } from '../script/stores/uiStore';
+  } from '../lib/stores/uiStore';
   import Recording from './Recording.svelte';
   import { t } from '../i18n';
   import StandardButton from './buttons/StandardButton.svelte';
   import ImageSkeleton from './skeletonloading/ImageSkeleton.svelte';
   import GestureCard from './GestureCard.svelte';
   import StaticConfiguration from '../StaticConfiguration';
-  import Gesture from '../script/domain/stores/gesture/Gesture';
-  import { state, stores } from '../script/stores/Stores';
-  import type { RecordingData } from '../script/domain/RecordingData';
-  import { startRecording } from '../script/utils/Recording';
+  import Gesture from '../lib/domain/stores/gesture/Gesture';
+  import { state, stores } from '../lib/stores/Stores';
+  import type { RecordingData } from '../lib/domain/RecordingData';
+  import { startRecording } from '../lib/utils/Recording';
   import GestureDot from './GestureDot.svelte';
 
   export let onNoMicrobitSelect: () => void;

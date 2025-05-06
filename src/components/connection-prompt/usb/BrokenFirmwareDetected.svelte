@@ -10,7 +10,7 @@
   import {
     ConnectDialogStates,
     connectionDialogState,
-  } from '../../../script/stores/connectDialogStore';
+  } from '../../../lib/stores/connectDialogStore';
 </script>
 
 <main>

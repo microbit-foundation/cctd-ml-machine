@@ -35,7 +35,7 @@
 </style>
 
 <script lang="ts">
-  import TypingUtils from './../../script/TypingUtils';
+  import TypingUtils from '../../lib/TypingUtils.js';
   import windi from './../../../windi.config.js';
   import Tooltip from '../base/Tooltip.svelte';
   import { fade } from 'svelte/transition';

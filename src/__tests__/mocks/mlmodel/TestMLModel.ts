@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { MLModel } from '../../../script/domain/MLModel';
-import type { Vector } from '../../../script/domain/Vector';
+import type { MLModel } from '../../../lib/domain/MLModel';
+import type { Vector } from '../../../lib/domain/Vector';
 
 class TestMLModel implements MLModel {
   constructor(private numberOfGestures: number) {}

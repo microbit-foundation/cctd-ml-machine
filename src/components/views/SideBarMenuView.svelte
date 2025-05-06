@@ -7,12 +7,12 @@
 <!-- Left-hand side menu -->
 <script lang="ts">
   import { get } from 'svelte/store';
-  import type { MenuProperties } from '../../script/navigation/Menus';
+  import type { MenuProperties } from '../../lib/navigation/Menus';
   import { currentPath, navigate, Paths } from '../../router/Router';
-  import { state } from '../../script/stores/Stores';
+  import { state } from '../../lib/stores/Stores';
   import MediaQuery from '../MediaQuery.svelte';
-  import { Feature, getFeature } from '../../script/FeatureToggles';
-  import Menus from '../../script/navigation/Menus';
+  import { Feature, getFeature } from '../../lib/FeatureToggles';
+  import Menus from '../../lib/navigation/Menus';
   import MenuButton from '../../menus/MenuButton.svelte';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {

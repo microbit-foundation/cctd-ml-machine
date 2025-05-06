@@ -9,8 +9,8 @@
  */
 import { MBSpecs } from 'microbyte';
 import { PinTurnOnState } from './components/output/PinSelectorUtil';
-import { type LayersModelTrainingSettings as NeuralNetworkModelTrainerSettings } from './script/mlmodels/LayersModelTrainer';
-import { HexOrigin } from './script/microbit-interfacing/HexOrigin';
+import { type LayersModelTrainingSettings as NeuralNetworkModelTrainerSettings } from './lib/mlmodels/LayersModelTrainer';
+import { HexOrigin } from './lib/microbit-interfacing/HexOrigin';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?

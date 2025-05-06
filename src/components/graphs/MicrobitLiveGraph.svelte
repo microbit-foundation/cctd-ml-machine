@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import StaticConfiguration from '../../StaticConfiguration';
-  import { stores } from '../../script/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
   import LiveGraph from './LiveGraph.svelte';
 
   const highlightedAxes = stores.getHighlightedAxes();

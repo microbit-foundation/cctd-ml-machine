@@ -2,15 +2,15 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
-import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
+import LayersModelTrainer from '../../lib/mlmodels/LayersModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
-import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
-import BaseVector from '../../script/domain/BaseVector';
+import KNNNonNormalizedModelTrainer from '../../lib/mlmodels/KNNNonNormalizedModelTrainer';
+import BaseVector from '../../lib/domain/BaseVector';
 
 describe('ML Model tests', async () => {
   describe('Layers Model', async () => {

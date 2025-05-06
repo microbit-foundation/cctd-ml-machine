@@ -11,10 +11,10 @@ import {
   writable,
   get,
 } from 'svelte/store';
-import LiveDataBuffer from '../../../script/domain/LiveDataBuffer';
-import { type LiveData } from '../../../script/domain/stores/LiveData';
-import BaseLiveDataVector from '../../../script/domain/BaseLiveDataVector';
-import BaseVector from '../../../script/domain/BaseVector';
+import LiveDataBuffer from '../../../lib/domain/LiveDataBuffer';
+import { type LiveData } from '../../../lib/domain/stores/LiveData';
+import BaseLiveDataVector from '../../../lib/domain/BaseLiveDataVector';
+import BaseVector from '../../../lib/domain/BaseVector';
 
 export class SyntheticLiveData implements LiveData<BaseLiveDataVector> {
   private store: Writable<BaseLiveDataVector>;

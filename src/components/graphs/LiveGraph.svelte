@@ -9,11 +9,11 @@
   import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
-  import { type LiveData } from '../../script/domain/stores/LiveData';
+  import { type LiveData } from '../../lib/domain/stores/LiveData';
   import StaticConfiguration from '../../StaticConfiguration';
-  import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-  import { type LiveDataVector } from '../../script/domain/stores/LiveDataVector';
-  import { state, stores } from '../../script/stores/Stores';
+  import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
+  import { type LiveDataVector } from '../../lib/domain/stores/LiveDataVector';
+  import { state, stores } from '../../lib/stores/Stores';
 
   /**
    * TimesSeries, but with the data array added.

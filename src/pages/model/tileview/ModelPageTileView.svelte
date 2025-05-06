@@ -6,12 +6,12 @@
 
 <script lang="ts">
   import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
-  import { areActionsAllowed, buttonPressed } from '../../../script/stores/uiStore';
+  import { areActionsAllowed, buttonPressed } from '../../../lib/stores/uiStore';
   import { onMount } from 'svelte';
-  import Microbits from '../../../script/microbit-interfacing/Microbits';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { state, stores } from '../../../script/stores/Stores';
+  import { state, stores } from '../../../lib/stores/Stores';
 
   const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation

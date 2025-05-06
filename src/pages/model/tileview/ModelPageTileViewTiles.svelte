@@ -6,12 +6,12 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { areActionsAllowed, buttonPressed } from '../../../script/stores/uiStore';
-  import Microbits from '../../../script/microbit-interfacing/Microbits';
+  import { areActionsAllowed, buttonPressed } from '../../../lib/stores/uiStore';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import MediaQuery from '../../../components/MediaQuery.svelte';
   import OutputGesture from '../../../components/output/OutputGesture.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { state, stores } from '../../../script/stores/Stores';
+  import { state, stores } from '../../../lib/stores/Stores';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;

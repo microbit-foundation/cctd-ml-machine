@@ -7,14 +7,14 @@
 <script lang="ts">
   import { type Unsubscriber, derived, get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { extractAxisFromAccelerometerData } from '../../../script/utils/graphUtils';
+  import { extractAxisFromAccelerometerData } from '../../../lib/utils/graphUtils';
   import StandardButton from '../../buttons/StandardButton.svelte';
   import arrowCreate from 'arrows-svg';
   import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
-  import { stores } from '../../../script/stores/Stores';
-  import { asAccelerometerData } from '../../../script/livedata/MicrobitAccelerometerData';
-  import type { Axis } from '../../../script/domain/Axis';
+  import { stores } from '../../../lib/stores/Stores';
+  import { asAccelerometerData } from '../../../lib/livedata/MicrobitAccelerometerData';
+  import type { Axis } from '../../../lib/domain/Axis';
   import { knnCurrentPoint } from './KnnModelGraph';
 
   const classifier = stores.getClassifier();

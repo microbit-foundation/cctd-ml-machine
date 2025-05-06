@@ -9,7 +9,7 @@
   import NewGestureButton from '../../components/NewGestureButton.svelte';
   import PleaseConnect from '../../components/PleaseConnect.svelte';
   import { t } from '../../i18n';
-  import { state } from '../../script/stores/Stores';
+  import { state } from '../../lib/stores/Stores';
   import { importExampleDataset } from './DataPage';
 </script>
 

@@ -8,9 +8,9 @@
   import { t } from '../i18n';
   import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
   import { onMount } from 'svelte';
-  import FileUtility from '../script/repository/FileUtility';
+  import FileUtility from '../lib/repository/FileUtility';
   import { get } from 'svelte/store';
-  import { stores } from '../script/stores/Stores';
+  import { stores } from '../lib/stores/Stores';
   import { hasSomeRecordingData } from './data/DataPage';
   import DataPageNoData from './data/DataPageNoData.svelte';
   import DataPageWithData from './data/DataPageWithData.svelte';

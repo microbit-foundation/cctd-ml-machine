@@ -101,7 +101,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { fly, fade } from 'svelte/transition';
-  import TypingUtils from '../script/TypingUtils';
+  import TypingUtils from '../lib/TypingUtils';
 
   // Props
   export let min = 0;

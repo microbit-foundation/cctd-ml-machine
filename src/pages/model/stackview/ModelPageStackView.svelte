@@ -5,13 +5,13 @@
  -->
 
 <script lang="ts">
-  import { buttonPressed, areActionsAllowed } from '../../../script/stores/uiStore';
+  import { buttonPressed, areActionsAllowed } from '../../../lib/stores/uiStore';
   import { onMount } from 'svelte';
-  import Microbits from '../../../script/microbit-interfacing/Microbits';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { state, stores } from '../../../script/stores/Stores';
+  import { state, stores } from '../../../lib/stores/Stores';
   import PleaseConnect from '../../../components/PleaseConnect.svelte';
 
   const classifier = stores.getClassifier();

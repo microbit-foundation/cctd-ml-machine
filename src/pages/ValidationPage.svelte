@@ -10,7 +10,7 @@
   import ValidationPageMainContent from './validation/ValidationPageMainContent.svelte';
   import { t } from '../i18n';
   import StandardButton from '../components/buttons/StandardButton.svelte';
-  import { startConnectionProcess } from '../script/stores/connectDialogStore';
+  import { startConnectionProcess } from '../lib/stores/connectDialogStore';
   import ConnectDialogContainer from '../components/connection-prompt/ConnectDialogContainer.svelte';
   import ValidationPageActionContent from './validation/ValidationPageActionContent.svelte';
 

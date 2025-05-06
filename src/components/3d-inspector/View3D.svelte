@@ -1,12 +1,12 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import { compatibility } from '../../script/stores/uiStore';
+  import { compatibility } from '../../lib/stores/uiStore';
   import View3DUnsafe from './View3DUnsafe.svelte';
   import { type Vector3 } from './View3DUtility';
 

@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { ModelTrainer } from '../../../script/domain/ModelTrainer';
-import type { TrainingDataRepository } from '../../../script/domain/TrainingDataRepository';
+import type { ModelTrainer } from '../../../lib/domain/ModelTrainer';
+import type { TrainingDataRepository } from '../../../lib/domain/TrainingDataRepository';
 import TestMLModel from './TestMLModel';
 
 class TestMLModelTrainer implements ModelTrainer<TestMLModel> {

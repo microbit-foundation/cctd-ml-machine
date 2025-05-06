@@ -5,9 +5,9 @@
  -->
 <script lang="ts">
   import StaticConfiguration from '../../StaticConfiguration';
-  import Model from '../../script/domain/stores/Model';
-  import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
-  import { stores } from '../../script/stores/Stores';
+  import Model from '../../lib/domain/stores/Model';
+  import LayersModelTrainer from '../../lib/mlmodels/LayersModelTrainer';
+  import { stores } from '../../lib/stores/Stores';
   import playgroundContext from './PlaygroundContext';
 
   const classifier = stores.getClassifier();

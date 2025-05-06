@@ -6,10 +6,10 @@
 <script lang="ts">
   import StandardButton from '../../../components/buttons/StandardButton.svelte';
   import ControlBar from '../../../components/control-bar/ControlBar.svelte';
-  import ModelRegistry from '../../../script/domain/ModelRegistry';
-  import { Feature, hasFeature } from '../../../script/FeatureToggles';
+  import ModelRegistry from '../../../lib/domain/ModelRegistry';
+  import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { t } from '../../../i18n';
-  import { stores } from '../../../script/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import NeuralNetworkDropdown from './NeuralNetworkDropdown.svelte';
   import KnnModelDropdown from './KNNModelDropdown.svelte';
   import { navigate, Paths } from '../../../router/Router';

@@ -1,5 +1,5 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -7,7 +7,7 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import * as THREE from 'three';
-  import Smoother from '../../script/utils/Smoother';
+  import Smoother from '../../lib/utils/Smoother';
   import Live3DUtility, { type Vector3 } from './View3DUtility';
 
   // TODO: The file has a lot of hardcoded (somewhat arbitrary) number values. Go through them and check if a refactor is in order

@@ -5,8 +5,8 @@
  -->
 
 <script lang="ts">
-  import Matrix from '../../script/domain/Matrix';
-  import { stores } from '../../script/stores/Stores';
+  import Matrix from '../../lib/domain/Matrix';
+  import { stores } from '../../lib/stores/Stores';
   import type { ValidationSetMatrix } from './ValidationPage';
   import { t } from '../../i18n';
 

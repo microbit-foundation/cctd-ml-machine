@@ -1,13 +1,13 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
   import StandardDropdownButton from '../../../components/buttons/StandardDropdownButton.svelte';
   import NumberSelector from '../../../components/NumberSelector.svelte';
-  import ModelRegistry from '../../../script/domain/ModelRegistry';
-  import { stores } from '../../../script/stores/Stores';
+  import ModelRegistry from '../../../lib/domain/ModelRegistry';
+  import { stores } from '../../../lib/stores/Stores';
   import { selectModel } from '../TrainingPage';
 
   export let isSelected: boolean;

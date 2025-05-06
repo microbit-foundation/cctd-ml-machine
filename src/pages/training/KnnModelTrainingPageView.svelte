@@ -4,10 +4,10 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { state, stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../lib/stores/Stores';
   import AxesFilterVectorView from '../../components/graphs/knngraph/AxesFilterVectorView.svelte';
   import { trainModel } from './TrainingPage';
-  import ModelRegistry from '../../script/domain/ModelRegistry';
+  import ModelRegistry from '../../lib/domain/ModelRegistry';
   import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
   import { t } from '../../i18n';
   import PredictionLegend from './PredictionLegend.svelte';

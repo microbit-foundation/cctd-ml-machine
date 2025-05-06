@@ -7,7 +7,7 @@
 <script lang="ts">
   import GestureCard from '../../components/GestureCard.svelte';
   import GestureDot from '../../components/GestureDot.svelte';
-  import type Gesture from '../../script/domain/stores/gesture/Gesture';
+  import type Gesture from '../../lib/domain/stores/gesture/Gesture';
 
   export let gesture: Gesture;
 </script>

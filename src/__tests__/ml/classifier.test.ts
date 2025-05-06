@@ -2,27 +2,27 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
 import { get, writable } from 'svelte/store';
-import BaseLiveDataVector from '../../script/domain/BaseLiveDataVector';
-import { ClassifierInput } from '../../script/domain/ClassifierInput';
-import Filters from '../../script/domain/Filters';
-import { stores } from '../../script/stores/Stores';
+import BaseLiveDataVector from '../../lib/domain/BaseLiveDataVector';
+import { ClassifierInput } from '../../lib/domain/ClassifierInput';
+import Filters from '../../lib/domain/Filters';
+import { stores } from '../../lib/stores/Stores';
 import TestMLModelTrainer from '../mocks/mlmodel/TestMLModelTrainer';
-import type { Filter } from '../../script/domain/Filter';
-import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
-import ClassifierFactory from '../../script/domain/ClassifierFactory';
-import LayersModelTrainer from '../../script/mlmodels/LayersModelTrainer';
+import type { Filter } from '../../lib/domain/Filter';
+import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
+import ClassifierFactory from '../../lib/domain/ClassifierFactory';
+import LayersModelTrainer from '../../lib/mlmodels/LayersModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import TestGestureRepository from '../mocks/TestGestureRepository';
-import Confidences from '../../script/domain/stores/Confidences';
+import Confidences from '../../lib/domain/stores/Confidences';
 import Snackbar from '../../components/snackbar/Snackbar';
-import BaseVector from '../../script/domain/BaseVector';
+import BaseVector from '../../lib/domain/BaseVector';
 
 describe('Classifier tests', () => {
   test('Changing matrix does not mark model as untrained', async () => {

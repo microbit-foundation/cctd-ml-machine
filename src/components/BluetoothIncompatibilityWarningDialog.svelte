@@ -7,8 +7,8 @@
 <script lang="ts">
   import { t } from '../i18n';
   import StandardDialog from './dialogs/StandardDialog.svelte';
-  import { isBluetoothWarningDialogOpen } from '../script/stores/uiStore';
-  import { usbCompatibilityList } from '../script/compatibility/CompatibilityList';
+  import { isBluetoothWarningDialogOpen } from '../lib/stores/uiStore';
+  import { usbCompatibilityList } from '../lib/compatibility/CompatibilityList';
 </script>
 
 <StandardDialog

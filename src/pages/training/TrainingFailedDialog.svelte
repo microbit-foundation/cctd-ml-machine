@@ -9,8 +9,8 @@
   import StandardDialog from '../../components/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
 
-  import { TrainingStatus } from '../../script/domain/stores/Model';
-  import { stores } from '../../script/stores/Stores';
+  import { TrainingStatus } from '../../lib/domain/stores/Model';
+  import { stores } from '../../lib/stores/Stores';
 
   let isFailedTrainingDialogOpen = false;
 

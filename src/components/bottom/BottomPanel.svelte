@@ -8,15 +8,15 @@
   import { fade } from 'svelte/transition';
   import { t } from '../../i18n';
   import ConnectDialogContainer from '../connection-prompt/ConnectDialogContainer.svelte';
-  import Microbits from '../../script/microbit-interfacing/Microbits';
+  import Microbits from '../../lib/microbit-interfacing/Microbits';
   import StandardButton from '../buttons/StandardButton.svelte';
-  import { startConnectionProcess } from '../../script/stores/connectDialogStore';
+  import { startConnectionProcess } from '../../lib/stores/connectDialogStore';
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
   import BaseDialog from '../dialogs/BaseDialog.svelte';
   import View3DLive from '../3d-inspector/View3DLive.svelte';
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
-  import { state } from '../../script/stores/Stores';
+  import { state } from '../../lib/stores/Stores';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import BaseVector from '../../script/domain/BaseVector';
-import type { TrainingData } from '../../script/domain/ModelTrainer';
-import type { TrainingDataRepository } from '../../script/domain/TrainingDataRepository';
-import type { Vector } from '../../script/domain/Vector';
+import BaseVector from '../../lib/domain/BaseVector';
+import type { TrainingData } from '../../lib/domain/ModelTrainer';
+import type { TrainingDataRepository } from '../../lib/domain/TrainingDataRepository';
+import type { Vector } from '../../lib/domain/Vector';
 
 class TestTrainingDataRepository implements TrainingDataRepository {
   getTrainingDataMean(): Vector {

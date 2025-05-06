@@ -1,12 +1,12 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
-  import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-  import { stores } from '../../script/stores/Stores';
+  import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
+  import { stores } from '../../lib/stores/Stores';
   import View3D from './View3D.svelte';
   import { type Vector3 } from './View3DUtility';
 

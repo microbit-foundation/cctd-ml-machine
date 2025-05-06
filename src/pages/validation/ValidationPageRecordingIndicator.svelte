@@ -6,8 +6,8 @@
 
 <script lang="ts">
   import MediaQuery from '../../components/MediaQuery.svelte';
-  import type { GestureID } from '../../script/domain/stores/gesture/Gesture';
-  import { stores } from '../../script/stores/Stores';
+  import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
+  import { stores } from '../../lib/stores/Stores';
   import StaticConfiguration from '../../StaticConfiguration';
 
   export let gestureId: GestureID;

@@ -103,15 +103,15 @@
 
 <script lang="ts">
   import { SmoothieChart, TimeSeries } from 'smoothie';
-  import { type LiveData } from '../../../script/domain/stores/LiveData';
-  import { type LiveDataVector } from '../../../script/domain/stores/LiveDataVector';
+  import { type LiveData } from '../../../lib/domain/stores/LiveData';
+  import { type LiveDataVector } from '../../../lib/domain/stores/LiveDataVector';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import SmoothedLiveData from '../../../script/livedata/SmoothedLiveData';
+  import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import { onDestroy, onMount } from 'svelte';
   import { type Unsubscriber } from 'svelte/motion';
   import DimensionLabels from '../../graphs/DimensionLabels.svelte';
   import liveDataSynthesizer from './LiveDataSynthesizer';
-  import { stores } from '../../../script/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
 
   const classifier = stores.getClassifier();
 

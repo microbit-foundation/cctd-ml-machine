@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { state, stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../lib/stores/Stores';
 
   const gestures = stores.getGestures();
   const confidences = stores.getConfidences();

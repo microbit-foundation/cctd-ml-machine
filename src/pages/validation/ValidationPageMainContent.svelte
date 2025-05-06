@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { stores } from '../../script/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
   import ValidationGestureNameCard from './ValidationGestureNameCard.svelte';
   import ValidationPageInformationLabels from './ValidationPageInformationLabels.svelte';
   import ValidationGestureSelectGestureCard from './ValidationGestureSelectGestureCard.svelte';
@@ -13,7 +13,7 @@
   import ValidationPageRecordingIndicator from './ValidationPageRecordingIndicator.svelte';
   import { isValidationSetEmpty } from './ValidationPage';
   import ValidationPageTutorial from './ValidationPageTutorial.svelte';
-  import { chosenGesture } from '../../script/stores/uiStore';
+  import { chosenGesture } from '../../lib/stores/uiStore';
   import { tr } from '../../i18n';
 
   const gestures = stores.getGestures();

@@ -6,18 +6,18 @@
 
 <script lang="ts">
   import GestureCard from '../../components/GestureCard.svelte';
-  import type Gesture from '../../script/domain/stores/gesture/Gesture';
+  import type Gesture from '../../lib/domain/stores/gesture/Gesture';
   import {
     buttonPressed,
     chosenGesture,
     microbitInteraction,
     MicrobitInteractions,
-  } from '../../script/stores/uiStore';
+  } from '../../lib/stores/uiStore';
   import { t } from '../../i18n';
-  import { state, stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../lib/stores/Stores';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { get } from 'svelte/store';
-  import Logger from '../../script/utils/Logger';
+  import Logger from '../../lib/utils/Logger';
 
   export let gesture: Gesture;
   export let onNoMicrobitSelect: () => void;

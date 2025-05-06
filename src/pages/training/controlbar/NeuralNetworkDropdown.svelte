@@ -1,5 +1,5 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -8,8 +8,8 @@
   import StandardDropdownButton from '../../../components/buttons/StandardDropdownButton.svelte';
   import windi from './../../../../windi.config.js';
   import NumberSelector from '../../../components/NumberSelector.svelte';
-  import { stores } from '../../../script/stores/Stores.js';
-  import ModelRegistry from '../../../script/domain/ModelRegistry.js';
+  import { stores } from '../../../lib/stores/Stores.js';
+  import ModelRegistry from '../../../lib/domain/ModelRegistry.js';
   import { selectModel } from '../TrainingPage.js';
 
   export let isSelected: boolean;

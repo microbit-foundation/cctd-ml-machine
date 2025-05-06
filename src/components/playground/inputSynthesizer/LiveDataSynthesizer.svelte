@@ -11,7 +11,7 @@
   import SynthesizerToggleButton from './SynthesizerToggleButton.svelte';
   import SpeedSliders from './SpeedSliders.svelte';
   import NoOfAxesCounter from './NoOfAxesCounter.svelte';
-  import { stores } from '../../../script/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   let keycnt = 0;
   stores.subscribe(e => keycnt++);
 </script>

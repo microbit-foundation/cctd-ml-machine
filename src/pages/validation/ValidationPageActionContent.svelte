@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import { stores } from '../../script/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
   import { derived, writable, type Readable } from 'svelte/store';
   import ValidationMatrix from './ValidationMatrix.svelte';
   import {

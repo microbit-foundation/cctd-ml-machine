@@ -11,9 +11,9 @@
 </style>
 
 <script lang="ts">
-  import { areActionsAllowed } from '../script/stores/uiStore';
+  import { areActionsAllowed } from '../lib/stores/uiStore';
   import { t } from '../i18n';
-  import { stores } from '../script/stores/Stores';
+  import { stores } from '../lib/stores/Stores';
 
   const gestures = stores.getGestures();
 

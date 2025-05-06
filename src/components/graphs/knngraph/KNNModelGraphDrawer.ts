@@ -6,8 +6,8 @@
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import StaticConfiguration from '../../../StaticConfiguration';
 import { knnHighlightedPoint } from './KnnPointToolTip';
-import { type Point3D, type Point3DTransformed } from '../../../script/utils/graphUtils';
-import { state, stores } from '../../../script/stores/Stores';
+import { type Point3D, type Point3DTransformed } from '../../../lib/utils/graphUtils';
+import { state, stores } from '../../../lib/stores/Stores';
 import { get } from 'svelte/store';
 import * as d3 from 'd3';
 import { knnNeighbours } from './KnnModelGraph';

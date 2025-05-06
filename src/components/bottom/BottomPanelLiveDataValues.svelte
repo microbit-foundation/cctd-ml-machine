@@ -6,9 +6,9 @@
 
 <script lang="ts">
   import { derived } from 'svelte/store';
-  import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-  import type { Axis } from '../../script/domain/Axis';
-  import { stores } from '../../script/stores/Stores';
+  import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
+  import type { Axis } from '../../lib/domain/Axis';
+  import { stores } from '../../lib/stores/Stores';
   import StaticConfiguration from '../../StaticConfiguration';
   import FixedNumber from '../base/FixedNumber.svelte';
 

@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type Gesture from '../script/domain/stores/gesture/Gesture';
+  import type Gesture from '../lib/domain/stores/gesture/Gesture';
 
   let isDotHovered = false;
   export let gesture: Gesture;

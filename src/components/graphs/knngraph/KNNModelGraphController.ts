@@ -3,20 +3,20 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { type TrainingData } from '../../../script/domain/ModelTrainer';
+import { type TrainingData } from '../../../lib/domain/ModelTrainer';
 import { type Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { type GraphDrawConfig } from './KNNModelGraphDrawer';
 import {
   type MicrobitAccelerometerData,
   MicrobitAccelerometerDataVector,
-} from '../../../script/livedata/MicrobitAccelerometerData';
-import { type TimestampedData } from '../../../script/domain/LiveDataBuffer';
-import Filters from '../../../script/domain/Filters';
+} from '../../../lib/livedata/MicrobitAccelerometerData';
+import { type TimestampedData } from '../../../lib/domain/LiveDataBuffer';
+import Filters from '../../../lib/domain/Filters';
 import StaticConfiguration from '../../../StaticConfiguration';
-import { stores } from '../../../script/stores/Stores';
-import { FilterType } from '../../../script/domain/FilterTypes';
-import BaseVector from '../../../script/domain/BaseVector';
-import type { Point3D } from '../../../script/utils/graphUtils';
+import { stores } from '../../../lib/stores/Stores';
+import { FilterType } from '../../../lib/domain/FilterTypes';
+import BaseVector from '../../../lib/domain/BaseVector';
+import type { Point3D } from '../../../lib/utils/graphUtils';
 import { knnCurrentPoint, knnTrainingDataPoints } from './KnnModelGraph';
 
 type UpdateCall = {

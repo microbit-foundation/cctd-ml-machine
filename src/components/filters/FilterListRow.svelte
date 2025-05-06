@@ -5,8 +5,8 @@
  -->
 <script lang="ts">
   import { Paths, navigate } from '../../router/Router';
-  import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
-  import { stores } from '../../script/stores/Stores';
+  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
+  import { stores } from '../../lib/stores/Stores';
   import {
     highlightedFilter,
     showHighlighted,

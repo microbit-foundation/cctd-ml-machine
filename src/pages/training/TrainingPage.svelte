@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
-  import { state, stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../lib/stores/Stores';
   import TrainingPageModelView from './TrainingPageModelView.svelte';
   import InsufficientData from './InsufficientData.svelte';
   import PleaseConnect from '../../components/PleaseConnect.svelte';

@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import { slide } from 'svelte/transition';
-  import { stores } from '../../script/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
   const snackbar = stores.getSnackbar();
   $: isOpen = $snackbar !== undefined;
   $: snackbarText = $snackbar;

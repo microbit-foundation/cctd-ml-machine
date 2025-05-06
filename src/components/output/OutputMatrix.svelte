@@ -52,11 +52,11 @@
 </style>
 
 <script lang="ts">
-  import { type GestureData } from '../../script/domain/stores/gesture/Gesture';
+  import { type GestureData } from '../../lib/domain/stores/gesture/Gesture';
 
   // TODO: Shares a lot with 'PatternMatrix'. Extract 'Matrix' component and reuse
-  import Microbits from '../../script/microbit-interfacing/Microbits';
-  import { stores } from '../../script/stores/Stores';
+  import Microbits from '../../lib/microbit-interfacing/Microbits';
+  import { stores } from '../../lib/stores/Stores';
 
   // TODO: Generalize such that it becomes ConnectionBehaviour.setMatrixTo() instead
   // TODO: Which is used. The function defined here. Or the one in 'OutputGesture.svelte'

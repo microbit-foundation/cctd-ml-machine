@@ -19,15 +19,15 @@
   import OutputMatrix from './OutputMatrix.svelte';
   import { t } from '../../i18n';
   import OutputSoundSelector from './OutputSoundSelector.svelte';
-  import Microbits from '../../script/microbit-interfacing/Microbits';
+  import Microbits from '../../lib/microbit-interfacing/Microbits';
   import ImageSkeleton from '../skeletonloading/ImageSkeleton.svelte';
   import GestureCard from '../GestureCard.svelte';
   import PinSelector from './PinSelector.svelte';
   import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../information/Information.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
-  import Gesture, { type SoundData } from '../../script/domain/stores/gesture/Gesture';
-  import { state, stores } from '../../script/stores/Stores';
+  import Gesture, { type SoundData } from '../../lib/domain/stores/gesture/Gesture';
+  import { state, stores } from '../../lib/stores/Stores';
   import { MBSpecs } from 'microbyte';
   import GestureDot from '../GestureDot.svelte';
 

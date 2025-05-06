@@ -9,8 +9,8 @@
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import { t } from '../../i18n';
   import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
-  import { stores } from '../../script/stores/Stores';
+  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
+  import { stores } from '../../lib/stores/Stores';
   import { navigate, Paths } from '../../router/Router';
 
   let isFilterInspectorDialogOpen = false;

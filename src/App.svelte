@@ -24,14 +24,14 @@
 <script lang="ts">
   import CookieBanner from './components/cookie-bannner/CookieBanner.svelte';
   import { fade } from 'svelte/transition';
-  import { compatibility } from './script/stores/uiStore';
+  import { compatibility } from './lib/stores/uiStore';
   import LoadingSpinner from './components/LoadingSpinner.svelte';
   import BluetoothIncompatibilityWarningDialog from './components/BluetoothIncompatibilityWarningDialog.svelte';
-  import CookieManager from './script/CookieManager';
+  import CookieManager from './lib/CookieManager';
   import Router from './router/Router.svelte';
-  import { Feature, getFeature } from './script/FeatureToggles';
-  import { welcomeLog } from './script/utils/Logger';
-  import { DeviceRequestStates, state } from './script/stores/Stores';
+  import { Feature, getFeature } from './lib/FeatureToggles';
+  import { welcomeLog } from './lib/utils/Logger';
+  import { DeviceRequestStates, state } from './lib/stores/Stores';
   import SnackbarView from './components/snackbar/SnackbarView.svelte';
   import MediaQuery from './components/MediaQuery.svelte';
   import IncompatiblePlatformView from './components/views/IncompatiblePlatformView.svelte';

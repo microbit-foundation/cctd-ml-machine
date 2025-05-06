@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import { derived } from 'svelte/store';
-  import { stores } from '../../../script/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import FixedNumber from '../../base/FixedNumber.svelte';
 

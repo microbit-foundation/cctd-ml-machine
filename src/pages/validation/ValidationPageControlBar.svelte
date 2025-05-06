@@ -8,7 +8,7 @@
   import StandardButton from '../../components/buttons/StandardButton.svelte';
   import ControlBar from '../../components/control-bar/ControlBar.svelte';
   import { tr } from '../../i18n';
-  import { stores } from '../../script/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
   const validationSets = stores.getValidationSets();
   $: isClearDisabled = $validationSets.length === 0;
   const clearValidationSets = () => validationSets.clear();

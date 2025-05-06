@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../i18n';
-  import { stores } from '../script/stores/Stores';
+  import { stores } from '../lib/stores/Stores';
 
   const gestures = stores.getGestures();
 

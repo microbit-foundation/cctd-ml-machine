@@ -7,7 +7,7 @@
 <script lang="ts">
   import { t } from '../i18n';
   import ImageSkeleton from '../components/skeletonloading/ImageSkeleton.svelte';
-  import { stores } from '../script/stores/Stores';
+  import { stores } from '../lib/stores/Stores';
 
   const model = stores.getClassifier().getModel();
 </script>

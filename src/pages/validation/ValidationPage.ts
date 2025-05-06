@@ -5,10 +5,10 @@
  */
 
 import { derived } from 'svelte/store';
-import Matrix from '../../script/domain/Matrix';
-import type { GestureData } from '../../script/domain/stores/gesture/Gesture';
-import type { ValidationResult } from '../../script/domain/stores/ValidationResults';
-import { stores } from '../../script/stores/Stores';
+import Matrix from '../../lib/domain/Matrix';
+import type { GestureData } from '../../lib/domain/stores/gesture/Gesture';
+import type { ValidationResult } from '../../lib/domain/stores/ValidationResults';
+import { stores } from '../../lib/stores/Stores';
 
 export interface ValidationSetMatrix {
   matrix: Matrix<number>;

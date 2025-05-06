@@ -5,17 +5,17 @@
  -->
 
 <script lang="ts">
-  import { horizontalSlide } from '../script/transitions';
+  import { horizontalSlide } from '../lib/transitions';
   import StandardButton from './buttons/StandardButton.svelte';
   import { t } from '../i18n';
   import {
     ConnectDialogStates,
     connectionDialogState,
-  } from '../script/stores/connectDialogStore';
+  } from '../lib/stores/connectDialogStore';
   import StaticConfiguration from '../StaticConfiguration';
-  import Microbits from '../script/microbit-interfacing/Microbits';
-  import { HexOrigin } from '../script/microbit-interfacing/HexOrigin';
-  import { DeviceRequestStates } from '../script/stores/Stores';
+  import Microbits from '../lib/microbit-interfacing/Microbits';
+  import { HexOrigin } from '../lib/microbit-interfacing/HexOrigin';
+  import { DeviceRequestStates } from '../lib/stores/Stores';
   let hasBeenClosed = false;
   export let targetRole: 'INPUT' | 'OUTPUT';
   let showMakeCodeUpdateMessage =

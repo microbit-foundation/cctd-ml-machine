@@ -13,14 +13,14 @@
     btPatternInput,
     btPatternOutput,
     isInputPatternValid,
-  } from '../../../script/stores/connectionStore';
+  } from '../../../lib/stores/connectionStore';
   import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
-  import Microbits from '../../../script/microbit-interfacing/Microbits';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import Logger from '../../../script/utils/Logger';
+  import Logger from '../../../lib/utils/Logger';
   import { MBSpecs } from 'microbyte';
-  import { DeviceRequestStates, state } from '../../../script/stores/Stores';
+  import { DeviceRequestStates, state } from '../../../lib/stores/Stores';
 
   // callbacks
   export let deviceState: DeviceRequestStates;

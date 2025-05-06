@@ -8,12 +8,12 @@
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
-  import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
-  import FilterGraphLimits from '../../script/utils/FilterLimits';
-  import { type GestureData } from '../../script/domain/stores/gesture/Gesture';
+  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
+  import FilterGraphLimits from '../../lib/utils/FilterLimits';
+  import { type GestureData } from '../../lib/domain/stores/gesture/Gesture';
   import StaticConfiguration from '../../StaticConfiguration';
-  import { state, stores } from '../../script/stores/Stores';
-  import type { RecordingData } from '../../script/domain/RecordingData';
+  import { state, stores } from '../../lib/stores/Stores';
+  import type { RecordingData } from '../../lib/domain/RecordingData';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;

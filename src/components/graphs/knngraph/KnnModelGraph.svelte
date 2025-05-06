@@ -9,10 +9,10 @@
   import * as d3 from 'd3';
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
-  import { stores } from '../../../script/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import { get } from 'svelte/store';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { FilterType } from '../../../script/domain/FilterTypes';
+  import { FilterType } from '../../../lib/domain/FilterTypes';
 
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();

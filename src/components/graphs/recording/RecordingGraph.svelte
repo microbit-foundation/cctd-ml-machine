@@ -18,11 +18,11 @@
   } from 'chart.js';
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
   import RecordingGraphPointData from './RecordingGraphPointData.svelte';
-  import { Feature, hasFeature } from '../../../script/FeatureToggles';
+  import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { stores } from '../../../script/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import { getRecordingChartDatasets, type ChartDataset } from './RecordingGraph';
-  import type { RecordingData } from '../../../script/domain/RecordingData';
+  import type { RecordingData } from '../../../lib/domain/RecordingData';
 
   export let recording: RecordingData;
   const samples = recording.samples;

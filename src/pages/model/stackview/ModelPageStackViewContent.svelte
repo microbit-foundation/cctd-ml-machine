@@ -8,7 +8,7 @@
   import Information from '../../../components/information/Information.svelte';
   import OutputGesture from '../../../components/output/OutputGesture.svelte';
   import { t } from './../../../i18n';
-  import { state, stores } from '../../../script/stores/Stores';
+  import { state, stores } from '../../../lib/stores/Stores';
 
   const gestures = stores.getGestures();
   // Bool flags to know whether output microbit popup should be show

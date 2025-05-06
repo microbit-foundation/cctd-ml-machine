@@ -7,9 +7,9 @@
 <script lang="ts">
   import GestureCard from '../../components/GestureCard.svelte';
   import Recording from '../../components/Recording.svelte';
-  import type { GestureID } from '../../script/domain/stores/gesture/Gesture';
-  import type Gesture from '../../script/domain/stores/gesture/Gesture';
-  import { stores } from '../../script/stores/Stores';
+  import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
+  import type Gesture from '../../lib/domain/stores/gesture/Gesture';
+  import { stores } from '../../lib/stores/Stores';
 
   export let gesture: Gesture;
 

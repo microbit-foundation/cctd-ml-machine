@@ -5,13 +5,13 @@
  -->
 
 <script lang="ts">
-  import { horizontalSlide } from '../script/transitions';
+  import { horizontalSlide } from '../lib/transitions';
   import StandardButton from '../components/buttons/StandardButton.svelte';
   import { t } from '../i18n';
-  import { btPatternInput, btPatternOutput } from '../script/stores/connectionStore';
-  import Microbits from '../script/microbit-interfacing/Microbits';
+  import { btPatternInput, btPatternOutput } from '../lib/stores/connectionStore';
+  import Microbits from '../lib/microbit-interfacing/Microbits';
   import { MBSpecs } from 'microbyte';
-  import { DeviceRequestStates, state } from '../script/stores/Stores';
+  import { DeviceRequestStates, state } from '../lib/stores/Stores';
 
   let reconnectText: string;
   let reconnectButtonText: string;

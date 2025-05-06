@@ -9,7 +9,7 @@ import { t as translate } from 'svelte-i18n';
 export { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
 import browserLang from 'browser-lang';
-import PersistantWritable from './script/repository/PersistantWritable';
+import PersistantWritable from './lib/repository/PersistantWritable';
 
 export const tr = translate; // make intellisense a little better
 

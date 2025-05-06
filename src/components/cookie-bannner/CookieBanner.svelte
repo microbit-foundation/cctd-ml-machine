@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { fly } from 'svelte/transition';
-  import CookieManager from '../../script/CookieManager';
+  import CookieManager from '../../lib/CookieManager';
   import { t } from '../../i18n';
   import { locale, locales } from 'svelte-i18n';
   import StandardDialog from '../dialogs/StandardDialog.svelte';

@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import { onMount } from 'svelte';
-  import FilterTypes from '../../script/domain/FilterTypes';
+  import FilterTypes from '../../lib/domain/FilterTypes';
   import { anchorElement } from './FilterList';
   import FilterListRow from './FilterListRow.svelte';
 

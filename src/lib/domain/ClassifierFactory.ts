@@ -11,10 +11,10 @@ import { type TrainerConsumer } from '../repository/LocalStorageClassifierReposi
 import Gesture, { type GestureID } from './stores/gesture/Gesture';
 import Model from './stores/Model';
 import type { MLModel } from './MLModel';
-import type Snackbar from '../../components/snackbar/Snackbar';
 import { t } from '../../i18n';
 import BaseVector from './BaseVector';
 import type { RecordingData } from './RecordingData';
+import type Snackbar from '../../components/features/snackbar/Snackbar';
 
 class ClassifierFactory {
   public buildClassifier(

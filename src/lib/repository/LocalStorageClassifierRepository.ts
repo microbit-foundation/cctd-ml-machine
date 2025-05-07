@@ -3,25 +3,21 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import PersistantWritable from './PersistantWritable';
 import { type Readable, type Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
 import type { MLModel } from '../domain/MLModel';
 import type { ModelTrainer } from '../domain/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
 import LocalStorageRepositories from './LocalStorageRepositories';
-import Filters from '../domain/Filters';
-import FilterTypes, { FilterType } from '../domain/FilterTypes';
 import Gesture, { type GestureID } from '../domain/stores/gesture/Gesture';
 import Classifier from '../domain/stores/Classifier';
 import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
 import Confidences from '../domain/stores/Confidences';
 import type { ClassifierRepository } from '../domain/ClassifierRepository';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
-import type Snackbar from '../../components/snackbar/Snackbar';
 import { t } from '../../i18n';
 import type { FiltersRepository } from '../domain/FiltersRepository';
-import type PredictedPointLiveData from '../livedata/PredictedPointLiveData';
+import type Snackbar from '../../components/features/snackbar/Snackbar';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,

@@ -9,10 +9,9 @@ import Confidences from '../domain/stores/Confidences';
 import LocalStorageTrainingDataRepository from './LocalStorageTrainingDataRepository';
 import type { Repositories } from '../domain/Repositories';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
-import type Snackbar from '../../components/snackbar/Snackbar';
 import { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import type { FiltersRepository } from '../domain/FiltersRepository';
-import type PredictedPointLiveData from '../livedata/PredictedPointLiveData';
+import type Snackbar from '../../components/features/snackbar/Snackbar';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;

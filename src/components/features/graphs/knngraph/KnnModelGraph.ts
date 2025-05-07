@@ -5,8 +5,8 @@
  */
 
 import { writable } from 'svelte/store';
-import type { Vector } from '../../../lib/domain/Vector';
-import type { LabelledPoint } from '../../../lib/mlmodels/KNNNonNormalizedMLModel';
+import type { Vector } from '../../../../lib/domain/Vector';
+import type { LabelledPoint } from '../../../../lib/mlmodels/KNNNonNormalizedMLModel';
 
 // TODO: Could be part of a greater 'currently predicted point' thing, that is updated by the engine.
 export const knnCurrentPoint = writable<undefined | Vector>(undefined);

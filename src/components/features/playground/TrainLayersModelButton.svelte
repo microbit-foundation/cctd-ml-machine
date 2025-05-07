@@ -4,10 +4,10 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import StaticConfiguration from '../../StaticConfiguration';
-  import Model from '../../lib/domain/stores/Model';
-  import LayersModelTrainer from '../../lib/mlmodels/LayersModelTrainer';
-  import { stores } from '../../lib/stores/Stores';
+  import type Model from '../../../lib/domain/stores/Model';
+  import LayersModelTrainer from '../../../lib/mlmodels/LayersModelTrainer';
+  import { stores } from '../../../lib/stores/Stores';
+  import StaticConfiguration from '../../../StaticConfiguration';
   import playgroundContext from './PlaygroundContext';
 
   const classifier = stores.getClassifier();

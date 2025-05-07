@@ -7,7 +7,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { t } from '../../i18n';
-  import GestureCard from '../GestureCard.svelte';
+  import GestureCard from '../ui/Card.svelte';
 
   export let onSoundSelection: (
     sound: { name: string; path: string; id: string } | undefined,

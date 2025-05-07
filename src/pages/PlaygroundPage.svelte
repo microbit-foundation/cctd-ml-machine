@@ -5,11 +5,11 @@
  -->
 
 <script lang="ts">
-  import PlaygroundLog from '../components/playground/PlaygroundLog.svelte';
-  import MicrobitAccelerometerDataSynthesizer from '../components/playground/inputSynthesizer/LiveDataSynthesizer.svelte';
-  import LiveDataBufferUtilizationPercentage from '../components/playground/LiveDataBufferUtilizationPercentage.svelte';
-  import StoresDisplay from '../components/playground/StoresDisplay.svelte';
   import { onMount } from 'svelte';
+  import LiveDataSynthesizer from '../components/features/playground/inputSynthesizer/LiveDataSynthesizer.svelte';
+  import LiveDataBufferUtilizationPercentage from '../components/features/playground/LiveDataBufferUtilizationPercentage.svelte';
+  import PlaygroundLog from '../components/features/playground/PlaygroundLog.svelte';
+  import StoresDisplay from '../components/features/playground/StoresDisplay.svelte';
 
   let isPlaygroundActive = false;
   onMount(() => {
@@ -26,7 +26,7 @@
         <PlaygroundLog />
       </div>
     </div>
-    <MicrobitAccelerometerDataSynthesizer />
+    <LiveDataSynthesizer />
     <LiveDataBufferUtilizationPercentage />
   </div>
 {/if}

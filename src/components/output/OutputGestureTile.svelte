@@ -18,7 +18,7 @@
   // IMPORT AND DEFAULTS
   import { t } from '../../i18n';
   import Gesture from '../../lib/domain/stores/gesture/Gesture';
-  import GestureCard from '../GestureCard.svelte';
+  import GestureCard from '../ui/Card.svelte';
   import Information from '../ui/information/Information.svelte';
 
   // Variables for component

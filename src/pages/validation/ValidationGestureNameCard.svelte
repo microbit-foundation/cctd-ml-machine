@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import GestureCard from '../../components/GestureCard.svelte';
+  import GestureCard from '../../components/ui/Card.svelte';
   import GestureDot from '../../components/GestureDot.svelte';
   import type Gesture from '../../lib/domain/stores/gesture/Gesture';
 

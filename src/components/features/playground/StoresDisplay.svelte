@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { stores } from '../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import PlaygroundGestureView from './PlaygroundGestureView.svelte';
 
   const classifier = stores.getClassifier();

@@ -21,7 +21,7 @@
   import OutputSoundSelector from './OutputSoundSelector.svelte';
   import Microbits from '../../lib/microbit-interfacing/Microbits';
   import ImageSkeleton from '../ui/skeletonloading/ImageSkeleton.svelte';
-  import GestureCard from '../GestureCard.svelte';
+  import GestureCard from '../ui/Card.svelte';
   import PinSelector from './PinSelector.svelte';
   import StaticConfiguration from '../../StaticConfiguration';
   import Information from '../ui/information/Information.svelte';

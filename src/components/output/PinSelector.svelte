@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import GestureCard from '../GestureCard.svelte';
+  import GestureCard from '../ui/Card.svelte';
   import StaticConfiguration from '../../StaticConfiguration';
   import { PinTurnOnState } from './PinSelectorUtil';
   import { t } from '../../i18n';

@@ -31,7 +31,6 @@
   import { Feature, getFeature } from './lib/FeatureToggles';
   import { welcomeLog } from './lib/utils/Logger';
   import { DeviceRequestStates, state } from './lib/stores/Stores';
-  import SnackbarView from './components/snackbar/SnackbarView.svelte';
   import MediaQuery from './components/MediaQuery.svelte';
   import IncompatiblePlatformView from './components/views/IncompatiblePlatformView.svelte';
   import OverlayView from './components/views/OverlayView.svelte';
@@ -39,6 +38,7 @@
   import BottomBarMenuView from './components/views/BottomBarMenuView.svelte';
   import PageContentView from './components/views/PageContentView.svelte';
   import CookieBanner from './components/features/cookie-bannner/CookieBanner.svelte';
+  import SnackbarView from './components/features/snackbar/SnackbarView.svelte';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {

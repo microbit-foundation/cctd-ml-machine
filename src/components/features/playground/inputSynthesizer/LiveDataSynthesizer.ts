@@ -11,10 +11,10 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { stores } from '../../../lib/stores/Stores';
 import { SyntheticLiveData } from './SyntheticLiveData ';
-import BaseLiveDataVector from '../../../lib/domain/BaseLiveDataVector';
-import BaseVector from '../../../lib/domain/BaseVector';
+import { stores } from '../../../../lib/stores/Stores';
+import BaseLiveDataVector from '../../../../lib/domain/BaseLiveDataVector';
+import BaseVector from '../../../../lib/domain/BaseVector';
 
 type LiveDataSynthesizerOptions = {
   intervalSpeed: number;

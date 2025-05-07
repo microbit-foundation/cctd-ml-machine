@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import GestureCard from '../../components/GestureCard.svelte';
+  import GestureCard from '../../components/ui/Card.svelte';
   import MediaQuery from '../../components/MediaQuery.svelte';
   import ImageSkeleton from '../../components/ui/skeletonloading/ImageSkeleton.svelte';
   import { t, tr } from '../../i18n';

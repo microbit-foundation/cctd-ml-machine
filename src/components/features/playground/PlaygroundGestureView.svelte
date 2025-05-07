@@ -5,7 +5,8 @@
  -->
 
 <script lang="ts">
-  import Gesture, { type GestureData } from '../../lib/domain/stores/gesture/Gesture';
+  import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
+  import type { GestureData } from '../../../lib/domain/stores/gesture/Gesture';
 
   export let gesture: Gesture;
   const reduceData = (gestureData: GestureData) => {

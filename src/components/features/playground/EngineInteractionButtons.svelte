@@ -1,14 +1,14 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import BaseLiveDataVector from '../../lib/domain/BaseLiveDataVector';
-  import BaseVector from '../../lib/domain/BaseVector';
-  import { ClassifierInput } from '../../lib/domain/ClassifierInput';
-  import Gesture from '../../lib/domain/stores/gesture/Gesture';
-  import { stores } from '../../lib/stores/Stores';
+  import BaseLiveDataVector from '../../../lib/domain/BaseLiveDataVector';
+  import BaseVector from '../../../lib/domain/BaseVector';
+  import { ClassifierInput } from '../../../lib/domain/ClassifierInput';
+  import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
+  import { stores } from '../../../lib/stores/Stores';
   import playgroundContext from './PlaygroundContext';
   import TrainKnnModelButton from './TrainKNNModelButton.svelte';
   import TrainLayersModelButton from './TrainLayersModelButton.svelte';

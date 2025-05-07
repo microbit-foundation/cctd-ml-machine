@@ -18,7 +18,7 @@
   import { t } from '../i18n';
   import StandardButton from './buttons/StandardButton.svelte';
   import ImageSkeleton from './ui/skeletonloading/ImageSkeleton.svelte';
-  import GestureCard from './GestureCard.svelte';
+  import GestureCard from './ui/Card.svelte';
   import StaticConfiguration from '../StaticConfiguration';
   import Gesture from '../lib/domain/stores/gesture/Gesture';
   import { state, stores } from '../lib/stores/Stores';

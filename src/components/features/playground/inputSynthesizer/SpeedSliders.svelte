@@ -4,8 +4,8 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+  import Range from '../../../Range.svelte';
   import liveDataSynthesizer from './LiveDataSynthesizer';
-  import Range from './../../Range.svelte';
   $: values = $liveDataSynthesizer.speeds;
 </script>
 

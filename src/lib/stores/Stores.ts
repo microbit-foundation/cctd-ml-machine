@@ -27,12 +27,12 @@ import type { LiveDataVector } from '../domain/stores/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import type { Engine } from '../domain/stores/Engine';
 import AvailableAxes from '../domain/stores/AvailableAxes';
-import Snackbar from '../../components/snackbar/Snackbar';
 import NeuralNetworkSettings from '../domain/stores/NeuralNetworkSettings';
 import KNNModelSettings from '../domain/stores/KNNModelSettings';
 import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
+import Snackbar from '../../components/features/snackbar/Snackbar';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;

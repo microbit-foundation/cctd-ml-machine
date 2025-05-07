@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { stores } from '../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
 
   $: liveDataStore = $stores.liveData;
   let utilization = 0;

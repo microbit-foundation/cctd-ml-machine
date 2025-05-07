@@ -21,8 +21,8 @@ import StaticConfiguration from '../../StaticConfiguration';
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import TestGestureRepository from '../mocks/TestGestureRepository';
 import Confidences from '../../lib/domain/stores/Confidences';
-import Snackbar from '../../components/snackbar/Snackbar';
 import BaseVector from '../../lib/domain/BaseVector';
+import Snackbar from '../../components/features/snackbar/Snackbar';
 
 describe('Classifier tests', () => {
   test('Changing matrix does not mark model as untrained', async () => {

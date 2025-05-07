@@ -1,5 +1,5 @@
 <!--
-  (c) 2025, center for computational thinking and design at aarhus university and contributors
+  (c) 2023-2025, center for computational thinking and design at aarhus university and contributors
  
   spdx-license-identifier: mit
  -->

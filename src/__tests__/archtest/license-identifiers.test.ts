@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -13,6 +13,8 @@ import * as path from 'path';
 // Place files you wish to ignore by name in here
 const ignoredFiles: string[] = ['.DS_Store', 'ui.da.json', 'ui.en.json', 'README.md'];
 const directoriesToScan = ['./src/', './microbit/v2/source/', './microbit/v1/source/'];
+
+const copyrightTime = "(c) 2023 - 2025"
 
 const licenseIdentifierStringContributors =
   'Center for Computational Thinking and Design at Aarhus University and contributors';
@@ -86,6 +88,7 @@ describe('License identifier tests', () => {
       const faultyFiles = filesMissingIdentifier(flatten, [
         licenseIdentifierStringContributors,
         licenseIdentifierStringSPDX,
+        copyrightTime
       ]);
       expect(
         faultyFiles.length,

@@ -7,7 +7,7 @@ import KNNMLModel from './KNNMLModel';
 import type { ModelTrainer } from '../domain/ModelTrainer';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
-import { knnTrainingDataPoints } from '../../components/graphs/knngraph/KnnModelGraph';
+import { knnTrainingDataPoints } from '../../components/features/graphs/knngraph/KnnModelGraph';
 
 /**
  * Trains a K-Nearest Neighbour model

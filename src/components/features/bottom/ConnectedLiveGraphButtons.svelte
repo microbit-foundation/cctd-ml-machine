@@ -1,5 +1,5 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -8,7 +8,7 @@
   import { tr } from '../../../i18n';
   import { state, stores } from '../../../lib/stores/Stores';
   import TypingUtils from '../../../lib/TypingUtils';
-  import StandardButton from '../../buttons/StandardButton.svelte';
+  import StandardButton from '../../ui/buttons/StandardButton.svelte';
 
   export let onOutputDisconnectButtonClicked: () => void;
   export let onOutputConnectButtonClicked: () => void;
@@ -24,9 +24,11 @@
       <!-- Output is assigned -->
       {#if !$state.isOutputConnected || $state.isOutputReady}
         <!-- Output MB is not in the connection process -->
-        <StandardButton onClick={onOutputDisconnectButtonClicked} color="warning"
-          >{$tr('menu.model.disconnect')}</StandardButton>
+        <StandardButton onClick={onOutputDisconnectButtonClicked} color="warning">
+          {$tr('menu.model.disconnect')}
+        </StandardButton>
       {:else}
+        <!-- svelte-ignore missing-declaration -->
         <StandardButton onClick={TypingUtils.emptyFunction} color="disabled">
           <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
         </StandardButton>

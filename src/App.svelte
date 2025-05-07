@@ -24,21 +24,21 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
   import { compatibility } from './lib/stores/uiStore';
-  import LoadingSpinner from './components/LoadingSpinner.svelte';
-  import BluetoothIncompatibilityWarningDialog from './components/BluetoothIncompatibilityWarningDialog.svelte';
+  import LoadingSpinner from './components/ui/LoadingSpinner.svelte';
+  import BluetoothIncompatibilityWarningDialog from './components/features/BluetoothIncompatibilityWarningDialog.svelte';
   import CookieManager from './lib/CookieManager';
   import Router from './router/Router.svelte';
   import { Feature, getFeature } from './lib/FeatureToggles';
   import { welcomeLog } from './lib/utils/Logger';
   import { DeviceRequestStates, state } from './lib/stores/Stores';
-  import MediaQuery from './components/MediaQuery.svelte';
-  import IncompatiblePlatformView from './components/views/IncompatiblePlatformView.svelte';
-  import OverlayView from './components/views/OverlayView.svelte';
-  import SideBarMenuView from './components/views/SideBarMenuView.svelte';
-  import BottomBarMenuView from './components/views/BottomBarMenuView.svelte';
-  import PageContentView from './components/views/PageContentView.svelte';
+  import MediaQuery from './components/layout/MediaQuery.svelte';
+  import BottomBarMenuView from './components/layout/BottomBarMenuView.svelte';
   import CookieBanner from './components/features/cookie-bannner/CookieBanner.svelte';
   import SnackbarView from './components/features/snackbar/SnackbarView.svelte';
+  import IncompatiblePlatformView from './components/layout/IncompatiblePlatformView.svelte';
+  import OverlayView from './components/layout/OverlayView.svelte';
+  import SideBarMenuView from './components/layout/SideBarMenuView.svelte';
+  import PageContentView from './components/layout/PageContentView.svelte';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {

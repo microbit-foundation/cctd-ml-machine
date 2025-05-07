@@ -5,8 +5,8 @@
  -->
 
 <script lang="ts">
-  import StandardButton from '../buttons/StandardButton.svelte';
   import { t } from '../../i18n';
+  import StandardButton from '../ui/buttons/StandardButton.svelte';
 
   export let onConnectSameClick: () => void;
   export let onConnectDifferentClick: () => void;
@@ -27,8 +27,9 @@
         {$t('connectMB.outputMB.same')}
       </h1>
 
-      <StandardButton icon="/imgs/microbit_icon.png"
-        >{$t('connectMB.outputMB.sameButton')}</StandardButton>
+      <StandardButton icon="/imgs/microbit_icon.png">
+        {$t('connectMB.outputMB.sameButton')}
+      </StandardButton>
     </div>
     <div
       class="hover:cursor-pointer ml-2 border-gray-200 border border-solid rounded-lg p-6 shadow-lg"

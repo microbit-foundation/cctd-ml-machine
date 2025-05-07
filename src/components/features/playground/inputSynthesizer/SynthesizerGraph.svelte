@@ -111,7 +111,7 @@
   import type { LiveDataVector } from '../../../../lib/domain/stores/LiveDataVector';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import SmoothedLiveData from '../../../../lib/livedata/SmoothedLiveData';
-  import DimensionLabels from '../../../graphs/DimensionLabels.svelte';
+  import DimensionLabels from '../../graphs/DimensionLabels.svelte';
 
   const classifier = stores.getClassifier();
 

@@ -16,8 +16,6 @@ import Logger from '../../lib/utils/Logger';
 import KNNModelTrainer from '../../lib/mlmodels/KNNModelTrainer';
 import type { ModelTrainer } from '../../lib/domain/ModelTrainer';
 import type { MLModel } from '../../lib/domain/MLModel';
-import { knnCurrentPoint } from '../../components/graphs/knngraph/KnnModelGraph';
-import { mode } from 'd3';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 

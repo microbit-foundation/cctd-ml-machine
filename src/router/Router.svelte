@@ -7,7 +7,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { currentPath, navigate, Paths, type PathType } from './Router';
-  import { currentPageComponent } from '../components/views/currentComponentStore';
+  import { currentPageComponent } from '../components/layout/currentComponentStore';
 
   async function getRoutedComponent(path: PathType) {
     switch (path) {

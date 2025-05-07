@@ -15,9 +15,9 @@
   } from '../../lib/stores/uiStore';
   import { t } from '../../i18n';
   import { state, stores } from '../../lib/stores/Stores';
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { get } from 'svelte/store';
   import Logger from '../../lib/utils/Logger';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
 
   export let gesture: Gesture;
   export let onNoMicrobitSelect: () => void;

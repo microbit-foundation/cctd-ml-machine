@@ -5,9 +5,9 @@
  -->
 
 <script lang="ts">
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import NewGestureButton from '../../components/NewGestureButton.svelte';
-  import PleaseConnect from '../../components/PleaseConnect.svelte';
+  import NewGestureButton from '../../components/features/NewGestureButton.svelte';
+  import PleaseConnect from '../../components/features/PleaseConnect.svelte';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import { t } from '../../i18n';
   import { state } from '../../lib/stores/Stores';
   import { importExampleDataset } from './DataPage';

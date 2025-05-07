@@ -4,8 +4,8 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import StandardDropdownButton from '../../../components/buttons/StandardDropdownButton.svelte';
-  import NumberSelector from '../../../components/NumberSelector.svelte';
+  import StandardDropdownButton from '../../../components/ui/buttons/StandardDropdownButton.svelte';
+  import NumberSelector from '../../../components/ui/NumberSelector.svelte';
   import ModelRegistry from '../../../lib/domain/ModelRegistry';
   import { stores } from '../../../lib/stores/Stores';
   import { selectModel } from '../TrainingPage';

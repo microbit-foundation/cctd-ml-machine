@@ -5,9 +5,9 @@
  -->
 
 <script lang="ts">
-  import StandardButton from '../../buttons/StandardButton.svelte';
   import { t } from '../../../i18n';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
+  import StandardButton from '../../ui/buttons/StandardButton.svelte';
 
   export let onFoundUsb: () => void;
   export let manualDownloadClick: () => void;

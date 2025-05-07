@@ -8,11 +8,11 @@
   import { buttonPressed, areActionsAllowed } from '../../../lib/stores/uiStore';
   import { onMount } from 'svelte';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
-  import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
+  import TrainModelFirstTitle from '../../../components/features/output/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { state, stores } from '../../../lib/stores/Stores';
-  import PleaseConnect from '../../../components/PleaseConnect.svelte';
+  import PleaseConnect from '../../../components/features/PleaseConnect.svelte';
 
   const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation

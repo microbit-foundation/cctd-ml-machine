@@ -1,18 +1,18 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { state, stores } from '../../lib/stores/Stores';
-  import AxesFilterVectorView from '../../components/graphs/knngraph/AxesFilterVectorView.svelte';
+  import { stores } from '../../lib/stores/Stores';
   import { trainModel } from './TrainingPage';
   import ModelRegistry from '../../lib/domain/ModelRegistry';
-  import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
   import { t } from '../../i18n';
   import PredictionLegend from './PredictionLegend.svelte';
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
   import StaticConfiguration from '../../StaticConfiguration';
+  import AxesFilterVectorView from '../../components/features/graphs/knngraph/AxesFilterVectorView.svelte';
+  import KnnModelGraph from '../../components/features/graphs/knngraph/KnnModelGraph.svelte';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
   const filters = classifier.getFilters();

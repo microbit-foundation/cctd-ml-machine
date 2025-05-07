@@ -4,7 +4,6 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import StandardButton from '../../../components/buttons/StandardButton.svelte';
   import ControlBar from '../../../components/ui/control-bar/ControlBar.svelte';
   import ModelRegistry from '../../../lib/domain/ModelRegistry';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
@@ -13,6 +12,7 @@
   import NeuralNetworkDropdown from './NeuralNetworkDropdown.svelte';
   import KnnModelDropdown from './KNNModelDropdown.svelte';
   import { navigate, Paths } from '../../../router/Router';
+  import StandardButton from '../../../components/ui/buttons/StandardButton.svelte';
 
   const selectedModel = stores.getSelectedModel();
 

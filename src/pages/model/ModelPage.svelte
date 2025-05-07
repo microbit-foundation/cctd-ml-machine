@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import StaticConfiguration from '../../StaticConfiguration';
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/ui/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';

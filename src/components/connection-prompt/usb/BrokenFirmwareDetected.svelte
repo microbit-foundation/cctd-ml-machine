@@ -6,11 +6,11 @@
 
 <script lang="ts">
   import { t } from '../../../i18n';
-  import StandardButton from '../../buttons/StandardButton.svelte';
   import {
     ConnectDialogStates,
     connectionDialogState,
   } from '../../../lib/stores/connectDialogStore';
+  import StandardButton from '../../ui/buttons/StandardButton.svelte';
 </script>
 
 <main>
@@ -42,6 +42,8 @@
     <StandardButton
       onClick={() => {
         $connectionDialogState.connectionState = ConnectDialogStates.MANUAL_TUTORIAL;
-      }}>{$t('connectMB.usb.firmwareBroken.button.skip')}</StandardButton>
+      }}>
+      {$t('connectMB.usb.firmwareBroken.button.skip')}
+    </StandardButton>
   </div>
 </main>

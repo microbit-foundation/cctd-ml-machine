@@ -11,7 +11,7 @@ import type { Vector } from '../domain/Vector';
 import {
   knnCurrentPoint,
   knnNeighbours,
-} from '../../components/graphs/knngraph/KnnModelGraph';
+} from '../../components/features/graphs/knngraph/KnnModelGraph';
 
 class KNNMLModel implements MLModel {
   constructor(

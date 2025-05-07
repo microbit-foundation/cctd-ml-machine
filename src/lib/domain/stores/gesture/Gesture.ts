@@ -12,7 +12,7 @@ import {
   get,
 } from 'svelte/store';
 import GestureConfidence from './GestureConfidence';
-import { PinTurnOnState } from '../../../../components/output/PinSelectorUtil';
+import { PinTurnOnState } from '../../../../components/features/output/PinSelectorUtil';
 import BindableValue from '../BindableValue';
 import { MBSpecs } from 'microbyte';
 import type { PersistedGestureData } from './Gestures';

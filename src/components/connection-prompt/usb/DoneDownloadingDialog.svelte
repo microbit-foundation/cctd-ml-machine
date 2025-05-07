@@ -5,8 +5,8 @@
  -->
 
 <script lang="ts">
-  import StandardButton from '../../buttons/StandardButton.svelte';
   import { t } from '../../../i18n';
+  import StandardButton from '../../ui/buttons/StandardButton.svelte';
 
   export let onConnectBluetoothClick: () => void;
 </script>

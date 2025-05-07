@@ -7,7 +7,7 @@
 import {
   knnCurrentPoint,
   knnNeighbours,
-} from '../../components/graphs/knngraph/KnnModelGraph';
+} from '../../components/features/graphs/knngraph/KnnModelGraph';
 import type { MLModel } from '../domain/MLModel';
 import type { Vector } from '../domain/Vector';
 import { distanceBetween } from '../utils/graphUtils';

@@ -5,7 +5,6 @@
  -->
 
 <script lang="ts">
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
   import { stores } from '../../lib/stores/Stores';
   import { derived, writable, type Readable } from 'svelte/store';
   import ValidationMatrix from './ValidationMatrix.svelte';
@@ -13,8 +12,9 @@
     createValidationMatrixVisual,
     type ValidationSetMatrix,
   } from './ValidationPage';
-  import Tooltip from '../../components/base/Tooltip.svelte';
   import { tr } from '../../i18n';
+  import Tooltip from '../../components/ui/Tooltip.svelte';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
 
   const gestures = stores.getGestures();
   const validationSets = stores.getValidationSets();

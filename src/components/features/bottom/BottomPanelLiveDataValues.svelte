@@ -9,7 +9,7 @@
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import type { Axis } from '../../../lib/domain/Axis';
-  import FixedNumber from '../../base/FixedNumber.svelte';
+  import FixedNumber from '../../ui/FixedNumber.svelte';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
 
   const highlightedAxes = stores.getHighlightedAxes();

@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import GestureCard from '../../components/ui/Card.svelte';
-  import Recording from '../../components/Recording.svelte';
+  import Recording from '../../components/ui/Recording.svelte';
   import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
   import type Gesture from '../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../lib/stores/Stores';

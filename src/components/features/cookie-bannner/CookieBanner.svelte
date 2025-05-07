@@ -12,8 +12,8 @@
   import CookieManager from '../../../lib/CookieManager';
   import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
   import StandardDialog from '../../ui/dialogs/StandardDialog.svelte';
-  import StandardButton from '../../buttons/StandardButton.svelte';
   import { tr } from '../../../i18n';
+  import StandardButton from '../../ui/buttons/StandardButton.svelte';
 
   let isCookieDialogOpen: boolean;
   let isDescriptionDialogOpen = false;

@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../i18n';
-  import DataPageControlBar from '../components/datacollection/DataPageControlBar.svelte';
+  import DataPageControlBar from '../components/features/datacollection/DataPageControlBar.svelte';
   import { onMount } from 'svelte';
   import FileUtility from '../lib/repository/FileUtility';
   import { get } from 'svelte/store';

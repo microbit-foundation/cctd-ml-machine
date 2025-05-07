@@ -5,12 +5,12 @@
  -->
 <script lang="ts">
   import RangeSlider from 'svelte-range-slider-pips';
-  import StandardDropdownButton from '../../../components/buttons/StandardDropdownButton.svelte';
   import windi from './../../../../windi.config.js';
-  import NumberSelector from '../../../components/NumberSelector.svelte';
+  import NumberSelector from '../../../components/ui/NumberSelector.svelte';
   import { stores } from '../../../lib/stores/Stores.js';
   import ModelRegistry from '../../../lib/domain/ModelRegistry.js';
   import { selectModel } from '../TrainingPage.js';
+  import StandardDropdownButton from '../../../components/ui/buttons/StandardDropdownButton.svelte';
 
   export let isSelected: boolean;
   const color = windi.theme.extend.colors.primary;

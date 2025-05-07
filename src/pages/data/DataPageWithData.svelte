@@ -5,16 +5,16 @@
  -->
 
 <script lang="ts">
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
   import StandardDialog from '../../components/ui/dialogs/StandardDialog.svelte';
   import { startConnectionProcess } from '../../lib/stores/connectDialogStore';
   import { t } from '../../i18n';
   import ConnectDialogContainer from '../../components/connection-prompt/ConnectDialogContainer.svelte';
-  import RecordInformationContent from '../../components/datacollection/RecordInformationContent.svelte';
-  import Gesture from '../../components/Gesture.svelte';
-  import NewGestureButton from '../../components/NewGestureButton.svelte';
+  import Gesture from '../../components/features/datacollection/Gesture.svelte';
+  import NewGestureButton from '../../components/features/NewGestureButton.svelte';
   import { stores } from '../../lib/stores/Stores';
   import Information from '../../components/ui/information/Information.svelte';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
+  import RecordInformationContent from '../../components/features/datacollection/RecordInformationContent.svelte';
 
   let isConnectionDialogOpen = false;
   const gestures = stores.getGestures();

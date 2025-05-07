@@ -5,10 +5,9 @@
  -->
 
 <script lang="ts">
-  import PatternMatrix from '../../PatternMatrix.svelte';
+  import PatternMatrix from '../../ui/PatternMatrix.svelte';
   import { t } from '../../../i18n';
   import { onDestroy, onMount } from 'svelte';
-  import StandardButton from '../../buttons/StandardButton.svelte';
   import {
     btPatternInput,
     btPatternOutput,
@@ -21,6 +20,7 @@
   import Logger from '../../../lib/utils/Logger';
   import { MBSpecs } from 'microbyte';
   import { DeviceRequestStates, state } from '../../../lib/stores/Stores';
+  import StandardButton from '../../ui/buttons/StandardButton.svelte';
 
   // callbacks
   export let deviceState: DeviceRequestStates;

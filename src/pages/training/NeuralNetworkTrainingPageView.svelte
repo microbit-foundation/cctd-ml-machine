@@ -7,12 +7,11 @@
   import { stores } from '../../lib/stores/Stores';
   import { loss, trainModel } from './TrainingPage';
   import { t } from './../../i18n';
-  import LossGraph from '../../components/graphs/LossGraph.svelte';
-  import StaticConfiguration from '../../StaticConfiguration';
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
   import ModelRegistry from '../../lib/domain/ModelRegistry';
   import Logger from '../../lib/utils/Logger';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
+  import LossGraph from '../../components/features/graphs/LossGraph.svelte';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();

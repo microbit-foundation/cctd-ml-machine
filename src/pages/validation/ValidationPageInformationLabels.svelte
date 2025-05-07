@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import RecordInformationContent from '../../components/datacollection/RecordInformationContent.svelte';
+  import RecordInformationContent from '../../components/features/datacollection/RecordInformationContent.svelte';
   import Information from '../../components/ui/information/Information.svelte';
   import { t } from '../../i18n';
   import { hasSomeRecordingData } from '../data/DataPage';

@@ -16,7 +16,7 @@
 
 <script lang="ts">
   import { type ComponentType } from 'svelte';
-  import FrontPageContentTile from '../components/FrontPageContentTile.svelte';
+  import FrontPageContentTile from '../components/features/FrontPageContentTile.svelte';
   import DoItYourselfMachineLearningTile from './home-page-content-tiles/DoItYourselfMachineLearningTile.svelte';
   import NewFeaturesTile from './home-page-content-tiles/NewFeaturesTile.svelte';
   import WhatIsMachineLearningTile from './home-page-content-tiles/WhatIsMachineLearningTile.svelte';
@@ -25,7 +25,7 @@
   import SelectLanguageControlBarDropdown from '../components/ui/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
   import { t } from '../i18n';
   import Environment from '../lib/Environment';
-  import DevTools from '../components/DevTools.svelte';
+  import DevTools from '../components/features/GoToPlaygroundButton.svelte';
   import { state } from '../lib/stores/Stores';
 
   type ContentTile = { tile: ComponentType; spanColumns: number };

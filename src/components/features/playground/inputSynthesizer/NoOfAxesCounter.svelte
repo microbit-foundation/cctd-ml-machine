@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import Range from '../../../Range.svelte';
+  import Range from '../../../ui/Range.svelte';
   import liveDataSynthesizer from './LiveDataSynthesizer';
 
   const setNoOfAxes = (number: number) => {

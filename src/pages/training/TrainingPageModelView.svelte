@@ -10,7 +10,7 @@
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import { state, stores } from '../../lib/stores/Stores';
-  import PleaseConnect from '../../components/PleaseConnect.svelte';
+  import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import FiltersList from '../../components/features/filters/FiltersList.svelte';
 
   const selectedModel = stores.getSelectedModel();

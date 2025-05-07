@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import MediaQuery from '../../components/MediaQuery.svelte';
+  import MediaQuery from '../../components/layout/MediaQuery.svelte';
   import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../lib/stores/Stores';
   import StaticConfiguration from '../../StaticConfiguration';

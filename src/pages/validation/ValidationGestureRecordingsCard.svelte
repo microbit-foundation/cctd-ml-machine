@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { derived } from 'svelte/store';
-  import GestureCard from '../../components/ui/Card.svelte';
+  import Card from '../../components/ui/Card.svelte';
   import Recording from '../../components/ui/Recording.svelte';
   import Gesture from '../../lib/domain/stores/gesture/Gesture';
   import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
@@ -42,7 +42,7 @@
   });
 </script>
 
-<GestureCard validationPage={true} small>
+<Card validationPage={true} small>
   <div class="flex flex-row h-full gap-1 items-center pl-2">
     {#each recordings as recording, idx}
       {#key recording.ID}
@@ -54,4 +54,4 @@
       {/key}
     {/each}
   </div>
-</GestureCard>
+</Card>

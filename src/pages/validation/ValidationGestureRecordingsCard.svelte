@@ -5,31 +5,40 @@
  -->
 
 <script lang="ts">
+  import { derived } from 'svelte/store';
   import GestureCard from '../../components/ui/Card.svelte';
   import Recording from '../../components/ui/Recording.svelte';
+  import Gesture from '../../lib/domain/stores/gesture/Gesture';
   import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
-  import type Gesture from '../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../lib/stores/Stores';
 
   export let gesture: Gesture;
 
   const validationSets = stores.getValidationSets();
-  const validationSet = stores.getValidationSets().getForGesture(gesture.getId());
+  const gestureValidationSet = stores.getValidationSets().getForGesture(gesture.getId());
+  // Results are grouped by gestures then recordings [i][j](Gestures -> Recording)
   const results = stores.getValidationResults();
   const gestures = stores.getGestures();
 
-  $: gestureIdx = $gestures.findIndex(gest => gest.ID === gesture.getId());
-  $: recordings = $validationSet.recordings;
-  $: predictedGestures = ($results[gestureIdx] ?? []).map(a => $gestures[a.gestureIdx]);
-  $: dots = $results.map((_, idx) => {
-    const prediction = predictedGestures[idx];
-    if (!prediction) {
-      return undefined;
-    }
-    return {
-      color: predictedGestures[idx]?.color,
-      gesture: predictedGestures[idx].ID,
+  $: recordings = $gestureValidationSet.recordings;
+
+  const dotGetter = derived(results, res => {
+    const getDot = (
+      recordingId: number,
+    ): { gesture: GestureID; color: string } | undefined => {
+      // recordingId -> Gesture
+      const resultGesture = results.getEvaluatedGesture(recordingId);
+
+      if (!resultGesture) {
+        return undefined;
+      }
+
+      return {
+        gesture: resultGesture.getId(),
+        color: resultGesture.getColor(),
+      };
     };
+    return getDot;
   });
 </script>
 
@@ -38,7 +47,7 @@
     {#each recordings as recording, idx}
       {#key recording.ID}
         <Recording
-          dot={dots[idx]}
+          dot={$dotGetter(recording.ID)}
           {recording}
           onDelete={recording =>
             validationSets.removeValidationRecording(recording.ID)} />

@@ -9,7 +9,7 @@ import Filters from './Filters';
 import type { Vector } from './Vector';
 
 export class ClassifierInput {
-  public constructor(private samples: Vector[]) { }
+  public constructor(private samples: Vector[]) {}
 
   public getInput(filters: Filters): number[] {
     if (this.samples.length === 0) {
@@ -23,13 +23,18 @@ export class ClassifierInput {
   }
 
   public static getInputForAxes(samples: Vector[], axes: Axis[]): ClassifierInput {
-    return new ClassifierInput(samples.map(
-      e => new BaseVector(
-        e.getValue()
-          .filter((vecVal, vecIdx) =>
-            axes.findIndex(axis => axis.index === vecIdx) !== -1)
-      )
-    ))
+    return new ClassifierInput(
+      samples.map(
+        e =>
+          new BaseVector(
+            e
+              .getValue()
+              .filter(
+                (vecVal, vecIdx) => axes.findIndex(axis => axis.index === vecIdx) !== -1,
+              ),
+          ),
+      ),
+    );
   }
 
   public getNumberOfSamples(): number {

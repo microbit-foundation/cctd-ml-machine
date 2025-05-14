@@ -90,24 +90,7 @@ class PollingPredictorEngine implements Engine {
     const bufferedData = this.getRawDataFromBuffer(
       StaticConfiguration.pollingPredictionSampleSize,
     );
-    const sampleVectors = bufferedData.map(
-      e =>
-        new BaseLiveDataVector(
-          new BaseVector(
-            e.value
-              .getValue()
-              .filter((vecVal, vecIdx) =>
-                this.highlightedAxes.isAxisIndexHighlighted(vecIdx),
-              ),
-          ),
-          e.value
-            .getLabels()
-            .filter((labelVal, vecIdx) =>
-              this.highlightedAxes.isAxisIndexHighlighted(vecIdx),
-            ),
-        ),
-    );
-    return new ClassifierInput(sampleVectors);
+    return ClassifierInput.getInputForAxes(bufferedData.map(e => e.value), get(this.highlightedAxes));
   }
 
   /**

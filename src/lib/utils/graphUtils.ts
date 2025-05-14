@@ -154,7 +154,7 @@ export const distanceBetween = (p1: Vector, p2: Vector): number => {
   // Check if both points have the same dimension
   if (p1.getSize() !== p2.getSize()) {
     throw new Error(
-      'Points must have the same dimension. Got elements of size: ' +
+      'Failed to compuse distance between 2 points. Points must have the same dimension. Got elements of size: ' +
         [p1.getSize(), p2.getSize()].join(' / '),
     );
   }

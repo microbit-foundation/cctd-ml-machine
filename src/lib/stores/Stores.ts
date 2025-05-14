@@ -84,6 +84,7 @@ class Stores implements Readable<StoresType> {
       this.validationSets,
       this.classifier,
       this.gestures,
+      this.highlightedAxis
     );
   }
 

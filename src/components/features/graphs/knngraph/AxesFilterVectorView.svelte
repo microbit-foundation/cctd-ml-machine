@@ -67,7 +67,7 @@
         updateArrows($highlightedAxis);
       },
       // We vary the timeout, because if no arrows exist, it must be the first render cycle which requres a bit more time (to avoid artifacts)
-      $vectorArrows.length === 0 ? 500 : 0,
+      $vectorArrows.length === 0 ? 1000 : 200,
     );
   };
 

@@ -22,6 +22,7 @@ import { findLargestIndex } from '../../utils/Math';
 import type Gestures from './gesture/Gestures';
 import type Gesture from './gesture/Gesture';
 import type { GestureID } from './gesture/Gesture';
+import type HighlightedAxes from './HighlightedAxes';
 
 export type ValidationResult = {
   prediction: number[];
@@ -36,6 +37,7 @@ class ValidationResults implements Readable<ValidationResult> {
     private validationSets: ValidationSets,
     private classifier: Classifier,
     private gestures: Gestures,
+    private highlightedAxes: HighlightedAxes
   ) {
     this.store = writable([]);
     this.accuracy = writable(0);
@@ -53,10 +55,11 @@ class ValidationResults implements Readable<ValidationResult> {
     const setEvaluations = get(this.validationSets).map(async set => {
       const recordingEvaluations = set.recordings.map(async rec => {
         const samples = rec.samples.map(sample => new BaseVector(sample.vector));
-        const classifierInput = new ClassifierInput(samples);
+        const classifierInput = ClassifierInput.getInputForAxes(samples, get(this.highlightedAxes));
+        const inputVector = new BaseVector(classifierInput.getInput(filters));
         const prediction = await this.classifier
           .getModel()
-          .predict(new BaseVector(classifierInput.getInput(filters)));
+          .predict(inputVector);
         return {
           recordingId: rec.ID,
           prediction,

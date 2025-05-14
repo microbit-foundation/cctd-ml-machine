@@ -44,7 +44,7 @@
 
 <Card validationPage={true} small>
   <div class="flex flex-row h-full gap-1 items-center pl-2">
-    {#each recordings as recording, idx}
+    {#each recordings as recording}
       {#key recording.ID}
         <Recording
           dot={$dotGetter(recording.ID)}

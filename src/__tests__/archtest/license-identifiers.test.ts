@@ -9,6 +9,7 @@
 
 import fs from 'fs';
 import * as path from 'path';
+import { getFilesInDirectory } from './fileloader';
 
 // Place files you wish to ignore by name in here
 const ignoredFiles: string[] = ['.DS_Store', 'ui.da.json', 'ui.en.json', 'README.md'];
@@ -24,42 +25,6 @@ const licenseIdentifierStringSPDX = 'SPDX-License-Identifier:';
 const readFile = (fileLocation: string, expect: string) => {
   const fileContent = fs.readFileSync(fileLocation);
   return fileContent.toString().toLowerCase().includes(expect.toLowerCase());
-};
-
-type DirectoryContents = {
-  files: string[];
-  folders: string[];
-};
-
-const readDirectory = (directory: string, ignoreList: string[]): DirectoryContents => {
-  const files: string[] = [];
-  const folders: string[] = [];
-  const filesRead = fs.readdirSync(directory);
-  filesRead.forEach(file => {
-    if (ignoreList.includes(file)) return;
-    if (file.endsWith('.json')) return; // Json cant have comments
-    const fileLocation = path.join(directory, file);
-    const stats = fs.statSync(fileLocation);
-    if (stats.isFile()) {
-      files.push(fileLocation);
-    } else {
-      folders.push(fileLocation);
-    }
-  });
-  return { files: files, folders: folders };
-};
-
-const flattenDirectory = (directory: string): string[] => {
-  const files: string[] = [];
-  const content = readDirectory(directory, ignoredFiles);
-  const filesFromSubFolders: string[] = [];
-  content.folders.forEach(value => {
-    const subFolderFlat = flattenDirectory(value);
-    subFolderFlat.forEach(value => filesFromSubFolders.push(value));
-  });
-  filesFromSubFolders.forEach(value => files.push(value));
-  content.files.forEach(value => files.push(value));
-  return files;
 };
 
 const filesMissingIdentifier = (files: string[], expects: string[]): string[] => {
@@ -82,7 +47,7 @@ describe('License identifier tests', () => {
     'All files should contain license identifier',
     () => {
       const flatten = directoriesToScan.reduce((acc: string[], current) => {
-        return acc.concat(flattenDirectory(current));
+        return acc.concat(getFilesInDirectory(current, ignoredFiles));
       }, []);
 
       const faultyFiles = filesMissingIdentifier(flatten, [

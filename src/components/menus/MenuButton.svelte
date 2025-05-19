@@ -12,7 +12,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-    import type { MenuProperties } from '../../lib/navigation/Menus';
+  import type { MenuProperties } from '../../lib/navigation/Menus';
   import Information from '../ui/information/Information.svelte';
 
   export let title: string;
@@ -20,7 +20,7 @@
   export let helpDescription: string;
   export let onClickFunction: () => void;
   export let isExpanded: boolean;
-  export let tooltipOffset: MenuProperties['tooltipOffset'] = {x: -100, y: 30};
+  export let tooltipOffset: MenuProperties['tooltipOffset'] = { x: -100, y: 30 };
 </script>
 
 <div>

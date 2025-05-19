@@ -21,8 +21,8 @@ export interface MenuProperties {
   collapsedButtonContent: typeof SvelteComponent<any> | undefined;
   expandedButtonContent: typeof SvelteComponent<any>;
   additionalExpandPaths?: PathType[];
-  tooltipOffset?: {x: number, y: number};
-};
+  tooltipOffset?: { x: number; y: number };
+}
 
 /**
  * Wrapper for the menu logic, use navigation if possible, this is for fine-grained control of menus.
@@ -64,7 +64,7 @@ class Menus {
             collapsedButtonContent: undefined,
             expandedButtonContent: ModelMenu,
             navigationPath: Paths.MODEL,
-            tooltipOffset: {x: -100, y: -250}
+            tooltipOffset: { x: -100, y: -250 },
           },
         ]
       : [

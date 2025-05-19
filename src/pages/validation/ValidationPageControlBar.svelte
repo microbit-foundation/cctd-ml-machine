@@ -10,8 +10,13 @@
   import { tr } from '../../i18n';
   import { stores } from '../../lib/stores/Stores';
   const validationSets = stores.getValidationSets();
-  $: isClearDisabled = $validationSets.length === 0;
-  const clearValidationSets = () => validationSets.clear();
+  $: isClearDisabled =
+    $validationSets.length === 0 ||
+    $validationSets.map(e => e.recordings.length).reduce((pre, cur) => pre + cur, 0) ===
+      0;
+  const clearValidationSets = () =>
+    confirm($tr('content.data.controlbar.button.clearData.confirm')) &&
+    validationSets.clear();
 </script>
 
 <ControlBar>

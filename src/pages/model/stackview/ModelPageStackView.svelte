@@ -8,7 +8,7 @@
   import { buttonPressed, areActionsAllowed } from '../../../lib/stores/uiStore';
   import { onMount } from 'svelte';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
-  import TrainModelFirstTitle from '../../../components/features/output/TrainModelFirstTitle.svelte';
+  import TrainModelFirstTitle from '../../../components/features/model/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { state, stores } from '../../../lib/stores/Stores';

@@ -11,7 +11,7 @@
   import MediaQuery from '../../../components/layout/MediaQuery.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { state, stores } from '../../../lib/stores/Stores';
-  import OutputGesture from '../../../components/features/output/OutputGesture.svelte';
+  import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;

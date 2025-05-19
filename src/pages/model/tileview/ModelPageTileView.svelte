@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import TrainModelFirstTitle from '../../../components/features/output/TrainModelFirstTitle.svelte';
+  import TrainModelFirstTitle from '../../../components/features/model/TrainModelFirstTitle.svelte';
   import { areActionsAllowed, buttonPressed } from '../../../lib/stores/uiStore';
   import { onMount } from 'svelte';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';

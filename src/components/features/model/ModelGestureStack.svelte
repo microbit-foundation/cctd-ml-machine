@@ -27,9 +27,9 @@
   import ImageSkeleton from '../../ui/skeletonloading/ImageSkeleton.svelte';
 
   // IMPORT AND DEFAULTS
-  import OutputMatrix from './OutputMatrix.svelte';
-  import OutputSoundSelector from './OutputSoundSelector.svelte';
-  import PinSelector from './PinSelector.svelte';
+  import OutputMatrix from './ModelMatrix.svelte';
+  import OutputSoundSelector from './ModelSoundSelector.svelte';
+  import PinSelector from './ModelPinSelector.svelte';
   import { PinTurnOnState } from './PinSelectorUtil';
   import { MBSpecs } from 'microbyte';
 

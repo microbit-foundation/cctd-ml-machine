@@ -6,8 +6,8 @@
 <script lang="ts">
   import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
-  import OutputGestureStack from './OutputGestureStack.svelte';
-  import OutputGestureTile from './OutputGestureTile.svelte';
+  import OutputGestureStack from './ModelGestureStack.svelte';
+  import OutputGestureTile from './ModelGestureTile.svelte';
 
   export let gesture: Gesture;
   let wasTriggered = false;

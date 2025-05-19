@@ -4,6 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+    import GestureDot from '../../components/ui/GestureDot.svelte';
   import { state, stores } from '../../lib/stores/Stores';
 
   const gestures = stores.getGestures();
@@ -14,13 +15,13 @@
   <div class="flex flex-row justify-between">
     <div class="flex flex-row">
       <div class="flex flex-col justify-center mr-1">
-        <div class="rounded-full w-3 h-3" style={'background-color:' + gesture.color} />
+        <GestureDot disableTooltip gesture={gestures.getGesture(gesture.ID)}/>
       </div>
       <p>{gesture.name}</p>
     </div>
     {#if $state.isInputReady}
       <p>
-        {(($confidences.get(gesture.ID) ?? 0) * 100).toFixed(2)}%
+        {(($confidences.get(gesture.ID) ?? 0) * 100).toFixed(1)}%
       </p>
     {/if}
   </div>

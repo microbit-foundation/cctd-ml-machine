@@ -115,7 +115,7 @@
           {/each}
         </div>
         {#if $highlightedAxis.length === 1}
-          <div class="pl-20 flex flex-col justify-around">
+          <div class="pl-28 flex flex-col justify-around">
             {#each $filters as filter, index}
               <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
             {/each}
@@ -131,7 +131,7 @@
           <div class="flex flex-col justify-around w-12">
             {#each liveFilteredAxesData as val, index}
               <p style={`color:${StaticConfiguration.graphColors[index]}`}>
-                {val.toFixed(3)}
+                {val.toFixed(2)}
               </p>
             {/each}
           </div>

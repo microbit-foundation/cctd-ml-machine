@@ -13,7 +13,7 @@ import { Paths, type PathType } from '../../router/Router';
 import { Feature, hasFeature } from '../FeatureToggles';
 import { writable } from 'svelte/store';
 
-export type MenuProperties = {
+export interface MenuProperties {
   title: string;
   infoBubbleTitle: string;
   infoBubbleContent: string;

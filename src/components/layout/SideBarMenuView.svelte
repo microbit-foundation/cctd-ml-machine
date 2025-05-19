@@ -63,6 +63,7 @@
     <div class="relative">
       {#each get(Menus.getMenuStore()) as menu, id}
         <MenuButton
+          tooltipOffset={menu.tooltipOffset}
           onClickFunction={() => {
             navigate(menu.navigationPath);
           }}

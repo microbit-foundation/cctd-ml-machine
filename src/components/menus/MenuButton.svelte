@@ -12,6 +12,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
+    import type { MenuProperties } from '../../lib/navigation/Menus';
   import Information from '../ui/information/Information.svelte';
 
   export let title: string;
@@ -19,6 +20,7 @@
   export let helpDescription: string;
   export let onClickFunction: () => void;
   export let isExpanded: boolean;
+  export let tooltipOffset: MenuProperties['tooltipOffset'] = {x: -100, y: 30};
 </script>
 
 <div>
@@ -43,7 +45,7 @@
       <div class="absolute top-3px right-12">
         <Information
           bodyText={$t(helpDescription)}
-          boxOffset={{ x: -200, y: 30 }}
+          boxOffset={tooltipOffset}
           titleText={$t(helpTitle)}
           width={280} />
       </div>

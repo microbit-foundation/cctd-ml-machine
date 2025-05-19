@@ -5,12 +5,12 @@
  -->
 
 <script lang="ts">
-  import { t } from '../../../i18n';
+  import { t } from '../../../../i18n';
   import {
     ConnectDialogStates,
     connectionDialogState,
-  } from '../../../lib/stores/connectDialogStore';
-  import StandardButton from '../../ui/buttons/StandardButton.svelte';
+  } from '../../../../lib/stores/connectDialogStore';
+  import StandardButton from '../../../ui/buttons/StandardButton.svelte';
 </script>
 
 <main>

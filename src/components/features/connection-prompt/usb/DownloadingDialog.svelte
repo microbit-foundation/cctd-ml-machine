@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { t } from '../../../i18n';
+  import { t } from '../../../../i18n';
 
   export let transferProgress: number;
   $: transferProgressLabel = `${Math.round(transferProgress * 100)}%`;

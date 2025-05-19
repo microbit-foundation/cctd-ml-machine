@@ -9,7 +9,7 @@
   import ConnectedLiveGraphButtons from './ConnectedLiveGraphButtons.svelte';
   import LiveGraphInformationSection from './LiveGraphInformationSection.svelte';
   import { tr } from '../../../i18n';
-  import ConnectDialogContainer from '../../connection-prompt/ConnectDialogContainer.svelte';
+  import ConnectDialogContainer from '../../features/connection-prompt/ConnectDialogContainer.svelte';
   import { state } from '../../../lib/stores/Stores';
   import { startConnectionProcess } from '../../../lib/stores/connectDialogStore';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';

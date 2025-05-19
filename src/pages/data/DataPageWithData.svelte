@@ -8,13 +8,13 @@
   import StandardDialog from '../../components/ui/dialogs/StandardDialog.svelte';
   import { startConnectionProcess } from '../../lib/stores/connectDialogStore';
   import { t } from '../../i18n';
-  import ConnectDialogContainer from '../../components/connection-prompt/ConnectDialogContainer.svelte';
   import Gesture from '../../components/features/datacollection/Gesture.svelte';
   import NewGestureButton from '../../components/features/NewGestureButton.svelte';
   import { stores } from '../../lib/stores/Stores';
   import Information from '../../components/ui/information/Information.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import RecordInformationContent from '../../components/features/datacollection/RecordInformationContent.svelte';
+  import ConnectDialogContainer from '../../components/features/connection-prompt/ConnectDialogContainer.svelte';
 
   let isConnectionDialogOpen = false;
   const gestures = stores.getGestures();

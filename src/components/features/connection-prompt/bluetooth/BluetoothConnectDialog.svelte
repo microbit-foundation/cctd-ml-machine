@@ -5,22 +5,22 @@
  -->
 
 <script lang="ts">
-  import PatternMatrix from '../../ui/PatternMatrix.svelte';
-  import { t } from '../../../i18n';
+  import PatternMatrix from '../../../ui/PatternMatrix.svelte';
+  import { t } from '../../../../i18n';
   import { onDestroy, onMount } from 'svelte';
   import {
     btPatternInput,
     btPatternOutput,
     isInputPatternValid,
-  } from '../../../lib/stores/connectionStore';
+  } from '../../../../lib/stores/connectionStore';
   import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
-  import Microbits from '../../../lib/microbit-interfacing/Microbits';
-  import StaticConfiguration from '../../../StaticConfiguration';
-  import Logger from '../../../lib/utils/Logger';
+  import Microbits from '../../../../lib/microbit-interfacing/Microbits';
+  import StaticConfiguration from '../../../../StaticConfiguration';
+  import Logger from '../../../../lib/utils/Logger';
   import { MBSpecs } from 'microbyte';
-  import { DeviceRequestStates, state } from '../../../lib/stores/Stores';
-  import StandardButton from '../../ui/buttons/StandardButton.svelte';
+  import { DeviceRequestStates, state } from '../../../../lib/stores/Stores';
+  import StandardButton from '../../../ui/buttons/StandardButton.svelte';
 
   // callbacks
   export let deviceState: DeviceRequestStates;

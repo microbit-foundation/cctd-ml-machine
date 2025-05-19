@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import StandardDialog from '../ui/dialogs/StandardDialog.svelte';
+  import StandardDialog from '../../ui/dialogs/StandardDialog.svelte';
   import BluetoothConnectDialog from './bluetooth/BluetoothConnectDialog.svelte';
   import StartDialog from './StartDialog.svelte';
   import DoneDownloadingDialog from './usb/DoneDownloadingDialog.svelte';
@@ -15,13 +15,13 @@
   import {
     ConnectDialogStates,
     connectionDialogState,
-  } from '../../lib/stores/connectDialogStore';
+  } from '../../../lib/stores/connectDialogStore';
   import ConnectSameDialog from './ConnectSameDialog.svelte';
-  import Microbits from '../../lib/microbit-interfacing/Microbits';
-  import { btPatternInput, btPatternOutput } from '../../lib/stores/connectionStore';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
+  import { btPatternInput, btPatternOutput } from '../../../lib/stores/connectionStore';
   import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
   import { MBSpecs } from 'microbyte';
-  import { DeviceRequestStates } from '../../lib/stores/Stores';
+  import { DeviceRequestStates } from '../../../lib/stores/Stores';
 
   let flashProgress = 0;
 

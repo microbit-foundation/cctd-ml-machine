@@ -10,9 +10,9 @@
   import ValidationPageMainContent from './validation/ValidationPageMainContent.svelte';
   import { t } from '../i18n';
   import { startConnectionProcess } from '../lib/stores/connectDialogStore';
-  import ConnectDialogContainer from '../components/connection-prompt/ConnectDialogContainer.svelte';
   import ValidationPageActionContent from './validation/ValidationPageActionContent.svelte';
   import StandardButton from '../components/ui/buttons/StandardButton.svelte';
+  import ConnectDialogContainer from '../components/features/connection-prompt/ConnectDialogContainer.svelte';
 
   let isConnectionDialogOpen = false;
 </script>

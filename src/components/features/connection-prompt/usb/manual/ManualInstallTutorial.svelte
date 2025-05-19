@@ -5,13 +5,13 @@
  -->
 
 <script lang="ts">
-  import { t } from '../../../../i18n';
+  import { t } from '../../../../../i18n';
   import { onMount } from 'svelte';
-  import Microbits from '../../../../lib/microbit-interfacing/Microbits';
-  import ImageSkeleton from '../../../ui/skeletonloading/ImageSkeleton.svelte';
+  import Microbits from '../../../../../lib/microbit-interfacing/Microbits';
+  import ImageSkeleton from '../../../../ui/skeletonloading/ImageSkeleton.svelte';
   import Bowser from 'bowser';
-  import StaticConfiguration from '../../../../StaticConfiguration';
-  import StandardButton from '../../../ui/buttons/StandardButton.svelte';
+  import StaticConfiguration from '../../../../../StaticConfiguration';
+  import StandardButton from '../../../../ui/buttons/StandardButton.svelte';
 
   export let onConnectBluetoothClick: () => void;
   /**

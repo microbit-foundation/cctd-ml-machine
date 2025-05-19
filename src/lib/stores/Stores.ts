@@ -32,7 +32,7 @@ import KNNModelSettings from '../domain/stores/KNNModelSettings';
 import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
-import Snackbar from '../../components/features/snackbar/Snackbar';
+import Snackbar from './Snackbar';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;

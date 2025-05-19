@@ -12,7 +12,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import type { MenuProperties } from '../../lib/navigation/Menus';
+  import type { MenuProperties } from './Menus';
   import Information from '../ui/information/Information.svelte';
 
   export let title: string;

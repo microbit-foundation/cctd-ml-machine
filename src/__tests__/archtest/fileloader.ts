@@ -7,8 +7,6 @@
 import fs from 'fs';
 import * as path from 'path';
 
-const directoriesToScan = ['./src/'];
-
 export interface DirectoryContents {
   files: string[];
   folders: string[];
@@ -37,7 +35,7 @@ export const readDirectory = (
 
 export const getFilesInDirectory = (
   directory: string,
-  ignoredFiles: string[],
+  ignoredFiles: string[] = [],
 ): string[] => {
   const files: string[] = [];
   const content = readDirectory(directory, ignoredFiles);

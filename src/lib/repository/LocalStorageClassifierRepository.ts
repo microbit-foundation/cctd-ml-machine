@@ -17,7 +17,7 @@ import type { ClassifierRepository } from '../domain/ClassifierRepository';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import { t } from '../../i18n';
 import type { FiltersRepository } from '../domain/FiltersRepository';
-import type Snackbar from '../../components/features/snackbar/Snackbar';
+import type Snackbar from '../stores/Snackbar';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,

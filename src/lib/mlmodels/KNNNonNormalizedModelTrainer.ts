@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { knnTrainingDataPoints } from '../../components/features/graphs/knngraph/KnnModelGraph';
+import { knnTrainingDataPoints } from '../stores/KnnModelGraph';
 import type { ModelTrainer } from '../domain/ModelTrainer';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import Logger from '../utils/Logger';

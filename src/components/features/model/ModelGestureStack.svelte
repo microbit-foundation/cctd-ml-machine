@@ -30,7 +30,7 @@
   import OutputMatrix from './ModelMatrix.svelte';
   import OutputSoundSelector from './ModelSoundSelector.svelte';
   import PinSelector from './ModelPinSelector.svelte';
-  import { PinTurnOnState } from './PinSelectorUtil';
+  import { PinTurnOnState } from '../../../lib/PinTurnOnState';
   import { MBSpecs } from 'microbyte';
 
   const gestures = stores.getGestures();

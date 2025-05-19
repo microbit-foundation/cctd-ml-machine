@@ -5,7 +5,10 @@
  */
 import { type Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { type GraphDrawConfig } from './KNNModelGraphDrawer';
-import { knnCurrentPoint, knnTrainingDataPoints } from './KnnModelGraph';
+import {
+  knnCurrentPoint,
+  knnTrainingDataPoints,
+} from '../../../../lib/stores/KnnModelGraph';
 import type Filters from '../../../../lib/domain/Filters';
 import { stores } from '../../../../lib/stores/Stores';
 import type { Point3D } from '../../../../lib/utils/graphUtils';

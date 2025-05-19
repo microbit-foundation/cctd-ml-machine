@@ -14,7 +14,7 @@ import type { MLModel } from './MLModel';
 import { t } from '../../i18n';
 import BaseVector from './BaseVector';
 import type { RecordingData } from './RecordingData';
-import type Snackbar from '../../components/features/snackbar/Snackbar';
+import type Snackbar from '../stores/Snackbar';
 
 class ClassifierFactory {
   public buildClassifier(

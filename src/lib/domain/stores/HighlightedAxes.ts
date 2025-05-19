@@ -20,7 +20,7 @@ import type { ApplicationState } from '../../stores/Stores';
 import PersistantWritable from '../../repository/PersistantWritable';
 import Logger from '../../utils/Logger';
 import { t } from '../../../i18n';
-import type Snackbar from '../../../components/features/snackbar/Snackbar';
+import type Snackbar from '../../stores/Snackbar';
 
 class HighlightedAxes implements Writable<Axis[]> {
   private value: PersistantWritable<Axis[]>; // Use this.set instead of this.value.set!

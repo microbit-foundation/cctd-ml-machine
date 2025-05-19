@@ -8,10 +8,7 @@ import Logger from '../utils/Logger';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import { distanceBetween } from '../utils/graphUtils';
 import type { Vector } from '../domain/Vector';
-import {
-  knnCurrentPoint,
-  knnNeighbours,
-} from '../../components/features/graphs/knngraph/KnnModelGraph';
+import { knnCurrentPoint, knnNeighbours } from '../stores/KnnModelGraph';
 
 class KNNMLModel implements MLModel {
   constructor(

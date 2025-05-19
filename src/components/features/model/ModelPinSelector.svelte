@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import { PinTurnOnState } from './PinSelectorUtil';
+  import { PinTurnOnState } from '../../../lib/PinTurnOnState';
   import { t } from '../../../i18n';
   import { MBSpecs } from 'microbyte';
   import Card from '../../ui/Card.svelte';

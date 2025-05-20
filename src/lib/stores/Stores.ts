@@ -34,7 +34,6 @@ import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
 import Snackbar from './Snackbar';
 import { state, type ApplicationState } from './applicationState';
-import ModelTraining from './ModelTraining';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -58,7 +57,6 @@ class Stores implements Readable<StoresType> {
   private validationSets: ValidationSets;
   private validationResults: ValidationResults;
   private recorder: Recorder;
-  private modelTraining: ModelTraining;
 
   public constructor(private applicationState: Readable<ApplicationState>) {
     this.neuralNetworkSettings = new NeuralNetworkSettings();
@@ -89,7 +87,6 @@ class Stores implements Readable<StoresType> {
       this.gestures,
       this.highlightedAxis,
     );
-    this.modelTraining = new ModelTraining(this.selectedModel);
   }
 
   public subscribe(
@@ -147,6 +144,10 @@ class Stores implements Readable<StoresType> {
     return this.highlightedAxis;
   }
 
+  public getSelectedModel(): SelectedModel {
+    return this.selectedModel;
+  }
+
   public getAvailableAxes(): AvailableAxes {
     return this.availableAxes;
   }
@@ -174,10 +175,7 @@ class Stores implements Readable<StoresType> {
   public getRecorder(): Recorder {
     return this.recorder;
   }
-
-  public getModelTraining(): ModelTraining {
-    return this.modelTraining;
-  }
 }
+
 
 export const stores = new Stores(state);

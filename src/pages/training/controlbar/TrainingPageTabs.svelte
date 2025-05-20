@@ -14,7 +14,7 @@
   import { navigate, Paths } from '../../../router/Router';
   import StandardButton from '../../../components/ui/buttons/StandardButton.svelte';
 
-  const selectedModel = stores.getModelTraining().getSelectedModel();
+  const selectedModel = stores.getSelectedModel();
 
   const showTabBar = hasFeature(Feature.KNN_MODEL);
   if (!showTabBar) {

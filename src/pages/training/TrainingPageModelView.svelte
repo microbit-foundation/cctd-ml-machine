@@ -14,7 +14,7 @@
   import FiltersList from '../../components/features/filters/FiltersList.svelte';
   import { state } from '../../lib/stores/applicationState';
 
-  const selectedModel = stores.getModelTraining().getSelectedModel();
+  const selectedModel = stores.getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);
 </script>
 

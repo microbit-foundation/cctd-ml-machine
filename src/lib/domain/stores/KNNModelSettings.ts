@@ -16,6 +16,7 @@ import StaticConfiguration from '../../../StaticConfiguration';
 import type SelectedModel from '../SelectedModel';
 import ModelRegistry from '../ModelRegistry';
 import { trainModel } from '../../../pages/training/TrainingPage';
+import type Classifier from './Classifier';
 
 interface KNNModelSettingsType {
   k: number;
@@ -25,7 +26,10 @@ interface KNNModelSettingsType {
 class KNNModelSettings implements Readable<KNNModelSettingsType> {
   private store: Writable<KNNModelSettingsType>;
 
-  public constructor(private selectedModel: SelectedModel) {
+  public constructor(
+    private selectedModel: SelectedModel,
+    private classifier: Classifier,
+  ) {
     this.store = writable({
       k: StaticConfiguration.defaultKnnNeighbourCount,
       normalized: StaticConfiguration.knnNormalizedDefault,
@@ -44,9 +48,7 @@ class KNNModelSettings implements Readable<KNNModelSettingsType> {
       k: get(this.store).k,
       normalized,
     });
-    if (get(this.selectedModel).id === ModelRegistry.KNN.id) {
-      trainModel(ModelRegistry.KNN);
-    }
+    this.onUpdate();
   }
 
   public setK(k: number) {
@@ -54,13 +56,17 @@ class KNNModelSettings implements Readable<KNNModelSettingsType> {
       k,
       normalized: get(this.store).normalized,
     });
-    if (get(this.selectedModel).id === ModelRegistry.KNN.id) {
-      trainModel(ModelRegistry.KNN);
-    }
+    this.onUpdate();
   }
 
   public isNormalized() {
     return get(this.store).normalized;
+  }
+
+  private onUpdate() {
+    if (get(this.selectedModel).id === ModelRegistry.KNN.id) {
+      trainModel(ModelRegistry.KNN);
+    }
   }
 }
 

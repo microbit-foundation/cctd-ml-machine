@@ -10,8 +10,8 @@
   import { btPatternInput, btPatternOutput } from '../../lib/stores/connectionStore';
   import Microbits from '../../lib/microbit-interfacing/Microbits';
   import { MBSpecs } from 'microbyte';
-  import { DeviceRequestStates, state } from '../../lib/stores/Stores';
   import StandardButton from '../ui/buttons/StandardButton.svelte';
+  import { DeviceRequestStates, state } from '../../lib/stores/applicationState';
 
   let reconnectText: string;
   let reconnectButtonText: string;

@@ -7,8 +7,9 @@
   import { fade } from 'svelte/transition';
   import Information from '../../../components/ui/information/Information.svelte';
   import { t } from './../../../i18n';
-  import { state, stores } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
+  import { state } from '../../../lib/stores/applicationState';
 
   const gestures = stores.getGestures();
   // Bool flags to know whether output microbit popup should be show

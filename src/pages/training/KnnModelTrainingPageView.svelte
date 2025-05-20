@@ -22,7 +22,7 @@
   const knnModelSettings = stores.getKNNModelSettings();
 
   $: {
-    if (!$classifier.model.isTrained) {
+    if (!$classifier.model.isTrained && $classifier.model.hasModel) {
       trainModel(ModelRegistry.KNN);
     }
   }
@@ -35,7 +35,6 @@
   const changeK = (amount: number) => {
     const newVal = Math.max($knnModelSettings.k + amount, 1);
     knnModelSettings.setK(newVal);
-    trainModel(ModelRegistry.KNN);
   };
   $: {
     if ($knnModelSettings.k > maxK) {

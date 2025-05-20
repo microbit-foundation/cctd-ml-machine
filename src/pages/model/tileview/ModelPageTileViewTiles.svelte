@@ -10,8 +10,9 @@
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import MediaQuery from '../../../components/layout/MediaQuery.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { state, stores } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
+  import { state } from '../../../lib/stores/applicationState';
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;

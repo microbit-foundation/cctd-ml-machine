@@ -9,8 +9,9 @@ import { get } from 'svelte/store';
 import * as d3 from 'd3';
 import { knnNeighbours } from '../../../../lib/stores/KnnModelGraph';
 import type { Point3D, Point3DTransformed } from '../../../../lib/utils/graphUtils';
-import { state, stores } from '../../../../lib/stores/Stores';
+import { stores } from '../../../../lib/stores/Stores';
 import StaticConfiguration from '../../../../StaticConfiguration';
+import { state } from '../../../../lib/stores/applicationState';
 
 export type GraphDrawConfig = {
   xRot: number;

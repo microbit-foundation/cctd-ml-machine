@@ -63,15 +63,12 @@ const trackModelEvent = () => {
     appInsights.trackEvent({
       name: 'ModelTrained',
       properties: {
-        modelType: get(stores.getSelectedModel()).id,
+        modelType: get(stores.getModelTraining().getSelectedModel()).id,
       },
     });
   }
 };
 
 export const selectModel = async (model: ModelInfo) => {
-  if (model.id === ModelRegistry.KNN.id) {
-    await trainKNNModel();
-  }
-  stores.getSelectedModel().set(model);
+  stores.getModelTraining().getSelectedModel().set(model);
 };

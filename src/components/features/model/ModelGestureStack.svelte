@@ -19,7 +19,7 @@
   import type { SoundData } from '../../../lib/domain/stores/gesture/Gesture';
   import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
-  import { state, stores } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Card from '../../ui/Card.svelte';
   import GestureDot from '../../ui/GestureDot.svelte';
@@ -32,6 +32,7 @@
   import PinSelector from './ModelPinSelector.svelte';
   import { PinTurnOnState } from '../../../lib/PinTurnOnState';
   import { MBSpecs } from 'microbyte';
+  import { state } from '../../../lib/stores/applicationState';
 
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';

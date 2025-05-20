@@ -5,7 +5,7 @@
  */
 
 import { get, writable } from 'svelte/store';
-import { DeviceRequestStates, state } from './Stores';
+import { DeviceRequestStates, state } from './applicationState';
 
 export enum ConnectDialogStates {
   NONE, // No connection in progress -> Dialog box closed

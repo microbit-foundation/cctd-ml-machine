@@ -6,11 +6,12 @@
 
 import { get } from 'svelte/store';
 import type { RecordingData } from '../domain/RecordingData';
-import { state, stores } from '../stores/Stores';
+import { stores } from '../stores/Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 import Logger from './Logger';
 import { alertUser } from '../stores/uiStore';
 import { t } from '../../i18n';
+import { state } from '../stores/applicationState';
 
 /**
  * @deprecated Will be removed in the future. Use store.getRecorder().startRecording(...) instead.

@@ -30,7 +30,6 @@
   import Router from './router/Router.svelte';
   import { Feature, getFeature } from './lib/FeatureToggles';
   import { welcomeLog } from './lib/utils/Logger';
-  import { DeviceRequestStates, state } from './lib/stores/Stores';
   import MediaQuery from './components/layout/MediaQuery.svelte';
   import BottomBarMenuView from './components/layout/BottomBarMenuView.svelte';
   import CookieBanner from './components/features/cookie-bannner/CookieBanner.svelte';
@@ -39,6 +38,7 @@
   import OverlayView from './components/layout/OverlayView.svelte';
   import SideBarMenuView from './components/layout/SideBarMenuView.svelte';
   import PageContentView from './components/layout/PageContentView.svelte';
+  import { DeviceRequestStates, state } from './lib/stores/applicationState';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {

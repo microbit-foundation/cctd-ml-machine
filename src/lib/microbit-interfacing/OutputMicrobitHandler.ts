@@ -10,7 +10,7 @@ import TypingUtils from '../TypingUtils';
 import Logger from '../utils/Logger';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
-import { DeviceRequestStates, ModelView, state } from '../stores/Stores';
+import { DeviceRequestStates, ModelView, state } from '../stores/applicationState';
 
 class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);

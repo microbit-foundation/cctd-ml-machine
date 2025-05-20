@@ -11,8 +11,9 @@
   import TrainModelFirstTitle from '../../../components/features/model/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { state, stores } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import PleaseConnect from '../../../components/features/PleaseConnect.svelte';
+  import { state } from '../../../lib/stores/applicationState';
 
   const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation

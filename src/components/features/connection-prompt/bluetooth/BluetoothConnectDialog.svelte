@@ -19,8 +19,8 @@
   import StaticConfiguration from '../../../../StaticConfiguration';
   import Logger from '../../../../lib/utils/Logger';
   import { MBSpecs } from 'microbyte';
-  import { DeviceRequestStates, state } from '../../../../lib/stores/Stores';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
+  import { DeviceRequestStates, state } from '../../../../lib/stores/applicationState';
 
   // callbacks
   export let deviceState: DeviceRequestStates;

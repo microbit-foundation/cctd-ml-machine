@@ -13,7 +13,8 @@ import { t } from '../../i18n';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import Gesture from '../domain/stores/gesture/Gesture';
-import { state, stores } from './Stores';
+import { stores } from './Stores';
+import { state } from './applicationState';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));

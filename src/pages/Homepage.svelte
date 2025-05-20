@@ -26,7 +26,7 @@
   import { t } from '../i18n';
   import Environment from '../lib/Environment';
   import DevTools from '../components/features/GoToPlaygroundButton.svelte';
-  import { state } from '../lib/stores/Stores';
+  import { state } from '../lib/stores/applicationState';
 
   type ContentTile = { tile: ComponentType; spanColumns: number };
   // Just add the content titles you wish to put on front page, in the order you wish them to be there

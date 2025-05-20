@@ -12,8 +12,9 @@
   import FilterGraphLimits from '../../lib/utils/FilterLimits';
   import { type GestureData } from '../../lib/domain/stores/gesture/Gesture';
   import StaticConfiguration from '../../StaticConfiguration';
-  import { state, stores } from '../../lib/stores/Stores';
   import type { RecordingData } from '../../lib/domain/RecordingData';
+  import { stores } from '../../lib/stores/Stores';
+  import { state } from '../../lib/stores/applicationState';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;

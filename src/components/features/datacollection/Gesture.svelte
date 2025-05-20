@@ -20,16 +20,16 @@
   import GestureCard from '../../ui/Card.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Gesture from '../../../lib/domain/stores/gesture/Gesture';
-  import { state, stores } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import type { RecordingData } from '../../../lib/domain/RecordingData';
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
+  import { state } from '../../../lib/stores/applicationState';
 
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
   const gestures = stores.getGestures();
-  $: liveData = $stores.liveData;
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = StaticConfiguration.recordingDuration;

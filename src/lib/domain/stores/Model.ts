@@ -15,7 +15,6 @@ import {
 import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
 import type { MLModel } from '../MLModel';
 import type { ModelTrainer } from '../ModelTrainer';
-import BaseVector from '../BaseVector';
 import type { Vector } from '../Vector';
 
 export enum TrainingStatus {

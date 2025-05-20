@@ -16,11 +16,11 @@ import SelectedModel from '../SelectedModel';
 import ModelRegistry from '../ModelRegistry';
 import type { Axis } from '../Axis';
 import { trainModel } from '../../../pages/training/TrainingPage';
-import type { ApplicationState } from '../../stores/Stores';
 import PersistantWritable from '../../repository/PersistantWritable';
 import Logger from '../../utils/Logger';
 import { t } from '../../../i18n';
 import type Snackbar from '../../stores/Snackbar';
+import type { ApplicationState } from '../../stores/applicationState';
 
 class HighlightedAxes implements Writable<Axis[]> {
   private value: PersistantWritable<Axis[]>; // Use this.set instead of this.value.set!

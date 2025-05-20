@@ -8,7 +8,6 @@ import Logger from '../utils/Logger';
 import { buttonPressed, onCatastrophicError } from '../stores/uiStore';
 import TypingUtils from '../TypingUtils';
 import { get } from 'svelte/store';
-import { DeviceRequestStates, ModelView, state, stores } from '../stores/Stores';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
 } from '../livedata/MicrobitAccelerometerData';
@@ -16,6 +15,8 @@ import LiveDataBuffer from '../domain/LiveDataBuffer';
 import StaticConfiguration from '../../StaticConfiguration';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
+import { stores } from '../stores/Stores';
+import { DeviceRequestStates, ModelView, state } from '../stores/applicationState';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);

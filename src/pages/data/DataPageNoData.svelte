@@ -9,7 +9,7 @@
   import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import { t } from '../../i18n';
-  import { state } from '../../lib/stores/Stores';
+  import { state } from '../../lib/stores/applicationState';
   import { importExampleDataset } from './DataPage';
 </script>
 

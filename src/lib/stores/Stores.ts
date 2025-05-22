@@ -34,6 +34,7 @@ import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
 import Snackbar from './Snackbar';
 import { state, type ApplicationState } from './applicationState';
+import { knnHasTrained } from './KNNStores';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -68,7 +69,7 @@ class Stores implements Readable<StoresType> {
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
-    this.selectedModel = new SelectedModel();
+    this.selectedModel = new SelectedModel(knnHasTrained);
     this.knnModelSettings = new KNNModelSettings(this.selectedModel, this.classifier);
     this.highlightedAxis = new HighlightedAxes(
       this.classifier,
@@ -176,6 +177,5 @@ class Stores implements Readable<StoresType> {
     return this.recorder;
   }
 }
-
 
 export const stores = new Stores(state);

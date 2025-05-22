@@ -9,11 +9,11 @@
   import arrowCreate from 'arrows-svg';
   import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
-  import { knnCurrentPoint } from '../../../../lib/stores/KnnModelGraph';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import type { Axis } from '../../../../lib/domain/Axis';
   import { stores } from '../../../../lib/stores/Stores';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
+  import { knnCurrentPoint } from '../../../../lib/stores/KNNStores';
 
   const classifier = stores.getClassifier();
 

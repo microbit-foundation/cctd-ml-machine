@@ -15,8 +15,9 @@ import {
 import StaticConfiguration from '../../../StaticConfiguration';
 import type SelectedModel from '../SelectedModel';
 import ModelRegistry from '../ModelRegistry';
-import { trainModel } from '../../../pages/training/TrainingPage';
+import { trainKNNModel } from '../../../pages/training/TrainingPage';
 import type Classifier from './Classifier';
+import { knnHasTrained } from '../../stores/KNNStores';
 
 interface KNNModelSettingsType {
   k: number;
@@ -65,7 +66,10 @@ class KNNModelSettings implements Readable<KNNModelSettingsType> {
 
   private onUpdate() {
     if (get(this.selectedModel).id === ModelRegistry.KNN.id) {
-      trainModel(ModelRegistry.KNN);
+      if (get(knnHasTrained)) {
+        // Only train if the knn model has been trained before
+        trainKNNModel();
+      }
     }
   }
 }

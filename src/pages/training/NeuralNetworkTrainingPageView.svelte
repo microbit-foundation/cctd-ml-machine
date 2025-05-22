@@ -5,9 +5,8 @@
  -->
 <script lang="ts">
   import { stores } from '../../lib/stores/Stores';
-  import { loss, trainModel } from './TrainingPage';
+  import { loss, trainNNModel } from './TrainingPage';
   import { t } from './../../i18n';
-  import ModelRegistry from '../../lib/domain/ModelRegistry';
   import Logger from '../../lib/utils/Logger';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import LossGraph from '../../components/features/graphs/LossGraph.svelte';
@@ -19,7 +18,7 @@
   const neuralNetworkSettings = stores.getNeuralNetworkSettings();
 
   const trainModelClickHandler = () => {
-    trainModel(ModelRegistry.NeuralNetwork).then(() => {
+    trainNNModel().then(() => {
       Logger.log('NeuralNetworkTrainingPageView', 'Model trained');
     });
   };

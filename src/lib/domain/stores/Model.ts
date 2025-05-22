@@ -16,6 +16,13 @@ import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRep
 import type { MLModel } from '../MLModel';
 import type { ModelTrainer } from '../ModelTrainer';
 import type { Vector } from '../Vector';
+import CookieManager from '../../CookieManager';
+import { appInsights } from '../../../appInsights';
+import { stores } from '../../stores/Stores';
+import type { ModelInfo } from '../ModelRegistry';
+import Logger from '../../utils/Logger';
+import ModelRegistry from '../ModelRegistry';
+import { knnHasTrained } from '../../stores/KNNStores';
 
 export enum TrainingStatus {
   Untrained,
@@ -51,16 +58,24 @@ class Model implements Readable<ModelData> {
   }
 
   public async train<T extends MLModel>(modelTrainer: ModelTrainer<T>): Promise<void> {
+    Logger.log('Model', 'Training new model: ' + modelTrainer.getModelInfo().title);
     this.modelData.update(state => {
       state.trainingStatus = TrainingStatus.InProgress;
       return state;
     });
     try {
       await this.trainerConsumer(modelTrainer);
+
+      // TODO: Consider making a service for some of the business logic here
+      if (modelTrainer.getModelInfo().id === ModelRegistry.KNN.id) {
+        knnHasTrained.set(true);
+      }
+
       this.modelData.update(state => {
         state.trainingStatus = TrainingStatus.Success;
         return state;
       });
+      this.trackModelEvent(modelTrainer.getModelInfo());
     } catch (err) {
       this.modelData.update(state => {
         state.trainingStatus = TrainingStatus.Failure;
@@ -126,6 +141,17 @@ class Model implements Readable<ModelData> {
       };
     });
     return derivedStore.subscribe(run, invalidate);
+  }
+
+  private trackModelEvent(model: ModelInfo): void {
+    if (CookieManager.getComplianceChoices().analytics) {
+      appInsights.trackEvent({
+        name: 'ModelTrained',
+        properties: {
+          modelType: model.id,
+        },
+      });
+    }
   }
 }
 

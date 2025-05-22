@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import type { ModelInfo } from '../domain/ModelRegistry';
+import ModelRegistry from '../domain/ModelRegistry';
 import type { ModelTrainer } from '../domain/ModelTrainer';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import LayersMLModel from './LayersMLModel';
@@ -25,6 +27,11 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
     private settings: LayersModelTrainingSettings,
     private onFitIteration: (h: LossTrainingIteration) => void,
   ) {}
+
+  public getModelInfo(): ModelInfo {
+    return ModelRegistry.NeuralNetwork;
+  }
+
   public async trainModel(
     trainingDataRepository: TrainingDataRepository,
   ): Promise<LayersMLModel> {

@@ -1,5 +1,5 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -16,17 +16,17 @@
 
 <script lang="ts">
   import { type ComponentType } from 'svelte';
-  import FrontPageContentTile from '../components/FrontPageContentTile.svelte';
+  import FrontPageContentTile from '../components/features/FrontPageContentTile.svelte';
   import DoItYourselfMachineLearningTile from './home-page-content-tiles/DoItYourselfMachineLearningTile.svelte';
   import NewFeaturesTile from './home-page-content-tiles/NewFeaturesTile.svelte';
   import WhatIsMachineLearningTile from './home-page-content-tiles/WhatIsMachineLearningTile.svelte';
-  import ControlBar from '../components/control-bar/ControlBar.svelte';
-  import ContactUsControlBarButton from '../components/control-bar/control-bar-items/ContactUsControlBarButton.svelte';
-  import SelectLanguageControlBarDropdown from '../components/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
+  import ControlBar from '../components/ui/control-bar/ControlBar.svelte';
+  import ContactUsControlBarButton from '../components/ui/control-bar/control-bar-items/ContactUsControlBarButton.svelte';
+  import SelectLanguageControlBarDropdown from '../components/ui/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
   import { t } from '../i18n';
-  import Environment from '../script/Environment';
-  import DevTools from '../components/DevTools.svelte';
-  import { state } from '../script/stores/Stores';
+  import Environment from '../lib/Environment';
+  import DevTools from '../components/features/GoToPlaygroundButton.svelte';
+  import { state } from '../lib/stores/Stores';
 
   type ContentTile = { tile: ComponentType; spanColumns: number };
   // Just add the content titles you wish to put on front page, in the order you wish them to be there

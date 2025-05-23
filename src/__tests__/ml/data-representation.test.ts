@@ -2,21 +2,21 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-import LiveDataBuffer from '../../script/domain/LiveDataBuffer';
+import LiveDataBuffer from '../../lib/domain/LiveDataBuffer';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
-} from '../../script/livedata/MicrobitAccelerometerData';
+} from '../../lib/livedata/MicrobitAccelerometerData';
 import { repeat } from '../testUtils';
 import { get } from 'svelte/store';
-import { type LiveDataVector } from '../../script/domain/stores/LiveDataVector';
-import SmoothedLiveData from '../../script/livedata/SmoothedLiveData';
-import { smoothNewValue } from '../../script/utils/graphUtils';
-import type { LiveData } from '../../script/domain/stores/LiveData';
+import { type LiveDataVector } from '../../lib/domain/stores/LiveDataVector';
+import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
+import { smoothNewValue } from '../../lib/utils/graphUtils';
+import type { LiveData } from '../../lib/domain/stores/LiveData';
 
 describe('Data representation tests', () => {
   test('Creating accelerometer live data does not throw', () => {
@@ -50,8 +50,8 @@ describe('Data representation tests', () => {
       20,
     );
 
-    expect(() => get(liveData).getVector()).not.toThrow();
-    expect(get(liveData).getVector()).toEqual([1, 2, 3]);
+    expect(() => get(liveData).getValue()).not.toThrow();
+    expect(get(liveData).getValue()).toEqual([1, 2, 3]);
   });
 
   test('Test smoothed values', () => {
@@ -65,16 +65,16 @@ describe('Data representation tests', () => {
     liveData.put(point1);
     liveData.put(point2);
 
-    expect(get(smoothLiveData).getVector()[0]).toBeCloseTo(
-      smoothNewValue(point2.getVector()[0], point1.getVector()[0]),
+    expect(get(smoothLiveData).getValue()[0]).toBeCloseTo(
+      smoothNewValue(point2.getValue()[0], point1.getValue()[0]),
       10,
     );
-    expect(get(smoothLiveData).getVector()[1]).toBeCloseTo(
-      smoothNewValue(point2.getVector()[1], point1.getVector()[1]),
+    expect(get(smoothLiveData).getValue()[1]).toBeCloseTo(
+      smoothNewValue(point2.getValue()[1], point1.getValue()[1]),
       10,
     );
-    expect(get(smoothLiveData).getVector()[2]).toBeCloseTo(
-      smoothNewValue(point2.getVector()[2], point1.getVector()[2]),
+    expect(get(smoothLiveData).getValue()[2]).toBeCloseTo(
+      smoothNewValue(point2.getValue()[2], point1.getValue()[2]),
       10,
     );
   });

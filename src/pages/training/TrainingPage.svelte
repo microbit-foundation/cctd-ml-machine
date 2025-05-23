@@ -1,15 +1,15 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
-  import { state, stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../lib/stores/Stores';
   import TrainingPageModelView from './TrainingPageModelView.svelte';
   import InsufficientData from './InsufficientData.svelte';
-  import PleaseConnect from '../../components/PleaseConnect.svelte';
+  import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import TrainingPageTabs from './controlbar/TrainingPageTabs.svelte';
 
   const gestures = stores.getGestures();

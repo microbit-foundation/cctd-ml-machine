@@ -1,17 +1,17 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import FilterToggler from './FilterToggler.svelte';
-  import ControlBar from '../../components/control-bar/ControlBar.svelte';
+  import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import { t } from '../../i18n';
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import { Paths, navigate } from '../../router/paths';
-  import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
-  import { stores } from '../../script/stores/Stores';
+  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
+  import { stores } from '../../lib/stores/Stores';
+  import { navigate, Paths } from '../../router/Router';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
 
   let isFilterInspectorDialogOpen = false;
   let currentFilter: FilterType | undefined = undefined;

@@ -10,8 +10,8 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install app dependencies
-RUN npm install 
-RUN npm install express
+RUN npm ci 
+RUN npm install express@4.21.2
 
 # Bundle app source
 COPY . .

@@ -1,14 +1,14 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import Information from '../../../components/information/Information.svelte';
-  import OutputGesture from '../../../components/output/OutputGesture.svelte';
+  import Information from '../../../components/ui/information/Information.svelte';
   import { t } from './../../../i18n';
-  import { state, stores } from '../../../script/stores/Stores';
+  import { state, stores } from '../../../lib/stores/Stores';
+  import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
 
   const gestures = stores.getGestures();
   // Bool flags to know whether output microbit popup should be show

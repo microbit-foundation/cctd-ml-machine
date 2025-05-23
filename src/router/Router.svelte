@@ -1,39 +1,37 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import DataPage from '../pages/DataPage.svelte';
-  import Homepage from '../pages/Homepage.svelte';
-  import ModelPage from '../pages/model/ModelPage.svelte';
-  import FilterPage from '../pages/filter/FilterPage.svelte';
-  import TrainingPage from '../pages/training/TrainingPage.svelte';
-  import PlaygroundPage from '../pages/PlaygroundPage.svelte';
-  import { currentPageComponent } from '../views/currentComponentStore';
-  import { currentPath, navigate, Paths, type PathType } from './paths';
+  import { currentPath, navigate, Paths, type PathType } from './Router';
+  import { currentPageComponent } from '../components/layout/currentComponentStore';
 
-  function getRoutedComponent(path: PathType) {
+  async function getRoutedComponent(path: PathType) {
     switch (path) {
       case Paths.HOME:
-        return Homepage;
+        return (await import('../pages/Homepage.svelte')).default;
+      case Paths.VALIDATE:
+        return (await import('../pages/ValidationPage.svelte')).default;
       case Paths.PLAYGROUND:
-        return PlaygroundPage;
+        return (await import('../pages/PlaygroundPage.svelte')).default;
       case Paths.DATA:
-        return DataPage;
+        return (await import('../pages/DataPage.svelte')).default;
       case Paths.TRAINING:
-        return TrainingPage;
+        return (await import('../pages/training/TrainingPage.svelte')).default;
       case Paths.MODEL:
-        return ModelPage;
+        return (await import('../pages/model/ModelPage.svelte')).default;
       case Paths.FILTERS:
-        return FilterPage;
+        return (await import('../pages/filter/FilterPage.svelte')).default;
     }
   }
 
   const onPathChange = (path: PathType) => {
-    currentPageComponent.set(getRoutedComponent(path));
+    getRoutedComponent(path).then(comp => {
+      currentPageComponent.set(comp);
+    });
     let shouldPushState = true;
 
     const historyState = pathFromBrowserHistoryState(history.state);

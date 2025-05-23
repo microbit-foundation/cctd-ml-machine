@@ -1,5 +1,5 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -8,12 +8,12 @@
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
-  import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
-  import FilterGraphLimits from '../../script/utils/FilterLimits';
-  import { type GestureData } from '../../script/domain/stores/gesture/Gesture';
-  import { type RecordingData } from '../../script/domain/stores/gesture/Gestures';
+  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
+  import FilterGraphLimits from '../../lib/utils/FilterLimits';
+  import { type GestureData } from '../../lib/domain/stores/gesture/Gesture';
   import StaticConfiguration from '../../StaticConfiguration';
-  import { state, stores } from '../../script/stores/Stores';
+  import { state, stores } from '../../lib/stores/Stores';
+  import type { RecordingData } from '../../lib/domain/RecordingData';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
@@ -155,9 +155,9 @@
       )
       .map(d => d.value);
 
-    const xs = liveD.map(d => d!.getVector()[0]);
-    const ys = liveD.map(d => d!.getVector()[1]);
-    const zs = liveD.map(d => d!.getVector()[2]);
+    const xs = liveD.map(d => d!.getValue()[0]);
+    const ys = liveD.map(d => d!.getValue()[1]);
+    const zs = liveD.map(d => d!.getValue()[2]);
 
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {

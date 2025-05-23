@@ -1,14 +1,14 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
-  import Information from '../../components/information/Information.svelte';
-  import { type Filter } from '../../script/domain/Filter';
-  import FilterTypes, { FilterType } from '../../script/domain/FilterTypes';
-  import { stores } from '../../script/stores/Stores';
+  import Information from '../../components/ui/information/Information.svelte';
+  import { type Filter } from '../../lib/domain/Filter';
+  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
+  import { stores } from '../../lib/stores/Stores';
   import D3Plot from './D3Plot.svelte';
 
   const classifier = stores.getClassifier();

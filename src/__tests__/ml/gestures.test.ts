@@ -2,12 +2,12 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-import { stores } from '../../script/stores/Stores';
+import { stores } from '../../lib/stores/Stores';
 
 describe('Tests of Gestures', () => {
   beforeEach(() => {

@@ -1,18 +1,21 @@
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 import { get, writable } from 'svelte/store';
-import KNNNonNormalizedModelTrainer from '../../script/mlmodels/KNNNonNormalizedModelTrainer';
-import { stores } from '../../script/stores/Stores';
-import CookieManager from '../../script/CookieManager';
+import KNNNonNormalizedModelTrainer from '../../lib/mlmodels/KNNNonNormalizedModelTrainer';
+import { stores } from '../../lib/stores/Stores';
+import CookieManager from '../../lib/CookieManager';
 import { appInsights } from '../../appInsights';
-import ModelRegistry, { type ModelInfo } from '../../script/domain/ModelRegistry';
+import ModelRegistry, { type ModelInfo } from '../../lib/domain/ModelRegistry';
 import LayersModelTrainer, {
   type LossTrainingIteration,
-} from '../../script/mlmodels/LayersModelTrainer';
-import Logger from '../../script/utils/Logger';
+} from '../../lib/mlmodels/LayersModelTrainer';
+import Logger from '../../lib/utils/Logger';
+import KNNModelTrainer from '../../lib/mlmodels/KNNModelTrainer';
+import type { ModelTrainer } from '../../lib/domain/ModelTrainer';
+import type { MLModel } from '../../lib/domain/MLModel';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 
@@ -24,8 +27,7 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
 };
 
 const trainNNModel = async () => {
-  //stores.getHighlightedAxes().set(get(stores.getAvailableAxes()));
-  loss.set([]);
+  loss.set([]); // Reset the loss graph
   const modelTrainer = new LayersModelTrainer(
     get(stores.getNeuralNetworkSettings()),
     trainingIterationHandler,
@@ -34,10 +36,15 @@ const trainNNModel = async () => {
 };
 
 const trainKNNModel = async () => {
-  const modelTrainer = new KNNNonNormalizedModelTrainer(
-    get(stores.getKNNModelSettings()).k,
-  );
-  await stores.getClassifier().getModel().train(modelTrainer);
+  const knnSettings = get(stores.getKNNModelSettings());
+  const getKNNModelTrainer = (): ModelTrainer<MLModel> => {
+    if (knnSettings.normalized) {
+      return new KNNModelTrainer(knnSettings.k);
+    } else {
+      return new KNNNonNormalizedModelTrainer(knnSettings.k);
+    }
+  };
+  await stores.getClassifier().getModel().train(getKNNModelTrainer());
 };
 
 export const trainModel = async (model: ModelInfo) => {
@@ -62,6 +69,9 @@ const trackModelEvent = () => {
   }
 };
 
-export const selectModel = (model: ModelInfo) => {
+export const selectModel = async (model: ModelInfo) => {
+  if (model.id === ModelRegistry.KNN.id) {
+    await trainKNNModel();
+  }
   stores.getSelectedModel().set(model);
 };

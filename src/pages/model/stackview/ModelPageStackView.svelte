@@ -1,18 +1,18 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
-  import { buttonPressed, areActionsAllowed } from '../../../script/stores/uiStore';
+  import { buttonPressed, areActionsAllowed } from '../../../lib/stores/uiStore';
   import { onMount } from 'svelte';
-  import Microbits from '../../../script/microbit-interfacing/Microbits';
-  import TrainModelFirstTitle from '../../../components/TrainModelFirstTitle.svelte';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
+  import TrainModelFirstTitle from '../../../components/features/model/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { state, stores } from '../../../script/stores/Stores';
-  import PleaseConnect from '../../../components/PleaseConnect.svelte';
+  import { state, stores } from '../../../lib/stores/Stores';
+  import PleaseConnect from '../../../components/features/PleaseConnect.svelte';
 
   const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation

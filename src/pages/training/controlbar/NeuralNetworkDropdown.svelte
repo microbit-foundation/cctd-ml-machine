@@ -1,16 +1,16 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
   import RangeSlider from 'svelte-range-slider-pips';
-  import StandardDropdownButton from '../../../components/buttons/StandardDropdownButton.svelte';
   import windi from './../../../../windi.config.js';
-  import NumberSelector from '../../../components/NumberSelector.svelte';
-  import { stores } from '../../../script/stores/Stores.js';
-  import ModelRegistry from '../../../script/domain/ModelRegistry.js';
+  import NumberSelector from '../../../components/ui/NumberSelector.svelte';
+  import { stores } from '../../../lib/stores/Stores.js';
+  import ModelRegistry from '../../../lib/domain/ModelRegistry.js';
   import { selectModel } from '../TrainingPage.js';
+  import StandardDropdownButton from '../../../components/ui/buttons/StandardDropdownButton.svelte';
 
   export let isSelected: boolean;
   const color = windi.theme.extend.colors.primary;
@@ -45,7 +45,7 @@
           <RangeSlider
             bind:value={learningRateSliderValue}
             min={0.01}
-            max={1.5}
+            max={1.0}
             float
             step={0.01}
             springValues={{ damping: 0.9, stiffness: 0.5, precision: 0.1 }} />

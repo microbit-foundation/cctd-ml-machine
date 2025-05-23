@@ -1,5 +1,5 @@
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -12,6 +12,7 @@ export default {
       colors: {
         primary: '#2B5EA7',
         primarytext: '#000000',
+        primaryaccent: '#8BbEf7',
         secondary: '#2CCAC0',
         secondarytext: '#FFFFFF',
         info: '#98A2B3',
@@ -22,6 +23,7 @@ export default {
         warning: '#FF7777',
         disabled: '#8892A3',
         primaryborder: '#E5E7EB',
+        primaryborderaccent: '#b5b7bB',
         infobglight: '#E7E5E4',
         infobgdark: '#57534E',
         infoiconlight: '#FFFFFF7F',

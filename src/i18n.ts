@@ -1,18 +1,21 @@
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
 import { init, locale, register } from 'svelte-i18n';
+import { t as translate } from 'svelte-i18n';
 export { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
 import browserLang from 'browser-lang';
-import PersistantWritable from './script/repository/PersistantWritable';
+import PersistantWritable from './lib/repository/PersistantWritable';
 
-register('en', () => import('./messages/ui.en.json'));
-register('da', () => import('./messages/ui.da.json'));
-register('de', () => import('./messages/ui.de.json'));
+export const tr = translate; // make intellisense a little better
+
+register('en', () => import('./assets/messages/ui.en.json'));
+register('da', () => import('./assets/messages/ui.da.json'));
+register('de', () => import('./assets/messages/ui.de.json'));
 
 const initialLocale = browserLang({
   languages: ['en', 'da', 'de'],

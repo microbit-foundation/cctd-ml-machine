@@ -1,5 +1,5 @@
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -11,10 +11,10 @@ import {
   writable,
   get,
 } from 'svelte/store';
-import type { GestureRepository } from '../../script/domain/GestureRepository';
-import Gesture from '../../script/domain/stores/gesture/Gesture';
-import type { PersistantGestureData } from '../../script/domain/stores/gesture/Gestures';
-import GestureConfidence from '../../script/domain/stores/gesture/GestureConfidence';
+import type { GestureRepository } from '../../lib/domain/GestureRepository';
+import Gesture from '../../lib/domain/stores/gesture/Gesture';
+import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
+import GestureConfidence from '../../lib/domain/stores/gesture/GestureConfidence';
 
 class TestGestureRepository implements GestureRepository {
   private gestures = writable<Gesture[]>([]);
@@ -31,7 +31,7 @@ class TestGestureRepository implements GestureRepository {
     this.gestures.set([]);
   }
 
-  addGesture(gestureData: PersistantGestureData): Gesture {
+  addGesture(gestureData: PersistedGestureData): Gesture {
     const gesture = new Gesture(
       writable(gestureData),
       new GestureConfidence(0.5, writable(0)),

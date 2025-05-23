@@ -1,5 +1,5 @@
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -8,9 +8,9 @@
  * Static configuration values. These values are not expected to change, while the application is running.
  */
 import { MBSpecs } from 'microbyte';
-import { PinTurnOnState } from './components/output/PinSelectorUtil';
-import { type LayersModelTrainingSettings as NeuralNetworkModelTrainerSettings } from './script/mlmodels/LayersModelTrainer';
-import { HexOrigin } from './script/microbit-interfacing/HexOrigin';
+import { PinTurnOnState } from './lib/PinTurnOnState';
+import { type LayersModelTrainingSettings as NeuralNetworkModelTrainerSettings } from './lib/mlmodels/LayersModelTrainer';
+import { HexOrigin } from './lib/microbit-interfacing/HexOrigin';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
@@ -71,14 +71,18 @@ class StaticConfiguration {
 
   // Colors to assign to gestures, useful for identifying gestures on graphs.
   public static readonly gestureColors = [
-    '#FCA311',
-    '#00ff81',
-    '#b1e400',
-    '#ADFCF9',
-    '#89A894',
-    '#4B644A',
-    '#49393B',
-    '#341C1C',
+    '#a6cee3',
+    '#1f78b4',
+    '#b2df8a',
+    '#33a02c',
+    '#fb9a99',
+    '#e31a1c',
+    '#fdbf6f',
+    '#ff7f00',
+    '#cab2d6',
+    '#6a3d9a',
+    '#ffff99',
+    '#b15928',
   ];
 
   // What will the min and max y-values on the livegraph be?
@@ -130,7 +134,7 @@ class StaticConfiguration {
     {
       noOfEpochs: 80,
       batchSize: 16,
-      learningRate: 0.5,
+      learningRate: 0.1,
       validationSplit: 0.1,
       noOfUnits: 16, // size of hidden layer
     };
@@ -139,5 +143,10 @@ class StaticConfiguration {
    * How many samples should the KNN model use for prediction? i.e the k-value.
    */
   public static readonly defaultKnnNeighbourCount = 3;
+
+  /**
+   * Whether the knn model should be normalized by default
+   */
+  public static readonly knnNormalizedDefault = false;
 }
 export default StaticConfiguration;

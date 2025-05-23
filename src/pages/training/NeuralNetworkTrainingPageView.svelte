@@ -1,18 +1,17 @@
 <!--
-  (c) 2023, center for computational thinking and design at aarhus university and contributors
+  (c) 2023-2025, center for computational thinking and design at aarhus university and contributors
  
   spdx-license-identifier: mit
  -->
 <script lang="ts">
-  import { stores } from '../../script/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
   import { loss, trainModel } from './TrainingPage';
   import { t } from './../../i18n';
-  import LossGraph from '../../components/graphs/LossGraph.svelte';
-  import StaticConfiguration from '../../StaticConfiguration';
-  import StandardButton from '../../components/buttons/StandardButton.svelte';
-  import ModelRegistry from '../../script/domain/ModelRegistry';
-  import Logger from '../../script/utils/Logger';
-  import { Feature, hasFeature } from '../../script/FeatureToggles';
+  import ModelRegistry from '../../lib/domain/ModelRegistry';
+  import Logger from '../../lib/utils/Logger';
+  import { Feature, hasFeature } from '../../lib/FeatureToggles';
+  import LossGraph from '../../components/features/graphs/LossGraph.svelte';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();

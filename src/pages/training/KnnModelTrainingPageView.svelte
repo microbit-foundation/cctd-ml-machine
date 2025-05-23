@@ -1,20 +1,23 @@
 <!--
-  (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { state, stores } from '../../script/stores/Stores';
-  import AxesFilterVectorView from '../../components/graphs/knngraph/AxesFilterVectorView.svelte';
+  import { stores } from '../../lib/stores/Stores';
   import { trainModel } from './TrainingPage';
-  import ModelRegistry from '../../script/domain/ModelRegistry';
-  import KnnModelGraph from '../../components/graphs/knngraph/KnnModelGraph.svelte';
+  import ModelRegistry from '../../lib/domain/ModelRegistry';
   import { t } from '../../i18n';
   import PredictionLegend from './PredictionLegend.svelte';
+  import StaticConfiguration from '../../StaticConfiguration';
+  import AxesFilterVectorView from '../../components/features/graphs/knngraph/AxesFilterVectorView.svelte';
+  import KnnModelGraph from '../../components/features/graphs/knngraph/KnnModelGraph.svelte';
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();
   const filters = classifier.getFilters();
   const highlightedAxis = stores.getHighlightedAxes();
+  const availableAxes = stores.getAvailableAxes();
 
   const knnModelSettings = stores.getKNNModelSettings();
 
@@ -80,7 +83,24 @@
     {/if}
   </div>
 {:else}
-  <div class="flex flex-grow flex-col justify-center items-center">
+  <div class="flex flex-col flex-grow justify-center items-center gap-4">
     <p class="text-lg max-w-120">{$t('content.trainer.knn.selectOneAxis')}</p>
+    <div class="flex flex-row gap-2">
+      <StandardButton
+        colorOverride={StaticConfiguration.graphColors[0]}
+        onClick={() => highlightedAxis.set([$availableAxes[0]])}>
+        X
+      </StandardButton>
+      <StandardButton
+        colorOverride={StaticConfiguration.graphColors[1]}
+        onClick={() => highlightedAxis.set([$availableAxes[1]])}>
+        Y
+      </StandardButton>
+      <StandardButton
+        colorOverride={StaticConfiguration.graphColors[2]}
+        onClick={() => highlightedAxis.set([$availableAxes[2]])}>
+        Z
+      </StandardButton>
+    </div>
   </div>
 {/if}

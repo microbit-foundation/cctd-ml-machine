@@ -4,5 +4,6 @@
   "lossGraph": true,
   "makecode": true,
   "liveGraphInputValues": true,
-  "recordingScrubberValues": true
+  "recordingScrubberValues": true,
+  "modelValidation": true
 }

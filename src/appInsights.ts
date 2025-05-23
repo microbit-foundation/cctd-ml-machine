@@ -1,11 +1,11 @@
 /**
- * (c) 2023, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
-import CookieManager from './script/CookieManager';
+import CookieManager from './lib/CookieManager';
 
 const load = () => {
   if (location.hostname !== "ml-machine.org") {

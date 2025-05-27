@@ -141,6 +141,7 @@ class Microbits {
    * @throws {Error} Throws an error if no output micro:bit is assigned.
    */
   public static disconnectOutput() {
+    Logger.log('Microbits', 'Attempting to disconnect output');
     if (this.isInputOutputTheSame()) {
       this.outputHandler.onDisconnected();
       this.outputHandler.onClosed();

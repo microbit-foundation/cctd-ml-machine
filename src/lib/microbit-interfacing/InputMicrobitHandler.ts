@@ -153,6 +153,11 @@ class InputMicrobitHandler implements MicrobitHandler {
   public onReconnectError(error: Error): void {
     Logger.log('InputMicrobitHandler', 'onReconnectError', error);
     this.onConnectError(error);
+    state.update(s => {
+      s.offerReconnect = true;
+      s.reconnectState = DeviceRequestStates.INPUT;
+      return s;
+    });
   }
 
   public onClosed(): void {
@@ -161,8 +166,6 @@ class InputMicrobitHandler implements MicrobitHandler {
       s.isInputConnected = false;
       s.isInputAssigned = false;
       s.isInputReady = false;
-      s.offerReconnect = true;
-      s.reconnectState = DeviceRequestStates.INPUT;
       return s;
     });
     clearTimeout(this.reconnectTimeout);

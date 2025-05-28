@@ -8,13 +8,17 @@
   import StandardDialog from '../components/ui/dialogs/StandardDialog.svelte';
   import ValidationPageControlBar from './validation/ValidationPageControlBar.svelte';
   import ValidationPageMainContent from './validation/ValidationPageMainContent.svelte';
-  import { t } from '../i18n';
+  import { t, tr } from '../i18n';
   import { startConnectionProcess } from '../lib/stores/connectDialogStore';
   import ValidationPageActionContent from './validation/ValidationPageActionContent.svelte';
   import StandardButton from '../components/ui/buttons/StandardButton.svelte';
   import ConnectDialogContainer from '../components/features/connection-prompt/ConnectDialogContainer.svelte';
+  import Drawer from '../components/ui/drawer/Drawer.svelte';
+  import { stores } from '../lib/stores/Stores';
+  import ValidationpageActionContentMinimized from './validation/ValidationpageActionContentMinimized.svelte';
 
   let isConnectionDialogOpen = false;
+  let isActionsOpen = false;
 </script>
 
 <!-- Main pane -->
@@ -25,12 +29,23 @@
   <div>
     <div
       class="overflow-x-auto flex-grow overflow-y-auto"
-      style="height: calc(100vh - 48px - 160px - 152px);">
+      style="height: calc(100vh - 48px - 160px - {isActionsOpen
+        ? '152px'
+        : '32px'}); transition: height 0.3s ease;">
       <ValidationPageMainContent
         onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
     </div>
-    <div class="flex-grow h-38">
-      <ValidationPageActionContent />
+    <div class="flex-grow">
+      <Drawer
+        isOpen={isActionsOpen}
+        className="bg-white"
+        onClose={() => (isActionsOpen = false)}
+        onOpen={() => (isActionsOpen = true)}
+        heightMax="152px"
+        heightMin="32px">
+        <ValidationPageActionContent slot="open" />
+        <ValidationpageActionContentMinimized slot="closed" />
+      </Drawer>
     </div>
   </div>
 

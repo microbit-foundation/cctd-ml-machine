@@ -29,7 +29,7 @@
   style="height: {isOpen ? heightMax : heightMin}; transition: height 0.3s ease; {style ??
     ''}">
   <div
-    class="absolute left-0 top-0 h-5 w-5 rounded-full bg-gray-200 flex flex-row justify-center items-center m-1 cursor-pointer"
+    class="absolute left-0 top-1 h-5 w-5 rounded-full bg-gray-200 flex flex-row justify-center items-center m-1 cursor-pointer"
     on:click={handleClick}>
     <div
       class:fa-angle-down={isOpen}
@@ -38,11 +38,11 @@
   </div>
   <slot />
   {#if isOpen}
-    <div out:slide={{ duration: 400, delay: 300 }} class="w-full h-full">
+    <div out:slide={{ duration: 300, delay: 150 }} class="w-full h-full">
       <slot name="open" />
     </div>
   {:else}
-    <div in:slide={{ duration: 300, delay: 350 }} class="w-full h-full">
+    <div class="w-full h-full">
       <slot name="closed" />
     </div>
   {/if}

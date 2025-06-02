@@ -5,16 +5,40 @@
  -->
 
 <script lang="ts">
+  import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
+  import Tooltip from '../../components/ui/Tooltip.svelte';
   import { tr } from '../../i18n';
   import { stores } from '../../lib/stores/Stores';
 
   const validationResults = stores.getValidationResults();
   const accuracy = validationResults.getAccuracy();
+  const model = stores.getClassifier().getModel();
+  const autoUpdate = validationResults.getAutoUpdate();
+
+  const handleEvaluateValidationSets = () => {
+    validationResults.evaluateValidationSet();
+  };
 </script>
 
 <div class="flex flex-col w-full h-full justify-center px-8">
   <div class="flex flex-row justify-between">
-    <p>Hello world</p>
+    <div class="flex flex-row gap-2 justify-center">
+      <p class="text-sm self-center">
+        {$tr('content.validation.testButton.autoUpdate')}:
+      </p>
+      <input type="checkbox" bind:checked={$autoUpdate} />
+      <Tooltip
+        disabled={$model.isTrained}
+        offset={{ x: -80, y: -60 }}
+        title={$tr('content.validation.tutorial.trainmodelfirst')}>
+        <StandardButton
+          tiny
+          disabled={!$model.isTrained}
+          onClick={handleEvaluateValidationSets}>
+          {$tr('content.validation.testButton.test')}
+        </StandardButton>
+      </Tooltip>
+    </div>
 
     <div class="flex flex-row gap-2">
       {#if !isNaN($accuracy)}

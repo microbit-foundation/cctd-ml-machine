@@ -113,6 +113,7 @@
   "content.validation.noGestures.description": "You haven't added any gestures yet. Go to the data step in the menu to the left and add some.",
   "content.validation.tutorial.title": "Validation sets",
   "content.validation.tutorial.description": "Create a separate dataset to evaluate the performance of your model. The model will not be trained on this data.",
+  "content.validation.tutorial.trainmodelfirst": "Train a model first",
   "footer.connectButtonNotConnected": "Connect your micro:bit",
   "footer.disconnectButton": "Disconnect",
   "footer.helpHeader": "Live graph",

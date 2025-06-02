@@ -14,8 +14,21 @@
   import StandardButton from '../components/ui/buttons/StandardButton.svelte';
   import ConnectDialogContainer from '../components/features/connection-prompt/ConnectDialogContainer.svelte';
   import Drawer from '../components/ui/drawer/Drawer.svelte';
-  import { stores } from '../lib/stores/Stores';
   import ValidationpageActionContentMinimized from './validation/ValidationpageActionContentMinimized.svelte';
+  import { stores } from '../lib/stores/Stores';
+
+  const validationSets = stores.getValidationSets();
+  const classifier = stores.getClassifier();
+  const model = classifier.getModel();
+  const validationResults = stores.getValidationResults();
+  const autoUpdate = validationResults.getAutoUpdate();
+
+  $: {
+    // TODO: This should be encapsulated in the validation results store
+    if ($model.isTrained && $autoUpdate && $validationSets.length) {
+      validationResults.evaluateValidationSet();
+    }
+  }
 
   let isConnectionDialogOpen = false;
   let isActionsOpen = false;
@@ -31,7 +44,7 @@
       class="overflow-x-auto flex-grow overflow-y-auto"
       style="height: calc(100vh - 48px - 160px - {isActionsOpen
         ? '152px'
-        : '32px'}); transition: height 0.3s ease;">
+        : '36px'}); transition: height 0.3s ease;">
       <ValidationPageMainContent
         onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
     </div>
@@ -42,7 +55,7 @@
         onClose={() => (isActionsOpen = false)}
         onOpen={() => (isActionsOpen = true)}
         heightMax="152px"
-        heightMin="32px">
+        heightMin="36px">
         <ValidationPageActionContent slot="open" />
         <ValidationpageActionContentMinimized slot="closed" />
       </Drawer>

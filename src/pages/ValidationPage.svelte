@@ -31,7 +31,7 @@
   }
 
   let isConnectionDialogOpen = false;
-  let isActionsOpen = false;
+  let isActionsOpen = true;
 </script>
 
 <!-- Main pane -->

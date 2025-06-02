@@ -29,7 +29,7 @@
       <input type="checkbox" bind:checked={$autoUpdate} />
       <Tooltip
         disabled={$model.isTrained}
-        offset={{ x: -80, y: -60 }}
+        offset={{ x: 230, y: 0 }}
         title={$tr('content.validation.tutorial.trainmodelfirst')}>
         <StandardButton
           tiny

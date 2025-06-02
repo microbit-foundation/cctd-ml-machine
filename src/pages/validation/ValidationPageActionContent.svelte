@@ -38,7 +38,7 @@
     </div>
     <Tooltip
       disabled={$model.isTrained}
-      offset={{ x: -80, y: -60 }}
+      offset={{ x: 30, y: 20 }}
       title={$tr('content.validation.tutorial.trainmodelfirst')}>
       <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}>
         {$tr('content.validation.testButton.test')}

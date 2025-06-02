@@ -11,6 +11,7 @@
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import LossGraph from '../../components/features/graphs/LossGraph.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
+  import Tooltip from '../../components/ui/Tooltip.svelte';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
@@ -42,12 +43,18 @@
       <p class="text-2xl">{$t('menu.trainer.TrainingFinished')}</p>
       <p class="text-lg mt-4 mb-4">{$t('menu.trainer.TrainingFinished.body')}</p>
     {/if}
-    <StandardButton
-      disabledTooltip={$t('menu.trainer.SelectMoreAxes')}
-      disabled={$highlightedAxes.length === 0}
-      onClick={trainModelClickHandler}>
-      {$t(trainButtonSimpleLabel)}
-    </StandardButton>
+    <div class="relative">
+      <Tooltip
+        disabled={$highlightedAxes.length !== 0}
+        title={$t('menu.trainer.SelectMoreAxes')}
+        offset={{ x: 5, y: -90 }}>
+        <StandardButton
+          disabled={$highlightedAxes.length === 0}
+          onClick={trainModelClickHandler}>
+          {$t(trainButtonSimpleLabel)}
+        </StandardButton>
+      </Tooltip>
+    </div>
   {/if}
   {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && ($model.isTrained || $model.isTraining)}
     <LossGraph {loss} maxX={$neuralNetworkSettings.noOfEpochs} />

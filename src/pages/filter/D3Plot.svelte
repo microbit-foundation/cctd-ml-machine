@@ -14,12 +14,13 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import type { RecordingData } from '../../lib/domain/RecordingData';
   import { stores } from '../../lib/stores/Stores';
-  import { state } from '../../lib/stores/ApplicationState';
+
+  const devices = stores.getDevices();
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
 
-  $: showLive = $state.isInputConnected;
+  $: showLive = $devices.isInputConnected;
   $: liveData = $stores.liveData;
   const highlightedAxes = stores.getHighlightedAxes();
 

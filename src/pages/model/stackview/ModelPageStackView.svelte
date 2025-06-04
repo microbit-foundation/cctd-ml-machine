@@ -13,8 +13,8 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../lib/stores/Stores';
   import PleaseConnect from '../../../components/features/PleaseConnect.svelte';
-  import { state } from '../../../lib/stores/ApplicationState';
 
+  const devices = stores.getDevices();
   const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -26,7 +26,7 @@
   function classifyClicked() {
     if (!areActionsAllowed()) return;
 
-    $state.isRecording = true;
+    $devices.isRecording = true;
     // lastRecording = undefined;
 
     // Get duration
@@ -42,7 +42,7 @@
     setTimeout(() => {
       clearInterval(loadingInterval);
       // lastRecording = getPrevData();
-      $state.isRecording = false;
+      $devices.isRecording = false;
       recordingTime = 0;
       // classify();
     }, duration);
@@ -77,7 +77,7 @@
 <!-- Main pane -->
 <main class="h-full flex flex-col">
   {#if $model.isTrained}
-    {#if $state.isInputReady}
+    {#if $devices.isInputReady}
       <ModelPageStackViewContent />
     {:else}
       <PleaseConnect />

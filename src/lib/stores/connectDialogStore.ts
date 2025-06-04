@@ -5,7 +5,8 @@
  */
 
 import { get, writable } from 'svelte/store';
-import { DeviceRequestStates, state } from './ApplicationState';
+import { DeviceRequestStates } from '../domain/Devices';
+import { stores } from './Stores';
 
 export enum ConnectDialogStates {
   NONE, // No connection in progress -> Dialog box closed
@@ -32,10 +33,10 @@ export const connectionDialogState = writable<{
 export const startConnectionProcess = (): void => {
   // Updating the state will cause a popup to appear, from where the connection process will take place
   connectionDialogState.update(s => {
-    s.connectionState = get(state).isInputConnected
+    s.connectionState = get(stores.getDevices()).isInputConnected
       ? ConnectDialogStates.START_OUTPUT
       : ConnectDialogStates.START;
-    s.deviceState = get(state).isInputConnected
+    s.deviceState = get(stores.getDevices()).isInputConnected
       ? DeviceRequestStates.OUTPUT
       : DeviceRequestStates.INPUT;
     return s;

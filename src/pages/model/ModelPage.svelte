@@ -10,9 +10,12 @@
   import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/ui/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
-  import { ModelView, state } from '../../lib/stores/ApplicationState';
+  import { modelView, ModelView } from '../../lib/stores/ApplicationState';
+  import { stores } from '../../lib/stores/Stores';
   import ModelPageStackView from './stackview/ModelPageStackView.svelte';
   import ModelPageTileView from './tileview/ModelPageTileView.svelte';
+
+  const devices = stores.getDevices();
 
   const openMakeCodeInNewTab = () => {
     window.open(StaticConfiguration.makecodeFirmwareUrl, '_blank');
@@ -32,7 +35,7 @@
 </div>
 
 <div class="pt-4 pl-3">
-  {#if $state.modelView == ModelView.TILE}
+  {#if $modelView == ModelView.TILE}
     <ModelPageTileView />
   {:else}
     <ModelPageStackView />

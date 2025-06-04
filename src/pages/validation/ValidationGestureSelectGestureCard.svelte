@@ -18,18 +18,18 @@
   import { get } from 'svelte/store';
   import Logger from '../../lib/utils/Logger';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
-  import { state } from '../../lib/stores/ApplicationState';
 
   export let gesture: Gesture;
   export let onNoMicrobitSelect: () => void;
 
+  const devices = stores.getDevices();
   const validationSets = stores.getValidationSets();
   const recorder = stores.getRecorder();
 
   $: isThisRecording = $recorder.recordingGesture === gesture.getId();
 
   const selectClicked = (gesture: Gesture): void => {
-    if (!$state.isInputConnected) {
+    if (!$devices.isInputConnected) {
       chosenGesture.update(gesture => {
         gesture = null;
         return gesture;

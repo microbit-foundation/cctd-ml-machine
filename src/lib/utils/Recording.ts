@@ -11,13 +11,12 @@ import StaticConfiguration from '../../StaticConfiguration';
 import Logger from './Logger';
 import { alertUser } from '../stores/uiStore';
 import { t } from '../../i18n';
-import { state } from '../stores/ApplicationState';
 
 /**
  * @deprecated Will be removed in the future. Use store.getRecorder().startRecording(...) instead.
  */
 export const startRecording = (onFinished: (recording: RecordingData) => void) => {
-  if (get(state).isRecording) {
+  if (get(stores.getDevices()).isRecording) {
     Logger.warn('Recording', 'Failed to start recording, already recording');
     return;
   }
@@ -26,7 +25,7 @@ export const startRecording = (onFinished: (recording: RecordingData) => void) =
     throw new Error('Cannot start recording, no live-data store');
   }
 
-  state.update(e => {
+  stores.getDevices().update(e => {
     e.isRecording = true;
     return e;
   });
@@ -44,7 +43,7 @@ export const startRecording = (onFinished: (recording: RecordingData) => void) =
   });
   setTimeout(() => {
     unsubscriber();
-    state.update(e => {
+    stores.getDevices().update(e => {
       e.isRecording = false;
       return e;
     });

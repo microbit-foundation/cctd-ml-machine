@@ -33,8 +33,8 @@ import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
 import Snackbar from './Snackbar';
-import { state, type ApplicationStates } from './ApplicationState';
 import { knnHasTrained } from './KNNStores';
+import Devices from '../domain/Devices';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -58,9 +58,10 @@ class Stores implements Readable<StoresType> {
   private validationSets: ValidationSets;
   private validationResults: ValidationResults;
   private recorder: Recorder;
-  // private state: ApplicationState
+  private devices: Devices;
 
-  public constructor(private applicationState: Readable<ApplicationStates>) {
+  public constructor() {
+    this.devices = new Devices();
     this.neuralNetworkSettings = new NeuralNetworkSettings();
     this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
@@ -75,7 +76,7 @@ class Stores implements Readable<StoresType> {
     this.highlightedAxis = new HighlightedAxes(
       this.classifier,
       this.selectedModel,
-      this.applicationState,
+      this.devices,
       this.snackbar,
     );
     this.availableAxes = new AvailableAxes(this.liveData, this.gestures);
@@ -177,6 +178,10 @@ class Stores implements Readable<StoresType> {
   public getRecorder(): Recorder {
     return this.recorder;
   }
+
+  public getDevices(): Devices {
+    return this.devices;
+  }
 }
 
-export const stores = new Stores(state);
+export const stores = new Stores();

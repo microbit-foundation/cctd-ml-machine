@@ -26,7 +26,7 @@
   import { t } from '../i18n';
   import Environment from '../lib/Environment';
   import DevTools from '../components/features/GoToPlaygroundButton.svelte';
-  import { state } from '../lib/stores/ApplicationState';
+  import { isLoading } from '../lib/stores/ApplicationState';
 
   type ContentTile = { tile: ComponentType; spanColumns: number };
   // Just add the content titles you wish to put on front page, in the order you wish them to be there
@@ -38,7 +38,7 @@
 </script>
 
 <main class="h-full flex flex-col">
-  <div class:hidden={$state.isLoading}>
+  <div class:hidden={$isLoading}>
     <div>
       <ControlBar>
         <div class="w-full">

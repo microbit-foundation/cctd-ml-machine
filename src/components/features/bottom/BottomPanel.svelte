@@ -16,7 +16,9 @@
   import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
-  import { state } from '../../../lib/stores/ApplicationState';
+  import { stores } from '../../../lib/stores/Stores';
+
+  const devices = stores.getDevices();
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -39,10 +41,10 @@
 <div
   bind:clientWidth={componentWidth}
   class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
-  class:bg-gray-300={$state.isInputAssigned && !$state.isInputReady}>
+  class:bg-gray-300={$devices.isInputAssigned && !$devices.isInputReady}>
   <ConnectDialogContainer bind:this={connectDialogReference} />
 
-  {#if !$state.isInputAssigned}
+  {#if !$devices.isInputAssigned}
     <!-- No input microbit assigned -->
     <div class="h-full w-full flex justify-center items-center bg-white">
       <StandardButton onClick={connectButtonClicked}>
@@ -55,7 +57,7 @@
       <div class="absolute w-full h-full">
         <MicrobitLiveGraph width={componentWidth - 160} />
       </div>
-      {#if $state.isInputInitializing}
+      {#if $devices.isInputInitializing}
         <div
           class="absolute w-full h-full flex items-center justify-center text-secondarytext">
           <div class="bg-secondary bg-opacity-80 py-2 px-4 rounded-full" transition:fade>

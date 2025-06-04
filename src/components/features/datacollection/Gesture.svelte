@@ -25,10 +25,10 @@
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
-  import { state } from '../../../lib/stores/ApplicationState';
 
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
+  const devices = stores.getDevices();
   const gestures = stores.getGestures();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
@@ -86,7 +86,7 @@
   // If gesture is already selected, the selection is removed.
   // If bluetooth is not connected, open connection prompt by calling callback
   function selectClicked(): void {
-    if (!$state.isInputConnected) {
+    if (!$devices.isInputConnected) {
       chosenGesture.update(gesture => {
         gesture = null;
         return gesture;

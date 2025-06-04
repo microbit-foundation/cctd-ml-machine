@@ -14,7 +14,6 @@ import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import Gesture from '../domain/stores/gesture/Gesture';
 import { stores } from './Stores';
-import { state } from './ApplicationState';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -60,13 +59,13 @@ export function areActionsAllowed(actionAllowed = true, alertIfNotReady = true):
 
 // Assess status and return message to alert user.
 function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: string } {
-  const currentState = get(state);
+  const devices = get(stores.getDevices());
 
   const model = stores.getClassifier().getModel();
 
-  if (currentState.isRecording) return { isReady: false, msg: text('alert.isRecording') };
+  if (devices.isRecording) return { isReady: false, msg: text('alert.isRecording') };
   if (model.isTraining()) return { isReady: false, msg: text('alert.isTraining') };
-  if (!currentState.isInputConnected && actionAllowed)
+  if (!devices.isInputConnected && actionAllowed)
     return { isReady: false, msg: text('alert.isNotConnected') };
 
   return { isReady: true, msg: '' };

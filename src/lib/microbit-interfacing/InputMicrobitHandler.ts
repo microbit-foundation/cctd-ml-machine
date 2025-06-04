@@ -16,11 +16,14 @@ import StaticConfiguration from '../../StaticConfiguration';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
-import { DeviceRequestStates, ModelView, state } from '../stores/ApplicationState';
+import Devices, { DeviceRequestStates } from '../domain/Devices';
+import { ModelView, modelView } from '../stores/ApplicationState';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
+
+  public constructor(private devices: Devices) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     Logger.log('InputMicrobitHandler', 'onConnected', versionNumber);
@@ -31,7 +34,7 @@ class InputMicrobitHandler implements MicrobitHandler {
     );
     stores.setLiveData(new MicrobitAccelerometerLiveData(buffer));
 
-    state.update(s => {
+    this.devices.update(s => {
       s.isInputConnected = true;
       s.isRequestingDevice = DeviceRequestStates.NONE;
       s.offerReconnect = false;
@@ -64,7 +67,7 @@ class InputMicrobitHandler implements MicrobitHandler {
 
   public onInitializing(): void {
     Logger.log('InputMicrobitHandler', 'onInitializing');
-    state.update(s => {
+    this.devices.update(s => {
       s.isInputInitializing = true;
       return s;
     });
@@ -99,10 +102,7 @@ class InputMicrobitHandler implements MicrobitHandler {
     //Logger.log("InputMicrobitHandler", "onMessageReceived", data);
     if (data === 'id_mkcd') {
       Microbits.setInputOrigin(HexOrigin.MAKECODE);
-      state.update(s => {
-        s.modelView = ModelView.TILE;
-        return s;
-      });
+      modelView.set(ModelView.TILE);
     }
     if (data === 'id_prop') {
       Microbits.setInputOrigin(HexOrigin.PROPRIETARY);
@@ -120,7 +120,7 @@ class InputMicrobitHandler implements MicrobitHandler {
 
   public onDisconnected(): void {
     Logger.log('InputMicrobitHandler', 'onDisconnected');
-    state.update(s => {
+    this.devices.update(s => {
       s.isInputConnected = false;
       s.offerReconnect = false;
       s.isInputReady = false;
@@ -142,7 +142,7 @@ class InputMicrobitHandler implements MicrobitHandler {
 
   public onConnectError(error: Error): void {
     Logger.log('InputMicrobitHandler', 'onConnectError', error);
-    state.update(s => {
+    this.devices.update(s => {
       s.isInputConnected = false;
       s.isInputAssigned = false;
       s.isInputReady = false;
@@ -153,7 +153,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   public onReconnectError(error: Error): void {
     Logger.log('InputMicrobitHandler', 'onReconnectError', error);
     this.onConnectError(error);
-    state.update(s => {
+    this.devices.update(s => {
       s.offerReconnect = true;
       s.reconnectState = DeviceRequestStates.INPUT;
       return s;
@@ -162,7 +162,7 @@ class InputMicrobitHandler implements MicrobitHandler {
 
   public onClosed(): void {
     Logger.log('InputMicrobitHandler', 'onClosed');
-    state.update(s => {
+    this.devices.update(s => {
       s.isInputConnected = false;
       s.isInputAssigned = false;
       s.isInputReady = false;

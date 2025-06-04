@@ -38,12 +38,17 @@
   import OverlayView from './components/layout/OverlayView.svelte';
   import SideBarMenuView from './components/layout/SideBarMenuView.svelte';
   import PageContentView from './components/layout/PageContentView.svelte';
-  import { DeviceRequestStates, state } from './lib/stores/ApplicationState';
+  import { stores } from './lib/stores/Stores';
+  import { DeviceRequestStates } from './lib/domain/Devices';
+  import { isLoading } from './lib/stores/ApplicationState';
+
+  const devices = stores.getDevices();
+
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {
-    $state.offerReconnect = true;
-    $state.reconnectState = DeviceRequestStates.INPUT;
+    $devices.offerReconnect = true;
+    $devices.reconnectState = DeviceRequestStates.INPUT;
     CookieManager.unsetReconnectFlag();
   }
 
@@ -56,7 +61,7 @@
     <!-- Denies mobile users access to the platform -->
     <IncompatiblePlatformView />
   {:else}
-    {#if $state.isLoading}
+    {#if $isLoading}
       <main class="h-screen w-screen bg-primary flex absolute z-10" transition:fade>
         <LoadingSpinner />
       </main>

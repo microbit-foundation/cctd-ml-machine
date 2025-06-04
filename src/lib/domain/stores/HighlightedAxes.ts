@@ -19,9 +19,9 @@ import PersistantWritable from '../../repository/PersistantWritable';
 import Logger from '../../utils/Logger';
 import { t } from '../../../i18n';
 import type Snackbar from '../../stores/Snackbar';
-import type { ApplicationStates } from '../../stores/ApplicationState';
 import { knnHasTrained } from '../../stores/KNNStores';
 import { trainKNNModel } from '../../../pages/training/TrainingPage';
+import type Devices from '../Devices';
 
 class HighlightedAxes implements Writable<Axis[]> {
   private value: PersistantWritable<Axis[]>; // Use this.set instead of this.value.set!
@@ -29,7 +29,7 @@ class HighlightedAxes implements Writable<Axis[]> {
   public constructor(
     private classifier: Classifier,
     private selectedModel: SelectedModel,
-    private applicationState: Readable<ApplicationStates>,
+    private devices: Devices,
     private snackbar: Snackbar,
   ) {
     this.value = new PersistantWritable([], 'highlightedAxes');
@@ -100,7 +100,7 @@ class HighlightedAxes implements Writable<Axis[]> {
 
     if (
       get(this.selectedModel).id === ModelRegistry.KNN.id &&
-      get(this.applicationState).isInputConnected
+      get(this.devices).isInputConnected
     ) {
       if (get(knnHasTrained)) {
         Logger.log('HighlightedAxes', 'Retraining KNN model due to axes changed');

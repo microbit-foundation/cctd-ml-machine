@@ -32,8 +32,8 @@
   import PinSelector from './ModelPinSelector.svelte';
   import { PinTurnOnState } from '../../../lib/PinTurnOnState';
   import { MBSpecs } from 'microbyte';
-  import { state } from '../../../lib/stores/ApplicationState';
 
+  const devices = stores.getDevices();
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -262,7 +262,7 @@
       width="30px" />
     <img
       class="m-auto"
-      class:hidden={!wasTriggered || !$state.isInputReady}
+      class:hidden={!wasTriggered || !$devices.isInputReady}
       src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />

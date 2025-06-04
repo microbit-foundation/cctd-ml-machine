@@ -11,11 +11,14 @@
   import Microbits from '../../lib/microbit-interfacing/Microbits';
   import { MBSpecs } from 'microbyte';
   import StandardButton from '../ui/buttons/StandardButton.svelte';
-  import { DeviceRequestStates, state } from '../../lib/stores/ApplicationState';
+  import { stores } from '../../lib/stores/Stores';
+  import { DeviceRequestStates } from '../../lib/domain/Devices';
+
+  const devices = stores.getDevices();
 
   let reconnectText: string;
   let reconnectButtonText: string;
-  state.subscribe(s => {
+  devices.subscribe(s => {
     if (s.reconnectState === DeviceRequestStates.INPUT) {
       reconnectText = $t('popup.disconnectedWarning.input');
       reconnectButtonText = $t('popup.disconnectedWarning.reconnectButton.input');
@@ -26,7 +29,7 @@
   });
   // When disconnected by lost connection, offer the option to attempt to reconnect
   let hideReconnectMessageAfterTimeout = false;
-  state.subscribe(s => {
+  devices.subscribe(s => {
     if (s.offerReconnect) {
       hideReconnectMessageAfterTimeout = true;
     }
@@ -47,7 +50,7 @@
     };
 
     void connect().then(() => {
-      $state.offerReconnect = false;
+      $devices.offerReconnect = false;
     });
   };
 </script>
@@ -59,7 +62,7 @@
     <div class="absolute right-2 top-2 svelte-1rnkjvh">
       <button
         class="hover:bg-gray-100 rounded outline-transparent w-8 svelte-1rnkjvh"
-        on:click={() => ($state.offerReconnect = false)}>
+        on:click={() => ($devices.offerReconnect = false)}>
         <i
           class="fas fa-plus text-lg text-gray-600 hover:text-gray-800 duration-75 svelte-1rnkjvh"
           style="transform: rotate(45deg);" />
@@ -67,7 +70,7 @@
     </div>
     <p>{reconnectText}</p>
     <div class="flex justify-center">
-      <StandardButton onClick={() => reconnect($state.reconnectState)}>
+      <StandardButton onClick={() => reconnect($devices.reconnectState)}>
         {reconnectButtonText}
       </StandardButton>
     </div>

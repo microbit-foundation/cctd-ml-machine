@@ -12,8 +12,8 @@
   import { stores } from '../../lib/stores/Stores';
   import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import FiltersList from '../../components/features/filters/FiltersList.svelte';
-  import { state } from '../../lib/stores/ApplicationState';
 
+  const devices = stores.getDevices();
   const selectedModel = stores.getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);
 </script>
@@ -23,14 +23,14 @@
     {#if showFilterList}
       <FiltersList />
     {/if}
-    {#if $selectedModel.id === ModelRegistry.KNN.id && $state.isInputConnected}
+    {#if $selectedModel.id === ModelRegistry.KNN.id && $devices.isInputConnected}
       <KnnModelTrainingPageView />
     {:else if $selectedModel.id === ModelRegistry.NeuralNetwork.id}
       <NeuralNetworkTrainingPageView />
     {/if}
   </div>
 </div>
-{#if !$state.isInputConnected}
+{#if !$devices.isInputConnected}
   <div class="mt-5">
     <PleaseConnect />
   </div>

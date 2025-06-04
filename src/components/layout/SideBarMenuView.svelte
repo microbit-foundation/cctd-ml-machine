@@ -13,7 +13,7 @@
   import { Feature, getFeature } from '../../lib/FeatureToggles';
   import Menus from '../sidemenu/Menus';
   import MenuButton from '../sidemenu/MenuButton.svelte';
-  import { state } from '../../lib/stores/ApplicationState';
+  import { isLoading } from '../../lib/stores/ApplicationState';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;
@@ -27,7 +27,7 @@
   };
 
   const onLoad = () => {
-    $state.isLoading = false;
+    $isLoading = false;
   };
 </script>
 

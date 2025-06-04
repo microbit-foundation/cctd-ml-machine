@@ -6,10 +6,10 @@
 
 <script lang="ts">
   import { tr } from '../../../i18n';
-  import { state } from '../../../lib/stores/ApplicationState';
   import { stores } from '../../../lib/stores/Stores';
   import TypingUtils from '../../../lib/TypingUtils';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
+  const devices = stores.getDevices();
 
   export let onOutputDisconnectButtonClicked: () => void;
   export let onOutputConnectButtonClicked: () => void;
@@ -20,10 +20,10 @@
 
 <!-- These are the buttons that are present while the input micro:bit is connected-->
 <div class="flex flex-row mr-4">
-  {#if $model.hasModel || $model.isTraining || $state.isOutputConnected}
-    {#if $state.isOutputAssigned}
+  {#if $model.hasModel || $model.isTraining || $devices.isOutputConnected}
+    {#if $devices.isOutputAssigned}
       <!-- Output is assigned -->
-      {#if !$state.isOutputConnected || $state.isOutputReady}
+      {#if !$devices.isOutputConnected || $devices.isOutputReady}
         <!-- Output MB is not in the connection process -->
         <StandardButton onClick={onOutputDisconnectButtonClicked} color="warning">
           {$tr('menu.model.disconnect')}
@@ -41,7 +41,7 @@
     {/if}
   {/if}
   <div class="ml-2">
-    {#if !$state.isInputConnected || $state.isInputReady}
+    {#if !$devices.isInputConnected || $devices.isInputReady}
       <!-- Input MB is not in the connection process -->
       <StandardButton onClick={onInputDisconnectButtonClicked} color="warning"
         >{$tr('footer.disconnectButton')}</StandardButton>

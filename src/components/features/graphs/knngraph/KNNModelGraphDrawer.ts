@@ -11,7 +11,6 @@ import { knnNeighbours } from '../../../../lib/stores/KNNStores';
 import type { Point3D, Point3DTransformed } from '../../../../lib/utils/graphUtils';
 import { stores } from '../../../../lib/stores/Stores';
 import StaticConfiguration from '../../../../StaticConfiguration';
-import { state } from '../../../../lib/stores/ApplicationState';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -67,7 +66,7 @@ class KNNModelGraphDrawer {
         }),
     );
 
-    if (get(state).isInputReady) {
+    if (get(stores.getDevices()).isInputReady) {
       this.addPoint(drawableLivePoint, 'live');
 
       // Draw lines from live point to the nearest neighbours

@@ -44,7 +44,6 @@ type StoresType = {
  * Stores is a container object, that allows for management of global stores.
  */
 class Stores implements Readable<StoresType> {
-
   private liveData: Writable<LiveData<LiveDataVector> | undefined>;
   private engine: Engine | undefined;
   private classifier: Classifier;

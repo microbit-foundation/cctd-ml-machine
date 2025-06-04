@@ -33,7 +33,7 @@ import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
 import Snackbar from './Snackbar';
-import { state, type ApplicationState } from './applicationState';
+import { state, type ApplicationStates } from './applicationState';
 import { knnHasTrained } from './KNNStores';
 
 type StoresType = {
@@ -44,6 +44,7 @@ type StoresType = {
  * Stores is a container object, that allows for management of global stores.
  */
 class Stores implements Readable<StoresType> {
+
   private liveData: Writable<LiveData<LiveDataVector> | undefined>;
   private engine: Engine | undefined;
   private classifier: Classifier;
@@ -58,8 +59,9 @@ class Stores implements Readable<StoresType> {
   private validationSets: ValidationSets;
   private validationResults: ValidationResults;
   private recorder: Recorder;
+  // private state: ApplicationState
 
-  public constructor(private applicationState: Readable<ApplicationState>) {
+  public constructor(private applicationState: Readable<ApplicationStates>) {
     this.neuralNetworkSettings = new NeuralNetworkSettings();
     this.snackbar = new Snackbar();
     this.liveData = writable(undefined);

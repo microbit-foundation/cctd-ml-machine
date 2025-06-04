@@ -19,7 +19,7 @@ import PersistantWritable from '../../repository/PersistantWritable';
 import Logger from '../../utils/Logger';
 import { t } from '../../../i18n';
 import type Snackbar from '../../stores/Snackbar';
-import type { ApplicationState } from '../../stores/applicationState';
+import type { ApplicationStates } from '../../stores/applicationState';
 import { knnHasTrained } from '../../stores/KNNStores';
 import { trainKNNModel } from '../../../pages/training/TrainingPage';
 
@@ -29,7 +29,7 @@ class HighlightedAxes implements Writable<Axis[]> {
   public constructor(
     private classifier: Classifier,
     private selectedModel: SelectedModel,
-    private applicationState: Readable<ApplicationState>,
+    private applicationState: Readable<ApplicationStates>,
     private snackbar: Snackbar,
   ) {
     this.value = new PersistantWritable([], 'highlightedAxes');

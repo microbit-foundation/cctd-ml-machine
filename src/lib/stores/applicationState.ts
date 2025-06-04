@@ -15,7 +15,7 @@ export enum ModelView {
   TILE,
   STACK,
 }
-export interface ApplicationState {
+export interface ApplicationStates {
   isRequestingDevice: DeviceRequestStates;
   isFlashingDevice: boolean;
   isRecording: boolean;
@@ -35,7 +35,7 @@ export interface ApplicationState {
   isOutputOutdated: boolean;
 }
 // TODO: Application state, used as a dumping ground for shared variables. Should be split up
-export const state = writable<ApplicationState>({
+export const state = writable<ApplicationStates>({
   isRequestingDevice: DeviceRequestStates.NONE,
   isFlashingDevice: false,
   isRecording: false,

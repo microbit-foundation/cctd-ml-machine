@@ -13,7 +13,7 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../lib/stores/Stores';
   import PleaseConnect from '../../../components/features/PleaseConnect.svelte';
-  import { state } from '../../../lib/stores/applicationState';
+  import { state } from '../../../lib/stores/ApplicationState';
 
   const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation

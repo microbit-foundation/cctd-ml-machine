@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import GestureDot from '../../components/ui/GestureDot.svelte';
-  import { state } from '../../lib/stores/applicationState';
+  import { state } from '../../lib/stores/ApplicationState';
   import { stores } from '../../lib/stores/Stores';
 
   const gestures = stores.getGestures();

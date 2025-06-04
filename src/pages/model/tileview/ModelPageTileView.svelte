@@ -11,7 +11,7 @@
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { state } from '../../../lib/stores/applicationState';
+  import { state } from '../../../lib/stores/ApplicationState';
   import { stores } from '../../../lib/stores/Stores';
 
   const classifier = stores.getClassifier();

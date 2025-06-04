@@ -20,7 +20,7 @@
   import Logger from '../../../../lib/utils/Logger';
   import { MBSpecs } from 'microbyte';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
-  import { DeviceRequestStates, state } from '../../../../lib/stores/applicationState';
+  import { DeviceRequestStates, state } from '../../../../lib/stores/ApplicationState';
 
   // callbacks
   export let deviceState: DeviceRequestStates;

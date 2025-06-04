@@ -14,7 +14,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import type { RecordingData } from '../../lib/domain/RecordingData';
   import { stores } from '../../lib/stores/Stores';
-  import { state } from '../../lib/stores/applicationState';
+  import { state } from '../../lib/stores/ApplicationState';
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;

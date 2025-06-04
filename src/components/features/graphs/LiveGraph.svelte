@@ -13,7 +13,7 @@
   import type { LiveDataVector } from '../../../lib/domain/stores/LiveDataVector';
   import StaticConfiguration from '../../../StaticConfiguration';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
-  import { state } from '../../../lib/stores/applicationState';
+  import { state } from '../../../lib/stores/ApplicationState';
   import { stores } from '../../../lib/stores/Stores';
 
   /**

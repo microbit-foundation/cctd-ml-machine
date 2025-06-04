@@ -38,7 +38,7 @@
   import OverlayView from './components/layout/OverlayView.svelte';
   import SideBarMenuView from './components/layout/SideBarMenuView.svelte';
   import PageContentView from './components/layout/PageContentView.svelte';
-  import { DeviceRequestStates, state } from './lib/stores/applicationState';
+  import { DeviceRequestStates, state } from './lib/stores/ApplicationState';
   welcomeLog();
 
   if (CookieManager.isReconnectFlagSet()) {

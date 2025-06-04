@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { tr } from '../../../i18n';
-  import { state } from '../../../lib/stores/applicationState';
+  import { state } from '../../../lib/stores/ApplicationState';
   import { stores } from '../../../lib/stores/Stores';
   import TypingUtils from '../../../lib/TypingUtils';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';

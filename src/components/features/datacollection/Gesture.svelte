@@ -25,7 +25,7 @@
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
-  import { state } from '../../../lib/stores/applicationState';
+  import { state } from '../../../lib/stores/ApplicationState';
 
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;

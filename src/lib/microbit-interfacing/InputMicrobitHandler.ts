@@ -16,7 +16,7 @@ import StaticConfiguration from '../../StaticConfiguration';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
-import { DeviceRequestStates, ModelView, state } from '../stores/applicationState';
+import { DeviceRequestStates, ModelView, state } from '../stores/ApplicationState';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);

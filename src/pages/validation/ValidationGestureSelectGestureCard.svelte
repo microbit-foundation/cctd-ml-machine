@@ -18,7 +18,7 @@
   import { get } from 'svelte/store';
   import Logger from '../../lib/utils/Logger';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
-  import { state } from '../../lib/stores/applicationState';
+  import { state } from '../../lib/stores/ApplicationState';
 
   export let gesture: Gesture;
   export let onNoMicrobitSelect: () => void;

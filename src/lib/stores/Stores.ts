@@ -33,7 +33,7 @@ import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
 import Snackbar from './Snackbar';
-import { state, type ApplicationStates } from './applicationState';
+import { state, type ApplicationStates } from './ApplicationState';
 import { knnHasTrained } from './KNNStores';
 
 type StoresType = {

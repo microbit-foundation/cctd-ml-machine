@@ -14,7 +14,7 @@ import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
 import Gesture from '../domain/stores/gesture/Gesture';
 import { stores } from './Stores';
-import { state } from './applicationState';
+import { state } from './ApplicationState';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));

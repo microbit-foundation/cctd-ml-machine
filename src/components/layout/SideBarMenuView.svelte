@@ -13,7 +13,7 @@
   import { Feature, getFeature } from '../../lib/FeatureToggles';
   import Menus from '../sidemenu/Menus';
   import MenuButton from '../sidemenu/MenuButton.svelte';
-  import { state } from '../../lib/stores/applicationState';
+  import { state } from '../../lib/stores/ApplicationState';
 
   $: shouldBeExpanded = (menuProps: MenuProperties) => {
     let path = $currentPath;

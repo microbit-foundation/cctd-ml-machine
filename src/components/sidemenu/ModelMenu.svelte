@@ -7,7 +7,7 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import Gesture from '../../lib/domain/stores/gesture/Gesture';
-  import { state } from '../../lib/stores/applicationState';
+  import { state } from '../../lib/stores/ApplicationState';
   import { stores } from '../../lib/stores/Stores';
 
   const gestures = stores.getGestures();

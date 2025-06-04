@@ -11,7 +11,7 @@
   import Microbits from '../../lib/microbit-interfacing/Microbits';
   import { MBSpecs } from 'microbyte';
   import StandardButton from '../ui/buttons/StandardButton.svelte';
-  import { DeviceRequestStates, state } from '../../lib/stores/applicationState';
+  import { DeviceRequestStates, state } from '../../lib/stores/ApplicationState';
 
   let reconnectText: string;
   let reconnectButtonText: string;

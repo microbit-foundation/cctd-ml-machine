@@ -16,7 +16,7 @@
   import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
-  import { state } from '../../../lib/stores/applicationState';
+  import { state } from '../../../lib/stores/ApplicationState';
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;

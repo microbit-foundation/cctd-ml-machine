@@ -29,7 +29,10 @@
     <div class="flex justify-end flex-row flex-grow h-full px-2">
       <div class="flex flex-row gap-2 justify-center py-2">
         {#each ModelRegistry.getModels() as model}
-          <StandardButton small outlined={!isSelected(model.id)} onClick={() => selectedModel.set(model)}>
+          <StandardButton
+            small
+            outlined={!isSelected(model.id)}
+            onClick={() => selectedModel.set(model)}>
             {model.title}
           </StandardButton>
         {/each}

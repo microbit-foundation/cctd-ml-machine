@@ -14,7 +14,5 @@
 </script>
 
 <div class="flex justify-center">
-  {#if $selectedModel.id === ModelRegistry.NeuralNetwork.id}
-   {:else}
-  {/if}
+  {#if $selectedModel.id === ModelRegistry.NeuralNetwork.id}{:else}{/if}
 </div>

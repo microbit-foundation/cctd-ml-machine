@@ -43,7 +43,7 @@
 <div class="flex flex-row">
   <span
     class="border-solid border-1 border-r-0 bg-primary rounded-l-md
-  px-1 font-bold select-none cursor-pointer border-primaryborder
+  px-1 font-bold select-none cursor-pointer border-primaryborder text-secondarytext
   hover:opacity-100 opacity-75"
     on:click={decrease}>
     -
@@ -53,10 +53,11 @@
     on:blur={() => {
       handleChange();
     }}
-    class="max-w-20 text-center border-solid border-1 px-2 bg-primary border-primaryborder" />
+    class="max-w-20 text-secondarytext text-center border-solid border-1 px-2 bg-primary border-primaryborder" />
   <span
     class="border-solid border-1 border-l-0 bg-primary rounded-r-md
     px-1 font-bold select-none cursor-pointer border-primaryborder
+    text-secondarytext
     hover:opacity-100 opacity-75"
     on:click={increase}>
     +

@@ -97,7 +97,7 @@
 <div class:hidden={!$classifier.model.isTrained && !$classifier.model.isTraining}>
   <div>
     {#if $highlightedAxis !== undefined}
-      <div class="flex flex-row space-x-1">
+      <div class="flex flex-row space-x-1 flex-grow">
         <div class="flex flex-col justify-evenly">
           {#each $availableAxes as axis}
             <div class="flex flex-row space-x-2" id="from{axis.label}">
@@ -115,7 +115,7 @@
           {/each}
         </div>
         {#if $highlightedAxis.length === 1}
-          <div class="pl-28 flex flex-col justify-around">
+          <div class="pl-30 flex flex-col justify-around">
             {#each $filters as filter, index}
               <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
             {/each}

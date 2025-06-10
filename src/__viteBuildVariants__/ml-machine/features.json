@@ -5,5 +5,6 @@
   "makecode": true,
   "liveGraphInputValues": true,
   "recordingScrubberValues": true,
-  "modelValidation": true
+  "modelValidation": true,
+  "modelSettings": true
 }

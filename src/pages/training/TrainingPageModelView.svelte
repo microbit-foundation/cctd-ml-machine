@@ -12,7 +12,6 @@
   import { stores } from '../../lib/stores/Stores';
   import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import FiltersList from '../../components/features/filters/FiltersList.svelte';
-  import TrainingPageModelSettings from '../../components/features/training/TrainingPageModelSettings.svelte';
 
   const devices = stores.getDevices();
   const selectedModel = stores.getSelectedModel();
@@ -26,7 +25,6 @@
     {/if}
   </div>
   <div class="flex flex-grow justify-center flex-col gap-2">
-    <TrainingPageModelSettings />
     <div class="flex flex-row p-2">
       {#if $selectedModel.id === ModelRegistry.KNN.id}
         <KnnModelTrainingPageView />

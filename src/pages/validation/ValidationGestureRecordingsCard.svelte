@@ -48,6 +48,7 @@
       {#key recording.ID}
         <Recording
           dot={$dotGetter(recording.ID)}
+          gestureId={$gesture.ID}
           {recording}
           onDelete={recording =>
             validationSets.removeValidationRecording(recording.ID)} />

@@ -218,7 +218,11 @@
       <GestureCard small>
         <div class="flex p-2 h-30">
           {#each $gesture.recordings as recording (String($gesture.ID) + String(recording.ID))}
-            <Recording {recording} onDelete={deleteRecording} />
+            <Recording
+              downloadable
+              {recording}
+              gestureId={$gesture.ID}
+              onDelete={deleteRecording} />
           {/each}
         </div>
       </GestureCard>

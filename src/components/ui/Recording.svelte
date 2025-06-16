@@ -11,16 +11,21 @@
   import GestureDot from './GestureDot.svelte';
   import RecordingGraph from '../features/graphs/recording/RecordingGraph.svelte';
   import type { RecordingData } from '../../lib/domain/RecordingData';
+  import Tooltip from './Tooltip.svelte';
+  import { serializeRecordingToCsvWithoutGestureName } from '../../lib/utils/CSVUtils';
 
   // get recording from mother prop
   export let recording: RecordingData;
+  export let gestureId: GestureID;
   export let onDelete: (recording: RecordingData) => void;
   export let dot: { gesture: GestureID; color: string } | undefined = undefined;
+  export let downloadable: boolean = false;
 
   $: dotGesture = dot?.gesture
     ? stores.getGestures().getGesture(dot?.gesture)
     : undefined;
 
+  $: gesture = stores.getGestures().getGesture(gestureId);
   let hide = false;
 
   // Method for propagating deletion of recording
@@ -35,7 +40,20 @@
       onDelete(recording);
     }, 450);
   }
-  let isDotHovered = false;
+
+  function bottomRightButtonClicked() {
+    const csvContent = serializeRecordingToCsvWithoutGestureName(recording);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${gesture.getName()}_recording_${recording.ID}.csv`;
+    link.click();
+
+    // Clean up the URL object
+    URL.revokeObjectURL(url);
+  }
 </script>
 
 <div class="h-28 w-40 pr-3 pt-1 relative rounded-md">
@@ -60,4 +78,15 @@
         on:click={deleteClicked} />
     </div>
   </button>
+
+  <!-- bottom-right button -->
+  {#if downloadable}
+    <Tooltip title="CSV" offset={{ x: 125, y: 125 }}>
+      <button
+        class="absolute bottom-1 right-0.5 text-primarytext bg-primary bg-opacity-10 px-2 py-1 text-sm rounded-full shadow-md hover:bg-secondary hover:bg-opacity-30 transition z-1"
+        on:click={bottomRightButtonClicked}>
+        <i class="fas fa-download" />
+      </button>
+    </Tooltip>
+  {/if}
 </div>

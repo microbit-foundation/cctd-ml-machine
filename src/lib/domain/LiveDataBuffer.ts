@@ -23,10 +23,16 @@ class LiveDataBuffer<T extends LiveDataVector> {
     this.buffer = new Array<TimestampedData<T> | null>(maxLen).fill(null);
   }
 
+  /**
+   * Returns true if no data points have been added to the buffer.
+   */
   public isEmpty(): boolean {
     return this.bufferPtr === 0;
   }
 
+  /**
+   * Adds a new value to the buffer.
+   */
   public addValue(value: T) {
     const bufferIndex = this.getBufferIndex();
     this.bufferPtr++;

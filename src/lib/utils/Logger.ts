@@ -28,9 +28,7 @@ class Logger {
     if (!Environment.isInDevelopment) {
       return;
     }
-    if (!(window as typeof window & { hasLogged: boolean }).hasLogged) {
-      welcomeLog();
-    }
+    welcomeLog();
     const outputMessage = `[${origin}] ${message} ${params}`;
     !get(nsStore) && console.trace(outputMessage);
     get(nsStore) && console.warn(outputMessage);
@@ -43,9 +41,7 @@ class Logger {
     if (!Environment.isInDevelopment) {
       return;
     }
-    if (!(window as typeof window & { hasLogged: boolean }).hasLogged) {
-      welcomeLog();
-    }
+    welcomeLog();
     const outputMessage = `[${origin}] ${message} ${params}`;
     !get(nsStore) && console.trace(outputMessage);
     get(nsStore) && console.log(outputMessage);

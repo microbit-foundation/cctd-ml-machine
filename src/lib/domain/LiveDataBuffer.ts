@@ -9,10 +9,16 @@ export type TimestampedData<T extends LiveDataVector> = {
   value: T;
   timestamp: number;
 };
+
+/**
+ * A buffer for storing live data vectors, which allows for efficient retrieval of the most recent values.
+ * Implemented as a circular buffer that can hold a fixed number of elements.
+ */
 class LiveDataBuffer<T extends LiveDataVector> {
+
   private buffer: (TimestampedData<T> | null)[];
   private bufferPtr = 0; // The buffer pointer keeps increasing from 0 to infinity each time a new item is added
-  private bufferUtilization = 0;
+
   constructor(private maxLen: number) {
     this.buffer = new Array<TimestampedData<T> | null>(maxLen).fill(null);
   }
@@ -30,23 +36,28 @@ class LiveDataBuffer<T extends LiveDataVector> {
     };
   }
 
-  public getNewestValues(noOfValues: number): (T | null)[] {
-    const values = [];
-    for (let i = 0; i < noOfValues; i++) {
+  /**
+   * Returns the newest n values in the buffer.
+   */
+  public getNewestValues(noOfDataPoints: number): (T | null)[] {
+    const resultSize = Math.min(noOfDataPoints, this.maxLen);
+    const values = new Array<T | null>(resultSize);
+
+    for (let i = 0; i < resultSize; i++) {
       const item = this.buffer[this.getBufferIndexFrom(this.bufferPtr - (i + 1))];
-      if (item) {
-        values.push(item.value);
-      } else {
-        values.push(null);
-      }
+      values[i] = item ? item.value : null;
     }
 
     return values;
   }
 
+  /**
+   * Returns the series of data points that are within the specified time frame.
+   * The time is specified in milliseconds, and the number of elements to return is also specified.
+   * If there are not enough elements in the buffer to satisfy the request within the specified timeframe, an error is thrown.
+   */
   public getSeries(time: number, noOfElements: number) {
     let searchPointer = this.bufferPtr;
-    this.bufferUtilization = 0;
     // Search for elements that fit the time frame
     const series = [];
     const dateStart = Date.now();
@@ -65,11 +76,6 @@ class LiveDataBuffer<T extends LiveDataVector> {
       i++;
     }
 
-    this.bufferUtilization = Math.max(
-      series.length / this.maxLen,
-      noOfElements / this.maxLen,
-    );
-
     // Now the series array is filled with elements within the timeframe.
     // We should now find `noOfElements` number of items to return
     if (series.length < noOfElements) {
@@ -85,10 +91,6 @@ class LiveDataBuffer<T extends LiveDataVector> {
       resultSeries.push(series[index]);
     }
     return resultSeries;
-  }
-
-  public getBufferUtilization() {
-    return this.bufferUtilization;
   }
 
   private getBufferIndex(): number {

@@ -15,7 +15,6 @@ export type TimestampedData<T extends LiveDataVector> = {
  * Implemented as a circular buffer that can hold a fixed number of elements.
  */
 class LiveDataBuffer<T extends LiveDataVector> {
-
   private buffer: (TimestampedData<T> | null)[];
   private bufferPtr = 0; // The buffer pointer keeps increasing from 0 to infinity each time a new item is added
 

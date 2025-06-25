@@ -57,39 +57,49 @@ class LiveDataBuffer<T extends LiveDataVector> {
    * If there are not enough elements in the buffer to satisfy the request within the specified timeframe, an error is thrown.
    */
   public getSeries(time: number, noOfElements: number) {
-    let searchPointer = this.bufferPtr;
-    // Search for elements that fit the time frame
-    const series = [];
-    const dateStart = Date.now();
-    let i = 0;
-    while (i < this.maxLen) {
-      const element = this.buffer[this.getBufferIndexFrom(searchPointer - 1)];
+    const now = Date.now();
+    let searchPointer = this.bufferPtr - 1;
+    const resultSeries: TimestampedData<T>[] = [];
+
+    let foundElements = 0;
+
+    // First, find the starting point: the oldest element within the timeframe
+    while (foundElements < this.maxLen) {
+      const idx = this.getBufferIndexFrom(searchPointer);
+      const element = this.buffer[idx];
+
       if (!element) {
         throw new Error('Found null element in LiveDataBuffer');
       }
-      const timeElapsed = dateStart - element.timestamp;
-      if (timeElapsed > time) {
+
+      if (now - element.timestamp > time) {
         break;
       }
-      series.push(element);
+
+      foundElements++;
       searchPointer--;
-      i++;
     }
 
-    // Now the series array is filled with elements within the timeframe.
-    // We should now find `noOfElements` number of items to return
-    if (series.length < noOfElements) {
+    if (foundElements < noOfElements) {
       throw new Error(
         'Insufficient buffer data! Try increasing the polling rate or decrease the number of elements requested',
       );
     }
 
-    // We will spread out the values evenly and return the result
-    const resultSeries = [];
+    // Evenly sample the required number of elements
+    const step = foundElements / noOfElements;
     for (let i = 0; i < noOfElements; i++) {
-      const index = Math.floor(series.length / noOfElements) * i;
-      resultSeries.push(series[index]);
+      const offset = Math.floor(i * step);
+      const idx = this.getBufferIndexFrom(searchPointer + 1 + offset);
+      const element = this.buffer[idx];
+
+      if (!element) {
+        throw new Error('Found null element in LiveDataBuffer during sampling');
+      }
+
+      resultSeries.push(element);
     }
+
     return resultSeries;
   }
 

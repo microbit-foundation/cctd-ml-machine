@@ -22,6 +22,17 @@ export class ClassifierInput {
     ).flat();
   }
 
+  public getNormalizedInput(filters: Filters) {
+    if (this.samples.length === 0) {
+      return [];
+    }
+    const vectorSize = this.samples[0].getSize();
+
+    return Array.from({ length: vectorSize }, (_, i) =>
+      filters.computeNormalized(this.samples.map(e => e.getValue()[i])),
+    ).flat();
+  }
+
   public static getInputForAxes(samples: Vector[], axes: Axis[]): ClassifierInput {
     return new ClassifierInput(
       samples.map(

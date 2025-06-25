@@ -18,21 +18,28 @@ import Gesture, { type GestureID } from './gesture/Gesture';
 import type { ClassifierInput } from '../ClassifierInput';
 import Logger from '../../utils/Logger';
 import BaseVector from '../BaseVector';
+import type { Vector } from '../Vector';
 
 type ClassifierData = {
   model: ModelData;
-  filteredInput: BaseVector;
+  filteredInput: {
+    raw: Vector;
+    normalized: Vector;
+  };
 };
 
 class Classifier implements Readable<ClassifierData> {
-  private filteredInput: Writable<BaseVector>;
+  private filteredInput: Writable<{ raw: Vector; normalized: Vector }>;
   constructor(
     private model: Model,
     private filters: Filters,
     private gestures: Readable<Gesture[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ) {
-    this.filteredInput = writable(new BaseVector([]));
+    this.filteredInput = writable({
+      raw: new BaseVector([]),
+      normalized: new BaseVector([]),
+    });
     Logger.log('classifier', 'Initialized classifier');
   }
 
@@ -55,7 +62,10 @@ class Classifier implements Readable<ClassifierData> {
    */
   public async classify(input: ClassifierInput): Promise<void> {
     const filteredInput = new BaseVector(input.getInput(this.filters));
-    this.filteredInput.set(filteredInput);
+    const filteredInputNormalized = new BaseVector(
+      input.getNormalizedInput(this.filters),
+    );
+    this.filteredInput.set({ raw: filteredInput, normalized: filteredInputNormalized });
     const predictions = await this.getModel().predict(filteredInput);
     predictions.forEach((confidence, index) => {
       const gesture = get(this.gestures)[index];

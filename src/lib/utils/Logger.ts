@@ -11,7 +11,7 @@ import PersistantWritable from '../repository/PersistantWritable';
 const nsStore = new PersistantWritable(false, 'dev_ns');
 
 class Logger {
-  constructor(private origin: any) { }
+  constructor(private origin: any) {}
 
   public log(message: any, ...params: any[]) {
     Logger.log(this.origin, message, params);

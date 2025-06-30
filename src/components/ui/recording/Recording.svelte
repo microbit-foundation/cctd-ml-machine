@@ -6,13 +6,15 @@
 
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
-  import { stores } from '../../lib/stores/Stores';
-  import GestureDot from './GestureDot.svelte';
-  import RecordingGraph from '../features/graphs/recording/RecordingGraph.svelte';
-  import type { RecordingData } from '../../lib/domain/RecordingData';
-  import Tooltip from './Tooltip.svelte';
-  import { serializeRecordingToCsvWithoutGestureName } from '../../lib/utils/CSVUtils';
+  import type { GestureID } from '../../../lib/domain/stores/gesture/Gesture';
+  import { stores } from '../../../lib/stores/Stores';
+  import GestureDot from './../GestureDot.svelte';
+  import RecordingGraph from '../../features/graphs/recording/RecordingGraph.svelte';
+  import type { RecordingData } from '../../../lib/domain/RecordingData';
+  import Tooltip from './../Tooltip.svelte';
+  import { serializeRecordingToCsvWithoutGestureName } from '../../../lib/utils/CSVUtils';
+  import Fingerprint from './Fingerprint.svelte';
+  import RecordingFingerprint from './RecordingFingerprint.svelte';
 
   // get recording from mother prop
   export let recording: RecordingData;
@@ -20,6 +22,7 @@
   export let onDelete: (recording: RecordingData) => void;
   export let dot: { gesture: GestureID; color: string } | undefined = undefined;
   export let downloadable: boolean = false;
+  export let enableFingerprint: boolean = false;
 
   $: dotGesture = dot?.gesture
     ? stores.getGestures().getGesture(dot?.gesture)
@@ -56,17 +59,38 @@
   }
 </script>
 
-<div class="h-28 w-40 pr-3 pt-1 relative rounded-md">
+<div
+  class="h-28 w-50 pr-3 pt-1 relative rounded-md"
+  class:w-40={!enableFingerprint}
+  class:w-50={enableFingerprint}>
   {#if dotGesture !== undefined}
-    <div class="absolute px-1 py-0.5 z-3 right-1 top-2">
+    <div
+      class="absolute px-1 py-0.5 z-3 right-1 top-2"
+      class:right-1={!enableFingerprint}
+      class:right-10={enableFingerprint}>
       <GestureDot gesture={dotGesture} />
     </div>
   {/if}
   {#if hide}
-    <div transition:fade class="absolute h-26 w-40 bg-white" />
+    <div
+      transition:fade
+      class="absolute h-26 bg-white"
+      class:w-40={!enableFingerprint}
+      class:w-50={enableFingerprint} />
   {:else}
-    <div transition:fade class="absolute h-26 w-40 bg-white rounded-md">
-      <RecordingGraph {recording} />
+    <div
+      transition:fade
+      class="absolute h-26 bg-white rounded-md"
+      class:w-40={!enableFingerprint}
+      class:w-50={enableFingerprint}>
+      <div class="w-40 h-26">
+        <RecordingGraph {recording} />
+      </div>
+      {#if enableFingerprint}
+        <div class="absolute right-0 top-0.5 left-40 w-10 overflow-hidden">
+          <RecordingFingerprint {recording} gestureName={$gesture.name} />
+        </div>
+      {/if}
     </div>
   {/if}
   <button class="absolute -left-2.8px top-0px outline-none">
@@ -83,7 +107,9 @@
   {#if downloadable}
     <Tooltip title="CSV" offset={{ x: 125, y: 125 }}>
       <button
-        class="absolute bottom-1 right-0.5 text-primarytext bg-primary bg-opacity-10 px-2 py-1 text-sm rounded-full shadow-md hover:bg-secondary hover:bg-opacity-30 transition z-1"
+        class="absolute bottom-4 text-primarytext bg-primary bg-opacity-10 px-2 py-1 text-sm rounded-full shadow-md hover:bg-secondary hover:bg-opacity-30 transition z-1"
+        class:right-10.5={enableFingerprint}
+        class:right-0.5={!enableFingerprint}
         on:click={bottomRightButtonClicked}>
         <i class="fas fa-download" />
       </button>

@@ -7,10 +7,10 @@
 <script lang="ts">
   import { derived } from 'svelte/store';
   import Card from '../../components/ui/Card.svelte';
-  import Recording from '../../components/ui/Recording.svelte';
   import Gesture from '../../lib/domain/stores/gesture/Gesture';
   import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../lib/stores/Stores';
+  import Recording from '../../components/ui/recording/Recording.svelte';
 
   export let gesture: Gesture;
 
@@ -47,6 +47,7 @@
     {#each recordings as recording}
       {#key recording.ID}
         <Recording
+          enableFingerprint={true}
           dot={$dotGetter(recording.ID)}
           gestureId={$gesture.ID}
           {recording}

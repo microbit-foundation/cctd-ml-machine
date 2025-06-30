@@ -25,17 +25,17 @@
       <!-- Output is assigned -->
       {#if !$devices.isOutputConnected || $devices.isOutputReady}
         <!-- Output MB is not in the connection process -->
-        <StandardButton onClick={onOutputDisconnectButtonClicked} color="warning">
+        <StandardButton medium onClick={onOutputDisconnectButtonClicked} color="warning">
           {$tr('menu.model.disconnect')}
         </StandardButton>
       {:else}
         <!-- svelte-ignore missing-declaration -->
-        <StandardButton onClick={TypingUtils.emptyFunction} color="disabled">
+        <StandardButton medium onClick={TypingUtils.emptyFunction} color="disabled">
           <img alt="loading" src="imgs/loadingspinner.gif" style="height:24px" />
         </StandardButton>
       {/if}
     {:else}
-      <StandardButton onClick={onOutputConnectButtonClicked}>
+      <StandardButton medium onClick={onOutputConnectButtonClicked}>
         {$tr('menu.model.connectOutputButton')}
       </StandardButton>
     {/if}
@@ -43,10 +43,10 @@
   <div class="ml-2">
     {#if !$devices.isInputConnected || $devices.isInputReady}
       <!-- Input MB is not in the connection process -->
-      <StandardButton onClick={onInputDisconnectButtonClicked} color="warning"
+      <StandardButton medium onClick={onInputDisconnectButtonClicked} color="warning"
         >{$tr('footer.disconnectButton')}</StandardButton>
     {:else}
-      <StandardButton onClick={TypingUtils.emptyFunction} color="disabled">
+      <StandardButton medium onClick={TypingUtils.emptyFunction} color="disabled">
         <img alt="loading" src="/imgs/loadingspinner.gif" style="height:24px" />
       </StandardButton>
     {/if}

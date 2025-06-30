@@ -14,7 +14,7 @@
     MicrobitInteractions,
     chosenGesture,
   } from '../../../lib/stores/uiStore';
-  import Recording from '../../ui/Recording.svelte';
+  import Recording from '../../ui/recording/Recording.svelte';
   import { t } from '../../../i18n';
   import ImageSkeleton from '../../ui/skeletonloading/ImageSkeleton.svelte';
   import GestureCard from '../../ui/Card.svelte';
@@ -219,6 +219,7 @@
         <div class="flex p-2 h-30">
           {#each $gesture.recordings as recording (String($gesture.ID) + String(recording.ID))}
             <Recording
+              enableFingerprint={true}
               downloadable
               {recording}
               gestureId={$gesture.ID}

@@ -17,6 +17,7 @@
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
   import { stores } from '../../../lib/stores/Stores';
+  import LiveDataFingerprint from './LiveDataFingerprint.svelte';
 
   const devices = stores.getDevices();
 
@@ -55,7 +56,7 @@
     <!-- Input microbit is assigned -->
     <div class="relative w-full h-full">
       <div class="absolute w-full h-full">
-        <MicrobitLiveGraph width={componentWidth - 160} />
+        <MicrobitLiveGraph width={componentWidth - 180} />
       </div>
       {#if $devices.isInputInitializing}
         <div
@@ -66,12 +67,12 @@
         </div>
       {/if}
       <div
-        class="h-full p-0 m-0 absolute top-0 left-0 right-40 border-r border-solid border-black border-opacity-60">
+        class="h-full p-0 m-0 absolute top-0 left-0 right-45 border-r border-solid border-black border-opacity-60">
         <!-- The live text and info box -->
         <div class="float-left mt-2 ml-2">
           <LiveGraphInformationSection />
         </div>
-        <div class="absolute right-2 top-2 m-0 float-right">
+        <div class="absolute right-4 top-2 m-0 float-right">
           <ConnectedLiveGraphButtons
             onInputDisconnectButtonClicked={inputDisconnectButtonClicked}
             onOutputConnectButtonClicked={connectButtonClicked}
@@ -79,9 +80,14 @@
         </div>
       </div>
       <div
-        class="absolute right-0 cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
+        class="absolute right-0 cursor-pointer w-45 hover:bg-secondary hover:bg-opacity-10 transition"
         on:click={() => (isLive3DOpen = true)}>
-        <View3DLive width={160} height={160} freeze={isLive3DOpen} />
+        <div class="flex flex-row">
+          <div class="absolute">
+            <LiveDataFingerprint gestureName="Live" />
+          </div>
+          <View3DLive width={160} height={160} freeze={isLive3DOpen} />
+        </div>
       </div>
       <BaseDialog isOpen={isLive3DOpen} onClose={() => (isLive3DOpen = false)}>
         <!-- hardcoded margin-left matches the size of the sidebar -->

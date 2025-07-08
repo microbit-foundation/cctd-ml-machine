@@ -50,6 +50,7 @@
   "content.data.noData.exampleName.shake": "Schütteln",
   "content.data.noData.exampleName.still": "Still",
   "content.data.noData.exampleName.circle": "Kreis",
+  "content.data.tooltip.remove": "Entfernen",
   "content.trainer.failure.header": "Training fehlgeschlagen",
   "content.trainer.failure.body": "Das Training führte nicht zu einem brauchbaren Modell. Der Grund dafür sind höchstwahrscheinlich die für das Training verwendeten Daten. Wenn die Daten für verschiedene Klassen zu ähnlich sind, kann dies zu Problemen im Trainingsprozess führen.",
   "content.trainer.failure.todo": "Gehe zur Datenseite zurück und ändere die Daten.",

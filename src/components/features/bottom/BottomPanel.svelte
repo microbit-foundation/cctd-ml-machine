@@ -83,7 +83,7 @@
         class="absolute right-0 cursor-pointer w-45 hover:bg-secondary hover:bg-opacity-10 transition"
         on:click={() => (isLive3DOpen = true)}>
         <div class="flex flex-row">
-          <div class="absolute">
+          <div class="absolute h-full">
             <LiveDataFingerprint gestureName="Live" />
           </div>
           <View3DLive width={160} height={160} freeze={isLive3DOpen} />

@@ -40,8 +40,4 @@
   const fingerprint: number[] = getFilteredInput().getValue();
 </script>
 
-<div class="relative w-full w-11 h-93px overflow-hidden rounded-sm mr-3">
-  <div class="absolute h-full w-full -left-10px overflow-hidden">
-    <Fingerprint filterLabels={filtersLabels} title={gestureName} {fingerprint} />
-  </div>
-</div>
+<Fingerprint filterLabels={filtersLabels} title={gestureName} {fingerprint} />

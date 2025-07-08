@@ -6,5 +6,6 @@
   "liveGraphInputValues": true,
   "recordingScrubberValues": true,
   "modelValidation": true,
-  "modelSettings": true
+  "modelSettings": true,
+  "fingerprint": true
 }

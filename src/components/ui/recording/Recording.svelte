@@ -13,8 +13,9 @@
   import type { RecordingData } from '../../../lib/domain/RecordingData';
   import Tooltip from './../Tooltip.svelte';
   import { serializeRecordingToCsvWithoutGestureName } from '../../../lib/utils/CSVUtils';
-  import Fingerprint from './Fingerprint.svelte';
   import RecordingFingerprint from './RecordingFingerprint.svelte';
+  import { Feature, hasFeature } from '../../../lib/FeatureToggles';
+    import { tr } from '../../../i18n';
 
   // get recording from mother prop
   export let recording: RecordingData;
@@ -57,17 +58,19 @@
     // Clean up the URL object
     URL.revokeObjectURL(url);
   }
+
+  const shouldDisplayFingerprint = enableFingerprint && hasFeature(Feature.FINGERPRINT);
 </script>
 
 <div
   class="h-28 w-50 pr-3 pt-1 relative rounded-md"
-  class:w-40={!enableFingerprint}
-  class:w-50={enableFingerprint}>
+  class:w-40={!shouldDisplayFingerprint}
+  class:w-50={shouldDisplayFingerprint}>
   {#if dotGesture !== undefined}
     <div
       class="absolute px-1 py-0.5 z-3 right-1 top-2"
-      class:right-1={!enableFingerprint}
-      class:right-10={enableFingerprint}>
+      class:right-1={!shouldDisplayFingerprint}
+      class:right-10={shouldDisplayFingerprint}>
       <GestureDot gesture={dotGesture} />
     </div>
   {/if}
@@ -75,24 +78,25 @@
     <div
       transition:fade
       class="absolute h-26 bg-white"
-      class:w-40={!enableFingerprint}
-      class:w-50={enableFingerprint} />
+      class:w-40={!shouldDisplayFingerprint}
+      class:w-50={shouldDisplayFingerprint} />
   {:else}
     <div
       transition:fade
       class="absolute h-26 bg-white rounded-md"
-      class:w-40={!enableFingerprint}
-      class:w-50={enableFingerprint}>
+      class:w-40={!shouldDisplayFingerprint}
+      class:w-50={shouldDisplayFingerprint}>
       <div class="w-40 h-26">
         <RecordingGraph {recording} />
       </div>
-      {#if enableFingerprint}
-        <div class="absolute right-0 top-0.5 left-40 w-10 overflow-hidden">
+      {#if shouldDisplayFingerprint}
+        <div class="absolute top-0 left-40 h-24.5 w-10 overflow-hidden">
           <RecordingFingerprint {recording} gestureName={$gesture.name} />
         </div>
       {/if}
     </div>
   {/if}
+    <Tooltip title={$tr("content.data.tooltip.remove")} offset={{ x: -26, y: -50 }}>
   <button class="absolute -left-2.8px top-0px outline-none">
     <div class="relative">
       <i class="z-1 absolute fas fa-circle fa-lg text-white" />
@@ -102,16 +106,15 @@
         on:click={deleteClicked} />
     </div>
   </button>
+    </Tooltip>
 
-  <!-- bottom-right button -->
+  <!-- Download Button -->
   {#if downloadable}
-    <Tooltip title="CSV" offset={{ x: 125, y: 125 }}>
+    <Tooltip title="CSV" offset={{ x: 12, y: -50 }}>
       <button
-        class="absolute bottom-4 text-primarytext bg-primary bg-opacity-10 px-2 py-1 text-sm rounded-full shadow-md hover:bg-secondary hover:bg-opacity-30 transition z-1"
-        class:right-10.5={enableFingerprint}
-        class:right-0.5={!enableFingerprint}
+      class="absolute top-0px left-6 text-light-800 hover:text-black transition ease"
         on:click={bottomRightButtonClicked}>
-        <i class="fas fa-download" />
+        <i class="fas fa-download z-1 absolute fa-md" />
       </button>
     </Tooltip>
   {/if}

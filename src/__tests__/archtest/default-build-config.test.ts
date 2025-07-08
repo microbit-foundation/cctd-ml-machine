@@ -31,4 +31,9 @@ describe('Default build config test', () => {
     expect(windiContent.includes("secondary: '#2CCAC0'"), message).toBeFalsy();
     expect(features.title, message).toBe('Learning tool');
   });
+
+  test("deleteme pls", () => {
+    // TODO: Remember to add feature flag for fingerprint!
+    expect(true).toBeFalsy();
+  });
 });

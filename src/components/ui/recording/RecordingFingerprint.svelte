@@ -13,31 +13,44 @@
   export let recording: RecordingData;
   export let gestureName: string;
   const classifier = stores.getClassifier();
-
-  const filtersLabels: string[] = [];
+  const highlightedAxes = stores.getHighlightedAxes();
   const filters = classifier.getFilters();
-  $filters.forEach(filter => {
-    const filterName = filter.getName();
-    filtersLabels.push(`${filterName} - x`, `${filterName} - y`, `${filterName} - z`);
-  });
-  const getFilteredInput = (): Vector => {
-    const [xs, ys, zs] = recording.samples.reduce(
+
+  $: filtersLabels = (() => {
+    const labels: string[] = [];
+    $filters.forEach(filter => {
+      const filterName = filter.getName();
+      $highlightedAxes.forEach(axis => {
+        labels.push(`${filterName} - ${axis.label}`);
+      });
+    });
+    return labels;
+  })();
+
+  $: fingerprint = (() => {
+    const sampleInputVectorIndices = $highlightedAxes.map(axis => axis.index);
+    const sampleInput = recording.samples.reduce(
       (pre, cur) => {
-        pre[0].push(cur.vector[0]);
-        pre[1].push(cur.vector[1]);
-        pre[2].push(cur.vector[2]);
+        sampleInputVectorIndices.forEach(idx => {
+          if (pre[idx.toString()] === undefined) {
+            pre[idx.toString()] = [cur.vector[idx]];
+          } else {
+            pre[idx.toString()]!.push(cur.vector[idx]);
+          }
+        });
         return pre;
       },
-      [[] as number[], [] as number[], [] as number[]],
+      {} as { [key: string]: number[] | undefined },
     );
 
-    return new BaseVector([
-      ...filters.computeNormalized(xs),
-      ...filters.computeNormalized(ys),
-      ...filters.computeNormalized(zs),
-    ]);
-  };
-  const fingerprint: number[] = getFilteredInput().getValue();
+    const vectorInput: number[] = [];
+    Object.entries(sampleInput).forEach(([key, val]) => {
+      if (!val) return;
+      vectorInput.push(...filters.computeNormalized(val));
+    });
+
+    return new BaseVector(vectorInput).getValue();
+  })();
 </script>
 
 <Fingerprint filterLabels={filtersLabels} title={gestureName} {fingerprint} />

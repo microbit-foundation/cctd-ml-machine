@@ -6,7 +6,6 @@
 <script lang="ts">
   import type { RecordingData } from '../../../lib/domain/RecordingData';
   import { stores } from '../../../lib/stores/Stores';
-  import type { Vector } from '../../../lib/domain/Vector';
   import BaseVector from '../../../lib/domain/BaseVector';
   import Fingerprint from './Fingerprint.svelte';
 

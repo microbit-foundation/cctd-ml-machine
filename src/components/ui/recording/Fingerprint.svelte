@@ -4,8 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-    import { stores } from "../../../lib/stores/Stores";
-    import { onDestroy } from "svelte";
+  import { onDestroy } from 'svelte';
 
   export let fingerprint: number[];
   export let title: string;
@@ -13,14 +12,14 @@
 
   // Tooltip state
   let tooltipVisible = false;
-  let tooltipLabel = "";
+  let tooltipLabel = '';
   let tooltipIndex = 0;
   let tooltipValue = 0;
   let containerElement: HTMLDivElement;
   let tooltipX = 0;
   let tooltipXOffset = -80;
   let tooltipY = 0;
-  let tooltipYOffset = -60;
+  let tooltipYOffset = -85;
   let tooltipInterval: NodeJS.Timeout | null = null;
 
   // Function to convert value (0-1) to viridis-like color
@@ -61,16 +60,16 @@
     tooltipLabel = filterLabels[index] || `Cell ${index}`;
     tooltipIndex = index;
     tooltipValue = value;
-    
+
     // Calculate fixed position relative to the visualization container
     if (containerElement) {
       const rect = containerElement.getBoundingClientRect();
       tooltipX = rect.right + tooltipXOffset; // Position near the right edge of the container
       tooltipY = rect.top + tooltipYOffset; // Position near the top of the container
     }
-    
+
     tooltipVisible = true;
-    
+
     // Start polling the value every 200ms
     if (tooltipInterval) {
       clearInterval(tooltipInterval);
@@ -84,7 +83,7 @@
 
   const hideTooltip = () => {
     tooltipVisible = false;
-    
+
     // Clear the polling interval
     if (tooltipInterval) {
       clearInterval(tooltipInterval);
@@ -103,23 +102,24 @@
 <div class="flex flex-col font-sans w-full h-full" bind:this={containerElement}>
   <div class="flex flex-col border border-gray-300 flex-1">
     {#each fingerprint as value, index}
-        <div
-          class="border-b border-white border-opacity-10 transition-opacity duration-200 hover:opacity-80 cursor-pointer last:border-b-0 flex-1"
-          style="background-color: {getViridisColor(value)};"
-          on:mouseenter={() => showTooltip(index, value)}
-          on:mouseleave={hideTooltip}
-          on:click|stopPropagation
-          role="button"
-          tabindex="0"/>
+      <div
+        class="border-b border-white border-opacity-10 transition-opacity duration-200 hover:opacity-80 cursor-pointer last:border-b-0 flex-1"
+        style="background-color: {getViridisColor(value)};"
+        on:mouseenter={() => showTooltip(index, value)}
+        on:mouseleave={hideTooltip}
+        on:click|stopPropagation
+        role="button"
+        tabindex="0" />
     {/each}
   </div>
 </div>
 
 <!-- Fixed tooltip positioned globally but relative to the visualization -->
 {#if tooltipVisible}
-  <div 
+  <div
     class="fixed bg-white shadow-md text-primarytext text-sm px-3 py-2 rounded z-50 pointer-events-none whitespace-nowrap"
     style="left: {tooltipX}px; top: {tooltipY}px;">
+    <div class="font-semibold text-md">{title}</div>
     <div class="font-semibold">{tooltipLabel}</div>
     <div>Value: {tooltipValue.toFixed(3)}</div>
   </div>

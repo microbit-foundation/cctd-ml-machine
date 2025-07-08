@@ -8,7 +8,6 @@
   import { ClassifierInput } from '../../../lib/domain/ClassifierInput';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import StandardButton from '../../ui/buttons/StandardButton.svelte';
   import Fingerprint from '../../ui/recording/Fingerprint.svelte';
 
   export let gestureName: string;
@@ -20,7 +19,7 @@
 
   $: filtersLabels = $filters.flatMap(filter => {
     const filterName = filter.getName();
-    return [`${filterName} - x`, `${filterName} - y`, `${filterName} - z`];
+    return $highlightedAxes.map(axis => `${filterName} - ${axis.label}`);
   });
   // $: fingerprint = $classifier.filteredInput.normalized.getValue();
   onMount(() => {

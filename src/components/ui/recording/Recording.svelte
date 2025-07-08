@@ -15,7 +15,7 @@
   import { serializeRecordingToCsvWithoutGestureName } from '../../../lib/utils/CSVUtils';
   import RecordingFingerprint from './RecordingFingerprint.svelte';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
-    import { tr } from '../../../i18n';
+  import { tr } from '../../../i18n';
 
   // get recording from mother prop
   export let recording: RecordingData;
@@ -96,23 +96,23 @@
       {/if}
     </div>
   {/if}
-    <Tooltip title={$tr("content.data.tooltip.remove")} offset={{ x: -26, y: -50 }}>
-  <button class="absolute -left-2.8px top-0px outline-none">
-    <div class="relative">
-      <i class="z-1 absolute fas fa-circle fa-lg text-white" />
-      <i
-        class="z-2 absolute far fa-times-circle fa-lg transition
+  <Tooltip title={$tr('content.data.tooltip.remove')} offset={{ x: -26, y: -50 }}>
+    <button class="absolute -left-2.8px top-0px outline-none">
+      <div class="relative">
+        <i class="z-1 absolute fas fa-circle fa-lg text-white" />
+        <i
+          class="z-2 absolute far fa-times-circle fa-lg transition
 									ease cursor-pointer text-light-800 hover:text-black"
-        on:click={deleteClicked} />
-    </div>
-  </button>
-    </Tooltip>
+          on:click={deleteClicked} />
+      </div>
+    </button>
+  </Tooltip>
 
   <!-- Download Button -->
   {#if downloadable}
     <Tooltip title="CSV" offset={{ x: 12, y: -50 }}>
       <button
-      class="absolute top-0px left-6 text-light-800 hover:text-black transition ease"
+        class="absolute top-0px left-6 text-light-800 hover:text-black transition ease"
         on:click={bottomRightButtonClicked}>
         <i class="fas fa-download z-1 absolute fa-md" />
       </button>

@@ -18,6 +18,7 @@
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
   import { stores } from '../../../lib/stores/Stores';
   import LiveDataFingerprint from './LiveDataFingerprint.svelte';
+  import { Feature, hasFeature } from '../../../lib/FeatureToggles';
 
   const devices = stores.getDevices();
 
@@ -79,16 +80,20 @@
             onOutputDisconnectButtonClicked={outputDisconnectButtonClicked} />
         </div>
       </div>
+
       <div
         class="absolute right-0 cursor-pointer w-45 hover:bg-secondary hover:bg-opacity-10 transition"
         on:click={() => (isLive3DOpen = true)}>
         <div class="flex flex-row">
-          <div class="absolute h-full">
-            <LiveDataFingerprint gestureName="Live" />
-          </div>
+          {#if hasFeature(Feature.FINGERPRINT)}
+            <div class="absolute h-full">
+              <LiveDataFingerprint gestureName="Live" />
+            </div>
+          {/if}
           <View3DLive width={160} height={160} freeze={isLive3DOpen} />
         </div>
       </div>
+
       <BaseDialog isOpen={isLive3DOpen} onClose={() => (isLive3DOpen = false)}>
         <!-- hardcoded margin-left matches the size of the sidebar -->
         <div

@@ -5,6 +5,7 @@
  -->
 <script lang="ts">
     import { stores } from "../../../lib/stores/Stores";
+    import { onDestroy } from "svelte";
 
   export let fingerprint: number[];
   export let title: string;
@@ -13,12 +14,14 @@
   // Tooltip state
   let tooltipVisible = false;
   let tooltipLabel = "";
+  let tooltipIndex = 0;
   let tooltipValue = 0;
   let containerElement: HTMLDivElement;
   let tooltipX = 0;
   let tooltipXOffset = -80;
   let tooltipY = 0;
   let tooltipYOffset = -60;
+  let tooltipInterval: NodeJS.Timeout | null = null;
 
   // Function to convert value (0-1) to viridis-like color
   const getViridisColor = (value: number): string => {
@@ -56,6 +59,7 @@
   // Tooltip handlers
   const showTooltip = (index: number, value: number) => {
     tooltipLabel = filterLabels[index] || `Cell ${index}`;
+    tooltipIndex = index;
     tooltipValue = value;
     
     // Calculate fixed position relative to the visualization container
@@ -66,11 +70,34 @@
     }
     
     tooltipVisible = true;
+    
+    // Start polling the value every 200ms
+    if (tooltipInterval) {
+      clearInterval(tooltipInterval);
+    }
+    tooltipInterval = setInterval(() => {
+      if (tooltipVisible && fingerprint[tooltipIndex] !== undefined) {
+        tooltipValue = fingerprint[tooltipIndex];
+      }
+    }, 200);
   };
 
   const hideTooltip = () => {
     tooltipVisible = false;
+    
+    // Clear the polling interval
+    if (tooltipInterval) {
+      clearInterval(tooltipInterval);
+      tooltipInterval = null;
+    }
   };
+
+  // Cleanup on component destroy
+  onDestroy(() => {
+    if (tooltipInterval) {
+      clearInterval(tooltipInterval);
+    }
+  });
 </script>
 
 <div class="flex flex-col font-sans w-full h-full" bind:this={containerElement}>

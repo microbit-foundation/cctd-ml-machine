@@ -33,6 +33,7 @@
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = StaticConfiguration.recordingDuration;
+  const enableFingerprint = stores.getEnableFingerprint();
 
   let isThisRecording = false;
 
@@ -219,7 +220,7 @@
         <div class="flex p-2 h-30">
           {#each $gesture.recordings as recording (String($gesture.ID) + String(recording.ID))}
             <Recording
-              enableFingerprint={true}
+              enableFingerprint={$enableFingerprint}
               downloadable
               {recording}
               gestureId={$gesture.ID}

@@ -23,7 +23,7 @@
   export let onDelete: (recording: RecordingData) => void;
   export let dot: { gesture: GestureID; color: string } | undefined = undefined;
   export let downloadable: boolean = false;
-  export let enableFingerprint: boolean = false;
+  export let enableFingerprint: boolean;
 
   $: dotGesture = dot?.gesture
     ? stores.getGestures().getGesture(dot?.gesture)

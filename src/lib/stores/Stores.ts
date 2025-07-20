@@ -35,6 +35,8 @@ import ValidationResults from '../domain/stores/ValidationResults';
 import Snackbar from './Snackbar';
 import { knnHasTrained } from './KNNStores';
 import Devices from '../domain/Devices';
+import EnableFingerprint from '../domain/stores/EnableFingerprint';
+import StaticConfiguration from '../../StaticConfiguration';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -59,6 +61,7 @@ class Stores implements Readable<StoresType> {
   private validationResults: ValidationResults;
   private recorder: Recorder;
   private devices: Devices;
+  private enableFingerprint: EnableFingerprint;
 
   public constructor() {
     this.devices = new Devices();
@@ -90,6 +93,7 @@ class Stores implements Readable<StoresType> {
       this.gestures,
       this.highlightedAxis,
     );
+    this.enableFingerprint = new EnableFingerprint(StaticConfiguration.enableFingerprintByDefault);
   }
 
   public subscribe(
@@ -181,6 +185,10 @@ class Stores implements Readable<StoresType> {
 
   public getDevices(): Devices {
     return this.devices;
+  }
+
+  public getEnableFingerprint() {
+    return this.enableFingerprint;
   }
 }
 

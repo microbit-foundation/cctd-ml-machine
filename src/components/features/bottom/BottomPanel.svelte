@@ -88,9 +88,7 @@
       </div>
 
       <!-- Right part of live-graph -->
-      <div
-        class="absolute right-0 bottom-0 cursor-pointer h-full w-45 flex flex-col justify-between hover:bg-secondary hover:bg-opacity-10 transition"
-        on:click={() => (isLive3DOpen = true)}>
+      <div class="absolute right-0 bottom-0 h-full w-45 flex flex-col justify-between">
         <div class="pt-2 pr-2 justify-end flex flex-row gap-2">
           <p>Fingerprint:</p>
           <input
@@ -106,7 +104,9 @@
           </div>
         {/if}
 
-        <div class="flex flex-row pl-4 justify-center">
+        <div
+          class="flex flex-row pl-4 justify-center cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
+          on:click={() => (isLive3DOpen = true)}>
           <View3DLive width={140} height={140} freeze={isLive3DOpen} />
         </div>
       </div>

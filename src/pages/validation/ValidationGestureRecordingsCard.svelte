@@ -18,7 +18,7 @@
   const gestureValidationSet = stores.getValidationSets().getForGesture(gesture.getId());
   // Results are grouped by gestures then recordings [i][j](Gestures -> Recording)
   const results = stores.getValidationResults();
-  const gestures = stores.getGestures();
+  const enableFingerprint = stores.getEnableFingerprint();
 
   $: recordings = $gestureValidationSet.recordings;
 
@@ -47,7 +47,7 @@
     {#each recordings as recording}
       {#key recording.ID}
         <Recording
-          enableFingerprint={true}
+          enableFingerprint={$enableFingerprint}
           dot={$dotGetter(recording.ID)}
           gestureId={$gesture.ID}
           {recording}

@@ -21,6 +21,7 @@
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
 
   const devices = stores.getDevices();
+  const enableFingerprint = stores.getEnableFingerprint();
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -38,6 +39,11 @@
   };
 
   let isLive3DOpen = false;
+
+  $: isFingerprintEnabled = $enableFingerprint && hasFeature(Feature.FINGERPRINT);
+  const toggleEnabled = (event: any) => {
+    enableFingerprint.set(event.target.checked);
+  };
 </script>
 
 <div
@@ -81,16 +87,27 @@
         </div>
       </div>
 
+      <!-- Right part of live-graph -->
       <div
-        class="absolute right-0 cursor-pointer w-45 hover:bg-secondary hover:bg-opacity-10 transition"
+        class="absolute right-0 bottom-0 cursor-pointer h-full w-45 flex flex-col justify-between hover:bg-secondary hover:bg-opacity-10 transition"
         on:click={() => (isLive3DOpen = true)}>
-        <div class="flex flex-row">
-          {#if hasFeature(Feature.FINGERPRINT)}
-            <div class="absolute h-full">
-              <LiveDataFingerprint gestureName="Live" />
-            </div>
-          {/if}
-          <View3DLive width={160} height={160} freeze={isLive3DOpen} />
+        <div class="pt-2 pr-2 justify-end flex flex-row gap-2">
+          <p>Fingerprint:</p>
+          <input
+            type="checkbox"
+            checked={$enableFingerprint}
+            on:change={e => toggleEnabled(e)}
+            on:click|stopPropagation />
+        </div>
+
+        {#if isFingerprintEnabled}
+          <div class="absolute h-full">
+            <LiveDataFingerprint gestureName="Live" />
+          </div>
+        {/if}
+
+        <div class="flex flex-row pl-4 justify-center">
+          <View3DLive width={140} height={140} freeze={isLive3DOpen} />
         </div>
       </div>
 

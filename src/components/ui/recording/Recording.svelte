@@ -59,7 +59,7 @@
     URL.revokeObjectURL(url);
   }
 
-  const shouldDisplayFingerprint = enableFingerprint && hasFeature(Feature.FINGERPRINT);
+  $: shouldDisplayFingerprint = enableFingerprint && hasFeature(Feature.FINGERPRINT);
 </script>
 
 <div

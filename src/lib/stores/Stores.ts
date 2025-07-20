@@ -93,7 +93,9 @@ class Stores implements Readable<StoresType> {
       this.gestures,
       this.highlightedAxis,
     );
-    this.enableFingerprint = new EnableFingerprint(StaticConfiguration.enableFingerprintByDefault);
+    this.enableFingerprint = new EnableFingerprint(
+      StaticConfiguration.enableFingerprintByDefault,
+    );
   }
 
   public subscribe(

@@ -87,6 +87,8 @@
     };
   });
 
+  $: console.log($filters);
+
   unsubscribe = derived([highlightedAxis, classifier], s => s).subscribe(s => {
     init();
   });
@@ -114,7 +116,9 @@
             </div>
           {/each}
         </div>
+
         {#if $highlightedAxis.length === 1}
+          <!-- Name and blue arrow -->
           <div class="pl-30 flex flex-col justify-around">
             {#each $filters as filter, index}
               <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
@@ -128,7 +132,10 @@
                 width="20px" />
             {/each}
           </div>
-          <div class="flex flex-col justify-around w-12">
+
+          <!-- Numbers -->
+          <div
+            class="flex flex-col justify-around w-14 overflow-hidden whitespace-nowrap">
             {#each liveFilteredAxesData as val, index}
               <p style={`color:${StaticConfiguration.graphColors[index]}`}>
                 {val.toFixed(2)}

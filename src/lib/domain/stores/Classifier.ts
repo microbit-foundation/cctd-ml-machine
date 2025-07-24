@@ -22,24 +22,15 @@ import type { Vector } from '../Vector';
 
 type ClassifierData = {
   model: ModelData;
-  filteredInput: {
-    raw: Vector;
-    normalized: Vector;
-  };
 };
 
 class Classifier implements Readable<ClassifierData> {
-  private filteredInput: Writable<{ raw: Vector; normalized: Vector }>;
   constructor(
     private model: Model,
     private filters: Filters,
     private gestures: Readable<Gesture[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ) {
-    this.filteredInput = writable({
-      raw: new BaseVector([]),
-      normalized: new BaseVector([]),
-    });
     Logger.log('classifier', 'Initialized classifier');
   }
 
@@ -47,12 +38,10 @@ class Classifier implements Readable<ClassifierData> {
     run: Subscriber<ClassifierData>,
     invalidate?: ((value?: ClassifierData | undefined) => void) | undefined,
   ): Unsubscriber {
-    return derived([this.model, this.filteredInput], stores => {
+    return derived([this.model], stores => {
       const modelStore = stores[0];
-      const filteredInputStore = stores[1];
       return {
         model: modelStore,
-        filteredInput: filteredInputStore,
       };
     }).subscribe(run, invalidate);
   }
@@ -62,10 +51,11 @@ class Classifier implements Readable<ClassifierData> {
    */
   public async classify(input: ClassifierInput): Promise<void> {
     const filteredInput = new BaseVector(input.getInput(this.filters));
-    const filteredInputNormalized = new BaseVector(
-      input.getNormalizedInput(this.filters),
-    );
-    this.filteredInput.set({ raw: filteredInput, normalized: filteredInputNormalized });
+    // Uncommented due to performance issues, caused too many re-renders
+    // const filteredInputNormalized = new BaseVector(
+    // input.getNormalizedInput(this.filters),
+    // );
+    // this.filteredInput.set({ raw: filteredInput, normalized: filteredInputNormalized });
     const predictions = await this.getModel().predict(filteredInput);
     predictions.forEach((confidence, index) => {
       const gesture = get(this.gestures)[index];

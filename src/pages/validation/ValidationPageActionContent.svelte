@@ -12,6 +12,7 @@
   import { tr } from '../../i18n';
   import Tooltip from '../../components/ui/Tooltip.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
+  import Switch from '../../components/ui/Switch.svelte';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
@@ -29,12 +30,12 @@
 </script>
 
 <div class="bg-white h-full flex flex-row justify-evenly">
-  <div class="pl-2 flex flex-col justify-center">
+  <div class="flex flex-col justify-center">
     <div class="flex flex-row gap-2 justify-center">
       <p>
         {$tr('content.validation.testButton.autoUpdate')}:
       </p>
-      <input type="checkbox" bind:checked={$autoUpdate} />
+      <Switch size="sm" bind:checked={$autoUpdate} />
     </div>
     <Tooltip
       disabled={$model.isTrained}

@@ -19,6 +19,7 @@
   import { stores } from '../../../lib/stores/Stores';
   import LiveDataFingerprint from './LiveDataFingerprint.svelte';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
+  import Switch from '../../ui/Switch.svelte';
 
   const devices = stores.getDevices();
   const enableFingerprint = stores.getEnableFingerprint();
@@ -91,11 +92,10 @@
       <div class="absolute right-0 bottom-0 h-full w-45 flex flex-col justify-between">
         <div class="pt-2 pr-2 justify-end flex flex-row gap-2">
           <p>Fingerprint:</p>
-          <input
-            type="checkbox"
-            checked={$enableFingerprint}
-            on:change={e => toggleEnabled(e)}
-            on:click|stopPropagation />
+          <Switch
+            size="sm"
+            bind:checked={$enableFingerprint}
+            on:change={e => enableFingerprint.set(e.detail.checked)} />
         </div>
 
         {#if isFingerprintEnabled}

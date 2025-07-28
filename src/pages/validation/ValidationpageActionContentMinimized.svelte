@@ -6,6 +6,7 @@
 
 <script lang="ts">
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
+  import Switch from '../../components/ui/Switch.svelte';
   import Tooltip from '../../components/ui/Tooltip.svelte';
   import { tr } from '../../i18n';
   import { stores } from '../../lib/stores/Stores';
@@ -26,7 +27,7 @@
       <p class="text-sm self-center">
         {$tr('content.validation.testButton.autoUpdate')}:
       </p>
-      <input type="checkbox" bind:checked={$autoUpdate} />
+      <Switch size="sm" bind:checked={$autoUpdate} />
       <Tooltip
         disabled={$model.isTrained}
         offset={{ x: 230, y: 0 }}

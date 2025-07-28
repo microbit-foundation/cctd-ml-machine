@@ -8,7 +8,6 @@
   import { createEventDispatcher } from 'svelte';
   export let checked: boolean = false;
   export let disabled: boolean = false;
-  export let label: string = '';
   export let size: 'sm' | 'md' | 'lg' = 'md';
   const dispatch = createEventDispatcher();
 
@@ -30,9 +29,6 @@
 </script>
 
 <div class="flex items-center space-x-3 select-none">
-  {#if label}
-    <label class="text-base cursor-pointer" on:click={toggle}>{label}</label>
-  {/if}
   <button
     type="button"
     class="relative focus:outline-none transition-colors duration-200 rounded-full border-2 border-gray-300 bg-gray-200 flex items-center {btnSize} {disabled
@@ -40,7 +36,6 @@
       : 'cursor-pointer'}"
     aria-checked={checked}
     on:click|stopPropagation
-    aria-label={label}
     {disabled}
     on:click={toggle}
     role="switch"

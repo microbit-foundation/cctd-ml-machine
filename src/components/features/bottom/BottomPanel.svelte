@@ -90,15 +90,14 @@
 
       <!-- Right part of live-graph -->
       <div class="absolute right-0 bottom-0 h-full w-45 flex flex-col justify-between">
-        <div class="pt-2 pr-2 justify-end flex flex-row gap-2">
-          <p>Fingerprint:</p>
-          <Switch
-            size="sm"
-            bind:checked={$enableFingerprint}
-            on:change={e => enableFingerprint.set(e.detail.checked)} />
-        </div>
-
         {#if isFingerprintEnabled}
+          <div class="pt-2 pr-2 justify-end flex flex-row gap-2">
+            <p>Fingerprint:</p>
+            <Switch
+              size="sm"
+              bind:checked={$enableFingerprint}
+              on:change={e => enableFingerprint.set(e.detail.checked)} />
+          </div>
           <div class="absolute h-full">
             <LiveDataFingerprint gestureName="Live" />
           </div>

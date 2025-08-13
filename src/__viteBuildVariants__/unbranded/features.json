@@ -7,5 +7,6 @@
   "recordingScrubberValues": true,
   "modelValidation": true,
   "modelSettings": true,
-  "fingerprint": true
+  "fingerprint": true,
+  "recordingDuration": 1800
 }

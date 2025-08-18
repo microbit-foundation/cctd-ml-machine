@@ -168,8 +168,10 @@
   <div class="items-center flex relative">
     <!-- Title of gesture-->
     <GestureCard mr small>
-      <div class="top-3 left-3 absolute">
+      <div class="top-2 left-3 absolute flex flex-row justify-center items-center gap-4">
         <GestureDot {gesture} />
+        <!-- TODO: Should be behind feature flag!! -->
+        <StandardButton small onClick={() => print()}>FeatureFLAG!</StandardButton>
       </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
         <div

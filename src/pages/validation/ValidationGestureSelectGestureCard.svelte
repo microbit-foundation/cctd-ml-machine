@@ -14,7 +14,7 @@
     MicrobitInteractions,
   } from '../../lib/stores/uiStore';
   import { t } from '../../i18n';
-  import { state, stores } from '../../lib/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
   import { get } from 'svelte/store';
   import Logger from '../../lib/utils/Logger';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
@@ -22,13 +22,14 @@
   export let gesture: Gesture;
   export let onNoMicrobitSelect: () => void;
 
+  const devices = stores.getDevices();
   const validationSets = stores.getValidationSets();
   const recorder = stores.getRecorder();
 
   $: isThisRecording = $recorder.recordingGesture === gesture.getId();
 
   const selectClicked = (gesture: Gesture): void => {
-    if (!$state.isInputConnected) {
+    if (!$devices.isInputConnected) {
       chosenGesture.update(gesture => {
         gesture = null;
         return gesture;

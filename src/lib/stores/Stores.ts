@@ -33,6 +33,10 @@ import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
 import Snackbar from './Snackbar';
+import { knnHasTrained } from './KNNStores';
+import Devices from '../domain/Devices';
+import EnableFingerprint from '../domain/stores/EnableFingerprint';
+import StaticConfiguration from '../../StaticConfiguration';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -56,8 +60,11 @@ class Stores implements Readable<StoresType> {
   private validationSets: ValidationSets;
   private validationResults: ValidationResults;
   private recorder: Recorder;
+  private devices: Devices;
+  private enableFingerprint: EnableFingerprint;
 
-  public constructor(private applicationState: Readable<ApplicationState>) {
+  public constructor() {
+    this.devices = new Devices();
     this.neuralNetworkSettings = new NeuralNetworkSettings();
     this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
@@ -67,12 +74,12 @@ class Stores implements Readable<StoresType> {
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
-    this.selectedModel = new SelectedModel();
-    this.knnModelSettings = new KNNModelSettings(this.selectedModel);
+    this.selectedModel = new SelectedModel(this.classifier, knnHasTrained);
+    this.knnModelSettings = new KNNModelSettings(this.selectedModel, this.classifier);
     this.highlightedAxis = new HighlightedAxes(
       this.classifier,
       this.selectedModel,
-      applicationState,
+      this.devices,
       this.snackbar,
     );
     this.availableAxes = new AvailableAxes(this.liveData, this.gestures);
@@ -85,6 +92,9 @@ class Stores implements Readable<StoresType> {
       this.classifier,
       this.gestures,
       this.highlightedAxis,
+    );
+    this.enableFingerprint = new EnableFingerprint(
+      StaticConfiguration.enableFingerprintByDefault,
     );
   }
 
@@ -174,55 +184,14 @@ class Stores implements Readable<StoresType> {
   public getRecorder(): Recorder {
     return this.recorder;
   }
+
+  public getDevices(): Devices {
+    return this.devices;
+  }
+
+  public getEnableFingerprint() {
+    return this.enableFingerprint;
+  }
 }
 
-export enum DeviceRequestStates {
-  NONE,
-  INPUT,
-  OUTPUT,
-}
-export enum ModelView {
-  TILE,
-  STACK,
-}
-export interface ApplicationState {
-  isRequestingDevice: DeviceRequestStates;
-  isFlashingDevice: boolean;
-  isRecording: boolean;
-  isInputConnected: boolean;
-  isOutputConnected: boolean;
-  offerReconnect: boolean;
-  requestDeviceWasCancelled: boolean;
-  reconnectState: DeviceRequestStates;
-  isInputReady: boolean;
-  isInputAssigned: boolean;
-  isOutputAssigned: boolean;
-  isOutputReady: boolean;
-  isInputInitializing: boolean;
-  isLoading: boolean;
-  modelView: ModelView;
-  isInputOutdated: boolean;
-  isOutputOutdated: boolean;
-}
-// Store current state to prevent error prone actions
-export const state = writable<ApplicationState>({
-  isRequestingDevice: DeviceRequestStates.NONE,
-  isFlashingDevice: false,
-  isRecording: false,
-  isInputConnected: false,
-  isOutputConnected: false,
-  offerReconnect: false,
-  requestDeviceWasCancelled: false,
-  reconnectState: DeviceRequestStates.NONE,
-  isInputReady: false,
-  isInputAssigned: false,
-  isOutputAssigned: false,
-  isOutputReady: false,
-  isInputInitializing: false,
-  isLoading: true,
-  modelView: ModelView.STACK,
-  isInputOutdated: false,
-  isOutputOutdated: false,
-});
-
-export const stores = new Stores(state);
+export const stores = new Stores();

@@ -11,9 +11,10 @@
   import ReconnectPrompt from '../features/ReconnectPrompt.svelte';
   import OutdatedMicrobitWarning from '../features/OutdatedMicrobitWarning.svelte';
   import { isInputPatternValid } from '../../lib/stores/connectionStore';
-  import { state } from '../../lib/stores/Stores';
   import FilterListFilterPreview from '../features/filters/FilterListFilterPreview.svelte';
+  import { stores } from '../../lib/stores/Stores';
 
+  const devices = stores.getDevices();
   // Helps show error messages on top of page
   let latestMessage = '';
   let showLatestMessage = false;
@@ -51,11 +52,11 @@
       </div>
     </div>
   {/if}
-  {#if $state.offerReconnect && isInputPatternValid()}
+  {#if $devices.offerReconnect && isInputPatternValid()}
     <ReconnectPrompt />
   {/if}
-  {#if $state.isInputOutdated || $state.isOutputOutdated}
-    <OutdatedMicrobitWarning targetRole={$state.isInputOutdated ? 'INPUT' : 'OUTPUT'} />
+  {#if $devices.isInputOutdated || $devices.isOutputOutdated}
+    <OutdatedMicrobitWarning targetRole={$devices.isInputOutdated ? 'INPUT' : 'OUTPUT'} />
   {/if}
   <FilterListFilterPreview />
 </div>

@@ -9,18 +9,20 @@
   import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import { t } from '../../i18n';
-  import { state } from '../../lib/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
   import { importExampleDataset } from './DataPage';
+
+  const devices = stores.getDevices();
 </script>
 
 <div class="flex flex-col flex-grow justify-between">
   <div>
-    {#if !$state.isInputConnected}
+    {#if !$devices.isInputConnected}
       <div class="mt-4">
         <PleaseConnect />
       </div>
     {/if}
-    {#if $state.isInputConnected}
+    {#if $devices.isInputConnected}
       <div class="flex justify-center">
         <div class="text-center text-xl w-1/2 text-bold text-primarytext">
           <p>{$t('content.data.noData')}</p>

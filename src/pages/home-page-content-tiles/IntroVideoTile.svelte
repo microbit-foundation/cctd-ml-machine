@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import { state } from '../../lib/stores/Stores';
+  import { isLoading } from '../../lib/stores/ApplicationState';
 </script>
 
 <p class="text-lg mb-2 font-semibold">
@@ -15,7 +15,7 @@
 <div class="flex items-center justify-center">
   <!-- We have selected the video's loading progress as the loading criterion -->
   <video
-    on:canplaythrough={() => ($state.isLoading = false)}
+    on:canplaythrough={() => ($isLoading = false)}
     class="h-[300px]"
     controls
     width="450"

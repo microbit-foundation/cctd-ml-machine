@@ -7,9 +7,10 @@
   import { fade } from 'svelte/transition';
   import Information from '../../../components/ui/information/Information.svelte';
   import { t } from './../../../i18n';
-  import { state, stores } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
 
+  const devices = stores.getDevices();
   const gestures = stores.getGestures();
   // Bool flags to know whether output microbit popup should be show
   let hasClosedPopup = false;
@@ -59,7 +60,7 @@
       <OutputGesture variant="stack" {gesture} {onUserInteraction} />
     {/each}
   </div>
-  {#if !$state.isOutputConnected && !hasClosedPopup && hasInteracted}
+  {#if !$devices.isOutputConnected && !hasClosedPopup && hasInteracted}
     <div transition:fade class="grid grid-cols-5 absolute bottom-5 w-full min-w-729px">
       <div
         class="flex relative col-start-2 rounded-lg col-end-5 h-35"

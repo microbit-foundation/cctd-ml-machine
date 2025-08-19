@@ -9,28 +9,33 @@
   import ModelRegistry from '../../lib/domain/ModelRegistry';
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
-  import { state, stores } from '../../lib/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
   import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import FiltersList from '../../components/features/filters/FiltersList.svelte';
 
+  const devices = stores.getDevices();
   const selectedModel = stores.getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);
 </script>
 
-<div class="flex flex-col h-full justify-center">
-  <div class="flex flex-row p-2">
+<div class="flex items-center flex-grow flex-row h-full">
+  <div>
     {#if showFilterList}
       <FiltersList />
     {/if}
-    {#if $selectedModel.id === ModelRegistry.KNN.id && $state.isInputConnected}
-      <KnnModelTrainingPageView />
-    {:else if $selectedModel.id === ModelRegistry.NeuralNetwork.id}
-      <NeuralNetworkTrainingPageView />
-    {/if}
+  </div>
+  <div class="flex flex-grow justify-center flex-col gap-2">
+    <div class="flex flex-row p-2">
+      {#if $selectedModel.id === ModelRegistry.KNN.id}
+        <KnnModelTrainingPageView />
+      {:else if $selectedModel.id === ModelRegistry.NeuralNetwork.id}
+        <NeuralNetworkTrainingPageView />
+      {/if}
+    </div>
   </div>
 </div>
-{#if !$state.isInputConnected}
-  <div class="mt-5">
+{#if !$devices.isInputConnected}
+  <div class="mt-4">
     <PleaseConnect />
   </div>
 {/if}

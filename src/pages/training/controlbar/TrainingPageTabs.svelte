@@ -9,8 +9,6 @@
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { t } from '../../../i18n';
   import { stores } from '../../../lib/stores/Stores';
-  import NeuralNetworkDropdown from './NeuralNetworkDropdown.svelte';
-  import KnnModelDropdown from './KNNModelDropdown.svelte';
   import { navigate, Paths } from '../../../router/Router';
   import StandardButton from '../../../components/ui/buttons/StandardButton.svelte';
 
@@ -29,14 +27,15 @@
 {#if showTabBar}
   <ControlBar expanded shadows={false}>
     <div class="flex justify-end flex-row flex-grow h-full px-2">
-      <div class="flex flex-row gap-2 justify-center">
-        <div class="flex flex-col justify-center">
-          <NeuralNetworkDropdown
-            isSelected={isSelected(ModelRegistry.NeuralNetwork.id)} />
-        </div>
-        <div class="flex flex-col justify-center">
-          <KnnModelDropdown isSelected={isSelected(ModelRegistry.KNN.id)} />
-        </div>
+      <div class="flex flex-row gap-2 justify-center py-2">
+        {#each ModelRegistry.getModels() as model}
+          <StandardButton
+            small
+            outlined={!isSelected(model.id)}
+            onClick={() => selectedModel.set(model)}>
+            {model.title}
+          </StandardButton>
+        {/each}
       </div>
     </div>
   </ControlBar>

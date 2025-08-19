@@ -7,13 +7,20 @@ import KNNMLModel from './KNNMLModel';
 import type { ModelTrainer } from '../domain/ModelTrainer';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
-import { knnTrainingDataPoints } from '../stores/KnnModelGraph';
+import { knnTrainingDataPoints } from '../stores/KNNStores';
+import type { ModelInfo } from '../domain/ModelRegistry';
+import ModelRegistry from '../domain/ModelRegistry';
 
 /**
  * Trains a K-Nearest Neighbour model
  */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
   constructor(private k: number) {}
+
+  public getModelInfo(): ModelInfo {
+    return ModelRegistry.KNN;
+  }
+
   public trainModel(trainingDataRepository: TrainingDataRepository): Promise<KNNMLModel> {
     const trainingData = trainingDataRepository.getTrainingData();
     const mean = trainingDataRepository.getTrainingDataMean();

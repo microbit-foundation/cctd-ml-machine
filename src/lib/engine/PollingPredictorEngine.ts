@@ -19,8 +19,6 @@ import type { Engine, EngineData } from '../domain/stores/Engine';
 import type { LiveData } from '../domain/stores/LiveData';
 import type HighlightedAxes from '../domain/stores/HighlightedAxes';
 import { ClassifierInput } from '../domain/ClassifierInput';
-import BaseLiveDataVector from '../domain/BaseLiveDataVector';
-import BaseVector from '../domain/BaseVector';
 
 /**
  * The PollingPredictorEngine will predict on the current input with consistent intervals.

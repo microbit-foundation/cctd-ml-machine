@@ -15,12 +15,13 @@ import { type Subscriber } from 'svelte/motion';
 import SelectedModel from '../SelectedModel';
 import ModelRegistry from '../ModelRegistry';
 import type { Axis } from '../Axis';
-import { trainModel } from '../../../pages/training/TrainingPage';
-import type { ApplicationState } from '../../stores/Stores';
 import PersistantWritable from '../../repository/PersistantWritable';
 import Logger from '../../utils/Logger';
 import { t } from '../../../i18n';
 import type Snackbar from '../../stores/Snackbar';
+import { knnHasTrained } from '../../stores/KNNStores';
+import { trainKNNModel } from '../../../pages/training/TrainingPage';
+import type Devices from '../Devices';
 
 class HighlightedAxes implements Writable<Axis[]> {
   private value: PersistantWritable<Axis[]>; // Use this.set instead of this.value.set!
@@ -28,7 +29,7 @@ class HighlightedAxes implements Writable<Axis[]> {
   public constructor(
     private classifier: Classifier,
     private selectedModel: SelectedModel,
-    private applicationState: Readable<ApplicationState>,
+    private devices: Devices,
     private snackbar: Snackbar,
   ) {
     this.value = new PersistantWritable([], 'highlightedAxes');
@@ -99,10 +100,13 @@ class HighlightedAxes implements Writable<Axis[]> {
 
     if (
       get(this.selectedModel).id === ModelRegistry.KNN.id &&
-      get(this.applicationState).isInputConnected
+      get(this.devices).isInputConnected
     ) {
-      Logger.log('HighlightedAxes', 'Retraining KNN model due to axes changed');
-      await trainModel(ModelRegistry.KNN);
+      if (get(knnHasTrained)) {
+        Logger.log('HighlightedAxes', 'Retraining KNN model due to axes changed');
+        // Only train if the knn model has been trained before
+        await trainKNNModel();
+      }
     }
   }
 }

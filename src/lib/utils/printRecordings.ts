@@ -13,7 +13,7 @@ export function printRecordings(gestureName: string, recordings: any[]) {
 
   const colors = StaticConfiguration.graphColors ?? ['#f9808e', '#80f98e', '#80b8f9'];
 
-  function svgForRecording(recording: any) {
+  function svgForRecording(recording: any, globalMinY?: number, globalMaxY?: number) {
     const datasets = getRecordingChartDatasets(recording.samples);
     const w = 600;
     const h = 260;
@@ -23,20 +23,22 @@ export function printRecordings(gestureName: string, recordings: any[]) {
     const topPad = 20;
     const bottomPad = 20;
     const n = datasets.length > 0 ? datasets[0].length : 0;
-    let minY = Infinity;
-    let maxY = -Infinity;
-    datasets.forEach(ds =>
-      ds.forEach((p: any) => {
-        minY = Math.min(minY, p.y);
-        maxY = Math.max(maxY, p.y);
-      }),
-    );
+    let minY = typeof globalMinY === 'number' ? globalMinY : Infinity;
+    let maxY = typeof globalMaxY === 'number' ? globalMaxY : -Infinity;
+    if (typeof globalMinY !== 'number' || typeof globalMaxY !== 'number') {
+      datasets.forEach(ds =>
+        ds.forEach((p: any) => {
+          minY = Math.min(minY, p.y);
+          maxY = Math.max(maxY, p.y);
+        }),
+      );
+    }
     if (!isFinite(minY) || !isFinite(maxY)) {
       minY = 0;
       maxY = 1;
     }
     if (minY === maxY) {
-      minY = minY + 1;
+      maxY = minY + 1;
     }
 
     const xScale = n > 1 ? (w - leftPad - rightPad) / (n - 1) : 1;
@@ -101,7 +103,23 @@ export function printRecordings(gestureName: string, recordings: any[]) {
     return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${leftAxis}${axis}${tickLines}${extraZero}${paths}</svg>`;
   }
 
-  const svgStrings = recordings.map(r => svgForRecording(r));
+  // compute global min/max across all recordings so y-axis is shared
+  let globalMinY = Infinity;
+  let globalMaxY = -Infinity;
+  recordings.forEach(rec => {
+    const datasets = getRecordingChartDatasets(rec.samples);
+    datasets.forEach(ds => ds.forEach((p: any) => {
+      globalMinY = Math.min(globalMinY, p.y);
+      globalMaxY = Math.max(globalMaxY, p.y);
+    }));
+  });
+  if (!isFinite(globalMinY) || !isFinite(globalMaxY)) {
+    globalMinY = 0;
+    globalMaxY = 1;
+  }
+  if (globalMinY === globalMaxY) globalMaxY = globalMinY + 1;
+
+  const svgStrings = recordings.map(r => svgForRecording(r, globalMinY, globalMaxY));
   const pages = chunk(svgStrings, 4);
 
   const safeTitle = escapeHtml(gestureName ?? '');

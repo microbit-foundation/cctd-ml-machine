@@ -94,7 +94,7 @@ export function printRecordings(gestureName: string, recordings: any[]) {
         }
         // small tick extending left from axis plus label
         const tick = `<line x1="${leftPad}" y1="${y}" x2="${leftPad - 6}" y2="${y}" stroke="#ccc" stroke-width="1"/>`;
-        const label = `<text x="${leftPad - 8}" y="${y + 4}" font-size="9" text-anchor="end" fill="#333">${escapeHtml(formatTick(val))}</text>`;
+        const label = `<text x="${leftPad - 8}" y="${y + 5}" font-size="11" text-anchor="end" fill="#333">${escapeHtml(formatTick(val))}</text>`;
         return tick + '\n' + label;
       })
       .join('\n');

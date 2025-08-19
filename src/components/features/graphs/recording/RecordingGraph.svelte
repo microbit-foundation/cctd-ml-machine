@@ -17,7 +17,10 @@
     PointElement,
   } from 'chart.js';
   import RecordingGraphPointData from './RecordingGraphPointData.svelte';
-  import { getRecordingChartDatasets, type ChartDataset } from './RecordingGraph';
+  import {
+    getRecordingChartDatasets,
+    type ChartDataset,
+  } from '../../../../lib/ChartDataset';
   import type { RecordingData } from '../../../../lib/domain/RecordingData';
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';

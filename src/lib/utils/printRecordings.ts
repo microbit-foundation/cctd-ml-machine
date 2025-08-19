@@ -5,7 +5,7 @@
  */
 
 import StaticConfiguration from '../../StaticConfiguration';
-import { getRecordingChartDatasets } from '../../components/features/graphs/recording/RecordingGraph';
+import { getRecordingChartDatasets } from '../ChartDataset';
 
 // Print recordings in a hidden iframe: 4 recordings per A4 landscape page.
 export function printRecordings(gestureName: string, recordings: any[]) {

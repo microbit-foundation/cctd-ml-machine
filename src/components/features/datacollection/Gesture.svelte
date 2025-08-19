@@ -26,7 +26,6 @@
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
-  import { getRecordingChartDatasets } from '../graphs/recording/RecordingGraph';
   import { printRecordings } from '../../../lib/utils/printRecordings';
 
   export let onNoMicrobitSelect: () => void;

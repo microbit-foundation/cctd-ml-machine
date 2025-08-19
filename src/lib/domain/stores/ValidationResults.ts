@@ -21,8 +21,10 @@ import { ClassifierInput } from '../ClassifierInput';
 import { findLargestIndex } from '../../utils/Math';
 import type Gestures from './gesture/Gestures';
 import type Gesture from './gesture/Gesture';
-import type { GestureID } from './gesture/Gesture';
+import type { GestureData, GestureID } from './gesture/Gesture';
 import type HighlightedAxes from './HighlightedAxes';
+import type { ValidationSetMatrix } from '../../../pages/validation/ValidationPage';
+import Matrix from '../Matrix';
 
 export type ValidationResult = {
   prediction: number[];
@@ -31,7 +33,8 @@ export type ValidationResult = {
 }[][];
 class ValidationResults implements Readable<ValidationResult> {
   private store: Writable<ValidationResult>;
-  private accuracy: Writable<number>;
+  private accuracy: Readable<number>;
+  private autoUpdate: Writable<boolean>;
 
   public constructor(
     private validationSets: ValidationSets,
@@ -40,7 +43,10 @@ class ValidationResults implements Readable<ValidationResult> {
     private highlightedAxes: HighlightedAxes,
   ) {
     this.store = writable([]);
-    this.accuracy = writable(0);
+    this.autoUpdate = writable(false);
+    this.accuracy = derived(this.getMatrix(), matrix => {
+      return matrix.accurateResults / this.validationSets.count();
+    });
   }
 
   public subscribe(
@@ -95,8 +101,12 @@ class ValidationResults implements Readable<ValidationResult> {
     return this.accuracy;
   }
 
-  public setAccuracy(acc: number): void {
-    this.accuracy.set(acc);
+  public getMatrix(): Readable<ValidationSetMatrix> {
+    return derived([this as Readable<ValidationResult>, this.gestures], stores => {
+      const [valRes, gests] = stores;
+      const matrix = this.createValidationMatrixVisual(valRes, gests);
+      return matrix;
+    });
   }
 
   public getEvaluatedGesture(recordingId: number): Gesture | undefined {
@@ -108,6 +118,47 @@ class ValidationResults implements Readable<ValidationResult> {
     }
     return this.gestures.getGestures()[x.gestureIdx];
   }
+
+  public getAutoUpdate(): Writable<boolean> {
+    return this.autoUpdate;
+  }
+
+  private createValidationMatrixVisual = (
+    validationResult: ValidationResult,
+    gestures: GestureData[],
+  ): ValidationSetMatrix => {
+    const matrixRaw = this.createValidationMatrix(validationResult, gestures);
+
+    const accurateResults = gestures.reduce(
+      (pre, _, idx) => pre + matrixRaw.getValues()[idx][idx],
+      0,
+    );
+    return {
+      matrix: matrixRaw,
+      accurateResults: accurateResults,
+    };
+  };
+
+  private createValidationMatrix = (
+    validationResults: {
+      prediction: number[];
+      gestureIdx: number;
+    }[][],
+    gestures: GestureData[],
+  ): Matrix<number> => {
+    const matrix = gestures.map((_, row) => {
+      const results = validationResults[row];
+      if (!results) {
+        return gestures.map(_ => 0);
+      }
+      return gestures.map((_, col) => {
+        return results.reduce((pre, cur) => {
+          return pre + (cur.gestureIdx === col ? 1 : 0);
+        }, 0);
+      });
+    });
+    return new Matrix(matrix);
+  };
 }
 
 export default ValidationResults;

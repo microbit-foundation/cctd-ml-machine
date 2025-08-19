@@ -7,10 +7,10 @@
 <script lang="ts">
   import { derived } from 'svelte/store';
   import Card from '../../components/ui/Card.svelte';
-  import Recording from '../../components/ui/Recording.svelte';
   import Gesture from '../../lib/domain/stores/gesture/Gesture';
   import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../lib/stores/Stores';
+  import Recording from '../../components/ui/recording/Recording.svelte';
 
   export let gesture: Gesture;
 
@@ -18,7 +18,7 @@
   const gestureValidationSet = stores.getValidationSets().getForGesture(gesture.getId());
   // Results are grouped by gestures then recordings [i][j](Gestures -> Recording)
   const results = stores.getValidationResults();
-  const gestures = stores.getGestures();
+  const enableFingerprint = stores.getEnableFingerprint();
 
   $: recordings = $gestureValidationSet.recordings;
 
@@ -47,7 +47,9 @@
     {#each recordings as recording}
       {#key recording.ID}
         <Recording
+          enableFingerprint={$enableFingerprint}
           dot={$dotGetter(recording.ID)}
+          gestureId={$gesture.ID}
           {recording}
           onDelete={recording =>
             validationSets.removeValidationRecording(recording.ID)} />

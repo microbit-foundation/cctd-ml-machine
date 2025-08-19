@@ -10,11 +10,15 @@ import TypingUtils from '../TypingUtils';
 import Logger from '../utils/Logger';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
-import { DeviceRequestStates, ModelView, state } from '../stores/Stores';
+import type Devices from '../domain/Devices';
+import { ModelView, modelView } from '../stores/ApplicationState';
+import { DeviceRequestStates } from '../domain/Devices';
 
 class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
+
+  public constructor(private devices: Devices) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     Logger.log('OutputMicrobitHandler', 'onConnected', versionNumber);
@@ -26,9 +30,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
     });
 
     Microbits.sendToOutputPin(pinResetArguments);
-    state.update(s => {
+    this.devices.update(s => {
       if (Microbits.isInputOutputTheSame()) {
-        s.modelView = Microbits.isOutputMakecode() ? ModelView.TILE : s.modelView;
+        if (Microbits.isOutputMakecode()) {
+          modelView.set(ModelView.TILE);
+        }
       }
       s.isOutputConnected = true;
       s.isOutputAssigned = true;
@@ -56,7 +62,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
 
   public onDisconnected(): void {
     Logger.log('OutputMicrobitHandler', 'onDisconnected');
-    state.update(s => {
+    this.devices.update(s => {
       s.isOutputConnected = false;
       s.isOutputReady = false;
       s.isOutputOutdated = false;
@@ -73,17 +79,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
   public onMessageReceived(data: string): void {
     if (data === 'id_mkcd') {
       Microbits.setOutputOrigin(HexOrigin.MAKECODE);
-      state.update(s => {
-        s.modelView = ModelView.TILE;
-        return s;
-      });
+      modelView.set(ModelView.TILE);
     }
     if (data === 'id_prop') {
       Microbits.setOutputOrigin(HexOrigin.PROPRIETARY);
-      state.update(s => {
-        s.modelView = ModelView.STACK;
-        return s;
-      });
+      modelView.set(ModelView.STACK);
     }
     if (data.includes('vi_')) {
       const version = parseInt(data.substring(3));
@@ -107,7 +107,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
 
   public onConnectError(error: Error): void {
     Logger.log('OutputMicrobitHandler', 'onConnectError', error);
-    state.update(s => {
+    this.devices.update(s => {
       s.isOutputConnected = false;
       s.isOutputAssigned = false;
       s.isOutputReady = false;
@@ -122,7 +122,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
 
   public onClosed() {
     Logger.log('OutputMicrobitHandler', 'onClosed');
-    state.update(s => {
+    this.devices.update(s => {
       s.isOutputConnected = false;
       s.isOutputAssigned = false;
       s.isOutputReady = false;

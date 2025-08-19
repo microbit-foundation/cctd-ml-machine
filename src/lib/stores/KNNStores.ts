@@ -14,3 +14,5 @@ export const knnCurrentPoint = writable<undefined | Vector>(undefined);
 export const knnTrainingDataPoints = writable<LabelledPoint[]>([]);
 
 export const knnNeighbours = writable<LabelledPoint[]>([]);
+
+export const knnHasTrained = writable<boolean>(false);

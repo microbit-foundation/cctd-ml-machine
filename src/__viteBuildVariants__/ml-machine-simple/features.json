@@ -5,5 +5,7 @@
   "makecode": false,
   "liveGraphInputValues": false,
   "recordingScrubberValues": false,
-  "modelValidation": false
+  "modelValidation": false,
+  "modelSettings": false,
+  "fingerprint": false
 }

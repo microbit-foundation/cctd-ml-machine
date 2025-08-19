@@ -9,11 +9,11 @@
   import { type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
-  import { state, stores } from '../../../lib/stores/Stores';
   import type { LiveData } from '../../../lib/domain/stores/LiveData';
   import type { LiveDataVector } from '../../../lib/domain/stores/LiveDataVector';
   import StaticConfiguration from '../../../StaticConfiguration';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
+  import { stores } from '../../../lib/stores/Stores';
 
   /**
    * TimesSeries, but with the data array added.
@@ -32,6 +32,7 @@
   let axisColors = StaticConfiguration.graphColors;
 
   const highlightedAxes = stores.getHighlightedAxes();
+  const devices = stores.getDevices();
 
   // Smoothes real-time data by using the 3 most recent data points
   let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
@@ -98,7 +99,7 @@
   const model = classifier.getModel();
   $: {
     if (chart !== undefined) {
-      if ($state.isInputReady) {
+      if ($devices.isInputReady) {
         if (!$model.isTraining) {
           chart.start();
         } else {
@@ -114,7 +115,7 @@
   // The jagged edges problem is caused by repeating the recordingStarted function.
   // We will simply block the recording from starting, while it's recording
   let blockRecordingStart = false;
-  $: recordingStarted($state.isRecording);
+  $: recordingStarted($devices.isRecording);
 
   // Function to clearly diplay the area in which users are recording
   function recordingStarted(isRecording: boolean): void {
@@ -135,15 +136,15 @@
     }, StaticConfiguration.recordingDuration);
   }
 
-  // When state changes, update the state of the canvas
+  // When devices changes, update the devices of the canvas
   $: {
-    const isConnected = $state.isInputReady;
+    const isConnected = $devices.isInputReady;
     updateCanvas(isConnected);
   }
 
   let unsubscribeFromData: Unsubscriber | undefined;
 
-  // If state is connected. Start updating the graph whenever there is new data
+  // If devices is connected. Start updating the graph whenever there is new data
   // From the Micro:Bit
   function updateCanvas(isConnected: boolean) {
     if (isConnected || !unsubscribeFromData) {
@@ -180,7 +181,7 @@
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
   {#key cnt}
     <DimensionLabels
-      hidden={!$state.isInputConnected}
+      hidden={!$devices.isInputConnected}
       {minValue}
       graphHeight={160}
       {maxValue}

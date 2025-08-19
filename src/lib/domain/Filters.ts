@@ -13,6 +13,9 @@ import {
 import FilterTypes, { FilterType } from './FilterTypes';
 import Logger from '../utils/Logger';
 import type { Filter } from './Filter';
+import FilterGraphLimits from '../utils/FilterLimits';
+import type { Vector } from './Vector';
+import BaseVector from './BaseVector';
 
 class Filters implements Readable<Filter[]> {
   constructor(private filters: Writable<Filter[]>) {}
@@ -27,6 +30,23 @@ class Filters implements Readable<Filter[]> {
     return get(this.filters).map(filter => {
       return filter.filter(values);
     });
+  }
+
+  public computeNormalized(values: number[]): number[] {
+    return get(this.filters).map(filter => {
+      return this.normalizeFilterResult(filter.filter(values), filter);
+    });
+  }
+
+  private normalizeFilterResult(value: number, filter: Filter): number {
+    const { min, max } = FilterGraphLimits.getFilterLimits(filter);
+    const newMin = 0;
+    const newMax = 1;
+    const existingMin = min;
+    const existingMax = max;
+    return (
+      ((newMax - newMin) * (value - existingMin)) / (existingMax - existingMin) + newMin
+    );
   }
 
   public set(filterTypes: FilterType[]) {

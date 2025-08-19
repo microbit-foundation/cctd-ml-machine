@@ -9,8 +9,16 @@
     padding: 12px 40px;
     font-size: 16px;
   }
+  .medium {
+    padding: 8px 24px;
+    font-size: 15px;
+  }
   .small {
     padding: 1px 10px;
+    font-size: 14px;
+  }
+  .tiny {
+    padding: 0px 10px;
     font-size: 14px;
   }
   .outlined {
@@ -55,6 +63,8 @@
   export let onClick: (e: Event) => void = TypingUtils.emptyFunction;
   export let disabled = false;
   export let small = false;
+  export let medium = false;
+  export let tiny = false;
   export let outlined = false;
   export let fillOnHover = false;
   export let bold = true;
@@ -87,8 +97,10 @@
       class:shadow-md={shadows}
       class:bg-disabled={true}
       class:font-bold={bold}
+      class:tiny
       class:small
-      class:normal={!small}
+      class:medium
+      class:normal={!small && !tiny && !medium}
       class:outlined
       class:cursor-default={disabled}
       on:click={onClick}>
@@ -108,7 +120,9 @@
     class:shadow-md={shadows}
     class:font-bold={bold}
     class:small
-    class:normal={!small}
+    class:tiny
+    class:medium
+    class:normal={!small && !tiny && !medium}
     class:outlined
     class:filled={!outlined}
     class:fillOnHover

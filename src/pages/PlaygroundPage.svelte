@@ -7,7 +7,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import LiveDataSynthesizer from '../components/features/playground/inputSynthesizer/LiveDataSynthesizer.svelte';
-  import LiveDataBufferUtilizationPercentage from '../components/features/playground/LiveDataBufferUtilizationPercentage.svelte';
   import PlaygroundLog from '../components/features/playground/PlaygroundLog.svelte';
   import StoresDisplay from '../components/features/playground/StoresDisplay.svelte';
 
@@ -27,6 +26,5 @@
       </div>
     </div>
     <LiveDataSynthesizer />
-    <LiveDataBufferUtilizationPercentage />
   </div>
 {/if}

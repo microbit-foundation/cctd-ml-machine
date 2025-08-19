@@ -10,9 +10,10 @@
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import MediaQuery from '../../../components/layout/MediaQuery.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { state, stores } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
 
+  const devices = stores.getDevices();
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
   // let lastRecording;
@@ -31,7 +32,7 @@
   function classifyClicked() {
     if (!areActionsAllowed()) return;
 
-    $state.isRecording = true;
+    $devices.isRecording = true;
     // lastRecording = undefined;
 
     // Get duration
@@ -47,7 +48,7 @@
     setTimeout(() => {
       clearInterval(loadingInterval);
       // lastRecording = getPrevData();
-      $state.isRecording = false;
+      $devices.isRecording = false;
       recordingTime = 0;
       // classify();
     }, duration);

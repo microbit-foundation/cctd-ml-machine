@@ -5,10 +5,11 @@
  -->
 <script lang="ts">
   import GestureDot from '../../components/ui/GestureDot.svelte';
-  import { state, stores } from '../../lib/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
 
   const gestures = stores.getGestures();
   const confidences = stores.getConfidences();
+  const devices = stores.getDevices();
 </script>
 
 {#each $gestures as gesture}
@@ -19,7 +20,7 @@
       </div>
       <p>{gesture.name}</p>
     </div>
-    {#if $state.isInputReady}
+    {#if $devices.isInputReady}
       <p>
         {(($confidences.get(gesture.ID) ?? 0) * 100).toFixed(1)}%
       </p>

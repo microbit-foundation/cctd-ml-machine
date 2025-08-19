@@ -7,10 +7,14 @@ import { MBSpecs } from 'microbyte';
 import Microbits from './Microbits';
 import InputMicrobitHandler from './InputMicrobitHandler';
 import OutputMicrobitHandler from './OutputMicrobitHandler';
+import type Devices from '../domain/Devices';
 
 class CombinedMicrobitHandler extends InputMicrobitHandler {
-  public constructor(private outputHandler: OutputMicrobitHandler) {
-    super();
+  public constructor(
+    private outputHandler: OutputMicrobitHandler,
+    devices: Devices,
+  ) {
+    super(devices);
   }
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {

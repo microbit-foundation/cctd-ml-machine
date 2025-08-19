@@ -5,6 +5,7 @@
  */
 
 import {
+  get,
   type Invalidator,
   type Subscriber,
   type Unsubscriber,
@@ -12,10 +13,16 @@ import {
 } from 'svelte/store';
 import ModelRegistry, { type ModelInfo } from './ModelRegistry';
 import PersistantWritable from '../repository/PersistantWritable';
+import Logger from '../utils/Logger';
+import type Classifier from './stores/Classifier';
 
 class SelectedModel implements Writable<ModelInfo> {
   private store: Writable<ModelInfo>;
-  public constructor() {
+
+  public constructor(
+    private classifier: Classifier,
+    private knnHasTrained: Writable<boolean>,
+  ) {
     this.store = new PersistantWritable<ModelInfo>(
       ModelRegistry.NeuralNetwork,
       'selectedModel',
@@ -23,11 +30,16 @@ class SelectedModel implements Writable<ModelInfo> {
   }
 
   public set(value: ModelInfo): void {
+    Logger.log('SelectedModel', `Setting selected model to ${value.title}`);
+    if (value.id === ModelRegistry.KNN.id) {
+      this.knnHasTrained.set(false);
+    }
+    this.classifier.getModel().markAsUntrained();
     this.store.set(value);
   }
 
   public update(updater: (state: ModelInfo) => ModelInfo): void {
-    this.store.update(updater);
+    this.set(updater(get(this.store)));
   }
 
   public subscribe(

@@ -18,6 +18,7 @@ import Logger from '../utils/Logger';
 import OutputMicrobitHandler from './OutputMicrobitHandler';
 import CombinedMicrobitHandler from './CombinedMicrobitHandler';
 import { HexOrigin } from './HexOrigin';
+import { stores } from '../stores/Stores';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
 
@@ -42,8 +43,11 @@ class Microbits {
   private static outputOrigin = HexOrigin.UNKNOWN;
   private static inputOrigin = HexOrigin.UNKNOWN;
 
-  private static outputHandler = new OutputMicrobitHandler();
-  private static inputHandler = new CombinedMicrobitHandler(this.outputHandler);
+  private static outputHandler = new OutputMicrobitHandler(stores.getDevices());
+  private static inputHandler = new CombinedMicrobitHandler(
+    this.outputHandler,
+    stores.getDevices(),
+  );
 
   private static linkedMicrobit: Microbit = new Microbit();
 
@@ -141,6 +145,7 @@ class Microbits {
    * @throws {Error} Throws an error if no output micro:bit is assigned.
    */
   public static disconnectOutput() {
+    Logger.log('Microbits', 'Attempting to disconnect output');
     if (this.isInputOutputTheSame()) {
       this.outputHandler.onDisconnected();
       this.outputHandler.onClosed();

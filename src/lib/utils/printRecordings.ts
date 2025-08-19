@@ -160,7 +160,10 @@ ${pages
   .map(
     page =>
       `<div class="page">${page
-        .map(item => `<div class="card"><div class="rec-label">${escapeHtml(item.label)}</div>${item.svg}</div>`)
+        .map(
+          item =>
+            `<div class="card"><div class="rec-label">${escapeHtml(item.label)}</div>${item.svg}</div>`,
+        )
         .concat(new Array(4 - page.length).fill('<div class="card"></div>'))
         .join('')}</div>`,
   )

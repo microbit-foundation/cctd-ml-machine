@@ -8,5 +8,6 @@
   "modelValidation": false,
   "modelSettings": false,
   "fingerprint": false,
-  "recordingDuration": 1800
+  "recordingDuration": 1800,
+  "printableRecordings": false
 }

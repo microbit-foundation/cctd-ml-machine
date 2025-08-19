@@ -25,7 +25,7 @@
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
-  import { Feature, getFeature } from '../../../lib/FeatureToggles';
+  import { Feature, getFeature, hasFeature } from '../../../lib/FeatureToggles';
   import { printRecordings } from '../../../lib/utils/printRecordings';
 
   export let onNoMicrobitSelect: () => void;
@@ -48,10 +48,9 @@
     }
   }
 
-  function print(): void {
+  function handlePrintRecordings(): void {
     const recordings = gesture.getRecordings() ?? [];
     if (!recordings || recordings.length === 0) return;
-
     printRecordings(gesture.getName(), recordings);
   }
 
@@ -178,8 +177,12 @@
     <GestureCard mr small>
       <div class="top-2 left-3 absolute flex flex-row justify-center items-center gap-4">
         <GestureDot {gesture} />
-        <!-- TODO: Should be behind feature flag!! -->
-        <StandardButton small onClick={() => print()}>FeatureFLAG!</StandardButton>
+
+        {#if hasFeature(Feature.PRINTABLE_RECORDINGS)}
+          <StandardButton small onClick={() => handlePrintRecordings()}>
+            Print
+          </StandardButton>
+        {/if}
       </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
         <div

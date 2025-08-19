@@ -82,7 +82,7 @@ export function printRecordings(gestureName: string, recordings: any[]) {
         const y = h - bottomPad - (val - minY) * yScale;
         // small tick extending left from axis plus label
         const tick = `<line x1="${leftPad}" y1="${y}" x2="${leftPad - 6}" y2="${y}" stroke="#ccc" stroke-width="1"/>`;
-        const label = `<text x="${leftPad - 8}" y="${y + 4}" font-size="10" text-anchor="end" fill="#333">${escapeHtml(formatTick(val))}</text>`;
+        const label = `<text x="${leftPad - 8}" y="${y + 4}" font-size="9" text-anchor="end" fill="#333">${escapeHtml(formatTick(val))}</text>`;
         return tick + '\n' + label;
       })
       .join('\n');
@@ -96,7 +96,7 @@ export function printRecordings(gestureName: string, recordings: any[]) {
         const y0 = h - bottomPad - (0 - minY) * yScale;
         extraZero =
           `<line x1="${leftPad}" y1="${y0}" x2="${leftPad - 6}" y2="${y0}" stroke="#ccc" stroke-width="1"/>\n` +
-          `<text x="${leftPad - 8}" y="${y0 + 4}" font-size="10" text-anchor="end" fill="#333">0</text>`;
+          `<text x="${leftPad - 8}" y="${y0 + 4}" font-size="9" text-anchor="end" fill="#333">0</text>`;
       }
     }
 
@@ -121,8 +121,13 @@ export function printRecordings(gestureName: string, recordings: any[]) {
   }
   if (globalMinY === globalMaxY) globalMaxY = globalMinY + 1;
 
-  const svgStrings = recordings.map(r => svgForRecording(r, globalMinY, globalMaxY));
-  const pages = chunk(svgStrings, 4);
+  // Build items with label and SVG so we can number them (Example 1, Example 2, ...)
+  const items = recordings.map((r, idx) => ({
+    label: `Example ${idx + 1}`,
+    svg: svgForRecording(r, globalMinY, globalMaxY),
+  }));
+
+  const pages = chunk(items, 4);
 
   const safeTitle = escapeHtml(gestureName ?? '');
 
@@ -136,12 +141,12 @@ export function printRecordings(gestureName: string, recordings: any[]) {
   html,body { height: 100%; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color: #111; }
   /* Landscape A4 is 297mm x 210mm; use the shorter side (210mm) for page height */
-  .page { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; height: calc(210mm - 20mm); box-sizing: border-box; page-break-after: always; padding: 10px; }
+  .page { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; height: calc(210mm - 20mm); box-sizing: border-box; page-break-after: always; padding: 8px; }
   /* Ensure each card fills its grid cell so all 4 cells are used */
-  .card { box-sizing: border-box; padding: 8px; display:flex; flex-direction:column; align-items:center; justify-content:center; border: 1px solid #ddd; border-radius: 6px; height: 100%; overflow: hidden; background: #fff; }
-  .card h4 { margin: 6px 0; font-size: 12pt; }
+  .card { box-sizing: border-box; padding: 6px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; border: 1px solid #ddd; border-radius: 4px; height: 100%; overflow: hidden; background: #fff; }
+  .rec-label { margin: 4px 0; font-size: 10pt; font-weight: 600; text-align: center; width: 100%; }
   /* Make SVG fill the available card space */
-  .card > svg { width: 100%; height: 100%; max-height: 100%; }
+  .card > svg { width: 100%; height: calc(100% - 30px); max-height: 100%; }
 </style>
 </head>
 <body>
@@ -149,7 +154,7 @@ ${pages
   .map(
     page =>
       `<div class="page">${page
-        .map(svg => `<div class="card">${svg}</div>`)
+        .map(item => `<div class="card"><div class="rec-label">${escapeHtml(item.label)}</div>${item.svg}</div>`)
         .concat(new Array(4 - page.length).fill('<div class="card"></div>'))
         .join('')}</div>`,
   )

@@ -1,3 +1,9 @@
+/**
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import StaticConfiguration from '../../StaticConfiguration';
 import { getRecordingChartDatasets } from '../../components/features/graphs/recording/RecordingGraph';
 
@@ -72,14 +78,20 @@ export function printRecordings(gestureName: string, recordings: any[]) {
       return Math.round(v).toString();
     }
 
+    const eps = (maxY - minY) / 1e6;
     const tickVals = Array.from(
       { length: tickCount },
       (_, ti) => minY + (ti / (tickCount - 1)) * (maxY - minY),
     );
 
+    // Render axis ticks and labels, but do NOT render a numeric label for the zero value (it will be shown as a dashed horizontal line)
     const tickLines = tickVals
       .map(val => {
         const y = h - bottomPad - (val - minY) * yScale;
+        // If this tick is effectively zero, skip rendering its label/tick here; a dashed zero line will be drawn across the plot.
+        if (Math.abs(val) <= eps) {
+          return '';
+        }
         // small tick extending left from axis plus label
         const tick = `<line x1="${leftPad}" y1="${y}" x2="${leftPad - 6}" y2="${y}" stroke="#ccc" stroke-width="1"/>`;
         const label = `<text x="${leftPad - 8}" y="${y + 4}" font-size="9" text-anchor="end" fill="#333">${escapeHtml(formatTick(val))}</text>`;
@@ -87,20 +99,14 @@ export function printRecordings(gestureName: string, recordings: any[]) {
       })
       .join('\n');
 
-    // If zero lies within the data range but wasn't one of the generated ticks, add it explicitly
-    let extraZero = '';
+    // Draw a dashed gray horizontal line across the plotting area at y=0 if zero lies within the data range
+    let zeroLine = '';
     if (minY <= 0 && 0 <= maxY) {
-      const eps = (maxY - minY) / 1e6;
-      const zeroIncluded = tickVals.some(v => Math.abs(v - 0) <= eps);
-      if (!zeroIncluded) {
-        const y0 = h - bottomPad - (0 - minY) * yScale;
-        extraZero =
-          `<line x1="${leftPad}" y1="${y0}" x2="${leftPad - 6}" y2="${y0}" stroke="#ccc" stroke-width="1"/>\n` +
-          `<text x="${leftPad - 8}" y="${y0 + 4}" font-size="9" text-anchor="end" fill="#333">0</text>`;
-      }
+      const y0 = h - bottomPad - (0 - minY) * yScale;
+      zeroLine = `<line x1="${leftPad}" y1="${y0}" x2="${w - rightPad}" y2="${y0}" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>`;
     }
 
-    return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${leftAxis}${axis}${tickLines}${extraZero}${paths}</svg>`;
+    return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${leftAxis}${axis}${tickLines}${zeroLine}${paths}</svg>`;
   }
 
   // compute global min/max across all recordings so y-axis is shared

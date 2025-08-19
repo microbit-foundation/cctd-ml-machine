@@ -108,10 +108,12 @@ export function printRecordings(gestureName: string, recordings: any[]) {
   let globalMaxY = -Infinity;
   recordings.forEach(rec => {
     const datasets = getRecordingChartDatasets(rec.samples);
-    datasets.forEach(ds => ds.forEach((p: any) => {
-      globalMinY = Math.min(globalMinY, p.y);
-      globalMaxY = Math.max(globalMaxY, p.y);
-    }));
+    datasets.forEach(ds =>
+      ds.forEach((p: any) => {
+        globalMinY = Math.min(globalMinY, p.y);
+        globalMaxY = Math.max(globalMaxY, p.y);
+      }),
+    );
   });
   if (!isFinite(globalMinY) || !isFinite(globalMaxY)) {
     globalMinY = 0;

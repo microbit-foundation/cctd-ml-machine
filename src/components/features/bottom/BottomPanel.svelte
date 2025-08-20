@@ -90,7 +90,8 @@
 
       <!-- Right part of live-graph -->
       <div class="absolute right-0 bottom-0 h-full w-45 flex flex-col justify-between">
-        {#if isFingerprintEnabled}
+        <!-- Quick fix: enable feature manually -->
+        <!-- {#if isFingerprintEnabled} -->
           <div class="pt-2 pr-2 justify-end flex flex-row gap-2">
             <p>Fingerprint:</p>
             <Switch
@@ -101,7 +102,7 @@
           <div class="absolute h-full">
             <LiveDataFingerprint gestureName="Live" />
           </div>
-        {/if}
+        <!-- {/if} -->
 
         <div
           class="flex flex-row pl-4 justify-center cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"

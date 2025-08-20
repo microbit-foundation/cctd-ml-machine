@@ -40,8 +40,6 @@
   };
 
   let isLive3DOpen = false;
-
-  $: isFingerprintEnabled = $enableFingerprint && hasFeature(Feature.FINGERPRINT);
 </script>
 
 <div

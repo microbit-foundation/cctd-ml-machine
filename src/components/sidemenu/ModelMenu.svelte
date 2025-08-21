@@ -7,13 +7,14 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import Gesture from '../../lib/domain/stores/gesture/Gesture';
-  import { state, stores } from '../../lib/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
 
   const gestures = stores.getGestures();
   const bestPrediction = gestures.getBestPrediction();
+  const devices = stores.getDevices();
 
   $: confidence =
-    $state.isInputReady && $bestPrediction
+    $devices.isInputReady && $bestPrediction
       ? $bestPrediction.getConfidence().getCurrentConfidence()
       : 0;
   confidence = isNaN(confidence) ? 0 : confidence;
@@ -34,7 +35,7 @@
   const model = stores.getClassifier().getModel();
 
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
-  $: predictionLabel = getPredictionLabel($state.isInputReady, $bestPrediction);
+  $: predictionLabel = getPredictionLabel($devices.isInputReady, $bestPrediction);
 </script>
 
 <div class="w-full text-center justify-center pt-5">
@@ -52,8 +53,8 @@
       class="grid break-words mr-auto ml-auto w-3/4 h-70px border-2 rounded-lg border-solid text-center align-center content-center">
       <p
         class="w-full max-w-[100%] text-2xl break-all"
-        class:text-2xl={$state.isInputReady}
-        class:text-md={!$state.isInputReady}>
+        class:text-2xl={$devices.isInputReady}
+        class:text-md={!$devices.isInputReady}>
         {predictionLabel}
       </p>
     </div>

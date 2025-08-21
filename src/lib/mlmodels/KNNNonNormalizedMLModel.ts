@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { knnCurrentPoint, knnNeighbours } from '../stores/KnnModelGraph';
+import { knnCurrentPoint, knnNeighbours } from '../stores/KNNStores';
 import type { MLModel } from '../domain/MLModel';
 import type { Vector } from '../domain/Vector';
 import { distanceBetween } from '../utils/graphUtils';

@@ -7,8 +7,10 @@ import {
   type Readable,
   type Subscriber,
   type Unsubscriber,
+  type Writable,
   derived,
   get,
+  writable,
 } from 'svelte/store';
 import Filters from '../Filters';
 import Model, { type ModelData } from './Model';
@@ -16,6 +18,7 @@ import Gesture, { type GestureID } from './gesture/Gesture';
 import type { ClassifierInput } from '../ClassifierInput';
 import Logger from '../../utils/Logger';
 import BaseVector from '../BaseVector';
+import type { Vector } from '../Vector';
 
 type ClassifierData = {
   model: ModelData;
@@ -48,6 +51,11 @@ class Classifier implements Readable<ClassifierData> {
    */
   public async classify(input: ClassifierInput): Promise<void> {
     const filteredInput = new BaseVector(input.getInput(this.filters));
+    // Uncommented due to performance issues, caused too many re-renders
+    // const filteredInputNormalized = new BaseVector(
+    // input.getNormalizedInput(this.filters),
+    // );
+    // this.filteredInput.set({ raw: filteredInput, normalized: filteredInputNormalized });
     const predictions = await this.getModel().predict(filteredInput);
     predictions.forEach((confidence, index) => {
       const gesture = get(this.gestures)[index];

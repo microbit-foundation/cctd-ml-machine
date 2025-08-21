@@ -14,13 +14,13 @@
     MicrobitInteractions,
     chosenGesture,
   } from '../../../lib/stores/uiStore';
-  import Recording from '../../ui/Recording.svelte';
+  import Recording from '../../ui/recording/Recording.svelte';
   import { t } from '../../../i18n';
   import ImageSkeleton from '../../ui/skeletonloading/ImageSkeleton.svelte';
   import GestureCard from '../../ui/Card.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Gesture from '../../../lib/domain/stores/gesture/Gesture';
-  import { state, stores } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import type { RecordingData } from '../../../lib/domain/RecordingData';
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
@@ -28,11 +28,12 @@
 
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
+  const devices = stores.getDevices();
   const gestures = stores.getGestures();
-  $: liveData = $stores.liveData;
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = StaticConfiguration.recordingDuration;
+  const enableFingerprint = stores.getEnableFingerprint();
 
   let isThisRecording = false;
 
@@ -86,7 +87,7 @@
   // If gesture is already selected, the selection is removed.
   // If bluetooth is not connected, open connection prompt by calling callback
   function selectClicked(): void {
-    if (!$state.isInputConnected) {
+    if (!$devices.isInputConnected) {
       chosenGesture.update(gesture => {
         gesture = null;
         return gesture;
@@ -218,7 +219,12 @@
       <GestureCard small>
         <div class="flex p-2 h-30">
           {#each $gesture.recordings as recording (String($gesture.ID) + String(recording.ID))}
-            <Recording {recording} onDelete={deleteRecording} />
+            <Recording
+              enableFingerprint={$enableFingerprint}
+              downloadable
+              {recording}
+              gestureId={$gesture.ID}
+              onDelete={deleteRecording} />
           {/each}
         </div>
       </GestureCard>

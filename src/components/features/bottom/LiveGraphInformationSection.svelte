@@ -7,9 +7,10 @@
 <script lang="ts">
   import { tr } from '../../../i18n';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
-  import { state } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import Information from '../../ui/information/Information.svelte';
   import BottomPanelLiveDataValues from './BottomPanelLiveDataValues.svelte';
+  const devices = stores.getDevices();
 </script>
 
 <div class="flex flex-row">
@@ -23,8 +24,8 @@
   <p class="float-left ml-6">Live</p>
   <p
     class="float-left ml-1 -mt-3 text-3xl"
-    class:text-red-500={$state.isInputReady}
-    class:text-gray-500={!$state.isInputReady}>
+    class:text-red-500={$devices.isInputReady}
+    class:text-gray-500={!$devices.isInputReady}>
     &#x2022;
   </p>
   {#if hasFeature(Feature.LIVE_GRAPH_INPUT_VALUES)}

@@ -12,13 +12,15 @@
   import FilterGraphLimits from '../../lib/utils/FilterLimits';
   import { type GestureData } from '../../lib/domain/stores/gesture/Gesture';
   import StaticConfiguration from '../../StaticConfiguration';
-  import { state, stores } from '../../lib/stores/Stores';
   import type { RecordingData } from '../../lib/domain/RecordingData';
+  import { stores } from '../../lib/stores/Stores';
+
+  const devices = stores.getDevices();
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
 
-  $: showLive = $state.isInputConnected;
+  $: showLive = $devices.isInputConnected;
   $: liveData = $stores.liveData;
   const highlightedAxes = stores.getHighlightedAxes();
 

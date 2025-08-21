@@ -9,11 +9,11 @@
   import arrowCreate from 'arrows-svg';
   import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
-  import { knnCurrentPoint } from '../../../../lib/stores/KnnModelGraph';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import type { Axis } from '../../../../lib/domain/Axis';
   import { stores } from '../../../../lib/stores/Stores';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
+  import { knnCurrentPoint } from '../../../../lib/stores/KNNStores';
 
   const classifier = stores.getClassifier();
 
@@ -87,6 +87,8 @@
     };
   });
 
+  $: console.log($filters);
+
   unsubscribe = derived([highlightedAxis, classifier], s => s).subscribe(s => {
     init();
   });
@@ -97,7 +99,7 @@
 <div class:hidden={!$classifier.model.isTrained && !$classifier.model.isTraining}>
   <div>
     {#if $highlightedAxis !== undefined}
-      <div class="flex flex-row space-x-1">
+      <div class="flex flex-row space-x-1 flex-grow">
         <div class="flex flex-col justify-evenly">
           {#each $availableAxes as axis}
             <div class="flex flex-row space-x-2" id="from{axis.label}">
@@ -114,8 +116,10 @@
             </div>
           {/each}
         </div>
+
         {#if $highlightedAxis.length === 1}
-          <div class="pl-28 flex flex-col justify-around">
+          <!-- Name and blue arrow -->
+          <div class="pl-30 flex flex-col justify-around">
             {#each $filters as filter, index}
               <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
             {/each}
@@ -128,7 +132,10 @@
                 width="20px" />
             {/each}
           </div>
-          <div class="flex flex-col justify-around w-12">
+
+          <!-- Numbers -->
+          <div
+            class="flex flex-col justify-around w-14 overflow-hidden whitespace-nowrap">
             {#each liveFilteredAxesData as val, index}
               <p style={`color:${StaticConfiguration.graphColors[index]}`}>
                 {val.toFixed(2)}

@@ -19,7 +19,7 @@
   import type { SoundData } from '../../../lib/domain/stores/gesture/Gesture';
   import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
-  import { state, stores } from '../../../lib/stores/Stores';
+  import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Card from '../../ui/Card.svelte';
   import GestureDot from '../../ui/GestureDot.svelte';
@@ -33,6 +33,7 @@
   import { PinTurnOnState } from '../../../lib/PinTurnOnState';
   import { MBSpecs } from 'microbyte';
 
+  const devices = stores.getDevices();
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -261,7 +262,7 @@
       width="30px" />
     <img
       class="m-auto"
-      class:hidden={!wasTriggered || !$state.isInputReady}
+      class:hidden={!wasTriggered || !$devices.isInputReady}
       src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />

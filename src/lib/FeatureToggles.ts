@@ -15,6 +15,8 @@ export enum Feature {
   LIVE_GRAPH_INPUT_VALUES = 'liveGraphInputValues',
   RECORDING_SCRUBBER_VALUES = 'recordingScrubberValues',
   MODEL_VALIDATION = 'modelValidation',
+  MODEL_SETTINGS = 'modelSettings',
+  FINGERPRINT = 'fingerprint',
 }
 
 export const hasFeature = (feature: Feature): boolean => {

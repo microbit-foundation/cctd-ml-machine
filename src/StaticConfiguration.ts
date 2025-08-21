@@ -148,5 +148,10 @@ class StaticConfiguration {
    * Whether the knn model should be normalized by default
    */
   public static readonly knnNormalizedDefault = false;
+
+  /**
+   * Whether fingerprinting should be enabled by default
+   */
+  public static readonly enableFingerprintByDefault: boolean = false;
 }
 export default StaticConfiguration;

@@ -28,6 +28,8 @@
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
 
   export let recording: RecordingData;
+  // Option to show y-axis ticks in the chart (default: off)
+  export let showYAxisTicks: boolean = false;
   const samples = recording.samples;
   const labels = recording.labels;
 
@@ -139,7 +141,7 @@
               color: '#f3f3f3',
             },
             ticks: {
-              display: false, //this will remove only the label
+              display: showYAxisTicks, // controlled by prop, default false
             },
           },
         },

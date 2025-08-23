@@ -19,6 +19,7 @@ export enum Feature {
   FINGERPRINT = 'fingerprint',
   RECORDING_DURATION = 'recordingDuration',
   PRINTABLE_RECORDINGS = 'printableRecordings',
+  DIALOG_RECORDINGS = 'dialogRecordings',
 }
 
 export const hasFeature = (feature: Feature): boolean => {

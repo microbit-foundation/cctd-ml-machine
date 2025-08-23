@@ -1,5 +1,5 @@
 {
-  "title": "ML-Machine",
+  "title": "Learning tool",
   "knnModel": true,
   "lossGraph": true,
   "makecode": true,
@@ -8,7 +8,7 @@
   "modelValidation": true,
   "modelSettings": true,
   "fingerprint": true,
-  "recordingDuration": 2500,
+  "recordingDuration": 1800,
   "printableRecordings": true,
   "dialogRecordings": true
 }

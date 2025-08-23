@@ -1,3 +1,7 @@
+<style>
+  /* small local styles if needed */
+</style>
+
 <!--
   (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
  
@@ -43,6 +47,31 @@
   }
 
   $: shouldDisplayFingerprint = enableFingerprint && hasFeature(Feature.FINGERPRINT);
+
+  // Compute y-axis bounds from recording samples (rounded down/up to nearest integer)
+  let computedYAxisMin: number;
+  let computedYAxisMax: number;
+
+  $: {
+    const defaultMin = -5.5;
+    const defaultMax = 6.5;
+    const allValues: number[] = recording.samples.flatMap(s => s.vector);
+
+    if (allValues.length > 0) {
+      const minV = Math.min(...allValues);
+      const maxV = Math.max(...allValues);
+      computedYAxisMin = Math.floor(minV);
+      computedYAxisMax = Math.ceil(maxV);
+      // Ensure we have a range
+      if (computedYAxisMin >= computedYAxisMax) {
+        computedYAxisMin = computedYAxisMin - 1;
+        computedYAxisMax = computedYAxisMax + 1;
+      }
+    } else {
+      computedYAxisMin = Math.floor(defaultMin);
+      computedYAxisMax = Math.ceil(defaultMax);
+    }
+  }
 </script>
 
 <div
@@ -62,17 +91,16 @@
           <button
             class="px-2 py-1 text-sm text-light-800 hover:text-black"
             on:click={downloadCsv}>
-            <i class="fas fa-download mr-1" />{ $tr('content.data.dialog.download') || 'Download CSV' }
+            <i class="fas fa-download mr-1" />{$tr('content.data.dialog.download') ||
+              'Download CSV'}
           </button>
         {/if}
         <button
           class="px-2 py-1 text-sm text-red-600 hover:text-red-800"
           on:click={confirmDelete}>
-          <i class="fas fa-trash mr-1" />{ $tr('content.data.dialog.delete') || 'Delete' }
+          <i class="fas fa-trash mr-1" />{$tr('content.data.dialog.delete') || 'Delete'}
         </button>
-        <button
-          class="px-2 py-1 text-sm text-gray-600 hover:text-black"
-          on:click={close}>
+        <button class="px-2 py-1 text-sm text-gray-600 hover:text-black" on:click={close}>
           <i class="fas fa-times" />
         </button>
       </div>
@@ -81,19 +109,19 @@
     <div class="flex flex-col md:flex-row gap-4">
       <div class="flex-1 bg-gray-50 p-2 rounded">
         <div class="w-full h-80 md:h-96">
-          <RecordingGraph {recording} showYAxisTicks={true}/>
+          <RecordingGraph
+            {recording}
+            showYAxisTicks={true}
+            yAxisMin={computedYAxisMin}
+            yAxisMax={computedYAxisMax} />
         </div>
       </div>
 
       {#if shouldDisplayFingerprint}
         <div class="w-full md:w-56 bg-gray-50 p-2 rounded overflow-hidden">
-          <RecordingFingerprint {recording} gestureName={gestureName} />
+          <RecordingFingerprint {recording} {gestureName} />
         </div>
       {/if}
     </div>
   </div>
 </div>
-
-<style>
-  /* small local styles if needed */
-</style>

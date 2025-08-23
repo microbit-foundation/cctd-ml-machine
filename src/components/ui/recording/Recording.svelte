@@ -144,8 +144,8 @@
     <RecordingDialog
       {recording}
       gestureName={$gesture.name}
-      downloadable={downloadable}
-      enableFingerprint={enableFingerprint}
+      {downloadable}
+      {enableFingerprint}
       on:close={closeDialog}
       on:delete={dialogDelete} />
   {/if}

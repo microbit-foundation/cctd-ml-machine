@@ -30,6 +30,9 @@
   export let recording: RecordingData;
   // Option to show y-axis ticks in the chart (default: off)
   export let showYAxisTicks: boolean = false;
+  // Configurable y-axis scale (defaults match previous hardcoded values)
+  export let yAxisMin: number = -5.5;
+  export let yAxisMax: number = 6.5;
   const samples = recording.samples;
   const labels = recording.labels;
 
@@ -135,8 +138,8 @@
           },
           y: {
             type: 'linear',
-            min: -5.5,
-            max: 6.5,
+            min: yAxisMin,
+            max: yAxisMax,
             grid: {
               color: '#f3f3f3',
             },

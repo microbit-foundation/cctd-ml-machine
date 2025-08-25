@@ -1,14 +1,14 @@
 {
-  "title": "Learning tool",
-  "knnModel": true,
-  "lossGraph": true,
-  "makecode": true,
+  "title": "ML-Machine",
+  "knnModel": false,
+  "lossGraph": false,
+  "makecode": false,
   "liveGraphInputValues": true,
   "recordingScrubberValues": true,
-  "modelValidation": true,
-  "modelSettings": true,
-  "fingerprint": true,
-  "recordingDuration": 1800,
+  "modelValidation": false,
+  "modelSettings": false,
+  "fingerprint": false,
+  "recordingDuration": 2500,
   "printableRecordings": true,
   "dialogRecordings": true
 }

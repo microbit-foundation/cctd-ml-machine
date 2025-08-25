@@ -40,11 +40,6 @@
   };
 
   let isLive3DOpen = false;
-
-  $: isFingerprintEnabled = $enableFingerprint && hasFeature(Feature.FINGERPRINT);
-  const toggleEnabled = (event: any) => {
-    enableFingerprint.set(event.target.checked);
-  };
 </script>
 
 <div
@@ -90,8 +85,7 @@
 
       <!-- Right part of live-graph -->
       <div class="absolute right-0 bottom-0 h-full w-45 flex flex-col justify-between">
-        <!-- Quick fix: enable feature manually -->
-        <!-- {#if isFingerprintEnabled} -->
+        {#if hasFeature(Feature.FINGERPRINT)}
           <div class="pt-2 pr-2 justify-end flex flex-row gap-2">
             <p>Fingerprint:</p>
             <Switch
@@ -99,13 +93,16 @@
               bind:checked={$enableFingerprint}
               on:change={e => enableFingerprint.set(e.detail.checked)} />
           </div>
-          <div class="absolute h-full">
-            <LiveDataFingerprint gestureName="Live" />
-          </div>
-        <!-- {/if} -->
+          {#if $enableFingerprint}
+            <div class="absolute h-full">
+              <LiveDataFingerprint gestureName="Live" />
+            </div>
+          {/if}
+        {/if}
 
         <div
           class="flex flex-row pl-4 justify-center cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
+          class:pl-4={$enableFingerprint}
           on:click={() => (isLive3DOpen = true)}>
           <View3DLive width={140} height={140} freeze={isLive3DOpen} />
         </div>

@@ -9,9 +9,9 @@
   import { areActionsAllowed, buttonPressed } from '../../../lib/stores/uiStore';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import MediaQuery from '../../../components/layout/MediaQuery.svelte';
-  import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
+  import { Feature, getFeature } from '../../../lib/FeatureToggles';
 
   const devices = stores.getDevices();
   // In case of manual classification, variables for evaluation
@@ -36,7 +36,7 @@
     // lastRecording = undefined;
 
     // Get duration
-    const duration = StaticConfiguration.recordingDuration;
+    const duration = getFeature<number>(Feature.RECORDING_DURATION);
 
     // Loading interval
     const loadingInterval = setInterval(() => {

@@ -17,7 +17,10 @@
     PointElement,
   } from 'chart.js';
   import RecordingGraphPointData from './RecordingGraphPointData.svelte';
-  import { getRecordingChartDatasets, type ChartDataset } from './RecordingGraph';
+  import {
+    getRecordingChartDatasets,
+    type ChartDataset,
+  } from '../../../../lib/ChartDataset';
   import type { RecordingData } from '../../../../lib/domain/RecordingData';
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
@@ -25,6 +28,11 @@
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
 
   export let recording: RecordingData;
+  // Option to show y-axis ticks in the chart (default: off)
+  export let showYAxisTicks: boolean = false;
+  // Configurable y-axis scale (defaults match previous hardcoded values)
+  export let yAxisMin: number = -5.5;
+  export let yAxisMax: number = 6.5;
   const samples = recording.samples;
   const labels = recording.labels;
 
@@ -130,13 +138,13 @@
           },
           y: {
             type: 'linear',
-            min: -5.5,
-            max: 6.5,
+            min: yAxisMin,
+            max: yAxisMax,
             grid: {
               color: '#f3f3f3',
             },
             ticks: {
-              display: false, //this will remove only the label
+              display: showYAxisTicks, // controlled by prop, default false
             },
           },
         },

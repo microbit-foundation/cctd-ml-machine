@@ -16,6 +16,7 @@
   import RecordingFingerprint from './RecordingFingerprint.svelte';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { tr } from '../../../i18n';
+  import RecordingDialog from './RecordingDialog.svelte';
 
   // get recording from mother prop
   export let recording: RecordingData;
@@ -31,6 +32,7 @@
 
   $: gesture = stores.getGestures().getGesture(gestureId);
   let hide = false;
+  let showDialog = false;
 
   // Method for propagating deletion of recording
   function deleteClicked() {
@@ -43,6 +45,23 @@
       hide = false;
       onDelete(recording);
     }, 450);
+  }
+
+  function openDialog() {
+    if (!hasFeature(Feature.DIALOG_RECORDINGS)) {
+      return;
+    }
+    showDialog = true;
+  }
+
+  function closeDialog() {
+    showDialog = false;
+  }
+
+  function dialogDelete() {
+    // close and propagate delete
+    showDialog = false;
+    deleteClicked();
   }
 
   function bottomRightButtonClicked() {
@@ -63,9 +82,11 @@
 </script>
 
 <div
-  class="h-28 w-50 pr-3 pt-1 relative rounded-md"
+  class="h-28 w-50 pr-3 pt-1 relative rounded-md cursor-pointer"
+  class:cursor-pointer={hasFeature(Feature.DIALOG_RECORDINGS)}
   class:w-40={!shouldDisplayFingerprint}
-  class:w-50={shouldDisplayFingerprint}>
+  class:w-50={shouldDisplayFingerprint}
+  on:click={openDialog}>
   {#if dotGesture !== undefined}
     <div
       class="absolute px-1 py-0.5 z-3 right-1 top-2"
@@ -103,7 +124,7 @@
         <i
           class="z-2 absolute far fa-times-circle fa-lg transition
 									ease cursor-pointer text-light-800 hover:text-black"
-          on:click={deleteClicked} />
+          on:click|stopPropagation={deleteClicked} />
       </div>
     </button>
   </Tooltip>
@@ -113,9 +134,19 @@
     <Tooltip title="CSV" offset={{ x: 12, y: -50 }}>
       <button
         class="absolute top-0px left-6 text-light-800 hover:text-black transition ease"
-        on:click={bottomRightButtonClicked}>
+        on:click|stopPropagation={bottomRightButtonClicked}>
         <i class="fas fa-download z-1 absolute fa-md" />
       </button>
     </Tooltip>
+  {/if}
+
+  {#if showDialog}
+    <RecordingDialog
+      {recording}
+      gestureName={$gesture.name}
+      {downloadable}
+      {enableFingerprint}
+      on:close={closeDialog}
+      on:delete={dialogDelete} />
   {/if}
 </div>

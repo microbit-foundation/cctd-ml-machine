@@ -19,6 +19,7 @@ import type { Engine, EngineData } from '../domain/stores/Engine';
 import type { LiveData } from '../domain/stores/LiveData';
 import type HighlightedAxes from '../domain/stores/HighlightedAxes';
 import { ClassifierInput } from '../domain/ClassifierInput';
+import { Feature, getFeature } from '../FeatureToggles';
 
 /**
  * The PollingPredictorEngine will predict on the current input with consistent intervals.
@@ -101,7 +102,7 @@ class PollingPredictorEngine implements Engine {
     try {
       return this.liveData
         .getBuffer()
-        .getSeries(StaticConfiguration.pollingPredictionSampleDuration, sampleSize);
+        .getSeries(getFeature<number>(Feature.RECORDING_DURATION), sampleSize);
     } catch (_e) {
       if (sampleSize < 8) {
         return []; // The minimum number of points is 8, otherwise the filters will throw an exception

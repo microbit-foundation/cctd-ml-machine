@@ -25,6 +25,8 @@
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
+  import { Feature, getFeature, hasFeature } from '../../../lib/FeatureToggles';
+  import { printRecordings } from '../../../lib/utils/printRecordings';
 
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;
@@ -32,7 +34,7 @@
   const gestures = stores.getGestures();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
-  const recordingDuration = StaticConfiguration.recordingDuration;
+  const recordingDuration = getFeature<number>(Feature.RECORDING_DURATION);
   const enableFingerprint = stores.getEnableFingerprint();
 
   let isThisRecording = false;
@@ -44,6 +46,12 @@
     if (gesture.getName() === defaultNewName) {
       gesture.setName('');
     }
+  }
+
+  function handlePrintRecordings(): void {
+    const recordings = gesture.getRecordings() ?? [];
+    if (!recordings || recordings.length === 0) return;
+    printRecordings(gesture.getName(), recordings);
   }
 
   function removeClicked(): void {
@@ -167,8 +175,14 @@
   <div class="items-center flex relative">
     <!-- Title of gesture-->
     <GestureCard mr small>
-      <div class="top-3 left-3 absolute">
+      <div class="top-2 left-3 absolute flex flex-row justify-center items-center gap-4">
         <GestureDot {gesture} />
+
+        {#if hasFeature(Feature.PRINTABLE_RECORDINGS)}
+          <StandardButton small onClick={() => handlePrintRecordings()}>
+            Print
+          </StandardButton>
+        {/if}
       </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
         <div

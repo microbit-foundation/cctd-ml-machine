@@ -17,6 +17,9 @@ export enum Feature {
   MODEL_VALIDATION = 'modelValidation',
   MODEL_SETTINGS = 'modelSettings',
   FINGERPRINT = 'fingerprint',
+  RECORDING_DURATION = 'recordingDuration',
+  PRINTABLE_RECORDINGS = 'printableRecordings',
+  DIALOG_RECORDINGS = 'dialogRecordings',
 }
 
 export const hasFeature = (feature: Feature): boolean => {

@@ -30,6 +30,7 @@
   "content.index.MLExplainer3": "Die Datendarstellungen der Datenbeispiele werden einem neuronalen Netz gezeigt. Das neuronale Netz \"lernt\" aus diesen Beispielen, indem es Muster in und zwischen den Beispielen findet.",
   "content.index.MLExplainer4": "Das Ergebnis dieses Trainingsprozesses ist ein trainiertes neuronales Netzwerk (wir nennen es auch ein maschinelles Lernmodell), das erraten/vorhersagen kann, wie der micro:bit bewegt wird, wenn dieselben Eigenschaften (Standardabweichung, kumulierte Beschleunigung, Maximalwert usw.) aus den Live-Beschleunigungsdaten berechnet werden.",
   "content.data.classPlaceholderNewClass": "Drücke hier, um den Namen zu ändern",
+  "content.data.print": "Drucken",
   "content.data.record": "Aufnehmen",
   "content.data.addData": "Daten hinzufügen",
   "content.data.classHelpHeader": "Klasse",

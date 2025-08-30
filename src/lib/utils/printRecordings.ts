@@ -10,7 +10,11 @@ import type { Axis } from '../domain/Axis';
 import type { RecordingData } from '../domain/RecordingData';
 
 // Print recordings in a hidden iframe: 4 recordings per A4 landscape page.
-export function printRecordings(gestureName: string, recordings: RecordingData[], highlightedAxes: Axis[]) {
+export function printRecordings(
+  gestureName: string,
+  recordings: RecordingData[],
+  highlightedAxes: Axis[],
+) {
   if (!recordings || recordings.length === 0) return;
 
   function chunk<T>(arr: T[], size: number): T[][] {
@@ -26,11 +30,16 @@ export function printRecordings(gestureName: string, recordings: RecordingData[]
       ? highlightedAxes.map(a => a.index).filter(i => Number.isFinite(i) && i >= 0)
       : null;
 
-  function svgForRecording(recording: RecordingData, globalMinY?: number, globalMaxY?: number) {
+  function svgForRecording(
+    recording: RecordingData,
+    globalMinY?: number,
+    globalMaxY?: number,
+  ) {
     const datasetsAll = getRecordingChartDatasets(recording.samples);
-    const indices = selectedAxisIndices && selectedAxisIndices.length > 0
-      ? selectedAxisIndices.filter(i => i >= 0 && i < datasetsAll.length)
-      : datasetsAll.map((_, idx) => idx);
+    const indices =
+      selectedAxisIndices && selectedAxisIndices.length > 0
+        ? selectedAxisIndices.filter(i => i >= 0 && i < datasetsAll.length)
+        : datasetsAll.map((_, idx) => idx);
     const datasets = indices.map(i => datasetsAll[i]);
     const w = 600;
     const h = 260;
@@ -78,28 +87,38 @@ export function printRecordings(gestureName: string, recordings: RecordingData[]
 
     // Build legend using axis labels. Prefer highlightedAxes labels when available; fallback to recording.labels.
     const legendCount = indices.length;
-    const legendSpacing = Math.max(80, Math.floor((w - leftPad - rightPad) / Math.max(1, legendCount)));
+    const legendSpacing = Math.max(
+      80,
+      Math.floor((w - leftPad - rightPad) / Math.max(1, legendCount)),
+    );
     // gap between the x-axis (plot) and the legend area
     const legendGap = 25;
-    const legendItems = indices.map((axisIdx, i) => {
-      const originalAxisIndex = axisIdx;
-      const color = colors[originalAxisIndex % colors.length];
-      // Prefer label from highlightedAxes if provided, else use recording.labels
-      let label = recording.labels && recording.labels[originalAxisIndex] ? recording.labels[originalAxisIndex] : `Axis ${originalAxisIndex + 1}`;
-      if (highlightedAxes && highlightedAxes.length > 0) {
-        const found = highlightedAxes.find(a => a.index === originalAxisIndex);
-        if (found && found.label) {
-          label = found.label;
+    const legendItems = indices
+      .map((axisIdx, i) => {
+        const originalAxisIndex = axisIdx;
+        const color = colors[originalAxisIndex % colors.length];
+        // Prefer label from highlightedAxes if provided, else use recording.labels
+        let label =
+          recording.labels && recording.labels[originalAxisIndex]
+            ? recording.labels[originalAxisIndex]
+            : `Axis ${originalAxisIndex + 1}`;
+        if (highlightedAxes && highlightedAxes.length > 0) {
+          const found = highlightedAxes.find(a => a.index === originalAxisIndex);
+          if (found && found.label) {
+            label = found.label;
+          }
         }
-      }
-      const lx = leftPad + i * legendSpacing;
-      // place legend in the bottom padding area (below the x-axis) with a small gap
-      const legendRectY = h - bottomPad + legendGap;
-      const legendTextY = legendRectY + 9; // vertically center text with the color box
-      // small color box and text label placed below the graph
-      return `<rect x="${lx}" y="${legendRectY}" width="10" height="10" fill="${color}" />` +
-             `<text x="${lx + 14}" y="${legendTextY}" font-size="11" fill="#333" dominant-baseline="middle">${escapeHtml(label)}</text>`;
-    }).join('\n');
+        const lx = leftPad + i * legendSpacing;
+        // place legend in the bottom padding area (below the x-axis) with a small gap
+        const legendRectY = h - bottomPad + legendGap;
+        const legendTextY = legendRectY + 9; // vertically center text with the color box
+        // small color box and text label placed below the graph
+        return (
+          `<rect x="${lx}" y="${legendRectY}" width="10" height="10" fill="${color}" />` +
+          `<text x="${lx + 14}" y="${legendTextY}" font-size="11" fill="#333" dominant-baseline="middle">${escapeHtml(label)}</text>`
+        );
+      })
+      .join('\n');
 
     const axis = `<line x1="${leftPad}" y1="${h - bottomPad}" x2="${w - rightPad}" y2="${h - bottomPad}" stroke="#ccc" stroke-width="1"/>`;
     // vertical left axis and ticks (no horizontal ticks)
@@ -153,9 +172,10 @@ export function printRecordings(gestureName: string, recordings: RecordingData[]
   let globalMaxY = -Infinity;
   recordings.forEach(rec => {
     const datasetsAll = getRecordingChartDatasets(rec.samples);
-    const indices = selectedAxisIndices && selectedAxisIndices.length > 0
-      ? selectedAxisIndices.filter(i => i >= 0 && i < datasetsAll.length)
-      : datasetsAll.map((_, idx) => idx);
+    const indices =
+      selectedAxisIndices && selectedAxisIndices.length > 0
+        ? selectedAxisIndices.filter(i => i >= 0 && i < datasetsAll.length)
+        : datasetsAll.map((_, idx) => idx);
     indices.forEach(i =>
       datasetsAll[i].forEach((p: any) => {
         globalMinY = Math.min(globalMinY, p.y);

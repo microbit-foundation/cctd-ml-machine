@@ -30,6 +30,7 @@
   "content.index.MLExplainer3": "The data representations of the data samples are shown to a neural network. The neural network “learns” from these examples by finding patterns in and between the samples.",
   "content.index.MLExplainer4": "This training process results in a trained neural network (we also call it a machine learning model) that can guess/predict how the micro:bit is moved when the same properties (standard deviation, cumulated acceleration, maximum value, etc.) are calculated from the live accelerometer data.",
   "content.data.classPlaceholderNewClass": "Press here to change name",
+  "content.data.print": "Print",
   "content.data.record": "Record",
   "content.data.addData": "Add Data",
   "content.data.classHelpHeader": "Class",

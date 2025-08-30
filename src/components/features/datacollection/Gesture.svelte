@@ -25,6 +25,7 @@
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
+  import IconButton from '../../ui/buttons/IconButton.svelte';
   import { Feature, getFeature, hasFeature } from '../../../lib/FeatureToggles';
   import { printRecordings } from '../../../lib/utils/printRecordings';
 
@@ -180,9 +181,13 @@
         <GestureDot {gesture} />
 
         {#if hasFeature(Feature.PRINTABLE_RECORDINGS)}
-          <StandardButton small onClick={() => handlePrintRecordings()}>
-            Print
-          </StandardButton>
+          <IconButton
+            small
+            ariaLabel={$t('content.data.print')}
+            title={$t('content.data.print')}
+            on:click={handlePrintRecordings}>
+            <i class="fa fa-print" aria-hidden="true"></i>
+          </IconButton>
         {/if}
       </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">

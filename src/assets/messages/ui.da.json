@@ -30,6 +30,7 @@
   "content.index.MLExplainer3": "Data repræsentationerne af eksemplerne vises til et neuralt netværk. Det neurale netværk “lærer” fra disse eksempler ved at finde mønstre i og imellem eksemplerne.",
   "content.index.MLExplainer4": "Denne træningsprocess resulterer i et trænet neuralt netværk (vi kalder det også en machine learning model), der kan gætte/forudsige, hvordan micro:bit’en bevæges, når de samme egenskaber (standardafvigelse, samlet acceleration, den maximale værdi m.m.) beregnes fra det live accelerometer data.",
   "content.data.classPlaceholderNewClass": "Klik for at ændre navnet",
+  "content.data.print": "Print",
   "content.data.record": "Optag",
   "content.data.addData": "Tilføj data",
   "content.data.classHelpHeader": "Klasse",

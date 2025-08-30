@@ -36,6 +36,7 @@
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = getFeature<number>(Feature.RECORDING_DURATION);
   const enableFingerprint = stores.getEnableFingerprint();
+  const highlightedAxes = stores.getHighlightedAxes();
 
   let isThisRecording = false;
 
@@ -51,7 +52,7 @@
   function handlePrintRecordings(): void {
     const recordings = gesture.getRecordings() ?? [];
     if (!recordings || recordings.length === 0) return;
-    printRecordings(gesture.getName(), recordings);
+    printRecordings(gesture.getName(), recordings, $highlightedAxes);
   }
 
   function removeClicked(): void {

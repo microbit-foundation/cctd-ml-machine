@@ -6,9 +6,11 @@
 
 import StaticConfiguration from '../../StaticConfiguration';
 import { getRecordingChartDatasets } from '../ChartDataset';
+import type { Axis } from '../domain/Axis';
+import type { RecordingData } from '../domain/RecordingData';
 
 // Print recordings in a hidden iframe: 4 recordings per A4 landscape page.
-export function printRecordings(gestureName: string, recordings: any[]) {
+export function printRecordings(gestureName: string, recordings: RecordingData[], highlightedAxes: Axis[]) {
   if (!recordings || recordings.length === 0) return;
 
   function chunk<T>(arr: T[], size: number): T[][] {
@@ -18,9 +20,18 @@ export function printRecordings(gestureName: string, recordings: any[]) {
   }
 
   const colors = StaticConfiguration.graphColors ?? ['#f9808e', '#80f98e', '#80b8f9'];
+  // Determine which axis indices to render based on highlightedAxes; if none provided, render all.
+  const selectedAxisIndices: number[] | null =
+    highlightedAxes && highlightedAxes.length > 0
+      ? highlightedAxes.map(a => a.index).filter(i => Number.isFinite(i) && i >= 0)
+      : null;
 
-  function svgForRecording(recording: any, globalMinY?: number, globalMaxY?: number) {
-    const datasets = getRecordingChartDatasets(recording.samples);
+  function svgForRecording(recording: RecordingData, globalMinY?: number, globalMaxY?: number) {
+    const datasetsAll = getRecordingChartDatasets(recording.samples);
+    const indices = selectedAxisIndices && selectedAxisIndices.length > 0
+      ? selectedAxisIndices.filter(i => i >= 0 && i < datasetsAll.length)
+      : datasetsAll.map((_, idx) => idx);
+    const datasets = indices.map(i => datasetsAll[i]);
     const w = 600;
     const h = 260;
     // padding inside SVG so labels/ticks don't clip
@@ -58,10 +69,37 @@ export function printRecordings(gestureName: string, recordings: any[]) {
               `${i === 0 ? 'M' : 'L'} ${leftPad + i * xScale} ${h - bottomPad - (p.y - minY) * yScale}`,
           )
           .join(' ');
-        const color = colors[idx % colors.length];
+        // Use original axis index (from `indices`) when selecting color so colors map to axis positions
+        const originalAxisIndex = indices[idx];
+        const color = colors[originalAxisIndex % colors.length];
         return `<path d="${path}" fill="none" stroke="${color}" stroke-width="1.5" />`;
       })
       .join('\n');
+
+    // Build legend using axis labels. Prefer highlightedAxes labels when available; fallback to recording.labels.
+    const legendCount = indices.length;
+    const legendSpacing = Math.max(80, Math.floor((w - leftPad - rightPad) / Math.max(1, legendCount)));
+    // gap between the x-axis (plot) and the legend area
+    const legendGap = 25;
+    const legendItems = indices.map((axisIdx, i) => {
+      const originalAxisIndex = axisIdx;
+      const color = colors[originalAxisIndex % colors.length];
+      // Prefer label from highlightedAxes if provided, else use recording.labels
+      let label = recording.labels && recording.labels[originalAxisIndex] ? recording.labels[originalAxisIndex] : `Axis ${originalAxisIndex + 1}`;
+      if (highlightedAxes && highlightedAxes.length > 0) {
+        const found = highlightedAxes.find(a => a.index === originalAxisIndex);
+        if (found && found.label) {
+          label = found.label;
+        }
+      }
+      const lx = leftPad + i * legendSpacing;
+      // place legend in the bottom padding area (below the x-axis) with a small gap
+      const legendRectY = h - bottomPad + legendGap;
+      const legendTextY = legendRectY + 9; // vertically center text with the color box
+      // small color box and text label placed below the graph
+      return `<rect x="${lx}" y="${legendRectY}" width="10" height="10" fill="${color}" />` +
+             `<text x="${lx + 14}" y="${legendTextY}" font-size="11" fill="#333" dominant-baseline="middle">${escapeHtml(label)}</text>`;
+    }).join('\n');
 
     const axis = `<line x1="${leftPad}" y1="${h - bottomPad}" x2="${w - rightPad}" y2="${h - bottomPad}" stroke="#ccc" stroke-width="1"/>`;
     // vertical left axis and ticks (no horizontal ticks)
@@ -106,16 +144,20 @@ export function printRecordings(gestureName: string, recordings: any[]) {
       zeroLine = `<line x1="${leftPad}" y1="${y0}" x2="${w - rightPad}" y2="${y0}" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>`;
     }
 
-    return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${leftAxis}${axis}${tickLines}${zeroLine}${paths}</svg>`;
+    // place legendItems after the plotted paths so it's rendered on top and positioned below the graph
+    return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${leftAxis}${axis}${tickLines}${zeroLine}${paths}${legendItems}</svg>`;
   }
 
-  // compute global min/max across all recordings so y-axis is shared
+  // compute global min/max across all recordings so y-axis is shared (consider only selected axes)
   let globalMinY = Infinity;
   let globalMaxY = -Infinity;
   recordings.forEach(rec => {
-    const datasets = getRecordingChartDatasets(rec.samples);
-    datasets.forEach(ds =>
-      ds.forEach((p: any) => {
+    const datasetsAll = getRecordingChartDatasets(rec.samples);
+    const indices = selectedAxisIndices && selectedAxisIndices.length > 0
+      ? selectedAxisIndices.filter(i => i >= 0 && i < datasetsAll.length)
+      : datasetsAll.map((_, idx) => idx);
+    indices.forEach(i =>
+      datasetsAll[i].forEach((p: any) => {
         globalMinY = Math.min(globalMinY, p.y);
         globalMaxY = Math.max(globalMaxY, p.y);
       }),

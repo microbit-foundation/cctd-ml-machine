@@ -1,3 +1,9 @@
+<!--
+  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+
+  SPDX-License-Identifier: MIT
+-->
+
 <style>
   .icon-button {
     background: transparent;
@@ -18,12 +24,6 @@
     font-size: 1rem;
   }
 </style>
-
-<!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
-
-  SPDX-License-Identifier: MIT
--->
 
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';

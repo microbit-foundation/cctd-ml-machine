@@ -122,11 +122,16 @@
     ariaLabel={$tr('content.data.tooltip.remove')}
     title={$tr('content.data.tooltip.remove')}
     small
-    on:click={(e) => { e.stopPropagation(); deleteClicked(); }}>
+    on:click={e => {
+      e.stopPropagation();
+      deleteClicked();
+    }}>
     <div class="relative">
       <i class="z-1 absolute fas fa-circle fa-lg text-white" />
-      <i class="z-2 absolute far fa-times-circle fa-lg transition
-                                  ease text-light-800 hover:text-black" aria-hidden="true" />
+      <i
+        class="z-2 absolute far fa-times-circle fa-lg transition
+                                  ease text-light-800 hover:text-black"
+        aria-hidden="true" />
     </div>
   </IconButton>
 
@@ -137,7 +142,10 @@
       ariaLabel="CSV"
       title="CSV"
       small
-      on:click={(e) => { e.stopPropagation(); bottomRightButtonClicked(); }}>
+      on:click={e => {
+        e.stopPropagation();
+        bottomRightButtonClicked();
+      }}>
       <i class="fas fa-download z-1 absolute fa-md" aria-hidden="true" />
     </IconButton>
   {/if}

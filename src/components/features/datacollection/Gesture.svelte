@@ -208,7 +208,9 @@
           className="pl-3 col-start-5 place-self-start justify-self-end outline-none"
           on:click={removeClicked}
           small>
-          <i class="far fa-times-circle fa-lg text-light-800 hover:text-black transition ease" aria-hidden="true" />
+          <i
+            class="far fa-times-circle fa-lg text-light-800 hover:text-black transition ease"
+            aria-hidden="true" />
         </IconButton>
       </div>
     </GestureCard>
@@ -221,7 +223,9 @@
             title={$t('content.data.select')}
             className="w-full text-center"
             on:click={selectClicked}>
-            <i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext" aria-hidden="true" />
+            <i
+              class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext"
+              aria-hidden="true" />
           </IconButton>
           <p class="w-full text-center">
             {$t('content.data.addData')}
@@ -234,7 +238,9 @@
             title={$t('content.data.select')}
             className="w-full text-center"
             on:click={selectClicked}>
-            <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" aria-hidden="true" />
+            <i
+              class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary"
+              aria-hidden="true" />
           </IconButton>
           <StandardButton
             onClick={recordClicked}

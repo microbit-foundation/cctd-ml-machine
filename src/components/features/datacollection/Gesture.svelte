@@ -193,38 +193,49 @@
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
         <div
           class="w-40 col-start-2 col-end-5 text-center
-									font-semibold transition ease
-									rounded-xl border border-gray-300
-									border-solid hover:bg-gray-100">
+                                    font-semibold transition ease
+                                    rounded-xl border border-gray-300
+                                    border-solid hover:bg-gray-100">
           <h3
             contenteditable
             bind:innerText={$nameBind}
             on:click={titleClicked}
             on:keypress={onTitleKeypress} />
         </div>
-        <button class="pl-3 col-start-5 place-self-start justify-self-end outline-none">
-          <i
-            class="far fa-times-circle fa-lg text-light-800 hover:text-black transition ease"
-            on:click={removeClicked} />
-        </button>
+        <IconButton
+          ariaLabel={$t('content.data.delete')}
+          title={$t('content.data.delete')}
+          className="pl-3 col-start-5 place-self-start justify-self-end outline-none"
+          on:click={removeClicked}
+          small>
+          <i class="far fa-times-circle fa-lg text-light-800 hover:text-black transition ease" aria-hidden="true" />
+        </IconButton>
       </div>
     </GestureCard>
 
     <GestureCard small mr elevated={$chosenGesture === gesture}>
       {#if $chosenGesture !== gesture}
-        <div class="text-center w-35 cursor-pointer" on:click={selectClicked}>
-          <div class="w-full text-center">
-            <i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext" />
-          </div>
+        <div class="text-center w-35 cursor-pointer">
+          <IconButton
+            ariaLabel={$t('content.data.select')}
+            title={$t('content.data.select')}
+            className="w-full text-center"
+            on:click={selectClicked}>
+            <i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext" aria-hidden="true" />
+          </IconButton>
           <p class="w-full text-center">
             {$t('content.data.addData')}
           </p>
         </div>
       {:else}
-        <div class="text-center w-35 cursor-pointer" on:click={selectClicked}>
-          <div class="w-full text-center">
-            <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" />
-          </div>
+        <div class="text-center w-35 cursor-pointer">
+          <IconButton
+            ariaLabel={$t('content.data.select')}
+            title={$t('content.data.select')}
+            className="w-full text-center"
+            on:click={selectClicked}>
+            <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" aria-hidden="true" />
+          </IconButton>
           <StandardButton
             onClick={recordClicked}
             small

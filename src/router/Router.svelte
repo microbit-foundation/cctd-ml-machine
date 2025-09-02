@@ -25,9 +25,8 @@
         return (await import('../pages/model/ModelPage.svelte')).default;
       case Paths.FILTERS:
         return (await import('../pages/filter/FilterPage.svelte')).default;
-        case Paths.CODE:
-      return (await import('../pages/CodePage.svelte')).default;
-
+      case Paths.CODE:
+        return (await import('../pages/CodePage.svelte')).default;
     }
   }
 

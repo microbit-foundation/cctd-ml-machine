@@ -47,18 +47,22 @@ export const project = {
     makecodeElem.appendChild(iframe);
 
     // Create and initialise an instance of MakeCodeFrameDriver.
-    const driverRef = new MakeCodeFrameDriver(
+    let driverRef: MakeCodeFrameDriver = null!;
+    driverRef = new MakeCodeFrameDriver(
       {
         controllerId: 'YOUR APP NAME HERE',
         initialProjects: async () => [project],
-        onEditorContentLoaded: e => console.log('MakeCode is now ready'),
+        // When the editor loads, hide the simulator to make more space
+        onEditorContentLoaded: e => driverRef.hideSimulator(),
+        onBack: () => console.log("Hello!"),
         onWorkspaceSave: e => {
-          console.log(e.project!.header!.id, e.project);
+          //console.log(e.project!.header!.id, e.project);
         },
       },
       () => iframe,
     );
     driverRef.initialize();
+    driverRef.hideSimulator();
   });
 </script>
 

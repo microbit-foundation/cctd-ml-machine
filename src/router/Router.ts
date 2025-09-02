@@ -12,8 +12,8 @@ export const Paths = {
   DATA: 'data',
   TRAINING: 'training',
   VALIDATE: 'validate',
-  MODEL: 'model',
   CODE: 'code',
+  MODEL: 'model',
   FILTERS: 'training/filters',
 } as const;
 

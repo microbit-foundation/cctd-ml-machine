@@ -13,6 +13,7 @@ export const Paths = {
   TRAINING: 'training',
   VALIDATE: 'validate',
   MODEL: 'model',
+  CODE: 'code',
   FILTERS: 'training/filters',
 } as const;
 

@@ -36,7 +36,7 @@ MLMachine.onGestureRecognized("idle", function () {
     "target": "6.0.28",
     "pxt": "9.0.19"
   },
-"preferredEditor": "tsprj"
+"preferredEditor": "blocksprj"
 }
 `,
   },

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Axis } from '../../core/model/Axis';
-import BaseVector from '../../core/model/vector/BaseVector';
+import type { Axis } from '../../core/entities/Axis';
+import BaseVector from '../../core/entities/vector/BaseVector';
 import { type TrainingData } from '../domain/ModelTrainer';
-import type { Vector } from '../../core/model/vector/Vector';
+import type { Vector } from '../../core/entities/vector/Vector';
 import { type MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
 export type Point3D = {

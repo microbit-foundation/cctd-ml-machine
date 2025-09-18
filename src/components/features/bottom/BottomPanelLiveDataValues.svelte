@@ -10,7 +10,7 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import FixedNumber from '../../ui/FixedNumber.svelte';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
-  import type { Axis } from '../../../core/model/Axis';
+  import type { Axis } from '../../../core/entities/Axis';
 
   const highlightedAxes = stores.getHighlightedAxes();
   const availableAxes = stores.getAvailableAxes();

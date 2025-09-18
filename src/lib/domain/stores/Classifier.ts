@@ -7,18 +7,15 @@ import {
   type Readable,
   type Subscriber,
   type Unsubscriber,
-  type Writable,
   derived,
   get,
-  writable,
 } from 'svelte/store';
 import Filters from '../Filters';
 import Model, { type ModelData } from './Model';
 import Gesture, { type GestureID } from './gesture/Gesture';
 import type { ClassifierInput } from '../ClassifierInput';
 import Logger from '../../utils/Logger';
-import BaseVector from '../../../core/model/vector/BaseVector';
-import type { Vector } from '../../../core/model/vector/Vector';
+import BaseVector from '../../../core/entities/vector/BaseVector';
 
 type ClassifierData = {
   model: ModelData;

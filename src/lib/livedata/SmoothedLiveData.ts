@@ -6,10 +6,10 @@
 import { type Readable, type Subscriber, type Unsubscriber, derived } from 'svelte/store';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
-import { type LiveDataVector } from '../../core/model/vector/LiveDataVector';
+import { type LiveDataVector } from '../../core/entities/vector/LiveDataVector';
 import BaseLiveDataVector from '../domain/BaseLiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
-import BaseVector from '../../core/model/vector/BaseVector';
+import BaseVector from '../../core/entities/vector/BaseVector';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.

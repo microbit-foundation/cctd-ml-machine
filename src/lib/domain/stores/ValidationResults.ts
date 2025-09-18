@@ -16,7 +16,7 @@ import {
 } from 'svelte/store';
 import type ValidationSets from './ValidationSets';
 import type Classifier from './Classifier';
-import BaseVector from '../../../core/model/vector/BaseVector';
+import BaseVector from '../../../core/entities/vector/BaseVector';
 import { ClassifierInput } from '../ClassifierInput';
 import { findLargestIndex } from '../../utils/Math';
 import type Gestures from './gesture/Gestures';

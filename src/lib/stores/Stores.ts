@@ -23,7 +23,7 @@ import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
 import HighlightedAxes from '../domain/stores/HighlightedAxes';
 import SelectedModel from '../domain/SelectedModel';
-import type { LiveDataVector } from '../../core/model/vector/LiveDataVector';
+import type { LiveDataVector } from '../../core/entities/vector/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import type { Engine } from '../domain/stores/Engine';
 import AvailableAxes from '../domain/stores/AvailableAxes';

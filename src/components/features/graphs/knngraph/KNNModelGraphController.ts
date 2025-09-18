@@ -10,7 +10,7 @@ import type Filters from '../../../../lib/domain/Filters';
 import { stores } from '../../../../lib/stores/Stores';
 import type { Point3D } from '../../../../lib/utils/graphUtils';
 import { FilterType } from '../../../../lib/domain/FilterTypes';
-import BaseVector from '../../../../core/model/vector/BaseVector';
+import BaseVector from '../../../../core/entities/vector/BaseVector';
 
 type UpdateCall = {
   config: GraphDrawConfig;

@@ -1,4 +1,4 @@
-import type { Axis } from '../../../core/model/Axis';
+import type { Axis } from '../../../core/entities/Axis';
 import {
   type Writable,
   type Readable,
@@ -8,7 +8,7 @@ import {
   get,
 } from 'svelte/store';
 import type { LiveData } from './LiveData';
-import type { LiveDataVector } from '../../../core/model/vector/LiveDataVector';
+import type { LiveDataVector } from '../../../core/entities/vector/LiveDataVector';
 import type Gestures from './gesture/Gestures';
 import Logger from '../../utils/Logger';
 

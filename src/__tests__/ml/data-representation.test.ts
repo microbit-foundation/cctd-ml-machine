@@ -13,7 +13,7 @@ import MicrobitAccelerometerLiveData, {
 } from '../../lib/livedata/MicrobitAccelerometerData';
 import { repeat } from '../testUtils';
 import { get } from 'svelte/store';
-import { type LiveDataVector } from '../../core/model/vector/LiveDataVector';
+import { type LiveDataVector } from '../../core/entities/vector/LiveDataVector';
 import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
 import { smoothNewValue } from '../../lib/utils/graphUtils';
 import type { LiveData } from '../../lib/domain/stores/LiveData';

@@ -12,7 +12,7 @@ import Gesture, { type GestureID } from './stores/gesture/Gesture';
 import Model from './stores/Model';
 import type { MLModel } from './MLModel';
 import { t } from '../../i18n';
-import BaseVector from '../../core/model/vector/BaseVector';
+import BaseVector from '../../core/entities/vector/BaseVector';
 import type { RecordingData } from './RecordingData';
 import type Snackbar from '../stores/Snackbar';
 

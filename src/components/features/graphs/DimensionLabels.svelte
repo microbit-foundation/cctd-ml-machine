@@ -17,7 +17,7 @@
   import type SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import type { LiveDataVector } from '../../../core/model/vector/LiveDataVector';
+  import type { LiveDataVector } from '../../../core/entities/vector/LiveDataVector';
 
   type LabelData = {
     id: number;

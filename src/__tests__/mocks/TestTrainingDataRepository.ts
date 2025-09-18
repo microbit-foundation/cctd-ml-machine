@@ -7,7 +7,7 @@
 import BaseVector from '../../lib/domain/BaseVector';
 import type { TrainingData } from '../../lib/domain/ModelTrainer';
 import type { TrainingDataRepository } from '../../lib/domain/TrainingDataRepository';
-import type { Vector } from '../../lib/domain/Vector';
+import type { Vector } from '../../core/Vector';
 
 class TestTrainingDataRepository implements TrainingDataRepository {
   getTrainingDataMean(): Vector {

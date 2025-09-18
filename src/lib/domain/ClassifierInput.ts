@@ -6,7 +6,7 @@
 import type { Axis } from './Axis';
 import BaseVector from './BaseVector';
 import Filters from './Filters';
-import type { Vector } from './Vector';
+import type { Vector } from '../../core/Vector';
 
 export class ClassifierInput {
   public constructor(private samples: Vector[]) {}

@@ -5,7 +5,7 @@
  */
 
 import type { MLModel } from '../../../lib/domain/MLModel';
-import type { Vector } from '../../../lib/domain/Vector';
+import type { Vector } from '../../../core/Vector';
 
 class TestMLModel implements MLModel {
   constructor(private numberOfGestures: number) {}

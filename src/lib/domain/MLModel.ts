@@ -1,4 +1,4 @@
-import type { Vector } from './Vector';
+import type { Vector } from '../../core/Vector';
 
 /**
  * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors

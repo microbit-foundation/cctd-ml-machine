@@ -5,7 +5,7 @@
  */
 
 import BaseVector from '../domain/BaseVector';
-import type { Vector } from '../domain/Vector';
+import type { Vector } from '../../core/Vector';
 
 export const getStandardDeviation = (vectors: Vector[]): Vector => {
   const input = vectors.map(e => e.getValue());

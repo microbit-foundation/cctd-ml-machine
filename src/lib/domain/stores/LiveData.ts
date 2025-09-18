@@ -5,7 +5,7 @@
  */
 import { type Readable } from 'svelte/store';
 import LiveDataBuffer from '../LiveDataBuffer';
-import { type LiveDataVector } from '../../../core/LiveDataVector';
+import { type LiveDataVector } from '../../../core/model/vector/LiveDataVector';
 
 /**
  * A container for real-time data. Uses a LiveDataBuffer to store data points.

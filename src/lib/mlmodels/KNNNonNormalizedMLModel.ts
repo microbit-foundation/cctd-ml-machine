@@ -6,7 +6,7 @@
 
 import { knnCurrentPoint, knnNeighbours } from '../stores/KNNStores';
 import type { MLModel } from '../domain/MLModel';
-import type { Vector } from '../../core/Vector';
+import type { Vector } from '../../core/model/vector/Vector';
 import { distanceBetween } from '../utils/graphUtils';
 import Logger from '../utils/Logger';
 

@@ -15,9 +15,9 @@
   import { onDestroy, onMount } from 'svelte';
   import { derived, type Unsubscriber } from 'svelte/store';
   import type SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
-  import type { LiveDataVector } from '../../../lib/domain/stores/LiveDataVector';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
+  import type { LiveDataVector } from '../../../core/model/vector/LiveDataVector';
 
   type LabelData = {
     id: number;

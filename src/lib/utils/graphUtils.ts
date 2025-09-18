@@ -5,9 +5,9 @@
  */
 
 import type { Axis } from '../domain/Axis';
-import BaseVector from '../../core/BaseVector';
+import BaseVector from '../../core/model/vector/BaseVector';
 import { type TrainingData } from '../domain/ModelTrainer';
-import type { Vector } from '../../core/Vector';
+import type { Vector } from '../../core/model/vector/Vector';
 import { type MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
 export type Point3D = {

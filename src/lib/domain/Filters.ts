@@ -14,8 +14,8 @@ import FilterTypes, { FilterType } from './FilterTypes';
 import Logger from '../utils/Logger';
 import type { Filter } from './Filter';
 import FilterGraphLimits from '../utils/FilterLimits';
-import type { Vector } from '../../core/Vector';
-import BaseVector from '../../core/BaseVector';
+import type { Vector } from '../../core/model/vector/Vector';
+import BaseVector from '../../core/model/vector/BaseVector';
 
 class Filters implements Readable<Filter[]> {
   constructor(private filters: Writable<Filter[]>) {}

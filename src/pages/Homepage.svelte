@@ -24,8 +24,6 @@
   import ContactUsControlBarButton from '../components/ui/control-bar/control-bar-items/ContactUsControlBarButton.svelte';
   import SelectLanguageControlBarDropdown from '../components/ui/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
   import { t } from '../i18n';
-  import Environment from '../lib/Environment';
-  import DevTools from '../components/features/GoToPlaygroundButton.svelte';
   import { isLoading } from '../lib/stores/ApplicationState';
 
   type ContentTile = { tile: ComponentType; spanColumns: number };
@@ -42,12 +40,6 @@
     <div>
       <ControlBar>
         <div class="w-full">
-          {#if Environment.isInDevelopment}
-            <div class="float-left flex flex-row">
-              <p>(DevTools)</p>
-              <DevTools />
-            </div>
-          {/if}
           <div class="float-right flex flex-row">
             <ContactUsControlBarButton />
             <SelectLanguageControlBarDropdown />

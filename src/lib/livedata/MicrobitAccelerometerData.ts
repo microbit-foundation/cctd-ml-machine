@@ -10,10 +10,10 @@ import {
   writable,
 } from 'svelte/store';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
-import type { LiveDataVector } from '../../core/LiveDataVector';
+import type { LiveDataVector } from '../../core/model/vector/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
-import type { Vector } from '../../core/Vector';
-import BaseVector from '../../core/BaseVector';
+import type { Vector } from '../../core/model/vector/Vector';
+import BaseVector from '../../core/model/vector/BaseVector';
 
 export type MicrobitAccelerometerData = {
   x: number;

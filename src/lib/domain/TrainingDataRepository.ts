@@ -5,7 +5,7 @@
  */
 
 import { type TrainingData } from './ModelTrainer';
-import type { Vector } from '../../core/Vector';
+import type { Vector } from '../../core/model/vector/Vector';
 
 export interface TrainingDataRepository {
   getTrainingData(): TrainingData;

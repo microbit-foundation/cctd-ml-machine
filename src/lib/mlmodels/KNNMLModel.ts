@@ -7,7 +7,7 @@ import { type MLModel } from '../domain/MLModel';
 import Logger from '../utils/Logger';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import { distanceBetween } from '../utils/graphUtils';
-import type { Vector } from '../../core/Vector';
+import type { Vector } from '../../core/model/vector/Vector';
 import { knnCurrentPoint, knnNeighbours } from '../stores/KNNStores';
 
 class KNNMLModel implements MLModel {

@@ -8,7 +8,7 @@ import {
   get,
 } from 'svelte/store';
 import type { LiveData } from './LiveData';
-import type { LiveDataVector } from '../../../core/LiveDataVector';
+import type { LiveDataVector } from '../../../core/model/vector/LiveDataVector';
 import type Gestures from './gesture/Gestures';
 import Logger from '../../utils/Logger';
 

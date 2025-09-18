@@ -8,7 +8,6 @@ import { writable, type Writable, get, derived } from 'svelte/store';
 
 export const Paths = {
   HOME: '/',
-  PLAYGROUND: 'playground',
   DATA: 'data',
   TRAINING: 'training',
   VALIDATE: 'validate',

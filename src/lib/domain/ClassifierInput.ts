@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Axis } from './Axis';
-import BaseVector from '../../core/BaseVector';
+import BaseVector from '../../core/model/vector/BaseVector';
 import Filters from './Filters';
-import type { Vector } from '../../core/Vector';
+import type { Vector } from '../../core/model/vector/Vector';
 
 export class ClassifierInput {
   public constructor(private samples: Vector[]) {}

@@ -15,8 +15,6 @@
         return (await import('../pages/Homepage.svelte')).default;
       case Paths.VALIDATE:
         return (await import('../pages/ValidationPage.svelte')).default;
-      case Paths.PLAYGROUND:
-        return (await import('../pages/PlaygroundPage.svelte')).default;
       case Paths.DATA:
         return (await import('../pages/DataPage.svelte')).default;
       case Paths.TRAINING:

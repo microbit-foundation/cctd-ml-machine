@@ -10,11 +10,11 @@
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
   import type { LiveData } from '../../../lib/domain/stores/LiveData';
-  import type { LiveDataVector } from '../../../lib/domain/stores/LiveDataVector';
   import StaticConfiguration from '../../../StaticConfiguration';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import { stores } from '../../../lib/stores/Stores';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
+  import type { LiveDataVector } from '../../../core/model/vector/LiveDataVector';
 
   /**
    * TimesSeries, but with the data array added.

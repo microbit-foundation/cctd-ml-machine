@@ -4,25 +4,25 @@
  * SPDX-License-Identifier: MIT
  */
 import { get } from 'svelte/store';
-import { FilterType } from '../domain/FilterTypes';
 import { t } from 'svelte-i18n';
-import type { Filter } from '../domain/Filter';
+import { FilterType, type Filter } from '../Filter';
 
-class MaxFilter implements Filter {
+class TotalAccFilter implements Filter {
   public getName(): string {
-    return get(t)('content.filters.max.title');
+    return get(t)('content.filters.acc.title');
   }
   public getDescription(): string {
-    return get(t)('content.filters.max.description');
+    return get(t)('content.filters.acc.description');
   }
   public getType(): FilterType {
-    return FilterType.MAX;
+    return FilterType.ACC;
   }
   public filter(inValues: number[]): number {
-    return Math.max(...inValues);
+    return inValues.reduce((a, b) => a + Math.abs(b), 0);
   }
   public getMinNumberOfSamples(): number {
-    return 1;
+    return 2;
   }
 }
-export default MaxFilter;
+
+export default TotalAccFilter;

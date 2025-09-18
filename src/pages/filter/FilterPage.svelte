@@ -8,10 +8,11 @@
   import FilterToggler from './FilterToggler.svelte';
   import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import { t } from '../../i18n';
-  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
   import { stores } from '../../lib/stores/Stores';
   import { navigate, Paths } from '../../router/Router';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
+  import type { FilterType } from '../../core/entities/filter/Filter';
+  import { getFilterTypes } from '../../core/entities/filter/FilterUtils';
 
   let isFilterInspectorDialogOpen = false;
   let currentFilter: FilterType | undefined = undefined;
@@ -23,7 +24,7 @@
     isFilterInspectorDialogOpen = fullScreen;
   };
 
-  const filtersAvailable = FilterTypes.toIterable();
+  const filtersAvailable = getFilterTypes();
 </script>
 
 <ControlBar>

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 import { t } from 'svelte-i18n';
-import { FilterType } from '../domain/FilterTypes';
 import FilterWithMaths from './FilterWithMaths';
 import { get } from 'svelte/store';
+import { FilterType } from '../Filter';
 
 class MeanFilter extends FilterWithMaths {
   public getType(): FilterType {

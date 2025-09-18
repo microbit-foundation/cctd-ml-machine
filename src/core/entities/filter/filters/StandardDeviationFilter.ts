@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 import { get } from 'svelte/store';
-import { FilterType } from '../domain/FilterTypes';
 import FilterWithMaths from './FilterWithMaths';
 import { t } from 'svelte-i18n';
+import { FilterType } from '../Filter';
 
 class StandardDeviationFilter extends FilterWithMaths {
   public getType(): FilterType {

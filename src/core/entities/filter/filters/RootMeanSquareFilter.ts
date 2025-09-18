@@ -4,27 +4,27 @@
  * SPDX-License-Identifier: MIT
  */
 import { get } from 'svelte/store';
-import { FilterType } from '../domain/FilterTypes';
 import { t } from 'svelte-i18n';
-import type { Filter } from '../domain/Filter';
+import { FilterType, type Filter } from '../Filter';
 
-class MinFilter implements Filter {
+class RootMeanSquareFilter implements Filter {
   public getName(): string {
-    return get(t)('content.filters.min.title');
+    return get(t)('content.filters.rms.title');
   }
   public getDescription(): string {
-    return get(t)('content.filters.min.description');
+    return get(t)('content.filters.rms.description');
   }
   public getType(): FilterType {
-    return FilterType.MIN;
+    return FilterType.RMS;
   }
 
   public filter(inValues: number[]): number {
-    return Math.min(...inValues);
+    return Math.sqrt(inValues.reduce((a, b) => a + Math.pow(b, 2), 0) / inValues.length);
   }
+
   public getMinNumberOfSamples(): number {
     return 1;
   }
 }
 
-export default MinFilter;
+export default RootMeanSquareFilter;

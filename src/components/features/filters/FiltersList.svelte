@@ -4,11 +4,11 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import FilterTypes from '../../../lib/domain/FilterTypes';
+  import { getFilterTypes } from '../../../core/entities/filter/FilterUtils';
   import { anchorElement } from './FilterList';
   import FilterListRow from './FilterListRow.svelte';
 
-  const availableFilters = FilterTypes.toIterable();
+  const availableFilters = getFilterTypes();
   let filterElement: HTMLElement;
   $: anchorElement.set(filterElement);
 </script>

@@ -12,7 +12,7 @@
   import { get } from 'svelte/store';
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
-  import { FilterType } from '../../../../lib/domain/FilterTypes';
+  import { FilterType } from '../../../../core/entities/filter/Filter';
 
   const classifier = stores.getClassifier();
   const gestures = stores.getGestures();

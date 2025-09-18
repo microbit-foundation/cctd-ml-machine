@@ -8,13 +8,14 @@
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
-  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
   import FilterGraphLimits from '../../lib/utils/FilterLimits';
   import { type GestureData } from '../../lib/domain/stores/gesture/Gesture';
   import StaticConfiguration from '../../StaticConfiguration';
   import type { RecordingData } from '../../lib/domain/RecordingData';
   import { stores } from '../../lib/stores/Stores';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
+  import type { FilterType } from '../../core/entities/filter/Filter';
+  import { createFilter } from '../../core/entities/filter/FilterUtils';
 
   const devices = stores.getDevices();
 
@@ -40,7 +41,7 @@
 
   // Data
   const uniqueLiveDataID = 983095438740;
-  const filter = FilterTypes.createFilter(filterType);
+  const filter = createFilter(filterType);
   const filterFunction = (data: number[]) => filter.filter(data);
   let classList: { name: string; id: number }[] = [];
   const recordings = createDataRepresentation(); // side effect: updates classList and color

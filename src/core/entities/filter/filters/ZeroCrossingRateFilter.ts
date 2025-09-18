@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 import { get } from 'svelte/store';
-import { FilterType } from '../domain/FilterTypes';
 import { t } from 'svelte-i18n';
-import type { Filter } from '../domain/Filter';
+import { FilterType, type Filter } from '../Filter';
 
 class ZeroCrossingRateFilter implements Filter {
   public getName(): string {

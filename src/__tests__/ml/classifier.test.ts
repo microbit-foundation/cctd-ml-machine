@@ -13,8 +13,6 @@ import { ClassifierInput } from '../../lib/domain/ClassifierInput';
 import Filters from '../../lib/domain/Filters';
 import { stores } from '../../lib/stores/Stores';
 import TestMLModelTrainer from '../mocks/mlmodel/TestMLModelTrainer';
-import type { Filter } from '../../lib/domain/Filter';
-import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
 import ClassifierFactory from '../../lib/domain/ClassifierFactory';
 import LayersModelTrainer from '../../lib/mlmodels/LayersModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
@@ -23,6 +21,8 @@ import TestGestureRepository from '../mocks/TestGestureRepository';
 import Confidences from '../../lib/domain/stores/Confidences';
 import BaseVector from '../../core/entities/vector/BaseVector';
 import Snackbar from '../../lib/stores/Snackbar';
+import { FilterType, type Filter } from '../../core/entities/filter/Filter';
+import { createFilter } from '../../core/entities/filter/FilterUtils';
 
 describe('Classifier tests', () => {
   test('Changing matrix does not mark model as untrained', async () => {
@@ -62,9 +62,9 @@ describe('Classifier tests', () => {
       new BaseLiveDataVector(new BaseVector([3, 3, 3]), ['x', 'y', 'z']),
     ];
     const input = new ClassifierInput(vectors);
-    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
-    const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
-    const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+    const filterMax: Filter = createFilter(FilterType.MAX);
+    const filterMean: Filter = createFilter(FilterType.MEAN);
+    const filterMin: Filter = createFilter(FilterType.MIN);
     const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
     expect(input.getInput(filters).length).toBe(3 * 3);
   });
@@ -75,7 +75,7 @@ describe('Classifier tests', () => {
       new BaseLiveDataVector(new BaseVector([4, 5, 6]), ['x', 'y', 'z']),
     ];
     const input = new ClassifierInput(vectors);
-    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
+    const filterMax: Filter = createFilter(FilterType.MAX);
     const filters: Filters = new Filters(writable([filterMax]));
     expect(input.getInput(filters)).toStrictEqual([4, 5, 6]);
   });
@@ -87,9 +87,9 @@ describe('Classifier tests', () => {
       new BaseLiveDataVector(new BaseVector([10]), ['x']),
     ];
     const input = new ClassifierInput(vectors);
-    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
-    const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
-    const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+    const filterMax: Filter = createFilter(FilterType.MAX);
+    const filterMean: Filter = createFilter(FilterType.MEAN);
+    const filterMin: Filter = createFilter(FilterType.MIN);
     const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
     expect(input.getInput(filters).length).toBe(3);
     expect(input.getInput(filters)).toStrictEqual([10, 5, 1]);
@@ -102,8 +102,8 @@ describe('Classifier tests', () => {
       new BaseLiveDataVector(new BaseVector([10, 20]), ['x', 'y']),
     ];
     const input = new ClassifierInput(vectors);
-    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
-    const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+    const filterMax: Filter = createFilter(FilterType.MAX);
+    const filterMin: Filter = createFilter(FilterType.MIN);
     const filters: Filters = new Filters(writable([filterMax, filterMin]));
     expect(input.getInput(filters)).toStrictEqual([
       // x value max/min
@@ -120,9 +120,9 @@ describe('Classifier tests', () => {
       new BaseLiveDataVector(new BaseVector([10, 20, 40]), ['x', 'y', 'z']),
     ];
     const classifierInput = new ClassifierInput(vectors);
-    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
-    const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
-    const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+    const filterMax: Filter = createFilter(FilterType.MAX);
+    const filterMean: Filter = createFilter(FilterType.MEAN);
+    const filterMin: Filter = createFilter(FilterType.MIN);
     const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
 
     let iterations = 0;
@@ -177,9 +177,9 @@ describe('Classifier tests', () => {
       new BaseLiveDataVector(new BaseVector([10, 20, 40]), ['x', 'y', 'z']),
     ];
     const classifierInput = new ClassifierInput(vectors);
-    const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
-    const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
-    const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+    const filterMax: Filter = createFilter(FilterType.MAX);
+    const filterMean: Filter = createFilter(FilterType.MEAN);
+    const filterMin: Filter = createFilter(FilterType.MIN);
     const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
 
     let iterations = 0;
@@ -239,9 +239,9 @@ describe('Classifier tests', () => {
         new BaseLiveDataVector(new BaseVector([10, 20, 40]), ['x', 'y', 'z']),
       ];
       const classifierInput = new ClassifierInput(vectors);
-      const filterMax: Filter = FilterTypes.createFilter(FilterType.MAX);
-      const filterMean: Filter = FilterTypes.createFilter(FilterType.MEAN);
-      const filterMin: Filter = FilterTypes.createFilter(FilterType.MIN);
+      const filterMax: Filter = createFilter(FilterType.MAX);
+      const filterMean: Filter = createFilter(FilterType.MEAN);
+      const filterMin: Filter = createFilter(FilterType.MIN);
       const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
 
       let iterations = 0;

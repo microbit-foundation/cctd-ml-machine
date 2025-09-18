@@ -4,13 +4,14 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import FilterTypes, { FilterType } from '../../../lib/domain/FilterTypes';
+  import { FilterType } from '../../../core/entities/filter/Filter';
+  import { createFilter } from '../../../core/entities/filter/FilterUtils';
   import D3Plot from '../../../pages/filter/D3Plot.svelte';
   import { highlightedFilter, anchorElement, showHighlighted } from './FilterList';
 
   $: top = $anchorElement?.getBoundingClientRect().top ?? 0;
   $: left = $anchorElement?.getBoundingClientRect().right ?? 0;
-  $: filter = FilterTypes.createFilter($highlightedFilter);
+  $: filter = createFilter($highlightedFilter);
   $: filterType = $highlightedFilter ?? FilterType.ACC;
 </script>
 

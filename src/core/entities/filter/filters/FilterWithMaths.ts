@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Filter } from '../domain/Filter';
-import { FilterType } from '../domain/FilterTypes';
+import type { Filter, FilterType } from '../Filter';
 
 abstract class FilterWithMaths implements Filter {
   abstract getMinNumberOfSamples(): number;

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 import { writable } from 'svelte/store';
-import { FilterType } from '../../../lib/domain/FilterTypes';
 import { stores } from '../../../lib/stores/Stores';
+import { FilterType } from '../../../core/entities/filter/Filter';
 
 export const toggleFilterCheckmarkClickHandler =
   (filterType: FilterType) => (e: MouseEvent) => {

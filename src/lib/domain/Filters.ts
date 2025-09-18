@@ -10,12 +10,10 @@ import {
   type Writable,
   get,
 } from 'svelte/store';
-import FilterTypes, { FilterType } from './FilterTypes';
 import Logger from '../utils/Logger';
-import type { Filter } from './Filter';
 import FilterGraphLimits from '../utils/FilterLimits';
-import type { Vector } from '../../core/entities/vector/Vector';
-import BaseVector from '../../core/entities/vector/BaseVector';
+import type { Filter, FilterType } from '../../core/entities/filter/Filter';
+import { createFilter } from '../../core/entities/filter/FilterUtils';
 
 class Filters implements Readable<Filter[]> {
   constructor(private filters: Writable<Filter[]>) {}
@@ -50,9 +48,7 @@ class Filters implements Readable<Filter[]> {
   }
 
   public set(filterTypes: FilterType[]) {
-    const newFilters = filterTypes.map(filterType =>
-      FilterTypes.createFilter(filterType),
-    );
+    const newFilters = filterTypes.map(filterType => createFilter(filterType));
     Logger.log('Setting filter ', newFilters);
     this.filters.set(newFilters);
   }
@@ -62,7 +58,7 @@ class Filters implements Readable<Filter[]> {
       // Just a thought: Does it make sense to have duplicate filters?
       throw new Error('Cannot add filter type. Filters already has this type');
     }
-    const filter = FilterTypes.createFilter(filterType);
+    const filter = createFilter(filterType);
     const oldFilterArray = [...get(this.filters)];
     this.filters.set([...oldFilterArray, filter]);
     Logger.log('Filters', 'added filter ', filter);

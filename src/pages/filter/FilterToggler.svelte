@@ -6,8 +6,8 @@
 
 <script lang="ts">
   import Information from '../../components/ui/information/Information.svelte';
-  import { type Filter } from '../../lib/domain/Filter';
-  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
+  import { FilterType, type Filter } from '../../core/entities/filter/Filter';
+  import { createFilter } from '../../core/entities/filter/FilterUtils';
   import { stores } from '../../lib/stores/Stores';
   import D3Plot from './D3Plot.svelte';
 
@@ -18,7 +18,7 @@
   export let fullScreen = false;
 
   const width = () => (fullScreen ? '1100px' : '550px');
-  const filter = FilterTypes.createFilter(filterType);
+  const filter = createFilter(filterType);
   const filterName = filter.getName();
   const filterDescription = filter.getDescription();
 

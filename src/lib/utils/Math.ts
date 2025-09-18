@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import BaseVector from '../domain/BaseVector';
+import BaseVector from '../../core/BaseVector';
 import type { Vector } from '../../core/Vector';
 
 export const getStandardDeviation = (vectors: Vector[]): Vector => {

@@ -12,7 +12,7 @@ import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import { stores } from '../stores/Stores';
 import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import type { Vector } from '../../core/Vector';
-import BaseVector from '../domain/BaseVector';
+import BaseVector from '../../core/BaseVector';
 import { getMean, getStandardDeviation } from '../utils/Math';
 import type { RecordingData } from '../domain/RecordingData';
 

@@ -9,7 +9,7 @@ import { smoothNewValue } from '../utils/graphUtils';
 import { type LiveDataVector } from '../../core/LiveDataVector';
 import BaseLiveDataVector from '../domain/BaseLiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
-import BaseVector from '../domain/BaseVector';
+import BaseVector from '../../core/BaseVector';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.

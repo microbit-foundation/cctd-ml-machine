@@ -14,7 +14,7 @@ import {
 import { SyntheticLiveData } from './SyntheticLiveData ';
 import { stores } from '../../../../lib/stores/Stores';
 import BaseLiveDataVector from '../../../../lib/domain/BaseLiveDataVector';
-import BaseVector from '../../../../lib/domain/BaseVector';
+import BaseVector from '../../../../core/BaseVector';
 
 type LiveDataSynthesizerOptions = {
   intervalSpeed: number;

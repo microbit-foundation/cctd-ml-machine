@@ -5,7 +5,7 @@
  */
 
 import type { Axis } from '../domain/Axis';
-import BaseVector from '../domain/BaseVector';
+import BaseVector from '../../core/BaseVector';
 import { type TrainingData } from '../domain/ModelTrainer';
 import type { Vector } from '../../core/Vector';
 import { type MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';

@@ -17,7 +17,7 @@ import Model, { type ModelData } from './Model';
 import Gesture, { type GestureID } from './gesture/Gesture';
 import type { ClassifierInput } from '../ClassifierInput';
 import Logger from '../../utils/Logger';
-import BaseVector from '../BaseVector';
+import BaseVector from '../../../core/BaseVector';
 import type { Vector } from '../../../core/Vector';
 
 type ClassifierData = {

@@ -14,7 +14,7 @@ import {
 import type { LiveData } from '../../../../lib/domain/stores/LiveData';
 import BaseLiveDataVector from '../../../../lib/domain/BaseLiveDataVector';
 import LiveDataBuffer from '../../../../lib/domain/LiveDataBuffer';
-import BaseVector from '../../../../lib/domain/BaseVector';
+import BaseVector from '../../../../core/BaseVector';
 
 export class SyntheticLiveData implements LiveData<BaseLiveDataVector> {
   private store: Writable<BaseLiveDataVector>;

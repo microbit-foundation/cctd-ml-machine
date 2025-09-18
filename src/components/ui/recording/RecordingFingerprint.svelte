@@ -4,9 +4,9 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+    import BaseVector from '../../../core/BaseVector';
   import type { RecordingData } from '../../../lib/domain/RecordingData';
   import { stores } from '../../../lib/stores/Stores';
-  import BaseVector from '../../../lib/domain/BaseVector';
   import Fingerprint from './Fingerprint.svelte';
 
   export let recording: RecordingData;

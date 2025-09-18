@@ -10,7 +10,7 @@ import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import LayersModelTrainer from '../../lib/mlmodels/LayersModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
 import KNNNonNormalizedModelTrainer from '../../lib/mlmodels/KNNNonNormalizedModelTrainer';
-import BaseVector from '../../lib/domain/BaseVector';
+import BaseVector from '../../core/BaseVector';
 
 describe('ML Model tests', async () => {
   describe('Layers Model', async () => {

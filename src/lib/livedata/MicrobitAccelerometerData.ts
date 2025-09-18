@@ -13,7 +13,7 @@ import LiveDataBuffer from '../domain/LiveDataBuffer';
 import type { LiveDataVector } from '../../core/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import type { Vector } from '../../core/Vector';
-import BaseVector from '../domain/BaseVector';
+import BaseVector from '../../core/BaseVector';
 
 export type MicrobitAccelerometerData = {
   x: number;

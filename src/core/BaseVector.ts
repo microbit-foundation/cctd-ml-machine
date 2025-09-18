@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Vector } from '../../core/Vector';
+import type { Vector } from './Vector';
 
 class BaseVector implements Vector {
   constructor(private values: number[]) {}

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import BaseVector from '../../lib/domain/BaseVector';
+import BaseVector from '../../core/BaseVector';
 import type { TrainingData } from '../../lib/domain/ModelTrainer';
 import type { TrainingDataRepository } from '../../lib/domain/TrainingDataRepository';
 import type { Vector } from '../../core/Vector';

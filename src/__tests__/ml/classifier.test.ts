@@ -21,7 +21,7 @@ import StaticConfiguration from '../../StaticConfiguration';
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import TestGestureRepository from '../mocks/TestGestureRepository';
 import Confidences from '../../lib/domain/stores/Confidences';
-import BaseVector from '../../lib/domain/BaseVector';
+import BaseVector from '../../core/BaseVector';
 import Snackbar from '../../lib/stores/Snackbar';
 
 describe('Classifier tests', () => {

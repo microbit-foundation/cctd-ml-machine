@@ -161,15 +161,15 @@ class Stores implements Readable<StoresType> {
     return this.availableAxes;
   }
 
-  public getSnackbar() {
+  public getSnackbar(): Snackbar {
     return this.snackbar;
   }
 
-  public getNeuralNetworkSettings() {
+  public getNeuralNetworkSettings(): NeuralNetworkSettings {
     return this.neuralNetworkSettings;
   }
 
-  public getKNNModelSettings() {
+  public getKNNModelSettings(): KNNModelSettings {
     return this.knnModelSettings;
   }
 
@@ -189,7 +189,7 @@ class Stores implements Readable<StoresType> {
     return this.devices;
   }
 
-  public getEnableFingerprint() {
+  public getEnableFingerprint(): EnableFingerprint {
     return this.enableFingerprint;
   }
 }

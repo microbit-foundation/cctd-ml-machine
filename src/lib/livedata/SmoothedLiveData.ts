@@ -6,7 +6,7 @@
 import { type Readable, type Subscriber, type Unsubscriber, derived } from 'svelte/store';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
-import { type LiveDataVector } from '../domain/stores/LiveDataVector';
+import { type LiveDataVector } from '../../core/LiveDataVector';
 import BaseLiveDataVector from '../domain/BaseLiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import BaseVector from '../domain/BaseVector';

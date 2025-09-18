@@ -10,7 +10,7 @@ import {
   writable,
 } from 'svelte/store';
 import LiveDataBuffer from '../domain/LiveDataBuffer';
-import type { LiveDataVector } from '../domain/stores/LiveDataVector';
+import type { LiveDataVector } from '../../core/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import type { Vector } from '../../core/Vector';
 import BaseVector from '../domain/BaseVector';

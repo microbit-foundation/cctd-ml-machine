@@ -5,7 +5,7 @@
  */
 
 import BaseVector from './BaseVector';
-import { type LiveDataVector } from './stores/LiveDataVector';
+import { type LiveDataVector } from '../../core/LiveDataVector';
 
 class BaseLiveDataVector implements LiveDataVector {
   public constructor(

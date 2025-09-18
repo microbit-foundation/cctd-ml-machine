@@ -8,9 +8,9 @@
   import { derived } from 'svelte/store';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import type { Axis } from '../../../lib/domain/Axis';
   import FixedNumber from '../../ui/FixedNumber.svelte';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
+  import type { Axis } from '../../../core/model/Axis';
 
   const highlightedAxes = stores.getHighlightedAxes();
   const availableAxes = stores.getAvailableAxes();

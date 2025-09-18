@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { Axis } from './Axis';
+import type { Axis } from '../../core/model/Axis';
 import BaseVector from '../../core/model/vector/BaseVector';
 import Filters from './Filters';
 import type { Vector } from '../../core/model/vector/Vector';

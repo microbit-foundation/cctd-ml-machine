@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Axis } from '../domain/Axis';
+import type { Axis } from '../../core/model/Axis';
 import BaseVector from '../../core/model/vector/BaseVector';
 import { type TrainingData } from '../domain/ModelTrainer';
 import type { Vector } from '../../core/model/vector/Vector';

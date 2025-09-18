@@ -10,7 +10,7 @@
   import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
   import StaticConfiguration from '../../../../StaticConfiguration';
-  import type { Axis } from '../../../../lib/domain/Axis';
+  import type { Axis } from '../../../../core/model/Axis';
   import { stores } from '../../../../lib/stores/Stores';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
   import { knnCurrentPoint } from '../../../../lib/stores/KNNStores';

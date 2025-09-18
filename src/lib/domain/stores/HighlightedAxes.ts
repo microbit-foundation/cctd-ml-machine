@@ -14,7 +14,7 @@ import Classifier from './Classifier';
 import { type Subscriber } from 'svelte/motion';
 import SelectedModel from '../SelectedModel';
 import ModelRegistry from '../ModelRegistry';
-import type { Axis } from '../Axis';
+import type { Axis } from '../../../core/model/Axis';
 import PersistantWritable from '../../repository/PersistantWritable';
 import Logger from '../../utils/Logger';
 import { t } from '../../../i18n';

@@ -1,4 +1,4 @@
-import type { Axis } from '../Axis';
+import type { Axis } from '../../../core/model/Axis';
 import {
   type Writable,
   type Readable,

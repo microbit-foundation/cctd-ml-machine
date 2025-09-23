@@ -8,7 +8,7 @@
  * Static configuration values. These values are not expected to change, while the application is running.
  */
 import { MBSpecs } from 'microbyte';
-import { PinTurnOnState } from './lib/PinTurnOnState';
+import { PinTurnOnState } from './core/entities/PinTurnOnState';
 import { type LayersModelTrainingSettings as NeuralNetworkModelTrainerSettings } from './lib/mlmodels/LayersModelTrainer';
 import { HexOrigin } from './lib/microbit-interfacing/HexOrigin';
 

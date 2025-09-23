@@ -12,30 +12,18 @@ import {
   get,
 } from 'svelte/store';
 import GestureConfidence from './GestureConfidence';
-import { PinTurnOnState } from '../../../PinTurnOnState';
+import { PinTurnOnState } from '../../../../core/entities/PinTurnOnState';
 import BindableValue from '../BindableValue';
 import { MBSpecs } from 'microbyte';
 import type { PersistedGestureData } from './Gestures';
-import type { RecordingData } from '../../RecordingData';
+import type { RecordingData } from '../../../../core/entities/RecordingData';
 import type { Confidence } from '../../../../core/entities/Confidence';
-
-export type GestureID = number;
+import type { GestureOutput, SoundData } from '../../../../core/entities/GestureOutput';
+import type { GestureID } from '../../../../core/entities/Gesture';
 
 export type GestureData = PersistedGestureData & { confidence: Confidence };
 
-export type GestureOutput = {
-  matrix?: boolean[];
-  sound?: SoundData;
-  outputPin?: { pin: MBSpecs.UsableIOPin; pinState: PinTurnOnState; turnOnTime: number };
-};
-
-export type SoundData = {
-  name: string;
-  id: string;
-  path: string;
-};
-
-class Gesture implements Readable<GestureData> {
+class GestureState implements Readable<GestureData> {
   private store: Readable<GestureData>;
 
   constructor(
@@ -171,4 +159,4 @@ class Gesture implements Readable<GestureData> {
   }
 }
 
-export default Gesture;
+export default GestureState;

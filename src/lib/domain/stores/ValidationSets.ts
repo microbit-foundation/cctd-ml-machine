@@ -14,10 +14,10 @@ import {
   type Writable,
 } from 'svelte/store';
 import type { ValidationSet } from '../ValidationSet';
-import type { GestureID } from './gesture/GestureState';
-import type { RecordingData } from '../RecordingData';
+import type { RecordingData } from '../../../core/entities/RecordingData';
 import PersistantWritable from '../../repository/PersistantWritable';
 import type Gestures from './gesture/Gestures';
+import type { GestureID } from '../../../core/entities/Gesture';
 
 class ValidationSets implements Readable<ValidationSet[]> {
   private validationSets: Writable<ValidationSet[]>;

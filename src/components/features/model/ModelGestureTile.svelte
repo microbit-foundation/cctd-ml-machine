@@ -17,12 +17,12 @@
 <script lang="ts">
   // IMPORT AND DEFAULTS
   import { t } from '../../../i18n';
-  import type Gesture from '../../../lib/domain/stores/gesture/GestureState';
+  import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
   import Card from '../../ui/Card.svelte';
   import Information from '../../ui/information/Information.svelte';
 
   // Variables for component
-  export let gesture: Gesture;
+  export let gesture: GestureState;
 
   let sliderValue = $gesture.confidence.requiredConfidence * 100;
   $: {

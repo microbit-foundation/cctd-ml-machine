@@ -7,7 +7,7 @@
 import StaticConfiguration from '../../StaticConfiguration';
 import { getRecordingChartDatasets } from '../ChartDataset';
 import type { Axis } from '../../core/entities/Axis';
-import type { RecordingData } from '../domain/RecordingData';
+import type { RecordingData } from '../../core/entities/RecordingData';
 
 // Print recordings in a hidden iframe: 4 recordings per A4 landscape page.
 export function printRecordings(

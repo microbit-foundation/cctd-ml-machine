@@ -12,15 +12,13 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import Gesture, {
-  type GestureData,
-  type GestureID,
-  type GestureOutput,
-} from './GestureState';
+import GestureState, { type GestureData } from './GestureState';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import type { GestureRepository } from '../../GestureRepository';
-import type { RecordingData } from '../../RecordingData';
+import type { RecordingData } from '../../../../core/entities/RecordingData';
 import Logger from '../../../utils/Logger';
+import type { GestureOutput } from '../../../../core/entities/GestureOutput';
+import type { GestureID } from '../../../../core/entities/Gesture';
 
 export type PersistedGestureData = {
   name: string;
@@ -31,7 +29,7 @@ export type PersistedGestureData = {
 };
 
 class Gestures implements Readable<GestureData[]> {
-  private static subscribableGestures: Writable<Gesture[]>;
+  private static subscribableGestures: Writable<GestureState[]>;
   private repository: GestureRepository;
 
   constructor(repository: GestureRepository) {
@@ -67,16 +65,16 @@ class Gestures implements Readable<GestureData[]> {
     );
   }
 
-  public getGesture(gestureID: number): Gesture {
+  public getGesture(gestureID: number): GestureState {
     return this.repository.getGesture(gestureID);
   }
 
   // TODO: Change to getCurrent() or something else maybe
-  public getGestures(): Gesture[] {
+  public getGestures(): GestureState[] {
     return get(Gestures.subscribableGestures);
   }
 
-  public createGesture(name = ''): Gesture {
+  public createGesture(name = ''): GestureState {
     const newId = Date.now();
     const color =
       StaticConfiguration.gestureColors[
@@ -104,7 +102,7 @@ class Gestures implements Readable<GestureData[]> {
     return get(Gestures.subscribableGestures).length;
   }
 
-  public getBestPrediction(): Readable<Gesture | undefined> {
+  public getBestPrediction(): Readable<GestureState | undefined> {
     return derived(
       get(Gestures.subscribableGestures).map(gest => gest.getConfidence()),
       confidences => {
@@ -127,7 +125,7 @@ class Gestures implements Readable<GestureData[]> {
     );
   }
 
-  private addGestureFromPersistedData(gestureData: PersistedGestureData): Gesture {
+  private addGestureFromPersistedData(gestureData: PersistedGestureData): GestureState {
     Logger.log(
       'Gestures',
       `Adding gesture from persistedData ${gestureData.name} (id:${gestureData.ID})`,
@@ -135,7 +133,7 @@ class Gestures implements Readable<GestureData[]> {
     return this.repository.addGesture(gestureData);
   }
 
-  private gestureToGestureData(gesture: Gesture): GestureData {
+  private gestureToGestureData(gesture: GestureState): GestureData {
     return {
       ID: gesture.getId(),
       name: gesture.getName(),

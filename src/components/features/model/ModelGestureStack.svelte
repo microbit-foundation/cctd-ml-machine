@@ -28,17 +28,17 @@
   import OutputMatrix from './ModelMatrix.svelte';
   import OutputSoundSelector from './ModelSoundSelector.svelte';
   import PinSelector from './ModelPinSelector.svelte';
-  import { PinTurnOnState } from '../../../lib/PinTurnOnState';
+  import { PinTurnOnState } from '../../../core/entities/PinTurnOnState';
   import { MBSpecs } from 'microbyte';
-  import type { SoundData } from '../../../lib/domain/stores/gesture/GestureState';
-  import type Gesture from '../../../lib/domain/stores/gesture/GestureState';
+  import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
+  import type { SoundData } from '../../../core/entities/GestureOutput';
 
   const devices = stores.getDevices();
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component
-  export let gesture: Gesture;
+  export let gesture: GestureState;
   export let onUserInteraction: () => void = () => {
     return;
   };

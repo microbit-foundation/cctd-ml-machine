@@ -20,11 +20,12 @@ import BaseVector from '../../../core/entities/vector/BaseVector';
 import { ClassifierInput } from '../ClassifierInput';
 import { findLargestIndex } from '../../utils/Math';
 import type Gestures from './gesture/Gestures';
-import type Gesture from './gesture/GestureState';
-import type { GestureData, GestureID } from './gesture/GestureState';
+import type GestureState from './gesture/GestureState';
+import type { GestureData } from './gesture/GestureState';
 import type HighlightedAxes from './HighlightedAxes';
 import type { ValidationSetMatrix } from '../../../pages/validation/ValidationPage';
 import Matrix from '../Matrix';
+import type { GestureID } from '../../../core/entities/Gesture';
 
 export type ValidationResult = {
   prediction: number[];
@@ -109,7 +110,7 @@ class ValidationResults implements Readable<ValidationResult> {
     });
   }
 
-  public getEvaluatedGesture(recordingId: number): Gesture | undefined {
+  public getEvaluatedGesture(recordingId: number): GestureState | undefined {
     const x = get(this.store)
       .find(pred => pred.findIndex(rec => rec.recordingId === recordingId) !== -1)
       ?.find(e => e.recordingId === recordingId);

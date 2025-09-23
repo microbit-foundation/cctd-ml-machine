@@ -4,10 +4,10 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type Gesture from '../../lib/domain/stores/gesture/GestureState';
+  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
 
   let isDotHovered = false;
-  export let gesture: Gesture;
+  export let gesture: GestureState;
   export let disableTooltip: boolean = false;
 
   $: name = $gesture.name;

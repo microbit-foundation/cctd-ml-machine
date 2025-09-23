@@ -14,7 +14,7 @@
   import RecordingGraph from '../../features/graphs/recording/RecordingGraph.svelte';
   import RecordingFingerprint from './RecordingFingerprint.svelte';
   import { serializeRecordingToCsvWithoutGestureName } from '../../../lib/utils/CSVUtils';
-  import type { RecordingData } from '../../../lib/domain/RecordingData';
+  import type { RecordingData } from '../../../core/entities/RecordingData';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { tr } from '../../../i18n';
 

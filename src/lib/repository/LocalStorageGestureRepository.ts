@@ -12,7 +12,7 @@ import {
   writable,
 } from 'svelte/store';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
-import Gesture from '../domain/stores/gesture/GestureState';
+import GestureState from '../domain/stores/gesture/GestureState';
 import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
 import type { GestureRepository } from '../domain/GestureRepository';
@@ -20,13 +20,13 @@ import Logger from '../utils/Logger';
 
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
-  private static gestureStore: Writable<Gesture[]>;
+  private static gestureStore: Writable<GestureState[]>;
   constructor(private classifierRepository: LocalStorageClassifierRepository) {
     LocalStorageGestureRepository.gestureStore = writable([]);
     LocalStorageGestureRepository.gestureStore.set(this.getPersistedGestures());
   }
 
-  public getGesture(gestureId: number): Gesture {
+  public getGesture(gestureId: number): GestureState {
     const gestures = get(LocalStorageGestureRepository.gestureStore);
     const gestureIndex = gestures.findIndex(gesture => gesture.getId() === gestureId);
     if (gestureIndex === -1) {
@@ -36,8 +36,8 @@ class LocalStorageGestureRepository implements GestureRepository {
   }
 
   public subscribe(
-    run: Subscriber<Gesture[]>,
-    invalidate?: ((value?: Gesture[] | undefined) => void) | undefined,
+    run: Subscriber<GestureState[]>,
+    invalidate?: ((value?: GestureState[] | undefined) => void) | undefined,
   ): Unsubscriber {
     return LocalStorageGestureRepository.gestureStore.subscribe(run, invalidate);
   }
@@ -47,7 +47,7 @@ class LocalStorageGestureRepository implements GestureRepository {
     this.saveCurrentGestures();
   }
 
-  public addGesture(gestureData: PersistedGestureData): Gesture {
+  public addGesture(gestureData: PersistedGestureData): GestureState {
     const gesture = this.buildGesture(gestureData);
     LocalStorageGestureRepository.gestureStore.update(arr => {
       arr.push(gesture);
@@ -94,7 +94,7 @@ class LocalStorageGestureRepository implements GestureRepository {
     ControlledStorage.set<PersistedGestureData[]>(this.LOCAL_STORAGE_KEY, data);
   }
 
-  private getPersistantValues(gesture: Gesture): PersistedGestureData {
+  private getPersistantValues(gesture: GestureState): PersistedGestureData {
     return {
       ID: gesture.getId(),
       name: gesture.getName(),
@@ -104,7 +104,7 @@ class LocalStorageGestureRepository implements GestureRepository {
     };
   }
 
-  private getPersistedGestures(): Gesture[] {
+  private getPersistedGestures(): GestureState[] {
     const resultFromFetch: PersistedGestureData[] = this.getPersistedData();
     return resultFromFetch.map((persistedData, index) => {
       const gesture = this.buildGesture(persistedData);
@@ -121,7 +121,7 @@ class LocalStorageGestureRepository implements GestureRepository {
     }
     const confidence = this.classifierRepository.getGestureConfidence(get(store).ID);
 
-    return new Gesture(store, confidence, onRecordingsChanged);
+    return new GestureState(store, confidence, onRecordingsChanged);
   }
 
   private getPersistedData(): PersistedGestureData[] {

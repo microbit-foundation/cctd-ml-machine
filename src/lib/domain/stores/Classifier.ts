@@ -12,10 +12,11 @@ import {
 } from 'svelte/store';
 import Filters from '../Filters';
 import Model, { type ModelData } from './Model';
-import Gesture, { type GestureID } from './gesture/GestureState';
 import type { ClassifierInput } from '../ClassifierInput';
 import Logger from '../../utils/Logger';
 import BaseVector from '../../../core/entities/vector/BaseVector';
+import type GestureState from './gesture/GestureState';
+import type { GestureID } from '../../../core/entities/Gesture';
 
 type ClassifierData = {
   model: ModelData;
@@ -25,7 +26,7 @@ class Classifier implements Readable<ClassifierData> {
   constructor(
     private model: Model,
     private filters: Filters,
-    private gestures: Readable<Gesture[]>,
+    private gestures: Readable<GestureState[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ) {
     Logger.log('classifier', 'Initialized classifier');

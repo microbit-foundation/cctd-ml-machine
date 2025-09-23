@@ -5,7 +5,7 @@
  */
 
 import { get } from 'svelte/store';
-import type { RecordingData } from '../domain/RecordingData';
+import type { RecordingData } from '../../core/entities/RecordingData';
 import { stores } from '../stores/Stores';
 import StaticConfiguration from '../../StaticConfiguration';
 import Logger from './Logger';

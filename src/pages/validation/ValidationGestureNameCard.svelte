@@ -7,9 +7,9 @@
 <script lang="ts">
   import GestureCard from '../../components/ui/Card.svelte';
   import GestureDot from '../../components/ui/GestureDot.svelte';
-  import type Gesture from '../../lib/domain/stores/gesture/GestureState';
+  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
 
-  export let gesture: Gesture;
+  export let gesture: GestureState;
 </script>
 
 <GestureCard validationPage small>

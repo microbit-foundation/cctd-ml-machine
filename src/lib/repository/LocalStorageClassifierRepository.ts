@@ -9,7 +9,6 @@ import type { MLModel } from '../../core/entities/classifier/models/MLModel';
 import type { ModelTrainer } from '../domain/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
 import LocalStorageRepositories from './LocalStorageRepositories';
-import Gesture, { type GestureID } from '../domain/stores/gesture/GestureState';
 import Classifier from '../domain/stores/Classifier';
 import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
 import Confidences from '../domain/stores/Confidences';
@@ -18,6 +17,8 @@ import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import { t } from '../../i18n';
 import type { FiltersRepository } from '../domain/FiltersRepository';
 import type Snackbar from '../stores/Snackbar';
+import type GestureState from '../domain/stores/gesture/GestureState';
+import type { GestureID } from '../../core/entities/Gesture';
 
 export type TrainerConsumer = <T extends MLModel>(
   trainer: ModelTrainer<T>,
@@ -38,7 +39,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
   }
 
   public getClassifier(): Classifier {
-    const gestureRepository: Readable<Gesture[]> =
+    const gestureRepository: Readable<GestureState[]> =
       LocalStorageRepositories.getInstance().getGestureRepository();
     // TODO: We should cache this object, as it can function as a singleton. This would improve performance
     const classifier = this.classifierFactory.buildClassifier(

@@ -9,8 +9,8 @@
 
 import { writable } from 'svelte/store';
 import { locale } from 'svelte-i18n';
-import type { RecordingData } from '../../lib/domain/RecordingData';
-import Gesture from '../../lib/domain/stores/gesture/GestureState';
+import type { RecordingData } from '../../core/entities/RecordingData';
+import GestureState from '../../lib/domain/stores/gesture/GestureState';
 import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
 import type GestureConfidence from '../../lib/domain/stores/gesture/GestureConfidence';
 import {
@@ -41,7 +41,7 @@ describe('CSV Test', () => {
       name: 'Test;Gesture',
     } as PersistedGestureData);
     const confidence = writable({}) as unknown as GestureConfidence;
-    const gesture: Gesture = new Gesture(data, confidence, () => void 0);
+    const gesture: GestureState = new GestureState(data, confidence, () => void 0);
     const result = serializeGestureRecordingsToCSV([gesture]);
     expect(result).toBe(
       'gesture;sample;x;y;z\nTest\\;Gesture;0;1;2;3\nTest\\;Gesture;1;4;5;6\nTest\\;Gesture;2;7;8;9',
@@ -82,8 +82,8 @@ describe('CSV Test', () => {
       name: 'Gesture2',
     } as PersistedGestureData);
     const confidence = writable({}) as unknown as GestureConfidence;
-    const gesture1: Gesture = new Gesture(data1, confidence, () => void 0);
-    const gesture2: Gesture = new Gesture(data2, confidence, () => void 0);
+    const gesture1: GestureState = new GestureState(data1, confidence, () => void 0);
+    const gesture2: GestureState = new GestureState(data2, confidence, () => void 0);
     const result = serializeGestureRecordingsToCSV([gesture1, gesture2]);
     expect(result).toBe(
       'gesture;sample;x;y;z\n' +
@@ -133,13 +133,13 @@ describe('CSV Test', () => {
       ],
     });
 
-    const createTestGestureWithDecimals = (name: string): Gesture => {
+    const createTestGestureWithDecimals = (name: string): GestureState => {
       const data = writable({
         recordings: [createTestRecordingWithDecimals()],
         name,
       } as PersistedGestureData);
       const confidence = writable({}) as unknown as GestureConfidence;
-      return new Gesture(data, confidence, () => void 0);
+      return new GestureState(data, confidence, () => void 0);
     };
 
     test('English locale uses period as decimal separator', () => {

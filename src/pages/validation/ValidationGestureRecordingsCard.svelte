@@ -9,10 +9,10 @@
   import Card from '../../components/ui/Card.svelte';
   import { stores } from '../../lib/stores/Stores';
   import Recording from '../../components/ui/recording/Recording.svelte';
-  import type Gesture from '../../lib/domain/stores/gesture/GestureState';
-  import type { GestureID } from '../../lib/domain/stores/gesture/GestureState';
+  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
+  import type { GestureID } from '../../core/entities/Gesture';
 
-  export let gesture: Gesture;
+  export let gesture: GestureState;
 
   const validationSets = stores.getValidationSets();
   const gestureValidationSet = stores.getValidationSets().getForGesture(gesture.getId());

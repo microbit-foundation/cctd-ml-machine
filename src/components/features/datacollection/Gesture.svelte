@@ -20,17 +20,17 @@
   import GestureCard from '../../ui/Card.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../lib/stores/Stores';
-  import type { RecordingData } from '../../../lib/domain/RecordingData';
+  import type { RecordingData } from '../../../core/entities/RecordingData';
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
   import IconButton from '../../ui/buttons/IconButton.svelte';
   import { Feature, getFeature, hasFeature } from '../../../lib/FeatureToggles';
   import { printRecordings } from '../../../lib/utils/printRecordings';
-  import type Gesture from '../../../lib/domain/stores/gesture/GestureState';
+  import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
 
   export let onNoMicrobitSelect: () => void;
-  export let gesture: Gesture;
+  export let gesture: GestureState;
   const devices = stores.getDevices();
   const gestures = stores.getGestures();
 

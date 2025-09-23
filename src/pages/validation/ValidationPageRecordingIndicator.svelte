@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import MediaQuery from '../../components/layout/MediaQuery.svelte';
-  import type { GestureID } from '../../lib/domain/stores/gesture/GestureState';
+  import type { GestureID } from '../../core/entities/Gesture';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
   import { stores } from '../../lib/stores/Stores';
 

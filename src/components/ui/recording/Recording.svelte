@@ -9,14 +9,14 @@
   import { stores } from '../../../lib/stores/Stores';
   import GestureDot from './../GestureDot.svelte';
   import RecordingGraph from '../../features/graphs/recording/RecordingGraph.svelte';
-  import type { RecordingData } from '../../../lib/domain/RecordingData';
+  import type { RecordingData } from '../../../core/entities/RecordingData';
   import IconButton from '../buttons/IconButton.svelte';
   import { serializeRecordingToCsvWithoutGestureName } from '../../../lib/utils/CSVUtils';
   import RecordingFingerprint from './RecordingFingerprint.svelte';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { tr } from '../../../i18n';
   import RecordingDialog from './RecordingDialog.svelte';
-  import type { GestureID } from '../../../lib/domain/stores/gesture/GestureState';
+  import type { GestureID } from '../../../core/entities/Gesture';
 
   // get recording from mother prop
   export let recording: RecordingData;

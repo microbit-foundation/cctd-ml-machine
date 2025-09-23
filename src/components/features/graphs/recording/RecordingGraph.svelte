@@ -21,7 +21,7 @@
     getRecordingChartDatasets,
     type ChartDataset,
   } from '../../../../lib/ChartDataset';
-  import type { RecordingData } from '../../../../lib/domain/RecordingData';
+  import type { RecordingData } from '../../../../core/entities/RecordingData';
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import { Feature, hasFeature } from '../../../../lib/FeatureToggles';

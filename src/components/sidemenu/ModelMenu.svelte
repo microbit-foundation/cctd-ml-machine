@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { t } from '../../i18n';
-  import type Gesture from '../../lib/domain/stores/gesture/GestureState';
+  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
   import { stores } from '../../lib/stores/Stores';
 
   const gestures = stores.getGestures();
@@ -21,7 +21,7 @@
 
   const getPredictionLabel = (
     isInputReady: boolean,
-    bestPrediction: Gesture | undefined,
+    bestPrediction: GestureState | undefined,
   ) => {
     if (!bestPrediction) {
       return $t('menu.model.noModel');

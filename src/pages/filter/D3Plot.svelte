@@ -10,7 +10,7 @@
   import * as d3 from 'd3';
   import FilterGraphLimits from '../../lib/utils/FilterLimits';
   import StaticConfiguration from '../../StaticConfiguration';
-  import type { RecordingData } from '../../lib/domain/RecordingData';
+  import type { RecordingData } from '../../core/entities/RecordingData';
   import { stores } from '../../lib/stores/Stores';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
   import type { FilterType } from '../../core/entities/filter/Filter';

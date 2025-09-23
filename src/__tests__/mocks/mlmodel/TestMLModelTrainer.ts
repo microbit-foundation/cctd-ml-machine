@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { ModelInfo } from '../../../lib/domain/ModelRegistry';
-import ModelRegistry from '../../../lib/domain/ModelRegistry';
-import type { ModelTrainer } from '../../../lib/domain/ModelTrainer';
+import type { ModelInfo } from '../../../core/entities/classifier/models/ModelRegistry';
+import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
+import type { ModelTrainer } from '../../../core/entities/classifier/models/ModelTrainer';
 import type { TrainingDataRepository } from '../../../lib/domain/TrainingDataRepository';
 import TestMLModel from './TestMLModel';
 

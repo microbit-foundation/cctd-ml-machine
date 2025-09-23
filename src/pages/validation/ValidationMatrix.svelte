@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-  import Matrix from '../../lib/domain/Matrix';
+  import Matrix from '../../core/entities/Matrix';
   import { stores } from '../../lib/stores/Stores';
   import type { ValidationSetMatrix } from './ValidationPage';
   import { t } from '../../i18n';

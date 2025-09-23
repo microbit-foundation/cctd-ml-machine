@@ -24,7 +24,7 @@ import type GestureState from './gesture/GestureState';
 import type { GestureData } from './gesture/GestureState';
 import type HighlightedAxes from './HighlightedAxes';
 import type { ValidationSetMatrix } from '../../../pages/validation/ValidationPage';
-import Matrix from '../Matrix';
+import Matrix from '../../../core/entities/Matrix';
 import type { GestureID } from '../../../core/entities/Gesture';
 
 export type ValidationResult = {

@@ -5,7 +5,7 @@
  */
 
 import { derived } from 'svelte/store';
-import Matrix from '../../lib/domain/Matrix';
+import Matrix from '../../core/entities/Matrix';
 import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
 import type { ValidationResult } from '../../lib/domain/stores/ValidationResults';
 import { stores } from '../../lib/stores/Stores';

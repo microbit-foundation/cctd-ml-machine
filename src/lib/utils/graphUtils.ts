@@ -6,7 +6,7 @@
 
 import type { Axis } from '../../core/entities/Axis';
 import BaseVector from '../../core/entities/vector/BaseVector';
-import { type TrainingData } from '../domain/ModelTrainer';
+import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import type { Vector } from '../../core/entities/vector/Vector';
 import { type MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 

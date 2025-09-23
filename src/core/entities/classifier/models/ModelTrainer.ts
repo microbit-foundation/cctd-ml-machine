@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { MLModel } from '../../core/entities/classifier/models/MLModel';
+import type { MLModel } from './MLModel';
 import type { ModelInfo } from './ModelRegistry';
-import type { TrainingDataRepository } from './TrainingDataRepository';
-import type { Vector } from '../../core/entities/vector/Vector';
+import type { TrainingDataRepository } from '../../../../lib/domain/TrainingDataRepository';
+import type { Vector } from '../../vector/Vector';
 
 export type TrainingData = {
   classes: {

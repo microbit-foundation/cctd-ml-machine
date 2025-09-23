@@ -6,12 +6,12 @@
 import { get, writable } from 'svelte/store';
 import KNNNonNormalizedModelTrainer from '../../lib/mlmodels/KNNNonNormalizedModelTrainer';
 import { stores } from '../../lib/stores/Stores';
-import { type ModelInfo } from '../../lib/domain/ModelRegistry';
+import { type ModelInfo } from '../../core/entities/classifier/models/ModelRegistry';
 import LayersModelTrainer, {
   type LossTrainingIteration,
 } from '../../lib/mlmodels/LayersModelTrainer';
 import KNNModelTrainer from '../../lib/mlmodels/KNNModelTrainer';
-import type { ModelTrainer } from '../../lib/domain/ModelTrainer';
+import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
 import type { MLModel } from '../../core/entities/classifier/models/MLModel';
 
 export const loss = writable<LossTrainingIteration[]>([]);

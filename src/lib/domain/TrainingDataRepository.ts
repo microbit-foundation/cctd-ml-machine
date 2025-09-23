@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { type TrainingData } from './ModelTrainer';
+import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import type { Vector } from '../../core/entities/vector/Vector';
 
 export interface TrainingDataRepository {

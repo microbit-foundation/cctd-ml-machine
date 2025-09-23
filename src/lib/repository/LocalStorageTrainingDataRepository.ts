@@ -6,7 +6,7 @@
 
 import { get } from 'svelte/store';
 import Filters from '../domain/Filters';
-import { type TrainingData } from '../domain/ModelTrainer';
+import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import type { Repositories } from '../domain/Repositories';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import { stores } from '../stores/Stores';

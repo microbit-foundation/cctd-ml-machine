@@ -6,7 +6,7 @@
 import { type Readable, type Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
 import type { MLModel } from '../../core/entities/classifier/models/MLModel';
-import type { ModelTrainer } from '../domain/ModelTrainer';
+import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
 import LocalStorageRepositories from './LocalStorageRepositories';
 import Classifier from '../domain/stores/Classifier';

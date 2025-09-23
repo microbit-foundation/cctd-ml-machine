@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { ModelInfo } from '../domain/ModelRegistry';
-import ModelRegistry from '../domain/ModelRegistry';
-import type { ModelTrainer } from '../domain/ModelTrainer';
+import type { ModelInfo } from '../../core/entities/classifier/models/ModelRegistry';
+import ModelRegistry from '../../core/entities/classifier/models/ModelRegistry';
+import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import LayersMLModel from './LayersMLModel';
 import * as tf from '@tensorflow/tfjs';

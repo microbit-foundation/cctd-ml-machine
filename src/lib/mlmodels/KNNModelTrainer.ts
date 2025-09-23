@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 import KNNMLModel from './KNNMLModel';
-import type { ModelTrainer } from '../domain/ModelTrainer';
+import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
 import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import { knnTrainingDataPoints } from '../stores/KNNStores';
-import type { ModelInfo } from '../domain/ModelRegistry';
-import ModelRegistry from '../domain/ModelRegistry';
+import type { ModelInfo } from '../../core/entities/classifier/models/ModelRegistry';
+import ModelRegistry from '../../core/entities/classifier/models/ModelRegistry';
 
 /**
  * Trains a K-Nearest Neighbour model

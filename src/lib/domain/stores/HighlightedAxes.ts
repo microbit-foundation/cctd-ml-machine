@@ -13,7 +13,7 @@ import {
 import Classifier from './Classifier';
 import { type Subscriber } from 'svelte/motion';
 import SelectedModel from '../SelectedModel';
-import ModelRegistry from '../ModelRegistry';
+import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
 import type { Axis } from '../../../core/entities/Axis';
 import PersistantWritable from '../../repository/PersistantWritable';
 import Logger from '../../utils/Logger';

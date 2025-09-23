@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import KnnModelTrainingPageView from './KnnModelTrainingPageView.svelte';
-  import ModelRegistry from '../../lib/domain/ModelRegistry';
+  import ModelRegistry from '../../core/entities/classifier/models/ModelRegistry';
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import { stores } from '../../lib/stores/Stores';

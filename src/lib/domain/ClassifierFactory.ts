@@ -6,7 +6,7 @@
 import { type Readable, type Writable, get, writable } from 'svelte/store';
 import Classifier from './stores/Classifier';
 import Filters from './Filters';
-import { type TrainingData } from './ModelTrainer';
+import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import { type TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
 import Model from './stores/Model';
 import type { MLModel } from '../../core/entities/classifier/models/MLModel';

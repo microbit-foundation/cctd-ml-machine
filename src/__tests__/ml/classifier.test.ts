@@ -8,7 +8,7 @@
  */
 
 import { get, writable } from 'svelte/store';
-import BaseLiveDataVector from '../../lib/domain/BaseLiveDataVector';
+import BaseLiveDataVector from '../../core/entities/vector/BaseLiveDataVector';
 import { ClassifierInput } from '../../lib/domain/ClassifierInput';
 import Filters from '../../lib/domain/Filters';
 import { stores } from '../../lib/stores/Stores';

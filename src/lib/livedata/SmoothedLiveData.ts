@@ -7,7 +7,7 @@ import { type Readable, type Subscriber, type Unsubscriber, derived } from 'svel
 import LiveDataBuffer from '../domain/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
 import { type LiveDataVector } from '../../core/entities/vector/LiveDataVector';
-import BaseLiveDataVector from '../domain/BaseLiveDataVector';
+import BaseLiveDataVector from '../../core/entities/vector/BaseLiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import BaseVector from '../../core/entities/vector/BaseVector';
 

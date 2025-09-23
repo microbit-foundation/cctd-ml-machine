@@ -147,11 +147,7 @@ class GestureState implements Readable<GestureData> {
         recordings: persistantData.recordings,
         output: persistantData.output,
         color: persistantData.color,
-        confidence: {
-          currentConfidence: confidenceData.confidence,
-          requiredConfidence: confidenceData.requiredConfidence,
-          isConfident: confidenceData.isConfident,
-        },
+        confidence: confidenceData,
       };
 
       return derivedData;

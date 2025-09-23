@@ -12,17 +12,12 @@ import {
   get,
   writable,
 } from 'svelte/store';
+import type { Confidence } from '../../../../core/entities/Confidence';
 
-type ConfidenceData = {
-  confidence: number;
-  requiredConfidence: number;
-  isConfident: boolean;
-};
-
-class GestureConfidence implements Readable<ConfidenceData> {
+class GestureConfidence implements Readable<Confidence> {
   private requiredConfidence: Writable<number>;
 
-  private store: Readable<ConfidenceData>;
+  private store: Readable<Confidence>;
 
   constructor(
     requiredConfidence: number,
@@ -34,8 +29,8 @@ class GestureConfidence implements Readable<ConfidenceData> {
   }
 
   public subscribe(
-    run: Subscriber<ConfidenceData>,
-    invalidate?: ((value?: ConfidenceData | undefined) => void) | undefined,
+    run: Subscriber<Confidence>,
+    invalidate?: ((value?: Confidence | undefined) => void) | undefined,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }
@@ -61,10 +56,10 @@ class GestureConfidence implements Readable<ConfidenceData> {
     return this.getCurrentConfidence() > this.getRequiredConfidence();
   }
 
-  private deriveStore(): Readable<ConfidenceData> {
+  private deriveStore(): Readable<Confidence> {
     return derived([this.confidence, this.requiredConfidence], stores => {
       return {
-        confidence: stores[0],
+        currentConfidence: stores[0],
         requiredConfidence: stores[1],
         isConfident: stores[0] > stores[1],
       };

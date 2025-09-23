@@ -5,7 +5,7 @@
  */
 
 import type { RecordingData } from './RecordingData';
-import type { GestureID } from './stores/gesture/Gesture';
+import type { GestureID } from './stores/gesture/GestureState';
 
 export interface ValidationSet {
   gestureId: GestureID;

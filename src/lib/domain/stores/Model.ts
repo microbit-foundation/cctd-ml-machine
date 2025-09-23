@@ -13,7 +13,7 @@ import {
   writable,
 } from 'svelte/store';
 import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
-import type { MLModel } from '../MLModel';
+import type { MLModel } from '../../../core/entities/classifier/models/MLModel';
 import type { ModelTrainer } from '../ModelTrainer';
 import type { Vector } from '../../../core/entities/vector/Vector';
 import CookieManager from '../../CookieManager';

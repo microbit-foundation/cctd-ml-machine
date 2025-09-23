@@ -6,7 +6,6 @@
 
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import type { GestureID } from '../../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../../lib/stores/Stores';
   import GestureDot from './../GestureDot.svelte';
   import RecordingGraph from '../../features/graphs/recording/RecordingGraph.svelte';
@@ -17,6 +16,7 @@
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { tr } from '../../../i18n';
   import RecordingDialog from './RecordingDialog.svelte';
+  import type { GestureID } from '../../../lib/domain/stores/gesture/GestureState';
 
   // get recording from mother prop
   export let recording: RecordingData;

@@ -12,7 +12,7 @@ import {
 import { t } from '../../i18n';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
-import Gesture from '../domain/stores/gesture/Gesture';
+import Gesture from '../domain/stores/gesture/GestureState';
 import { stores } from './Stores';
 
 let text: (key: string, vars?: object) => string;

@@ -13,7 +13,7 @@ import {
   type Unsubscriber,
   type Writable,
 } from 'svelte/store';
-import type { GestureID } from './gesture/Gesture';
+import type { GestureID } from './gesture/GestureState';
 import type { RecordingData } from '../RecordingData';
 import { startRecording as _startRecording } from '../../utils/Recording';
 import Logger from '../../utils/Logger';

@@ -12,7 +12,7 @@ import {
   writable,
 } from 'svelte/store';
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
-import Gesture from '../domain/stores/gesture/Gesture';
+import Gesture from '../domain/stores/gesture/GestureState';
 import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
 import type { GestureRepository } from '../domain/GestureRepository';

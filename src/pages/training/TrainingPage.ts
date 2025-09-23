@@ -12,7 +12,7 @@ import LayersModelTrainer, {
 } from '../../lib/mlmodels/LayersModelTrainer';
 import KNNModelTrainer from '../../lib/mlmodels/KNNModelTrainer';
 import type { ModelTrainer } from '../../lib/domain/ModelTrainer';
-import type { MLModel } from '../../lib/domain/MLModel';
+import type { MLModel } from '../../core/entities/classifier/models/MLModel';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 

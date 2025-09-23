@@ -5,11 +5,11 @@
  */
 import { type Readable, type Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
-import type { MLModel } from '../domain/MLModel';
+import type { MLModel } from '../../core/entities/classifier/models/MLModel';
 import type { ModelTrainer } from '../domain/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
 import LocalStorageRepositories from './LocalStorageRepositories';
-import Gesture, { type GestureID } from '../domain/stores/gesture/Gesture';
+import Gesture, { type GestureID } from '../domain/stores/gesture/GestureState';
 import Classifier from '../domain/stores/Classifier';
 import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
 import Confidences from '../domain/stores/Confidences';

@@ -7,10 +7,10 @@
 <script lang="ts">
   import { derived } from 'svelte/store';
   import Card from '../../components/ui/Card.svelte';
-  import Gesture from '../../lib/domain/stores/gesture/Gesture';
-  import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../lib/stores/Stores';
   import Recording from '../../components/ui/recording/Recording.svelte';
+  import type Gesture from '../../lib/domain/stores/gesture/GestureState';
+  import type { GestureID } from '../../lib/domain/stores/gesture/GestureState';
 
   export let gesture: Gesture;
 

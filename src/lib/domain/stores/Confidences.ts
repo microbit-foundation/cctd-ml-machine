@@ -11,7 +11,7 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { type GestureID } from './gesture/Gesture';
+import { type GestureID } from './gesture/GestureState';
 
 type GestureConfidenceMap = Map<GestureID, number>;
 

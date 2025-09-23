@@ -17,7 +17,7 @@
 <script lang="ts">
   // IMPORT AND DEFAULTS
   import { t } from '../../../i18n';
-  import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
+  import type Gesture from '../../../lib/domain/stores/gesture/GestureState';
   import Card from '../../ui/Card.svelte';
   import Information from '../../ui/information/Information.svelte';
 

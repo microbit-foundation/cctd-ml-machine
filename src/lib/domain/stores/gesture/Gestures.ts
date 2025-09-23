@@ -12,7 +12,11 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import Gesture, { type GestureData, type GestureID, type GestureOutput } from './Gesture';
+import Gesture, {
+  type GestureData,
+  type GestureID,
+  type GestureOutput,
+} from './GestureState';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import type { GestureRepository } from '../../GestureRepository';
 import type { RecordingData } from '../../RecordingData';

@@ -6,7 +6,7 @@
 
 import { get } from 'svelte/store';
 import type { RecordingData } from '../domain/RecordingData';
-import type Gesture from '../domain/stores/gesture/Gesture';
+import type Gesture from '../domain/stores/gesture/GestureState';
 import { locale } from 'svelte-i18n';
 
 /**

@@ -10,7 +10,7 @@
 import { writable } from 'svelte/store';
 import { locale } from 'svelte-i18n';
 import type { RecordingData } from '../../lib/domain/RecordingData';
-import Gesture from '../../lib/domain/stores/gesture/Gesture';
+import Gesture from '../../lib/domain/stores/gesture/GestureState';
 import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
 import type GestureConfidence from '../../lib/domain/stores/gesture/GestureConfidence';
 import {

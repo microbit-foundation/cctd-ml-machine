@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { LayersModel } from '@tensorflow/tfjs';
-import { type MLModel } from '../domain/MLModel';
+import { type MLModel } from '../../core/entities/classifier/models/MLModel';
 import * as tf from '@tensorflow/tfjs';
 import type { Vector } from '../../core/entities/vector/Vector';
 

@@ -12,7 +12,7 @@ import {
   get,
 } from 'svelte/store';
 import type { GestureRepository } from '../../lib/domain/GestureRepository';
-import Gesture from '../../lib/domain/stores/gesture/Gesture';
+import Gesture from '../../lib/domain/stores/gesture/GestureState';
 import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
 import GestureConfidence from '../../lib/domain/stores/gesture/GestureConfidence';
 

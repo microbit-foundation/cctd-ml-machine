@@ -9,13 +9,13 @@
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
   import FilterGraphLimits from '../../lib/utils/FilterLimits';
-  import { type GestureData } from '../../lib/domain/stores/gesture/Gesture';
   import StaticConfiguration from '../../StaticConfiguration';
   import type { RecordingData } from '../../lib/domain/RecordingData';
   import { stores } from '../../lib/stores/Stores';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
   import type { FilterType } from '../../core/entities/filter/Filter';
   import { createFilter } from '../../core/entities/filter/FilterUtils';
+  import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
 
   const devices = stores.getDevices();
 

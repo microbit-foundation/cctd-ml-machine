@@ -12,7 +12,7 @@ import {
 } from 'svelte/store';
 import Filters from '../Filters';
 import Model, { type ModelData } from './Model';
-import Gesture, { type GestureID } from './gesture/Gesture';
+import Gesture, { type GestureID } from './gesture/GestureState';
 import type { ClassifierInput } from '../ClassifierInput';
 import Logger from '../../utils/Logger';
 import BaseVector from '../../../core/entities/vector/BaseVector';

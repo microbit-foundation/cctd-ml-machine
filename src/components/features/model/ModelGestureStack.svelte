@@ -16,8 +16,6 @@
 
 <script lang="ts">
   import { t } from '../../../i18n';
-  import type { SoundData } from '../../../lib/domain/stores/gesture/Gesture';
-  import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
@@ -32,6 +30,8 @@
   import PinSelector from './ModelPinSelector.svelte';
   import { PinTurnOnState } from '../../../lib/PinTurnOnState';
   import { MBSpecs } from 'microbyte';
+  import type { SoundData } from '../../../lib/domain/stores/gesture/GestureState';
+  import type Gesture from '../../../lib/domain/stores/gesture/GestureState';
 
   const devices = stores.getDevices();
   const gestures = stores.getGestures();

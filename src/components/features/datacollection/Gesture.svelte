@@ -19,7 +19,6 @@
   import ImageSkeleton from '../../ui/skeletonloading/ImageSkeleton.svelte';
   import GestureCard from '../../ui/Card.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import Gesture from '../../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../../lib/stores/Stores';
   import type { RecordingData } from '../../../lib/domain/RecordingData';
   import { startRecording } from '../../../lib/utils/Recording';
@@ -28,6 +27,7 @@
   import IconButton from '../../ui/buttons/IconButton.svelte';
   import { Feature, getFeature, hasFeature } from '../../../lib/FeatureToggles';
   import { printRecordings } from '../../../lib/utils/printRecordings';
+  import type Gesture from '../../../lib/domain/stores/gesture/GestureState';
 
   export let onNoMicrobitSelect: () => void;
   export let gesture: Gesture;

@@ -6,7 +6,6 @@
 
 <script lang="ts">
   import GestureCard from '../../components/ui/Card.svelte';
-  import type Gesture from '../../lib/domain/stores/gesture/Gesture';
   import {
     buttonPressed,
     chosenGesture,
@@ -18,6 +17,7 @@
   import { get } from 'svelte/store';
   import Logger from '../../lib/utils/Logger';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
+  import type Gesture from '../../lib/domain/stores/gesture/GestureState';
 
   export let gesture: Gesture;
   export let onNoMicrobitSelect: () => void;

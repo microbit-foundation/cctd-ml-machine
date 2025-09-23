@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { MLModel } from '../../../lib/domain/MLModel';
+import type { MLModel } from '../../../core/entities/classifier/models/MLModel';
 import type { Vector } from '../../../core/entities/vector/Vector';
 
 class TestMLModel implements MLModel {

@@ -17,14 +17,9 @@ import BindableValue from '../BindableValue';
 import { MBSpecs } from 'microbyte';
 import type { PersistedGestureData } from './Gestures';
 import type { RecordingData } from '../../RecordingData';
+import type { Confidence } from '../../../../core/entities/Confidence';
 
 export type GestureID = number;
-
-export type Confidence = {
-  currentConfidence: number;
-  requiredConfidence: number;
-  isConfident: boolean;
-};
 
 export type GestureData = PersistedGestureData & { confidence: Confidence };
 

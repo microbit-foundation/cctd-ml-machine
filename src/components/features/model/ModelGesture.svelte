@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
+  import type Gesture from '../../../lib/domain/stores/gesture/GestureState';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import OutputGestureStack from './ModelGestureStack.svelte';
   import OutputGestureTile from './ModelGestureTile.svelte';

@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { type MLModel } from '../domain/MLModel';
+import { type MLModel } from '../../core/entities/classifier/models/MLModel';
 import Logger from '../utils/Logger';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import { distanceBetween } from '../utils/graphUtils';

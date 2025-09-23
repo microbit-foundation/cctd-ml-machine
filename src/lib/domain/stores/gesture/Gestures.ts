@@ -117,7 +117,9 @@ class Gestures implements Readable<GestureData[]> {
         });
 
         sorted.sort((confidence1, confidence2) => {
-          return confidence2.value.currentConfidence - confidence1.value.currentConfidence;
+          return (
+            confidence2.value.currentConfidence - confidence1.value.currentConfidence
+          );
         });
 
         return get(Gestures.subscribableGestures)[sorted[0].index];

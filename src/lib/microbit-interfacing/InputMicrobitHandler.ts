@@ -11,7 +11,7 @@ import { get } from 'svelte/store';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
 } from '../livedata/MicrobitAccelerometerData';
-import LiveDataBuffer from '../domain/LiveDataBuffer';
+import LiveDataBuffer from '../../core/LiveDataBuffer';
 import StaticConfiguration from '../../StaticConfiguration';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';

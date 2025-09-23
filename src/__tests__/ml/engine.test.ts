@@ -8,7 +8,7 @@
  */
 
 import { get } from 'svelte/store';
-import LiveDataBuffer from '../../lib/domain/LiveDataBuffer';
+import LiveDataBuffer from '../../core/LiveDataBuffer';
 import MicrobitAccelerometerLiveData from '../../lib/livedata/MicrobitAccelerometerData';
 import { stores } from '../../lib/stores/Stores';
 

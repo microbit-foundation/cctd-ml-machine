@@ -12,7 +12,7 @@ import {
   writable,
 } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
-import { type TimestampedData } from '../domain/LiveDataBuffer';
+import { type TimestampedData } from '../../core/LiveDataBuffer';
 import Classifier from '../domain/stores/Classifier';
 import { type LiveDataVector } from '../../core/entities/vector/LiveDataVector';
 import type { Engine, EngineData } from '../domain/stores/Engine';

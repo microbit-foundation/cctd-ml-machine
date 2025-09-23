@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import LiveDataBuffer from '../../lib/domain/LiveDataBuffer';
+import LiveDataBuffer from '../../core/LiveDataBuffer';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
 } from '../../lib/livedata/MicrobitAccelerometerData';

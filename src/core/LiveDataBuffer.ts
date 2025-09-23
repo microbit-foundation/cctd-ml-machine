@@ -1,4 +1,4 @@
-import { type LiveDataVector } from '../../core/entities/vector/LiveDataVector';
+import { type LiveDataVector } from './entities/vector/LiveDataVector';
 
 /**
  * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors

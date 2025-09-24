@@ -3,19 +3,20 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import { knnTrainingDataPoints } from '../../../../lib/stores/KNNStores';
+import type { TrainingDataRepository } from '../../../repository/TrainingDataRepository';
 import KNNMLModel from './KNNMLModel';
-import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
-import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
-import { knnTrainingDataPoints } from '../stores/KNNStores';
-import type { ModelInfo } from '../../core/entities/classifier/models/ModelRegistry';
-import ModelRegistry from '../../core/entities/classifier/models/ModelRegistry';
+import type { ModelInfo } from './ModelRegistry';
+import ModelRegistry from './ModelRegistry';
+import type { ModelTrainer } from './ModelTrainer';
+
 
 /**
  * Trains a K-Nearest Neighbour model
  */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
-  constructor(private k: number) {}
+  constructor(private k: number) { }
 
   public getModelInfo(): ModelInfo {
     return ModelRegistry.KNN;

@@ -14,7 +14,6 @@ import Filters from '../../lib/domain/Filters';
 import { stores } from '../../lib/stores/Stores';
 import TestMLModelTrainer from '../mocks/mlmodel/TestMLModelTrainer';
 import ClassifierFactory from '../../lib/domain/ClassifierFactory';
-import LayersModelTrainer from '../../lib/mlmodels/LayersModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import TestGestureRepository from '../mocks/TestGestureRepository';
@@ -23,6 +22,7 @@ import BaseVector from '../../core/entities/vector/BaseVector';
 import Snackbar from '../../lib/stores/Snackbar';
 import { FilterType, type Filter } from '../../core/entities/filter/Filter';
 import { createFilter } from '../../core/entities/filter/FilterUtils';
+import LayersModelTrainer from '../../core/entities/classifier/models/LayersModelTrainer';
 
 describe('Classifier tests', () => {
   test('Changing matrix does not mark model as untrained', async () => {

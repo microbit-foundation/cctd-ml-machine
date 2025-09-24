@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 import { LayersModel } from '@tensorflow/tfjs';
-import { type MLModel } from '../../core/entities/classifier/models/MLModel';
 import * as tf from '@tensorflow/tfjs';
-import type { Vector } from '../../core/entities/vector/Vector';
+import type { Vector } from '../../vector/Vector';
+import type { MLModel } from './MLModel';
 
 class LayersMLModel implements MLModel {
   constructor(private neuralNet: LayersModel) {}

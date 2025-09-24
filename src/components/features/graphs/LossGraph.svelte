@@ -21,7 +21,7 @@
   import { onMount } from 'svelte';
   import { type Readable } from 'svelte/store';
   import { tr } from '../../../i18n';
-  import type { LossTrainingIteration } from '../../../lib/mlmodels/LayersModelTrainer';
+    import type { LossTrainingIteration } from '../../../core/entities/classifier/models/LayersModelTrainer';
 
   export let loss: Readable<LossTrainingIteration[]>;
   export let maxX: number | undefined = undefined;

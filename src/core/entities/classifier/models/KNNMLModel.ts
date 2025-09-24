@@ -3,12 +3,14 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { type MLModel } from '../../core/entities/classifier/models/MLModel';
-import Logger from '../utils/Logger';
-import type { LabelledPoint } from './KNNNonNormalizedMLModel';
-import { distanceBetween } from '../utils/graphUtils';
-import type { Vector } from '../../core/entities/vector/Vector';
-import { knnCurrentPoint, knnNeighbours } from '../stores/KNNStores';
+
+import type { LabelledPoint } from "./KNNNonNormalizedMLModel";
+import type { MLModel } from "./MLModel";
+import Logger from "../../../../lib/utils/Logger";
+import { knnCurrentPoint, knnNeighbours } from "../../../../lib/stores/KNNStores";
+import { distanceBetween } from "../../../../lib/utils/graphUtils";
+import type { Vector } from "../../vector/Vector";
+
 
 class KNNMLModel implements MLModel {
   constructor(

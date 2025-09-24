@@ -4,15 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 import { get, writable } from 'svelte/store';
-import KNNNonNormalizedModelTrainer from '../../lib/mlmodels/KNNNonNormalizedModelTrainer';
 import { stores } from '../../lib/stores/Stores';
 import { type ModelInfo } from '../../core/entities/classifier/models/ModelRegistry';
-import LayersModelTrainer, {
-  type LossTrainingIteration,
-} from '../../lib/mlmodels/LayersModelTrainer';
-import KNNModelTrainer from '../../lib/mlmodels/KNNModelTrainer';
-import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
 import type { MLModel } from '../../core/entities/classifier/models/MLModel';
+import type { LossTrainingIteration } from '../../core/entities/classifier/models/LayersModelTrainer';
+import LayersModelTrainer from '../../core/entities/classifier/models/LayersModelTrainer';
+import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
+import KNNModelTrainer from '../../core/entities/classifier/models/KNNModelTrainer';
+import KNNNonNormalizedModelTrainer from '../../core/entities/classifier/models/KNNNonNormalizedModelTrainer';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 

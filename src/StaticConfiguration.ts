@@ -9,8 +9,8 @@
  */
 import { MBSpecs } from 'microbyte';
 import { PinTurnOnState } from './core/entities/PinTurnOnState';
-import { type LayersModelTrainingSettings as NeuralNetworkModelTrainerSettings } from './lib/mlmodels/LayersModelTrainer';
 import { HexOrigin } from './lib/microbit-interfacing/HexOrigin';
+import type { LayersModelTrainingSettings } from './core/entities/classifier/models/LayersModelTrainer';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
@@ -122,7 +122,7 @@ class StaticConfiguration {
   /**
    * The neural network training settings
    */
-  public static readonly defaultNeuralNetworkSettings: NeuralNetworkModelTrainerSettings =
+  public static readonly defaultNeuralNetworkSettings: LayersModelTrainingSettings =
     {
       noOfEpochs: 80,
       batchSize: 16,

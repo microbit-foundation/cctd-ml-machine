@@ -12,8 +12,8 @@ import {
   type Unsubscriber,
   type Writable,
 } from 'svelte/store';
-import type { LayersModelTrainingSettings } from '../../mlmodels/LayersModelTrainer';
 import StaticConfiguration from '../../../StaticConfiguration';
+import type { LayersModelTrainingSettings } from '../../../core/entities/classifier/models/LayersModelTrainer';
 
 class NeuralNetworkSettings implements Readable<LayersModelTrainingSettings> {
   private store: Writable<LayersModelTrainingSettings>;

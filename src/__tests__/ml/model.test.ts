@@ -7,10 +7,10 @@
  * SPDX-License-Identifier: MIT
  */
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
-import LayersModelTrainer from '../../lib/mlmodels/LayersModelTrainer';
 import StaticConfiguration from '../../StaticConfiguration';
-import KNNNonNormalizedModelTrainer from '../../lib/mlmodels/KNNNonNormalizedModelTrainer';
 import BaseVector from '../../core/entities/vector/BaseVector';
+import LayersModelTrainer from '../../core/entities/classifier/models/LayersModelTrainer';
+import KNNNonNormalizedModelTrainer from '../../core/entities/classifier/models/KNNNonNormalizedModelTrainer';
 
 describe('ML Model tests', async () => {
   describe('Layers Model', async () => {

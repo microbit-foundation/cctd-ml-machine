@@ -4,15 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { knnTrainingDataPoints } from "../../../../lib/stores/KNNStores";
-import Logger from "../../../../lib/utils/Logger";
-import type { TrainingDataRepository } from "../../../repository/TrainingDataRepository";
-import type { LabelledPoint } from "./KNNNonNormalizedMLModel";
-import KNNNonNormalizedMLModel from "./KNNNonNormalizedMLModel";
-import type { ModelInfo } from "./ModelRegistry";
-import ModelRegistry from "./ModelRegistry";
-import type { ModelTrainer } from "./ModelTrainer";
-
+import { knnTrainingDataPoints } from '../../../../lib/stores/KNNStores';
+import Logger from '../../../../lib/utils/Logger';
+import type { TrainingDataRepository } from '../../../repository/TrainingDataRepository';
+import type { LabelledPoint } from './KNNNonNormalizedMLModel';
+import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
+import type { ModelInfo } from './ModelRegistry';
+import ModelRegistry from './ModelRegistry';
+import type { ModelTrainer } from './ModelTrainer';
 
 /**
  * Trains a K-Nearest Neighbour model. Unlike the version provided by tensorflow, the points are not normalized

@@ -122,14 +122,13 @@ class StaticConfiguration {
   /**
    * The neural network training settings
    */
-  public static readonly defaultNeuralNetworkSettings: LayersModelTrainingSettings =
-    {
-      noOfEpochs: 80,
-      batchSize: 16,
-      learningRate: 0.1,
-      validationSplit: 0.1,
-      noOfUnits: 16, // size of hidden layer
-    };
+  public static readonly defaultNeuralNetworkSettings: LayersModelTrainingSettings = {
+    noOfEpochs: 80,
+    batchSize: 16,
+    learningRate: 0.1,
+    validationSplit: 0.1,
+    noOfUnits: 16, // size of hidden layer
+  };
 
   /**
    * How many samples should the KNN model use for prediction? i.e the k-value.

@@ -11,12 +11,11 @@ import type { ModelInfo } from './ModelRegistry';
 import ModelRegistry from './ModelRegistry';
 import type { ModelTrainer } from './ModelTrainer';
 
-
 /**
  * Trains a K-Nearest Neighbour model
  */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
-  constructor(private k: number) { }
+  constructor(private k: number) {}
 
   public getModelInfo(): ModelInfo {
     return ModelRegistry.KNN;

@@ -11,7 +11,9 @@ import {
   type Unsubscriber,
   type Writable,
 } from 'svelte/store';
-import ModelRegistry, { type ModelInfo } from '../../core/entities/classifier/models/ModelRegistry';
+import ModelRegistry, {
+  type ModelInfo,
+} from '../../core/entities/classifier/models/ModelRegistry';
 import PersistantWritable from '../repository/PersistantWritable';
 import Logger from '../utils/Logger';
 import type Classifier from './stores/Classifier';

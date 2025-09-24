@@ -8,7 +8,7 @@ import { get } from 'svelte/store';
 import Filters from '../domain/Filters';
 import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import type { Repositories } from '../domain/Repositories';
-import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import { stores } from '../stores/Stores';
 import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import type { Vector } from '../../core/entities/vector/Vector';

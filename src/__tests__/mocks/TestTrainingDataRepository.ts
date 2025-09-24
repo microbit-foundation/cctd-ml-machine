@@ -6,7 +6,7 @@
 
 import BaseVector from '../../core/entities/vector/BaseVector';
 import type { TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
-import type { TrainingDataRepository } from '../../lib/domain/TrainingDataRepository';
+import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import type { Vector } from '../../core/entities/vector/Vector';
 
 class TestTrainingDataRepository implements TrainingDataRepository {

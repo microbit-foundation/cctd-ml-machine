@@ -6,7 +6,7 @@
 import type { ModelInfo } from '../../../core/entities/classifier/models/ModelRegistry';
 import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
 import type { ModelTrainer } from '../../../core/entities/classifier/models/ModelTrainer';
-import type { TrainingDataRepository } from '../../../lib/domain/TrainingDataRepository';
+import type { TrainingDataRepository } from '../../../core/repository/TrainingDataRepository';
 import TestMLModel from './TestMLModel';
 
 class TestMLModelTrainer implements ModelTrainer<TestMLModel> {

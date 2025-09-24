@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { GestureID } from '../../core/entities/Gesture';
-import type { RecordingData } from '../../core/entities/RecordingData';
+import type { GestureID } from './Gesture';
+import type { RecordingData } from './RecordingData';
 
 export interface ValidationSet {
   gestureId: GestureID;

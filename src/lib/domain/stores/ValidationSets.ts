@@ -13,7 +13,7 @@ import {
   type Unsubscriber,
   type Writable,
 } from 'svelte/store';
-import type { ValidationSet } from '../ValidationSet';
+import type { ValidationSet } from '../../../core/entities/ValidationSet';
 import type { RecordingData } from '../../../core/entities/RecordingData';
 import PersistantWritable from '../../repository/PersistantWritable';
 import type Gestures from './gesture/Gestures';

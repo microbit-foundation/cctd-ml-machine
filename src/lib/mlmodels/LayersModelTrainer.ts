@@ -6,7 +6,7 @@
 import type { ModelInfo } from '../../core/entities/classifier/models/ModelRegistry';
 import ModelRegistry from '../../core/entities/classifier/models/ModelRegistry';
 import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
-import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import LayersMLModel from './LayersMLModel';
 import * as tf from '@tensorflow/tfjs';
 export type LayersModelTrainingSettings = {

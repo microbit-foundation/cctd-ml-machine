@@ -13,7 +13,7 @@ import Classifier from '../domain/stores/Classifier';
 import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
 import Confidences from '../domain/stores/Confidences';
 import type { ClassifierRepository } from '../domain/ClassifierRepository';
-import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import { t } from '../../i18n';
 import type { FiltersRepository } from '../domain/FiltersRepository';
 import type Snackbar from '../stores/Snackbar';

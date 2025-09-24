@@ -7,7 +7,7 @@
 import type { ClassifierRepository } from './ClassifierRepository';
 import type { FiltersRepository } from './FiltersRepository';
 import type { GestureRepository } from './GestureRepository';
-import type { TrainingDataRepository } from './TrainingDataRepository';
+import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 
 export interface Repositories {
   getGestureRepository(): GestureRepository;

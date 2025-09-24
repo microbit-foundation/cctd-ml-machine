@@ -5,7 +5,7 @@
  */
 import KNNMLModel from './KNNMLModel';
 import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
-import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import { knnTrainingDataPoints } from '../stores/KNNStores';
 import type { ModelInfo } from '../../core/entities/classifier/models/ModelRegistry';

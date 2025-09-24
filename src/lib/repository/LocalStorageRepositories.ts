@@ -8,7 +8,7 @@ import LocalStorageClassifierRepository from './LocalStorageClassifierRepository
 import Confidences from '../domain/stores/Confidences';
 import LocalStorageTrainingDataRepository from './LocalStorageTrainingDataRepository';
 import type { Repositories } from '../domain/Repositories';
-import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import type { FiltersRepository } from '../domain/FiltersRepository';
 import type Snackbar from '../stores/Snackbar';

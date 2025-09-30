@@ -14,7 +14,7 @@ import {
 import StaticConfiguration from '../../StaticConfiguration';
 import { type TimestampedData } from '../../core/LiveDataBuffer';
 import Classifier from '../domain/stores/Classifier';
-import { type LiveDataVector } from '../../core/entities/vector/LiveDataVector';
+import { type LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { Engine, EngineData } from '../domain/stores/Engine';
 import type { LiveData } from '../domain/stores/LiveData';
 import type HighlightedAxes from '../domain/stores/HighlightedAxes';

@@ -11,7 +11,7 @@ import { type TrainerConsumer } from '../repository/LocalStorageClassifierReposi
 import Model from './stores/Model';
 import type { MLModel } from '../../core/entities/classifier/models/MLModel';
 import { t } from '../../i18n';
-import BaseVector from '../../core/entities/vector/BaseVector';
+import BaseVector from '../../core/vector/BaseVector';
 import type { RecordingData } from '../../core/entities/RecordingData';
 import type Snackbar from '../stores/Snackbar';
 import type GestureState from './stores/gesture/GestureState';

@@ -8,7 +8,7 @@
  */
 
 import { get, writable } from 'svelte/store';
-import BaseLiveDataVector from '../../core/entities/vector/BaseLiveDataVector';
+import BaseLiveDataVector from '../../core/vector/BaseLiveDataVector';
 import { ClassifierInput } from '../../lib/domain/ClassifierInput';
 import Filters from '../../lib/domain/Filters';
 import { stores } from '../../lib/stores/Stores';
@@ -18,10 +18,10 @@ import StaticConfiguration from '../../StaticConfiguration';
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import TestGestureRepository from '../mocks/TestGestureRepository';
 import Confidences from '../../lib/domain/stores/Confidences';
-import BaseVector from '../../core/entities/vector/BaseVector';
+import BaseVector from '../../core/vector/BaseVector';
 import Snackbar from '../../lib/stores/Snackbar';
-import { FilterType, type Filter } from '../../core/entities/filter/Filter';
-import { createFilter } from '../../core/entities/filter/FilterUtils';
+import { FilterType, type Filter } from '../../core/filter/Filter';
+import { createFilter } from '../../core/filter/FilterUtils';
 import LayersModelTrainer from '../../core/entities/classifier/models/LayersModelTrainer';
 
 describe('Classifier tests', () => {

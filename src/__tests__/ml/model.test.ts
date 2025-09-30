@@ -8,9 +8,9 @@
  */
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import StaticConfiguration from '../../StaticConfiguration';
-import BaseVector from '../../core/entities/vector/BaseVector';
-import LayersModelTrainer from '../../core/entities/classifier/models/LayersModelTrainer';
-import KNNNonNormalizedModelTrainer from '../../core/entities/classifier/models/KNNNonNormalizedModelTrainer';
+import BaseVector from '../../core/vector/BaseVector';
+import KNNNonNormalizedModelTrainer from '../../core/model/KNNNonNormalizedModelTrainer';
+import LayersModelTrainer from '../../core/model/LayersModelTrainer';
 
 describe('ML Model tests', async () => {
   describe('Layers Model', async () => {
@@ -36,11 +36,11 @@ describe('ML Model tests', async () => {
       const prediction1 = await knnModel.predict(
         new BaseVector([0, 0, 0, 0, 0, 0, 0, 0, 0]),
       );
-      expect(prediction1).toStrictEqual([0, 1, 0]);
+      expect(prediction1.getValue()).toStrictEqual([0, 1, 0]);
       const prediction2 = await knnModel.predict(
         new BaseVector([1, 1, 0, 0, 0, -2, 0, -3, 0]),
       );
-      expect(prediction2).toStrictEqual([0.5, 0, 0.5]);
+      expect(prediction2.getValue()).toStrictEqual([0.5, 0, 0.5]);
     });
   });
 });

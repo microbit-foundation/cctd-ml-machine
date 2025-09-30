@@ -3,5 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
-export interface EvaluationResult {
+
+import type { Vector } from '../vector/Vector';
+
+export interface MLModel {
+  predict(filteredData: Vector): Promise<Vector>;
 }

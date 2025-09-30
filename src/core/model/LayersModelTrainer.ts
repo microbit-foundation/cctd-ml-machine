@@ -8,7 +8,7 @@ import * as tf from '@tensorflow/tfjs';
 import type { ModelTrainer } from './ModelTrainer';
 import type { ModelInfo } from './ModelRegistry';
 import ModelRegistry from './ModelRegistry';
-import type { TrainingDataRepository } from '../../../repository/TrainingDataRepository';
+import type { Dataset } from '../dataset/Dataset';
 export type LayersModelTrainingSettings = {
   noOfEpochs: number;
   noOfUnits: number;
@@ -32,31 +32,26 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
     return ModelRegistry.NeuralNetwork;
   }
 
-  public async trainModel(
-    trainingDataRepository: TrainingDataRepository,
-  ): Promise<LayersMLModel> {
-    const trainingData = trainingDataRepository.getTrainingData();
+  public async trainModel(dataset: Dataset): Promise<LayersMLModel> {
+    if (!dataset.isValid()) {
+      throw new Error('Dataset chosen to train with is invalid!');
+    }
+
     // Fetch data
-    const features: Array<number[]> = [];
-    const labels: Array<number[]> = [];
-    const numberOfClasses = trainingData.classes.length;
-
-    trainingData.classes.forEach((gestureClass, index) => {
-      gestureClass.samples.forEach(sample => {
-        features.push(sample.value.getValue());
-
-        const label: number[] = new Array(numberOfClasses) as number[];
-        label.fill(0, 0, numberOfClasses);
-        label[index] = 1;
-        labels.push(label);
-      });
-    });
-
+    const features: Array<number[]> = dataset
+      .getFeatureSet()
+      .map(features => features.getFeatures().getValue());
+    const labels: Array<number[]> = dataset
+      .getLabels()
+      .getLabelVectors()
+      .map(labelVector => labelVector.getValue());
     const tensorFeatures = tf.tensor(features);
     const tensorLabels = tf.tensor(labels);
 
+    const numberOfClasses = dataset.getNumberOfClasses();
+
     // Find the shape by looking at the first data point
-    const inputShape = [trainingData.classes[0].samples[0].value.getSize()];
+    const inputShape = [dataset.getFeatureSize()];
 
     const input = tf.input({ shape: inputShape });
     const normalizer = tf.layers.batchNormalization().apply(input);

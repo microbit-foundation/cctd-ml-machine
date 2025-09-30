@@ -12,8 +12,8 @@ import {
 } from 'svelte/store';
 import Logger from '../utils/Logger';
 import FilterGraphLimits from '../utils/FilterLimits';
-import type { Filter, FilterType } from '../../core/entities/filter/Filter';
-import { createFilter } from '../../core/entities/filter/FilterUtils';
+import type { Filter, FilterType } from '../../core/filter/Filter';
+import { createFilter } from '../../core/filter/FilterUtils';
 
 class Filters implements Readable<Filter[]> {
   constructor(private filters: Writable<Filter[]>) {}

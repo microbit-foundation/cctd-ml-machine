@@ -15,7 +15,7 @@ import {
 import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
 import type { MLModel } from '../../../core/entities/classifier/models/MLModel';
 import type { ModelTrainer } from '../../../core/entities/classifier/models/ModelTrainer';
-import type { Vector } from '../../../core/entities/vector/Vector';
+import type { Vector } from '../../../core/vector/Vector';
 import CookieManager from '../../CookieManager';
 import { appInsights } from '../../../appInsights';
 import { stores } from '../../stores/Stores';

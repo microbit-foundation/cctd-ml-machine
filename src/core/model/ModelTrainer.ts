@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { Vector } from '../vector/Vector';
 import type { MLModel } from './MLModel';
 import type { ModelInfo } from './ModelRegistry';
-import type { TrainingDataRepository } from '../../../repository/TrainingDataRepository';
-import type { Vector } from '../../vector/Vector';
+import type { Dataset } from '../dataset/Dataset';
 
 export type TrainingData = {
   classes: {
@@ -19,5 +19,5 @@ export type TrainingData = {
 
 export interface ModelTrainer<T extends MLModel> {
   getModelInfo(): ModelInfo;
-  trainModel(trainingDataRepository: TrainingDataRepository): Promise<T>;
+  trainModel(dataset: Dataset): Promise<T>;
 }

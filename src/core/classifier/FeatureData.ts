@@ -3,5 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
-export interface TrainingResult {
+
+import type { Vector } from '../vector/Vector';
+
+export interface FeatureData {
+  getFeatures(): Vector;
 }

@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { knnCurrentPoint, knnNeighbours } from '../../../../lib/stores/KNNStores';
-import { distanceBetween } from '../../../../lib/utils/graphUtils';
-import Logger from '../../../../lib/utils/Logger';
-import type { Vector } from '../../vector/Vector';
+import { knnCurrentPoint, knnNeighbours } from '../../lib/stores/KNNStores';
+import { distanceBetween } from '../../lib/utils/graphUtils';
+import Logger from '../../lib/utils/Logger';
+import BaseVector from '../vector/BaseVector';
+import type { Vector } from '../vector/Vector';
 import type { MLModel } from './MLModel';
 
 export type LabelledPoint = {
@@ -27,7 +28,7 @@ class KNNNonNormalizedMLModel implements MLModel {
     Logger.log('KNNNonNormalizedMLModel', 'New KNN model was initialized');
   }
 
-  public predict(filteredData: Vector): Promise<number[]> {
+  public async predict(filteredData: Vector): Promise<Vector> {
     knnCurrentPoint.set(filteredData);
 
     // Sort points by distance to live-data point
@@ -54,7 +55,7 @@ class KNNNonNormalizedMLModel implements MLModel {
       );
     }
 
-    return Promise.resolve(confidences);
+    return new BaseVector(confidences);
   }
 }
 

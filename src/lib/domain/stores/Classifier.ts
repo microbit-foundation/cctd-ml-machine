@@ -14,7 +14,7 @@ import Filters from '../Filters';
 import Model, { type ModelData } from './Model';
 import type { ClassifierInput } from '../ClassifierInput';
 import Logger from '../../utils/Logger';
-import BaseVector from '../../../core/entities/vector/BaseVector';
+import BaseVector from '../../../core/vector/BaseVector';
 import type GestureState from './gesture/GestureState';
 import type { GestureID } from '../../../core/entities/Gesture';
 

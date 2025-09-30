@@ -9,6 +9,11 @@ export type ModelInfo = {
   label: string;
 };
 
+export enum ModelType {
+  NeuralNetwork = 'NN',
+  KNN = 'KNN',
+}
+
 class ModelRegistry {
   public static NeuralNetwork: ModelInfo = {
     id: 'NN',

@@ -12,7 +12,7 @@ import {
 } from 'svelte/store';
 import type LiveDataBuffer from '../../core/LiveDataBuffer';
 import type { LiveData } from '../domain/stores/LiveData';
-import type { LiveDataVector } from '../../core/entities/vector/LiveDataVector';
+import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import { MicrobitAccelerometerDataVector } from './MicrobitAccelerometerData';
 
 class PredictedPointLiveData implements LiveData<LiveDataVector> {

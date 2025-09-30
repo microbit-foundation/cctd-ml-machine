@@ -11,8 +11,8 @@ import type { Repositories } from '../domain/Repositories';
 import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import { stores } from '../stores/Stores';
 import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
-import type { Vector } from '../../core/entities/vector/Vector';
-import BaseVector from '../../core/entities/vector/BaseVector';
+import type { Vector } from '../../core/vector/Vector';
+import BaseVector from '../../core/vector/BaseVector';
 import { getMean, getStandardDeviation } from '../utils/Math';
 import type { RecordingData } from '../../core/entities/RecordingData';
 

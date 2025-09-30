@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { knnCurrentPoint, knnNeighbours } from '../../lib/stores/KNNStores';
+import { distanceBetween } from '../../lib/utils/graphUtils';
+import Logger from '../../lib/utils/Logger';
+import BaseVector from '../vector/BaseVector';
+import type { Vector } from '../vector/Vector';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import type { MLModel } from './MLModel';
-import Logger from '../../../../lib/utils/Logger';
-import { knnCurrentPoint, knnNeighbours } from '../../../../lib/stores/KNNStores';
-import { distanceBetween } from '../../../../lib/utils/graphUtils';
-import type { Vector } from '../../vector/Vector';
 
 class KNNMLModel implements MLModel {
   constructor(
@@ -22,7 +23,7 @@ class KNNMLModel implements MLModel {
     Logger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
   }
 
-  public async predict(filteredData: Vector): Promise<number[]> {
+  public async predict(filteredData: Vector): Promise<Vector> {
     const filteredDataNormalized = KNNMLModel.normalizePoint(
       filteredData,
       this.dataMean,
@@ -55,7 +56,7 @@ class KNNMLModel implements MLModel {
       );
     }
 
-    return Promise.resolve(confidences);
+    return Promise.resolve(new BaseVector(confidences));
   }
 
   public static normalizePoint(point: Vector, mean: Vector, stdDeviation: Vector) {

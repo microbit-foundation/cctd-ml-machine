@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import BaseVector from '../../core/entities/vector/BaseVector';
-import type { TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
+import BaseVector from '../../core/vector/BaseVector';
 import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
-import type { Vector } from '../../core/entities/vector/Vector';
+import type { Vector } from '../../core/vector/Vector';
+import type { TrainingData } from '../../core/model/ModelTrainer';
 
 class TestTrainingDataRepository implements TrainingDataRepository {
   getTrainingDataMean(): Vector {

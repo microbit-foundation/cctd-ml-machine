@@ -5,7 +5,7 @@
  */
 import { writable } from 'svelte/store';
 import { stores } from '../../../lib/stores/Stores';
-import { FilterType } from '../../../core/entities/filter/Filter';
+import { FilterType } from '../../../core/filter/Filter';
 
 export const toggleFilterCheckmarkClickHandler =
   (filterType: FilterType) => (e: MouseEvent) => {

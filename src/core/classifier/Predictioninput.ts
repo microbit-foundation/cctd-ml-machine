@@ -4,5 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-export interface PredictionOutput {
+import type { Vector } from '../vector/Vector';
+
+export interface PredictionInput {
+  getInput(): Vector;
 }

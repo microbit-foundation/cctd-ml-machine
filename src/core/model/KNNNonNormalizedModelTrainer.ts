@@ -3,36 +3,38 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { knnTrainingDataPoints } from '../../../../lib/stores/KNNStores';
-import type { TrainingDataRepository } from '../../../repository/TrainingDataRepository';
-import KNNMLModel from './KNNMLModel';
+
+import { knnTrainingDataPoints } from '../../lib/stores/KNNStores';
+import Logger from '../../lib/utils/Logger';
+import type { TrainingDataRepository } from '../repository/TrainingDataRepository';
+import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import type { ModelInfo } from './ModelRegistry';
 import ModelRegistry from './ModelRegistry';
 import type { ModelTrainer } from './ModelTrainer';
 
 /**
- * Trains a K-Nearest Neighbour model
+ * Trains a K-Nearest Neighbour model. Unlike the version provided by tensorflow, the points are not normalized
  */
-class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
+class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLModel> {
   constructor(private k: number) {}
 
   public getModelInfo(): ModelInfo {
     return ModelRegistry.KNN;
   }
 
-  public trainModel(trainingDataRepository: TrainingDataRepository): Promise<KNNMLModel> {
+  public trainModel(
+    trainingDataRepository: TrainingDataRepository,
+  ): Promise<KNNNonNormalizedMLModel> {
+    Logger.log('KNNNonNormalizedModelTrainer', 'Training KNN model');
     const trainingData = trainingDataRepository.getTrainingData();
-    const mean = trainingDataRepository.getTrainingDataMean();
-    const stdDev = trainingDataRepository.getTrainingDataStdDeviation();
-
     const points: LabelledPoint[] = [];
 
     trainingData.classes.forEach((gestureClass, labelIndex) => {
       gestureClass.samples.forEach(sample => {
         points.push({
           classIndex: labelIndex,
-          vector: KNNMLModel.normalizePoint(sample.value, mean, stdDev),
+          vector: sample.value,
         });
       });
     });
@@ -40,9 +42,9 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
     knnTrainingDataPoints.set(points);
 
     return Promise.resolve(
-      new KNNMLModel(this.k, trainingData.classes.length, points, mean, stdDev),
+      new KNNNonNormalizedMLModel(this.k, trainingData.classes.length, points),
     );
   }
 }
 
-export default KNNModelTrainer;
+export default KNNNonNormalizedModelTrainer;

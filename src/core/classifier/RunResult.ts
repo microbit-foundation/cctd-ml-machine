@@ -3,6 +3,4 @@
  *
  * SPDX-License-Identifier: MIT
  */
-
-export interface Dataset {
-}
+export interface RunResult {}

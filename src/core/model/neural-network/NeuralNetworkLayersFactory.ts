@@ -8,7 +8,7 @@ import * as tf from '@tensorflow/tfjs';
 import type { NeuralNetworkArchitecture } from './NeuralNetworkArchitecture';
 import { ActivationFunction, type NeuralNetworkLayerSettings } from './NeuralNetworkLayerSettings';
 
-class NeuralNetworkLayersModelFactory {
+export class NeuralNetworkLayersModelFactory {
     public buildLayers(architecture: NeuralNetworkArchitecture): tf.LayersModel {
         const inputLayerSettings = architecture.getInputLayer();
         const hiddenLayersSettings = architecture.getHiddenLayers();

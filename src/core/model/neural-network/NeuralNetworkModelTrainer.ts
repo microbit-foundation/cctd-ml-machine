@@ -7,6 +7,7 @@ import type { Dataset } from "../../dataset/Dataset";
 import type { ModelInfo } from "../ModelRegistry";
 import ModelRegistry from "../ModelRegistry";
 import type { ModelTrainer } from "../ModelTrainer";
+import { NeuralNetworkLayersModelFactory } from "./NeuralNetworkLayersFactory";
 import type { NeuralNetworkModel } from "./NeuralNetworkModel";
 import type { NeuralNetworkModelSettings } from "./NeuralNetworkModelSettings";
 import * as tf from '@tensorflow/tfjs';
@@ -42,25 +43,13 @@ export class NeuralNetworkModelTrainer implements ModelTrainer<NeuralNetworkMode
     const tensorFeatures = tf.tensor(features);
     const tensorLabels = tf.tensor(labels);
 
-    const numberOfClasses = dataset.getNumberOfClasses();
+    const modelFactory = new NeuralNetworkLayersModelFactory()
 
-    // Find the shape by looking at the first data point
-    const inputShape = [dataset.getFeatureSize()];
-
-    const input = tf.input({ shape: inputShape });
-    const normalizer = tf.layers.batchNormalization().apply(input);
-    const dense = tf.layers
-      .dense({ units: this.settings.noOfUnits, activation: 'relu' })
-      .apply(normalizer);
-    const softmax = tf.layers
-      .dense({ units: numberOfClasses, activation: 'softmax' })
-      .apply(dense) as tf.SymbolicTensor;
-
-    const model = tf.model({ inputs: input, outputs: softmax });
+    const model = modelFactory.buildLayers(this.settings.getArchitecture());
 
     model.compile({
       loss: 'categoricalCrossentropy',
-      optimizer: tf.train.sgd(this.settings.learningRate),
+      optimizer: tf.train.sgd(this.settings.getLearningRate()),
       metrics: ['accuracy'],
     });
 

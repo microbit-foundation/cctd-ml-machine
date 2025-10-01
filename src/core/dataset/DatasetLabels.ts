@@ -5,10 +5,12 @@
  */
 
 import type { Vector } from '../vector/Vector';
+import type { DataIndexLabel } from './VectorDatasetLabel';
 
 export interface DatasetLabels {
   /**
    * Examlpe [0,0,0,1,0] for a index representation of 3
    */
   getLabelVectors(): Vector[];
+  getIndexLabels(): DataIndexLabel[];
 }

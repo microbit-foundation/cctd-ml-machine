@@ -4,10 +4,15 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { NeuralNetworkArchitecture } from "./NeuralNetworkArchitecture";
+import type { NeuralNetworkTrainingObserver } from './NeuralNetworkTrainingObserver';
+import type { NeuralNetworkArchitecture } from './NeuralNetworkArchitecture';
 
 export interface NeuralNetworkModelSettings {
-    getLearningRate(): number;
-    getArchitecture(): NeuralNetworkArchitecture;
+  getLearningRate(): number;
+  getArchitecture(): NeuralNetworkArchitecture;
+  getNumberOfEpochs(): number;
+  getBatchSize(): number;
+  getValidationSplit(): number;
+  getTrainingObserver(): NeuralNetworkTrainingObserver;
+  getObserver(): NeuralNetworkTrainingObserver;
 }
-

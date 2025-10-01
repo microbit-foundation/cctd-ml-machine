@@ -3,25 +3,17 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { Dataset } from "../../dataset/Dataset";
-import type { ModelInfo } from "../ModelRegistry";
-import ModelRegistry from "../ModelRegistry";
-import type { ModelTrainer } from "../ModelTrainer";
-import { NeuralNetworkLayersModelFactory } from "./NeuralNetworkLayersFactory";
-import type { NeuralNetworkModel } from "./NeuralNetworkModel";
-import type { NeuralNetworkModelSettings } from "./NeuralNetworkModelSettings";
+import type { Dataset } from '../../dataset/Dataset';
+import type { ModelInfo } from '../ModelRegistry';
+import ModelRegistry from '../ModelRegistry';
+import type { ModelTrainer } from '../ModelTrainer';
+import { NeuralNetworkLayersModelFactory } from './NeuralNetworkLayersFactory';
+import { NeuralNetworkModel } from './NeuralNetworkModel';
+import type { NeuralNetworkModelSettings } from './NeuralNetworkModelSettings';
 import * as tf from '@tensorflow/tfjs';
 
-export type LossTrainingIteration = {
-  loss: number;
-  epoch: number;
-};
-
 export class NeuralNetworkModelTrainer implements ModelTrainer<NeuralNetworkModel> {
-  constructor(
-    private settings: NeuralNetworkModelSettings,
-    private onFitIteration: (h: LossTrainingIteration) => void,
-  ) {}
+  constructor(private settings: NeuralNetworkModelSettings) {}
 
   public getModelInfo(): ModelInfo {
     return ModelRegistry.NeuralNetwork;
@@ -42,9 +34,7 @@ export class NeuralNetworkModelTrainer implements ModelTrainer<NeuralNetworkMode
       .map(labelVector => labelVector.getValue());
     const tensorFeatures = tf.tensor(features);
     const tensorLabels = tf.tensor(labels);
-
-    const modelFactory = new NeuralNetworkLayersModelFactory()
-
+    const modelFactory = new NeuralNetworkLayersModelFactory();
     const model = modelFactory.buildLayers(this.settings.getArchitecture());
 
     model.compile({
@@ -53,23 +43,22 @@ export class NeuralNetworkModelTrainer implements ModelTrainer<NeuralNetworkMode
       metrics: ['accuracy'],
     });
 
-    for (let i = 0; i < this.settings.noOfEpochs; i++) {
-      const h = await model
-        .fit(tensorFeatures, tensorLabels, {
+    for (let i = 0; i < this.settings.getNumberOfEpochs(); i++) {
+      try {
+        const iteration = await model.fit(tensorFeatures, tensorLabels, {
           epochs: 1,
-          batchSize: this.settings.batchSize,
-          validationSplit: this.settings.validationSplit,
-        })
-        .catch(err => {
-          console.error('tensorflow training process failed:', err);
-          return Promise.reject(err);
+          batchSize: this.settings.getBatchSize(),
+          validationSplit: this.settings.getValidationSplit(),
         });
-      this.onFitIteration({
-        epoch: i,
-        loss: h.history.loss[0] as number,
-      });
+        this.settings.getObserver().handleTrainingIteration({
+          epoch: i,
+          loss: iteration.history.loss[0] as number,
+        });
+      } catch (error) {
+        console.error('tensorflow training process failed:', error);
+        return Promise.reject(error);
+      }
     }
-    return Promise.resolve(new LayersMLModel(model));
+    return Promise.resolve(new NeuralNetworkModel(model));
   }
 }
-

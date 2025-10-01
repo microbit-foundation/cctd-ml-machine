@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 export enum ActivationFunction {
-    RELU,
-    SOFTMAX
-};
+  RELU,
+  SOFTMAX,
+}
 
 export interface NeuralNetworkLayerSettings {
-    getNoOfNodes(): number;
-    getActivationFunction(): ActivationFunction;
+  getNoOfNodes(): number;
+  getActivationFunction(): ActivationFunction;
 }

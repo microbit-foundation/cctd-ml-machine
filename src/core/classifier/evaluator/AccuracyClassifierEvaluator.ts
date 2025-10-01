@@ -8,8 +8,8 @@ import type { ClassifierEvaluator } from '../ClassifierEvaluator';
 import type { Dataset } from '../../dataset/Dataset';
 import type { EvaluationResult } from '../EvaluationResult';
 import type { PredictionOutput } from '../PredictionOutput';
-import { VectorDatasetLabel } from '../../dataset/VectorDatasetLabel';
 import type { Vector } from '../../vector/Vector';
+import { DataIndexLabel } from '../../dataset/VectorDatasetLabel';
 
 export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
   public getEvaluation(
@@ -34,7 +34,7 @@ export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
 
   private getLabelIndices(labelVectors: Vector[]): number[] {
     return labelVectors
-      .map(vector => new VectorDatasetLabel(vector))
+      .map(vector => new DataIndexLabel(vector))
       .map(vectorDatasetLabel => vectorDatasetLabel.getIndex());
   }
 

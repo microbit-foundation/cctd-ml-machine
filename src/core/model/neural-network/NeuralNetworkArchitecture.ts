@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { NeuralNetworkLayerSettings } from "./NeuralNetworkLayerSettings";
+import type { NeuralNetworkLayerSettings } from './NeuralNetworkLayerSettings';
 
 export interface NeuralNetworkArchitecture {
-   getInputLayer(): NeuralNetworkLayerSettings;
-   getHiddenLayers(): NeuralNetworkLayerSettings[];
-   getOutputLayer(): NeuralNetworkLayerSettings;
+  getInputLayer(): NeuralNetworkLayerSettings;
+  getHiddenLayers(): NeuralNetworkLayerSettings[];
+  getOutputLayer(): NeuralNetworkLayerSettings;
 }

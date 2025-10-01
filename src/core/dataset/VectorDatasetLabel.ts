@@ -6,7 +6,7 @@
 
 import type { Vector } from '../vector/Vector';
 
-export class VectorDatasetLabel {
+export class DataIndexLabel {
   private labelVector: Vector;
 
   public constructor(labelVector: Vector) {

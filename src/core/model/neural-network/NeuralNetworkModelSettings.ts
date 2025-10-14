@@ -6,13 +6,9 @@
 
 import type { NeuralNetworkTrainingObserver } from './NeuralNetworkTrainingObserver';
 import type { NeuralNetworkArchitecture } from './NeuralNetworkArchitecture';
+import type { NeuralNetworkModelBaseSettings } from './NeuralNetworkModelBaseSettings';
 
-export interface NeuralNetworkModelSettings {
-  getLearningRate(): number;
+export interface NeuralNetworkModelSettings extends NeuralNetworkModelBaseSettings {
   getArchitecture(): NeuralNetworkArchitecture;
-  getNumberOfEpochs(): number;
-  getBatchSize(): number;
-  getValidationSplit(): number;
   getTrainingObserver(): NeuralNetworkTrainingObserver;
-  getObserver(): NeuralNetworkTrainingObserver;
 }

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Vector } from '../entities/vector/Vector';
-import type { PredictionInput } from './Predictioninput';
+import type { Vector } from '../../vector/Vector';
+import type { PredictionInput } from '../Predictioninput';
 
 export class VectorPredictionInput implements PredictionInput {
   private vector: Vector;

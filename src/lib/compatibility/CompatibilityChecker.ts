@@ -7,7 +7,7 @@
 
 import Bowser from 'bowser';
 import { nonAllowedPlatforms } from './CompatibilityList';
-import Environment from '../Environment';
+import Environment from '../../core/Environment';
 
 export type CompatibilityStatus = {
   bluetooth: boolean;

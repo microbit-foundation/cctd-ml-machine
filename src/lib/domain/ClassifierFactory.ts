@@ -6,16 +6,16 @@
 import { type Readable, type Writable, get, writable } from 'svelte/store';
 import Classifier from './stores/Classifier';
 import Filters from './Filters';
-import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import { type TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
 import Model from './stores/Model';
-import type { MLModel } from '../../core/entities/classifier/models/MLModel';
 import { t } from '../../i18n';
 import BaseVector from '../../core/vector/BaseVector';
 import type { RecordingData } from '../../core/entities/RecordingData';
 import type Snackbar from '../stores/Snackbar';
 import type GestureState from './stores/gesture/GestureState';
 import type { GestureID } from '../../core/entities/Gesture';
+import type { MLModel } from '../../core/model/MLModel';
+import type { TrainingData } from '../../core/model/ModelTrainer';
 
 class ClassifierFactory {
   public buildClassifier(

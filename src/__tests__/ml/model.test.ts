@@ -9,8 +9,9 @@
 import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
 import StaticConfiguration from '../../StaticConfiguration';
 import BaseVector from '../../core/vector/BaseVector';
-import KNNNonNormalizedModelTrainer from '../../core/model/KNNNonNormalizedModelTrainer';
-import LayersModelTrainer from '../../core/model/LayersModelTrainer';
+import { NeuralNetworkModelTrainer } from '../../core/model/neural-network/NeuralNetworkModelTrainer';
+import KNNModelTrainer from '../../core/model/KNN/KNNModelTrainer';
+import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
 
 describe('ML Model tests', async () => {
   describe('Layers Model', async () => {
@@ -18,10 +19,10 @@ describe('ML Model tests', async () => {
       let iterations = 0;
 
       const trainingData = new TestTrainingDataRepository();
-      await new LayersModelTrainer(
-        StaticConfiguration.defaultNeuralNetworkSettings,
-        () => (iterations += 1),
-      ).trainModel(trainingData);
+      const trainer = new NeuralNetworkModelTrainer(
+        new NeuralNetworkSettingsImpl(StaticConfiguration.defaultNeuralNetworkSettings),
+      );
+      const model = trainer.trainModel(trainingData);
 
       expect(iterations).toBe(
         StaticConfiguration.defaultNeuralNetworkSettings.noOfEpochs,
@@ -31,7 +32,11 @@ describe('ML Model tests', async () => {
   describe('KNN-non normalized Model', async () => {
     test('Model should train the expected number of times', async () => {
       const trainingData = new TestTrainingDataRepository();
-      const knnModel = await new KNNNonNormalizedModelTrainer(2).trainModel(trainingData);
+      const knnModel = await new KNNModelTrainer({
+        k: 2,
+        normalize: false,
+        numberOfClasses: 3
+      }).trainModel(trainingData);
 
       const prediction1 = await knnModel.predict(
         new BaseVector([0, 0, 0, 0, 0, 0, 0, 0, 0]),

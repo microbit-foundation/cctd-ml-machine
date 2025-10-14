@@ -4,28 +4,32 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { knnCurrentPoint, knnNeighbours } from '../../../lib/stores/KNNStores';
-import { distanceBetween } from '../../../lib/utils/graphUtils';
-import Logger from '../../../lib/utils/Logger';
+import ConsoleLogger from '../../logging/ConsoleLogger';
+import { distanceBetween } from '../../utils/Math';
 import BaseVector from '../../vector/BaseVector';
 import type { Vector } from '../../vector/Vector';
-import type { LabelledPoint } from '../KNNNonNormalizedMLModel';
 import type { MLModel } from '../MLModel';
+import type { KNNModelObserver } from './KNNModelObserver';
 import type { KNNModelSettings } from './KNNModelSettings';
+import type { LabelledPoint } from './LabelledPoint';
 
 class KNNMLModel implements MLModel {
+  private observer: KNNModelObserver | undefined;
+
   constructor(
     private settings: KNNModelSettings,
     private points: LabelledPoint[],
     private mean: Vector,
-    private stdDeviation: Vector
+    private stdDeviation: Vector,
   ) {
-    Logger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
+    ConsoleLogger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
   }
 
   public async predict(filteredData: Vector): Promise<Vector> {
     const inputPoint: Vector = this.getInputPoint(filteredData);
-    knnCurrentPoint.set(inputPoint);
+    if (this.observer) {
+      this.observer.onInputComputed(inputPoint);
+    }
 
     // Sort points by distance to live-data point
     const orderedPoints = [...this.points];
@@ -42,7 +46,9 @@ class KNNMLModel implements MLModel {
       neighbours.push(neighbour);
     }
 
-    knnNeighbours.set(neighbours);
+    if (this.observer) {
+      this.observer.onNeighboursFound(neighbours);
+    }
 
     // Compute the confidences and create the confidences array.
     const confidences = [];
@@ -53,6 +59,10 @@ class KNNMLModel implements MLModel {
     }
 
     return Promise.resolve(new BaseVector(confidences));
+  }
+
+  public setObserver(observer: KNNModelObserver) {
+    this.observer = observer;
   }
 
   private getInputPoint(filteredData: Vector): Vector {

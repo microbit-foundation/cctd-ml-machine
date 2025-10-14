@@ -19,7 +19,7 @@ import Classifier from '../domain/stores/Classifier';
 import Gestures from '../domain/stores/gesture/Gestures';
 import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
-import Logger from '../utils/Logger';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import Confidences from '../domain/stores/Confidences';
 import HighlightedAxes from '../domain/stores/HighlightedAxes';
 import SelectedModel from '../domain/SelectedModel';
@@ -110,7 +110,7 @@ class Stores implements Readable<StoresType> {
   }
 
   public setLiveData<T extends LiveData<LiveDataVector>>(liveDataStore: T): T {
-    Logger.log('stores', 'setting live data');
+    ConsoleLogger.log('stores', 'setting live data');
     if (!liveDataStore) {
       throw new Error('Cannot set live data store to undefined/null');
     }

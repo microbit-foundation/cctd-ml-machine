@@ -15,7 +15,7 @@
   import { t } from '../../i18n';
   import { stores } from '../../lib/stores/Stores';
   import { get } from 'svelte/store';
-  import Logger from '../../lib/utils/Logger';
+  import ConsoleLogger from '../../core/logging/ConsoleLogger';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import type GestureState from '../../lib/domain/stores/gesture/GestureState';
 
@@ -54,7 +54,7 @@
     }
 
     if (isThisRecording) {
-      Logger.warn('ValidationGestureSelectGestureCard', 'Already recording');
+      ConsoleLogger.warn('ValidationGestureSelectGestureCard', 'Already recording');
       return;
     }
     const addRecording = () => {

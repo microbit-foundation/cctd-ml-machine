@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import LayersModelTrainer from '../../model/LayersModelTrainer';
 import type { MLModel } from '../../model/MLModel';
 import type { Classifier } from '../Classifier';
 import type { ClassifierFactory } from '../ClassifierFactory';
@@ -16,7 +15,3 @@ export class DefaultClassifierFactory implements ClassifierFactory {
     return new VectorClassifier(model, new AccuracyClassifierEvaluator());
   }
 }
-
-const fac = new DefaultClassifierFactory();
-
-fac.createClassifier(new LayersModelTrainer().trainModel());

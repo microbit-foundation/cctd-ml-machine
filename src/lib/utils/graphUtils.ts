@@ -149,23 +149,3 @@ export const extractAxisFromAccelerometerData = (
   }
   throw new Error(`Cannot extract from axis ${axis}`);
 };
-
-export const distanceBetween = (p1: Vector, p2: Vector): number => {
-  // Check if both points have the same dimension
-  if (p1.getSize() !== p2.getSize()) {
-    throw new Error(
-      'Failed to compuse distance between 2 points. Points must have the same dimension. Got elements of size: ' +
-        [p1.getSize(), p2.getSize()].join(' / '),
-    );
-  }
-
-  // Calculate the distance using the Euclidean formula
-  const squaredDifferences = p1.getValue().map((coord, index) => {
-    const difference = coord - p2.getValue()[index];
-    return difference ** 2;
-  });
-
-  const sumOfSquares = squaredDifferences.reduce((sum, value) => sum + value, 0);
-
-  return Math.sqrt(sumOfSquares);
-};

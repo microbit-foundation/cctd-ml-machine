@@ -10,7 +10,8 @@
 import { MBSpecs } from 'microbyte';
 import { PinTurnOnState } from './core/entities/PinTurnOnState';
 import { HexOrigin } from './lib/microbit-interfacing/HexOrigin';
-import type { LayersModelTrainingSettings } from './core/entities/classifier/models/LayersModelTrainer';
+import type { NeuralNetworkModelBaseSettings } from './core/model/neural-network/NeuralNetworkModelBaseSettings';
+import { DefaultNeuralNetworkModelBaseSettings } from './lib/configuration/DefaultNeuralNetworkModelBaseSettings';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
@@ -122,13 +123,8 @@ class StaticConfiguration {
   /**
    * The neural network training settings
    */
-  public static readonly defaultNeuralNetworkSettings: LayersModelTrainingSettings = {
-    noOfEpochs: 80,
-    batchSize: 16,
-    learningRate: 0.1,
-    validationSplit: 0.1,
-    noOfUnits: 16, // size of hidden layer
-  };
+  public static readonly defaultNeuralNetworkSettings: NeuralNetworkModelBaseSettings =
+    new DefaultNeuralNetworkModelBaseSettings();
 
   /**
    * How many samples should the KNN model use for prediction? i.e the k-value.

@@ -11,6 +11,7 @@ import type { LabelledFeatureSet } from './LabelledFeatureSet';
 
 export interface Dataset extends LabelledFeatureSet {
   getFeatureSet(): FeatureData[];
+  getNormalizedFeatureSet(): FeatureData[];
   getLabels(): DatasetLabels;
   isValid(): boolean;
   getNumberOfClasses(): number;

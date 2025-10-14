@@ -3,42 +3,53 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { knnTrainingDataPoints } from '../../../lib/stores/KNNStores';
 import type { Dataset } from '../../dataset/Dataset';
 import KNNMLModel from './KNNMLModel';
 import type { KNNModelSettings } from './KNNModelSettings';
-import type { LabelledPoint } from '../KNNNonNormalizedMLModel';
 import type { ModelInfo } from '../ModelRegistry';
 import ModelRegistry from '../ModelRegistry';
-import type { ModelTrainer } from '../ModelTrainer';
+import type { ModelTrainer, ModelTrainerResult } from '../ModelTrainer';
+import type { FeatureData } from '../../classifier/FeatureData';
+import { KNNMLModelTrainingResult } from './KNNMLModelTrainingResult';
+import type { LabelledPoint } from './LabelledPoint';
 
 /**
  * Trains a K-Nearest Neighbour model
  */
-class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
+class KNNModelTrainer implements ModelTrainer<KNNMLModel, KNNMLModelTrainingResult> {
   constructor(private settings: KNNModelSettings) {}
 
   public getModelInfo(): ModelInfo {
     return ModelRegistry.KNN;
   }
 
-  public trainModel(dataset: Dataset): Promise<KNNMLModel> {
-    if (this.settings.normalize) {
-      asdf do stuff here hehe1
-    }
-    const featureSet = dataset.getFeatureSet();
+  public trainModel(
+    dataset: Dataset,
+  ): Promise<ModelTrainerResult<KNNMLModel, KNNMLModelTrainingResult>> {
+    const featureSet = this.getFeatureSet(dataset);
     const labels = dataset.getLabels().getIndexLabels();
 
     const labelledPoints: LabelledPoint[] = featureSet.map((featureData, idx) => ({
       classIndex: labels[idx].getIndex(),
-      vector: featureData.getFeatures()
+      vector: featureData.getFeatures(),
     }));
 
-    knnTrainingDataPoints.set(labelledPoints);
+    return Promise.resolve({
+      model: new KNNMLModel(
+        this.settings,
+        labelledPoints,
+        dataset.getFeatureMean(),
+        dataset.getFeatureStandardDeviation(),
+      ),
+      trainingInformation: new KNNMLModelTrainingResult(labelledPoints),
+    });
+  }
 
-    return Promise.resolve(
-      new KNNMLModel(this.settings, labelledPoints, dataset.getFeatureMean(), dataset.getFeatureStandardDeviation()),
-    );
+  private getFeatureSet(dataset: Dataset): FeatureData[] {
+    if (this.settings.normalize) {
+      return dataset.getNormalizedFeatureSet();
+    }
+    return dataset.getFeatureSet();
   }
 }
 

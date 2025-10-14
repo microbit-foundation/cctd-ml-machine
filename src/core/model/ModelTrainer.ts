@@ -8,6 +8,7 @@ import type { Vector } from '../vector/Vector';
 import type { MLModel } from './MLModel';
 import type { ModelInfo } from './ModelRegistry';
 import type { Dataset } from '../dataset/Dataset';
+import type { TrainingResult } from '../classifier/TrainingResult';
 
 export type TrainingData = {
   classes: {
@@ -17,7 +18,12 @@ export type TrainingData = {
   }[];
 };
 
-export interface ModelTrainer<T extends MLModel> {
+export interface ModelTrainerResult<T extends MLModel, U extends TrainingResult> {
+  model: T;
+  trainingInformation: U;
+}
+
+export interface ModelTrainer<T extends MLModel, U extends TrainingResult> {
   getModelInfo(): ModelInfo;
-  trainModel(dataset: Dataset): Promise<T>;
+  trainModel(dataset: Dataset): Promise<ModelTrainerResult<T, U>>;
 }

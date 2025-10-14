@@ -13,9 +13,9 @@
   import type { RecordingData } from '../../core/entities/RecordingData';
   import { stores } from '../../lib/stores/Stores';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
-  import type { FilterType } from '../../core/entities/filter/Filter';
-  import { createFilter } from '../../core/entities/filter/FilterUtils';
   import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
+    import { createFilter } from '../../core/filter/FilterUtils';
+    import type { FilterType } from '../../core/filter/Filter';
 
   const devices = stores.getDevices();
 

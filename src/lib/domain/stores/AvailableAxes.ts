@@ -10,7 +10,7 @@ import {
 import type { LiveData } from './LiveData';
 import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
 import type Gestures from './gesture/Gestures';
-import Logger from '../../utils/Logger';
+import ConsoleLogger from '../../../core/logging/ConsoleLogger';
 
 /**
  * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
@@ -37,7 +37,7 @@ class AvailableAxes implements Readable<Axis[]> {
     if (gestures.getGestures().length > 0) {
       const recordings = gestures.getGestures()[0].getRecordings();
       if (recordings.length > 0) {
-        Logger.log(
+        ConsoleLogger.log(
           'Available Axes',
           'Found default available axes in recordings',
           recordings[0].labels,
@@ -76,7 +76,7 @@ class AvailableAxes implements Readable<Axis[]> {
       }));
       if (axes.length !== get(this.value).length) {
         this.value.set(axes);
-        Logger.log(
+        ConsoleLogger.log(
           'AvailableAxes',
           'New available axes',
           axes.map(e => e.label).join(', '),
@@ -84,7 +84,7 @@ class AvailableAxes implements Readable<Axis[]> {
       }
       if (!!get(this.value).find((e, i) => axes[i].label !== e.label)) {
         this.value.set(axes);
-        Logger.log(
+        ConsoleLogger.log(
           'AvailableAxes',
           'New available axes',
           axes.map(e => e.label).join(', '),

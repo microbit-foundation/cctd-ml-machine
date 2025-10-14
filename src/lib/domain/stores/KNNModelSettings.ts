@@ -14,10 +14,10 @@ import {
 } from 'svelte/store';
 import StaticConfiguration from '../../../StaticConfiguration';
 import type SelectedModel from '../SelectedModel';
-import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
 import { trainKNNModel } from '../../../pages/training/TrainingPage';
 import type Classifier from './Classifier';
 import { knnHasTrained } from '../../stores/KNNStores';
+import ModelRegistry from '../../../core/model/ModelRegistry';
 
 interface KNNModelSettingsType {
   k: number;

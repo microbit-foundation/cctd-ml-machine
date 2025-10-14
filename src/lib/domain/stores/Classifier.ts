@@ -13,7 +13,7 @@ import {
 import Filters from '../Filters';
 import Model, { type ModelData } from './Model';
 import type { ClassifierInput } from '../ClassifierInput';
-import Logger from '../../utils/Logger';
+import ConsoleLogger from '../../../core/logging/ConsoleLogger';
 import BaseVector from '../../../core/vector/BaseVector';
 import type GestureState from './gesture/GestureState';
 import type { GestureID } from '../../../core/entities/Gesture';
@@ -29,7 +29,7 @@ class Classifier implements Readable<ClassifierData> {
     private gestures: Readable<GestureState[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ) {
-    Logger.log('classifier', 'Initialized classifier');
+    ConsoleLogger.log('classifier', 'Initialized classifier');
   }
 
   public subscribe(

@@ -5,10 +5,13 @@
  -->
 <script lang="ts">
   import { slide } from 'svelte/transition';
-  import { stores } from '../../../lib/stores/Stores';
-  const snackbar = stores.getSnackbar();
-  $: isOpen = $snackbar !== undefined;
-  $: snackbarText = $snackbar;
+  import { MLMachine } from '../../../backend/interface-adapter/MLMachine';
+  const notificationController = MLMachine.getInstance()
+    .getControllers()
+    .getNotificationController();
+  const snackbarMessage = notificationController.getSnackbarMessage();
+  $: isOpen = $snackbarMessage !== undefined;
+  $: snackbarText = $snackbarMessage;
 </script>
 
 {#if isOpen}
@@ -19,7 +22,7 @@
       <p class="text-sm text-secondarytext mr-3">{snackbarText}</p>
       <i
         class="far fa-times-circle text-secondarytext cursor-pointer self-center"
-        on:click={() => snackbar.clearMessaage()} />
+        on:click={() => notificationController.clearSnackbarMessage()} />
     </div>
   </div>
 {/if}

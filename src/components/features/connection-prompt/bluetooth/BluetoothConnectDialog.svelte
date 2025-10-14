@@ -17,7 +17,7 @@
   import type { Writable } from 'svelte/store';
   import Microbits from '../../../../lib/microbit-interfacing/Microbits';
   import StaticConfiguration from '../../../../StaticConfiguration';
-  import Logger from '../../../../lib/utils/Logger';
+  import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
   import { MBSpecs } from 'microbyte';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
   import { DeviceRequestStates } from '../../../../lib/domain/Devices';
@@ -57,7 +57,7 @@
     }
     isConnecting = true;
     const connectionResult = async () => {
-      Logger.log('BluetoothConnectDialog', 'Attempting to connect to micro:bit');
+      ConsoleLogger.log('BluetoothConnectDialog', 'Attempting to connect to micro:bit');
       if (deviceState == DeviceRequestStates.INPUT) {
         await Microbits.connectInput(name);
       } else {
@@ -66,7 +66,7 @@
     };
 
     const connectTimeout = setTimeout(() => {
-      Logger.log('BluetoothConnectDialog', 'Connection timed-out');
+      ConsoleLogger.log('BluetoothConnectDialog', 'Connection timed-out');
       timeouted.set(true);
     }, StaticConfiguration.connectTimeoutDuration);
 
@@ -76,7 +76,11 @@
       timeouted.set(false);
       onBluetoothConnected();
     } catch (error) {
-      Logger.log('BluetoothConnectDialog', 'Failed to connect to micro:bit', error);
+      ConsoleLogger.log(
+        'BluetoothConnectDialog',
+        'Failed to connect to micro:bit',
+        error,
+      );
     } finally {
       isConnecting = false;
     }

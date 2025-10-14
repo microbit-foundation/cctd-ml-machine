@@ -14,7 +14,7 @@ import {
   MicrobitBluetoothDevice,
   MicrobitDeviceState,
 } from 'microbyte';
-import Logger from '../utils/Logger';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import OutputMicrobitHandler from './OutputMicrobitHandler';
 import CombinedMicrobitHandler from './CombinedMicrobitHandler';
 import { HexOrigin } from './HexOrigin';
@@ -92,7 +92,7 @@ class Microbits {
    * If no name is given, it will search for any nearby microbit.
    */
   public static async connectInput(name?: string) {
-    Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
+    ConsoleLogger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.inputIndexRef = 0;
     this.getInput().setDevice(bluetoothDevice);
@@ -106,7 +106,7 @@ class Microbits {
    * If no name is provided, it will search for any nearby micro:bit.
    */
   public static async connectOutput(name?: string): Promise<void> {
-    Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
+    ConsoleLogger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.getOutput().setDevice(bluetoothDevice);
     this.getOutput().setHandler(this.outputHandler);
@@ -145,7 +145,7 @@ class Microbits {
    * @throws {Error} Throws an error if no output micro:bit is assigned.
    */
   public static disconnectOutput() {
-    Logger.log('Microbits', 'Attempting to disconnect output');
+    ConsoleLogger.log('Microbits', 'Attempting to disconnect output');
     if (this.isInputOutputTheSame()) {
       this.outputHandler.onDisconnected();
       this.outputHandler.onClosed();

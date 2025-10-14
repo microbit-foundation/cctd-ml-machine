@@ -5,7 +5,7 @@
  */
 
 export interface KNNModelSettings {
-    k: number;
-    numberOfClasses: number;
-    normalize: boolean;
+  k: number;
+  numberOfClasses: number;
+  normalize: boolean;
 }

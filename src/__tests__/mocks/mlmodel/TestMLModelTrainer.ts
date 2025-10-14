@@ -3,19 +3,22 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { ModelInfo } from '../../../core/entities/classifier/models/ModelRegistry';
-import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
-import type { ModelTrainer } from '../../../core/entities/classifier/models/ModelTrainer';
-import type { TrainingDataRepository } from '../../../core/repository/TrainingDataRepository';
+import type { Dataset } from '../../../core/dataset/Dataset';
+import type { ModelInfo } from '../../../core/model/ModelRegistry';
+import ModelRegistry from '../../../core/model/ModelRegistry';
+import type { ModelTrainer, ModelTrainerResult } from '../../../core/model/ModelTrainer';
 import TestMLModel from './TestMLModel';
 
-class TestMLModelTrainer implements ModelTrainer<TestMLModel> {
-  constructor(private numberOfGestures: number) {}
+class TestMLModelTrainer implements ModelTrainer<TestMLModel, {}> {
+  constructor(private numberOfGestures: number) { }
   getModelInfo(): ModelInfo {
     return ModelRegistry.NeuralNetwork;
   }
-  public trainModel(trainingData: TrainingDataRepository): Promise<TestMLModel> {
-    return Promise.resolve(new TestMLModel(this.numberOfGestures));
+  public trainModel(dataset: Dataset): Promise<ModelTrainerResult<TestMLModel, {}>> {
+    return Promise.resolve({
+      model: new TestMLModel(this.numberOfGestures),
+      trainingInformation: {},
+    });
   }
 }
 

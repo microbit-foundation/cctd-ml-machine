@@ -6,12 +6,12 @@
 
 <script lang="ts">
   import KnnModelTrainingPageView from './KnnModelTrainingPageView.svelte';
-  import ModelRegistry from '../../core/entities/classifier/models/ModelRegistry';
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import { stores } from '../../lib/stores/Stores';
   import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import FiltersList from '../../components/features/filters/FiltersList.svelte';
+    import ModelRegistry from '../../core/model/ModelRegistry';
 
   const devices = stores.getDevices();
   const selectedModel = stores.getSelectedModel();

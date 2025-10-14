@@ -15,11 +15,15 @@ import type { FeatureData } from '../../core/classifier/FeatureData';
 import type { Vector } from '../../core/vector/Vector';
 import { VectorPredictionOutput } from '../../core/classifier/vector-classifier/VectorPredictionOutput';
 import { AccuracyClassifierEvaluator } from '../../core/classifier/evaluator/AccuracyClassifierEvaluator';
+import type { DataIndexLabel } from '../../core/dataset/VectorDatasetLabel';
 
 class SimpleDatasetLabels implements DatasetLabels {
   private labelVectors: BaseVector[];
   constructor(labelVectors: number[][]) {
     this.labelVectors = labelVectors.map(v => new BaseVector(v));
+  }
+  getIndexLabels(): DataIndexLabel[] {
+    throw new Error('Method not implemented.');
   }
   public getLabelVectors(): BaseVector[] {
     return this.labelVectors;
@@ -32,6 +36,24 @@ class SimpleDataset implements Dataset {
   constructor(features: FeatureData[], labelVectors: number[][]) {
     this.featureSet = features;
     this.labels = new SimpleDatasetLabels(labelVectors);
+  }
+  getNormalizedFeatureSet(): FeatureData[] {
+    throw new Error('Method not implemented.');
+  }
+  isValid(): boolean {
+    throw new Error('Method not implemented.');
+  }
+  getNumberOfClasses(): number {
+    throw new Error('Method not implemented.');
+  }
+  getFeatureSize(): number {
+    throw new Error('Method not implemented.');
+  }
+  getFeatureMean(): Vector {
+    throw new Error('Method not implemented.');
+  }
+  getFeatureStandardDeviation(): Vector {
+    throw new Error('Method not implemented.');
   }
   public getFeatureSet(): FeatureData[] {
     return this.featureSet;

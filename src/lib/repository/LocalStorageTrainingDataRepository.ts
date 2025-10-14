@@ -6,7 +6,6 @@
 
 import { get } from 'svelte/store';
 import Filters from '../domain/Filters';
-import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import type { Repositories } from '../domain/Repositories';
 import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import { stores } from '../stores/Stores';
@@ -15,6 +14,7 @@ import type { Vector } from '../../core/vector/Vector';
 import BaseVector from '../../core/vector/BaseVector';
 import { getMean, getStandardDeviation } from '../utils/Math';
 import type { RecordingData } from '../../core/entities/RecordingData';
+import type { TrainingData } from '../../core/model/ModelTrainer';
 
 class LocalStorageTrainingDataRepository implements TrainingDataRepository {
   constructor(

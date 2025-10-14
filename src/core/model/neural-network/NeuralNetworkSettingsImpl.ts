@@ -12,25 +12,29 @@ import type { NeuralNetworkTrainingObserver } from "./NeuralNetworkTrainingObser
 
 export class NeuralNetworkSettingsImpl implements NeuralNetworkModelSettings {
 
-    public constructor(private baseSettings: NeuralNetworkModelBaseSettings) {
+    public constructor(
+        private baseSettings: NeuralNetworkModelBaseSettings,
+        private networkArchitecture: NeuralNetworkArchitecture,
+        private networkObserver: NeuralNetworkTrainingObserver
+    ) {
     }
 
-    getArchitecture(): NeuralNetworkArchitecture {
-        throw new Error("Method not implemented.");
+    public getArchitecture(): NeuralNetworkArchitecture {
+        return this.networkArchitecture;
     }
-    getTrainingObserver(): NeuralNetworkTrainingObserver {
-        throw new Error("Method not implemented.");
+    public getTrainingObserver(): NeuralNetworkTrainingObserver {
+        return this.networkObserver;
     }
-    getLearningRate(): number {
-        throw new Error("Method not implemented.");
+    public getLearningRate(): number {
+        return this.baseSettings.getLearningRate();
     }
-    getNumberOfEpochs(): number {
-        throw new Error("Method not implemented.");
+    public getNumberOfEpochs(): number {
+        return this.baseSettings.getNumberOfEpochs();
     }
-    getBatchSize(): number {
-        throw new Error("Method not implemented.");
+    public getBatchSize(): number {
+        return this.baseSettings.getBatchSize();
     }
-    getValidationSplit(): number {
-        throw new Error("Method not implemented.");
+    public getValidationSplit(): number {
+        return this.baseSettings.getValidationSplit();
     }
 }

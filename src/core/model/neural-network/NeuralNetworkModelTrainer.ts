@@ -3,23 +3,24 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import type { TrainingResult } from '../../classifier/TrainingResult';
 import type { Dataset } from '../../dataset/Dataset';
 import type { ModelInfo } from '../ModelRegistry';
 import ModelRegistry from '../ModelRegistry';
-import type { ModelTrainer } from '../ModelTrainer';
+import type { ModelTrainer, ModelTrainerResult } from '../ModelTrainer';
 import { NeuralNetworkLayersModelFactory } from './NeuralNetworkLayersFactory';
 import { NeuralNetworkModel } from './NeuralNetworkModel';
 import type { NeuralNetworkModelSettings } from './NeuralNetworkModelSettings';
 import * as tf from '@tensorflow/tfjs';
 
-export class NeuralNetworkModelTrainer implements ModelTrainer<NeuralNetworkModel> {
-  constructor(private settings: NeuralNetworkModelSettings) {}
+export class NeuralNetworkModelTrainer implements ModelTrainer<NeuralNetworkModel, TrainingResult> {
+  constructor(private settings: NeuralNetworkModelSettings) { }
 
   public getModelInfo(): ModelInfo {
     return ModelRegistry.NeuralNetwork;
   }
 
-  public async trainModel(dataset: Dataset): Promise<NeuralNetworkModel> {
+  public async trainModel(dataset: Dataset): Promise<ModelTrainerResult<NeuralNetworkModel, TrainingResult>> {
     if (!dataset.isValid()) {
       throw new Error('Dataset chosen to train with is invalid!');
     }
@@ -50,7 +51,7 @@ export class NeuralNetworkModelTrainer implements ModelTrainer<NeuralNetworkMode
           batchSize: this.settings.getBatchSize(),
           validationSplit: this.settings.getValidationSplit(),
         });
-        this.settings.getObserver().handleTrainingIteration({
+        this.settings.getTrainingObserver().handleTrainingIteration({
           epoch: i,
           loss: iteration.history.loss[0] as number,
         });
@@ -59,6 +60,9 @@ export class NeuralNetworkModelTrainer implements ModelTrainer<NeuralNetworkMode
         return Promise.reject(error);
       }
     }
-    return Promise.resolve(new NeuralNetworkModel(model));
+    return Promise.resolve({
+      model: new NeuralNetworkModel(model),
+      trainingInformation: {}
+    });
   }
 }

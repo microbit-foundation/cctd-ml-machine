@@ -13,16 +13,15 @@ import {
   writable,
 } from 'svelte/store';
 import { type TrainerConsumer } from '../../repository/LocalStorageClassifierRepository';
-import type { MLModel } from '../../../core/entities/classifier/models/MLModel';
-import type { ModelTrainer } from '../../../core/entities/classifier/models/ModelTrainer';
 import type { Vector } from '../../../core/vector/Vector';
 import CookieManager from '../../CookieManager';
 import { appInsights } from '../../../appInsights';
-import { stores } from '../../stores/Stores';
-import type { ModelInfo } from '../../../core/entities/classifier/models/ModelRegistry';
 import ConsoleLogger from '../../../core/logging/ConsoleLogger';
-import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
 import { knnHasTrained } from '../../stores/KNNStores';
+import type { MLModel } from '../../../core/model/MLModel';
+import type { ModelTrainer } from '../../../core/model/ModelTrainer';
+import ModelRegistry, { type ModelInfo } from '../../../core/model/ModelRegistry';
+import type { TrainingResult } from '../../../core/classifier/TrainingResult';
 
 export enum TrainingStatus {
   Untrained,
@@ -57,7 +56,7 @@ class Model implements Readable<ModelData> {
     });
   }
 
-  public async train<T extends MLModel>(modelTrainer: ModelTrainer<T>): Promise<void> {
+  public async train<T extends MLModel>(modelTrainer: ModelTrainer<T, TrainingResult>): Promise<void> {
     ConsoleLogger.log(
       'Model',
       'Training new model: ' + modelTrainer.getModelInfo().title,
@@ -121,7 +120,7 @@ class Model implements Readable<ModelData> {
    *
    * Use if you have to, but see `classifier.classify()` first
    */
-  public async predict(filteredData: Vector): Promise<number[]> {
+  public async predict(filteredData: Vector): Promise<Vector> {
     const mlModel = get(this.mlModel);
     if (!mlModel) {
       throw new Error('Cannot predict, no MLModel has been specified');

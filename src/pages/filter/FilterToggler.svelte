@@ -6,8 +6,8 @@
 
 <script lang="ts">
   import Information from '../../components/ui/information/Information.svelte';
-  import { FilterType, type Filter } from '../../core/entities/filter/Filter';
-  import { createFilter } from '../../core/entities/filter/FilterUtils';
+    import type { Filter, FilterType } from '../../core/filter/Filter';
+    import { createFilter } from '../../core/filter/FilterUtils';
   import { stores } from '../../lib/stores/Stores';
   import D3Plot from './D3Plot.svelte';
 

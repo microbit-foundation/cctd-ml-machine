@@ -8,10 +8,8 @@ import { get } from 'svelte/store';
 import Filters from '../domain/Filters';
 import type { Repositories } from '../domain/Repositories';
 import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
-import { stores } from '../stores/Stores';
 import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import type { Vector } from '../../core/vector/Vector';
-import BaseVector from '../../core/vector/BaseVector';
 import { getMean, getStandardDeviation } from '../utils/Math';
 import type { RecordingData } from '../../core/entities/RecordingData';
 import type { TrainingData } from '../../core/model/ModelTrainer';
@@ -55,18 +53,19 @@ class LocalStorageTrainingDataRepository implements TrainingDataRepository {
     recordings: RecordingData[],
     filters: Filters,
   ): { value: Vector }[] {
-    return recordings.map(recording => {
-      const data = recording.samples;
-      const highlightedAxes = get(stores.getHighlightedAxes());
-      const value = highlightedAxes
-        .toSorted((a, b) => a.index - b.index)
-        .flatMap(e => {
-          return filters.compute(data.map(d => d.vector[e.index]));
-        });
-      return {
-        value: new BaseVector(value),
-      };
-    });
+    return [];
+    // return recordings.map(recording => {
+    //   const data = recording.samples;
+    //   const highlightedAxes = get(stores.getHighlightedAxes());
+    //   const value = highlightedAxes
+    //     .toSorted((a, b) => a.index - b.index)
+    //     .flatMap(e => {
+    //       return filters.compute(data.map(d => d.vector[e.index]));
+    //     });
+    //   return {
+    //     value: new BaseVector(value),
+    //   };
+    // });
   }
 }
 

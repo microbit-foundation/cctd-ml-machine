@@ -4,7 +4,3 @@
  * SPDX-License-Identifier: MIT
  */
 
-export interface KeyValueStore<T> {
-    getValue<U>(key: T): U
-    setValue<U>(key: T, value: U): void;
-}

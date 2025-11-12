@@ -14,14 +14,17 @@ import {
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
 import GestureState from '../domain/stores/gesture/GestureState';
 import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
-import { stores } from '../stores/Stores';
 import type { GestureRepository } from '../domain/GestureRepository';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
+import type { ClassifierService } from '../../backend/domain/ClassifierService';
 
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private static gestureStore: Writable<GestureState[]>;
-  constructor(private classifierRepository: LocalStorageClassifierRepository) {
+  constructor(
+    private classifierRepository: LocalStorageClassifierRepository,
+    private classifierService: ClassifierService
+  ) {
     LocalStorageGestureRepository.gestureStore = writable([]);
     LocalStorageGestureRepository.gestureStore.set(this.getPersistedGestures());
   }
@@ -114,7 +117,7 @@ class LocalStorageGestureRepository implements GestureRepository {
 
   private buildGesture(persistedData: PersistedGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
-    const onRecordingsChanged = () => stores.getClassifier().getModel().markAsUntrained();
+    const onRecordingsChanged = () => this.classifierService.unsetClassifier();
 
     if (!this.classifierRepository.hasGestureConfidence(get(store).ID)) {
       this.classifierRepository.setGestureConfidence(get(store).ID, 0);

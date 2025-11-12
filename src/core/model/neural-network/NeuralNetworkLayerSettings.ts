@@ -9,6 +9,7 @@ export enum ActivationFunction {
 }
 
 export interface NeuralNetworkLayerSettings {
-  getNoOfNodes(): number;
+  getNumberOfNodes(): number;
+  setNumberOfNodes(noOfNodes: number): void;
   getActivationFunction(): ActivationFunction;
 }

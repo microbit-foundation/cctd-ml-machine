@@ -17,7 +17,7 @@ export class NeuralNetworkLayersModelFactory {
     const hiddenLayersSettings = architecture.getHiddenLayers();
     const outputLayerSettings = architecture.getOutputLayer();
 
-    const tfInput = tf.input({ shape: [inputLayerSettings.getNoOfNodes()] });
+    const tfInput = tf.input({ shape: [inputLayerSettings.getNumberOfNodes()] });
     const tfInputLayer = this.getInputLayer(inputLayerSettings, tfInput);
     const hiddenLayers = this.getHiddenLayers(hiddenLayersSettings, tfInputLayer);
     const outputLayer = this.getOutputLayer(
@@ -34,7 +34,7 @@ export class NeuralNetworkLayersModelFactory {
     const tfNormalizer = tf.layers.batchNormalization().apply(inputTensor);
     return tf.layers
       .dense({
-        units: inputLayerSettings.getNoOfNodes(),
+        units: inputLayerSettings.getNumberOfNodes(),
         activation: this.getTfActivation(inputLayerSettings.getActivationFunction()),
       })
       .apply(tfNormalizer);
@@ -48,7 +48,7 @@ export class NeuralNetworkLayersModelFactory {
     return hiddenLayersSettings.map(settings => {
       const layer = tf.layers
         .dense({
-          units: settings.getNoOfNodes(),
+          units: settings.getNumberOfNodes(),
           activation: this.getTfActivation(settings.getActivationFunction()),
         })
         .apply(previousLayer);
@@ -63,7 +63,7 @@ export class NeuralNetworkLayersModelFactory {
   ) {
     return tf.layers
       .dense({
-        units: outputLayerSettings.getNoOfNodes(),
+        units: outputLayerSettings.getNumberOfNodes(),
         activation: this.getTfActivation(outputLayerSettings.getActivationFunction()),
       })
       .apply(lastHiddenLayer);

@@ -8,7 +8,7 @@ import type { FeatureProvider } from "../../core/featureprovider/FeatureProvider
 import { featureList, featureValues } from "../application/feature/FeatureList";
 import { JSONFeatureProvider } from "../../core/featureprovider/JSONFeatureProvider";
 import type { AppController } from "./abstract/AppController";
-import type { AbstractState } from "../application/data/AbstractState";
+import type { AbstractState } from "../domain/AbstractState";
 import type { DevicesType } from "../application/devices/Devices";
 
 export class MLMachineAppController implements AppController {

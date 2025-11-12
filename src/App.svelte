@@ -23,7 +23,7 @@
 
 <script>
   import { MLMachine } from './backend/interface-adapter/MLMachine';
-  import AppRoot from './ui/view/AppRoot.svelte';
+  import AppRoot from './frontend/view/AppRoot.svelte';
   new MLMachine().init();
 </script>
 

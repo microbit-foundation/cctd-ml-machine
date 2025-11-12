@@ -4,18 +4,20 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { stores } from '../../../lib/stores/Stores';
   import windi from '../../../../windi.config';
   import RangeSlider from 'svelte-range-slider-pips';
   import NumberSelector from '../../ui/NumberSelector.svelte';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
+    import type { NeuralNetworkModelSettings } from '../../../core/model/neural-network/NeuralNetworkModelSettings';
+    import type { Writable } from 'svelte/store';
+  
+  export let neuralNetworkSettings: Writable<NeuralNetworkModelSettings>
 
-  const neuralNetworkSettings = stores.getNeuralNetworkSettings();
   const color = windi.theme.extend.colors.primary;
 
-  let learningRateSliderValue = $neuralNetworkSettings.learningRate;
+  let learningRateSliderValue = $neuralNetworkSettings.getLearningRate();
   $: {
-    neuralNetworkSettings.setLearningRate(learningRateSliderValue);
+    $neuralNetworkSettings.setLearningRate(learningRateSliderValue);
   }
 </script>
 
@@ -39,8 +41,8 @@
       <NumberSelector
         min={1}
         max={1000}
-        defaultValue={$neuralNetworkSettings.noOfEpochs}
-        onChange={val => neuralNetworkSettings.setNoOfEpochs(val)} />
+        defaultValue={$neuralNetworkSettings.getNumberOfEpochs()}
+        onChange={val => $neuralNetworkSettings.setNumberOfEpochs(val)} />
     </div>
 
     <p class="whitespace-nowrap content-center">Nodes</p>
@@ -48,8 +50,15 @@
       <NumberSelector
         min={1}
         max={200}
-        defaultValue={$neuralNetworkSettings.noOfUnits}
-        onChange={val => neuralNetworkSettings.setNoOfUnits(val)} />
+        defaultValue={$neuralNetworkSettings
+          .getArchitecture()
+          .getHiddenLayers()[0]
+          .getNumberOfNodes()}
+        onChange={val =>
+          $neuralNetworkSettings
+            .getArchitecture()
+            .getHiddenLayers()[0]
+            .setNumberOfNodes(val)} />
     </div>
 
     <p class="whitespace-nowrap content-center">Batch size</p>
@@ -57,8 +66,8 @@
       <NumberSelector
         min={1}
         max={30}
-        defaultValue={$neuralNetworkSettings.batchSize}
-        onChange={val => neuralNetworkSettings.setBatchSize(val)} />
+        defaultValue={$neuralNetworkSettings.getBatchSize()}
+        onChange={val => $neuralNetworkSettings.setBatchSize(val)} />
     </div>
   </div>
 {/if}

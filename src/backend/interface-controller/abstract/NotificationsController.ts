@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { AbstractState } from "../../application/data/AbstractState";
+import type { AbstractState } from "../../domain/AbstractState";
 
 export interface NotificationController {
     getSnackbarMessage(): AbstractState<string | undefined>

@@ -21,7 +21,7 @@ import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import Confidences from '../domain/stores/Confidences';
-import HighlightedAxes from '../domain/stores/HighlightedAxes';
+// import HighlightedAxes from '../domain/stores/HighlightedAxes';
 import SelectedModel from '../domain/SelectedModel';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
@@ -51,7 +51,7 @@ class Stores implements Readable<StoresType> {
   private classifier: Classifier;
   private gestures: Gestures;
   private confidences: Confidences;
-  private highlightedAxis: HighlightedAxes;
+  // private highlightedAxis: HighlightedAxes;
   private selectedModel: SelectedModel;
   private availableAxes: AvailableAxes;
   private snackbar: Snackbar;
@@ -76,22 +76,23 @@ class Stores implements Readable<StoresType> {
     this.gestures = new Gestures(repositories.getGestureRepository());
     this.selectedModel = new SelectedModel(this.classifier, knnHasTrained);
     this.knnModelSettings = new KNNModelSettings(this.selectedModel, this.classifier);
-    this.highlightedAxis = new HighlightedAxes(
-      this.classifier,
-      this.selectedModel,
-      this.devices,
-      this.snackbar,
-    );
+    // this.highlightedAxis = new HighlightedAxes(
+    //   this.classifier,
+    //   this.selectedModel,
+    //   this.devices,
+    //   this.snackbar,
+    // );
     this.availableAxes = new AvailableAxes(this.liveData, this.gestures);
     this.availableAxes.subscribe(newAxes => {
-      this.highlightedAxis.set(newAxes);
+      //this.highlightedAxis.set(newAxes);
     });
     this.validationSets = new ValidationSets(this.gestures);
     this.validationResults = new ValidationResults(
       this.validationSets,
       this.classifier,
       this.gestures,
-      this.highlightedAxis,
+      null!,
+      //this.highlightedAxis,
     );
     this.enableFingerprint = new EnableFingerprint(
       StaticConfiguration.enableFingerprintByDefault,
@@ -123,7 +124,8 @@ class Stores implements Readable<StoresType> {
     this.engine = new PollingPredictorEngine(
       this.classifier,
       liveDataStore,
-      this.highlightedAxis,
+      null!
+      //this.highlightedAxis,
     );
     return get(this.liveData) as T;
   }
@@ -149,8 +151,8 @@ class Stores implements Readable<StoresType> {
     return this.confidences;
   }
 
-  public getHighlightedAxes(): HighlightedAxes {
-    return this.highlightedAxis;
+  public getHighlightedAxes() {
+    return null!; //this.highlightedAxis;
   }
 
   public getSelectedModel(): SelectedModel {

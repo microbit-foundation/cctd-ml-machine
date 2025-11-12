@@ -33,9 +33,12 @@ export const trainNNModel = async () => {
     16
   );
   const modelTrainer = new NeuralNetworkModelTrainer(
-    new NeuralNetworkSettingsImpl(StaticConfiguration.defaultNeuralNetworkSettings, architecture, {
-      handleTrainingIteration: trainingIterationHandler
-    })
+    new NeuralNetworkSettingsImpl(
+      StaticConfiguration.defaultNeuralNetworkSettings,
+      architecture,
+      {
+        handleTrainingIteration: trainingIterationHandler
+      })
   );
 
   await stores.getClassifier().getModel().train(modelTrainer);

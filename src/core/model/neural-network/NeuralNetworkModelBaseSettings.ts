@@ -6,7 +6,11 @@
 
 export interface NeuralNetworkModelBaseSettings {
   getLearningRate(): number;
+  setLearningRate(learningRate: number): void;
   getNumberOfEpochs(): number;
+  setNumberOfEpochs(numberOfEpochs: number): void;
   getBatchSize(): number;
+  setBatchSize(batchSize: number): void;
   getValidationSplit(): number;
+  setValidationSplit(validationSplit: number): void;
 }

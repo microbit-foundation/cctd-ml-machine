@@ -13,5 +13,5 @@ export interface AbstractState<T> {
     get(): T;
     set(value: T): void;
     update(updater: (currentValue: T) => T): void;
-    subscribe: (run: (value: T) => void, invalidate?: (value?: T) => void) => Unsubscriber;
+    subscribe(run: (value: T) => void, invalidate?: (value?: T) => void): Unsubscriber;
 }

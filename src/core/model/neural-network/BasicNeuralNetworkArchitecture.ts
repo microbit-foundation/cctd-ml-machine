@@ -19,19 +19,19 @@ export class BasicNeuralNetworkArchitecture implements NeuralNetworkArchitecture
     public getInputLayer(): NeuralNetworkLayerSettings {
         return {
             getActivationFunction: () => ActivationFunction.RELU,
-            getNoOfNodes: () => this.noOfClasses * this.noOfFilters
+            getNumberOfNodes: () => this.noOfClasses * this.noOfFilters
         }
     }
     public getHiddenLayers(): NeuralNetworkLayerSettings[] {
         return [{
             getActivationFunction: () => ActivationFunction.RELU,
-            getNoOfNodes: () => this.noOfNodesInHiddenLayer
+            getNumberOfNodes: () => this.noOfNodesInHiddenLayer
         }]
     }
     public getOutputLayer(): NeuralNetworkLayerSettings {
         return {
             getActivationFunction: () => ActivationFunction.SOFTMAX,
-            getNoOfNodes: () => this.noOfClasses
+            getNumberOfNodes: () => this.noOfClasses
         }
     }
 

@@ -17,6 +17,22 @@ export class NeuralNetworkSettingsImpl implements NeuralNetworkModelSettings {
         private networkArchitecture: NeuralNetworkArchitecture,
         private networkObserver: NeuralNetworkTrainingObserver
     ) {
+
+    }
+    public setLearningRate(learningRate: number): void {
+        this.baseSettings.setLearningRate(learningRate);
+    }
+
+    public setNumberOfEpochs(numberOfEpochs: number): void {
+        this.baseSettings.setNumberOfEpochs(numberOfEpochs);
+    }
+
+    public setBatchSize(batchSize: number): void {
+        this.baseSettings.setBatchSize(batchSize);
+    }
+
+    public setValidationSplit(validationSplit: number): void {
+        this.baseSettings.setValidationSplit(validationSplit);
     }
 
     public getArchitecture(): NeuralNetworkArchitecture {

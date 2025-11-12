@@ -30,7 +30,7 @@
   import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
 
   export let onNoMicrobitSelect: () => void;
-  export let gesture: GestureState;
+  export let gesture: Gesture; // TODO: !! Changed this to Gesture
   const devices = stores.getDevices();
   const gestures = stores.getGestures();
 

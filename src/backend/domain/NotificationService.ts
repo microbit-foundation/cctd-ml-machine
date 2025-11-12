@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { AbstractState } from "../application/data/AbstractState";
+import type { AbstractState } from "./AbstractState";
 
 export interface NotificationService {
     getImmediateFeedbackMessage(): AbstractState<string | undefined>;
+    clearImmediateMessage(): void;
 }

@@ -5,8 +5,6 @@
  */
 import { type Readable, type Writable, derived, get, writable } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
-import type { MLModel } from '../../core/entities/classifier/models/MLModel';
-import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
 import ClassifierFactory from '../domain/ClassifierFactory';
 import LocalStorageRepositories from './LocalStorageRepositories';
 import Classifier from '../domain/stores/Classifier';
@@ -14,14 +12,16 @@ import GestureConfidence from '../domain/stores/gesture/GestureConfidence';
 import Confidences from '../domain/stores/Confidences';
 import type { ClassifierRepository } from '../domain/ClassifierRepository';
 import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
-import { t } from '../../i18n';
 import type { FiltersRepository } from '../domain/FiltersRepository';
 import type Snackbar from '../stores/Snackbar';
 import type GestureState from '../domain/stores/gesture/GestureState';
 import type { GestureID } from '../../core/entities/Gesture';
+import type { MLModel } from '../../core/model/MLModel';
+import type { ModelTrainer } from '../../core/model/ModelTrainer';
+import type { TrainingResult } from '../../core/classifier/TrainingResult';
 
 export type TrainerConsumer = <T extends MLModel>(
-  trainer: ModelTrainer<T>,
+  trainer: ModelTrainer<T, TrainingResult>,
 ) => Promise<void>;
 
 class LocalStorageClassifierRepository implements ClassifierRepository {
@@ -60,14 +60,15 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
    * Takes a trainer as parameter and produces a MLModel. This function is passed into the classifier when built.
    * See getTrainerConsumer() and getClassifier()
    */
-  private async trainModel<T extends MLModel>(trainer: ModelTrainer<T>): Promise<void> {
-    const model = await trainer.trainModel(this.trainingDataRepository);
-    this.snackbar.sendMessage(get(t)('snackbar.modeltrained'));
-    LocalStorageClassifierRepository.mlModel.set(model);
+  private async trainModel<T extends MLModel>(trainer: ModelTrainer<T, TrainingResult>): Promise<void> {
+    throw new Error("Old logic")
+    //const model = await trainer.trainModel(this.trainingDataRepository);
+    //this.snackbar.sendMessage(get(t)('snackbar.modeltrained'));
+    //LocalStorageClassifierRepository.mlModel.set(model);
   }
 
   private getTrainerConsumer(): TrainerConsumer {
-    return <T extends MLModel>(trainer: ModelTrainer<T>) => this.trainModel(trainer);
+    return <T extends MLModel>(trainer: ModelTrainer<T, TrainingResult>) => this.trainModel(trainer);
   }
 
   /* TODO: feels wrong to have this in the classifier repository, maybe? Shouldn't confidence relate to gestures? */

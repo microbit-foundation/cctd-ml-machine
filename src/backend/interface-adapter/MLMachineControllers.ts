@@ -4,21 +4,32 @@
  * SPDX-License-Identifier: MIT
  */
 
-import CookieManager from "../../lib/CookieManager";
-import type { AbstractState } from "../application/data/AbstractState";
 import type { AppController } from "../interface-controller/abstract/AppController";
 import type { NotificationController } from "../interface-controller/abstract/NotificationsController";
+import { AxisController } from "../interface-controller/AxisController";
+import { ClassifierController } from "../interface-controller/ClassifierController";
+import { GestureController } from "../interface-controller/GestureController";
 import { MLMachineAppController } from "../interface-controller/MLMachineAppController";
 import { MLMachineNotificationController } from "../interface-controller/MLMachineNotificationController";
+import { GesturesStateAdapter } from "./GesturesStateAdapter";
 import { MLMachine } from "./MLMachine";
+import { ReconnectFlagCookieState } from "./ReconnectFlagCookieState";
 
 export class MLMachineControllers {
-    public constructor(private mlMachine: MLMachine) { }
+
+    private gestureController: GestureController;
+
+    public constructor(private mlMachine: MLMachine) {
+        this.gestureController = new GestureController(
+            new GesturesStateAdapter(this.mlMachine.getGestureService()),
+            this.mlMachine.getGestureService()
+        );
+    }
 
     public getAppController(): AppController {
         return new MLMachineAppController(
             this.mlMachine.getDevices(),
-            this.getReconnectFlag(),
+            new ReconnectFlagCookieState(),
         )
     }
 
@@ -26,23 +37,15 @@ export class MLMachineControllers {
         return new MLMachineNotificationController(this.mlMachine.getNotificationService())
     }
 
-    private getReconnectFlag(): AbstractState<boolean> {
-        const setter = (value: boolean) => {
-                if (value === true) {
-                    CookieManager.setReconnectFlag();
-                } else {
-                    CookieManager.unsetReconnectFlag();
-                }
-            }
-        return {
-            get: () => CookieManager.isReconnectFlagSet(),
-            set: setter,
-            update: (updater: (curVal: boolean) => boolean) => {
-                setter(updater(CookieManager.isReconnectFlagSet()))
-            },
-            subscribe: () => {
-                throw new Error("Subscriptions not supported for reconnect flag!");
-            }
-        }
+    public getClassifierController(): ClassifierController {
+        return new ClassifierController(this.mlMachine);
+    }
+
+    public getAxisController(): AxisController {
+        return new AxisController(this.mlMachine);
+    }
+
+    public getGestureController() {
+        return this.gestureController;
     }
 }

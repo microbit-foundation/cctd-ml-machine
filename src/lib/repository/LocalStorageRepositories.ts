@@ -12,6 +12,7 @@ import type { TrainingDataRepository } from '../../core/repository/TrainingDataR
 import { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import type { FiltersRepository } from '../domain/FiltersRepository';
 import type Snackbar from '../stores/Snackbar';
+import { MLMachine } from '../../backend/interface-adapter/MLMachine';
 
 class LocalStorageRepositories implements Repositories {
   private gestureRepository: LocalStorageGestureRepository;
@@ -42,7 +43,11 @@ class LocalStorageRepositories implements Repositories {
       snackbar,
       this.filtersRepository,
     );
-    this.gestureRepository = new LocalStorageGestureRepository(this.classifierRepository);
+    this.gestureRepository = new LocalStorageGestureRepository(
+      this.classifierRepository,
+      null!
+      //MLMachine.getInstance().getClassifierService()
+    );
   }
 
   public static getInstance() {

@@ -11,10 +11,10 @@ import type { RecordingData } from './RecordingData';
 export type GestureID = number;
 
 export interface Gesture {
-  name: string;
-  ID: GestureID;
-  recordings: RecordingData[];
-  output: GestureOutput;
-  color: string;
-  confidence: Confidence;
+  getName(): string;
+  getID(): GestureID;
+  getRecordings(): RecordingData[];
+  getOutput(): GestureOutput;
+  getColor(): string;
+  getConfidence(): Confidence;
 }

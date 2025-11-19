@@ -4,6 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import type { RecordingData } from '../../../core/entities/RecordingData';
   import BaseVector from '../../../core/vector/BaseVector';
   import { stores } from '../../../lib/stores/Stores';
@@ -11,15 +12,18 @@
 
   export let recording: RecordingData;
   export let gestureName: string;
+
+  const controllers = getControllers();
+  const selectedAxes = controllers.getAxisController().getSelectedAxes();
+
   const classifier = stores.getClassifier();
-  const highlightedAxes = stores.getHighlightedAxes();
   const filters = classifier.getFilters();
 
   $: filtersLabels = (() => {
     const labels: string[] = [];
     $filters.forEach(filter => {
       const filterName = filter.getName();
-      $highlightedAxes.forEach(axis => {
+      $selectedAxes.forEach(axis => {
         labels.push(`${filterName} - ${axis.label}`);
       });
     });
@@ -27,7 +31,7 @@
   })();
 
   $: fingerprint = (() => {
-    const sampleInputVectorIndices = $highlightedAxes.map(axis => axis.index);
+    const sampleInputVectorIndices = $selectedAxes.map(axis => axis.index);
     const sampleInput = recording.samples.reduce(
       (pre, cur) => {
         sampleInputVectorIndices.forEach(idx => {

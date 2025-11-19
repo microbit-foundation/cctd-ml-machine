@@ -7,10 +7,12 @@
 import type { Classifier } from "../../../../core/classifier/Classifier";
 import type { ModelTraining } from "../../../../core/model/ModelTraining";
 import type { NeuralNetworkModelSettings } from "../../../../core/model/neural-network/NeuralNetworkModelSettings";
-import type { AbstractState } from "../../AbstractState";
+import type { AbstractState } from "../../../interface-adapter/AbstractState";
 import type { ClassifierService } from "../../ClassifierService";
 
 export class StateClassifierService implements ClassifierService {
+
+    // TODO: Remove dependency on abstract state. Move to a repository interface instead
 
     constructor(
         private neuralNetworkSettings: AbstractState<NeuralNetworkModelSettings>,

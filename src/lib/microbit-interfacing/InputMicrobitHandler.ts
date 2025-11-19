@@ -18,12 +18,17 @@ import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
 import Devices, { DeviceRequestStates } from '../domain/Devices';
 import { ModelView, modelView } from '../stores/ApplicationState';
+import { MLMachine } from '../../backend/interface-adapter/MLMachine';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private devices: Devices) {}
+  public constructor(
+    private devices: Devices,
+  ) { 
+    new ConsoleLogger("InputMicrobitHandler").log("Input handler was initialized!");
+  }
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnected', versionNumber);
@@ -47,11 +52,12 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onAccelerometerDataReceived(x: number, y: number, z: number): void {
-    //Logger.log("InputMicrobitHandler", "onAccelerometerDataReceived", x, y, z);
-
     const accelX = x / 1000.0;
     const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
+    MLMachine.getInstance().getDataService().addLiveData(
+      new MicrobitAccelerometerDataVector({ x: accelX, y: accelY, z: accelZ })
+    );
 
     const liveDataStore = get(stores).liveData;
     if (liveDataStore !== undefined) {

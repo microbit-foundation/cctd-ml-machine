@@ -6,10 +6,11 @@
 
 
 import { writable } from "svelte/store";
-import type { AbstractState, Unsubscriber } from "../domain/AbstractState";
+import type { AbstractState } from "./AbstractState";
 import type { ModelTraining } from "../../core/model/ModelTraining";
 import { SvelteStateAdapter } from "./SvelteStateAdapter";
 import { ModelTrainingImpl } from "../../core/model/ModelTrainingImpl";
+import type { Unsubscriber } from "./AbstractReadonlyState";
 
 export class ModelTrainingStateAdapter implements AbstractState<ModelTraining>, ModelTraining { 
     

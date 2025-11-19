@@ -26,9 +26,10 @@ import type HighlightedAxes from './HighlightedAxes';
 import type { ValidationSetMatrix } from '../../../pages/validation/ValidationPage';
 import Matrix from '../../../core/entities/Matrix';
 import type { GestureID } from '../../../core/entities/Gesture';
+import type { Vector } from '../../../core/vector/Vector';
 
 export type ValidationResult = {
-  prediction: number[];
+  prediction: Vector;
   gestureIdx: number;
   recordingId: number;
 }[][];
@@ -88,7 +89,7 @@ class ValidationResults implements Readable<ValidationResult> {
 
   public getForGesture(
     gestureId: GestureID,
-  ): Readable<{ prediction: number[]; gestureIdx: number; recordingId: number }[]> {
+  ): Readable<ValidationResult[0]> {
     const index = this.gestures
       .getGestures()
       .findIndex(gesture => gesture.getId() === gestureId);
@@ -142,7 +143,7 @@ class ValidationResults implements Readable<ValidationResult> {
 
   private createValidationMatrix = (
     validationResults: {
-      prediction: number[];
+      prediction: Vector;
       gestureIdx: number;
     }[][],
     gestures: GestureData[],

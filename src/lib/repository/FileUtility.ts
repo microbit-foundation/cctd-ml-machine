@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 import type { Gesture, GestureID } from '../../core/entities/Gesture';
 import type { GestureOutput } from '../../core/entities/GestureOutput';
 import type { RecordingData } from '../../core/entities/RecordingData';
@@ -26,7 +27,7 @@ class FileUtility {
       }
       const contents = e.target.result;
       if (typeof contents === 'string') {
-        stores.getGestures().importFrom(JSON.parse(contents) as PersistedGestureData[]);
+        getControllers().getGestureController().importFromJson(contents)
       }
     };
     reader.readAsText(file as Blob);

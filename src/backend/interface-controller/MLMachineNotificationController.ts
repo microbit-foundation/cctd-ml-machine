@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { AbstractState } from "../domain/AbstractState";
+import type { AbstractState } from "../interface-adapter/AbstractState";
 import type { NotificationService } from "../domain/NotificationService";
 import type { NotificationController } from "./abstract/NotificationsController";
 

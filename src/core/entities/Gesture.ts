@@ -11,6 +11,9 @@ import type { RecordingData } from './RecordingData';
 export type GestureID = number;
 
 export interface Gesture {
+  setOutput(ouput: GestureOutput): void;
+  setRecordings(recordings: RecordingData[]): void;
+  setName(name: string): void;
   getName(): string;
   getID(): GestureID;
   getRecordings(): RecordingData[];

@@ -9,6 +9,7 @@ import Matrix from '../../core/entities/Matrix';
 import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
 import type { ValidationResult } from '../../lib/domain/stores/ValidationResults';
 import { stores } from '../../lib/stores/Stores';
+import type { Vector } from '../../core/vector/Vector';
 
 export interface ValidationSetMatrix {
   matrix: Matrix<number>;
@@ -33,7 +34,7 @@ export const createValidationMatrixVisual = (
 
 export const createValidationMatrix = (
   validationResults: {
-    prediction: number[];
+    prediction: Vector;
     gestureIdx: number;
   }[][],
   gestures: GestureData[],
@@ -59,7 +60,3 @@ export const isValidationSetEmpty = derived(
   },
 );
 
-export const evaluateValidationSet = () => {
-  const validationResults = stores.getValidationResults();
-  const accuracy = validationResults.getAccuracy();
-};

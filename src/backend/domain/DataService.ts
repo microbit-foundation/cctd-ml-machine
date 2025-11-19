@@ -5,8 +5,15 @@
  */
 
 import type { Axis } from "../../core/entities/Axis";
-import type { AbstractState } from "./AbstractState";
+import type { LiveDataVector } from "../../core/vector/LiveDataVector";
+import type { Vector } from "../../core/vector/Vector";
 
 export interface DataService {
-    getSelectedAxes(): AbstractState<Axis[]>
+    addLiveData(input: LiveDataVector): void;
+    setSelectedAxes(axes: Axis[]): void; 
+    toggleAxis(axis: Axis): void;
+    getAvailableAxes(): Axis[];
+    getSelectedAxes(): Axis[]
+    getAxisFromIndex(index: number): Axis | undefined;
+    isAxisSelected(axis: Axis): boolean;
 }

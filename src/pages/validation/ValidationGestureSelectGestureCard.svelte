@@ -17,18 +17,22 @@
   import { get } from 'svelte/store';
   import ConsoleLogger from '../../core/logging/ConsoleLogger';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
-  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
+  import type { Gesture, GestureID } from '../../core/entities/Gesture';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  export let gesture: GestureState;
+  export let gestureId: GestureID;
+  const gestureController = getControllers().getGestureController();
+  const gesture = gestureController.getGestureState(gestureId);
+
   export let onNoMicrobitSelect: () => void;
 
   const devices = stores.getDevices();
   const validationSets = stores.getValidationSets();
   const recorder = stores.getRecorder();
 
-  $: isThisRecording = $recorder.recordingGesture === gesture.getId();
+  $: isThisRecording = $recorder.recordingGesture === $gesture.getID();
 
-  const selectClicked = (gesture: GestureState): void => {
+  const selectClicked = (gesture: Gesture): void => {
     if (!$devices.isInputConnected) {
       chosenGesture.update(gesture => {
         gesture = null;
@@ -38,10 +42,10 @@
       return;
     }
     chosenGesture.update(chosen => {
-      if (chosen === gesture) {
+      if (chosen === gesture.getID()) {
         chosen = null;
       } else {
-        chosen = gesture;
+        chosen = gesture.getID();
       }
       return chosen;
     });
@@ -49,7 +53,7 @@
 
   const createRecording = (buttons?: { buttonA: 0 | 1; buttonB: 0 | 1 }) => {
     // Make sure only *this* gesture get's the recording indicator
-    if (gesture.getId() !== $chosenGesture?.getId()) {
+    if ($gesture.getID() !== $chosenGesture) {
       return;
     }
 
@@ -58,8 +62,8 @@
       return;
     }
     const addRecording = () => {
-      recorder.startRecording(gesture.getId(), recording => {
-        validationSets.addRecording(gesture.getId(), recording);
+      recorder.startRecording($gesture.getID(), recording => {
+        validationSets.addRecording($gesture.getID(), recording);
       });
     };
 
@@ -91,8 +95,8 @@
 </script>
 
 <GestureCard validationPage small>
-  {#if $chosenGesture?.getId() !== gesture.getId()}
-    <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked(gesture)}>
+  {#if $chosenGesture !== $gesture.getID()}
+    <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked($gesture)}>
       <div class="w-full text-center">
         <i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext" />
       </div>
@@ -101,7 +105,7 @@
       </p>
     </div>
   {:else}
-    <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked(gesture)}>
+    <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked($gesture)}>
       <div class="w-full text-center">
         <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" />
       </div>

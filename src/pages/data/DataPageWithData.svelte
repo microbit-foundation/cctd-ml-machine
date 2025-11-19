@@ -64,7 +64,7 @@
 <!-- Display all gestures -->
 <div class="flex flex-col gap-2 pt-8">
   {#each $gestures as gesture}
-    <Gesture {gesture} onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
+    <Gesture gestureId={gesture.getID()} onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
   {/each}
   <NewGestureButton />
 </div>

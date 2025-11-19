@@ -16,6 +16,11 @@
   import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
     import { createFilter } from '../../core/filter/FilterUtils';
     import type { FilterType } from '../../core/filter/Filter';
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
+
+    const controllers = getControllers();
+    const selectedAxes = controllers.getAxisController().getSelectedAxes();
+
 
   const devices = stores.getDevices();
 
@@ -279,7 +284,7 @@
       .style('text-anchor', 'middle')
       .style('font-size', '20px')
       .style('text-decoration', (axis: Axis) =>
-        $highlightedAxes.find(e => e.label.toLocaleLowerCase() === axis)
+        $selectedAxes.find(e => e.label.toLocaleLowerCase() === axis)
           ? 'none'
           : 'line-through',
       )

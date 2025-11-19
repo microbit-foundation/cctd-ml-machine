@@ -9,9 +9,7 @@ export type Unsubscriber = () => void
 /**
  * Abstraction for state management
  */
-export interface AbstractState<T> {
+export interface AbstractReadonlyState<T> {
     get(): T;
-    set(value: T): void;
-    update(updater: (currentValue: T) => T): void;
     subscribe(run: (value: T) => void, invalidate?: (value?: T) => void): Unsubscriber;
 }

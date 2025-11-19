@@ -18,6 +18,27 @@ export class LocalStorageGestureRepository implements GestureRepository {
 
   public constructor(private log: Logger) { }
 
+  public generateGestureId(): GestureID {
+    let proposed = new Date().getTime();
+    while(this.getGestures().find(gest => gest.getID() === proposed)) {
+      proposed++;
+    }
+    return proposed;
+  }
+
+  public saveGesture(gesture: Gesture): Gesture {
+    const gestures = this.getGestures();
+    const gestIdx = gestures.findIndex(gest => gest.getID() === gesture.getID());
+    if (gestIdx === -1) {
+      this.saveGestures([...gestures, gesture]);
+    } else {
+      const updated = [...gestures];
+      updated[gestIdx] = gesture;
+      this.saveGestures(updated);
+    }
+    return gesture;
+  }
+
   public getGestures(): Gesture[] {
     const persisted = this.getPersistedData();
     return persisted.map(persist => new GestureImpl(
@@ -59,7 +80,7 @@ export class LocalStorageGestureRepository implements GestureRepository {
   }
 
   public removeGesture(gestureId: number): void {
-    this.saveGestures(this.getGestures().filter(gest => gest.getID() !== gestureId));
+    this.saveGestures([...this.getGestures().filter(gest => gest.getID() !== gestureId)]);
   }
 
   private getPersistedData(): PersistedGestureData[] {

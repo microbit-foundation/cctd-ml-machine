@@ -8,7 +8,7 @@ import { writable } from "svelte/store";
 import ConsoleLogger, { welcomeLog } from "../../core/logging/ConsoleLogger";
 import type { Logger } from "../../core/logging/Logger";
 import Devices from "../../lib/domain/Devices";
-import type { AbstractState } from "../domain/AbstractState";
+import type { AbstractState } from "./AbstractState";
 import type { DevicesType } from "../application/devices/Devices";
 import { StateNotificationService } from "../domain/implementation/notification/StateNotificationService";
 import type { NotificationService } from "../domain/NotificationService";
@@ -24,12 +24,27 @@ import { DefaultNeuralNetworkArchitecture } from "./DefaultNeuralNetworkArchitec
 import type { Classifier } from "../../core/classifier/Classifier";
 import type { ModelTraining } from "../../core/model/ModelTraining";
 import { ModelTrainingStateAdapter } from "./ModelTrainingStateAdapter";
-import { StateDataService } from "../domain/implementation/data/StateDataService";
+import { DataServiceImpl } from "../application/data/DataServiceImpl";
 import type { Axis } from "../../core/entities/Axis";
 import type { GestureService } from "../domain/GestureService";
 import { GestureServiceImpl } from "../domain/implementation/gesture/GestureServiceImpl";
 import { LocalStorageGestureRepository } from "../infrastructure/LocalStorageGestureRepository";
 import type { Gesture } from "../../core/entities/Gesture";
+import { MLMachineColors } from "./MLMachineColors";
+import type { DataService } from "../domain/DataService";
+import { InMemoryAxisRepository } from "../infrastructure/InMemoryAxisRepository";
+import { InMemoryLiveDataRepository } from "../infrastructure/InMemoryLiveDataRepository";
+import StaticConfiguration from "../../StaticConfiguration";
+import { NotifierServiceImpl } from "../application/NotifierServiceImpl";
+import Microbits from "../../lib/microbit-interfacing/Microbits";
+import CombinedMicrobitHandler from "../../lib/microbit-interfacing/CombinedMicrobitHandler";
+import OutputMicrobitHandler from "../../lib/microbit-interfacing/OutputMicrobitHandler";
+import { stores } from "../../lib/stores/Stores";
+import type { LiveData } from "../../lib/domain/stores/LiveData";
+import type { LiveDataVector } from "../../core/vector/LiveDataVector";
+import type { AbstractReadonlyState } from "./AbstractReadonlyState";
+import { InMemoryLiveDataStore } from "../../core/InMemoryLiveDataStore";
+import { LiveDataStateAdapter } from "./LiveDataStateAdapter";
 
 
 /**
@@ -41,10 +56,11 @@ export class MLMachine {
     private devices: AbstractState<DevicesType>;
     private immediateFeedback: AbstractState<string | undefined>;
     private classifier: AbstractState<Classifier | undefined>;
-    private modelTraining: AbstractState<ModelTraining>
-    private selectedAxes: AbstractState<Axis[]>
-    private availableAxes: AbstractState<Axis[]>
+    private modelTraining: AbstractState<ModelTraining>;
     private controllers: MLMachineControllers;
+    private dataService: DataService;
+    private gestureService: GestureService;
+    private liveData: AbstractState<LiveData<LiveDataVector>>;
     // TODO: Should probably be a logging factory taken as argument instead
     private log: Logger = new ConsoleLogger("MLMachine");
 
@@ -68,15 +84,28 @@ export class MLMachine {
         )
         this.modelTraining = new ModelTrainingStateAdapter();
 
-        const availableAxesFromRecordings = this.getAvailableAxesFromRecordings()
-        this.availableAxes = new SvelteStateAdapter(writable<Axis[]>(
-            availableAxesFromRecordings
-        ))
-        this.selectedAxes = new SvelteStateAdapter(writable<Axis[]>(
-            availableAxesFromRecordings
-        ))
+        const repository = new LocalStorageGestureRepository(new ConsoleLogger("LocalStorageGestureRepository"));
+        this.gestureService = new GestureServiceImpl(
+            new LocalStorageGestureRepository(new ConsoleLogger("LocalStorageGestureRepository")),
+            new MLMachineColors(repository)
+        );
+        this.liveData = new LiveDataStateAdapter();
+        this.dataService = new DataServiceImpl(
+            new InMemoryAxisRepository(this.gestureService),
+            new InMemoryLiveDataRepository(
+                StaticConfiguration.accelerometerLiveDataBufferSize,
+                this.liveData
+            ),
+            new NotifierServiceImpl()
+        );
 
-        this.controllers = new MLMachineControllers(this);
+        this.controllers = new MLMachineControllers(this, this.dataService, this.liveData);
+        const devices = stores.getDevices();
+        const outputHandler = new OutputMicrobitHandler(devices)
+        Microbits.setHandlers(
+            new CombinedMicrobitHandler(outputHandler, devices),
+            outputHandler
+        );
     }
 
     public init(): void {
@@ -110,15 +139,11 @@ export class MLMachine {
     }
 
     public getDataService() {
-        return new StateDataService(
-            this.selectedAxes
-        );
+        return this.dataService;
     }
 
     public getGestureService(): GestureService {
-        return new GestureServiceImpl(
-            new LocalStorageGestureRepository(new ConsoleLogger("LocalStorageGestureRepository"))
-        );
+        return this.gestureService;
     }
 
     public createLogger(origin: any): Logger {
@@ -127,27 +152,6 @@ export class MLMachine {
 
     public getControllers(): MLMachineControllers {
         return this.controllers;
-    }
-
-    private getAvailableAxesFromRecordings(): Axis[] | undefined {
-        const gestures: Gesture[] = this.getGestureService().getGestures()
-        if (gestures.length > 0) {
-            const recordings = gestures[0].getRecordings();
-            if (recordings.length > 0) {
-                this.log.log(
-                    'Found default available axes in recordings',
-                    recordings[0].labels,
-                );
-                return recordings[0].labels.map(
-                    (label: string, index: number) =>
-                        ({
-                            index,
-                            label,
-                        }) as Axis,
-                );
-            }
-        }
-        return [];
     }
 }
 

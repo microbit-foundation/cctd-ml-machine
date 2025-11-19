@@ -6,7 +6,7 @@
 
 import type { Classifier } from "../../core/classifier/Classifier";
 import type { NeuralNetworkModelSettings } from "../../core/model/neural-network/NeuralNetworkModelSettings";
-import type { AbstractState } from "./AbstractState";
+import type { AbstractState } from "../interface-adapter/AbstractState";
 import type { ModelTraining } from "../../core/model/ModelTraining";
 
 export interface ClassifierService {

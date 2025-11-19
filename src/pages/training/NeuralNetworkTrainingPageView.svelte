@@ -23,7 +23,7 @@
   const classifier = svelteState(classifierController.getClassifier());
   const axisController = getControllers().getAxisController();
 
-  const selectedAxes = svelteState(axisController.getSelectedAxes())
+  const selectedAxes = axisController.getSelectedAxes()
 
   const trainModelClickHandler = () => {
     trainNNModel().then(() => {

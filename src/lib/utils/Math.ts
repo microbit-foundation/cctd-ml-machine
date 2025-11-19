@@ -53,7 +53,10 @@ export const getMean = (vectors: Vector[]): Vector => {
   return new BaseVector(mean);
 };
 
-export const findLargestIndex = (arr: number[]) => {
+export const findLargestIndex = (arr: number[] | Vector) => {
+  if (!Array.isArray(arr)) {
+    arr = arr.getValue();
+  }
   if (arr.length === 0) return -1; // Handle empty array case
 
   let maxIndex = 0;

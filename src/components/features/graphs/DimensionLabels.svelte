@@ -15,9 +15,13 @@
   import { onDestroy, onMount } from 'svelte';
   import { derived, type Unsubscriber } from 'svelte/store';
   import type SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
-  import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
-    import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+  import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+
+  const controllers = getControllers();
+  const axisController = controllers.getAxisController();
+  const selectedAxes = axisController.getSelectedAxes();
 
   type LabelData = {
     id: number;
@@ -96,8 +100,7 @@
     }
   }
 
-  const highlightedAxes = stores.getHighlightedAxes();
-  const labelEnabled = derived(highlightedAxes, axes => {
+  const labelEnabled = derived(selectedAxes, axes => {
     return labels.map((_, idx) => axes.find(axis => axis.index === idx) !== undefined);
   });
 </script>

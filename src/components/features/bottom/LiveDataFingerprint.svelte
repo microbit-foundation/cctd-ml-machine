@@ -10,17 +10,20 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import Fingerprint from '../../ui/recording/Fingerprint.svelte';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   export let gestureName: string;
+  const controllers = getControllers();
+  const axisController = controllers.getAxisController();
   const classifier = stores.getClassifier();
   const filters = classifier.getFilters();
-  const highlightedAxes = stores.getHighlightedAxes();
+  const selectedAxes = axisController.getSelectedAxes();
   $: liveData = $stores.liveData;
   let filteredNormalizedInput: null | number[] = null;
 
   $: filtersLabels = $filters.flatMap(filter => {
     const filterName = filter.getName();
-    return $highlightedAxes.map(axis => `${filterName} - ${axis.label}`);
+    return $selectedAxes.map(axis => `${filterName} - ${axis.label}`);
   });
   // $: fingerprint = $classifier.filteredInput.normalized.getValue();
   onMount(() => {
@@ -35,7 +38,7 @@
             );
           filteredNormalizedInput = ClassifierInput.getInputForAxes(
             bufferedData.map(e => e.value),
-            $highlightedAxes,
+            $selectedAxes,
           ).getNormalizedInput(filters);
         }
       } catch (error) {}

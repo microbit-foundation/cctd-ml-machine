@@ -11,11 +11,14 @@
   import Recording from '../../components/ui/recording/Recording.svelte';
   import type GestureState from '../../lib/domain/stores/gesture/GestureState';
   import type { GestureID } from '../../core/entities/Gesture';
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  export let gesture: GestureState;
+  export let gestureId: GestureID;
+  const gestureController = getControllers().getGestureController();
+  const gesture = gestureController.getGestureState(gestureId);
 
   const validationSets = stores.getValidationSets();
-  const gestureValidationSet = stores.getValidationSets().getForGesture(gesture.getId());
+  const gestureValidationSet = stores.getValidationSets().getForGesture($gesture.getID());
   // Results are grouped by gestures then recordings [i][j](Gestures -> Recording)
   const results = stores.getValidationResults();
   const enableFingerprint = stores.getEnableFingerprint();
@@ -49,7 +52,7 @@
         <Recording
           enableFingerprint={$enableFingerprint}
           dot={$dotGetter(recording.ID)}
-          gestureId={$gesture.ID}
+          gestureId={$gesture.getID()}
           {recording}
           onDelete={recording =>
             validationSets.removeValidationRecording(recording.ID)} />

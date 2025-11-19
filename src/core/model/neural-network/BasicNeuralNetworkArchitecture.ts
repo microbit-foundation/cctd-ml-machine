@@ -6,6 +6,7 @@
 
 import type { NeuralNetworkArchitecture } from "./NeuralNetworkArchitecture";
 import { ActivationFunction, type NeuralNetworkLayerSettings } from "./NeuralNetworkLayerSettings";
+import { NeuralNetworkLayerSettingsImpl } from "./NeuralNetworkLayerSettingsImpl";
 
 
 export class BasicNeuralNetworkArchitecture implements NeuralNetworkArchitecture {
@@ -17,22 +18,13 @@ export class BasicNeuralNetworkArchitecture implements NeuralNetworkArchitecture
     ) { }
 
     public getInputLayer(): NeuralNetworkLayerSettings {
-        return {
-            getActivationFunction: () => ActivationFunction.RELU,
-            getNumberOfNodes: () => this.noOfClasses * this.noOfFilters
-        }
+        return new NeuralNetworkLayerSettingsImpl(this.noOfFilters, ActivationFunction.RELU);
     }
     public getHiddenLayers(): NeuralNetworkLayerSettings[] {
-        return [{
-            getActivationFunction: () => ActivationFunction.RELU,
-            getNumberOfNodes: () => this.noOfNodesInHiddenLayer
-        }]
+        return [new NeuralNetworkLayerSettingsImpl(this.noOfNodesInHiddenLayer, ActivationFunction.RELU)]
     }
     public getOutputLayer(): NeuralNetworkLayerSettings {
-        return {
-            getActivationFunction: () => ActivationFunction.SOFTMAX,
-            getNumberOfNodes: () => this.noOfClasses
-        }
+        return new NeuralNetworkLayerSettingsImpl(this.noOfClasses, ActivationFunction.SOFTMAX);
     }
 
 }

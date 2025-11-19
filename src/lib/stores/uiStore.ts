@@ -12,8 +12,8 @@ import {
 import { t } from '../../i18n';
 import CookieManager from '../CookieManager';
 import { isInputPatternValid } from './connectionStore';
-import GestureState from '../domain/stores/gesture/GestureState';
 import { stores } from './Stores';
+import type { GestureID } from '../../core/entities/Gesture';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -22,7 +22,7 @@ export const compatibility: Writable<CompatibilityStatus> = writable(
   await checkCompatibility(),
 );
 
-export const chosenGesture = writable<GestureState | null>(null);
+export const chosenGesture = writable<GestureID | null>(null);
 
 export const isBluetoothWarningDialogOpen = derived(
   compatibility,

@@ -18,7 +18,6 @@ import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import OutputMicrobitHandler from './OutputMicrobitHandler';
 import CombinedMicrobitHandler from './CombinedMicrobitHandler';
 import { HexOrigin } from './HexOrigin';
-import { stores } from '../stores/Stores';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
 
@@ -43,11 +42,13 @@ class Microbits {
   private static outputOrigin = HexOrigin.UNKNOWN;
   private static inputOrigin = HexOrigin.UNKNOWN;
 
-  private static outputHandler = new OutputMicrobitHandler(stores.getDevices());
-  private static inputHandler = new CombinedMicrobitHandler(
-    this.outputHandler,
-    stores.getDevices(),
-  );
+  public static outputHandler: OutputMicrobitHandler | undefined = undefined
+  public static inputHandler: CombinedMicrobitHandler | undefined = undefined
+
+  public static setHandlers(inputHandler: CombinedMicrobitHandler, outputHandler: OutputMicrobitHandler) {
+    this.inputHandler = inputHandler;
+    this.outputHandler = outputHandler;
+  }
 
   private static linkedMicrobit: Microbit = new Microbit();
 
@@ -96,7 +97,7 @@ class Microbits {
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.inputIndexRef = 0;
     this.getInput().setDevice(bluetoothDevice);
-    this.getInput().setHandler(this.inputHandler);
+    this.getInput().setHandler(this.inputHandler!);
     this.getInput().setAutoReconnect(true);
     await bluetoothDevice.connect(name);
   }
@@ -109,7 +110,7 @@ class Microbits {
     ConsoleLogger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.getOutput().setDevice(bluetoothDevice);
-    this.getOutput().setHandler(this.outputHandler);
+    this.getOutput().setHandler(this.outputHandler!);
     this.getOutput().setAutoReconnect(true);
     await bluetoothDevice.connect(name);
     if (this.isInputOutputTheSame()) {
@@ -147,8 +148,8 @@ class Microbits {
   public static disconnectOutput() {
     ConsoleLogger.log('Microbits', 'Attempting to disconnect output');
     if (this.isInputOutputTheSame()) {
-      this.outputHandler.onDisconnected();
-      this.outputHandler.onClosed();
+      this.outputHandler!.onDisconnected();
+      this.outputHandler!.onClosed();
       this.outputIndexRef = 1;
     } else {
       this.getOutput().disconnect();

@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { type Unsubscriber } from 'svelte/store';
+  import { writable, type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
   import type { LiveData } from '../../../lib/domain/stores/LiveData';
@@ -14,7 +14,10 @@
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import { stores } from '../../../lib/stores/Stores';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
-    import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+  import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import type { ClassifierController } from '../../../backend/interface-controller/ClassifierController';
+  import type { AbstractReadonlyState } from '../../../backend/interface-adapter/AbstractReadonlyState';
 
   /**
    * TimesSeries, but with the data array added.
@@ -22,31 +25,23 @@
    * `data[i][1]` is the value,
    */
   type TimeSeriesWithData = TimeSeries & { data: number[][] };
-  const classifier = stores.getClassifier();
+  const controllers = getControllers();
+  const classifierController: ClassifierController =
+    controllers.getClassifierController();
+  const axisController = controllers.getAxisController();
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
-  export let liveData: LiveData<LiveDataVector>;
+  export let liveDataState: AbstractReadonlyState<LiveData<LiveDataVector>>;
   export let maxValue: number;
   export let minValue: number;
 
   let axisColors = StaticConfiguration.graphColors;
 
-  const highlightedAxes = stores.getHighlightedAxes();
   const devices = stores.getDevices();
 
   // Smoothes real-time data by using the 3 most recent data points
-  let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
-  let cnt = 0;
-
-  // Subscribing to the stores object, allows us to detect changes in the LiveData store
-  // Without it, reconnecting would cause the component to use an outdated reference of the liveData store.
-  stores.subscribe(e => {
-    cnt++; // The cnt variable is the key that will force the dimension labels to update
-    if (e.liveData !== undefined) {
-      smoothedLiveData = new SmoothedLiveData(e.liveData, 3);
-    }
-  });
+  let smoothedLiveData = new SmoothedLiveData<LiveDataVector>($liveDataState, 3);
 
   var canvas: HTMLCanvasElement | undefined = undefined;
   var chart: SmoothieChart | undefined;
@@ -74,7 +69,7 @@
     });
 
     lines.forEach((line, index) => {
-      const opaque = highlightedAxes.isAxisIndexHighlighted(index);
+      const opaque = axisController.isAxisIndexSelected(index);
       const color = axisColors[index] + (opaque ? 'ff' : '00');
       chart!.addTimeSeries(line, {
         lineWidth,
@@ -97,7 +92,7 @@
   });
 
   // Start and stop chart when microbit connect/disconnect
-  const model = classifier.getModel();
+  const model = classifierController.getModelTraining();
   $: {
     if (chart !== undefined) {
       if ($devices.isInputReady) {
@@ -150,7 +145,7 @@
   function updateCanvas(isConnected: boolean) {
     if (isConnected || !unsubscribeFromData) {
       unsubscribeFromData = smoothedLiveData.subscribe(data => {
-        if (!liveData.getBuffer().isEmpty()) {
+        if (!$liveDataState.getBuffer().isEmpty()) {
           addDataToGraphLines(data);
         }
       });
@@ -180,12 +175,12 @@
 
 <main class="flex">
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
-  {#key cnt}
+  {#if $smoothedLiveData != null}
     <DimensionLabels
       hidden={!$devices.isInputConnected}
       {minValue}
       graphHeight={160}
       {maxValue}
       liveData={smoothedLiveData} />
-  {/key}
+  {/if}
 </main>

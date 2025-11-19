@@ -55,7 +55,7 @@ class Classifier implements Readable<ClassifierData> {
     // );
     // this.filteredInput.set({ raw: filteredInput, normalized: filteredInputNormalized });
     const predictions = await this.getModel().predict(filteredInput);
-    predictions.forEach((confidence, index) => {
+    predictions.getValue().forEach((confidence, index) => {
       const gesture = get(this.gestures)[index];
       this.confidenceSetter(gesture.getId(), confidence);
     });

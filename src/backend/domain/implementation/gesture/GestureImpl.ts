@@ -19,6 +19,17 @@ export class GestureImpl implements Gesture {
         private ouput: GestureOutput,
         private color: string,
     ) {}
+    setOutput(ouput: GestureOutput): void {
+        this.ouput = ouput;
+    }
+    
+    setRecordings(recordings: RecordingData[]): void {
+        this.recordings = recordings;
+    }
+
+    setName(name: string): void {
+        this.name = name;
+    }
 
     getName(): string {
         return this.name;

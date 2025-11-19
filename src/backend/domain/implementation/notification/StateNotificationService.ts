@@ -5,8 +5,9 @@
  */
 
 import type { NotificationService } from "../../NotificationService";
-import type { AbstractState } from "../../AbstractState";
+import type { AbstractState } from "../../../interface-adapter/AbstractState";
 
+// TODO: Replace with notifier service calls. Uses observer pattern for state management!
 export class StateNotificationService implements NotificationService {
     public constructor(
         private immediateFeedbackMessage: AbstractState<string | undefined>

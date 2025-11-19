@@ -5,7 +5,8 @@
  */
 
 import CookieManager from "../../lib/CookieManager";
-import type { AbstractState, Unsubscriber } from "../domain/AbstractState";
+import type { Unsubscriber } from "./AbstractReadonlyState";
+import type { AbstractState } from "./AbstractState";
 
 export class ReconnectFlagCookieState implements AbstractState<boolean> {
     public get(): boolean {

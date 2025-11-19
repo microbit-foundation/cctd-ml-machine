@@ -5,19 +5,20 @@
  -->
 <script lang="ts">
   import { derived } from 'svelte/store';
-  import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import FixedNumber from '../../../ui/FixedNumber.svelte';
+    import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   export let sample: number[];
   export let offest: number;
-  const highlightedAxes = stores.getHighlightedAxes();
+  const axisController = getControllers().getAxisController();
+  const selectedAxes = axisController.getSelectedAxes();
 
-  const sampleEnabled = derived(highlightedAxes, axes => {
+  const sampleEnabled = derived(selectedAxes, axes => {
     return sample.map((_, idx) => axes.find(axis => axis.index === idx) !== undefined);
   });
 
-  $: noOfHighlightedAxes = $highlightedAxes.length;
+  $: noOfHighlightedAxes = $selectedAxes.length;
 </script>
 
 <p

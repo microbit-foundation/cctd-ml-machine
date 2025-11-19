@@ -9,9 +9,11 @@
   import { t } from './../../../i18n';
   import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
+  const gestureController = getControllers().getGestureController();
+  const gestures = gestureController.getGestures();
   const devices = stores.getDevices();
-  const gestures = stores.getGestures();
   // Bool flags to know whether output microbit popup should be show
   let hasClosedPopup = false;
 
@@ -56,8 +58,8 @@
 
   <div class="pl-1">
     <!-- Display all gestures and their output capabilities -->
-    {#each gestures.getGestures() as gesture}
-      <OutputGesture variant="stack" {gesture} {onUserInteraction} />
+    {#each $gestures as gesture}
+      <OutputGesture variant="stack" gestureId={gesture.getID()} {onUserInteraction} />
     {/each}
   </div>
   {#if !$devices.isOutputConnected && !hasClosedPopup && hasInteracted}

@@ -52,6 +52,8 @@
 </style>
 
 <script lang="ts">
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+    import type { GestureID } from '../../../core/entities/Gesture';
   import type { GestureData } from '../../../lib/domain/stores/gesture/GestureState';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import { stores } from '../../../lib/stores/Stores';
@@ -67,9 +69,15 @@
     }
   };
 
-  export let gesture: GestureData;
+  export let gestureId: GestureID;
 
-  let matrix = gesture.output?.matrix ?? new Array<boolean>(25).fill(false);
+  const gestureController = getControllers().getGestureController();
+  const gesture = gestureController.getGesture(gestureId);
+  if (!gesture) {
+    throw new Error("Gesture with id not found, id: " + gestureId);
+  }
+
+  let matrix = gesture?.getOutput()?.matrix ?? new Array<boolean>(25).fill(false);
 
   // Save matrix to output
   // $: gesture.output.matrix = matrix;
@@ -83,7 +91,7 @@
   function elementClick(i: number) {
     setElementTo = !matrix[i];
     matrix[i] = setElementTo;
-    stores.getGestures().getGesture(gesture.ID).setLEDOutput(matrix);
+    stores.getGestures().getGesture(gesture!.getID()).setLEDOutput(matrix);
   }
 
   // When user hovers over a box. If user is clicking:
@@ -94,7 +102,7 @@
       return;
     }
     matrix[i] = setElementTo;
-    stores.getGestures().getGesture(gesture.ID).setLEDOutput(matrix);
+    stores.getGestures().getGesture(gesture!.getID()).setLEDOutput(matrix);
   }
 </script>
 

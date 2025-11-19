@@ -5,22 +5,22 @@
  */
 
 
-import { get, type Invalidator, type Subscriber, type Unsubscriber, type Writable } from "svelte/store";
+import { get, type Invalidator, type Readable, type Subscriber, type Unsubscriber, type Writable } from "svelte/store";
 import type { AbstractState } from "./AbstractState";
 
-export class SvelteStateAdapter<T> implements AbstractState<T>, Writable<T> {
-    constructor(private svelteState: Writable<T>) { }
+export class SvelteStateAdapterReadonly<T> implements AbstractState<T>, Readable<T> {
+
+    constructor(private svelteState: Readable<T>) { }
+
+    set(value: T): void {
+        throw new Error("Method not implemented.");
+    }
+    update(updater: (currentValue: T) => T): void {
+        throw new Error("Method not implemented.");
+    }
 
     public get(): T {
         return get(this.svelteState);
-    }
-
-    public set(value: T): void {
-        return this.svelteState.set(value);
-    }
-
-    public update(updater: (currentValue: T) => T): void {
-        return this.svelteState.update(() => updater(this.get()));
     }
 
     public subscribe(run: Subscriber<T>, invalidate?: Invalidator<T> | undefined): Unsubscriber {

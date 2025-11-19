@@ -5,7 +5,7 @@
  */
 
 import type { Application } from "../../../core/Application";
-import type { AbstractState } from "../../domain/AbstractState";
+import type { AbstractState } from "../../interface-adapter/AbstractState";
 import type { DevicesType } from "../../application/devices/Devices";
 
 export interface AppController extends Application {

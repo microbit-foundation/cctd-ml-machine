@@ -4,14 +4,17 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import type { GestureID } from '../../core/entities/Gesture';
 
   let isDotHovered = false;
-  export let gesture: GestureState;
+  export let gestureId: GestureID;
   export let disableTooltip: boolean = false;
+  const gestureController = getControllers().getGestureController();
+  const gestureState = gestureController.getGestureState(gestureId);
 
-  $: name = $gesture.name;
-  $: color = $gesture.color;
+  $: name = $gestureState?.getName();
+  $: color = $gestureState?.getColor();
 </script>
 
 <div

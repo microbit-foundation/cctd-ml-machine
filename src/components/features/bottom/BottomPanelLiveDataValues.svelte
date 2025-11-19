@@ -11,17 +11,20 @@
   import FixedNumber from '../../ui/FixedNumber.svelte';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import type { Axis } from '../../../core/entities/Axis';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
-  const highlightedAxes = stores.getHighlightedAxes();
-  const availableAxes = stores.getAvailableAxes();
+  const controllers = getControllers();
+  const axisController = controllers.getAxisController();
+  const availableAxes = axisController.getAvailableAxes();
+  const selectedAxes = axisController.getSelectedAxes();
 
   const clickNumber = (axis: Axis) => {
-    highlightedAxes.toggleAxis(axis);
+    axisController.toggleAxis(axis);
   };
 
   $: liveData = $stores.liveData ? new SmoothedLiveData($stores.liveData, 3) : undefined;
   $: input = $liveData ? $liveData.getValue() : undefined;
-  $: axes = derived([highlightedAxes, availableAxes], stores => {
+  $: axes = derived([selectedAxes, availableAxes], stores => {
     const highlighted = stores[0];
     return stores[1].map(e => ({
       isHighlighted: !!highlighted.find(l => l.index === e.index),

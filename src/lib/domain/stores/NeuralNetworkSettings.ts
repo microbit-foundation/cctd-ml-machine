@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  get,
   writable,
   type Invalidator,
   type Readable,
@@ -13,17 +12,25 @@ import {
   type Writable,
 } from 'svelte/store';
 import StaticConfiguration from '../../../StaticConfiguration';
-import type { LayersModelTrainingSettings } from '../../../core/entities/classifier/models/LayersModelTrainer';
+import type { NeuralNetworkModelBaseSettings } from '../../../core/model/neural-network/NeuralNetworkModelBaseSettings';
 
-class NeuralNetworkSettings implements Readable<LayersModelTrainingSettings> {
-  private store: Writable<LayersModelTrainingSettings>;
+interface LegacyNeuralNetworkSettings extends NeuralNetworkModelBaseSettings {
+  // legacy mutable properties kept for compatibility with existing store update code
+  learningRate?: number;
+  noOfEpochs?: number;
+  validationSplit?: number;
+  noOfUnits?: number;
+  batchSize?: number;
+}
+class NeuralNetworkSettings implements Readable<LegacyNeuralNetworkSettings> {
+  private store: Writable<LegacyNeuralNetworkSettings>;
   public constructor() {
     this.store = writable(StaticConfiguration.defaultNeuralNetworkSettings);
   }
 
   public subscribe(
-    run: Subscriber<LayersModelTrainingSettings>,
-    invalidate?: Invalidator<LayersModelTrainingSettings> | undefined,
+    run: Subscriber<LegacyNeuralNetworkSettings>,
+    invalidate?: Invalidator<LegacyNeuralNetworkSettings> | undefined,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

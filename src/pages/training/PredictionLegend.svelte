@@ -4,10 +4,15 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import GestureDot from '../../components/ui/GestureDot.svelte';
   import { stores } from '../../lib/stores/Stores';
 
-  const gestures = stores.getGestures();
+  const controllers = getControllers();
+  const gestureController = controllers.getGestureController();
+
+  const gestures = gestureController.getGestures();
+
   const confidences = stores.getConfidences();
   const devices = stores.getDevices();
 </script>
@@ -16,13 +21,13 @@
   <div class="flex flex-row justify-between">
     <div class="flex flex-row">
       <div class="flex flex-col justify-center mr-1">
-        <GestureDot disableTooltip gesture={gestures.getGesture(gesture.ID)} />
+        <GestureDot disableTooltip gestureId={gesture.getID()} />
       </div>
-      <p>{gesture.name}</p>
+      <p>{gesture.getName()}</p>
     </div>
     {#if $devices.isInputReady}
       <p>
-        {(($confidences.get(gesture.ID) ?? 0) * 100).toFixed(1)}%
+        {(($confidences.get(gesture.getID()) ?? 0) * 100).toFixed(1)}%
       </p>
     {/if}
   </div>

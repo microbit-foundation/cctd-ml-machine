@@ -92,7 +92,7 @@
       class="absolute px-1 py-0.5 z-3 right-1 top-2"
       class:right-1={!shouldDisplayFingerprint}
       class:right-10={shouldDisplayFingerprint}>
-      <GestureDot gesture={dotGesture} />
+      <GestureDot gestureId={dotGesture.getId()} />
     </div>
   {/if}
   {#if hide}

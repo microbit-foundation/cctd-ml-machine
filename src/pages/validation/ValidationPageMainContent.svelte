@@ -5,7 +5,6 @@
  -->
 
 <script lang="ts">
-  import { stores } from '../../lib/stores/Stores';
   import ValidationGestureNameCard from './ValidationGestureNameCard.svelte';
   import ValidationPageInformationLabels from './ValidationPageInformationLabels.svelte';
   import ValidationGestureSelectGestureCard from './ValidationGestureSelectGestureCard.svelte';
@@ -15,8 +14,13 @@
   import ValidationPageTutorial from './ValidationPageTutorial.svelte';
   import { chosenGesture } from '../../lib/stores/uiStore';
   import { tr } from '../../i18n';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const gestures = stores.getGestures();
+  const controllers = getControllers();
+  const gestureController = controllers.getGestureController();
+
+  const gestures = gestureController.getGestures();
+
   export let onNoMicrobitSelect: () => void;
 </script>
 
@@ -24,20 +28,22 @@
   <div class="p-3 gap-2 grid grid-cols-[max(200px,20%)_140px_1fr]">
     <ValidationPageInformationLabels />
 
-    {#each stores.getGestures().getGestures() as gesture, idx}
+    {#each $gestures as gesture, idx}
       <div class="col-start-1">
-        <ValidationGestureNameCard gesture={gestures.getGesture(gesture.getId())} />
+        <ValidationGestureNameCard gestureId={gesture.getID()} />
       </div>
 
       <div class="col-start-2">
-        <ValidationPageRecordingIndicator gestureId={gesture.getId()} />
-        <ValidationGestureSelectGestureCard {gesture} {onNoMicrobitSelect} />
+        <ValidationPageRecordingIndicator gestureId={gesture.getID()} />
+        <ValidationGestureSelectGestureCard
+          gestureId={gesture.getID()}
+          {onNoMicrobitSelect} />
       </div>
 
       <div class="col-start-3">
         {#if !$isValidationSetEmpty}
-          <ValidationGestureRecordingsCard {gesture} />
-        {:else if $chosenGesture?.getId() === gesture.getId() || (!$chosenGesture && idx === 0)}
+          <ValidationGestureRecordingsCard gestureId={gesture.getID()} />
+        {:else if $chosenGesture === gesture.getID() || (!$chosenGesture && idx === 0)}
           <ValidationPageTutorial />
         {/if}
       </div>

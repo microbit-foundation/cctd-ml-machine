@@ -4,40 +4,36 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { get, writable, type Writable } from "svelte/store";
+import { get, writable, type Readable, type Writable } from "svelte/store";
 import type { Gesture } from "../../core/entities/Gesture";
-import type { AbstractState, Unsubscriber } from "../domain/AbstractState";
 import type { GestureService } from "../domain/GestureService";
+import type { AbstractReadonlyState, Unsubscriber } from "./AbstractReadonlyState";
 
 
-export class GesturesStateAdapter implements AbstractState<Gesture[]> {
+export class GesturesStateAdapter implements AbstractReadonlyState<Gesture[]>, Readable<Gesture[]> {
 
     private gestures: Writable<Gesture[]>;
 
     public constructor(
-        private gestureService: GestureService
+        gestureService: GestureService
     ) {
         this.gestures = writable(gestureService.getGestures());
     }
 
     public get(): Gesture[] {
-        return this.gestureService.getGestures();
+        return get(this.gestures);
     }
-    
-    public set(value: Gesture[]): void {
-        this.gestures.set(value);
-        return this.gestureService.setGestures(value);
+
+    public set(gestures: Gesture[]) {
+        this.gestures.set(gestures);
     }
 
     public update(updater: (currentValue: Gesture[]) => Gesture[]): void {
-        this.gestures.update(updater);
-        this.gestureService.setGestures(
-            get(this.gestures)
-        );
+        return this.gestures.update(updater);
     }
+
     public subscribe(run: (value: Gesture[]) => void, invalidate?: ((value?: Gesture[] | undefined) => void) | undefined): Unsubscriber {
         return this.gestures.subscribe(run, invalidate);
     }
-
 }
 

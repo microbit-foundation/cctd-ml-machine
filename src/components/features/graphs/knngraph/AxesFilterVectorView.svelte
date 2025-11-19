@@ -14,11 +14,14 @@
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
   import { knnCurrentPoint } from '../../../../lib/stores/KNNStores';
   import type { Axis } from '../../../../core/entities/Axis';
+    import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
+
+  const controllers = getControllers();
+  const axisController = controllers.getAxisController();
+  const selectedAxes = axisController.getSelectedAxes()
+  const availableAxes = axisController.getAvailableAxes()
 
   const classifier = stores.getClassifier();
-
-  const highlightedAxis = stores.getHighlightedAxes();
-  const availableAxes = stores.getAvailableAxes();
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -64,7 +67,7 @@
     setTimeout(
       () => {
         // We set a timeout to fix a graphical issue, that relates to the resizing of DOM elements
-        updateArrows($highlightedAxis);
+        updateArrows($selectedAxes);
       },
       // We vary the timeout, because if no arrows exist, it must be the first render cycle which requres a bit more time (to avoid artifacts)
       $vectorArrows.length === 0 ? 1000 : 200,
@@ -89,7 +92,7 @@
 
   $: console.log($filters);
 
-  unsubscribe = derived([highlightedAxis, classifier], s => s).subscribe(s => {
+  unsubscribe = derived([selectedAxes, classifier], s => s).subscribe(s => {
     init();
   });
 
@@ -98,7 +101,7 @@
 
 <div class:hidden={!$classifier.model.isTrained && !$classifier.model.isTraining}>
   <div>
-    {#if $highlightedAxis !== undefined}
+    {#if $selectedAxes !== undefined}
       <div class="flex flex-row space-x-1 flex-grow">
         <div class="flex flex-col justify-evenly">
           {#each $availableAxes as axis}
@@ -106,10 +109,10 @@
               <StandardButton
                 color={StaticConfiguration.graphColors[axis.index]}
                 small
-                outlined={$highlightedAxis.find(e => e.index === axis.index) ===
+                outlined={$selectedAxes.find(e => e.index === axis.index) ===
                   undefined}
                 onClick={() => {
-                  $highlightedAxis = [axis];
+                  $selectedAxes = [axis];
                 }}>
                 {axis.label}
               </StandardButton>
@@ -117,7 +120,7 @@
           {/each}
         </div>
 
-        {#if $highlightedAxis.length === 1}
+        {#if $selectedAxes.length === 1}
           <!-- Name and blue arrow -->
           <div class="pl-30 flex flex-col justify-around">
             {#each $filters as filter, index}

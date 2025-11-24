@@ -3,5 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
-export interface EvaluationResult {
+
+class Environment {
+  public static isInDevelopment: boolean = process.env.NODE_ENV === 'development';
 }
+
+export default Environment;

@@ -9,8 +9,8 @@ import { knnCurrentPoint, knnTrainingDataPoints } from '../../../../lib/stores/K
 import type Filters from '../../../../lib/domain/Filters';
 import { stores } from '../../../../lib/stores/Stores';
 import type { Point3D } from '../../../../lib/utils/graphUtils';
-import BaseVector from '../../../../core/entities/vector/BaseVector';
-import { FilterType } from '../../../../core/entities/filter/Filter';
+import BaseVector from '../../../../core/vector/BaseVector';
+import { FilterType } from '../../../../core/filter/Filter';
 
 type UpdateCall = {
   config: GraphDrawConfig;

@@ -3,5 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-export interface TrainingResult {
+
+
+export interface SystemColors {
+    generateGestureColor(): string;
 }

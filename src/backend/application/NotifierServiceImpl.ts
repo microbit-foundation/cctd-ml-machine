@@ -4,5 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-export interface Dataset {
+import type { NotifierService } from "../domain/NotifierService";
+
+
+export class NotifierServiceImpl implements NotifierService {
+
 }
+
+

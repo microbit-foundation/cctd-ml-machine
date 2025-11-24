@@ -4,5 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-export interface PredictionInput {
+
+export interface NotifierService {
+    
 }
+

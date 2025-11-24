@@ -10,10 +10,10 @@ import {
   type Writable,
   get,
 } from 'svelte/store';
-import Logger from '../utils/Logger';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import FilterGraphLimits from '../utils/FilterLimits';
-import type { Filter, FilterType } from '../../core/entities/filter/Filter';
-import { createFilter } from '../../core/entities/filter/FilterUtils';
+import type { Filter, FilterType } from '../../core/filter/Filter';
+import { createFilter } from '../../core/filter/FilterUtils';
 
 class Filters implements Readable<Filter[]> {
   constructor(private filters: Writable<Filter[]>) {}
@@ -49,7 +49,7 @@ class Filters implements Readable<Filter[]> {
 
   public set(filterTypes: FilterType[]) {
     const newFilters = filterTypes.map(filterType => createFilter(filterType));
-    Logger.log('Setting filter ', newFilters);
+    ConsoleLogger.log('Setting filter ', newFilters);
     this.filters.set(newFilters);
   }
 
@@ -61,7 +61,7 @@ class Filters implements Readable<Filter[]> {
     const filter = createFilter(filterType);
     const oldFilterArray = [...get(this.filters)];
     this.filters.set([...oldFilterArray, filter]);
-    Logger.log('Filters', 'added filter ', filter);
+    ConsoleLogger.log('Filters', 'added filter ', filter);
   }
 
   public has(filterType: FilterType): boolean {

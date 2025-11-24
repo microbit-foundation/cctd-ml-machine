@@ -16,7 +16,7 @@ import GestureState, { type GestureData } from './GestureState';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import type { GestureRepository } from '../../GestureRepository';
 import type { RecordingData } from '../../../../core/entities/RecordingData';
-import Logger from '../../../utils/Logger';
+import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
 import type { GestureOutput } from '../../../../core/entities/GestureOutput';
 import type { GestureID } from '../../../../core/entities/Gesture';
 
@@ -128,7 +128,7 @@ class Gestures implements Readable<GestureData[]> {
   }
 
   private addGestureFromPersistedData(gestureData: PersistedGestureData): GestureState {
-    Logger.log(
+    ConsoleLogger.log(
       'Gestures',
       `Adding gesture from persistedData ${gestureData.name} (id:${gestureData.ID})`,
     );

@@ -4,21 +4,24 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { get } from 'svelte/store';
 import Environment from '../Environment';
-import PersistantWritable from '../repository/PersistantWritable';
+import type { Logger } from './Logger';
 
-const nsStore = new PersistantWritable(false, 'dev_ns');
+const isStackTraceEnabled = () => {
+  return localStorage.getItem('dev_print_stacktrace') === 'true';
+};
+const setStackTraceEnabled = (val: boolean) =>
+  localStorage.setItem('dev_print_stacktrace', val.toString());
 
-class Logger {
+class ConsoleLogger implements Logger {
   constructor(private origin: any) {}
 
   public log(message: any, ...params: any[]) {
-    Logger.log(this.origin, message, params);
+    ConsoleLogger.log(this.origin, message, params);
   }
 
   public warn(message: any, ...params: any[]) {
-    Logger.warn(this.origin, message, params);
+    ConsoleLogger.warn(this.origin, message, params);
   }
 
   /**
@@ -30,8 +33,8 @@ class Logger {
     }
     welcomeLog();
     const outputMessage = `[${origin}] ${message} ${params}`;
-    !get(nsStore) && console.trace(outputMessage);
-    get(nsStore) && console.warn(outputMessage);
+    !isStackTraceEnabled() && console.trace(outputMessage);
+    isStackTraceEnabled() && console.warn(outputMessage);
   }
 
   /**
@@ -43,8 +46,8 @@ class Logger {
     }
     welcomeLog();
     const outputMessage = `[${origin}] ${message} ${params}`;
-    !get(nsStore) && console.trace(outputMessage);
-    get(nsStore) && console.log(outputMessage);
+    !isStackTraceEnabled() && console.trace(outputMessage);
+    isStackTraceEnabled() && console.log(outputMessage);
   }
 }
 
@@ -71,16 +74,16 @@ Thank you for contributing to the improvement of ML-Machine!`);
 
 if (!(window as typeof window & { ns: boolean }).ns) {
   Object.assign(window, {
-    ns: get(nsStore),
+    ns: isStackTraceEnabled(),
     ds: () => {
       console.log('Disabled stacktraces, enable again using es()');
-      nsStore.set(true);
+      setStackTraceEnabled(false);
     },
     es: () => {
       console.log('Enabled stacktraces');
-      nsStore.set(false);
+      setStackTraceEnabled(true);
     },
   });
 }
 
-export default Logger;
+export default ConsoleLogger;

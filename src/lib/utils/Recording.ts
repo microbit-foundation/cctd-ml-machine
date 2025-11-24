@@ -8,7 +8,7 @@ import { get } from 'svelte/store';
 import type { RecordingData } from '../../core/entities/RecordingData';
 import { stores } from '../stores/Stores';
 import StaticConfiguration from '../../StaticConfiguration';
-import Logger from './Logger';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { alertUser } from '../stores/uiStore';
 import { t } from '../../i18n';
 import { Feature, getFeature } from '../FeatureToggles';
@@ -18,7 +18,7 @@ import { Feature, getFeature } from '../FeatureToggles';
  */
 export const startRecording = (onFinished: (recording: RecordingData) => void) => {
   if (get(stores.getDevices()).isRecording) {
-    Logger.warn('Recording', 'Failed to start recording, already recording');
+    ConsoleLogger.warn('Recording', 'Failed to start recording, already recording');
     return;
   }
   const liveData = get(stores).liveData;
@@ -30,7 +30,7 @@ export const startRecording = (onFinished: (recording: RecordingData) => void) =
     e.isRecording = true;
     return e;
   });
-  Logger.log('Recording', 'Creating new recording');
+  ConsoleLogger.log('Recording', 'Creating new recording');
   const recordingId = Date.now();
   let labels: string[] = [];
 
@@ -64,6 +64,6 @@ export const startRecording = (onFinished: (recording: RecordingData) => void) =
 
     onFinished(recording);
 
-    Logger.log('Recording', `Created recording ${recordingId}`);
+    ConsoleLogger.log('Recording', `Created recording ${recordingId}`);
   }, getFeature<number>(Feature.RECORDING_DURATION));
 };

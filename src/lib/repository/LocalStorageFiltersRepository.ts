@@ -7,8 +7,8 @@ import { derived, get, type Writable } from 'svelte/store';
 import type { FiltersRepository } from '../domain/FiltersRepository';
 import PersistantWritable from './PersistantWritable';
 import Filters from '../domain/Filters';
-import type { Filter } from '../../core/entities/filter/Filter';
-import { createFilter, getFilterTypes } from '../../core/entities/filter/FilterUtils';
+import type { Filter } from '../../core/filter/Filter';
+import { createFilter, getFilterTypes } from '../../core/filter/FilterUtils';
 
 export class LocalStorageFiltersRepository implements FiltersRepository {
   private filters: Filters;

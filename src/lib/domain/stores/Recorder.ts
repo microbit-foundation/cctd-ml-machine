@@ -15,7 +15,7 @@ import {
 } from 'svelte/store';
 import type { RecordingData } from '../../../core/entities/RecordingData';
 import { startRecording as _startRecording } from '../../utils/Recording';
-import Logger from '../../utils/Logger';
+import ConsoleLogger from '../../../core/logging/ConsoleLogger';
 import type { GestureID } from '../../../core/entities/Gesture';
 
 export interface RecorderStore {
@@ -37,7 +37,7 @@ export class Recorder implements Readable<RecorderStore> {
     onFinished: (recording: RecordingData) => void,
   ) {
     if (get(this.store).isRecording) {
-      Logger.warn('Recorder', 'Recording was skipped. Already recording');
+      ConsoleLogger.warn('Recorder', 'Recording was skipped. Already recording');
       return;
     }
     this.store.update(s => {

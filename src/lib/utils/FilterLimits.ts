@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { FilterType, type Filter } from '../../core/entities/filter/Filter';
+import { FilterType, type Filter } from '../../core/filter/Filter';
 
 export type FilterGraphType = {
   min: number;

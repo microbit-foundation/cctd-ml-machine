@@ -5,14 +5,14 @@
  */
 
 import { get, writable, type Readable, type Writable } from "svelte/store";
-import type { Gesture } from "../../core/entities/Gesture";
 import type { GestureService } from "../domain/GestureService";
 import type { AbstractReadonlyState, Unsubscriber } from "./AbstractReadonlyState";
+import type { NewGesture } from "../../core/entities/NewGesture";
 
 
-export class GesturesStateAdapter implements AbstractReadonlyState<Gesture[]>, Readable<Gesture[]> {
+export class GesturesStateAdapter implements AbstractReadonlyState<NewGesture[]>, Readable<NewGesture[]> {
 
-    private gestures: Writable<Gesture[]>;
+    private gestures: Writable<NewGesture[]>;
 
     public constructor(
         gestureService: GestureService
@@ -20,19 +20,19 @@ export class GesturesStateAdapter implements AbstractReadonlyState<Gesture[]>, R
         this.gestures = writable(gestureService.getGestures());
     }
 
-    public get(): Gesture[] {
+    public get(): NewGesture[] {
         return get(this.gestures);
     }
 
-    public set(gestures: Gesture[]) {
+    public set(gestures: NewGesture[]) {
         this.gestures.set(gestures);
     }
 
-    public update(updater: (currentValue: Gesture[]) => Gesture[]): void {
+    public update(updater: (currentValue: NewGesture[]) => NewGesture[]): void {
         return this.gestures.update(updater);
     }
 
-    public subscribe(run: (value: Gesture[]) => void, invalidate?: ((value?: Gesture[] | undefined) => void) | undefined): Unsubscriber {
+    public subscribe(run: (value: NewGesture[]) => void, invalidate?: ((value?: NewGesture[] | undefined) => void) | undefined): Unsubscriber {
         return this.gestures.subscribe(run, invalidate);
     }
 }

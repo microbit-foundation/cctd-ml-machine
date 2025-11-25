@@ -29,7 +29,6 @@
   import CookieManager from './lib/CookieManager';
   import Router from './router/Router.svelte';
   import { Feature, getFeature } from './lib/FeatureToggles';
-  import { welcomeLog } from './lib/utils/Logger';
   import MediaQuery from './components/layout/MediaQuery.svelte';
   import BottomBarMenuView from './components/layout/BottomBarMenuView.svelte';
   import CookieBanner from './components/features/cookie-bannner/CookieBanner.svelte';
@@ -41,6 +40,7 @@
   import { stores } from './lib/stores/Stores';
   import { DeviceRequestStates } from './lib/domain/Devices';
   import { isLoading } from './lib/stores/ApplicationState';
+  import { welcomeLog } from './core/logging/ConsoleLogger';
 
   const devices = stores.getDevices();
 

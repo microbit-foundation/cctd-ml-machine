@@ -5,6 +5,7 @@
  */
 
 import type { Gesture, GestureID } from "../../core/entities/Gesture";
+import type { NewGesture } from "../../core/entities/NewGesture";
 import type { Logger } from "../../core/logging/Logger";
 import ControlledStorage from "../../lib/ControlledStorage";
 import type { PersistedGestureData } from "../../lib/domain/stores/gesture/Gestures";
@@ -26,7 +27,7 @@ export class LocalStorageGestureRepository implements GestureRepository {
     return proposed;
   }
 
-  public saveGesture(gesture: Gesture): Gesture {
+  public saveGesture(gesture: NewGesture): NewGesture {
     const gestures = this.getGestures();
     const gestIdx = gestures.findIndex(gest => gest.getID() === gesture.getID());
     if (gestIdx === -1) {
@@ -39,7 +40,7 @@ export class LocalStorageGestureRepository implements GestureRepository {
     return gesture;
   }
 
-  public getGestures(): Gesture[] {
+  public getGestures(): NewGesture[] {
     const persisted = this.getPersistedData();
     return persisted.map(persist => new GestureImpl(
       persist.ID,
@@ -50,7 +51,7 @@ export class LocalStorageGestureRepository implements GestureRepository {
     ))
   }
 
-  public getGesture(gestureId: GestureID): Gesture | undefined {
+  public getGesture(gestureId: GestureID): NewGesture | undefined {
     const gestures = this.getGestures();
     const filtered = gestures.filter(gest => gest.getID() === gestureId)
     if (!filtered.length) {
@@ -63,7 +64,7 @@ export class LocalStorageGestureRepository implements GestureRepository {
     return filtered[0];
   }
 
-  public saveGestures(value: Gesture[]): Gesture[] {
+  public saveGestures(value: NewGesture[]): NewGesture[] {
     const persistedData: PersistedGestureData[] = value.map(gest => ({
       ID: gest.getID(),
       color: gest.getColor(),

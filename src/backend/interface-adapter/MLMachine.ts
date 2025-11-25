@@ -102,10 +102,10 @@ export class MLMachine {
         this.controllers = new MLMachineControllers(this, this.dataService, this.liveData);
         const devices = stores.getDevices();
         const outputHandler = new OutputMicrobitHandler(devices)
-        Microbits.setHandlers(
+        /*Microbits.setHandlers(
             new CombinedMicrobitHandler(outputHandler, devices),
             outputHandler
-        );
+        );*/
     }
 
     public init(): void {

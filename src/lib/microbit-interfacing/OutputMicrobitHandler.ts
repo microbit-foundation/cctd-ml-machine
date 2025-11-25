@@ -7,21 +7,21 @@ import { MBSpecs, type MicrobitHandler } from 'microbyte';
 import { onCatastrophicError } from '../stores/uiStore';
 import StaticConfiguration from '../../StaticConfiguration';
 import TypingUtils from '../TypingUtils';
-import Logger from '../utils/Logger';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
 import type Devices from '../domain/Devices';
 import { ModelView, modelView } from '../stores/ApplicationState';
 import { DeviceRequestStates } from '../domain/Devices';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 
 class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private devices: Devices) {}
+  public constructor(private devices: Devices) { }
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
-    Logger.log('OutputMicrobitHandler', 'onConnected', versionNumber);
+    ConsoleLogger.log('OutputMicrobitHandler', 'onConnected', versionNumber);
 
     const pinResetArguments: { pin: MBSpecs.UsableIOPin; on: boolean }[] = [];
     StaticConfiguration.supportedPins.forEach(pin => {
@@ -57,11 +57,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
   }
 
   public onConnecting() {
-    Logger.log('OutputMicrobitHandler', 'onConnecting');
+    ConsoleLogger.log('OutputMicrobitHandler', 'onConnecting');
   }
 
   public onDisconnected(): void {
-    Logger.log('OutputMicrobitHandler', 'onDisconnected');
+    ConsoleLogger.log('OutputMicrobitHandler', 'onDisconnected');
     this.devices.update(s => {
       s.isOutputConnected = false;
       s.isOutputReady = false;
@@ -70,11 +70,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
     });
   }
 
-  public onAccelerometerDataReceived(x: number, y: number, z: number): void {}
+  public onAccelerometerDataReceived(x: number, y: number, z: number): void { }
 
-  public onButtonAPressed(state: MBSpecs.ButtonState): void {}
+  public onButtonAPressed(state: MBSpecs.ButtonState): void { }
 
-  public onButtonBPressed(state: MBSpecs.ButtonState): void {}
+  public onButtonBPressed(state: MBSpecs.ButtonState): void { }
 
   public onMessageReceived(data: string): void {
     if (data === 'id_mkcd') {
@@ -91,22 +91,22 @@ class OutputMicrobitHandler implements MicrobitHandler {
         Microbits.getOutputOrigin(),
         version,
       );
-      Logger.log('OutputMicrobitHandler', 'Is microbit outdated: ' + isOutdated);
+      ConsoleLogger.log('OutputMicrobitHandler', 'Is microbit outdated: ' + isOutdated);
     }
   }
 
   public onReconnecting(): void {
-    Logger.log('OutputMicrobitHandler', 'onReconnecting');
+    ConsoleLogger.log('OutputMicrobitHandler', 'onReconnecting');
     this.onConnecting();
   }
 
   public onReconnected() {
-    Logger.log('OutputMicrobitHandler', 'onReconnected');
+    ConsoleLogger.log('OutputMicrobitHandler', 'onReconnected');
     this.onConnected(this.lastConnectedVersion);
   }
 
   public onConnectError(error: Error): void {
-    Logger.log('OutputMicrobitHandler', 'onConnectError', error);
+    ConsoleLogger.log('OutputMicrobitHandler', 'onConnectError', error);
     this.devices.update(s => {
       s.isOutputConnected = false;
       s.isOutputAssigned = false;
@@ -116,12 +116,12 @@ class OutputMicrobitHandler implements MicrobitHandler {
   }
 
   public onReconnectError(error: Error): void {
-    Logger.log('OutputMicrobitHandler', 'onReconnectError', error);
+    ConsoleLogger.log('OutputMicrobitHandler', 'onReconnectError', error);
     this.onConnectError(error);
   }
 
   public onClosed() {
-    Logger.log('OutputMicrobitHandler', 'onClosed');
+    ConsoleLogger.log('OutputMicrobitHandler', 'onClosed');
     this.devices.update(s => {
       s.isOutputConnected = false;
       s.isOutputAssigned = false;

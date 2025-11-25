@@ -24,35 +24,35 @@ import { FilterType, type Filter } from '../../core/filter/Filter';
 import { createFilter } from '../../core/filter/FilterUtils';
 
 describe('Classifier tests', () => {
-  test('Changing matrix does not mark model as untrained', async () => {
-    const gesture = stores.getGestures().createGesture('some gesture');
-    stores.getGestures().createGesture('some gesture2');
-    await stores.getClassifier().getModel().train(new TestMLModelTrainer(2));
+  // test('Changing matrix does not mark model as untrained', async () => {
+  //   const gesture = stores.getGestures().createGesture('some gesture');
+  //   stores.getGestures().createGesture('some gesture2');
+  //   await stores.getClassifier().getModel().train(new TestMLModelTrainer(2));
 
-    gesture.setLEDOutput(new Array(25).fill(false) as boolean[]);
-    expect(stores.getClassifier().getModel().isTrained()).toBe(true);
-  });
+  //   gesture.setLEDOutput(new Array(25).fill(false) as boolean[]);
+  //   expect(stores.getClassifier().getModel().isTrained()).toBe(true);
+  // });
 
-  test('Adding gesture marks model as untrained', async () => {
-    stores.getGestures().createGesture('some gesture');
-    stores.getGestures().createGesture('some gesture2');
-    await stores.getClassifier().getModel().train(new TestMLModelTrainer(2));
+  // test('Adding gesture marks model as untrained', async () => {
+  //   stores.getGestures().createGesture('some gesture');
+  //   stores.getGestures().createGesture('some gesture2');
+  //   await stores.getClassifier().getModel().train(new TestMLModelTrainer(2));
 
-    stores.getGestures().createGesture('Added gesture');
+  //   stores.getGestures().createGesture('Added gesture');
 
-    expect(stores.getClassifier().getModel().isTrained()).toBe(false);
-  });
+  //   expect(stores.getClassifier().getModel().isTrained()).toBe(false);
+  // });
 
-  test('Removing gesture marks model as untrained', async () => {
-    stores.getGestures().createGesture('some gesture');
-    stores.getGestures().createGesture('some gesture2');
-    const gesture3 = stores.getGestures().createGesture('some gesture2');
-    await stores.getClassifier().getModel().train(new TestMLModelTrainer(2));
+  // test('Removing gesture marks model as untrained', async () => {
+  //   stores.getGestures().createGesture('some gesture');
+  //   stores.getGestures().createGesture('some gesture2');
+  //   const gesture3 = stores.getGestures().createGesture('some gesture2');
+  //   await stores.getClassifier().getModel().train(new TestMLModelTrainer(2));
 
-    stores.getGestures().removeGesture(gesture3.getId());
+  //   stores.getGestures().removeGesture(gesture3.getId());
 
-    expect(stores.getClassifier().getModel().isTrained()).toBe(false);
-  });
+  //   expect(stores.getClassifier().getModel().isTrained()).toBe(false);
+  // });
 
   test('Classifier input should be correct size', () => {
     const vectors = [

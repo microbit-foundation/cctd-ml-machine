@@ -16,7 +16,6 @@ import {
 } from 'svelte/store';
 import type ValidationSets from './ValidationSets';
 import type Classifier from './Classifier';
-import BaseVector from '../../../core/entities/vector/BaseVector';
 import { ClassifierInput } from '../ClassifierInput';
 import { findLargestIndex } from '../../utils/Math';
 import type Gestures from './gesture/Gestures';
@@ -26,6 +25,7 @@ import type HighlightedAxes from './HighlightedAxes';
 import type { ValidationSetMatrix } from '../../../pages/validation/ValidationPage';
 import Matrix from '../../../core/entities/Matrix';
 import type { GestureID } from '../../../core/entities/Gesture';
+import BaseVector from '../../../core/vector/BaseVector';
 
 export type ValidationResult = {
   prediction: number[];

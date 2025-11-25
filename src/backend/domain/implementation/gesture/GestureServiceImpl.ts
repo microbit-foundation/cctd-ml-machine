@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Gesture, GestureID } from "../../../../core/entities/Gesture";
+import type { GestureID } from "../../../../core/entities/Gesture";
+import type { NewGesture } from "../../../../core/entities/NewGesture";
 import type { RecordingData } from "../../../../core/entities/RecordingData";
 import type { GestureRepository } from "../../GestureRepository";
 import type { GestureService } from "../../GestureService";
@@ -18,11 +19,11 @@ export class GestureServiceImpl implements GestureService {
         private colors: SystemColors
     ) { }
 
-    public saveGesture(gesture: Gesture): void {
+    public saveGesture(gesture: NewGesture): void {
         this.gestureRepository.saveGesture(gesture);
     }
 
-    public createGesture(name: string): Gesture {
+    public createGesture(name: string): NewGesture {
         const id = this.gestureRepository.generateGestureId();
         const gesture = new GestureImpl(
             id,
@@ -56,19 +57,19 @@ export class GestureServiceImpl implements GestureService {
         this.gestureRepository.saveGesture(gesture)
     }
 
-    public getGesture(id: GestureID): Gesture | undefined {
+    public getGesture(id: GestureID): NewGesture | undefined {
         return this.gestureRepository.getGesture(id);
     }
 
-    public setGestures(value: Gesture[]): void {
+    public setGestures(value: NewGesture[]): void {
         this.gestureRepository.saveGestures(value);
     }
 
-    public getGestures(): Gesture[] {
+    public getGestures(): NewGesture[] {
         return this.gestureRepository.getGestures();
     }
 
-    private getOrThrowGesture(gestureId: GestureID): Gesture {
+    private getOrThrowGesture(gestureId: GestureID): NewGesture {
         const gesture = this.getGesture(gestureId);
         if (!gesture) {
             throw new Error(`Couldn't find gesture with id ${gestureId}`);

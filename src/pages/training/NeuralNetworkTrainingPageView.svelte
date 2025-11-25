@@ -7,12 +7,12 @@
   import { stores } from '../../lib/stores/Stores';
   import { loss, trainNNModel } from './TrainingPage';
   import { t } from './../../i18n';
-  import Logger from '../../lib/utils/Logger';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import LossGraph from '../../components/features/graphs/LossGraph.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import Tooltip from '../../components/ui/Tooltip.svelte';
   import NeuralNetworkSettings from '../../components/features/training/NeuralNetworkSettings.svelte';
+  import ConsoleLogger from '../../core/logging/ConsoleLogger';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
@@ -21,7 +21,7 @@
 
   const trainModelClickHandler = () => {
     trainNNModel().then(() => {
-      Logger.log('NeuralNetworkTrainingPageView', 'Model trained');
+      ConsoleLogger.log('NeuralNetworkTrainingPageView', 'Model trained');
     });
   };
 

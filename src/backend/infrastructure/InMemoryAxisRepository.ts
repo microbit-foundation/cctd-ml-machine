@@ -10,6 +10,7 @@ import type { AxisRepository } from "../domain/AxisRepository";
 import type { GestureService } from "../domain/GestureService";
 import ConsoleLogger from "../../core/logging/ConsoleLogger";
 import type { Logger } from "../../core/logging/Logger";
+import type { NewGesture } from "../../core/entities/NewGesture";
 
 export class InMemoryAxisRepository implements AxisRepository {
     private log: Logger;
@@ -40,7 +41,7 @@ export class InMemoryAxisRepository implements AxisRepository {
     }
 
     private getAvailableAxesFromRecordings(): Axis[] {
-        const gestures: Gesture[] = this.gestureService.getGestures()
+        const gestures: NewGesture[] = this.gestureService.getGestures()
         if (gestures.length > 0) {
             const recordings = gestures[0].getRecordings();
             if (recordings.length > 0) {

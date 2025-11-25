@@ -4,18 +4,19 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Gesture, GestureID } from "../../core/entities/Gesture";
+import type { GestureID } from "../../core/entities/Gesture";
+import type { NewGesture } from "../../core/entities/NewGesture";
 import type { RecordingData } from "../../core/entities/RecordingData";
 
 
 export interface GestureService {
-    saveGesture(gesture: Gesture): void;
-    createGesture(name: string): Gesture;
+    saveGesture(gesture: NewGesture): void;
+    createGesture(name: string): NewGesture;
     deleteRecording(gestureId: GestureID, recordingId: number): void;
     addRecording(gestureId: GestureID, recording: RecordingData): void;
     deleteGesture(gestureId: GestureID): void;
     setGestureName(gesture: GestureID, name: string): void;
-    getGesture(id: GestureID): Gesture | undefined;
-    setGestures(value: Gesture[]): void;
-    getGestures(): Gesture[]
+    getGesture(id: GestureID): NewGesture | undefined;
+    setGestures(value: NewGesture[]): void;
+    getGestures(): NewGesture[]
 }

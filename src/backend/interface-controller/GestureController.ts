@@ -19,6 +19,7 @@ import type { PersistedGestureData } from "../../lib/domain/stores/gesture/Gestu
 import type { MBSpecs } from "microbyte";
 import type { GestureOutput, SoundData } from "../../core/entities/GestureOutput";
 import type { PinTurnOnState } from "../../core/entities/PinTurnOnState";
+import type { NewGesture } from "../../core/entities/NewGesture";
 
 export class GestureController {
     setRequiredConfidence(gestureId: GestureID, requiredConfidence: number) {
@@ -47,7 +48,7 @@ export class GestureController {
         this.log = new ConsoleLogger("GestureController");
     }
 
-    public createGesture(name: string): Gesture {
+    public createGesture(name: string): NewGesture {
         const newGesture = this.gestureService.createGesture(name);
         this.updateState();
         return newGesture;
@@ -58,15 +59,15 @@ export class GestureController {
         this.updateState();
     }
 
-    public getGestures(): AbstractReadonlyState<Gesture[]> {
+    public getGestures(): AbstractReadonlyState<NewGesture[]> {
         return this.gesturesState;
     }
 
-    public getGesture(id: GestureID): Gesture | undefined {
+    public getGesture(id: GestureID): NewGesture | undefined {
         return this.gestureService.getGesture(id);
     }
 
-    public getGestureState(id: GestureID): AbstractState<Gesture> {
+    public getGestureState(id: GestureID): AbstractState<NewGesture> {
         const derivation = derived(this.gesturesState, gests => {
             const idx = gests.findIndex(gest => gest.getID() === id);
             if (idx === -1) {

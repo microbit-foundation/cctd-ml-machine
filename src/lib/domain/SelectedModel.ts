@@ -15,8 +15,8 @@ import ModelRegistry, {
   type ModelInfo,
 } from '../../core/entities/classifier/models/ModelRegistry';
 import PersistantWritable from '../repository/PersistantWritable';
-import Logger from '../utils/Logger';
 import type Classifier from './stores/Classifier';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 
 class SelectedModel implements Writable<ModelInfo> {
   private store: Writable<ModelInfo>;
@@ -32,7 +32,7 @@ class SelectedModel implements Writable<ModelInfo> {
   }
 
   public set(value: ModelInfo): void {
-    Logger.log('SelectedModel', `Setting selected model to ${value.title}`);
+    ConsoleLogger.log('SelectedModel', `Setting selected model to ${value.title}`);
     if (value.id === ModelRegistry.KNN.id) {
       this.knnHasTrained.set(false);
     }

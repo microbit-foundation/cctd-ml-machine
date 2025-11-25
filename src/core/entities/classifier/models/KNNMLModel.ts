@@ -6,10 +6,10 @@
 
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import type { MLModel } from './MLModel';
-import Logger from '../../../../lib/utils/Logger';
 import { knnCurrentPoint, knnNeighbours } from '../../../../lib/stores/KNNStores';
 import { distanceBetween } from '../../../../lib/utils/graphUtils';
-import type { Vector } from '../../vector/Vector';
+import type { Vector } from '../../../vector/Vector';
+import ConsoleLogger from '../../../logging/ConsoleLogger';
 
 class KNNMLModel implements MLModel {
   constructor(
@@ -19,7 +19,7 @@ class KNNMLModel implements MLModel {
     private dataMean: Vector,
     private stdDeviation: Vector,
   ) {
-    Logger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
+    ConsoleLogger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
   }
 
   public async predict(filteredData: Vector): Promise<number[]> {

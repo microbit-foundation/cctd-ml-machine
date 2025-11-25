@@ -5,8 +5,8 @@
  */
 import { LayersModel } from '@tensorflow/tfjs';
 import * as tf from '@tensorflow/tfjs';
-import type { Vector } from '../../vector/Vector';
 import type { MLModel } from './MLModel';
+import type { Vector } from '../../../vector/Vector';
 
 class LayersMLModel implements MLModel {
   constructor(private neuralNet: LayersModel) {}

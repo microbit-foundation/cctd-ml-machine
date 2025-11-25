@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 import { MBSpecs, type MicrobitHandler } from 'microbyte';
-import Logger from '../utils/Logger';
 import { buttonPressed, onCatastrophicError } from '../stores/uiStore';
 import TypingUtils from '../TypingUtils';
 import { get } from 'svelte/store';
@@ -18,6 +17,7 @@ import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
 import Devices, { DeviceRequestStates } from '../domain/Devices';
 import { ModelView, modelView } from '../stores/ApplicationState';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
@@ -26,7 +26,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   public constructor(private devices: Devices) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
-    Logger.log('InputMicrobitHandler', 'onConnected', versionNumber);
+    ConsoleLogger.log('InputMicrobitHandler', 'onConnected', versionNumber);
 
     clearTimeout(this.reconnectTimeout);
     const buffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(
@@ -66,7 +66,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onInitializing(): void {
-    Logger.log('InputMicrobitHandler', 'onInitializing');
+    ConsoleLogger.log('InputMicrobitHandler', 'onInitializing');
     this.devices.update(s => {
       s.isInputInitializing = true;
       return s;
@@ -79,7 +79,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onButtonAPressed(state: MBSpecs.ButtonState): void {
-    Logger.log('InputMicrobitHandler', 'onButtonAPressed', state);
+    ConsoleLogger.log('InputMicrobitHandler', 'onButtonAPressed', state);
     if (state === MBSpecs.ButtonStates.Released) return;
     buttonPressed.update(obj => {
       obj.buttonA = 1;
@@ -89,7 +89,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onButtonBPressed(state: MBSpecs.ButtonState): void {
-    Logger.log('InputMicrobitHandler', 'onButtonBPressed', state);
+    ConsoleLogger.log('InputMicrobitHandler', 'onButtonBPressed', state);
     if (state === MBSpecs.ButtonStates.Released) return;
     buttonPressed.update(obj => {
       obj.buttonA = 0;
@@ -119,7 +119,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onDisconnected(): void {
-    Logger.log('InputMicrobitHandler', 'onDisconnected');
+    ConsoleLogger.log('InputMicrobitHandler', 'onDisconnected');
     this.devices.update(s => {
       s.isInputConnected = false;
       s.offerReconnect = false;
@@ -131,17 +131,17 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onReconnecting(): void {
-    Logger.log('InputMicrobitHandler', 'onReconnecting');
+    ConsoleLogger.log('InputMicrobitHandler', 'onReconnecting');
     this.onConnecting();
   }
 
   public onReconnected(): void {
-    Logger.log('InputMicrobitHandler', 'onReconnected');
+    ConsoleLogger.log('InputMicrobitHandler', 'onReconnected');
     this.onConnected(this.lastConnectedVersion);
   }
 
   public onConnectError(error: Error): void {
-    Logger.log('InputMicrobitHandler', 'onConnectError', error);
+    ConsoleLogger.log('InputMicrobitHandler', 'onConnectError', error);
     this.devices.update(s => {
       s.isInputConnected = false;
       s.isInputAssigned = false;
@@ -151,7 +151,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onReconnectError(error: Error): void {
-    Logger.log('InputMicrobitHandler', 'onReconnectError', error);
+    ConsoleLogger.log('InputMicrobitHandler', 'onReconnectError', error);
     this.onConnectError(error);
     this.devices.update(s => {
       s.offerReconnect = true;
@@ -161,7 +161,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onClosed(): void {
-    Logger.log('InputMicrobitHandler', 'onClosed');
+    ConsoleLogger.log('InputMicrobitHandler', 'onClosed');
     this.devices.update(s => {
       s.isInputConnected = false;
       s.isInputAssigned = false;
@@ -172,11 +172,11 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onConnecting(): void {
-    Logger.log('InputMicrobitHandler', 'onConnecting');
+    ConsoleLogger.log('InputMicrobitHandler', 'onConnecting');
   }
 
   public onClosedError(error: Error): void {
-    Logger.log('InputMicrobitHandler', 'onClosedError', error);
+    ConsoleLogger.log('InputMicrobitHandler', 'onClosedError', error);
     throw new Error('Not sure what to do here');
   }
 }

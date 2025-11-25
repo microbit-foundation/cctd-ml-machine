@@ -4,20 +4,21 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Gesture, GestureID } from "../../core/entities/Gesture";
+import type { GestureID } from "../../core/entities/Gesture";
+import type { NewGesture } from "../../core/entities/NewGesture";
 
 
 export interface GestureRepository {
 
   generateGestureId(): GestureID;
 
-  saveGesture(gesture: Gesture): Gesture;
+  saveGesture(gesture: NewGesture): NewGesture;
 
-  saveGestures(value: Gesture[]): Gesture[];
+  saveGestures(value: NewGesture[]): NewGesture[];
 
-  getGestures(): Gesture[]
+  getGestures(): NewGesture[]
 
-  getGesture(gestureId: number): Gesture | undefined;
+  getGesture(gestureId: number): NewGesture | undefined;
 
   clearGestures(): void;
 

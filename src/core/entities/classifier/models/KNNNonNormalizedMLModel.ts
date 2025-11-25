@@ -6,8 +6,8 @@
 
 import { knnCurrentPoint, knnNeighbours } from '../../../../lib/stores/KNNStores';
 import { distanceBetween } from '../../../../lib/utils/graphUtils';
-import Logger from '../../../../lib/utils/Logger';
-import type { Vector } from '../../vector/Vector';
+import ConsoleLogger from '../../../logging/ConsoleLogger';
+import type { Vector } from '../../../vector/Vector';
 import type { MLModel } from './MLModel';
 
 export type LabelledPoint = {
@@ -24,7 +24,7 @@ class KNNNonNormalizedMLModel implements MLModel {
     private noOfClasses: number,
     private points: LabelledPoint[],
   ) {
-    Logger.log('KNNNonNormalizedMLModel', 'New KNN model was initialized');
+    ConsoleLogger.log('KNNNonNormalizedMLModel', 'New KNN model was initialized');
   }
 
   public predict(filteredData: Vector): Promise<number[]> {

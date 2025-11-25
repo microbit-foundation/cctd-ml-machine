@@ -19,11 +19,9 @@ import Classifier from '../domain/stores/Classifier';
 import Gestures from '../domain/stores/gesture/Gestures';
 import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
-import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
 import HighlightedAxes from '../domain/stores/HighlightedAxes';
 import SelectedModel from '../domain/SelectedModel';
-import type { LiveDataVector } from '../../core/entities/vector/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import type { Engine } from '../domain/stores/Engine';
 import AvailableAxes from '../domain/stores/AvailableAxes';
@@ -37,6 +35,8 @@ import { knnHasTrained } from './KNNStores';
 import Devices from '../domain/Devices';
 import EnableFingerprint from '../domain/stores/EnableFingerprint';
 import StaticConfiguration from '../../StaticConfiguration';
+import type { LiveDataVector } from '../../core/vector/LiveDataVector';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -110,7 +110,7 @@ class Stores implements Readable<StoresType> {
   }
 
   public setLiveData<T extends LiveData<LiveDataVector>>(liveDataStore: T): T {
-    Logger.log('stores', 'setting live data');
+    ConsoleLogger.log('stores', 'setting live data');
     if (!liveDataStore) {
       throw new Error('Cannot set live data store to undefined/null');
     }

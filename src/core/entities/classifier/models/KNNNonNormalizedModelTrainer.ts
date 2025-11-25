@@ -5,7 +5,7 @@
  */
 
 import { knnTrainingDataPoints } from '../../../../lib/stores/KNNStores';
-import Logger from '../../../../lib/utils/Logger';
+import ConsoleLogger from '../../../logging/ConsoleLogger';
 import type { TrainingDataRepository } from '../../../repository/TrainingDataRepository';
 import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 import KNNNonNormalizedMLModel from './KNNNonNormalizedMLModel';
@@ -26,7 +26,7 @@ class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLMod
   public trainModel(
     trainingDataRepository: TrainingDataRepository,
   ): Promise<KNNNonNormalizedMLModel> {
-    Logger.log('KNNNonNormalizedModelTrainer', 'Training KNN model');
+    ConsoleLogger.log('KNNNonNormalizedModelTrainer', 'Training KNN model');
     const trainingData = trainingDataRepository.getTrainingData();
     const points: LabelledPoint[] = [];
 

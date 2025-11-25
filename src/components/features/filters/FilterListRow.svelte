@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import type { FilterType } from '../../../core/entities/filter/Filter';
-  import { createFilter } from '../../../core/entities/filter/FilterUtils';
+    import { createFilter } from '../../../core/filter/FilterUtils';
   import { stores } from '../../../lib/stores/Stores';
   import { navigate, Paths } from '../../../router/Router';
   import {

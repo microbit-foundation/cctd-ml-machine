@@ -5,7 +5,7 @@
  */
 
 import { type TrainingData } from '../entities/classifier/models/ModelTrainer';
-import type { Vector } from '../entities/vector/Vector';
+import type { Vector } from '../vector/Vector';
 
 export interface TrainingDataRepository {
   getTrainingData(): TrainingData;

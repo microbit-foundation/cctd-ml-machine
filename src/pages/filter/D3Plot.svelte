@@ -14,8 +14,8 @@
   import { stores } from '../../lib/stores/Stores';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
   import type { FilterType } from '../../core/entities/filter/Filter';
-  import { createFilter } from '../../core/entities/filter/FilterUtils';
   import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
+  import { createFilter } from '../../core/filter/FilterUtils';
 
   const devices = stores.getDevices();
 

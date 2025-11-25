@@ -7,7 +7,7 @@
 import type { MLModel } from './MLModel';
 import type { ModelInfo } from './ModelRegistry';
 import type { TrainingDataRepository } from '../../../repository/TrainingDataRepository';
-import type { Vector } from '../../vector/Vector';
+import type { Vector } from '../../../vector/Vector';
 
 export type TrainingData = {
   classes: {

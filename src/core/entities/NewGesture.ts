@@ -10,7 +10,7 @@ import type { RecordingData } from './RecordingData';
 
 export type GestureID = number;
 
-export interface Gesture {
+export interface NewGesture {
   setOutput(ouput: GestureOutput): void;
   setRecordings(recordings: RecordingData[]): void;
   setName(name: string): void;

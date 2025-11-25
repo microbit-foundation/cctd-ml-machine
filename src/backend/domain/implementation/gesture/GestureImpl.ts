@@ -7,10 +7,11 @@
 import type { Confidence } from "../../../../core/entities/Confidence";
 import type { Gesture, GestureID } from "../../../../core/entities/Gesture";
 import type { GestureOutput } from "../../../../core/entities/GestureOutput";
+import type { NewGesture } from "../../../../core/entities/NewGesture";
 import type { RecordingData } from "../../../../core/entities/RecordingData";
 
 
-export class GestureImpl implements Gesture {
+export class GestureImpl implements NewGesture {
 
     public constructor(
         private id: GestureID,

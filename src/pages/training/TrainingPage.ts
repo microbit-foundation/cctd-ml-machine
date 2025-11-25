@@ -10,8 +10,8 @@ import type { MLModel } from '../../core/entities/classifier/models/MLModel';
 import type { LossTrainingIteration } from '../../core/entities/classifier/models/LayersModelTrainer';
 import LayersModelTrainer from '../../core/entities/classifier/models/LayersModelTrainer';
 import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
-import KNNModelTrainer from '../../core/entities/classifier/models/KNNModelTrainer';
-import KNNNonNormalizedModelTrainer from '../../core/entities/classifier/models/KNNNonNormalizedModelTrainer';
+import KNNModelTrainer from '../../lib/legacy/KNNModelTrainer';
+import KNNNonNormalizedModelTrainer from '../../lib/legacy/KNNNonNormalizedModelTrainer';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 

@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { knnCurrentPoint, knnNeighbours } from '../../../../lib/stores/KNNStores';
-import { distanceBetween } from '../../../../lib/utils/graphUtils';
-import ConsoleLogger from '../../../logging/ConsoleLogger';
-import type { Vector } from '../../../vector/Vector';
-import type { MLModel } from './MLModel';
+import { knnCurrentPoint, knnNeighbours } from '../stores/KNNStores';
+import { distanceBetween } from '../utils/graphUtils';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
+import type { Vector } from '../../core/vector/Vector';
+import type { MLModel } from '../../core/entities/classifier/models/MLModel';
 
 export type LabelledPoint = {
   classIndex: number;

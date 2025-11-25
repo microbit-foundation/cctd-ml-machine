@@ -5,7 +5,7 @@
  */
 
 import { writable } from 'svelte/store';
-import type { LabelledPoint } from '../../core/entities/classifier/models/KNNNonNormalizedMLModel';
+import type { LabelledPoint } from '../legacy/KNNNonNormalizedMLModel';
 import type { Vector } from '../../core/vector/Vector';
 
 // TODO: Could be part of a greater 'currently predicted point' thing, that is updated by the engine.

@@ -4,8 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-
-export interface NotifierService {
-    
-}
-
+export interface NotifierService {}

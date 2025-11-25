@@ -17,13 +17,11 @@ describe('ML Model tests', async () => {
   describe('Layers Model', async () => {
     test('Model should train the expected number of times', async () => {
       // let iterations = 0;
-
       // const trainingData = new TestTrainingDataRepository();
       // const trainer = new NeuralNetworkModelTrainer(
       //   new NeuralNetworkSettingsImpl(StaticConfiguration.defaultNeuralNetworkSettings),
       // );
       // const model = trainer.trainModel(trainingData);
-
       // expect(iterations).toBe(
       //   StaticConfiguration.defaultNeuralNetworkSettings.noOfEpochs,
       // );
@@ -37,7 +35,6 @@ describe('ML Model tests', async () => {
       //   normalize: false,
       //   numberOfClasses: 3
       // }).trainModel(trainingData);
-
       // const prediction1 = await knnModel.predict(
       //   new BaseVector([0, 0, 0, 0, 0, 0, 0, 0, 0]),
       // );

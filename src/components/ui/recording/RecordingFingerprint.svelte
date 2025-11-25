@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import type { RecordingData } from '../../../core/entities/RecordingData';
-    import BaseVector from '../../../core/vector/BaseVector';
+  import BaseVector from '../../../core/vector/BaseVector';
   import { stores } from '../../../lib/stores/Stores';
   import Fingerprint from './Fingerprint.svelte';
 

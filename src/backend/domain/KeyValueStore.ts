@@ -5,6 +5,6 @@
  */
 
 export interface KeyValueStore<T> {
-    getValue<U>(key: T): U | undefined
-    setValue<U>(key: T, value: U | undefined): void;
+  getValue<U>(key: T): U | undefined;
+  setValue<U>(key: T, value: U | undefined): void;
 }

@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type LiveDataBuffer from "./LiveDataBuffer";
-import type { LiveDataVector } from "./vector/LiveDataVector";
-
+import type LiveDataBuffer from './LiveDataBuffer';
+import type { LiveDataVector } from './vector/LiveDataVector';
 
 /**
  * A container for real-time data. Uses a LiveDataBuffer to store data points.
@@ -33,4 +32,3 @@ export interface LiveDataStore<T extends LiveDataVector> {
    */
   getLabels(): string[];
 }
-

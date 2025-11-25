@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Axis } from "../../core/entities/Axis";
-import type { LiveDataVector } from "../../core/vector/LiveDataVector";
-import type { Vector } from "../../core/vector/Vector";
+import type { Axis } from '../../core/entities/Axis';
+import type { LiveDataVector } from '../../core/vector/LiveDataVector';
+import type { Vector } from '../../core/vector/Vector';
 
 export interface DataService {
-    addLiveData(input: LiveDataVector): void;
-    setSelectedAxes(axes: Axis[]): void; 
-    toggleAxis(axis: Axis): void;
-    getAvailableAxes(): Axis[];
-    getSelectedAxes(): Axis[]
-    getAxisFromIndex(index: number): Axis | undefined;
-    isAxisSelected(axis: Axis): boolean;
+  addLiveData(input: LiveDataVector): void;
+  setSelectedAxes(axes: Axis[]): void;
+  toggleAxis(axis: Axis): void;
+  getAvailableAxes(): Axis[];
+  getSelectedAxes(): Axis[];
+  getAxisFromIndex(index: number): Axis | undefined;
+  isAxisSelected(axis: Axis): boolean;
 }

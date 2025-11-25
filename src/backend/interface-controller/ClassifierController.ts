@@ -4,24 +4,24 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Classifier } from "../../core/classifier/Classifier";
-import type { NeuralNetworkModelSettings } from "../../core/model/neural-network/NeuralNetworkModelSettings";
-import type { AbstractState } from "../interface-adapter/AbstractState";
-import type { ModelTraining } from "../../core/model/ModelTraining";
-import type { MLMachine } from "../interface-adapter/MLMachine";
+import type { Classifier } from '../../core/classifier/Classifier';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { AbstractState } from '../interface-adapter/AbstractState';
+import type { ModelTraining } from '../../core/model/ModelTraining';
+import type { MLMachine } from '../interface-adapter/MLMachine';
 
 export class ClassifierController {
-    constructor(private mlMachine: MLMachine) { }
+  constructor(private mlMachine: MLMachine) {}
 
-    public getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings> {
-        return this.mlMachine.getClassifierService().getNeuralNetworkSettings();
-    }
+  public getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings> {
+    return this.mlMachine.getClassifierService().getNeuralNetworkSettings();
+  }
 
-    public getClassifier(): AbstractState<Classifier | undefined> {
-        return this.mlMachine.getClassifierService().getClassifier();
-    }
+  public getClassifier(): AbstractState<Classifier | undefined> {
+    return this.mlMachine.getClassifierService().getClassifier();
+  }
 
-    public getModelTraining(): AbstractState<ModelTraining> {
-        return this.mlMachine.getClassifierService().getModelTraining();
-    }
+  public getModelTraining(): AbstractState<ModelTraining> {
+    return this.mlMachine.getClassifierService().getModelTraining();
+  }
 }

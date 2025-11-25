@@ -4,15 +4,16 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Logger } from "../../logging/Logger";
-import type { NeuralNetworkTrainingIteration } from "./NeuralNetworkTrainingIteration";
-import type { NeuralNetworkTrainingObserver } from "./NeuralNetworkTrainingObserver";
+import type { Logger } from '../../logging/Logger';
+import type { NeuralNetworkTrainingIteration } from './NeuralNetworkTrainingIteration';
+import type { NeuralNetworkTrainingObserver } from './NeuralNetworkTrainingObserver';
 
+export class LoggingNeuralNetworkTrainingObserver
+  implements NeuralNetworkTrainingObserver
+{
+  public constructor(private logger: Logger) {}
 
-export class LoggingNeuralNetworkTrainingObserver implements NeuralNetworkTrainingObserver {
-    public constructor(private logger: Logger) { }
-
-    handleTrainingIteration(iteration: NeuralNetworkTrainingIteration): void {
-        this.logger.log(`Epoch ${iteration.epoch} - Loss: ${iteration.loss}`)
-    }
+  handleTrainingIteration(iteration: NeuralNetworkTrainingIteration): void {
+    this.logger.log(`Epoch ${iteration.epoch} - Loss: ${iteration.loss}`);
+  }
 }

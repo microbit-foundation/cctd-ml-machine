@@ -14,7 +14,7 @@
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import { stores } from '../../../lib/stores/Stores';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
-    import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+  import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
 
   /**
    * TimesSeries, but with the data array added.

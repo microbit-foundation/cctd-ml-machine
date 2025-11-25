@@ -4,52 +4,53 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Axis } from "../../../core/entities/Axis";
-import type { LiveDataVector } from "../../../core/vector/LiveDataVector";
-import type { AxisRepository } from "../../domain/AxisRepository";
-import type { DataService } from "../../domain/DataService";
-import type { LiveDataRepository } from "../../domain/LiveDataRepository";
-import type { NotifierService } from "../../domain/NotifierService";
+import type { Axis } from '../../../core/entities/Axis';
+import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+import type { AxisRepository } from '../../domain/AxisRepository';
+import type { DataService } from '../../domain/DataService';
+import type { LiveDataRepository } from '../../domain/LiveDataRepository';
+import type { NotifierService } from '../../domain/NotifierService';
 
 export class DataServiceImpl implements DataService {
-    constructor(
-        private axisRepository: AxisRepository,
-        private liveDataRepository: LiveDataRepository,
-        private notifierService: NotifierService
-    ) { }
+  constructor(
+    private axisRepository: AxisRepository,
+    private liveDataRepository: LiveDataRepository,
+    private notifierService: NotifierService,
+  ) {}
 
-    addLiveData(input: LiveDataVector): void {
-        this.liveDataRepository.addInput(input);
+  addLiveData(input: LiveDataVector): void {
+    this.liveDataRepository.addInput(input);
+  }
+
+  setSelectedAxes(axes: Axis[]): void {
+    this.axisRepository.setSelectedAxes(axes);
+  }
+
+  toggleAxis(axis: Axis): void {
+    const isSelected = this.isAxisSelected(axis);
+    if (isSelected) {
+      // TODO: Maybe this should be axisRepository.removeSelectedAxis(...)
+      this.setSelectedAxes(
+        [...this.getSelectedAxes()].filter(ax => ax.index !== axis.index),
+      );
+    } else {
+      this.setSelectedAxes([...this.getSelectedAxes(), axis]);
     }
+  }
 
-    setSelectedAxes(axes: Axis[]): void {
-        this.axisRepository.setSelectedAxes(axes);
-    }
+  getAvailableAxes(): Axis[] {
+    return this.axisRepository.getAvailableAxes();
+  }
 
-    toggleAxis(axis: Axis): void {
-        const isSelected = this.isAxisSelected(axis);
-        if (isSelected) {
-            // TODO: Maybe this should be axisRepository.removeSelectedAxis(...)
-            this.setSelectedAxes([...this.getSelectedAxes()].filter(ax => ax.index !== axis.index))
-        } else {
-            this.setSelectedAxes([...this.getSelectedAxes(), axis]);
-        }
-    }
+  public getAxisFromIndex(index: number): Axis | undefined {
+    return this.axisRepository.getAvailableAxes().find(ax => ax.index === index);
+  }
 
-    getAvailableAxes(): Axis[] {
-        return this.axisRepository.getAvailableAxes();
-    }
+  public isAxisSelected(axis: Axis): boolean {
+    return !!this.axisRepository.getSelectedAxes().find(ax => ax.index === axis.index);
+  }
 
-    public getAxisFromIndex(index: number): Axis | undefined {
-        return this.axisRepository.getAvailableAxes().find(ax => ax.index === index);
-    }
-
-    public isAxisSelected(axis: Axis): boolean {
-        return !!this.axisRepository.getSelectedAxes().find(ax => ax.index === axis.index);
-    }
-
-    public getSelectedAxes(): Axis[] {
-        return this.axisRepository.getSelectedAxes();
-    }
-
+  public getSelectedAxes(): Axis[] {
+    return this.axisRepository.getSelectedAxes();
+  }
 }

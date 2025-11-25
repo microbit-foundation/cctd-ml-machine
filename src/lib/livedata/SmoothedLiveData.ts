@@ -3,7 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { type Readable, type Subscriber, type Unsubscriber, derived, writable } from 'svelte/store';
+import {
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  derived,
+  writable,
+} from 'svelte/store';
 import LiveDataBuffer from '../../core/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
 import { type LiveDataVector } from '../../core/vector/LiveDataVector';

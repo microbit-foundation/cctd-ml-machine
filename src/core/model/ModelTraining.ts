@@ -5,6 +5,6 @@
  */
 
 export interface ModelTraining {
-    isTraining(): boolean;
-    setIsTraining(training: boolean): void;
+  isTraining(): boolean;
+  setIsTraining(training: boolean): void;
 }

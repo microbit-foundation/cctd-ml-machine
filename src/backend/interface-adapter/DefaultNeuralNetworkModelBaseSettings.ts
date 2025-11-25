@@ -7,8 +7,8 @@
 import type { NeuralNetworkModelBaseSettings } from '../../core/model/neural-network/NeuralNetworkModelBaseSettings';
 
 export class DefaultNeuralNetworkModelBaseSettings
-  implements NeuralNetworkModelBaseSettings {
-
+  implements NeuralNetworkModelBaseSettings
+{
   private learningRate: number;
   private numberOfEpochs: number;
   private batchSize: number;

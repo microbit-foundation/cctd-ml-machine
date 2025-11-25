@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Vector } from "../../vector/Vector";
+import type { Vector } from '../../vector/Vector';
 
 export type LabelledPoint = {
   classIndex: number;
   vector: Vector;
 };
-

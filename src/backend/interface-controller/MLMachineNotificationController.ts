@@ -4,19 +4,18 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { AbstractState } from "../interface-adapter/AbstractState";
-import type { NotificationService } from "../domain/NotificationService";
-import type { NotificationController } from "./abstract/NotificationsController";
+import type { AbstractState } from '../interface-adapter/AbstractState';
+import type { NotificationService } from '../domain/NotificationService';
+import type { NotificationController } from './abstract/NotificationsController';
 
 export class MLMachineNotificationController implements NotificationController {
-    public constructor(private notificationService: NotificationService) { }
+  public constructor(private notificationService: NotificationService) {}
 
-    public clearSnackbarMessage(): void {
-        this.notificationService.clearImmediateMessage();
-    }
+  public clearSnackbarMessage(): void {
+    this.notificationService.clearImmediateMessage();
+  }
 
-    public getSnackbarMessage(): AbstractState<string | undefined> {
-
-        return this.notificationService.getImmediateFeedbackMessage();
-    }
+  public getSnackbarMessage(): AbstractState<string | undefined> {
+    return this.notificationService.getImmediateFeedbackMessage();
+  }
 }

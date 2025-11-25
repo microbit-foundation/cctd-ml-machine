@@ -4,21 +4,20 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { ModelTraining } from "./ModelTraining";
+import type { ModelTraining } from './ModelTraining';
 
 export class ModelTrainingImpl implements ModelTraining {
+  private training: boolean;
 
-    private training: boolean;
+  constructor() {
+    this.training = false;
+  }
 
-    constructor() {
-        this.training = false;
-    }
+  isTraining(): boolean {
+    return this.training;
+  }
 
-    isTraining(): boolean {
-        return this.training;
-    }
-
-    setIsTraining(training: boolean): void {
-        this.training = training;
-    }
+  setIsTraining(training: boolean): void {
+    this.training = training;
+  }
 }

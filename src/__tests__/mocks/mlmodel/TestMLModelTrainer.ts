@@ -10,7 +10,7 @@ import type { ModelTrainer, ModelTrainerResult } from '../../../core/model/Model
 import TestMLModel from './TestMLModel';
 
 class TestMLModelTrainer implements ModelTrainer<TestMLModel, {}> {
-  constructor(private numberOfGestures: number) { }
+  constructor(private numberOfGestures: number) {}
   getModelInfo(): ModelInfo {
     return ModelRegistry.NeuralNetwork;
   }

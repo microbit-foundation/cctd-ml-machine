@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Application } from "../../../core/Application";
-import type { AbstractState } from "../../interface-adapter/AbstractState";
-import type { DevicesType } from "../../application/devices/Devices";
+import type { Application } from '../../../core/Application';
+import type { AbstractState } from '../../interface-adapter/AbstractState';
+import type { DevicesType } from '../../application/devices/Devices';
 
 export interface AppController extends Application {
-    getDocumentTitle(): string;
-    // TODO; Should be a domain entity, but it's too large for refactoring now
-    getDevices(): AbstractState<DevicesType>
-    isReconnectFlagSet(): boolean;
-    unsetReconnectFlag(): void;
+  getDocumentTitle(): string;
+  // TODO; Should be a domain entity, but it's too large for refactoring now
+  getDevices(): AbstractState<DevicesType>;
+  isReconnectFlagSet(): boolean;
+  unsetReconnectFlag(): void;
 }

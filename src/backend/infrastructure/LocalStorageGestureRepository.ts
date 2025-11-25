@@ -4,24 +4,22 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Gesture, GestureID } from "../../core/entities/Gesture";
-import type { NewGesture } from "../../core/entities/NewGesture";
-import type { Logger } from "../../core/logging/Logger";
-import ControlledStorage from "../../lib/ControlledStorage";
-import type { PersistedGestureData } from "../../lib/domain/stores/gesture/Gestures";
-import type { GestureRepository } from "../domain/GestureRepository";
-import { GestureImpl } from "../domain/implementation/gesture/GestureImpl";
-
+import type { Gesture, GestureID } from '../../core/entities/Gesture';
+import type { NewGesture } from '../../core/entities/NewGesture';
+import type { Logger } from '../../core/logging/Logger';
+import ControlledStorage from '../../lib/ControlledStorage';
+import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
+import type { GestureRepository } from '../domain/GestureRepository';
+import { GestureImpl } from '../domain/implementation/gesture/GestureImpl';
 
 export class LocalStorageGestureRepository implements GestureRepository {
-
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
 
-  public constructor(private log: Logger) { }
+  public constructor(private log: Logger) {}
 
   public generateGestureId(): GestureID {
     let proposed = new Date().getTime();
-    while(this.getGestures().find(gest => gest.getID() === proposed)) {
+    while (this.getGestures().find(gest => gest.getID() === proposed)) {
       proposed++;
     }
     return proposed;
@@ -42,24 +40,27 @@ export class LocalStorageGestureRepository implements GestureRepository {
 
   public getGestures(): NewGesture[] {
     const persisted = this.getPersistedData();
-    return persisted.map(persist => new GestureImpl(
-      persist.ID,
-      persist.name,
-      persist.recordings,
-      persist.output,
-      persist.color,
-    ))
+    return persisted.map(
+      persist =>
+        new GestureImpl(
+          persist.ID,
+          persist.name,
+          persist.recordings,
+          persist.output,
+          persist.color,
+        ),
+    );
   }
 
   public getGesture(gestureId: GestureID): NewGesture | undefined {
     const gestures = this.getGestures();
-    const filtered = gestures.filter(gest => gest.getID() === gestureId)
+    const filtered = gestures.filter(gest => gest.getID() === gestureId);
     if (!filtered.length) {
-      this.log.warn(`Couldn't find any gestures with gesture id ${gestureId}`)
+      this.log.warn(`Couldn't find any gestures with gesture id ${gestureId}`);
       return undefined;
     }
     if (filtered.length > 1) {
-      throw new Error(`There's multiple gestures with the id ${gestureId}`)
+      throw new Error(`There's multiple gestures with the id ${gestureId}`);
     }
     return filtered[0];
   }
@@ -70,8 +71,8 @@ export class LocalStorageGestureRepository implements GestureRepository {
       color: gest.getColor(),
       name: gest.getName(),
       output: gest.getOutput(),
-      recordings: gest.getRecordings()
-    }))
+      recordings: gest.getRecordings(),
+    }));
     ControlledStorage.set(this.LOCAL_STORAGE_KEY, persistedData);
     return value;
   }
@@ -94,4 +95,3 @@ export class LocalStorageGestureRepository implements GestureRepository {
     return storedData;
   }
 }
-

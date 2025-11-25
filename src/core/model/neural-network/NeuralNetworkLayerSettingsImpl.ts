@@ -4,27 +4,29 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { ActivationFunction, NeuralNetworkLayerSettings } from "./NeuralNetworkLayerSettings";
+import type {
+  ActivationFunction,
+  NeuralNetworkLayerSettings,
+} from './NeuralNetworkLayerSettings';
 
 export class NeuralNetworkLayerSettingsImpl implements NeuralNetworkLayerSettings {
-    private numberOfNodes: number;
-    private activationFunction: ActivationFunction;
+  private numberOfNodes: number;
+  private activationFunction: ActivationFunction;
 
-    public constructor(numberOfNodes: number, activationFunction: ActivationFunction) {
-        this.numberOfNodes = numberOfNodes;
-        this.activationFunction = activationFunction;
-    }
+  public constructor(numberOfNodes: number, activationFunction: ActivationFunction) {
+    this.numberOfNodes = numberOfNodes;
+    this.activationFunction = activationFunction;
+  }
 
-    public getNumberOfNodes(): number {
-        return this.numberOfNodes;
-    }
-    
-    public setNumberOfNodes(noOfNodes: number): void {
-        this.numberOfNodes = noOfNodes;
-    }
+  public getNumberOfNodes(): number {
+    return this.numberOfNodes;
+  }
 
-    public getActivationFunction(): ActivationFunction {
-        return this.activationFunction;
-    }
+  public setNumberOfNodes(noOfNodes: number): void {
+    this.numberOfNodes = noOfNodes;
+  }
 
+  public getActivationFunction(): ActivationFunction {
+    return this.activationFunction;
+  }
 }

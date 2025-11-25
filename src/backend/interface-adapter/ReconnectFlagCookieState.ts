@@ -4,28 +4,31 @@
  * SPDX-License-Identifier: MIT
  */
 
-import CookieManager from "../../lib/CookieManager";
-import type { Unsubscriber } from "./AbstractReadonlyState";
-import type { AbstractState } from "./AbstractState";
+import CookieManager from '../../lib/CookieManager';
+import type { Unsubscriber } from './AbstractReadonlyState';
+import type { AbstractState } from './AbstractState';
 
 export class ReconnectFlagCookieState implements AbstractState<boolean> {
-    public get(): boolean {
-        return CookieManager.isReconnectFlagSet();
-    }
+  public get(): boolean {
+    return CookieManager.isReconnectFlagSet();
+  }
 
-    public set(value: boolean): void {
-        if (value === true) {
-            CookieManager.setReconnectFlag();
-        } else {
-            CookieManager.unsetReconnectFlag();
-        }
+  public set(value: boolean): void {
+    if (value === true) {
+      CookieManager.setReconnectFlag();
+    } else {
+      CookieManager.unsetReconnectFlag();
     }
+  }
 
-    public update(updater: (curVal: boolean) => boolean): void {
-        this.set(updater(this.get()));
-    }
+  public update(updater: (curVal: boolean) => boolean): void {
+    this.set(updater(this.get()));
+  }
 
-    public subscribe(run: (value: boolean) => void, invalidate?: (value?: boolean) => void): Unsubscriber {
-        throw new Error("Subscriptions not supported for reconnect flag!");
-    }
+  public subscribe(
+    run: (value: boolean) => void,
+    invalidate?: (value?: boolean) => void,
+  ): Unsubscriber {
+    throw new Error('Subscriptions not supported for reconnect flag!');
+  }
 }

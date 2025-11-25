@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { AbstractReadonlyState } from "./AbstractReadonlyState";
+import type { AbstractReadonlyState } from './AbstractReadonlyState';
 
 /**
  * Abstraction for state management
  */
 export interface AbstractState<T> extends AbstractReadonlyState<T> {
-    set(value: T): void;
-    update(updater: (currentValue: T) => T): void;
+  set(value: T): void;
+  update(updater: (currentValue: T) => T): void;
 }

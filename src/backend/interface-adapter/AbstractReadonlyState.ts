@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-export type Unsubscriber = () => void
+export type Unsubscriber = () => void;
 
 /**
  * Abstraction for state management
  */
 export interface AbstractReadonlyState<T> {
-    get(): T;
-    subscribe(run: (value: T) => void, invalidate?: (value?: T) => void): Unsubscriber;
+  get(): T;
+  subscribe(run: (value: T) => void, invalidate?: (value?: T) => void): Unsubscriber;
 }

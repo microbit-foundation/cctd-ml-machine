@@ -18,7 +18,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private devices: Devices) { }
+  public constructor(private devices: Devices) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('OutputMicrobitHandler', 'onConnected', versionNumber);
@@ -70,11 +70,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
     });
   }
 
-  public onAccelerometerDataReceived(x: number, y: number, z: number): void { }
+  public onAccelerometerDataReceived(x: number, y: number, z: number): void {}
 
-  public onButtonAPressed(state: MBSpecs.ButtonState): void { }
+  public onButtonAPressed(state: MBSpecs.ButtonState): void {}
 
-  public onButtonBPressed(state: MBSpecs.ButtonState): void { }
+  public onButtonBPressed(state: MBSpecs.ButtonState): void {}
 
   public onMessageReceived(data: string): void {
     if (data === 'id_mkcd') {

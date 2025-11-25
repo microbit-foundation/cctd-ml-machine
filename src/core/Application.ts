@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { FeatureProvider } from "./featureprovider/FeatureProvider";
+import type { FeatureProvider } from './featureprovider/FeatureProvider';
 
 export interface Application {
-    getFeatureProvider(): FeatureProvider;
+  getFeatureProvider(): FeatureProvider;
 }

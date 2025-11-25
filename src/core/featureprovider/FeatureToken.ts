@@ -4,13 +4,15 @@
  * SPDX-License-Identifier: MIT
  */
 
-export type FeatureKey<T> = FeatureToken<T> | string | symbol
+export type FeatureKey<T> = FeatureToken<T> | string | symbol;
 
 export interface FeatureToken<T = unknown> {
-    readonly id: symbol
-    readonly name?: string
+  readonly id: symbol;
+  readonly name?: string;
 }
 
-export function createFeatureToken<U extends string, T = unknown>(name?: U): FeatureToken<T> {
-    return { id: Symbol(name), name }
+export function createFeatureToken<U extends string, T = unknown>(
+  name?: U,
+): FeatureToken<T> {
+  return { id: Symbol(name), name };
 }

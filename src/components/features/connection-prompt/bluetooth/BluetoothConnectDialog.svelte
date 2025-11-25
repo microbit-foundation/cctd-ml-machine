@@ -21,7 +21,7 @@
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
   import { DeviceRequestStates } from '../../../../lib/domain/Devices';
   import { stores } from '../../../../lib/stores/Stores';
-    import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
+  import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
 
   const devices = stores.getDevices();
 
@@ -76,7 +76,11 @@
       timeouted.set(false);
       onBluetoothConnected();
     } catch (error) {
-      ConsoleLogger.log('BluetoothConnectDialog', 'Failed to connect to micro:bit', error);
+      ConsoleLogger.log(
+        'BluetoothConnectDialog',
+        'Failed to connect to micro:bit',
+        error,
+      );
     } finally {
       isConnecting = false;
     }

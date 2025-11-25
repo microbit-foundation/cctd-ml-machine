@@ -123,16 +123,13 @@ describe('Classifier tests', () => {
     // const filterMean: Filter = createFilter(FilterType.MEAN);
     // const filterMin: Filter = createFilter(FilterType.MIN);
     // const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
-
     // let iterations = 0;
-
     // const trainingData = new TestTrainingDataRepository();
     // const trainedModel = await new LayersModelTrainer(
     //   StaticConfiguration.defaultNeuralNetworkSettings,
     //   () => (iterations += 1),
     // ).trainModel(trainingData);
     // const model = writable(trainedModel);
-
     // const gestureRepository = new TestGestureRepository();
     // gestureRepository.addGesture({
     //   color: 'blue',
@@ -155,7 +152,6 @@ describe('Classifier tests', () => {
     //   output: {},
     //   recordings: [],
     // });
-
     // const confidences = new Confidences();
     // const classifier = new ClassifierFactory().buildClassifier(
     //   model,
@@ -165,7 +161,6 @@ describe('Classifier tests', () => {
     //   (gestureId, confidence) => confidences.setConfidence(gestureId, confidence),
     //   new Snackbar(),
     // );
-
     // expect(async () => await classifier.classify(classifierInput)).not.throws();
   });
 
@@ -180,16 +175,13 @@ describe('Classifier tests', () => {
     // const filterMean: Filter = createFilter(FilterType.MEAN);
     // const filterMin: Filter = createFilter(FilterType.MIN);
     // const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
-
     // let iterations = 0;
-
     // const trainingData = new TestTrainingDataRepository();
     // const trainedModel = await new LayersModelTrainer(
     //   StaticConfiguration.defaultNeuralNetworkSettings,
     //   () => (iterations += 1),
     // ).trainModel(trainingData);
     // const model = writable(trainedModel);
-
     // const gestureRepository = new TestGestureRepository();
     // gestureRepository.addGesture({
     //   color: 'blue',
@@ -212,9 +204,7 @@ describe('Classifier tests', () => {
     //   output: {},
     //   recordings: [],
     // });
-
     // const confidences = new Confidences();
-
     // const classifier = new ClassifierFactory().buildClassifier(
     //   model,
     //   async () => void 0,
@@ -223,9 +213,7 @@ describe('Classifier tests', () => {
     //   (gestureId, confidence) => confidences.setConfidence(gestureId, confidence),
     //   new Snackbar(),
     // );
-
     // await classifier.classify(classifierInput);
-
     // expect(get(confidences).size).toBe(3);
   });
 
@@ -242,16 +230,13 @@ describe('Classifier tests', () => {
       // const filterMean: Filter = createFilter(FilterType.MEAN);
       // const filterMin: Filter = createFilter(FilterType.MIN);
       // const filters: Filters = new Filters(writable([filterMax, filterMean, filterMin]));
-
       // let iterations = 0;
-
       // const trainingData = new TestTrainingDataRepository();
       // const trainedModel = await new LayersModelTrainer(
       //   StaticConfiguration.defaultNeuralNetworkSettings,
       //   () => (iterations += 1),
       // ).trainModel(trainingData);
       // const model = writable(trainedModel);
-
       // const gestureRepository = new TestGestureRepository();
       // gestureRepository.addGesture({
       //   color: 'blue',
@@ -274,9 +259,7 @@ describe('Classifier tests', () => {
       //   output: {},
       //   recordings: [],
       // });
-
       // const confidences = new Confidences();
-
       // const classifier = new ClassifierFactory().buildClassifier(
       //   model,
       //   async () => void 0,
@@ -285,10 +268,8 @@ describe('Classifier tests', () => {
       //   (gestureId, confidence) => confidences.setConfidence(gestureId, confidence),
       //   new Snackbar(),
       // );
-
       // // This is based on known correct results
       // await classifier.classify(classifierInput);
-
       // expect(get(confidences).get(1)).toBeCloseTo(0);
       // expect(get(confidences).get(2)).toBeCloseTo(0);
       // expect(get(confidences).get(3)).toBeCloseTo(1);

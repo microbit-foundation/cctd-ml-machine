@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { NotifierService } from "../domain/NotifierService";
+import type { NotifierService } from '../domain/NotifierService';
 
-
-export class NotifierServiceImpl implements NotifierService {
-
-}
-
-
+export class NotifierServiceImpl implements NotifierService {}

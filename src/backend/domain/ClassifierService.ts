@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Classifier } from "../../core/classifier/Classifier";
-import type { NeuralNetworkModelSettings } from "../../core/model/neural-network/NeuralNetworkModelSettings";
-import type { AbstractState } from "../interface-adapter/AbstractState";
-import type { ModelTraining } from "../../core/model/ModelTraining";
+import type { Classifier } from '../../core/classifier/Classifier';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { AbstractState } from '../interface-adapter/AbstractState';
+import type { ModelTraining } from '../../core/model/ModelTraining';
 
 export interface ClassifierService {
-    getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings>;
-    getClassifier(): AbstractState<Classifier | undefined>
-    getModelTraining(): AbstractState<ModelTraining>;
-    unsetClassifier(): void;
+  getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings>;
+  getClassifier(): AbstractState<Classifier | undefined>;
+  getModelTraining(): AbstractState<ModelTraining>;
+  unsetClassifier(): void;
 }

@@ -26,7 +26,7 @@
   import { getControllers, MLMachine } from './backend/interface-adapter/MLMachine';
 
   new MLMachine().init();
-  const controller = getControllers().getAppController(); 
+  const controller = getControllers().getAppController();
 
   document.title = controller.getDocumentTitle();
 </script>

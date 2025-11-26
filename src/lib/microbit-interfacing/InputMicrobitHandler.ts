@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { MBSpecs, type MicrobitHandler } from 'microbyte';
-import { buttonPressed, onCatastrophicError } from '../stores/uiStore';
+import { buttonPressed } from '../stores/uiStore';
 import TypingUtils from '../TypingUtils';
 import { get } from 'svelte/store';
 import MicrobitAccelerometerLiveData, {
@@ -18,6 +18,7 @@ import { stores } from '../stores/Stores';
 import Devices, { DeviceRequestStates } from '../domain/Devices';
 import { ModelView, modelView } from '../stores/ApplicationState';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
+import { onCatastrophicError } from '../utils/ErrorReconnect';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);

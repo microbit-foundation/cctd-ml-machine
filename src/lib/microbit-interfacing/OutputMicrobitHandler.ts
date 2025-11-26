@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 import { MBSpecs, type MicrobitHandler } from 'microbyte';
-import { onCatastrophicError } from '../stores/uiStore';
 import StaticConfiguration from '../../StaticConfiguration';
 import TypingUtils from '../TypingUtils';
 import Microbits from './Microbits';
@@ -13,6 +12,7 @@ import type Devices from '../domain/Devices';
 import { ModelView, modelView } from '../stores/ApplicationState';
 import { DeviceRequestStates } from '../domain/Devices';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
+import { onCatastrophicError } from '../utils/ErrorReconnect';
 
 class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);

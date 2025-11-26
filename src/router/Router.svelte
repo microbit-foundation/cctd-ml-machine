@@ -23,6 +23,8 @@
         return (await import('../pages/model/ModelPage.svelte')).default;
       case Paths.FILTERS:
         return (await import('../pages/filter/FilterPage.svelte')).default;
+      case Paths.DEBUG:
+        return (await import('../pages/DebugPage.svelte')).default;
     }
   }
 

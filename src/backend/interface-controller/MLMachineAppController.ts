@@ -10,19 +10,24 @@ import { JSONFeatureProvider } from '../../core/featureprovider/JSONFeatureProvi
 import type { AppController } from './abstract/AppController';
 import type { AbstractState } from '../interface-adapter/AbstractState';
 import type { DevicesType } from '../application/devices/Devices';
+import type { UserService } from '../domain/UserService';
 
 export class MLMachineAppController implements AppController {
   public constructor(
     private devices: AbstractState<DevicesType>,
-    private reconnectFlag: AbstractState<boolean>,
+    private userService: UserService
   ) {}
 
+  public setReconnectFlag(state: boolean): void {
+    this.userService.setShouldReconnect(state);
+  }
+
   public unsetReconnectFlag(): void {
-    this.reconnectFlag.set(false);
+    this.userService.setShouldReconnect(false);
   }
 
   public isReconnectFlagSet(): boolean {
-    return this.reconnectFlag.get();
+    return this.userService.shouldReconnect();
   }
 
   public getDevices(): AbstractState<DevicesType> {

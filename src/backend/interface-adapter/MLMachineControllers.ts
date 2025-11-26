@@ -7,6 +7,8 @@
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { DataService } from '../domain/DataService';
+import { UserServiceImpl } from '../domain/implementation/UserServiceImpl';
+import { LocalStorageUserSessionRepository } from '../infrastructure/LocalStorageUserSessionRepository';
 import type { AppController } from '../interface-controller/abstract/AppController';
 import type { NotificationController } from '../interface-controller/abstract/NotificationsController';
 import { AxisController } from '../interface-controller/AxisController';
@@ -18,7 +20,6 @@ import { MLMachineNotificationController } from '../interface-controller/MLMachi
 import type { AbstractReadonlyState } from './AbstractReadonlyState';
 import { GesturesStateAdapter } from './GesturesStateAdapter';
 import { MLMachine } from './MLMachine';
-import { ReconnectFlagCookieState } from './ReconnectFlagCookieState';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -39,7 +40,7 @@ export class MLMachineControllers {
   public getAppController(): AppController {
     return new MLMachineAppController(
       this.mlMachine.getDevices(),
-      new ReconnectFlagCookieState(),
+      new UserServiceImpl(new LocalStorageUserSessionRepository()),
     );
   }
 

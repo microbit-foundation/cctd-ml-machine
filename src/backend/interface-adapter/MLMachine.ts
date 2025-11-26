@@ -101,9 +101,9 @@ export class MLMachine {
     );
 
     this.controllers = new MLMachineControllers(this, this.dataService, this.liveData);
-    const devices = stores.getDevices();
-    const outputHandler = new OutputMicrobitHandler(devices);
-    /*Microbits.setHandlers(
+    // const devices = stores.getDevices();
+    // const outputHandler = new OutputMicrobitHandler(devices);
+    /* Microbits.setHandlers(
             new CombinedMicrobitHandler(outputHandler, devices),
             outputHandler
         );*/

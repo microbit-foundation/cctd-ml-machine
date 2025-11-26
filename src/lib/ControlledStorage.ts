@@ -14,6 +14,14 @@ class ControlledStorage {
    */
   public static readonly localStorageVersion = 3;
 
+  public static getOrElse<T>(key: string, defaultValue: T): T {
+    try {
+      return this.get<T>(key);
+    } catch {
+      return defaultValue;
+    }
+  }
+
   public static get<T>(key: string): T {
     const storedValue = this.getStoredItem(key);
     try {

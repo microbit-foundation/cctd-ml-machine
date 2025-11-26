@@ -9,6 +9,7 @@ import type { AbstractState } from '../../interface-adapter/AbstractState';
 import type { DevicesType } from '../../application/devices/Devices';
 
 export interface AppController extends Application {
+  setReconnectFlag(state: boolean): unknown;
   getDocumentTitle(): string;
   // TODO; Should be a domain entity, but it's too large for refactoring now
   getDevices(): AbstractState<DevicesType>;

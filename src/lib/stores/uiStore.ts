@@ -88,15 +88,3 @@ export const microbitInteraction = writable<MicrobitInteractions>(
   initialMicrobitInteraction,
 );
 
-/**
- * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium.
- * This error occurs, when a connection is established, but lost again before listening to the characteristics
- * Refresh the page is the only known solution
- */
-export const onCatastrophicError = (reconnect?: boolean) => {
-  // Set flag to offer reconnect when page reloads
-  if (isInputPatternValid() && reconnect) {
-    CookieManager.setReconnectFlag();
-  }
-  location.reload();
-};

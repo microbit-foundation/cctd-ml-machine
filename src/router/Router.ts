@@ -13,6 +13,7 @@ export const Paths = {
   VALIDATE: 'validate',
   MODEL: 'model',
   FILTERS: 'training/filters',
+  DEBUG: 'debug',
 } as const;
 
 export type PathType = (typeof Paths)[keyof typeof Paths];

@@ -23,9 +23,12 @@
 
 <script lang="ts">
   import AppRoot from './frontend/view/AppRoot.svelte';
-  import { MLMachine } from './backend/interface-adapter/MLMachine';
+  import { getControllers, MLMachine } from './backend/interface-adapter/MLMachine';
 
   new MLMachine().init();
+  const controller = getControllers().getAppController(); 
+
+  document.title = controller.getDocumentTitle();
 </script>
 
 <AppRoot />

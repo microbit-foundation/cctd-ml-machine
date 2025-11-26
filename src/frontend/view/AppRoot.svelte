@@ -35,8 +35,6 @@
     });
     controller.unsetReconnectFlag();
   }
-
-  document.title = controller.getDocumentTitle();
 </script>
 
 <Router>

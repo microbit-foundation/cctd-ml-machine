@@ -22,7 +22,7 @@
   import PageContentView from '../../components/layout/PageContentView.svelte';
   import BottomBarMenuView from '../../components/layout/BottomBarMenuView.svelte';
   import { MLMachine } from '../../backend/interface-adapter/MLMachine';
-    import { stores } from '../../lib/stores/Stores';
+  import { stores } from '../../lib/stores/Stores';
 
   const devices = stores.getDevices();
 

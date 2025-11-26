@@ -39,7 +39,7 @@
       showLatestMessage = false;
     }, 3000);
   }
-console.log($devices.offerReconnect)
+  console.log($devices.offerReconnect);
 </script>
 
 <div>

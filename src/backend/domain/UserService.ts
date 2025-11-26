@@ -5,6 +5,6 @@
  */
 
 export interface UserService {
-    setShouldReconnect(state: boolean): unknown;
-    shouldReconnect(): boolean
+  setShouldReconnect(state: boolean): unknown;
+  shouldReconnect(): boolean;
 }

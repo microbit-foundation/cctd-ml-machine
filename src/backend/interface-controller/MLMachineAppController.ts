@@ -15,7 +15,7 @@ import type { UserService } from '../domain/UserService';
 export class MLMachineAppController implements AppController {
   public constructor(
     private devices: AbstractState<DevicesType>,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   public setReconnectFlag(state: boolean): void {

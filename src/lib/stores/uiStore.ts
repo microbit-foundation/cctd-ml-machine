@@ -87,4 +87,3 @@ const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB
 export const microbitInteraction = writable<MicrobitInteractions>(
   initialMicrobitInteraction,
 );
-

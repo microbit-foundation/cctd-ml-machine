@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-
 export interface UserSessionRepository {
-    setShouldReconnect(state: boolean): void;
-    shouldReconnect(): boolean;
+  setShouldReconnect(state: boolean): void;
+  shouldReconnect(): boolean;
 }

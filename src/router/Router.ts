@@ -14,6 +14,7 @@ export const Paths = {
   MODEL: 'model',
   FILTERS: 'training/filters',
   DEBUG: 'debug',
+  MAKECODE: 'makecode',
 } as const;
 
 export type PathType = (typeof Paths)[keyof typeof Paths];

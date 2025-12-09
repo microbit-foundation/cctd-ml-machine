@@ -25,6 +25,8 @@
         return (await import('../pages/filter/FilterPage.svelte')).default;
       case Paths.DEBUG:
         return (await import('../pages/DebugPage.svelte')).default;
+      case Paths.MAKECODE:
+        return (await import('../pages/MakecodePage.svelte')).default;
     }
   }
 

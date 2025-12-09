@@ -8,7 +8,7 @@
   import StandardDialog from '../components/ui/dialogs/StandardDialog.svelte';
   import ValidationPageControlBar from './validation/ValidationPageControlBar.svelte';
   import ValidationPageMainContent from './validation/ValidationPageMainContent.svelte';
-  import { t, tr } from '../i18n';
+  import { t } from '../i18n';
   import { startConnectionProcess } from '../lib/stores/connectDialogStore';
   import ValidationPageActionContent from './validation/ValidationPageActionContent.svelte';
   import StandardButton from '../components/ui/buttons/StandardButton.svelte';

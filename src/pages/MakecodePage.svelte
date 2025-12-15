@@ -4,55 +4,25 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import {
-    createMakeCodeRenderBlocks,
-    createMakeCodeURL,
-    MakeCodeFrameDriver,
-  } from '@microbit/makecode-embed';
+  import { createMakeCodeURL, MakeCodeFrameDriver } from '@microbit/makecode-embed';
   import { onMount } from 'svelte';
   import { getControllers } from '../backend/interface-adapter/MLMachine';
+  import { navigate, Paths } from '../router/Router';
 
   const controllers = getControllers();
-  const makecodeController = controllers.getMakecodeController();
-  const project = makecodeController.getMakecodeProject();
+  const makeCodeController = controllers.getMakeCodeController();
 
-  const renderer = createMakeCodeRenderBlocks({});
-  renderer.initialize();
+  // const renderer = createMakeCodeRenderBlocks({});
+  // renderer.initialize();
   onMount(async () => {
-    const makecodeElem = document.getElementById('makecode-elem');
-    if (!makecodeElem) {
+    const frameElem = document.getElementById('makecode-elem');
+    if (!frameElem) {
       return;
     }
-    const iframe = document.createElement('iframe');
-    iframe.allow = 'usb; autoplay; camera; microphone;';
-    iframe.src = createMakeCodeURL(
-      'https://makecode.microbit.org',
-      undefined, // Version.
-      undefined, // Language.
-      1, // Controller.
-      undefined, // Query params.
-    );
 
-    iframe.width = '100%';
-    iframe.height = '100%';
+    const iframe = makeCodeController.getFrameBuilder().getFrame().getIframe();
 
-    makecodeElem.appendChild(iframe);
-
-    // Create and initialise an instance of MakeCodeFrameDriver.
-    const driverRef = new MakeCodeFrameDriver(
-      {
-        controllerId: 'MlMachine',
-        initialProjects: async () => [project],
-        // When the editor loads, hide the simulator to make more space
-        onEditorContentLoaded: e => driverRef.hideSimulator(),
-        onWorkspaceSave: e => {
-          console.log(e.project!.header!.id, e.project);
-        },
-      },
-      () => iframe,
-    );
-    driverRef.initialize();
-    driverRef.hideSimulator();
+    frameElem.appendChild(iframe);
   });
 </script>
 

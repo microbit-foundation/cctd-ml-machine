@@ -15,7 +15,7 @@ import { AxisController } from '../interface-controller/AxisController';
 import { ClassifierController } from '../interface-controller/ClassifierController';
 import { DataController } from '../interface-controller/DataController';
 import { GestureController } from '../interface-controller/GestureController';
-import { MakecodeController } from '../interface-controller/MakecodeController';
+import { MakecodeController as MakeCodeController } from '../interface-controller/MakeCodeController';
 import { MLMachineAppController } from '../interface-controller/MLMachineAppController';
 import { MLMachineNotificationController } from '../interface-controller/MLMachineNotificationController';
 import type { AbstractReadonlyState } from './AbstractReadonlyState';
@@ -65,7 +65,7 @@ export class MLMachineControllers {
     return this.dataController;
   }
 
-  public getMakecodeController(): MakecodeController {
-    return new MakecodeController();
+  public getMakeCodeController(): MakeCodeController {
+    return new MakeCodeController();
   }
 }

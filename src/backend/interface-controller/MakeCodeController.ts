@@ -5,6 +5,7 @@
  */
 
 import type { MakeCodeProject } from '@microbit/makecode-embed';
+import { MakeCodeFrameBuilder } from './MakeCodeFrameBuilder';
 
 export class MakecodeController {
   public getMakecodeProject(): MakeCodeProject {
@@ -47,5 +48,9 @@ export class MakecodeController {
             `,
       },
     };
+  }
+
+  public getFrameBuilder(): MakeCodeFrameBuilder {
+    return new MakeCodeFrameBuilder(this.getMakecodeProject());
   }
 }

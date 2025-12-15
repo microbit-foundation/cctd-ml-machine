@@ -4,10 +4,8 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { createMakeCodeURL, MakeCodeFrameDriver } from '@microbit/makecode-embed';
   import { onMount } from 'svelte';
   import { getControllers } from '../backend/interface-adapter/MLMachine';
-  import { navigate, Paths } from '../router/Router';
 
   const controllers = getControllers();
   const makeCodeController = controllers.getMakeCodeController();

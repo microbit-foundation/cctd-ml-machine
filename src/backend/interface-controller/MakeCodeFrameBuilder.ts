@@ -10,7 +10,6 @@ import {
   type MakeCodeProject,
 } from '@microbit/makecode-embed';
 import { MakeCodeFrame } from './MakeCodeFrame';
-import { navigate, Paths } from '../../router/Router';
 
 /**
  * Builds the makecode frames needed for embedding makecode
@@ -18,7 +17,7 @@ import { navigate, Paths } from '../../router/Router';
 export class MakeCodeFrameBuilder {
   public constructor(private project: MakeCodeProject) {}
 
-  public getFrame(): MakeCodeFrame {
+  public getFrame(onBack: () => void): MakeCodeFrame {
     const iframe = document.createElement('iframe');
     iframe.allow = 'usb; autoplay; camera; microphone;';
     iframe.src = createMakeCodeURL(
@@ -35,7 +34,7 @@ export class MakeCodeFrameBuilder {
     // Create and initialise an instance of MakeCodeFrameDriver.
     const driverRef = new MakeCodeFrameDriver(
       {
-        onBack: () => navigate(Paths.MODEL),
+        onBack,
         controllerId: 'MlMachine',
         initialProjects: async () => [this.project],
         // When the editor loads, hide the simulator to make more space

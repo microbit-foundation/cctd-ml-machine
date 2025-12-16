@@ -109,6 +109,7 @@
   "content.model.output.pin.descriptionBody": "Here you can select which pin will turn on when a gesture is predicted. Each pins are numbered according to micro:bit's official pin output diagram.",
   "content.model.output.popup.header": "Connect output micro:bit",
   "content.model.output.popup.body": "If you have not connected an output micro:bit, you cannot see the results of the changed made on this page. Use the connect button below",
+  "content.model.output.toMakeCode": "To MakeCode",
   "content.validation.matrix.predicted": "Predicted",
   "content.validation.matrix.actual": "Actual",
   "content.validation.testButton.autoUpdate": "Auto-update",

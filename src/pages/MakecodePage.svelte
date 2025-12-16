@@ -6,6 +6,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { getControllers } from '../backend/interface-adapter/MLMachine';
+  import { navigate, Paths } from '../router/Router';
 
   const controllers = getControllers();
   const makeCodeController = controllers.getMakeCodeController();
@@ -18,7 +19,11 @@
       return;
     }
 
-    const iframe = makeCodeController.getFrameBuilder().getFrame().getIframe();
+    const onBackButtonPressed = () => navigate(Paths.MODEL);
+    const iframe = makeCodeController
+      .getFrameBuilder()
+      .getFrame(onBackButtonPressed)
+      .getIframe();
 
     frameElem.appendChild(iframe);
   });

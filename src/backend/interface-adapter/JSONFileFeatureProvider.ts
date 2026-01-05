@@ -1,5 +1,8 @@
-// JSONFileFeatureProvider: reads feature values from the project's features.json and
-// implements the FeatureProvider interface used by the ML machine.
+/**
+ * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 
 import type { FeatureProvider } from '../application/feature/FeatureProvider';
 import { Feature } from '../application/feature/Feature';

@@ -25,27 +25,22 @@ import type { Classifier } from '../../core/classifier/Classifier';
 import type { ModelTraining } from '../../core/model/ModelTraining';
 import { ModelTrainingStateAdapter } from './ModelTrainingStateAdapter';
 import { DataServiceImpl } from '../application/data/DataServiceImpl';
-import type { Axis } from '../../core/entities/Axis';
 import type { GestureService } from '../domain/GestureService';
 import { GestureServiceImpl } from '../domain/implementation/gesture/GestureServiceImpl';
 import { LocalStorageGestureRepository } from '../infrastructure/LocalStorageGestureRepository';
-import type { Gesture } from '../../core/entities/Gesture';
 import { MLMachineColors } from './MLMachineColors';
 import type { DataService } from '../domain/DataService';
 import { InMemoryAxisRepository } from '../infrastructure/InMemoryAxisRepository';
 import { InMemoryLiveDataRepository } from '../infrastructure/InMemoryLiveDataRepository';
 import StaticConfiguration from '../../StaticConfiguration';
 import { NotifierServiceImpl } from '../application/NotifierServiceImpl';
-import Microbits from '../../lib/microbit-interfacing/Microbits';
-import CombinedMicrobitHandler from '../../lib/microbit-interfacing/CombinedMicrobitHandler';
-import OutputMicrobitHandler from '../../lib/microbit-interfacing/OutputMicrobitHandler';
-import { stores } from '../../lib/stores/Stores';
 import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import { LiveDataStateAdapter } from './LiveDataStateAdapter';
 import type { FeatureProvider } from '../application/feature/FeatureProvider';
 import { FeatureServiceImpl } from '../application/feature/FeatureServiceImpl';
 import type { FeatureService } from '../application/feature/FeatureService';
+import { JSONFileFeatureProvider } from './JSONFileFeatureProvider';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -65,12 +60,9 @@ export class MLMachine {
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
-  private static instance: MLMachine | null = null;
+  private static instance: MLMachine = new MLMachine(new JSONFileFeatureProvider());
 
   public static getInstance(): MLMachine {
-    if (MLMachine.instance === null) {
-      throw new Error("MLMachine hasn't been instantiated yet");
-    }
     return MLMachine.instance;
   }
 

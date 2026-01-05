@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Feature } from '../../lib/FeatureToggles';
+import type { Feature } from '../application/feature/Feature';
 import type { FeatureService } from '../application/feature/FeatureService';
 
 export class FeatureController {
-  public constructor(featureService: FeatureService) {}
+  public constructor(private featureService: FeatureService) {}
 
-  public isFeatureToggled(feature: Feature) {}
+  public hasFeature(feature: Feature): boolean {
+    return this.featureService.getFeature<boolean>(feature).isSet();
+  }
 }

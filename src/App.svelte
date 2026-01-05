@@ -23,10 +23,8 @@
 
 <script lang="ts">
   import AppRoot from './frontend/view/AppRoot.svelte';
-  import { getControllers, MLMachine } from './backend/interface-adapter/MLMachine';
-  import { JSONFileFeatureProvider } from './backend/interface-adapter/JSONFileFeatureProvider';
+  import { getControllers } from './backend/interface-adapter/MLMachine';
 
-  new MLMachine(new JSONFileFeatureProvider()).init();
   const controller = getControllers().getAppController();
 
   document.title = controller.getDocumentTitle();

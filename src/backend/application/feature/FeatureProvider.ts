@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-
 import type { FeatureValue } from './FeatureValue';
 import type { Feature } from './Feature';
 

@@ -6,6 +6,7 @@
 
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { LiveData } from '../../lib/domain/stores/LiveData';
+import type { FeatureService } from '../application/feature/FeatureService';
 import type { DataService } from '../domain/DataService';
 import { UserServiceImpl } from '../domain/implementation/UserServiceImpl';
 import { LocalStorageUserSessionRepository } from '../infrastructure/LocalStorageUserSessionRepository';
@@ -14,6 +15,7 @@ import type { NotificationController } from '../interface-controller/abstract/No
 import { AxisController } from '../interface-controller/AxisController';
 import { ClassifierController } from '../interface-controller/ClassifierController';
 import { DataController } from '../interface-controller/DataController';
+import { FeatureController } from '../interface-controller/FeatureController';
 import { GestureController } from '../interface-controller/GestureController';
 import { MakecodeController as MakeCodeController } from '../interface-controller/MakeCodeController';
 import { MLMachineAppController } from '../interface-controller/MLMachineAppController';
@@ -30,6 +32,7 @@ export class MLMachineControllers {
     private mlMachine: MLMachine,
     dataService: DataService,
     liveData: AbstractReadonlyState<LiveData<LiveDataVector>>,
+    private featureService: FeatureService,
   ) {
     this.gestureController = new GestureController(
       new GesturesStateAdapter(this.mlMachine.getGestureService()),
@@ -42,6 +45,7 @@ export class MLMachineControllers {
     return new MLMachineAppController(
       this.mlMachine.getDevices(),
       new UserServiceImpl(new LocalStorageUserSessionRepository()),
+      this.featureService,
     );
   }
 
@@ -67,5 +71,9 @@ export class MLMachineControllers {
 
   public getMakeCodeController(): MakeCodeController {
     return new MakeCodeController();
+  }
+
+  public getFeatureController(): FeatureController {
+    return new FeatureController(this.featureService);
   }
 }

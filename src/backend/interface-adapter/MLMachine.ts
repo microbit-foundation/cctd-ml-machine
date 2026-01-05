@@ -42,9 +42,10 @@ import OutputMicrobitHandler from '../../lib/microbit-interfacing/OutputMicrobit
 import { stores } from '../../lib/stores/Stores';
 import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import type { AbstractReadonlyState } from './AbstractReadonlyState';
-import { InMemoryLiveDataStore } from '../../core/InMemoryLiveDataStore';
 import { LiveDataStateAdapter } from './LiveDataStateAdapter';
+import type { FeatureProvider } from '../application/feature/FeatureProvider';
+import { FeatureServiceImpl } from '../application/feature/FeatureServiceImpl';
+import type { FeatureService } from '../application/feature/FeatureService';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -60,6 +61,7 @@ export class MLMachine {
   private dataService: DataService;
   private gestureService: GestureService;
   private liveData: AbstractState<LiveData<LiveDataVector>>;
+  private featureService: FeatureService;
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
@@ -72,7 +74,7 @@ export class MLMachine {
     return MLMachine.instance;
   }
 
-  public constructor() {
+  public constructor(private featureProvider: FeatureProvider) {
     this.log.log('Bootstrapped ML-Machine');
     this.devices = new SvelteStateAdapter(new Devices());
     this.immediateFeedback = new SvelteStateAdapter(
@@ -84,6 +86,7 @@ export class MLMachine {
     const repository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
     );
+    this.featureService = new FeatureServiceImpl(featureProvider);
     this.gestureService = new GestureServiceImpl(
       new LocalStorageGestureRepository(
         new ConsoleLogger('LocalStorageGestureRepository'),
@@ -100,7 +103,12 @@ export class MLMachine {
       new NotifierServiceImpl(),
     );
 
-    this.controllers = new MLMachineControllers(this, this.dataService, this.liveData);
+    this.controllers = new MLMachineControllers(
+      this,
+      this.dataService,
+      this.liveData,
+      this.featureService,
+    );
     // const devices = stores.getDevices();
     // const outputHandler = new OutputMicrobitHandler(devices);
     /* Microbits.setHandlers(

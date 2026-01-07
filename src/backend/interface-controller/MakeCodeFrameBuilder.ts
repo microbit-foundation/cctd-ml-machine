@@ -39,9 +39,7 @@ export class MakeCodeFrameBuilder {
         initialProjects: async () => [this.project],
         // When the editor loads, hide the simulator to make more space
         onEditorContentLoaded: e => driverRef.hideSimulator(),
-        onWorkspaceSave: e => {
-          console.log(e.project!.header!.id, e.project);
-        },
+        onWorkspaceSave: e => {},
       },
       () => iframe,
     );

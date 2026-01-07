@@ -9,23 +9,27 @@
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/ui/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
-  import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import ModelPageStackView from './stackview/ModelPageStackView.svelte';
   import ModelPageTileView from './tileview/ModelPageTileView.svelte';
   import { navigate, Paths } from '../../router/Router';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import { OutputTarget } from '../../backend/domain/implementation/output/OutputTarget';
+  import { Feature } from '../../backend/application/feature/Feature';
+
+  const controllers = getControllers();
+  const outputController = controllers.getOutputController();
+  const featureController = controllers.getFeatureController();
+  const outputTarget = outputController.getOutputTarget();
 
   const openMakecode = () => {
     navigate(Paths.MAKECODE);
+    outputController.setOutputTargetMakecode();
   };
-  const outputController = getControllers().getOutputController();
-  const outputTarget = outputController.getOutputTarget();
 </script>
 
 <div>
   <ControlBar>
-    {#if hasFeature(Feature.MAKECODE)}
+    {#if featureController.hasFeature(Feature.MAKECODE)}
       <ExpandableControlBarMenu>
         <StandardButton small outlined onClick={openMakecode}>
           {$t('content.model.output.toMakeCode')}

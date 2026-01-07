@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { OutputTarget } from '../domain/implementation/output/OutputTarget';
+import { OutputTarget } from '../domain/implementation/output/OutputTarget';
 import type { OutputService } from '../domain/OutputService';
 import type { AbstractStates } from '../infrastructure/AbstractStates';
 import type { AbstractState } from '../interface-adapter/AbstractState';
@@ -17,5 +17,9 @@ export class OutputController {
 
   public getOutputTarget(): AbstractState<OutputTarget> {
     return this.states.getOutputTarget();
+  }
+
+  public setOutputTargetMakecode() {
+    this.outputService.setOutputTarget(OutputTarget.MAKECODE);
   }
 }

@@ -9,6 +9,8 @@ import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { FeatureService } from '../application/feature/FeatureService';
 import type { DataService } from '../domain/DataService';
 import { UserServiceImpl } from '../domain/implementation/UserServiceImpl';
+import type { OutputService } from '../domain/OutputService';
+import type { AbstractStates } from '../infrastructure/AbstractStates';
 import { LocalStorageUserSessionRepository } from '../infrastructure/LocalStorageUserSessionRepository';
 import type { AppController } from '../interface-controller/abstract/AppController';
 import type { NotificationController } from '../interface-controller/abstract/NotificationsController';
@@ -20,6 +22,7 @@ import { GestureController } from '../interface-controller/GestureController';
 import { MakecodeController as MakeCodeController } from '../interface-controller/MakeCodeController';
 import { MLMachineAppController } from '../interface-controller/MLMachineAppController';
 import { MLMachineNotificationController } from '../interface-controller/MLMachineNotificationController';
+import { OutputController } from '../interface-controller/OutputController';
 import type { AbstractReadonlyState } from './AbstractReadonlyState';
 import { GesturesStateAdapter } from './GesturesStateAdapter';
 import { MLMachine } from './MLMachine';
@@ -33,6 +36,8 @@ export class MLMachineControllers {
     dataService: DataService,
     liveData: AbstractReadonlyState<LiveData<LiveDataVector>>,
     private featureService: FeatureService,
+    private outputService: OutputService,
+    private states: AbstractStates,
   ) {
     this.gestureController = new GestureController(
       new GesturesStateAdapter(this.mlMachine.getGestureService()),
@@ -75,5 +80,9 @@ export class MLMachineControllers {
 
   public getFeatureController(): FeatureController {
     return new FeatureController(this.featureService);
+  }
+
+  public getOutputController(): OutputController {
+    return new OutputController(this.outputService, this.states);
   }
 }

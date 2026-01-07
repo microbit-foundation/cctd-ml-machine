@@ -8,23 +8,21 @@ import type { OutputRepository } from '../domain/OutputRepository';
 import { OutputTarget } from '../domain/implementation/output/OutputTarget';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import type { Logger } from '../../core/logging/Logger';
+import type { AbstractStates } from './AbstractStates';
 
-export class InMemoryOutputRepository implements OutputRepository {
+export class StatesOutputRepository implements OutputRepository {
   private log: Logger;
-  private outputTarget: OutputTarget;
 
-  constructor(initialOutputTarget: OutputTarget) {
+  constructor(private states: AbstractStates) {
     this.log = new ConsoleLogger('InMemoryOutputRepository');
-    this.outputTarget = initialOutputTarget;
   }
 
   public getOutputTarget(): OutputTarget {
-    this.log.log('getOutputTarget', this.outputTarget);
-    return this.outputTarget;
+    return this.states.getOutputTarget().get();
   }
 
   public setOutputTarget(outputTarget: OutputTarget): void {
     this.log.log('setOutputTarget', outputTarget);
-    this.outputTarget = outputTarget;
+    return this.states.getOutputTarget().set(outputTarget);
   }
 }

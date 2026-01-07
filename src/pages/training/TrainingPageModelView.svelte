@@ -1,7 +1,7 @@
 <!--
-  (c) 2023-2025, center for computational thinking and design at aarhus university and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
-  spdx-license-identifier: mit
+  SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">

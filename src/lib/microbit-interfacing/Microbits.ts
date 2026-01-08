@@ -19,6 +19,7 @@ import CombinedMicrobitHandler from './CombinedMicrobitHandler';
 import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
+import { MLMachine } from '../../backend/interface-adapter/MLMachine';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
 
@@ -43,10 +44,14 @@ class Microbits {
   private static outputOrigin = HexOrigin.UNKNOWN;
   private static inputOrigin = HexOrigin.UNKNOWN;
 
-  private static outputHandler = new OutputMicrobitHandler(stores.getDevices());
+  private static outputHandler = new OutputMicrobitHandler(
+    stores.getDevices(),
+    MLMachine.getInstance().getControllers().getOutputController(),
+  );
   private static inputHandler = new CombinedMicrobitHandler(
     this.outputHandler,
     stores.getDevices(),
+    MLMachine.getInstance().getControllers().getOutputController(),
   );
 
   private static linkedMicrobit: Microbit = new Microbit();

@@ -9,16 +9,19 @@ import TypingUtils from '../TypingUtils';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
 import type Devices from '../domain/Devices';
-import { ModelView, modelView } from '../stores/ApplicationState';
 import { DeviceRequestStates } from '../domain/Devices';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { onCatastrophicError } from '../utils/ErrorReconnect';
+import type { OutputController } from '../../backend/interface-controller/OutputController';
 
 class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private devices: Devices) {}
+  public constructor(
+    private devices: Devices,
+    private outputController: OutputController,
+  ) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('OutputMicrobitHandler', 'onConnected', versionNumber);
@@ -33,7 +36,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
     this.devices.update(s => {
       if (Microbits.isInputOutputTheSame()) {
         if (Microbits.isOutputMakecode()) {
-          modelView.set(ModelView.TILE);
+          this.outputController.setOutputTargetOutputMicrobit();
         }
       }
       s.isOutputConnected = true;
@@ -79,11 +82,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
   public onMessageReceived(data: string): void {
     if (data === 'id_mkcd') {
       Microbits.setOutputOrigin(HexOrigin.MAKECODE);
-      modelView.set(ModelView.TILE);
+      this.outputController.setOutputTargetOutputMicrobit();
     }
     if (data === 'id_prop') {
       Microbits.setOutputOrigin(HexOrigin.PROPRIETARY);
-      modelView.set(ModelView.STACK);
+      this.outputController.setOutputTargetOutputMicrobit();
     }
     if (data.includes('vi_')) {
       const version = parseInt(data.substring(3));

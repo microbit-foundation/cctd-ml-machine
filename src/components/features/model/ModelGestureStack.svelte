@@ -32,8 +32,11 @@
   import { MBSpecs } from 'microbyte';
   import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
   import type { SoundData } from '../../../core/entities/GestureOutput';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
+
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
@@ -262,7 +265,7 @@
       width="30px" />
     <img
       class="m-auto"
-      class:hidden={!wasTriggered || !$devices.isInputReady}
+      class:hidden={!wasTriggered || !$microbitConnection.isInputReady}
       src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />

@@ -4,12 +4,14 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import GestureDot from '../../components/ui/GestureDot.svelte';
   import { stores } from '../../lib/stores/Stores';
 
   const gestures = stores.getGestures();
   const confidences = stores.getConfidences();
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 </script>
 
 {#each $gestures as gesture}
@@ -20,7 +22,7 @@
       </div>
       <p>{gesture.name}</p>
     </div>
-    {#if $devices.isInputReady}
+    {#if $microbitConnection.isInputReady}
       <p>
         {(($confidences.get(gesture.ID) ?? 0) * 100).toFixed(1)}%
       </p>

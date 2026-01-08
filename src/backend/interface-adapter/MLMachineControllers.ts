@@ -23,6 +23,8 @@ import { OutputController } from '../interface-controller/OutputController';
 import { GesturesStateAdapter } from './GesturesStateAdapter';
 import { MLMachine } from './MLMachine';
 import { MakeCodeController } from '../interface-controller/makecode/MakeCodeController';
+import type { MicrobitService } from '../domain/microbit/MicrobitService';
+import { MicrobitController } from '../interface-controller/MicrobitController';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -34,6 +36,7 @@ export class MLMachineControllers {
     private featureService: FeatureService,
     private outputService: OutputService,
     private states: AbstractStates,
+    private microbitService: MicrobitService,
   ) {
     this.gestureController = new GestureController(
       new GesturesStateAdapter(this.mlMachine.getGestureService()),
@@ -80,5 +83,9 @@ export class MLMachineControllers {
 
   public getOutputController(): OutputController {
     return new OutputController(this.outputService, this.states);
+  }
+
+  public getMicrobitController() {
+    return new MicrobitController(this.microbitService, this.states);
   }
 }

@@ -14,8 +14,12 @@
   import { stores } from '../../../lib/stores/Stores';
   import PleaseConnect from '../../../components/features/PleaseConnect.svelte';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   const devices = stores.getDevices();
+
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
   const classifier = stores.getClassifier();
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -78,7 +82,7 @@
 <!-- Main pane -->
 <main class="h-full flex flex-col">
   {#if $model.isTrained}
-    {#if $devices.isInputReady}
+    {#if $microbitConnection.isInputReady}
       <ModelPageStackViewContent />
     {:else}
       <PleaseConnect />

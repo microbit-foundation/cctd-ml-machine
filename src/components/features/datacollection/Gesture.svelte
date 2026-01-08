@@ -28,10 +28,14 @@
   import { Feature, getFeature, hasFeature } from '../../../lib/FeatureToggles';
   import { printRecordings } from '../../../lib/utils/printRecordings';
   import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   export let onNoMicrobitSelect: () => void;
   export let gesture: GestureState;
-  const devices = stores.getDevices();
+
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
+
   const gestures = stores.getGestures();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
@@ -97,7 +101,7 @@
   // If gesture is already selected, the selection is removed.
   // If bluetooth is not connected, open connection prompt by calling callback
   function selectClicked(): void {
-    if (!$devices.isInputConnected) {
+    if (!$microbitConnection.isInputConnected) {
       chosenGesture.update(gesture => {
         gesture = null;
         return gesture;

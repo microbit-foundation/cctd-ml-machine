@@ -12,9 +12,10 @@
   import OutdatedMicrobitWarning from '../features/OutdatedMicrobitWarning.svelte';
   import { isInputPatternValid } from '../../lib/stores/connectionStore';
   import FilterListFilterPreview from '../features/filters/FilterListFilterPreview.svelte';
-  import { stores } from '../../lib/stores/Stores';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
   // Helps show error messages on top of page
   let latestMessage = '';
   let showLatestMessage = false;
@@ -39,7 +40,7 @@
       showLatestMessage = false;
     }, 3000);
   }
-  console.log($devices.offerReconnect);
+  console.log($microbitConnection.offerReconnect);
 </script>
 
 <div>
@@ -53,11 +54,12 @@
       </div>
     </div>
   {/if}
-  {#if $devices.offerReconnect && isInputPatternValid()}
+  {#if $microbitConnection.offerReconnect && isInputPatternValid()}
     <ReconnectPrompt />
   {/if}
-  {#if $devices.isInputOutdated || $devices.isOutputOutdated}
-    <OutdatedMicrobitWarning targetRole={$devices.isInputOutdated ? 'INPUT' : 'OUTPUT'} />
+  {#if $microbitConnection.isInputOutdated || $microbitConnection.isOutputOutdated}
+    <OutdatedMicrobitWarning
+      targetRole={$microbitConnection.isInputOutdated ? 'INPUT' : 'OUTPUT'} />
   {/if}
   <FilterListFilterPreview />
 </div>

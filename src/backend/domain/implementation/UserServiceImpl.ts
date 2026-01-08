@@ -10,7 +10,7 @@ import type { UserSessionRepository } from '../UserSessionRepository';
 export class UserServiceImpl implements UserService {
   constructor(private sessionRepository: UserSessionRepository) {}
 
-  setShouldReconnect(state: boolean) {
+  setShouldReconnectNextVisit(state: boolean) {
     this.sessionRepository.setShouldReconnect(state);
   }
 

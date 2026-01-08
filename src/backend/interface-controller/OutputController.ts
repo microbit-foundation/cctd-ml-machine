@@ -22,4 +22,8 @@ export class OutputController {
   public setOutputTargetMakecode() {
     this.outputService.setOutputTarget(OutputTarget.MAKECODE);
   }
+
+  public setOutputTargetOutputMicrobit() {
+    this.outputService.setOutputTarget(OutputTarget.OUTPUT_MICROBIT);
+  }
 }

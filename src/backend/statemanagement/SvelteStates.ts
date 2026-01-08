@@ -13,10 +13,13 @@ import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { LiveData } from '../../lib/domain/stores/LiveData';
 import { LiveDataStateAdapter } from '../interface-adapter/LiveDataStateAdapter';
 import StaticConfiguration from '../../StaticConfiguration';
+import type { MicrobitConnectionData } from '../infrastructure/MicrobitConnectionData';
+import { MicrobitRole } from '../domain/microbit/MicrobitRole';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
   private liveDataState: AbstractState<LiveData<LiveDataVector>>;
+  private microbitConnectionState: AbstractState<MicrobitConnectionData>;
 
   public constructor() {
     this.liveDataState = new LiveDataStateAdapter(
@@ -25,7 +28,28 @@ export class SvelteStates implements AbstractStates {
     this.outputTargetState = new SvelteStateAdapter(
       writable(OutputTarget.OUTPUT_MICROBIT),
     );
+    this.microbitConnectionState = new SvelteStateAdapter<MicrobitConnectionData>(
+      writable({
+        isInputConnected: false,
+        isOutputConnected: false,
+        offerReconnect: false,
+        requestDeviceWasCancelled: false,
+        reconnectingRole: MicrobitRole.INPUT,
+        isInputReady: false,
+        isInputAssigned: false,
+        isOutputAssigned: false,
+        isOutputReady: false,
+        isInputInitializing: false,
+        isInputOutdated: false,
+        isOutputOutdated: false,
+      }),
+    );
   }
+
+  getMicrobitConnection(): AbstractState<MicrobitConnectionData> {
+    return this.microbitConnectionState;
+  }
+
   getLiveData(): AbstractState<LiveData<LiveDataVector>> {
     return this.liveDataState;
   }

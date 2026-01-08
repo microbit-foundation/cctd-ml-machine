@@ -14,7 +14,7 @@ export class StatesOutputRepository implements OutputRepository {
   private log: Logger;
 
   constructor(private states: AbstractStates) {
-    this.log = new ConsoleLogger('InMemoryOutputRepository');
+    this.log = new ConsoleLogger('StatesOutputRepository');
   }
 
   public getOutputTarget(): OutputTarget {

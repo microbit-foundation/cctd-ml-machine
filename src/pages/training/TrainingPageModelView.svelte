@@ -12,8 +12,10 @@
   import { stores } from '../../lib/stores/Stores';
   import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import FiltersList from '../../components/features/filters/FiltersList.svelte';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
   const selectedModel = stores.getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);
 </script>
@@ -34,7 +36,7 @@
     </div>
   </div>
 </div>
-{#if !$devices.isInputConnected}
+{#if !$microbitConnection.isInputConnected}
   <div class="mt-4">
     <PleaseConnect />
   </div>

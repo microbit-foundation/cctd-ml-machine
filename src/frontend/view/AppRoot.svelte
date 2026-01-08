@@ -7,7 +7,6 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
   import type { AppController } from '../../backend/interface-controller/abstract/AppController';
-  import { DeviceRequestStates } from '../../lib/domain/Devices';
   import Router from '../../router/Router.svelte';
   import SnackbarView from '../../components/features/snackbar/SnackbarView.svelte';
   import { compatibility } from '../../lib/stores/uiStore';
@@ -21,22 +20,14 @@
   import SideBarMenuView from '../../components/layout/SideBarMenuView.svelte';
   import PageContentView from '../../components/layout/PageContentView.svelte';
   import BottomBarMenuView from '../../components/layout/BottomBarMenuView.svelte';
-  import { MLMachine } from '../../backend/interface-adapter/MLMachine';
-  import { stores } from '../../lib/stores/Stores';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { MicrobitRole } from '../../backend/domain/microbit/MicrobitRole';
 
-  const devices = stores.getDevices();
-
-  const controller: AppController = MLMachine.getInstance()
-    .getControllers()
-    .getAppController();
+  const controller: AppController = getControllers().getAppController();
+  const microbitController = getControllers().getMicrobitController();
 
   if (controller.isReconnectFlagSet()) {
-    devices.update(s => {
-      s.offerReconnect = true;
-      s.reconnectState = DeviceRequestStates.INPUT;
-      return s;
-    });
-    controller.unsetReconnectFlag();
+    microbitController.offerReconnect(MicrobitRole.INPUT);
   }
 </script>
 

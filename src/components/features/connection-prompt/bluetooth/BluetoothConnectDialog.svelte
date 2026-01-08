@@ -22,8 +22,10 @@
   import { DeviceRequestStates } from '../../../../lib/domain/Devices';
   import { stores } from '../../../../lib/stores/Stores';
   import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
+  import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 
   export let deviceState: DeviceRequestStates;
   export let onBluetoothConnected: () => void;
@@ -107,7 +109,7 @@
 
   onMount(() => {
     // Resets the bluetooth connection prompt for cancelled device requests
-    $devices.requestDeviceWasCancelled = false;
+    $microbitConnection.requestDeviceWasCancelled = false;
   });
 
   const handleSearchWithoutName = () => {
@@ -120,7 +122,7 @@
     {$t('popup.connectMB.bluetooth.heading')}
   </h1>
 
-  {#if $devices.requestDeviceWasCancelled && !isConnecting}
+  {#if $microbitConnection.requestDeviceWasCancelled && !isConnecting}
     <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
     <p class="text-warning mb-1">
       {$t('popup.connectMB.bluetooth.cancelledConnection.noNameDescription')}

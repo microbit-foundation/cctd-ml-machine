@@ -16,13 +16,15 @@
   import type { FilterType } from '../../core/entities/filter/Filter';
   import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
   import { createFilter } from '../../core/filter/FilterUtils';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
 
-  $: showLive = $devices.isInputConnected;
+  $: showLive = $microbitConnection.isInputConnected;
   $: liveData = $stores.liveData;
   const highlightedAxes = stores.getHighlightedAxes();
 

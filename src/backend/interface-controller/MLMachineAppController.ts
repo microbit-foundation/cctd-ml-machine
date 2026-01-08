@@ -19,11 +19,11 @@ export class MLMachineAppController implements AppController {
   ) {}
 
   public setReconnectFlag(state: boolean): void {
-    this.userService.setShouldReconnect(state);
+    this.userService.setShouldReconnectNextVisit(state);
   }
 
   public unsetReconnectFlag(): void {
-    this.userService.setShouldReconnect(false);
+    this.userService.setShouldReconnectNextVisit(false);
   }
 
   public isReconnectFlagSet(): boolean {

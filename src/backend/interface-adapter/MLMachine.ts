@@ -32,20 +32,21 @@ import { MLMachineColors } from './MLMachineColors';
 import type { DataService } from '../domain/DataService';
 import { InMemoryAxisRepository } from '../infrastructure/InMemoryAxisRepository';
 import { InMemoryLiveDataRepository } from '../infrastructure/StatesLiveDataRepository';
-import StaticConfiguration from '../../StaticConfiguration';
 import { NotifierServiceImpl } from '../application/NotifierServiceImpl';
-import type { LiveData } from '../../lib/domain/stores/LiveData';
-import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import { LiveDataStateAdapter } from './LiveDataStateAdapter';
 import type { FeatureProvider } from '../application/feature/FeatureProvider';
 import { FeatureServiceImpl } from '../application/feature/FeatureServiceImpl';
 import type { FeatureService } from '../application/feature/FeatureService';
 import { JSONFileFeatureProvider } from './JSONFileFeatureProvider';
 import { OutputServiceImpl } from '../domain/implementation/output/OutputServiceImpl';
-import { OutputTarget } from '../domain/implementation/output/OutputTarget';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 import { SvelteStates } from '../statemanagement/SvelteStates';
 import { StatesOutputRepository } from '../infrastructure/StatesOutputRepository';
+import type { MicrobitService } from '../domain/microbit/MicrobitService';
+import { MicrobitServiceImpl } from '../domain/implementation/microbit/MicrobitServiceImpl';
+import { StatesMicrobitConnectionRepository } from '../infrastructure/StatesMicrobitConnectionRepository';
+import { UserServiceImpl } from '../domain/implementation/UserServiceImpl';
+import { LocalStorageUserSessionRepository } from '../infrastructure/LocalStorageUserSessionRepository';
+import type { UserService } from '../domain/UserService';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -62,6 +63,8 @@ export class MLMachine {
   private gestureService: GestureService;
   private featureService: FeatureService;
   private states: AbstractStates;
+  private microbitService: MicrobitService;
+  private userService: UserService;
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
@@ -73,7 +76,10 @@ export class MLMachine {
 
   public constructor(private featureProvider: FeatureProvider) {
     this.log.log('Bootstrapped ML-Machine');
+    const userSessionRepository = new LocalStorageUserSessionRepository();
+    this.userService = new UserServiceImpl(userSessionRepository);
     this.states = new SvelteStates();
+
     this.devices = new SvelteStateAdapter(new Devices());
     this.immediateFeedback = new SvelteStateAdapter(
       writable<string | undefined>(undefined),
@@ -96,13 +102,22 @@ export class MLMachine {
       new InMemoryLiveDataRepository(this.states),
       new NotifierServiceImpl(),
     );
+
     const outputService = new OutputServiceImpl(new StatesOutputRepository(this.states));
+    const microbitConnectionRepository = new StatesMicrobitConnectionRepository(
+      this.states,
+    );
+    this.microbitService = new MicrobitServiceImpl(
+      microbitConnectionRepository,
+      this.userService,
+    );
     this.controllers = new MLMachineControllers(
       this,
       this.dataService,
       this.featureService,
       outputService,
       this.states,
+      this.microbitService,
     );
     // const devices = stores.getDevices();
     // const outputHandler = new OutputMicrobitHandler(devices);

@@ -11,46 +11,47 @@
   import Microbits from '../../lib/microbit-interfacing/Microbits';
   import { MBSpecs } from 'microbyte';
   import StandardButton from '../ui/buttons/StandardButton.svelte';
-  import { stores } from '../../lib/stores/Stores';
-  import { DeviceRequestStates } from '../../lib/domain/Devices';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { MicrobitRole } from '../../backend/domain/microbit/MicrobitRole';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 
   let reconnectText: string;
   let reconnectButtonText: string;
-  devices.subscribe(s => {
-    if (s.reconnectState === DeviceRequestStates.INPUT) {
+  microbitConnection.subscribe(s => {
+    if (s.reconnectingRole === MicrobitRole.INPUT) {
       reconnectText = $t('popup.disconnectedWarning.input');
       reconnectButtonText = $t('popup.disconnectedWarning.reconnectButton.input');
-    } else if (s.reconnectState === DeviceRequestStates.OUTPUT) {
+    } else if (s.reconnectingRole === MicrobitRole.OUTPUT) {
       reconnectText = $t('popup.disconnectedWarning.output');
       reconnectButtonText = $t('popup.disconnectedWarning.reconnectButton.output');
     }
   });
   // When disconnected by lost connection, offer the option to attempt to reconnect
   let hideReconnectMessageAfterTimeout = false;
-  devices.subscribe(s => {
+  microbitConnection.subscribe(s => {
     if (s.offerReconnect) {
       hideReconnectMessageAfterTimeout = true;
     }
   });
 
-  const reconnect = (connectState: DeviceRequestStates) => {
+  const reconnect = (connectState: MicrobitRole) => {
     hideReconnectMessageAfterTimeout = false;
-    console.assert(connectState != DeviceRequestStates.NONE);
+    console.assert(microbitConnection.get().offerReconnect === true);
     const pairingPattern =
-      connectState === DeviceRequestStates.INPUT ? $btPatternInput : $btPatternOutput;
+      connectState === MicrobitRole.INPUT ? $btPatternInput : $btPatternOutput;
     const name = MBSpecs.Utility.patternToName(pairingPattern);
 
     const connect = () => {
-      if (connectState == DeviceRequestStates.INPUT) {
+      if (connectState == MicrobitRole.INPUT) {
         return Microbits.connectInput(name);
       }
       return Microbits.connectOutput(name);
     };
 
     void connect().then(() => {
-      $devices.offerReconnect = false;
+      $microbitConnection.offerReconnect = false;
     });
   };
 </script>
@@ -62,7 +63,7 @@
     <div class="absolute right-2 top-2 svelte-1rnkjvh">
       <button
         class="hover:bg-gray-100 rounded outline-transparent w-8 svelte-1rnkjvh"
-        on:click={() => ($devices.offerReconnect = false)}>
+        on:click={() => ($microbitConnection.offerReconnect = false)}>
         <i
           class="fas fa-plus text-lg text-gray-600 hover:text-gray-800 duration-75 svelte-1rnkjvh"
           style="transform: rotate(45deg);" />
@@ -70,7 +71,7 @@
     </div>
     <p>{reconnectText}</p>
     <div class="flex justify-center">
-      <StandardButton onClick={() => reconnect($devices.reconnectState)}>
+      <StandardButton onClick={() => reconnect($microbitConnection.reconnectingRole)}>
         {reconnectButtonText}
       </StandardButton>
     </div>

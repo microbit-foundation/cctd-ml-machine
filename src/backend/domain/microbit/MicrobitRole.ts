@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-export interface UserService {
-  setShouldReconnectNextVisit(state: boolean): unknown;
-  shouldReconnect(): boolean;
+export enum MicrobitRole {
+  INPUT,
+  OUTPUT,
 }

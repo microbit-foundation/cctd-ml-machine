@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { LiveDataStore } from '../../core/LiveDataStore';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { DataService } from '../domain/DataService';
 import type { AbstractReadonlyState } from '../statemanagement/AbstractReadonlyState';
 
 export class DataController {
   public constructor(
     private dataService: DataService,
-    private liveData: AbstractReadonlyState<LiveData<LiveDataVector>>,
+    private liveData: AbstractReadonlyState<LiveDataStore<LiveDataVector>>,
   ) {}
 
   public addLiveData(input: LiveDataVector): void {

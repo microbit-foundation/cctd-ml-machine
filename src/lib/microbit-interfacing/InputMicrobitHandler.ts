@@ -15,16 +15,20 @@ import StaticConfiguration from '../../StaticConfiguration';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
-import Devices, { DeviceRequestStates } from '../domain/Devices';
-import { ModelView, modelView } from '../stores/ApplicationState';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { onCatastrophicError } from '../utils/ErrorReconnect';
+import type { OutputController } from '../../backend/interface-controller/OutputController';
+import type { MicrobitController } from '../../backend/interface-controller/MicrobitController';
+import { MicrobitRole } from '../../backend/domain/microbit/MicrobitRole';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private devices: Devices) {}
+  public constructor(
+    private microbitController: MicrobitController,
+    private outputController: OutputController,
+  ) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnected', versionNumber);
@@ -34,10 +38,9 @@ class InputMicrobitHandler implements MicrobitHandler {
       StaticConfiguration.accelerometerLiveDataBufferSize,
     );
     stores.setLiveData(new MicrobitAccelerometerLiveData(buffer));
-
-    this.devices.update(s => {
+    const microbitConnection = this.microbitController.getMicrobitConnectionState();
+    microbitConnection.update(s => {
       s.isInputConnected = true;
-      s.isRequestingDevice = DeviceRequestStates.NONE;
       s.offerReconnect = false;
       s.isInputInitializing = false;
       s.isInputReady = true;
@@ -68,7 +71,9 @@ class InputMicrobitHandler implements MicrobitHandler {
 
   public onInitializing(): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onInitializing');
-    this.devices.update(s => {
+
+    const microbitConnection = this.microbitController.getMicrobitConnectionState();
+    microbitConnection.update(s => {
       s.isInputInitializing = true;
       return s;
     });
@@ -103,7 +108,7 @@ class InputMicrobitHandler implements MicrobitHandler {
     //Logger.log("InputMicrobitHandler", "onMessageReceived", data);
     if (data === 'id_mkcd') {
       Microbits.setInputOrigin(HexOrigin.MAKECODE);
-      modelView.set(ModelView.TILE);
+      this.outputController.setOutputTargetOutputMicrobit();
     }
     if (data === 'id_prop') {
       Microbits.setInputOrigin(HexOrigin.PROPRIETARY);
@@ -121,11 +126,12 @@ class InputMicrobitHandler implements MicrobitHandler {
 
   public onDisconnected(): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onDisconnected');
-    this.devices.update(s => {
+
+    const microbitConnection = this.microbitController.getMicrobitConnectionState();
+    microbitConnection.update(s => {
       s.isInputConnected = false;
       s.offerReconnect = false;
       s.isInputReady = false;
-      s.reconnectState = DeviceRequestStates.NONE;
       s.isInputOutdated = false;
       return s;
     });
@@ -143,7 +149,9 @@ class InputMicrobitHandler implements MicrobitHandler {
 
   public onConnectError(error: Error): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnectError', error);
-    this.devices.update(s => {
+
+    const microbitConnection = this.microbitController.getMicrobitConnectionState();
+    microbitConnection.update(s => {
       s.isInputConnected = false;
       s.isInputAssigned = false;
       s.isInputReady = false;
@@ -154,16 +162,20 @@ class InputMicrobitHandler implements MicrobitHandler {
   public onReconnectError(error: Error): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onReconnectError', error);
     this.onConnectError(error);
-    this.devices.update(s => {
+
+    const microbitConnection = this.microbitController.getMicrobitConnectionState();
+    microbitConnection.update(s => {
       s.offerReconnect = true;
-      s.reconnectState = DeviceRequestStates.INPUT;
+      s.reconnectingRole = MicrobitRole.INPUT;
       return s;
     });
   }
 
   public onClosed(): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onClosed');
-    this.devices.update(s => {
+
+    const microbitConnection = this.microbitController.getMicrobitConnectionState();
+    microbitConnection.update(s => {
       s.isInputConnected = false;
       s.isInputAssigned = false;
       s.isInputReady = false;

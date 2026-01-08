@@ -27,18 +27,6 @@ interface DevicesType {
    * @deprecated should be moved to the 'Recorder' store
    */
   isRecording: boolean;
-  isInputConnected: boolean;
-  isOutputConnected: boolean;
-  offerReconnect: boolean;
-  requestDeviceWasCancelled: boolean;
-  reconnectState: DeviceRequestStates;
-  isInputReady: boolean;
-  isInputAssigned: boolean;
-  isOutputAssigned: boolean;
-  isOutputReady: boolean;
-  isInputInitializing: boolean;
-  isInputOutdated: boolean;
-  isOutputOutdated: boolean;
 }
 
 class Devices implements Writable<DevicesType> {

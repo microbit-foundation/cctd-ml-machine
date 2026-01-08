@@ -8,12 +8,12 @@ import { writable } from 'svelte/store';
 import ConsoleLogger, { welcomeLog } from '../../core/logging/ConsoleLogger';
 import type { Logger } from '../../core/logging/Logger';
 import Devices from '../../lib/domain/Devices';
-import type { AbstractState } from './AbstractState';
+import type { AbstractState } from '../statemanagement/AbstractState';
 import type { DevicesType } from '../application/devices/Devices';
 import { StateNotificationService } from '../domain/implementation/notification/StateNotificationService';
 import type { NotificationService } from '../domain/NotificationService';
 import { MLMachineControllers } from './MLMachineControllers';
-import { SvelteStateAdapter } from './SvelteStateAdapter';
+import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
 import type { ClassifierService } from '../domain/ClassifierService';
 import { StateClassifierService } from '../domain/implementation/classifier/StateClassifierService';
 import { DefaultNeuralNetworkModelBaseSettings } from './DefaultNeuralNetworkModelBaseSettings';
@@ -31,7 +31,7 @@ import { LocalStorageGestureRepository } from '../infrastructure/LocalStorageGes
 import { MLMachineColors } from './MLMachineColors';
 import type { DataService } from '../domain/DataService';
 import { InMemoryAxisRepository } from '../infrastructure/InMemoryAxisRepository';
-import { InMemoryLiveDataRepository } from '../infrastructure/InMemoryLiveDataRepository';
+import { InMemoryLiveDataRepository } from '../infrastructure/StatesLiveDataRepository';
 import StaticConfiguration from '../../StaticConfiguration';
 import { NotifierServiceImpl } from '../application/NotifierServiceImpl';
 import type { LiveData } from '../../lib/domain/stores/LiveData';
@@ -43,9 +43,9 @@ import type { FeatureService } from '../application/feature/FeatureService';
 import { JSONFileFeatureProvider } from './JSONFileFeatureProvider';
 import { OutputServiceImpl } from '../domain/implementation/output/OutputServiceImpl';
 import { OutputTarget } from '../domain/implementation/output/OutputTarget';
-import type { AbstractStates } from '../infrastructure/AbstractStates';
-import { SvelteStates } from '../infrastructure/SvelteStates';
-import { StatesOutputRepository } from '../infrastructure/InMemoryOutputRepository';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
+import { SvelteStates } from '../statemanagement/SvelteStates';
+import { StatesOutputRepository } from '../infrastructure/StatesOutputRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -60,7 +60,6 @@ export class MLMachine {
   private controllers: MLMachineControllers;
   private dataService: DataService;
   private gestureService: GestureService;
-  private liveData: AbstractState<LiveData<LiveDataVector>>;
   private featureService: FeatureService;
   private states: AbstractStates;
   // TODO: Should probably be a logging factory taken as argument instead
@@ -92,20 +91,15 @@ export class MLMachine {
       ),
       new MLMachineColors(repository),
     );
-    this.liveData = new LiveDataStateAdapter();
     this.dataService = new DataServiceImpl(
       new InMemoryAxisRepository(this.gestureService),
-      new InMemoryLiveDataRepository(
-        StaticConfiguration.accelerometerLiveDataBufferSize,
-        this.liveData,
-      ),
+      new InMemoryLiveDataRepository(this.states),
       new NotifierServiceImpl(),
     );
     const outputService = new OutputServiceImpl(new StatesOutputRepository(this.states));
     this.controllers = new MLMachineControllers(
       this,
       this.dataService,
-      this.liveData,
       this.featureService,
       outputService,
       this.states,

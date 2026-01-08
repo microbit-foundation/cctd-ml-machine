@@ -12,12 +12,12 @@ export default class LocalStorageKeyValueStore<T> implements KeyValueStore<T> {
   private prefix: string;
   private keySerializer: (key: T) => string;
   private fallback?: Map<string, string>;
+  private version: number = 1;
 
-  constructor(options?: { prefix?: string; keySerializer?: (key: T) => string }) {
-    this.prefix = options?.prefix ?? 'kv:';
-    this.keySerializer =
-      options?.keySerializer ??
-      ((k: T) => (typeof k === 'string' ? (k as unknown as string) : JSON.stringify(k)));
+  constructor() {
+    this.prefix = 'kv:';
+    this.keySerializer = (k: T) =>
+      typeof k === 'string' ? (k as unknown as string) : JSON.stringify(k);
 
     if (!this.isLocalStorageAvailable()) {
       this.fallback = new Map<string, string>();
@@ -46,20 +46,46 @@ export default class LocalStorageKeyValueStore<T> implements KeyValueStore<T> {
     return `${this.prefix}${this.keySerializer(key)}`;
   }
 
+  private parseStored(raw: string): { version: number; value: unknown } {
+    try {
+      const parsed = JSON.parse(raw);
+      if (
+        parsed &&
+        typeof parsed === 'object' &&
+        'version' in parsed &&
+        'value' in parsed
+      ) {
+        return {
+          version: (parsed as any).version as number,
+          value: (parsed as any).value,
+        };
+      }
+      // Legacy/untagged value
+      return { version: 0, value: parsed };
+    } catch {
+      // Not JSON — treat as legacy raw string
+      return { version: 0, value: raw };
+    }
+  }
+
   getValue<U>(key: T): U | undefined {
     const fs = this.storage();
     const raw =
       fs instanceof Map ? fs.get(this.fullKey(key)) : fs.getItem(this.fullKey(key));
-    if (raw == null) {
-      return undefined;
+    if (raw == null) return undefined;
+
+    const stored = this.parseStored(raw);
+
+    if (stored.version === this.version) {
+      return stored.value as U;
     }
 
+    // Version mismatch — no upgrader configured, remove stale value
     try {
-      return JSON.parse(raw) as U;
-    } catch {
-      // If stored value is not JSON, return raw as any
-      return raw as unknown as U;
-    }
+      if (fs instanceof Map) fs.delete(this.fullKey(key));
+      else fs.removeItem(this.fullKey(key));
+    } catch {}
+    return undefined;
   }
 
   setValue<U>(key: T, value: U | undefined): void {
@@ -74,7 +100,7 @@ export default class LocalStorageKeyValueStore<T> implements KeyValueStore<T> {
       return;
     }
 
-    const toStore = JSON.stringify(value);
+    const toStore = JSON.stringify({ version: this.version, value });
     if (fs instanceof Map) {
       fs.set(k, toStore);
     } else {

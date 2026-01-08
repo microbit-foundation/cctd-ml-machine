@@ -5,7 +5,7 @@
  */
 
 import type { AppController } from './abstract/AppController';
-import type { AbstractState } from '../interface-adapter/AbstractState';
+import type { AbstractState } from '../statemanagement/AbstractState';
 import type { DevicesType } from '../application/devices/Devices';
 import type { UserService } from '../domain/UserService';
 import type { FeatureService } from '../application/feature/FeatureService';

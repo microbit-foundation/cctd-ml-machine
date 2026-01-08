@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { LiveDataVector } from '../../core/vector/LiveDataVector';
+import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { OutputTarget } from '../domain/implementation/output/OutputTarget';
-import type { AbstractState } from '../interface-adapter/AbstractState';
+import type { AbstractState } from './AbstractState';
 
 export interface AbstractStates {
   getOutputTarget(): AbstractState<OutputTarget>;
+  getLiveData(): AbstractState<LiveData<LiveDataVector>>;
 }

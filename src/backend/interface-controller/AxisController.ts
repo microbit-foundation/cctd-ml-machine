@@ -6,10 +6,10 @@
 
 import { writable } from 'svelte/store';
 import type { Axis } from '../../core/entities/Axis';
-import type { AbstractState } from '../interface-adapter/AbstractState';
+import type { AbstractState } from '../statemanagement/AbstractState';
 import type { MLMachine } from '../interface-adapter/MLMachine';
-import { SvelteStateAdapter } from '../interface-adapter/SvelteStateAdapter';
-import type { AbstractReadonlyState } from '../interface-adapter/AbstractReadonlyState';
+import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
+import type { AbstractReadonlyState } from '../statemanagement/AbstractReadonlyState';
 import type { DataService } from '../domain/DataService';
 
 export class AxisController {

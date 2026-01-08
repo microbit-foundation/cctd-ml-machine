@@ -7,19 +7,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { get, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 import BaseLiveDataVector from '../../core/vector/BaseLiveDataVector';
 import { ClassifierInput } from '../../lib/domain/ClassifierInput';
 import Filters from '../../lib/domain/Filters';
-import { stores } from '../../lib/stores/Stores';
-import TestMLModelTrainer from '../mocks/mlmodel/TestMLModelTrainer';
-import ClassifierFactory from '../../lib/domain/ClassifierFactory';
-import StaticConfiguration from '../../StaticConfiguration';
-import TestTrainingDataRepository from '../mocks/TestTrainingDataRepository';
-import TestGestureRepository from '../mocks/TestGestureRepository';
-import Confidences from '../../lib/domain/stores/Confidences';
 import BaseVector from '../../core/vector/BaseVector';
-import Snackbar from '../../lib/stores/Snackbar';
 import { FilterType, type Filter } from '../../core/filter/Filter';
 import { createFilter } from '../../core/filter/FilterUtils';
 

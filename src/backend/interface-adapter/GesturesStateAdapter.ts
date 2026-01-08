@@ -6,7 +6,10 @@
 
 import { get, writable, type Readable, type Writable } from 'svelte/store';
 import type { GestureService } from '../domain/GestureService';
-import type { AbstractReadonlyState, Unsubscriber } from './AbstractReadonlyState';
+import type {
+  AbstractReadonlyState,
+  Unsubscriber,
+} from '../statemanagement/AbstractReadonlyState';
 import type { NewGesture } from '../../core/entities/NewGesture';
 
 export class GesturesStateAdapter

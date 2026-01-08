@@ -8,9 +8,9 @@ import { writable } from 'svelte/store';
 import type { NeuralNetworkArchitecture } from '../../core/model/neural-network/NeuralNetworkArchitecture';
 import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
 import type { NeuralNetworkTrainingObserver } from '../../core/model/neural-network/NeuralNetworkTrainingObserver';
-import type { AbstractState } from './AbstractState';
-import { SvelteStateAdapter } from './SvelteStateAdapter';
-import type { Unsubscriber } from './AbstractReadonlyState';
+import type { AbstractState } from '../statemanagement/AbstractState';
+import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
+import type { Unsubscriber } from '../statemanagement/AbstractReadonlyState';
 
 export class NeuralNetworkSettingsStateAdapter
   implements AbstractState<NeuralNetworkModelSettings>, NeuralNetworkModelSettings

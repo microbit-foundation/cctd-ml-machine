@@ -7,7 +7,7 @@
 import type { MakeCodeProject } from '@microbit/makecode-embed';
 import { MakeCodeFrameBuilder } from './MakeCodeFrameBuilder';
 
-export class MakecodeController {
+export class MakeCodeController {
   public getMakecodeProject(): MakeCodeProject {
     return {
       text: {

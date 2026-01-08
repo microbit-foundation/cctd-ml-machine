@@ -10,24 +10,17 @@ import type { LiveDataStore } from '../../core/LiveDataStore';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { LiveDataRepository } from '../domain/LiveDataRepository';
-import type { AbstractState } from '../interface-adapter/AbstractState';
+import type { AbstractState } from '../statemanagement/AbstractState';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class InMemoryLiveDataRepository implements LiveDataRepository {
-  private store: LiveDataStore<LiveDataVector>;
-
-  constructor(
-    liveDataStoreBufferSize: number,
-    private liveDataState: AbstractState<LiveData<LiveDataVector>>,
-  ) {
-    this.store = new InMemoryLiveDataStore(liveDataStoreBufferSize);
-  }
+  constructor(private states: AbstractStates) {}
 
   getSeries(time: number, noOfElements: number): TimestampedData<LiveDataVector>[] {
-    return this.store.getBuffer().getSeries(time, noOfElements);
+    return this.states.getLiveData().get().getBuffer().getSeries(time, noOfElements);
   }
 
   addInput(data: LiveDataVector): void {
-    this.store.put(data);
-    this.liveDataState.get().put(data);
+    this.states.getLiveData().get().put(data);
   }
 }

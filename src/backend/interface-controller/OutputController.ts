@@ -6,8 +6,8 @@
 
 import { OutputTarget } from '../domain/implementation/output/OutputTarget';
 import type { OutputService } from '../domain/OutputService';
-import type { AbstractStates } from '../infrastructure/AbstractStates';
-import type { AbstractState } from '../interface-adapter/AbstractState';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
+import type { AbstractState } from '../statemanagement/AbstractState';
 
 export class OutputController {
   public constructor(

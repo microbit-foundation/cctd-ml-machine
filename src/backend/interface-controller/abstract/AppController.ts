@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { AbstractState } from '../../interface-adapter/AbstractState';
+import type { AbstractState } from '../../statemanagement/AbstractState';
 import type { DevicesType } from '../../application/devices/Devices';
 
 export interface AppController {

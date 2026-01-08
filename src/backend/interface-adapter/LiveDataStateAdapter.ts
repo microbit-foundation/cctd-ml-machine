@@ -7,15 +7,17 @@
 import { get, writable, type Writable } from 'svelte/store';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { LiveData } from '../../lib/domain/stores/LiveData';
-import type { Unsubscriber } from './AbstractReadonlyState';
-import type { AbstractState } from './AbstractState';
+import type { Unsubscriber } from '../statemanagement/AbstractReadonlyState';
+import type { AbstractState } from '../statemanagement/AbstractState';
 import MicrobitAccelerometerLiveData from '../../lib/livedata/MicrobitAccelerometerData';
 import LiveDataBuffer from '../../core/LiveDataBuffer';
 
 export class LiveDataStateAdapter implements AbstractState<LiveData<LiveDataVector>> {
   private store: Writable<LiveData<LiveDataVector>>;
-  constructor() {
-    this.store = writable(new MicrobitAccelerometerLiveData(new LiveDataBuffer(600)));
+  constructor(bufferLen: number) {
+    this.store = writable(
+      new MicrobitAccelerometerLiveData(new LiveDataBuffer(bufferLen)),
+    );
   }
 
   set(value: LiveData<LiveDataVector>): void {

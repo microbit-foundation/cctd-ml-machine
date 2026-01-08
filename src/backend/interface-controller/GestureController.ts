@@ -7,11 +7,11 @@
 import { derived } from 'svelte/store';
 import type { Gesture, GestureID } from '../../core/entities/Gesture';
 import type { RecordingData } from '../../core/entities/RecordingData';
-import type { AbstractState } from '../interface-adapter/AbstractState';
+import type { AbstractState } from '../statemanagement/AbstractState';
 import type { GestureService } from '../domain/GestureService';
-import { SvelteStateAdapterReadonly } from '../interface-adapter/SvelteStateAdapterReadonly';
+import { SvelteStateAdapterReadonly } from '../statemanagement/SvelteStateAdapterReadonly';
 import type { GesturesStateAdapter } from '../interface-adapter/GesturesStateAdapter';
-import type { AbstractReadonlyState } from '../interface-adapter/AbstractReadonlyState';
+import type { AbstractReadonlyState } from '../statemanagement/AbstractReadonlyState';
 import type { Logger } from '../../core/logging/Logger';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { GestureImpl } from '../domain/implementation/gesture/GestureImpl';

@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { FeatureService } from '../application/feature/FeatureService';
 import type { DataService } from '../domain/DataService';
 import { UserServiceImpl } from '../domain/implementation/UserServiceImpl';
 import type { OutputService } from '../domain/OutputService';
-import type { AbstractStates } from '../infrastructure/AbstractStates';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
 import { LocalStorageUserSessionRepository } from '../infrastructure/LocalStorageUserSessionRepository';
 import type { AppController } from '../interface-controller/abstract/AppController';
 import type { NotificationController } from '../interface-controller/abstract/NotificationsController';
@@ -19,13 +17,12 @@ import { ClassifierController } from '../interface-controller/ClassifierControll
 import { DataController } from '../interface-controller/DataController';
 import { FeatureController } from '../interface-controller/FeatureController';
 import { GestureController } from '../interface-controller/GestureController';
-import { MakecodeController as MakeCodeController } from '../interface-controller/MakeCodeController';
 import { MLMachineAppController } from '../interface-controller/MLMachineAppController';
 import { MLMachineNotificationController } from '../interface-controller/MLMachineNotificationController';
 import { OutputController } from '../interface-controller/OutputController';
-import type { AbstractReadonlyState } from './AbstractReadonlyState';
 import { GesturesStateAdapter } from './GesturesStateAdapter';
 import { MLMachine } from './MLMachine';
+import { MakeCodeController } from '../interface-controller/makecode/MakeCodeController';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -34,7 +31,6 @@ export class MLMachineControllers {
   public constructor(
     private mlMachine: MLMachine,
     dataService: DataService,
-    liveData: AbstractReadonlyState<LiveData<LiveDataVector>>,
     private featureService: FeatureService,
     private outputService: OutputService,
     private states: AbstractStates,
@@ -43,7 +39,7 @@ export class MLMachineControllers {
       new GesturesStateAdapter(this.mlMachine.getGestureService()),
       this.mlMachine.getGestureService(),
     );
-    this.dataController = new DataController(dataService, liveData);
+    this.dataController = new DataController(dataService, states.getLiveData());
   }
 
   public getAppController(): AppController {

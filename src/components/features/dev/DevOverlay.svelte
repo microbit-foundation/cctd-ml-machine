@@ -16,7 +16,9 @@
 
 {#if inDev}
   <div
-    class="absolute bottom-3 left-3 bg-transparent justify-center self-center items-center z-4">
+    class="absolute bottom-3 left-3 bg-transparent justify-center self-center items-center z-4"
+    style="pointer-events: none;"
+    aria-hidden="true">
     <div class="text-sm text-violet-700 bg-white p-2">
       <p><span>WasCancelled</span>: {$microbitConnection.wasDeviceRequestCancelled()}</p>
       {#each [$microbitConnection.getInput(), $microbitConnection.getInput()] as connection, idx}

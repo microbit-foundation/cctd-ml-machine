@@ -18,12 +18,12 @@
 
 <div class="flex flex-col flex-grow justify-between">
   <div>
-    {#if !$microbitConnection.isInputConnected}
+    {#if !$microbitConnection.getInput().isConnected()}
       <div class="mt-4">
         <PleaseConnect />
       </div>
     {/if}
-    {#if $microbitConnection.isInputConnected}
+    {#if $microbitConnection.getInput().isConnected()}
       <div class="flex justify-center">
         <div class="text-center text-xl w-1/2 text-bold text-primarytext">
           <p>{$t('content.data.noData')}</p>

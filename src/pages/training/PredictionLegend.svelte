@@ -22,7 +22,7 @@
       </div>
       <p>{gesture.name}</p>
     </div>
-    {#if $microbitConnection.isInputReady}
+    {#if $microbitConnection.getInput().isReady()}
       <p>
         {(($confidences.get(gesture.ID) ?? 0) * 100).toFixed(1)}%
       </p>

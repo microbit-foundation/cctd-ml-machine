@@ -26,8 +26,8 @@
   <p class="float-left ml-6">Live</p>
   <p
     class="float-left ml-1 -mt-3 text-3xl"
-    class:text-red-500={$microbitConnection.isInputReady}
-    class:text-gray-500={!$microbitConnection.isInputReady}>
+    class:text-red-500={$microbitConnection.getInput().isReady()}
+    class:text-gray-500={!$microbitConnection.getInput().isReady()}>
     &#x2022;
   </p>
   {#if hasFeature(Feature.LIVE_GRAPH_INPUT_VALUES)}

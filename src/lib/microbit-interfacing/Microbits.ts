@@ -19,7 +19,7 @@ import CombinedMicrobitHandler from './CombinedMicrobitHandler';
 import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
-import { MLMachine } from '../../backend/interface-adapter/MLMachine';
+import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
 
@@ -50,7 +50,7 @@ class Microbits {
   );
   private static inputHandler = new CombinedMicrobitHandler(
     this.outputHandler,
-    stores.getDevices(),
+    getControllers().getMicrobitController(),
     MLMachine.getInstance().getControllers().getOutputController(),
   );
 

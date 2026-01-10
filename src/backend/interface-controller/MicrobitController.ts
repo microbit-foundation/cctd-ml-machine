@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { MicrobitConnection } from '../domain/microbit/MicrobitConnection';
 import type { MicrobitRole } from '../domain/microbit/MicrobitRole';
 import type { MicrobitService } from '../domain/microbit/MicrobitService';
-import type { MicrobitConnectionData } from '../infrastructure/MicrobitConnectionData';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 
@@ -20,7 +20,19 @@ export class MicrobitController {
     this.microbitService.offerReconnect(role);
   }
 
-  public getMicrobitConnectionState(): AbstractState<MicrobitConnectionData> {
+  public clearReconnectOffering(): void {
+    this.microbitService.clearReconnectOffering();
+  }
+
+  public setRequestWasCancelled(cancelled: boolean): void {
+    this.microbitService.setRequestWasCancelled(cancelled);
+  }
+
+  public setMicrobitConnection(connection: MicrobitConnection): void {
+    this.microbitService.setMicrobitConnection(connection);
+  }
+
+  public getMicrobitConnectionState(): AbstractState<MicrobitConnection> {
     return this.states.getMicrobitConnection();
   }
 }

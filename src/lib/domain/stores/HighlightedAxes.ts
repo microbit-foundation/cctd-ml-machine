@@ -22,9 +22,13 @@ import { knnHasTrained } from '../../stores/KNNStores';
 import { trainKNNModel } from '../../../pages/training/TrainingPage';
 import type Devices from '../Devices';
 import ConsoleLogger from '../../../core/logging/ConsoleLogger';
+import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
+import type { MicrobitConnection } from '../../../backend/domain/microbit/MicrobitConnection';
 
 class HighlightedAxes implements Writable<Axis[]> {
   private value: PersistantWritable<Axis[]>; // Use this.set instead of this.value.set!
+  private microbitConnection: AbstractState<MicrobitConnection>;
 
   public constructor(
     private classifier: Classifier,
@@ -33,6 +37,8 @@ class HighlightedAxes implements Writable<Axis[]> {
     private snackbar: Snackbar,
   ) {
     this.value = new PersistantWritable([], 'highlightedAxes');
+    const microbitController = getControllers().getMicrobitController();
+    this.microbitConnection = microbitController.getMicrobitConnectionState();
   }
 
   public set(newValue: Axis[]): void {
@@ -100,11 +106,10 @@ class HighlightedAxes implements Writable<Axis[]> {
 
     if (
       get(this.selectedModel).id === ModelRegistry.KNN.id &&
-      get(this.devices).isInputConnected
+      get(this.microbitConnection).getInput().isConnected()
     ) {
       if (get(knnHasTrained)) {
         ConsoleLogger.log('HighlightedAxes', 'Retraining KNN model due to axes changed');
-        // Only train if the knn model has been trained before
         await trainKNNModel();
       }
     }

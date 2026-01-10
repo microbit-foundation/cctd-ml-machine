@@ -103,7 +103,7 @@
   const model = classifier.getModel();
   $: {
     if (chart !== undefined) {
-      if ($microbitConnection.isInputReady) {
+      if ($microbitConnection.getInput().isReady()) {
         if (!$model.isTraining) {
           chart.start();
         } else {
@@ -142,7 +142,7 @@
 
   // When devices changes, update the devices of the canvas
   $: {
-    const isConnected = $microbitConnection.isInputReady;
+    const isConnected = $microbitConnection.getInput().isReady();
     updateCanvas(isConnected);
   }
 
@@ -185,7 +185,7 @@
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
   {#key cnt}
     <DimensionLabels
-      hidden={!$microbitConnection.isInputConnected}
+      hidden={!$microbitConnection.getInput().isConnected()}
       {minValue}
       graphHeight={160}
       {maxValue}

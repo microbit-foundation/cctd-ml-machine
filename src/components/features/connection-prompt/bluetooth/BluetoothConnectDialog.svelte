@@ -108,8 +108,7 @@
   });
 
   onMount(() => {
-    // Resets the bluetooth connection prompt for cancelled device requests
-    $microbitConnection.requestDeviceWasCancelled = false;
+    microbitController.setRequestWasCancelled(false);
   });
 
   const handleSearchWithoutName = () => {
@@ -122,7 +121,7 @@
     {$t('popup.connectMB.bluetooth.heading')}
   </h1>
 
-  {#if $microbitConnection.requestDeviceWasCancelled && !isConnecting}
+  {#if $microbitConnection.wasDeviceRequestCancelled() && !isConnecting}
     <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
     <p class="text-warning mb-1">
       {$t('popup.connectMB.bluetooth.cancelledConnection.noNameDescription')}

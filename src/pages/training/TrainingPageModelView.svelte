@@ -36,7 +36,7 @@
     </div>
   </div>
 </div>
-{#if !$microbitConnection.isInputConnected}
+{#if !$microbitConnection.getInput().isConnected()}
   <div class="mt-4">
     <PleaseConnect />
   </div>

@@ -10,10 +10,9 @@ import {
   checkCompatibility,
 } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
-import CookieManager from '../CookieManager';
-import { isInputPatternValid } from './connectionStore';
 import GestureState from '../domain/stores/gesture/GestureState';
 import { stores } from './Stores';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -62,10 +61,13 @@ function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: strin
   const devices = get(stores.getDevices());
 
   const model = stores.getClassifier().getModel();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
+  const inputConnected = microbitConnection.get().getInput().isConnected();
 
   if (devices.isRecording) return { isReady: false, msg: text('alert.isRecording') };
   if (model.isTraining()) return { isReady: false, msg: text('alert.isTraining') };
-  if (!devices.isInputConnected && actionAllowed)
+  if (!inputConnected && actionAllowed)
     return { isReady: false, msg: text('alert.isNotConnected') };
 
   return { isReady: true, msg: '' };

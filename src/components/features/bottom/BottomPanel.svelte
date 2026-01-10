@@ -47,11 +47,11 @@
 <div
   bind:clientWidth={componentWidth}
   class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
-  class:bg-gray-300={$microbitConnection.isInputAssigned &&
-    !$microbitConnection.isInputReady}>
+  class:bg-gray-300={$microbitConnection.getInput().isAssigned() &&
+    !$microbitConnection.getInput().isReady()}>
   <ConnectDialogContainer bind:this={connectDialogReference} />
 
-  {#if !$microbitConnection.isInputAssigned}
+  {#if !$microbitConnection.getInput().isAssigned()}
     <!-- No input microbit assigned -->
     <div class="h-full w-full flex justify-center items-center bg-white">
       <StandardButton onClick={connectButtonClicked}>
@@ -64,7 +64,7 @@
       <div class="absolute w-full h-full">
         <MicrobitLiveGraph width={componentWidth - 180} />
       </div>
-      {#if $microbitConnection.isInputInitializing}
+      {#if $microbitConnection.getInput().isInitializing()}
         <div
           class="absolute w-full h-full flex items-center justify-center text-secondarytext">
           <div class="bg-secondary bg-opacity-80 py-2 px-4 rounded-full" transition:fade>

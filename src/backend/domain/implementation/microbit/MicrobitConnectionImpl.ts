@@ -7,7 +7,7 @@
 import type { MicrobitConnection } from '../../microbit/MicrobitConnection';
 import type { MicrobitConnectionState } from '../../microbit/MicrobitConnectionState';
 import type { MicrobitReconnectState } from '../../microbit/MicrobitReconnectState';
-import type { MicrobitRole } from '../../microbit/MicrobitRole';
+import { MicrobitRole } from '../../microbit/MicrobitRole';
 import { MicrobitReconnectStateImpl } from './MicrobitReconnectStateImpl';
 
 export class MicrobitConnectionImpl implements MicrobitConnection {
@@ -17,6 +17,24 @@ export class MicrobitConnectionImpl implements MicrobitConnection {
     private reconnectState: MicrobitReconnectState,
     private wasRequestCancelled: boolean,
   ) {}
+  setRequestWasCancelled(cancelled: boolean): void {
+    this.wasRequestCancelled = cancelled;
+  }
+  clearReconnectOffering(): void {
+    this.reconnectState = new MicrobitReconnectStateImpl(
+      false,
+      this.reconnectState.getMicrobitRole(),
+    );
+  }
+  setInput(inputState: MicrobitConnectionState): void {
+    this.inputState = inputState;
+  }
+  setOutput(outputState: MicrobitConnectionState): void {
+    this.outputState = outputState;
+  }
+  setReconnection(reconnectState: MicrobitReconnectState): void {
+    this.reconnectState = reconnectState;
+  }
   offerReconnect(role: MicrobitRole): void {
     this.reconnectState = new MicrobitReconnectStateImpl(true, role);
   }

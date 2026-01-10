@@ -69,7 +69,7 @@ class KNNModelGraphDrawer {
 
     const microbitController = getControllers().getMicrobitController();
     const microbitConnection = microbitController.getMicrobitConnectionState();
-    if (microbitConnection.get().isInputReady) {
+    if (microbitConnection.get().getInput().isReady()) {
       this.addPoint(drawableLivePoint, 'live');
 
       // Draw lines from live point to the nearest neighbours

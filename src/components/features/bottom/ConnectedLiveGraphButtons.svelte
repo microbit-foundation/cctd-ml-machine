@@ -23,10 +23,14 @@
 
 <!-- These are the buttons that are present while the input micro:bit is connected-->
 <div class="flex flex-row mr-4">
-  {#if $model.hasModel || $model.isTraining || $microbitConnection.isOutputConnected}
-    {#if $microbitConnection.isOutputAssigned}
+  {#if $model.hasModel || $model.isTraining || $microbitConnection
+      .getOutput()
+      .isConnected()}
+    {#if $microbitConnection.getOutput().isAssigned()}
       <!-- Output is assigned -->
-      {#if !$microbitConnection.isOutputConnected || $microbitConnection.isOutputReady}
+      {#if !$microbitConnection.getOutput().isConnected() || $microbitConnection
+          .getOutput()
+          .isReady()}
         <!-- Output MB is not in the connection process -->
         <StandardButton medium onClick={onOutputDisconnectButtonClicked} color="warning">
           {$tr('menu.model.disconnect')}
@@ -44,7 +48,9 @@
     {/if}
   {/if}
   <div class="ml-2">
-    {#if !$microbitConnection.isInputConnected || $microbitConnection.isInputReady}
+    {#if !$microbitConnection.getInput().isConnected() || $microbitConnection
+        .getInput()
+        .isReady()}
       <!-- Input MB is not in the connection process -->
       <StandardButton medium onClick={onInputDisconnectButtonClicked} color="warning"
         >{$tr('footer.disconnectButton')}</StandardButton>

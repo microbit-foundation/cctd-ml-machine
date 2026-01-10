@@ -8,6 +8,9 @@ import type { MicrobitConnection } from './MicrobitConnection';
 import type { MicrobitRole } from './MicrobitRole';
 
 export interface MicrobitService {
+  setMicrobitConnection(connection: MicrobitConnection): void;
   offerReconnect(role: MicrobitRole): void;
+  clearReconnectOffering(): void;
   getMicrobitConnection(): MicrobitConnection;
+  setRequestWasCancelled(cancelled: boolean): void;
 }

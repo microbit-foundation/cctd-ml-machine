@@ -20,6 +20,7 @@ import { onCatastrophicError } from '../utils/ErrorReconnect';
 import type { OutputController } from '../../backend/interface-controller/OutputController';
 import type { MicrobitController } from '../../backend/interface-controller/MicrobitController';
 import { MicrobitRole } from '../../backend/domain/microbit/MicrobitRole';
+import { MicrobitConnectionStateImpl } from '../../backend/domain/implementation/microbit/MicrobitConnectionStateImpl';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
@@ -39,14 +40,18 @@ class InputMicrobitHandler implements MicrobitHandler {
     );
     stores.setLiveData(new MicrobitAccelerometerLiveData(buffer));
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
-    microbitConnection.update(s => {
-      s.isInputConnected = true;
-      s.offerReconnect = false;
-      s.isInputInitializing = false;
-      s.isInputReady = true;
-      s.isInputAssigned = true; // TODO: Maybe this should just be removed
-      return s;
-    });
+    const curConn = microbitConnection.get();
+    const oldInput = curConn.getInput();
+    const newInput = new MicrobitConnectionStateImpl(
+      true,
+      true,
+      true,
+      oldInput ? oldInput.isOutdated() : false,
+      false,
+    );
+    curConn.setInput(newInput);
+    this.microbitController.setMicrobitConnection(curConn);
+    this.microbitController.clearReconnectOffering();
     this.lastConnectedVersion = versionNumber;
   }
 
@@ -73,10 +78,17 @@ class InputMicrobitHandler implements MicrobitHandler {
     ConsoleLogger.log('InputMicrobitHandler', 'onInitializing');
 
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
-    microbitConnection.update(s => {
-      s.isInputInitializing = true;
-      return s;
-    });
+    const curConnInit = microbitConnection.get();
+    const oldInit = curConnInit.getInput();
+    const newInit = new MicrobitConnectionStateImpl(
+      oldInit ? oldInit.isConnected() : false,
+      oldInit ? oldInit.isAssigned() : false,
+      oldInit ? oldInit.isReady() : false,
+      oldInit ? oldInit.isOutdated() : false,
+      true,
+    );
+    curConnInit.setInput(newInit);
+    this.microbitController.setMicrobitConnection(curConnInit);
     clearTimeout(this.reconnectTimeout);
     const onTimeout = () => onCatastrophicError(false);
     this.reconnectTimeout = setTimeout(function () {
@@ -128,13 +140,18 @@ class InputMicrobitHandler implements MicrobitHandler {
     ConsoleLogger.log('InputMicrobitHandler', 'onDisconnected');
 
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
-    microbitConnection.update(s => {
-      s.isInputConnected = false;
-      s.offerReconnect = false;
-      s.isInputReady = false;
-      s.isInputOutdated = false;
-      return s;
-    });
+    const curConnDisc = microbitConnection.get();
+    const oldDisc = curConnDisc.getInput();
+    const newDisc = new MicrobitConnectionStateImpl(
+      false,
+      oldDisc ? oldDisc.isAssigned() : false,
+      false,
+      false,
+      oldDisc ? oldDisc.isInitializing() : false,
+    );
+    curConnDisc.setInput(newDisc);
+    this.microbitController.setMicrobitConnection(curConnDisc);
+    this.microbitController.clearReconnectOffering();
   }
 
   public onReconnecting(): void {
@@ -151,12 +168,17 @@ class InputMicrobitHandler implements MicrobitHandler {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnectError', error);
 
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
-    microbitConnection.update(s => {
-      s.isInputConnected = false;
-      s.isInputAssigned = false;
-      s.isInputReady = false;
-      return s;
-    });
+    const curConnErr = microbitConnection.get();
+    const oldErr = curConnErr.getInput();
+    const newErr = new MicrobitConnectionStateImpl(
+      false,
+      false,
+      false,
+      oldErr ? oldErr.isOutdated() : false,
+      oldErr ? oldErr.isInitializing() : false,
+    );
+    curConnErr.setInput(newErr);
+    this.microbitController.setMicrobitConnection(curConnErr);
   }
 
   public onReconnectError(error: Error): void {
@@ -164,23 +186,24 @@ class InputMicrobitHandler implements MicrobitHandler {
     this.onConnectError(error);
 
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
-    microbitConnection.update(s => {
-      s.offerReconnect = true;
-      s.reconnectingRole = MicrobitRole.INPUT;
-      return s;
-    });
+    this.microbitController.offerReconnect(MicrobitRole.INPUT);
   }
 
   public onClosed(): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onClosed');
 
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
-    microbitConnection.update(s => {
-      s.isInputConnected = false;
-      s.isInputAssigned = false;
-      s.isInputReady = false;
-      return s;
-    });
+    const curConnClosed = microbitConnection.get();
+    const oldClosed = curConnClosed.getInput();
+    const newClosed = new MicrobitConnectionStateImpl(
+      false,
+      false,
+      false,
+      oldClosed ? oldClosed.isOutdated() : false,
+      oldClosed ? oldClosed.isInitializing() : false,
+    );
+    curConnClosed.setInput(newClosed);
+    this.microbitController.setMicrobitConnection(curConnClosed);
     clearTimeout(this.reconnectTimeout);
   }
 

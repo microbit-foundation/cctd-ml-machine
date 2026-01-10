@@ -7,11 +7,11 @@
 import type { LiveDataStore } from '../../core/LiveDataStore';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { OutputTarget } from '../domain/implementation/output/OutputTarget';
-import type { MicrobitConnectionData } from '../infrastructure/MicrobitConnectionData';
+import type { MicrobitConnection } from '../domain/microbit/MicrobitConnection';
 import type { AbstractState } from './AbstractState';
 
 export interface AbstractStates {
   getOutputTarget(): AbstractState<OutputTarget>;
   getLiveData(): AbstractState<LiveDataStore<LiveDataVector>>;
-  getMicrobitConnection(): AbstractState<MicrobitConnectionData>;
+  getMicrobitConnection(): AbstractState<MicrobitConnection>;
 }

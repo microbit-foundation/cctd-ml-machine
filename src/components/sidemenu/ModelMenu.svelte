@@ -17,7 +17,7 @@
   const microbitConnection = microbitController.getMicrobitConnectionState();
 
   $: confidence =
-    $microbitConnection.isInputReady && $bestPrediction
+    $microbitConnection.getInput().isReady() && $bestPrediction
       ? $bestPrediction.getConfidence().getCurrentConfidence()
       : 0;
   confidence = isNaN(confidence) ? 0 : confidence;
@@ -39,7 +39,7 @@
 
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
   $: predictionLabel = getPredictionLabel(
-    $microbitConnection.isInputReady,
+    $microbitConnection.getInput().isReady(),
     $bestPrediction,
   );
 </script>
@@ -59,8 +59,8 @@
       class="grid break-words mr-auto ml-auto w-3/4 h-70px border-2 rounded-lg border-solid text-center align-center content-center">
       <p
         class="w-full max-w-[100%] text-2xl break-all"
-        class:text-2xl={$microbitConnection.isInputReady}
-        class:text-md={!$microbitConnection.isInputReady}>
+        class:text-2xl={$microbitConnection.getInput().isReady()}
+        class:text-md={!$microbitConnection.getInput().isReady()}>
         {predictionLabel}
       </p>
     </div>

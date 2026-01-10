@@ -24,7 +24,8 @@
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
 
-  $: showLive = $microbitConnection.isInputConnected;
+  // Use the MicrobitConnection API to check input connection state
+  $: showLive = $microbitConnection.getInput().isConnected();
   $: liveData = $stores.liveData;
   const highlightedAxes = stores.getHighlightedAxes();
 

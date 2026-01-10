@@ -101,7 +101,7 @@
   // If gesture is already selected, the selection is removed.
   // If bluetooth is not connected, open connection prompt by calling callback
   function selectClicked(): void {
-    if (!$microbitConnection.isInputConnected) {
+    if (!$microbitConnection.getInput().isConnected()) {
       chosenGesture.update(gesture => {
         gesture = null;
         return gesture;

@@ -82,7 +82,7 @@
 <!-- Main pane -->
 <main class="h-full flex flex-col">
   {#if $model.isTrained}
-    {#if $microbitConnection.isInputReady}
+    {#if $microbitConnection.getInput().isReady()}
       <ModelPageStackViewContent />
     {:else}
       <PleaseConnect />

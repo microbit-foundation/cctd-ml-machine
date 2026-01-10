@@ -13,6 +13,7 @@
   import { isInputPatternValid } from '../../lib/stores/connectionStore';
   import FilterListFilterPreview from '../features/filters/FilterListFilterPreview.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import DevOverlay from '../features/dev/DevOverlay.svelte';
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
@@ -40,7 +41,7 @@
       showLatestMessage = false;
     }, 3000);
   }
-  console.log($microbitConnection.offerReconnect);
+  console.log($microbitConnection.getReconnectState().isOfferingReconnect());
 </script>
 
 <div>
@@ -54,12 +55,17 @@
       </div>
     </div>
   {/if}
-  {#if $microbitConnection.offerReconnect && isInputPatternValid()}
+  {#if $microbitConnection
+    .getReconnectState()
+    .isOfferingReconnect() && isInputPatternValid()}
     <ReconnectPrompt />
   {/if}
-  {#if $microbitConnection.isInputOutdated || $microbitConnection.isOutputOutdated}
+  {#if $microbitConnection.getInput().isOutdated() || $microbitConnection
+      .getOutput()
+      .isOutdated()}
     <OutdatedMicrobitWarning
-      targetRole={$microbitConnection.isInputOutdated ? 'INPUT' : 'OUTPUT'} />
+      targetRole={$microbitConnection.getInput().isOutdated() ? 'INPUT' : 'OUTPUT'} />
   {/if}
   <FilterListFilterPreview />
+  <DevOverlay />
 </div>

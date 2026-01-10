@@ -265,7 +265,7 @@
       width="30px" />
     <img
       class="m-auto"
-      class:hidden={!wasTriggered || !$microbitConnection.isInputReady}
+      class:hidden={!wasTriggered || !$microbitConnection.getInput().isReady()}
       src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />

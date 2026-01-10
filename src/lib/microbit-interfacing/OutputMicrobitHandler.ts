@@ -13,6 +13,8 @@ import { DeviceRequestStates } from '../domain/Devices';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { onCatastrophicError } from '../utils/ErrorReconnect';
 import type { OutputController } from '../../backend/interface-controller/OutputController';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
+import { MicrobitConnectionStateImpl } from '../../backend/domain/implementation/microbit/MicrobitConnectionStateImpl';
 
 class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
@@ -39,13 +41,23 @@ class OutputMicrobitHandler implements MicrobitHandler {
           this.outputController.setOutputTargetOutputMicrobit();
         }
       }
-      s.isOutputConnected = true;
-      s.isOutputAssigned = true;
       s.isRequestingDevice = DeviceRequestStates.NONE;
-      s.offerReconnect = false;
-      s.isOutputReady = true;
       return s;
     });
+    const microbitController = getControllers().getMicrobitController();
+    const microbitConnection = microbitController.getMicrobitConnectionState();
+    const curConn = microbitConnection.get();
+    const oldOutput = curConn.getOutput();
+    const newOutput = new MicrobitConnectionStateImpl(
+      true,
+      true,
+      true,
+      oldOutput ? oldOutput.isOutdated() : false,
+      false,
+    );
+    curConn.setOutput(newOutput);
+    microbitController.setMicrobitConnection(curConn);
+    microbitController.clearReconnectOffering();
 
     this.lastConnectedVersion = versionNumber;
     clearTimeout(this.reconnectTimeout);
@@ -66,11 +78,21 @@ class OutputMicrobitHandler implements MicrobitHandler {
   public onDisconnected(): void {
     ConsoleLogger.log('OutputMicrobitHandler', 'onDisconnected');
     this.devices.update(s => {
-      s.isOutputConnected = false;
-      s.isOutputReady = false;
-      s.isOutputOutdated = false;
       return s;
     });
+    const microbitController = getControllers().getMicrobitController();
+    const microbitConnection = microbitController.getMicrobitConnectionState();
+    const curConnDisc = microbitConnection.get();
+    const oldOutputDisc = curConnDisc.getOutput();
+    const newOutputDisc = new MicrobitConnectionStateImpl(
+      false,
+      oldOutputDisc ? oldOutputDisc.isAssigned() : false,
+      false,
+      false,
+      oldOutputDisc ? oldOutputDisc.isInitializing() : false,
+    );
+    curConnDisc.setOutput(newOutputDisc);
+    microbitController.setMicrobitConnection(curConnDisc);
   }
 
   public onAccelerometerDataReceived(x: number, y: number, z: number): void {}
@@ -111,11 +133,20 @@ class OutputMicrobitHandler implements MicrobitHandler {
   public onConnectError(error: Error): void {
     ConsoleLogger.log('OutputMicrobitHandler', 'onConnectError', error);
     this.devices.update(s => {
-      s.isOutputConnected = false;
-      s.isOutputAssigned = false;
-      s.isOutputReady = false;
       return s;
     });
+    const microbitController = getControllers().getMicrobitController();
+    const microbitConnection = microbitController.getMicrobitConnectionState();
+    const curConnErr = microbitConnection.get();
+    const newOutputErr = new MicrobitConnectionStateImpl(
+      false,
+      false,
+      false,
+      curConnErr.getOutput() ? curConnErr.getOutput().isOutdated() : false,
+      curConnErr.getOutput() ? curConnErr.getOutput().isInitializing() : false,
+    );
+    curConnErr.setOutput(newOutputErr);
+    microbitController.setMicrobitConnection(curConnErr);
   }
 
   public onReconnectError(error: Error): void {
@@ -125,14 +156,19 @@ class OutputMicrobitHandler implements MicrobitHandler {
 
   public onClosed() {
     ConsoleLogger.log('OutputMicrobitHandler', 'onClosed');
-    this.devices.update(s => {
-      s.isOutputConnected = false;
-      s.isOutputAssigned = false;
-      s.isOutputReady = false;
-      s.offerReconnect = true;
-      s.reconnectState = DeviceRequestStates.OUTPUT;
-      return s;
-    });
+    const microbitController = getControllers().getMicrobitController();
+    const microbitConnection = microbitController.getMicrobitConnectionState();
+    const curConnClosed = microbitConnection.get();
+    const oldOutputClosed = curConnClosed.getOutput();
+    const newOutputClosed = new MicrobitConnectionStateImpl(
+      false,
+      false,
+      false,
+      oldOutputClosed ? oldOutputClosed.isOutdated() : false,
+      oldOutputClosed ? oldOutputClosed.isInitializing() : false,
+    );
+    curConnClosed.setOutput(newOutputClosed);
+    microbitController.setMicrobitConnection(curConnClosed);
   }
 
   public onClosedError(error: Error): void {

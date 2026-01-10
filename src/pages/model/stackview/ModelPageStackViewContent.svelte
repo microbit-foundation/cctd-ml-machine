@@ -62,7 +62,7 @@
       <OutputGesture variant="stack" {gesture} {onUserInteraction} />
     {/each}
   </div>
-  {#if !$microbitConnection.isOutputConnected && !hasClosedPopup && hasInteracted}
+  {#if !$microbitConnection.getOutput().isConnected() && !hasClosedPopup && hasInteracted}
     <div transition:fade class="grid grid-cols-5 absolute bottom-5 w-full min-w-729px">
       <div
         class="flex relative col-start-2 rounded-lg col-end-5 h-35"

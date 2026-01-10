@@ -15,6 +15,19 @@ export class MicrobitServiceImpl implements MicrobitService {
     private microbitConnectionRepository: MicrobitConnectionRepository,
     private userService: UserService,
   ) {}
+  setMicrobitConnection(connection: MicrobitConnection): void {
+    this.microbitConnectionRepository.setMicrobitConnection(connection);
+  }
+  clearReconnectOffering(): void {
+    const connection = this.getMicrobitConnection();
+    connection.clearReconnectOffering();
+    this.microbitConnectionRepository.setMicrobitConnection(connection);
+  }
+  setRequestWasCancelled(cancelled: boolean): void {
+    const connection = this.getMicrobitConnection();
+    connection.setRequestWasCancelled(cancelled);
+    this.microbitConnectionRepository.setMicrobitConnection(connection);
+  }
 
   offerReconnect(role: MicrobitRole): void {
     this.userService.setShouldReconnectNextVisit(false);

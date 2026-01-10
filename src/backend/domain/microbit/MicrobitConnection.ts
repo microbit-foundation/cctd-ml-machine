@@ -9,9 +9,14 @@ import type { MicrobitReconnectState } from './MicrobitReconnectState';
 import type { MicrobitRole } from './MicrobitRole';
 
 export interface MicrobitConnection {
+  setRequestWasCancelled(cancelled: boolean): void;
+  clearReconnectOffering(): void;
   offerReconnect(role: MicrobitRole): void;
   getOutput(): MicrobitConnectionState;
   getInput(): MicrobitConnectionState;
   getReconnectState(): MicrobitReconnectState;
   wasDeviceRequestCancelled(): boolean;
+  setInput(inputState: MicrobitConnectionState): void;
+  setOutput(outputState: MicrobitConnectionState): void;
+  setReconnection(reconnectState: MicrobitReconnectState): void;
 }

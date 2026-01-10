@@ -18,18 +18,21 @@
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import type GestureState from '../../lib/domain/stores/gesture/GestureState';
   import ConsoleLogger from '../../core/logging/ConsoleLogger';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   export let gesture: GestureState;
   export let onNoMicrobitSelect: () => void;
 
-  const devices = stores.getDevices();
   const validationSets = stores.getValidationSets();
   const recorder = stores.getRecorder();
+
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 
   $: isThisRecording = $recorder.recordingGesture === gesture.getId();
 
   const selectClicked = (gesture: GestureState): void => {
-    if (!$devices.isInputConnected) {
+    if (!$microbitConnection.getInput().isConnected()) {
       chosenGesture.update(gesture => {
         gesture = null;
         return gesture;

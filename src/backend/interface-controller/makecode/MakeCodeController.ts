@@ -9,21 +9,21 @@ import type { StatesMakeCodeProjectRepository } from '../../infrastructure/State
 import type { AbstractState } from '../../statemanagement/AbstractState';
 
 export class MakeCodeController {
-  public constructor(private projectRepository: StatesMakeCodeProjectRepository) { }
+  public constructor(private projectRepository: StatesMakeCodeProjectRepository) {}
 
   public getMakeCodeProject(): AbstractState<MakeCodeProject> {
-    const currentState = this.projectRepository.getMakeCodeProject()
+    const currentState = this.projectRepository.getMakeCodeProject();
     if (!currentState.get()) {
-      currentState.set(defaultMakeCodeProject)
+      currentState.set(defaultMakeCodeProject);
     }
-    return currentState as AbstractState<MakeCodeProject>
+    return currentState as AbstractState<MakeCodeProject>;
   }
 
   public hasProjectBeenChanged(): boolean {
     const currentState = this.projectRepository.getMakeCodeProject();
     const current = currentState.get();
     if (!current) return false;
-    console.log(current)
+    console.log(current);
 
     const currentMainBlocks = current?.text?.['main.blocks'] ?? '';
     const defaultMainBlocks = defaultMakeCodeProject.text?.['main.blocks'] ?? '';
@@ -35,21 +35,19 @@ export class MakeCodeController {
   public setMakeCodeProject(project: MakeCodeProject) {
     this.projectRepository.getMakeCodeProject().set(project);
   }
-  
 }
 
-
 export const defaultMakeCodeProject: MakeCodeProject = {
-        text: {
-          'README.md': ``,
+  text: {
+    'README.md': ``,
 
-          'main.blocks': `
+    'main.blocks': `
             <xml xmlns="https://developers.google.com/blockly/xml"><variables></variables><block type="pxt-on-start" x="21" y="17"><statement name="HANDLER"><block type="MLMachine_showPairingPattern"></block></statement></block></xml>
             `,
 
-          'main.ts': ``,
+    'main.ts': ``,
 
-          'pxt.json': `
+    'pxt.json': `
             {
             "name": "MLMachineMakecode",
             "description": "",
@@ -72,8 +70,5 @@ export const defaultMakeCodeProject: MakeCodeProject = {
             "preferredEditor": "blocksprj"
             }
             `,
-        },
-      }
-
-
-
+  },
+};

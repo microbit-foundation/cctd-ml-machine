@@ -24,7 +24,7 @@ export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
   private liveDataState: AbstractState<LiveData<LiveDataVector>>;
   private microbitConnectionState: AbstractState<MicrobitConnection>;
-  private makeCodeProjectState: AbstractState<MakeCodeProject | undefined>
+  private makeCodeProjectState: AbstractState<MakeCodeProject | undefined>;
 
   public constructor() {
     this.liveDataState = new LiveDataStateAdapter(

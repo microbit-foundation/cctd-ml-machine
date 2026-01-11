@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { createMakeCodeURL, MakeCodeFrameDriver, type MakeCodeProject } from '@microbit/makecode-embed';
-    import { onMount } from 'svelte';
-    import { navigate, Paths } from '../../../router/Router';
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import {
+    createMakeCodeURL,
+    MakeCodeFrameDriver,
+    type MakeCodeProject,
+  } from '@microbit/makecode-embed';
+  import { onMount } from 'svelte';
+  import { navigate, Paths } from '../../../router/Router';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   const controllers = getControllers();
   const makeCodeController = controllers.getMakeCodeController();
@@ -46,7 +50,6 @@
     driverRef.initialize();
     driverRef.hideSimulator();
     frameElem.appendChild(iframe);
-
   });
 </script>
 

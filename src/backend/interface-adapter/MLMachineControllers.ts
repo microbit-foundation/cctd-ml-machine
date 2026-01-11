@@ -25,6 +25,7 @@ import { MLMachine } from './MLMachine';
 import { MakeCodeController } from '../interface-controller/makecode/MakeCodeController';
 import type { MicrobitService } from '../domain/microbit/MicrobitService';
 import { MicrobitController } from '../interface-controller/MicrobitController';
+import { StatesMakeCodeProjectRepository } from '../infrastructure/StatesMakeCodeProjectRepository';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -74,7 +75,7 @@ export class MLMachineControllers {
   }
 
   public getMakeCodeController(): MakeCodeController {
-    return new MakeCodeController();
+    return new MakeCodeController(new StatesMakeCodeProjectRepository(this.states));
   }
 
   public getFeatureController(): FeatureController {

@@ -18,11 +18,13 @@ import type { MicrobitConnection } from '../domain/microbit/MicrobitConnection';
 import { MicrobitConnectionImpl } from '../domain/implementation/microbit/MicrobitConnectionImpl';
 import { MicrobitConnectionStateImpl } from '../domain/implementation/microbit/MicrobitConnectionStateImpl';
 import { MicrobitReconnectStateImpl } from '../domain/implementation/microbit/MicrobitReconnectStateImpl';
+import type { MakeCodeProject } from '@microbit/makecode-embed';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
   private liveDataState: AbstractState<LiveData<LiveDataVector>>;
   private microbitConnectionState: AbstractState<MicrobitConnection>;
+  private makeCodeProjectState: AbstractState<MakeCodeProject | undefined>
 
   public constructor() {
     this.liveDataState = new LiveDataStateAdapter(
@@ -41,6 +43,10 @@ export class SvelteStates implements AbstractStates {
         ),
       ),
     );
+    this.makeCodeProjectState = new SvelteStateAdapter(writable(undefined));
+  }
+  getMakeCodeProject(): AbstractState<MakeCodeProject | undefined> {
+    return this.makeCodeProjectState;
   }
 
   getMicrobitConnection(): AbstractState<MicrobitConnection> {

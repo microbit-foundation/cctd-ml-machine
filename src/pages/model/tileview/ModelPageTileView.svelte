@@ -14,6 +14,7 @@
   import { stores } from '../../../lib/stores/Stores';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import MakeCodeProjectBlocks from '../../../components/features/makecode/MakeCodeProjectBlocks.svelte';
 
   const devices = stores.getDevices();
   const classifier = stores.getClassifier();
@@ -106,11 +107,8 @@
           </p>
         </div>
       </div>
+    {:else}
+      <MakeCodeProjectBlocks />
     {/if}
   {/if}
 </main>
-
-<!--
-
-            href="https://makecode.microbit.org/S83658-20131-63602-68476"
--->

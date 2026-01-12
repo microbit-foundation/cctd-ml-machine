@@ -42,7 +42,7 @@ export const defaultMakeCodeProject: MakeCodeProject = {
     'README.md': ``,
 
     'main.blocks': `
-            <xml xmlns="https://developers.google.com/blockly/xml"><variables></variables><block type="pxt-on-start" x="21" y="17"><statement name="HANDLER"><block type="MLMachine_showPairingPattern"></block></statement></block></xml>
+            <xml xmlns="https://developers.google.com/blockly/xml"><variables></variables><block type="pxt-on-start" x="0" y="0"><statement name="HANDLER"><block type="MLMachine_showPairingPattern"></block></statement></block></xml>
             `,
 
     'main.ts': ``,

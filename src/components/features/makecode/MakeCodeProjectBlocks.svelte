@@ -30,7 +30,6 @@
     renderedBlocks = await blocksRenderer.renderBlocks({ code: $project });
     // Use the shared filterSVG utility to sanitize and scope the SVG.
     safeSvg = filterSVG(renderedBlocks.svg) ?? null;
-    console.log(safeSvg);
   });
 </script>
 

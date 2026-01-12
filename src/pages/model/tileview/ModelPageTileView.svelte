@@ -10,16 +10,17 @@
   import { onMount } from 'svelte';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
-  import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../lib/stores/Stores';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import MakeCodeProjectBlocks from '../../../components/features/makecode/MakeCodeProjectBlocks.svelte';
+  import { navigate, Paths } from '../../../router/Router';
 
   const devices = stores.getDevices();
   const classifier = stores.getClassifier();
 
   const makecodeController = getControllers().getMakeCodeController();
+  const outputController = getControllers().getOutputController();
 
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
@@ -82,6 +83,11 @@
     Microbits.resetIOPins();
   });
 
+  const openMakeCode = () => {
+    navigate(Paths.MAKECODE);
+    outputController.setOutputTargetMakecode();
+  };
+
   $: triggerButtonsClicked($buttonPressed);
 
   const model = classifier.getModel();
@@ -100,9 +106,8 @@
             <p class="text-md font-bold text-primary text-center">MakeCode</p>
             <p class="text-sm">
               You can create a hex file on <a
-                target="_blank"
-                href={StaticConfiguration.makecodeFirmwareUrl}
-                class="text-secondary">
+                on:click={openMakeCode}
+                class="text-secondary cursor-pointer">
                 MakeCode
               </a>
             </p>

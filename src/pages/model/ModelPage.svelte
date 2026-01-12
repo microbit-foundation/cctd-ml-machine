@@ -39,7 +39,7 @@
   </ControlBar>
 </div>
 
-<div class="pt-4 pl-3">
+<div class="h-[calc(100%-48px)] flex flex-col">
   {#if $outputTarget == OutputTarget.MAKECODE}
     <ModelPageTileView />
   {:else}

@@ -87,28 +87,32 @@
   const model = classifier.getModel();
 </script>
 
-<main class="h-full flex flex-col">
-  {#if !$model.hasModel}
-    <TrainModelFirstTitle />
-  {:else}
-    <ModelPageTileViewTiles />
-    {#if !makecodeController.hasProjectBeenChanged()}
-      <div
-        class="flex flex-row mt-12 mx-30 bg-backgroundlight border-secondary border-1 p-4 rounded justify-center shadow-xl">
-        <div class="flex flex-col">
-          <p class="text-md font-bold text-primary text-center">MakeCode</p>
-          <p class="text-sm">
-            You can create a hex file on <a
-              target="_blank"
-              href={StaticConfiguration.makecodeFirmwareUrl}
-              class="text-secondary">
-              MakeCode
-            </a>
-          </p>
-        </div>
-      </div>
+<main class="px-4 pt-4 flex flex-grow">
+  <div class="flex-col flex-grow">
+    {#if !$model.hasModel}
+      <TrainModelFirstTitle />
     {:else}
-      <MakeCodeProjectBlocks />
+      <ModelPageTileViewTiles />
+      {#if !makecodeController.hasProjectBeenChanged()}
+        <div
+          class="flex flex-row mt-12 mx-30 bg-backgroundlight border-secondary border-1 p-4 rounded justify-center shadow-xl">
+          <div class="flex flex-col">
+            <p class="text-md font-bold text-primary text-center">MakeCode</p>
+            <p class="text-sm">
+              You can create a hex file on <a
+                target="_blank"
+                href={StaticConfiguration.makecodeFirmwareUrl}
+                class="text-secondary">
+                MakeCode
+              </a>
+            </p>
+          </div>
+        </div>
+      {:else}
+        <div class="mt-2 bg-backgroundlight rounded-md p-1 shadow-sm text-xs">
+          <MakeCodeProjectBlocks />
+        </div>
+      {/if}
     {/if}
-  {/if}
+  </div>
 </main>

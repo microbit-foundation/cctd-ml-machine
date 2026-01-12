@@ -4,7 +4,6 @@
   SPDX-License-Identifier: MIT
  -->
 
-
 <script lang="ts">
   import {
     createMakeCodeRenderBlocks,
@@ -13,7 +12,7 @@
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import { onMount } from 'svelte';
   import LoadingSpinner from '../../ui/LoadingSpinner.svelte';
-    import { filterSVG } from '../../../lib/MakeCodeBlocks';
+  import { filterSVG } from '../../../lib/MakeCodeBlocks';
 
   const makeCodeController = getControllers().getMakeCodeController();
   const project = makeCodeController.getMakeCodeProject();

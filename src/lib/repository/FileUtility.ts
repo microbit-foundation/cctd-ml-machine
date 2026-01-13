@@ -37,6 +37,32 @@ class FileUtility {
     element.click();
     document.body.removeChild(element);
   }
+
+  /**
+   * Download arbitrary text content as a file. Ensures a .hex extension when
+   * the provided filename does not already have one.
+   */
+  public static downloadFile(content: string, filename: string) {
+    const baseName = (filename || 'download').trim();
+    const finalName = baseName.toLowerCase().endsWith('.hex')
+      ? baseName
+      : `${baseName}.hex`;
+
+    const blob = new Blob([content || ''], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = finalName;
+
+    // Some browsers require the anchor to be in the document
+    a.style.display = 'none';
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
 }
 
 export default FileUtility;

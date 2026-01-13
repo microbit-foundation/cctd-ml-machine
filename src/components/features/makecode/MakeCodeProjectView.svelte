@@ -10,6 +10,7 @@
     MakeCodeFrameDriver,
     type MakeCodeProject,
   } from '@microbit/makecode-embed';
+  import FileUtility from '../../../lib/repository/FileUtility';
   import { onMount } from 'svelte';
   import { navigate, Paths } from '../../../router/Router';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
@@ -50,6 +51,14 @@
         // When the editor loads, hide the simulator to make more space
         onEditorContentLoaded: e => driverRef.hideSimulator(),
         onWorkspaceSave: e => makeCodeController.setMakeCodeProject(e.project),
+        onDownload: e => console.log(e),
+        onSave: (file: { name: string; hex: string }) => {
+          try {
+            FileUtility.downloadFile(file.hex, file.name);
+          } catch (err) {
+            console.error('Failed to save .hex file', err);
+          }
+        },
       },
       () => iframe,
     );

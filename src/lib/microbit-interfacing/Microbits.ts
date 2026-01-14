@@ -293,7 +293,7 @@ class Microbits {
     hexContent?: string,
   ): Promise<void> {
     const version = this.getLinked().getUsbController().getModelNumber();
-    const hexFileName = this.hexFiles[version]; // Note: For this we CANNOT use the universal hex file (don't know why)
+    const hexFileName = this.hexFiles[version]; // Note: If using the universal hex, we must split up the hex and determine the correct version ourselves, using the @microbit/microbit-universal-hex library
     const hexFile = await fetch(hexFileName);
     const fetched = await hexFile.arrayBuffer();
 

@@ -292,13 +292,34 @@ class Microbits {
    */
   public static async flashHexToLinked(
     progressCallback: (progress: number) => void,
+    hexContent?: string,
   ): Promise<void> {
     const version = this.getLinked().getUsbController().getModelNumber();
     const hexFileName = this.hexFiles[version]; // Note: For this we CANNOT use the universal hex file (don't know why)
     const hexFile = await fetch(hexFileName);
-    const hex = await hexFile.arrayBuffer();
+    const fetched = await hexFile.arrayBuffer();
 
-    await this.linkedMicrobit.getUsbController().flashHex(hex, progressCallback);
+    // Ensure we have a real ArrayBuffer (not ArrayBufferLike/SharedArrayBuffer).
+    let plainHexBuffer: ArrayBuffer;
+    if (fetched instanceof ArrayBuffer) {
+      plainHexBuffer = fetched;
+    } else {
+      const tmp = new Uint8Array(fetched as ArrayBufferLike);
+      const copy = new Uint8Array(tmp.length);
+      copy.set(tmp);
+      // copy.buffer is guaranteed to be a plain ArrayBuffer
+      plainHexBuffer = copy.buffer;
+    }
+
+    // If we have custom hex content, encode it and obtain an ArrayBuffer copy
+    // via ArrayBuffer.prototype.slice to ensure the exact bytes are used.
+    const hexContentBuffer: ArrayBuffer = hexContent
+      ? (new TextEncoder().encode(hexContent).buffer as ArrayBuffer).slice(0)
+      : plainHexBuffer;
+
+    await this.linkedMicrobit
+      .getUsbController()
+      .flashHex(hexContentBuffer, progressCallback);
   }
 
   public static async getLinkedFriendlyName(): Promise<string> {

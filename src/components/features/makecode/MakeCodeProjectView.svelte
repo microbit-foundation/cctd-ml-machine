@@ -14,6 +14,7 @@
   import { onMount } from 'svelte';
   import { navigate, Paths } from '../../../router/Router';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
 
   const controllers = getControllers();
   const makeCodeController = controllers.getMakeCodeController();
@@ -51,7 +52,14 @@
         // When the editor loads, hide the simulator to make more space
         onEditorContentLoaded: e => driverRef.hideSimulator(),
         onWorkspaceSave: e => makeCodeController.setMakeCodeProject(e.project),
-        onDownload: e => console.log(e),
+        onDownload: async e => {
+          try {
+            await Microbits.linkMicrobit();
+            Microbits.flashHexToLinked(console.log, e.hex);
+          } catch (error) {
+            console.log(error);
+          }
+        },
         onSave: (file: { name: string; hex: string }) => {
           try {
             FileUtility.downloadFile(file.hex, file.name);

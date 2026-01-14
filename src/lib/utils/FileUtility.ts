@@ -8,6 +8,7 @@ import { type GestureData } from '../domain/stores/gesture/GestureState';
 import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
 import type { MBSpecs } from 'microbyte';
+import { isUniversalHex, separateUniversalHex } from '@microbit/microbit-universal-hex';
 
 class FileUtility {
   public static loadDatasetFromFile(file: File) {
@@ -70,6 +71,17 @@ class FileUtility {
     hexContent: string,
     mbVersion: MBSpecs.MBVersion,
   ): Uint8Array {
+    if (isUniversalHex(hexContent)) {
+      const separated = separateUniversalHex(hexContent);
+      const versionIds: Record<MBSpecs.MBVersion, number[]> = {
+        '1': [0x9900, 0x9901],
+        '2': [0x9903, 0x9904, 0x9905, 0x9906],
+      };
+      return this.convertDataToPaddedBytes(
+        separated.find(part => versionIds[mbVersion].includes(part.boardId))!.hex,
+        mbVersion,
+      );
+    }
     return this.convertDataToPaddedBytes(hexContent, mbVersion);
   }
 

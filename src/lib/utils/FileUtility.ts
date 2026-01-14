@@ -63,6 +63,10 @@ class FileUtility {
     a.remove();
     URL.revokeObjectURL(url);
   }
+
+  public static createHexBuffer(hexContent: string): ArrayBuffer {
+    return (new TextEncoder().encode(hexContent).buffer as ArrayBuffer).slice(0);
+  }
 }
 
 export default FileUtility;

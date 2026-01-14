@@ -20,6 +20,7 @@ import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
+import FileUtility from '../utils/FileUtility';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
 
@@ -299,23 +300,9 @@ class Microbits {
     const hexFile = await fetch(hexFileName);
     const fetched = await hexFile.arrayBuffer();
 
-    // Ensure we have a real ArrayBuffer (not ArrayBufferLike/SharedArrayBuffer).
-    let plainHexBuffer: ArrayBuffer;
-    if (fetched instanceof ArrayBuffer) {
-      plainHexBuffer = fetched;
-    } else {
-      const tmp = new Uint8Array(fetched as ArrayBufferLike);
-      const copy = new Uint8Array(tmp.length);
-      copy.set(tmp);
-      // copy.buffer is guaranteed to be a plain ArrayBuffer
-      plainHexBuffer = copy.buffer;
-    }
-
-    // If we have custom hex content, encode it and obtain an ArrayBuffer copy
-    // via ArrayBuffer.prototype.slice to ensure the exact bytes are used.
-    const hexContentBuffer: ArrayBuffer = hexContent
-      ? (new TextEncoder().encode(hexContent).buffer as ArrayBuffer).slice(0)
-      : plainHexBuffer;
+    const hexContentBuffer = !!hexContent
+      ? FileUtility.createHexBuffer(hexContent)
+      : fetched;
 
     await this.linkedMicrobit
       .getUsbController()

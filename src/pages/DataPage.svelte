@@ -8,7 +8,7 @@
   import { t } from '../i18n';
   import DataPageControlBar from '../components/features/datacollection/DataPageControlBar.svelte';
   import { onMount } from 'svelte';
-  import FileUtility from '../lib/repository/FileUtility';
+  import FileUtility from '../lib/utils/FileUtility';
   import { get } from 'svelte/store';
   import { stores } from '../lib/stores/Stores';
   import { hasSomeRecordingData } from './data/DataPage';

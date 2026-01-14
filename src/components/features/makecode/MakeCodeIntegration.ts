@@ -6,7 +6,7 @@
 
 import { createMakeCodeURL, MakeCodeFrameDriver } from '@microbit/makecode-embed';
 import Microbits from '../../../lib/microbit-interfacing/Microbits';
-import FileUtility from '../../../lib/repository/FileUtility';
+import FileUtility from '../../../lib/utils/FileUtility';
 import { navigate, Paths } from '../../../router/Router';
 import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 

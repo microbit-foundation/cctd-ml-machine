@@ -70,48 +70,24 @@ class FileUtility {
   public static createHexBuffer(
     hexContent: string,
     mbVersion: MBSpecs.MBVersion,
-  ): Uint8Array {
+  ): Uint8Array | ArrayBuffer {
     if (isUniversalHex(hexContent)) {
       const separated = separateUniversalHex(hexContent);
       const versionIds: Record<MBSpecs.MBVersion, number[]> = {
         '1': [0x9900, 0x9901],
         '2': [0x9903, 0x9904, 0x9905, 0x9906],
       };
-      return this.convertDataToPaddedBytes(
-        separated.find(part => versionIds[mbVersion].includes(part.boardId))!.hex,
-        mbVersion,
+      const versionedPart = separated.find(part =>
+        versionIds[mbVersion].includes(part.boardId),
       );
+      if (!versionedPart) {
+        throw new Error(
+          `No compatible hex part found for micro:bit version ${mbVersion}`,
+        );
+      }
+      return (new TextEncoder().encode(versionedPart.hex).buffer as ArrayBuffer).slice(0);
     }
-    return this.convertDataToPaddedBytes(hexContent, mbVersion);
-  }
-
-  private static convertDataToPaddedBytes(
-    data: string | Uint8Array | MemoryMap,
-    mbVersion: MBSpecs.MBVersion,
-  ): Uint8Array {
-    if (data instanceof Uint8Array) {
-      return data;
-    }
-    if (typeof data === 'string') {
-      return this.hexStringToPaddedBytes(data, mbVersion);
-    }
-    return this.memoryMapToPaddedBytes(data, mbVersion);
-  }
-
-  private static hexStringToPaddedBytes(
-    hex: string,
-    mbVersion: MBSpecs.MBVersion,
-  ): Uint8Array {
-    const m = MemoryMap.fromHex(hex);
-    return this.memoryMapToPaddedBytes(m, mbVersion);
-  }
-
-  private static memoryMapToPaddedBytes(
-    memoryMap: MemoryMap,
-    mbVersion: MBSpecs.MBVersion,
-  ): Uint8Array {
-    const flashSize = mbVersion === 1 ? 256 * 1024 : 512 * 1024;
-    return memoryMap.slicePad(0, flashSize);
+    return (new TextEncoder().encode(hexContent).buffer as ArrayBuffer).slice(0);
   }
 }
 

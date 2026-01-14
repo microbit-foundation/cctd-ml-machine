@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-/**
- * Entrypoint for the Microbit facade pattern
- */
 import StaticConfiguration from '../../StaticConfiguration';
 import {
   MBSpecs,
@@ -301,7 +298,7 @@ class Microbits {
     const fetched = await hexFile.arrayBuffer();
 
     const hexContentBuffer = !!hexContent
-      ? FileUtility.createHexBuffer(hexContent)
+      ? FileUtility.createHexBuffer(hexContent, version)
       : fetched;
 
     await this.linkedMicrobit

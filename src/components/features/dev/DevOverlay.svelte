@@ -7,11 +7,19 @@
 <script lang="ts">
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import Environment from '../../../core/Environment';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
 
   const inDev = Environment.isInDevelopment;
   const controllers = getControllers();
   const microbitController = controllers.getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
+
+  const testHexOutput = async () => {
+    const known = await fetch(Microbits.hexFiles['universal']);
+    console.log('known', known);
+    const knownBuffer = await known.arrayBuffer();
+    console.log('known content', knownBuffer);
+  };
 </script>
 
 {#if inDev}
@@ -33,6 +41,9 @@
           <span>{idx === 0 ? 'Input' : 'Output'}-Initializing</span>: {connection.isInitializing()}
         </p>
       {/each}
+      <div class="pointer-events-auto">
+        <button on:click={testHexOutput}>test hex output</button>
+      </div>
     </div>
   </div>
 {/if}

@@ -3,9 +3,11 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import MemoryMap from 'nrf-intel-hex';
 import { type GestureData } from '../domain/stores/gesture/GestureState';
 import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
+import type { MBSpecs } from 'microbyte';
 
 class FileUtility {
   public static loadDatasetFromFile(file: File) {
@@ -64,8 +66,40 @@ class FileUtility {
     URL.revokeObjectURL(url);
   }
 
-  public static createHexBuffer(hexContent: string): ArrayBuffer {
-    return (new TextEncoder().encode(hexContent).buffer as ArrayBuffer).slice(0);
+  public static createHexBuffer(
+    hexContent: string,
+    mbVersion: MBSpecs.MBVersion,
+  ): Uint8Array {
+    return this.convertDataToPaddedBytes(hexContent, mbVersion);
+  }
+
+  private static convertDataToPaddedBytes(
+    data: string | Uint8Array | MemoryMap,
+    mbVersion: MBSpecs.MBVersion,
+  ): Uint8Array {
+    if (data instanceof Uint8Array) {
+      return data;
+    }
+    if (typeof data === 'string') {
+      return this.hexStringToPaddedBytes(data, mbVersion);
+    }
+    return this.memoryMapToPaddedBytes(data, mbVersion);
+  }
+
+  private static hexStringToPaddedBytes(
+    hex: string,
+    mbVersion: MBSpecs.MBVersion,
+  ): Uint8Array {
+    const m = MemoryMap.fromHex(hex);
+    return this.memoryMapToPaddedBytes(m, mbVersion);
+  }
+
+  private static memoryMapToPaddedBytes(
+    memoryMap: MemoryMap,
+    mbVersion: MBSpecs.MBVersion,
+  ): Uint8Array {
+    const flashSize = mbVersion === 1 ? 256 * 1024 : 512 * 1024;
+    return memoryMap.slicePad(0, flashSize);
   }
 }
 

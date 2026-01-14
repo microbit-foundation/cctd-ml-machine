@@ -8,9 +8,6 @@
   import { onMount } from 'svelte';
   import { createFrameDriver, createMakeCodeIframe } from './MakeCodeIntegration';
 
-  // const renderer = createMakeCodeRenderBlocks({});
-  // renderer.initialize();
-
   onMount(async () => {
     const frameElem = document.getElementById('makecode-elem');
     if (!frameElem) {

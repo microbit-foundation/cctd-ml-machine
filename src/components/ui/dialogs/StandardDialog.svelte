@@ -9,10 +9,10 @@
 
   export let hasCloseButton = true;
   export let isOpen: boolean;
-  export let onClose: () => void;
+  export let onClose: (() => void) | undefined = undefined;
 </script>
 
-<BaseDialog {isOpen} {onClose}>
+<BaseDialog {isOpen} onClose={onClose ?? (() => {})}>
   <div
     class="w-min h-min border-gray-200 border border-solid relative bg-white rounded-lg p-8"
     on:click|stopPropagation>

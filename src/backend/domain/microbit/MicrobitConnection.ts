@@ -5,10 +5,13 @@
  */
 
 import type { MicrobitConnectionState } from './MicrobitConnectionState';
+import type { MicrobitFlashing } from './MicrobitFlashing';
 import type { MicrobitReconnectState } from './MicrobitReconnectState';
 import type { MicrobitRole } from './MicrobitRole';
 
 export interface MicrobitConnection {
+  getFlashing(): MicrobitFlashing;
+  setFlashingProgress(flashingProgress: number): void;
   setRequestWasCancelled(cancelled: boolean): void;
   clearReconnectOffering(): void;
   offerReconnect(role: MicrobitRole): void;

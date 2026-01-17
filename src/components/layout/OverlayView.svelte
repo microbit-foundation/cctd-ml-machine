@@ -14,6 +14,7 @@
   import FilterListFilterPreview from '../features/filters/FilterListFilterPreview.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import DevOverlay from '../features/dev/DevOverlay.svelte';
+  import MicrobitFlashingProgressOverlay from '../features/microbit-flashing/MicrobitFlashingProgressOverlay.svelte';
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
@@ -67,5 +68,6 @@
       targetRole={$microbitConnection.getInput().isOutdated() ? 'INPUT' : 'OUTPUT'} />
   {/if}
   <FilterListFilterPreview />
+  <MicrobitFlashingProgressOverlay />
   <DevOverlay />
 </div>

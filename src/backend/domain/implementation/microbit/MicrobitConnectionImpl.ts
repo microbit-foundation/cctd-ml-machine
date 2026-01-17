@@ -6,17 +6,30 @@
 
 import type { MicrobitConnection } from '../../microbit/MicrobitConnection';
 import type { MicrobitConnectionState } from '../../microbit/MicrobitConnectionState';
+import type { MicrobitFlashing } from '../../microbit/MicrobitFlashing';
 import type { MicrobitReconnectState } from '../../microbit/MicrobitReconnectState';
 import { MicrobitRole } from '../../microbit/MicrobitRole';
+import MicrobitFlashingImpl from './MicrobitFlashingImpl';
 import { MicrobitReconnectStateImpl } from './MicrobitReconnectStateImpl';
 
 export class MicrobitConnectionImpl implements MicrobitConnection {
+  private flashing: MicrobitFlashing;
+
   public constructor(
     private inputState: MicrobitConnectionState,
     private outputState: MicrobitConnectionState,
     private reconnectState: MicrobitReconnectState,
     private wasRequestCancelled: boolean,
-  ) {}
+  ) {
+    this.flashing = new MicrobitFlashingImpl();
+  }
+  getFlashing(): MicrobitFlashing {
+    return this.flashing;
+  }
+  setFlashingProgress(flashingProgress: number): void {
+    this.flashing.setFlashingProgress(flashingProgress);
+    this.flashing.setFlashing(flashingProgress < 1);
+  }
   setRequestWasCancelled(cancelled: boolean): void {
     this.wasRequestCancelled = cancelled;
   }

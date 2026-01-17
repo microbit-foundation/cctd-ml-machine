@@ -49,7 +49,6 @@ class Microbits {
   private static inputHandler = new CombinedMicrobitHandler(
     this.outputHandler,
     getControllers().getMicrobitController(),
-    MLMachine.getInstance().getControllers().getOutputController(),
   );
 
   private static linkedMicrobit: Microbit = new Microbit();

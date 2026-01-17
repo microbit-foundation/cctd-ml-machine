@@ -17,19 +17,16 @@ import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { onCatastrophicError } from '../utils/ErrorReconnect';
-import type { OutputController } from '../../backend/interface-controller/OutputController';
 import type { MicrobitController } from '../../backend/interface-controller/MicrobitController';
 import { MicrobitRole } from '../../backend/domain/microbit/MicrobitRole';
 import { MicrobitConnectionStateImpl } from '../../backend/domain/implementation/microbit/MicrobitConnectionStateImpl';
+import { MLMachine } from '../../backend/interface-adapter/MLMachine';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(
-    private microbitController: MicrobitController,
-    private outputController: OutputController,
-  ) {}
+  public constructor(private microbitController: MicrobitController) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnected', versionNumber);
@@ -120,7 +117,10 @@ class InputMicrobitHandler implements MicrobitHandler {
     //Logger.log("InputMicrobitHandler", "onMessageReceived", data);
     if (data === 'id_mkcd') {
       Microbits.setInputOrigin(HexOrigin.MAKECODE);
-      this.outputController.setOutputTargetOutputMicrobit();
+      MLMachine.getInstance()
+        .getControllers()
+        .getOutputController()
+        .setOutputTargetOutputMicrobit();
     }
     if (data === 'id_prop') {
       Microbits.setInputOrigin(HexOrigin.PROPRIETARY);

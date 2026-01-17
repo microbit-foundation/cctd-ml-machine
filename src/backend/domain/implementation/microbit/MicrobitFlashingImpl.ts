@@ -25,8 +25,7 @@ export class MicrobitFlashingImpl implements MicrobitFlashing {
   }
 
   setFlashingProgress(progress: number): void {
-    // Normalize to integer and clamp between 0 and 100
-    const normalized = Math.max(0, Math.min(1, Math.round(progress * 100) / 100));
+    const normalized = Math.max(0, Math.min(1, progress));
     this.progress = normalized;
   }
 }

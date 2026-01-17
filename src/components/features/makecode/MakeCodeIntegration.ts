@@ -14,7 +14,10 @@ export const flashHexContent = async (hexContent: string) => {
   const microbitController = getControllers().getMicrobitController();
   try {
     await Microbits.linkMicrobit();
-    Microbits.flashHexToLinked(microbitController.setFlashingProgress, hexContent);
+    Microbits.flashHexToLinked(
+      progress => microbitController.setFlashingProgress(progress),
+      hexContent,
+    );
   } catch (error) {
     console.log(error);
   }

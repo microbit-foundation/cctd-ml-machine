@@ -16,6 +16,12 @@ export class MicrobitController {
     private states: AbstractStates,
   ) {}
 
+  public setFlashingProgress(progress: number): void {
+    const connection = this.getMicrobitConnectionState().get();
+    connection.setFlashingProgress(progress);
+    this.setMicrobitConnection(connection);
+  }
+
   public offerReconnect(role: MicrobitRole) {
     this.microbitService.offerReconnect(role);
   }

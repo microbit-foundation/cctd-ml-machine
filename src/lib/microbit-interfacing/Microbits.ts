@@ -326,7 +326,7 @@ class Microbits {
       const separated = separateUniversalHex(hexContent);
       const versionedPart = separated.find(part => {
         MBSpecs.Utility.getModelNumberFromBoardID(part.boardId) === mbVersion;
-      })
+      });
       if (!versionedPart) {
         throw new Error(
           `No compatible hex part found for micro:bit version ${mbVersion}`,

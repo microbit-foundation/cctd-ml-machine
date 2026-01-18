@@ -168,17 +168,17 @@ class InputMicrobitHandler implements MicrobitHandler {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnectError', error);
 
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
-    const curConnErr = microbitConnection.get();
-    const oldErr = curConnErr.getInput();
-    const newErr = new MicrobitConnectionStateImpl(
+    const curConn = microbitConnection.get();
+    const oldInput = curConn.getInput();
+    const newInput = new MicrobitConnectionStateImpl(
       false,
       false,
       false,
-      oldErr ? oldErr.isOutdated() : false,
-      oldErr ? oldErr.isInitializing() : false,
+      oldInput ? oldInput.isOutdated() : false,
+      oldInput ? oldInput.isInitializing() : false,
     );
-    curConnErr.setInput(newErr);
-    this.microbitController.setMicrobitConnection(curConnErr);
+    curConn.setInput(newInput);
+    this.microbitController.setMicrobitConnection(curConn);
   }
 
   public onReconnectError(error: Error): void {

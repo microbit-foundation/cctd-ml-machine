@@ -42,7 +42,6 @@
       showLatestMessage = false;
     }, 3000);
   }
-  console.log($microbitConnection.getReconnectState().isOfferingReconnect());
 </script>
 
 <div>

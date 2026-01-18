@@ -114,13 +114,13 @@ class InputMicrobitHandler implements MicrobitHandler {
   }
 
   public onMessageReceived(data: string): void {
-    //Logger.log("InputMicrobitHandler", "onMessageReceived", data);
+    ConsoleLogger.log('InputMicrobitHandler', 'onMessageReceived', data);
     if (data === 'id_mkcd') {
       Microbits.setInputOrigin(HexOrigin.MAKECODE);
       MLMachine.getInstance()
         .getControllers()
         .getOutputController()
-        .setOutputTargetOutputMicrobit();
+        .setOutputTargetMakecode();
     }
     if (data === 'id_prop') {
       Microbits.setInputOrigin(HexOrigin.PROPRIETARY);
@@ -185,7 +185,6 @@ class InputMicrobitHandler implements MicrobitHandler {
     ConsoleLogger.log('InputMicrobitHandler', 'onReconnectError', error);
     this.onConnectError(error);
 
-    const microbitConnection = this.microbitController.getMicrobitConnectionState();
     this.microbitController.offerReconnect(MicrobitRole.INPUT);
   }
 

@@ -23,7 +23,6 @@ export class MakeCodeController {
     const currentState = this.projectRepository.getMakeCodeProject();
     const current = currentState.get();
     if (!current) return false;
-    console.log(current);
 
     const currentMainBlocks = current?.text?.['main.blocks'] ?? '';
     const defaultMainBlocks = defaultMakeCodeProject.text?.['main.blocks'] ?? '';

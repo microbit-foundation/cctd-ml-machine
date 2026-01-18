@@ -38,7 +38,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
     this.devices.update(s => {
       if (Microbits.isInputOutputTheSame()) {
         if (Microbits.isOutputMakecode()) {
-          this.outputController.setOutputTargetOutputMicrobit();
+          this.outputController.setOutputTargetMakecode();
         }
       }
       s.isRequestingDevice = DeviceRequestStates.NONE;
@@ -104,7 +104,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
   public onMessageReceived(data: string): void {
     if (data === 'id_mkcd') {
       Microbits.setOutputOrigin(HexOrigin.MAKECODE);
-      this.outputController.setOutputTargetOutputMicrobit();
+      this.outputController.setOutputTargetMakecode();
     }
     if (data === 'id_prop') {
       Microbits.setOutputOrigin(HexOrigin.PROPRIETARY);

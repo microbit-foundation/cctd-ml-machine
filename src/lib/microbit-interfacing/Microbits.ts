@@ -18,6 +18,7 @@ import { stores } from '../stores/Stores';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
 import FileUtility from '../utils/FileUtility';
+import { isUniversalHex, separateUniversalHex } from '@microbit/microbit-universal-hex';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
 
@@ -297,7 +298,7 @@ class Microbits {
     const fetched = await hexFile.arrayBuffer();
 
     const hexContentBuffer = !!hexContent
-      ? FileUtility.createHexBuffer(hexContent, version)
+      ? this.createHexBuffer(hexContent, version)
       : fetched;
 
     await this.linkedMicrobit
@@ -315,6 +316,25 @@ class Microbits {
 
   public static getOutputOrigin(): HexOrigin {
     return this.outputOrigin;
+  }
+
+  private static createHexBuffer(
+    hexContent: string,
+    mbVersion: MBSpecs.MBVersion,
+  ): Uint8Array | ArrayBuffer {
+    if (isUniversalHex(hexContent)) {
+      const separated = separateUniversalHex(hexContent);
+      const versionedPart = separated.find(part => {
+        MBSpecs.Utility.getModelNumberFromBoardID(part.boardId) === mbVersion;
+      })
+      if (!versionedPart) {
+        throw new Error(
+          `No compatible hex part found for micro:bit version ${mbVersion}`,
+        );
+      }
+      return (new TextEncoder().encode(versionedPart.hex).buffer as ArrayBuffer).slice(0);
+    }
+    return (new TextEncoder().encode(hexContent).buffer as ArrayBuffer).slice(0);
   }
 }
 

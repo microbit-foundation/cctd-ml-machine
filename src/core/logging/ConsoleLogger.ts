@@ -33,8 +33,8 @@ class ConsoleLogger implements Logger {
     }
     welcomeLog();
     const outputMessage = `[${origin}] ${message} ${params}`;
-    !isStackTraceEnabled() && console.trace(outputMessage);
-    isStackTraceEnabled() && console.warn(outputMessage);
+    isStackTraceEnabled() && console.trace(outputMessage);
+    !isStackTraceEnabled() && console.warn(outputMessage);
   }
 
   /**
@@ -46,8 +46,8 @@ class ConsoleLogger implements Logger {
     }
     welcomeLog();
     const outputMessage = `[${origin}] ${message} ${params}`;
-    !isStackTraceEnabled() && console.trace(outputMessage);
-    isStackTraceEnabled() && console.log(outputMessage);
+    isStackTraceEnabled() && console.trace(outputMessage);
+    !isStackTraceEnabled() && console.log(outputMessage);
   }
 }
 

@@ -17,7 +17,6 @@ import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
-import FileUtility from '../utils/FileUtility';
 import { isUniversalHex, separateUniversalHex } from '@microbit/microbit-universal-hex';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
@@ -102,6 +101,7 @@ class Microbits {
     this.getInput().setHandler(this.inputHandler);
     this.getInput().setAutoReconnect(true);
     await bluetoothDevice.connect(name);
+    console.log(this.getInput().getDevice());
   }
 
   /**
@@ -138,6 +138,7 @@ class Microbits {
    * @throws {Error} Throws an error if no micro:bit is assigned.
    */
   public static disconnectInputAndOutput() {
+    ConsoleLogger.log('Microbits', 'Attempting to disconnect input and output');
     this.disconnectInput();
     this.disconnectOutput();
   }
@@ -300,6 +301,9 @@ class Microbits {
     const hexContentBuffer = !!hexContent
       ? this.createHexBuffer(hexContent, version)
       : fetched;
+
+    // Check if the micro:bit is already connected using bluetooth, and disconnect it if so
+    this.disconnectInputAndOutput();
 
     await this.linkedMicrobit
       .getUsbController()

@@ -101,7 +101,6 @@ class Microbits {
     this.getInput().setHandler(this.inputHandler);
     this.getInput().setAutoReconnect(true);
     await bluetoothDevice.connect(name);
-    console.log(this.getInput().getDevice());
   }
 
   /**
@@ -139,8 +138,8 @@ class Microbits {
    */
   public static disconnectInputAndOutput() {
     ConsoleLogger.log('Microbits', 'Attempting to disconnect input and output');
-    this.disconnectInput();
     this.disconnectOutput();
+    this.disconnectInput();
   }
 
   /**

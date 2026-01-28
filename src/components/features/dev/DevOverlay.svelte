@@ -7,21 +7,22 @@
 <script lang="ts">
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import Environment from '../../../core/Environment';
+  import Microbits from '../../../lib/microbit-interfacing/Microbits';
 
   const inDev = Environment.isInDevelopment;
   const controllers = getControllers();
   const microbitController = controllers.getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
 
-  let elems: any[] = [];
-
+  let outp = Microbits.getOutput().getDevice()?.getId();
+  let inp = Microbits.getInput().getDevice()?.getId();
   const test = () => {
-    elems.push({ msg: 'test' });
-    elems = elems;
+    outp = Microbits.getOutput().getDevice()?.getId();
+    inp = Microbits.getInput().getDevice()?.getId();
   };
 </script>
 
-{#if inDev && false}
+{#if inDev}
   <div
     class="absolute bottom-3 left-3 bg-transparent justify-center self-center items-center z-4"
     style="pointer-events: none;"
@@ -41,10 +42,9 @@
         </p>
       {/each}
       <div class="pointer-events-auto">
-        <button on:click={test}>test</button>
-        {#each elems as elem}
-          {elem.msg}
-        {/each}
+        <button on:click={test}>button</button>
+        <p>input:{inp}</p>
+        <p>output:{outp}</p>
       </div>
     </div>
   </div>

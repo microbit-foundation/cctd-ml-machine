@@ -12,15 +12,19 @@ import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 import { t } from '../../../i18n';
 import { get } from 'svelte/store';
 
+const notifyNoGestureRecognizedBlock = () => {
+  const notificationController = getControllers().getNotificationController();
+  notificationController.setSnackbarMessage(
+    get(t)('makecode.flash.no_gesture_recognized_block'),
+  );
+};
+
 export const flashHexContent = async (hexContent: string) => {
   const microbitController = getControllers().getMicrobitController();
   const makecodeController = getControllers().getMakeCodeController();
-  const notificationController = getControllers().getNotificationController();
 
   if (!makecodeController.hasProjectBluetoothEnabled()) {
-    notificationController.setSnackbarMessage(
-      get(t)('makecode.flash.no_gesture_recognized_block'),
-    );
+    notifyNoGestureRecognizedBlock();
     return;
   }
 
@@ -36,6 +40,11 @@ export const flashHexContent = async (hexContent: string) => {
 };
 
 export const downloadHexContent = (hexContent: string, filename: string) => {
+  const makecodeController = getControllers().getMakeCodeController();
+  if (!makecodeController.hasProjectBluetoothEnabled()) {
+    notifyNoGestureRecognizedBlock();
+    return;
+  }
   try {
     FileUtility.downloadFile(hexContent, filename);
   } catch (err) {

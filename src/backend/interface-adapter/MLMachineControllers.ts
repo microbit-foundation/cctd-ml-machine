@@ -26,14 +26,17 @@ import { MakeCodeController } from '../interface-controller/makecode/MakeCodeCon
 import type { MicrobitService } from '../domain/microbit/MicrobitService';
 import { MicrobitController } from '../interface-controller/MicrobitController';
 import { StatesMakeCodeProjectRepository } from '../infrastructure/StatesMakeCodeProjectRepository';
+import type { NotificationService } from '../domain/NotificationService';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
   private dataController: DataController;
+  private notificationController: NotificationController;
 
   public constructor(
     private mlMachine: MLMachine,
     dataService: DataService,
+    private notificationService: NotificationService,
     private featureService: FeatureService,
     private outputService: OutputService,
     private states: AbstractStates,
@@ -44,6 +47,10 @@ export class MLMachineControllers {
       this.mlMachine.getGestureService(),
     );
     this.dataController = new DataController(dataService, states.getLiveData());
+    this.notificationController = new MLMachineNotificationController(
+      this.notificationService,
+      states,
+    );
   }
 
   public getAppController(): AppController {
@@ -55,10 +62,8 @@ export class MLMachineControllers {
   }
 
   public getNotificationController(): NotificationController {
-    return new MLMachineNotificationController(
-      this.mlMachine.getNotificationService(),
-      this.states,
-    );
+    console.log(this.notificationController);
+    return this.notificationController;
   }
 
   public getClassifierController(): ClassifierController {

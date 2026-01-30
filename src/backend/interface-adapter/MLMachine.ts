@@ -113,18 +113,20 @@ export class MLMachine {
       microbitConnectionRepository,
       this.userService,
     );
+
+    this.notificationService = new StateNotificationService(
+      new StatesNotificationRepository(this.states),
+    );
     this.controllers = new MLMachineControllers(
       this,
       this.dataService,
+      this.notificationService,
       this.featureService,
       outputService,
       this.states,
       this.microbitService,
     );
 
-    this.notificationService = new StateNotificationService(
-      new StatesNotificationRepository(this.states),
-    );
     // const devices = stores.getDevices();
     // const outputHandler = new OutputMicrobitHandler(devices);
     /* Microbits.setHandlers(

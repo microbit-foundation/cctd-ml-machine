@@ -10,6 +10,7 @@ import type { NotificationController } from './abstract/NotificationsController'
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class MLMachineNotificationController implements NotificationController {
+  private resetTimeout: ReturnType<typeof setTimeout> | undefined;
   public constructor(
     private notificationService: NotificationService,
     private states: AbstractStates,
@@ -25,8 +26,12 @@ export class MLMachineNotificationController implements NotificationController {
 
   public setSnackbarMessage(message: string): void {
     this.notificationService.setPopupMessage(message);
-    setTimeout(() => {
-      this.notificationService.clearPopupMessage();
+    if (this.resetTimeout) {
+      clearTimeout(this.resetTimeout);
+    }
+    this.resetTimeout = setTimeout(() => {
+      this.clearSnackbarMessage();
+      this.resetTimeout = undefined;
     }, 5000);
   }
 }

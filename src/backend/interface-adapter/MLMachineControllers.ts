@@ -55,7 +55,10 @@ export class MLMachineControllers {
   }
 
   public getNotificationController(): NotificationController {
-    return new MLMachineNotificationController(this.mlMachine.getNotificationService());
+    return new MLMachineNotificationController(
+      this.mlMachine.getNotificationService(),
+      this.states,
+    );
   }
 
   public getClassifierController(): ClassifierController {

@@ -7,15 +7,26 @@
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { NotificationService } from '../domain/NotificationService';
 import type { NotificationController } from './abstract/NotificationsController';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class MLMachineNotificationController implements NotificationController {
-  public constructor(private notificationService: NotificationService) {}
+  public constructor(
+    private notificationService: NotificationService,
+    private states: AbstractStates,
+  ) {}
 
   public clearSnackbarMessage(): void {
-    this.notificationService.clearImmediateMessage();
+    this.notificationService.clearPopupMessage();
   }
 
   public getSnackbarMessage(): AbstractState<string | undefined> {
-    return this.notificationService.getImmediateFeedbackMessage();
+    return this.states.getPopupMessage();
+  }
+
+  public setSnackbarMessage(message: string): void {
+    this.notificationService.setPopupMessage(message);
+    setTimeout(() => {
+      this.notificationService.clearPopupMessage();
+    }, 5000);
   }
 }

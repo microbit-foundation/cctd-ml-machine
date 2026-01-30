@@ -113,6 +113,7 @@
   "content.model.makecode.heading": "MakeCode",
   "content.model.makecode.description": "Du kan skabe en hex fil på",
   "content.model.makecode.edit": "Rediger i MakeCode",
+  "makecode.flash.no_gesture_recognized_block": "Tilføj venligst et 'gesture recognized'-blok, før du downloader programmet til micro:bit",
   "content.validation.matrix.predicted": "Forudsagt",
   "content.validation.matrix.actual": "Faktisk",
   "content.validation.testButton.autoUpdate": "Automatisk opdatering",

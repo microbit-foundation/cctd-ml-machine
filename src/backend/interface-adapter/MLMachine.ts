@@ -47,6 +47,7 @@ import { StatesMicrobitConnectionRepository } from '../infrastructure/StatesMicr
 import { UserServiceImpl } from '../domain/implementation/UserServiceImpl';
 import { LocalStorageUserSessionRepository } from '../infrastructure/LocalStorageUserSessionRepository';
 import type { UserService } from '../domain/UserService';
+import { StatesNotificationRepository } from '../infrastructure/StatesNotificationRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -65,6 +66,7 @@ export class MLMachine {
   private states: AbstractStates;
   private microbitService: MicrobitService;
   private userService: UserService;
+  private notificationService: NotificationService;
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
@@ -119,6 +121,10 @@ export class MLMachine {
       this.states,
       this.microbitService,
     );
+
+    this.notificationService = new StateNotificationService(
+      new StatesNotificationRepository(this.states),
+    );
     // const devices = stores.getDevices();
     // const outputHandler = new OutputMicrobitHandler(devices);
     /* Microbits.setHandlers(
@@ -141,7 +147,7 @@ export class MLMachine {
   }
 
   public getNotificationService(): NotificationService {
-    return new StateNotificationService(this.immediateFeedback);
+    return this.notificationService;
   }
 
   public getClassifierService(): ClassifierService {

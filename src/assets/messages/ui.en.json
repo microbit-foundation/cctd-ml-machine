@@ -113,6 +113,7 @@
   "content.model.makecode.heading": "MakeCode",
   "content.model.makecode.description": "You can create a hex file on",
   "content.model.makecode.edit": "Edit in MakeCode",
+  "makecode.flash.no_gesture_recognized_block": "Please add a gesture recognized block before downloading micro:bit program",
   "content.validation.matrix.predicted": "Predicted",
   "content.validation.matrix.actual": "Actual",
   "content.validation.testButton.autoUpdate": "Auto-update",

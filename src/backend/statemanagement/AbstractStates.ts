@@ -16,4 +16,5 @@ export interface AbstractStates {
   getOutputTarget(): AbstractState<OutputTarget>;
   getLiveData(): AbstractState<LiveDataStore<LiveDataVector>>;
   getMicrobitConnection(): AbstractState<MicrobitConnection>;
+  getPopupMessage(): AbstractState<string | undefined>;
 }

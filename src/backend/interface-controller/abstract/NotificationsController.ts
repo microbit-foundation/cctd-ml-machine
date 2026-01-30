@@ -9,4 +9,5 @@ import type { AbstractState } from '../../statemanagement/AbstractState';
 export interface NotificationController {
   getSnackbarMessage(): AbstractState<string | undefined>;
   clearSnackbarMessage(): void;
+  setSnackbarMessage(message: string): void;
 }

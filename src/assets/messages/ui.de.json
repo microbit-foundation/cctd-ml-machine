@@ -113,6 +113,7 @@
   "content.model.makecode.heading": "MakeCode",
   "content.model.makecode.description": "Sie können eine Hex-Datei erstellen auf",
   "content.model.makecode.edit": "In MakeCode bearbeiten",
+  "makecode.flash.no_gesture_recognized_block": "Bitte fügen Sie einen 'gesture recognized'-Block hinzu, bevor Sie das micro:bit-Programm herunterladen",
   "content.validation.matrix.predicted": "Vorhergesagt",
   "content.validation.matrix.actual": "Tatsächlich",
   "content.validation.testButton.autoUpdate": "Automatische Aktualisierung",

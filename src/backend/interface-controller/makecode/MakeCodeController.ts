@@ -31,6 +31,15 @@ export class MakeCodeController {
     return currentMainBlocks.trim() !== defaultMainBlocks.trim();
   }
 
+  public hasProjectBluetoothEnabled(): boolean {
+    const makecodeProject = this.getMakeCodeProject().get();
+    const text = makecodeProject.text || {};
+    const blocks = text['main.blocks'] || '';
+
+    // Check if the Bluetooth block is present in the blocks XML
+    return blocks.includes('MLMachine_onGestureRecognized');
+  }
+
   public setMakeCodeProject(project: MakeCodeProject) {
     this.projectRepository.getMakeCodeProject().set(project);
   }

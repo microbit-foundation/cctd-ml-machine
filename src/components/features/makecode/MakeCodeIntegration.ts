@@ -9,9 +9,21 @@ import Microbits from '../../../lib/microbit-interfacing/Microbits';
 import FileUtility from '../../../lib/utils/FileUtility';
 import { navigate, Paths } from '../../../router/Router';
 import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+import { t } from '../../../i18n';
+import { get } from 'svelte/store';
 
 export const flashHexContent = async (hexContent: string) => {
   const microbitController = getControllers().getMicrobitController();
+  const makecodeController = getControllers().getMakeCodeController();
+  const notificationController = getControllers().getNotificationController();
+
+  if (!makecodeController.hasProjectBluetoothEnabled()) {
+    notificationController.setSnackbarMessage(
+      get(t)('makecode.flash.no_gesture_recognized_block'),
+    );
+    return;
+  }
+
   try {
     await Microbits.linkMicrobit();
     Microbits.flashHexToLinked(
@@ -43,7 +55,10 @@ export const createFrameDriver = (iframe: HTMLIFrameElement | undefined) => {
       initialProjects: async () => [makeCodeController.getMakeCodeProject().get()],
       // When the editor loads, hide the simulator to make more space
       onEditorContentLoaded: e => driverRef.hideSimulator(),
-      onWorkspaceSave: e => makeCodeController.setMakeCodeProject(e.project),
+      onWorkspaceSave: e => {
+        console.log(e.project);
+        makeCodeController.setMakeCodeProject(e.project);
+      },
       onDownload: ({ hex }) => flashHexContent(hex),
       onSave: ({ name, hex }) => downloadHexContent(hex, name),
     },

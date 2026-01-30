@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-export interface NotificationService {
-  setPopupMessage(message: string): void;
+export interface NotificationRepository {
+  setPopupMessage(message: string | undefined): void;
   getPopupMessage(): string | undefined;
-  clearPopupMessage(): void;
 }

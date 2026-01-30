@@ -25,6 +25,7 @@ export class SvelteStates implements AbstractStates {
   private liveDataState: AbstractState<LiveData<LiveDataVector>>;
   private microbitConnectionState: AbstractState<MicrobitConnection>;
   private makeCodeProjectState: AbstractState<MakeCodeProject | undefined>;
+  private popupMessageState: AbstractState<string | undefined>;
 
   public constructor() {
     this.liveDataState = new LiveDataStateAdapter(
@@ -43,6 +44,7 @@ export class SvelteStates implements AbstractStates {
         ),
       ),
     );
+    this.popupMessageState = new SvelteStateAdapter(writable(undefined));
     this.makeCodeProjectState = new SvelteStateAdapter(writable(undefined));
   }
   getMakeCodeProject(): AbstractState<MakeCodeProject | undefined> {
@@ -55,6 +57,10 @@ export class SvelteStates implements AbstractStates {
 
   getLiveData(): AbstractState<LiveData<LiveDataVector>> {
     return this.liveDataState;
+  }
+
+  getPopupMessage(): AbstractState<string | undefined> {
+    return this.popupMessageState;
   }
 
   public getOutputTarget(): AbstractState<OutputTarget> {

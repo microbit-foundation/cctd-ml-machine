@@ -31,7 +31,6 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
   constructor(
     private confidences: Confidences,
     private trainingDataRepository: TrainingDataRepository,
-    private snackbar: Snackbar,
     private filtersRepository: FiltersRepository,
   ) {
     LocalStorageClassifierRepository.mlModel = writable(undefined);
@@ -50,7 +49,6 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
       (gestureId: GestureID, confidence: number) => {
         this.setGestureConfidence(gestureId, confidence);
       },
-      this.snackbar,
     );
 
     return classifier;
@@ -62,7 +60,7 @@ class LocalStorageClassifierRepository implements ClassifierRepository {
    */
   private async trainModel<T extends MLModel>(trainer: ModelTrainer<T>): Promise<void> {
     const model = await trainer.trainModel(this.trainingDataRepository);
-    this.snackbar.sendMessage(get(t)('snackbar.modeltrained'));
+    // this.snackbar.sendMessage(get(t)('snackbar.modeltrained'));
     LocalStorageClassifierRepository.mlModel.set(model);
   }
 

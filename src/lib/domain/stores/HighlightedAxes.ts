@@ -17,10 +17,8 @@ import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistr
 import type { Axis } from '../../../core/entities/Axis';
 import PersistantWritable from '../../repository/PersistantWritable';
 import { t } from '../../../i18n';
-import type Snackbar from '../../stores/Snackbar';
 import { knnHasTrained } from '../../stores/KNNStores';
 import { trainKNNModel } from '../../../pages/training/TrainingPage';
-import type Devices from '../Devices';
 import ConsoleLogger from '../../../core/logging/ConsoleLogger';
 import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
@@ -33,8 +31,6 @@ class HighlightedAxes implements Writable<Axis[]> {
   public constructor(
     private classifier: Classifier,
     private selectedModel: SelectedModel,
-    private devices: Devices,
-    private snackbar: Snackbar,
   ) {
     this.value = new PersistantWritable([], 'highlightedAxes');
     const microbitController = getControllers().getMicrobitController();
@@ -99,7 +95,7 @@ class HighlightedAxes implements Writable<Axis[]> {
       get(this.selectedModel).id === ModelRegistry.NeuralNetwork.id &&
       this.classifier.getModel().isTrained()
     ) {
-      this.snackbar.sendMessage(get(t)('snackbar.axischanged.NNInvalid'));
+      //this.snackbar.sendMessage(get(t)('snackbar.axischanged.NNInvalid'));
     }
 
     this.classifier.getModel().markAsUntrained();

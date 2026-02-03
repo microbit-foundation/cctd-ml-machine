@@ -54,7 +54,6 @@ class Stores implements Readable<StoresType> {
   private highlightedAxis: HighlightedAxes;
   private selectedModel: SelectedModel;
   private availableAxes: AvailableAxes;
-  private snackbar: Snackbar;
   private neuralNetworkSettings: NeuralNetworkSettings;
   private knnModelSettings: KNNModelSettings;
   private validationSets: ValidationSets;
@@ -66,22 +65,16 @@ class Stores implements Readable<StoresType> {
   public constructor() {
     this.devices = new Devices();
     this.neuralNetworkSettings = new NeuralNetworkSettings();
-    this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
     this.recorder = new Recorder();
     this.engine = undefined;
-    const repositories: Repositories = new LocalStorageRepositories(this.snackbar);
+    const repositories: Repositories = new LocalStorageRepositories();
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
     this.selectedModel = new SelectedModel(this.classifier, knnHasTrained);
     this.knnModelSettings = new KNNModelSettings(this.selectedModel, this.classifier);
-    this.highlightedAxis = new HighlightedAxes(
-      this.classifier,
-      this.selectedModel,
-      this.devices,
-      this.snackbar,
-    );
+    this.highlightedAxis = new HighlightedAxes(this.classifier, this.selectedModel);
     this.availableAxes = new AvailableAxes(this.liveData, this.gestures);
     this.availableAxes.subscribe(newAxes => {
       this.highlightedAxis.set(newAxes);
@@ -159,10 +152,6 @@ class Stores implements Readable<StoresType> {
 
   public getAvailableAxes(): AvailableAxes {
     return this.availableAxes;
-  }
-
-  public getSnackbar(): Snackbar {
-    return this.snackbar;
   }
 
   public getNeuralNetworkSettings(): NeuralNetworkSettings {

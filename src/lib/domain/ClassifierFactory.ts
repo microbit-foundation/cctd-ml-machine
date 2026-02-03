@@ -10,9 +10,7 @@ import { type TrainingData } from '../../core/entities/classifier/models/ModelTr
 import { type TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
 import Model from './stores/Model';
 import type { MLModel } from '../../core/entities/classifier/models/MLModel';
-import { t } from '../../i18n';
 import type { RecordingData } from '../../core/entities/RecordingData';
-import type Snackbar from '../stores/Snackbar';
 import type GestureState from './stores/gesture/GestureState';
 import type { GestureID } from '../../core/entities/Gesture';
 import BaseVector from '../../core/vector/BaseVector';
@@ -24,7 +22,6 @@ class ClassifierFactory {
     filters: Filters,
     gestures: Readable<GestureState[]>,
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
-    snackbar: Snackbar, // Maybe an event could be fired instead of passing the snackbar around
   ): Classifier {
     const classifier = new Classifier(
       this.buildModel(trainerConsumer, model),
@@ -35,7 +32,7 @@ class ClassifierFactory {
     filters.subscribe(() => {
       // Filters has changed
       if (classifier.getModel().isTrained()) {
-        snackbar.sendMessage(get(t)('snackbar.filtersChanged.modelInvalid'));
+        //snackbar.sendMessage(get(t)('snackbar.filtersChanged.modelInvalid'));
       }
       classifier.getModel().markAsUntrained();
     });

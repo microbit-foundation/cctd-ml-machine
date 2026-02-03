@@ -5,39 +5,45 @@
  */
 
 import type { Axis } from '../../core/entities/Axis';
-import type { Gesture } from '../../core/entities/Gesture';
 import type { AxisRepository } from '../domain/AxisRepository';
 import type { GestureService } from '../domain/GestureService';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import type { Logger } from '../../core/logging/Logger';
 import type { NewGesture } from '../../core/entities/NewGesture';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
 
-export class InMemoryAxisRepository implements AxisRepository {
+// TODO: Rename to StatesAxisRepository
+export class StatesAxisRepository implements AxisRepository {
   private log: Logger;
-  private selectedAxes: Axis[] | undefined;
-  private availableAxes: Axis[] | undefined;
 
-  constructor(private gestureService: GestureService) {
-    this.selectedAxes = undefined;
+  constructor(
+    private gestureService: GestureService,
+    private states: AbstractStates,
+  ) {
     this.log = new ConsoleLogger('InMemoryAxisRepository');
+
+    if (!states.getAvailableAxes().get()) {
+      const availableAxes = this.getAvailableAxesFromRecordings();
+      this.log.log('Setting available axes in state from recordings', availableAxes);
+      states.getAvailableAxes().set(availableAxes);
+    }
+    if (!states.getSelectedAxes().get()) {
+      const selectedAxes = this.getAvailableAxesFromRecordings();
+      this.log.log('Setting selected axes in state from recordings', selectedAxes);
+      states.getSelectedAxes().set(selectedAxes);
+    }
   }
 
   setSelectedAxes(axes: Axis[]): void {
-    this.selectedAxes = axes;
+    this.states.getSelectedAxes().set(axes);
   }
 
   public getAvailableAxes(): Axis[] {
-    if (!this.availableAxes) {
-      this.availableAxes = this.getAvailableAxesFromRecordings();
-    }
-    return this.availableAxes;
+    return this.states.getAvailableAxes().get() || [];
   }
 
   public getSelectedAxes(): Axis[] {
-    if (!this.selectedAxes) {
-      this.selectedAxes = this.getAvailableAxesFromRecordings();
-    }
-    return this.selectedAxes;
+    return this.states.getSelectedAxes().get() || [];
   }
 
   private getAvailableAxesFromRecordings(): Axis[] {

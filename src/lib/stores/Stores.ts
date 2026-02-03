@@ -30,11 +30,8 @@ import KNNModelSettings from '../domain/stores/KNNModelSettings';
 import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
-import Snackbar from './Snackbar';
 import { knnHasTrained } from './KNNStores';
 import Devices from '../domain/Devices';
-import EnableFingerprint from '../domain/stores/EnableFingerprint';
-import StaticConfiguration from '../../StaticConfiguration';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 

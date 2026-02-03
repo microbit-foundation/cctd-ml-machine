@@ -16,7 +16,6 @@ import type { Logger } from '../../core/logging/Logger';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { GestureImpl } from '../domain/implementation/gesture/GestureImpl';
 import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
-import type { MBSpecs } from 'microbyte';
 import type { GestureOutput } from '../../core/entities/GestureOutput';
 import type { NewGesture } from '../../core/entities/NewGesture';
 

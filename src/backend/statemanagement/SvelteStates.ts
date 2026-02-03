@@ -19,6 +19,7 @@ import { MicrobitConnectionImpl } from '../domain/implementation/microbit/Microb
 import { MicrobitConnectionStateImpl } from '../domain/implementation/microbit/MicrobitConnectionStateImpl';
 import { MicrobitReconnectStateImpl } from '../domain/implementation/microbit/MicrobitReconnectStateImpl';
 import type { MakeCodeProject } from '@microbit/makecode-embed';
+import type { Axis } from '../../core/entities/Axis';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -27,6 +28,8 @@ export class SvelteStates implements AbstractStates {
   private makeCodeProjectState: AbstractState<MakeCodeProject | undefined>;
   private popupMessageState: AbstractState<string | undefined>;
   private enableFingerprintState: AbstractState<boolean>;
+  private availableAxesState: AbstractState<Axis[] | undefined>;
+  private selectedAxesState: AbstractState<Axis[] | undefined>;
 
   public constructor() {
     this.liveDataState = new LiveDataStateAdapter(
@@ -50,6 +53,16 @@ export class SvelteStates implements AbstractStates {
     this.enableFingerprintState = new SvelteStateAdapter(
       writable(StaticConfiguration.enableFingerprintByDefault),
     );
+    this.availableAxesState = new SvelteStateAdapter(writable(undefined));
+    this.selectedAxesState = new SvelteStateAdapter(writable(undefined));
+  }
+
+  getSelectedAxes(): AbstractState<Axis[] | undefined> {
+    return this.selectedAxesState;
+  }
+
+  getAvailableAxes(): AbstractState<Axis[] | undefined> {
+    return this.availableAxesState;
   }
   getEnableFingerprint(): AbstractState<boolean> {
     return this.enableFingerprintState;

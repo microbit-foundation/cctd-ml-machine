@@ -30,7 +30,7 @@ import { GestureServiceImpl } from '../domain/implementation/gesture/GestureServ
 import { LocalStorageGestureRepository } from '../infrastructure/LocalStorageGestureRepository';
 import { MLMachineColors } from './MLMachineColors';
 import type { DataService } from '../domain/DataService';
-import { InMemoryAxisRepository } from '../infrastructure/InMemoryAxisRepository';
+import { StatesAxisRepository } from '../infrastructure/StatesAxisRepository';
 import { InMemoryLiveDataRepository } from '../infrastructure/StatesLiveDataRepository';
 import { NotifierServiceImpl } from '../application/NotifierServiceImpl';
 import type { FeatureProvider } from '../application/feature/FeatureProvider';
@@ -100,9 +100,8 @@ export class MLMachine {
       new MLMachineColors(repository),
     );
     this.dataService = new DataServiceImpl(
-      new InMemoryAxisRepository(this.gestureService),
+      new StatesAxisRepository(this.gestureService, this.states),
       new InMemoryLiveDataRepository(this.states),
-      new NotifierServiceImpl(),
     );
 
     const outputService = new OutputServiceImpl(new StatesOutputRepository(this.states));

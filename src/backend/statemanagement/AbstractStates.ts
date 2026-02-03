@@ -10,8 +10,11 @@ import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { OutputTarget } from '../domain/implementation/output/OutputTarget';
 import type { MicrobitConnection } from '../domain/microbit/MicrobitConnection';
 import type { AbstractState } from './AbstractState';
+import type { Axis } from '../../core/entities/Axis';
 
 export interface AbstractStates {
+  getAvailableAxes(): AbstractState<Axis[] | undefined>;
+  getSelectedAxes(): AbstractState<Axis[] | undefined>;
   getEnableFingerprint(): AbstractState<boolean>;
   getMakeCodeProject(): AbstractState<MakeCodeProject | undefined>;
   getOutputTarget(): AbstractState<OutputTarget>;

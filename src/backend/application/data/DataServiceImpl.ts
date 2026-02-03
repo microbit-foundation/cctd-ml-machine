@@ -9,13 +9,11 @@ import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
 import type { AxisRepository } from '../../domain/AxisRepository';
 import type { DataService } from '../../domain/DataService';
 import type { LiveDataRepository } from '../../domain/LiveDataRepository';
-import type { NotifierService } from '../../domain/NotifierService';
 
 export class DataServiceImpl implements DataService {
   constructor(
     private axisRepository: AxisRepository,
     private liveDataRepository: LiveDataRepository,
-    private notifierService: NotifierService,
   ) {}
 
   addLiveData(input: LiveDataVector): void {

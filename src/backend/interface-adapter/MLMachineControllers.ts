@@ -46,7 +46,7 @@ export class MLMachineControllers {
       new GesturesStateAdapter(this.mlMachine.getGestureService()),
       this.mlMachine.getGestureService(),
     );
-    this.dataController = new DataController(dataService, states.getLiveData());
+    this.dataController = new DataController(dataService, states);
     this.notificationController = new MLMachineNotificationController(
       this.notificationService,
       states,

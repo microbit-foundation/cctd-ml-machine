@@ -26,6 +26,7 @@ export class SvelteStates implements AbstractStates {
   private microbitConnectionState: AbstractState<MicrobitConnection>;
   private makeCodeProjectState: AbstractState<MakeCodeProject | undefined>;
   private popupMessageState: AbstractState<string | undefined>;
+  private enableFingerprintState: AbstractState<boolean>;
 
   public constructor() {
     this.liveDataState = new LiveDataStateAdapter(
@@ -46,6 +47,12 @@ export class SvelteStates implements AbstractStates {
     );
     this.popupMessageState = new SvelteStateAdapter(writable(undefined));
     this.makeCodeProjectState = new SvelteStateAdapter(writable(undefined));
+    this.enableFingerprintState = new SvelteStateAdapter(
+      writable(StaticConfiguration.enableFingerprintByDefault),
+    );
+  }
+  getEnableFingerprint(): AbstractState<boolean> {
+    return this.enableFingerprintState;
   }
   getMakeCodeProject(): AbstractState<MakeCodeProject | undefined> {
     return this.makeCodeProjectState;

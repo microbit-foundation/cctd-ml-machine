@@ -16,13 +16,12 @@
   import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
-  import { stores } from '../../../lib/stores/Stores';
   import LiveDataFingerprint from './LiveDataFingerprint.svelte';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import Switch from '../../ui/Switch.svelte';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
-  const enableFingerprint = stores.getEnableFingerprint();
+  const enableFingerprint = getControllers().getDataController().isFingerprintEnabled();
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
 

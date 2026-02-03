@@ -35,12 +35,13 @@
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
+  const dataController = getControllers().getDataController();
+  const enableFingerprint = dataController.isFingerprintEnabled();
 
   const gestures = stores.getGestures();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = getFeature<number>(Feature.RECORDING_DURATION);
-  const enableFingerprint = stores.getEnableFingerprint();
   const highlightedAxes = stores.getHighlightedAxes();
 
   let isThisRecording = false;

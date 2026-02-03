@@ -60,7 +60,6 @@ class Stores implements Readable<StoresType> {
   private validationResults: ValidationResults;
   private recorder: Recorder;
   private devices: Devices;
-  private enableFingerprint: EnableFingerprint;
 
   public constructor() {
     this.devices = new Devices();
@@ -85,9 +84,6 @@ class Stores implements Readable<StoresType> {
       this.classifier,
       this.gestures,
       this.highlightedAxis,
-    );
-    this.enableFingerprint = new EnableFingerprint(
-      StaticConfiguration.enableFingerprintByDefault,
     );
   }
 
@@ -176,10 +172,6 @@ class Stores implements Readable<StoresType> {
 
   public getDevices(): Devices {
     return this.devices;
-  }
-
-  public getEnableFingerprint(): EnableFingerprint {
-    return this.enableFingerprint;
   }
 }
 

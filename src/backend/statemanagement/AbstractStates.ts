@@ -12,6 +12,7 @@ import type { MicrobitConnection } from '../domain/microbit/MicrobitConnection';
 import type { AbstractState } from './AbstractState';
 
 export interface AbstractStates {
+  getEnableFingerprint(): AbstractState<boolean>;
   getMakeCodeProject(): AbstractState<MakeCodeProject | undefined>;
   getOutputTarget(): AbstractState<OutputTarget>;
   getLiveData(): AbstractState<LiveDataStore<LiveDataVector>>;

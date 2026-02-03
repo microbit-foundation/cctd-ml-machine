@@ -8,18 +8,24 @@ import type { LiveDataStore } from '../../core/LiveDataStore';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { DataService } from '../domain/DataService';
 import type { AbstractReadonlyState } from '../statemanagement/AbstractReadonlyState';
+import type { AbstractState } from '../statemanagement/AbstractState';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class DataController {
   public constructor(
     private dataService: DataService,
-    private liveData: AbstractReadonlyState<LiveDataStore<LiveDataVector>>,
+    private states: AbstractStates,
   ) {}
 
   public addLiveData(input: LiveDataVector): void {
     this.dataService.addLiveData(input);
   }
 
-  public getLiveData() {
-    return this.liveData;
+  public getLiveData(): AbstractState<LiveDataStore<LiveDataVector>> {
+    return this.states.getLiveData();
+  }
+
+  public isFingerprintEnabled(): AbstractState<boolean> {
+    return this.states.getEnableFingerprint();
   }
 }

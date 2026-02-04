@@ -58,8 +58,3 @@ export const isValidationSetEmpty = derived(
     return validationSets.reduce((pre, cur) => pre + cur.recordings.length, 0) === 0;
   },
 );
-
-export const evaluateValidationSet = () => {
-  const validationResults = stores.getValidationResults();
-  const accuracy = validationResults.getAccuracy();
-};

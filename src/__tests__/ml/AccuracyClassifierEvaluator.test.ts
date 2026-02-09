@@ -11,11 +11,11 @@ import { describe, test, expect } from 'vitest';
 import type { DatasetLabels } from '../../core/dataset/DatasetLabels';
 import BaseVector from '../../core/vector/BaseVector';
 import type { Dataset } from '../../core/dataset/Dataset';
-import type { FeatureData } from '../../core/classifier/FeatureData';
+import type { FeatureData } from '../../core/dataset/FeatureData';
 import type { Vector } from '../../core/vector/Vector';
 import { VectorPredictionOutput } from '../../core/classifier/vector-classifier/VectorPredictionOutput';
 import { AccuracyClassifierEvaluator } from '../../core/classifier/evaluator/AccuracyClassifierEvaluator';
-import type { DataIndexLabel } from '../../core/dataset/VectorDatasetLabel';
+import type { DataIndexLabel } from '../../core/dataset/DataIndexLabel';
 
 class SimpleDatasetLabels implements DatasetLabels {
   private labelVectors: BaseVector[];

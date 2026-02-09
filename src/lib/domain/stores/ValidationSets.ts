@@ -13,14 +13,14 @@ import {
   type Unsubscriber,
   type Writable,
 } from 'svelte/store';
-import type { ValidationSet } from '../../../core/entities/ValidationSet';
+import type { ValidationSetGesture } from '../../../core/entities/validation/ValidationSetGesture';
 import type { RecordingData } from '../../../core/entities/RecordingData';
 import PersistantWritable from '../../repository/PersistantWritable';
 import type Gestures from './gesture/Gestures';
 import type { GestureID } from '../../../core/entities/Gesture';
 
-class ValidationSets implements Readable<ValidationSet[]> {
-  private validationSets: Writable<ValidationSet[]>;
+class ValidationSets implements Readable<ValidationSetGesture[]> {
+  private validationSets: Writable<ValidationSetGesture[]>;
 
   public constructor(private gestures: Gestures) {
     this.validationSets = new PersistantWritable([], 'validation_set');
@@ -47,7 +47,7 @@ class ValidationSets implements Readable<ValidationSet[]> {
           return {
             gestureId,
             recordings: [...set.recordings, recording],
-          } as ValidationSet;
+          } as ValidationSetGesture;
         }
         return set;
       });
@@ -56,7 +56,7 @@ class ValidationSets implements Readable<ValidationSet[]> {
     this.sortSetsAccordingToGestures();
   }
 
-  public getForGesture(gestureId: GestureID): Readable<ValidationSet> {
+  public getForGesture(gestureId: GestureID): Readable<ValidationSetGesture> {
     return derived(this.validationSets, sets => {
       const idx = sets.findIndex(e => e.gestureId === gestureId);
       if (idx === -1) {
@@ -82,7 +82,7 @@ class ValidationSets implements Readable<ValidationSet[]> {
     });
   }
 
-  public getValidationSets(): ValidationSet[] {
+  public getValidationSets(): ValidationSetGesture[] {
     return get(this);
   }
 
@@ -91,14 +91,14 @@ class ValidationSets implements Readable<ValidationSet[]> {
   }
 
   public subscribe(
-    run: Subscriber<ValidationSet[]>,
-    invalidate?: Invalidator<ValidationSet[]> | undefined,
+    run: Subscriber<ValidationSetGesture[]>,
+    invalidate?: Invalidator<ValidationSetGesture[]> | undefined,
   ): Unsubscriber {
     return derived([this.validationSets, this.gestures], stores => {
       const [sets, gestures] = stores;
       return gestures.map(gesture => {
         const recordingsIndex = sets.findIndex(set => set.gestureId === gesture.ID);
-        const resultSet: ValidationSet = {
+        const resultSet: ValidationSetGesture = {
           gestureId: gesture.ID,
           recordings: recordingsIndex !== -1 ? sets[recordingsIndex].recordings : [],
         };

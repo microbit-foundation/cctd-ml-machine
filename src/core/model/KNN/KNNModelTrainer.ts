@@ -9,7 +9,7 @@ import type { KNNModelSettings } from './KNNModelSettings';
 import type { ModelInfo } from '../ModelRegistry';
 import ModelRegistry from '../ModelRegistry';
 import type { ModelTrainer, ModelTrainerResult } from '../ModelTrainer';
-import type { FeatureData } from '../../classifier/FeatureData';
+import type { FeatureData } from '../../dataset/FeatureData';
 import { KNNMLModelTrainingResult } from './KNNMLModelTrainingResult';
 import type { LabelledPoint } from './LabelledPoint';
 

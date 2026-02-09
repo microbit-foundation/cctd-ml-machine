@@ -11,7 +11,7 @@ import type { ModelTraining } from '../../core/model/ModelTraining';
 
 export interface ClassifierService {
   getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings>;
-  getClassifier(): AbstractState<Classifier | undefined>;
+  getClassifier(): Classifier;
   getModelTraining(): AbstractState<ModelTraining>;
   unsetClassifier(): void;
 }

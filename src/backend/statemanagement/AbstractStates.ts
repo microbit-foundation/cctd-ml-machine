@@ -11,8 +11,10 @@ import type { OutputTarget } from '../domain/implementation/output/OutputTarget'
 import type { MicrobitConnection } from '../domain/microbit/MicrobitConnection';
 import type { AbstractState } from './AbstractState';
 import type { Axis } from '../../core/entities/Axis';
+import type { Filter } from '../../core/filter/Filter';
 
 export interface AbstractStates {
+  getFilters(): AbstractState<Filter[]>;
   getAvailableAxes(): AbstractState<Axis[] | undefined>;
   getSelectedAxes(): AbstractState<Axis[] | undefined>;
   getEnableFingerprint(): AbstractState<boolean>;

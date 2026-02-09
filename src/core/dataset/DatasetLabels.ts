@@ -5,7 +5,7 @@
  */
 
 import type { Vector } from '../vector/Vector';
-import type { DataIndexLabel } from './VectorDatasetLabel';
+import type { DataIndexLabel } from './DataIndexLabel';
 
 export interface DatasetLabels {
   /**

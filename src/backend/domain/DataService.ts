@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { Dataset } from '../../core/dataset/Dataset';
 import type { Axis } from '../../core/entities/Axis';
+import type { Filter } from '../../core/filter/Filter';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 
 export interface DataService {
@@ -15,4 +17,7 @@ export interface DataService {
   getSelectedAxes(): Axis[];
   getAxisFromIndex(index: number): Axis | undefined;
   isAxisSelected(axis: Axis): boolean;
+  getFilters(): Filter[];
+  getTrainingDataset(): Dataset;
+  getValidationDataset(): Dataset;
 }

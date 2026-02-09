@@ -6,6 +6,7 @@
 
 import type { Confidence } from './Confidence';
 import type { GestureOutput } from './GestureOutput';
+import type { Recording } from './recording/Recording';
 import type { RecordingData } from './RecordingData';
 
 export type GestureID = number;
@@ -17,6 +18,7 @@ export interface NewGesture {
   getName(): string;
   getID(): GestureID;
   getRecordings(): RecordingData[];
+  getValidationRecordings(): Recording[];
   getOutput(): GestureOutput;
   getColor(): string;
   getConfidence(): Confidence;

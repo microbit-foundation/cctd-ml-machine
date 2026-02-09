@@ -6,51 +6,12 @@
 
 import { derived } from 'svelte/store';
 import Matrix from '../../core/entities/Matrix';
-import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
-import type { ValidationResult } from '../../lib/domain/stores/ValidationResults';
 import { stores } from '../../lib/stores/Stores';
 
 export interface ValidationSetMatrix {
   matrix: Matrix<number>;
   accurateResults: number;
 }
-
-export const createValidationMatrixVisual = (
-  validationResult: ValidationResult,
-  gestures: GestureData[],
-): ValidationSetMatrix => {
-  const matrixRaw = createValidationMatrix(validationResult, gestures);
-
-  const accurateResults = gestures.reduce(
-    (pre, _, idx) => pre + matrixRaw.getValues()[idx][idx],
-    0,
-  );
-  return {
-    matrix: matrixRaw,
-    accurateResults: accurateResults,
-  };
-};
-
-export const createValidationMatrix = (
-  validationResults: {
-    prediction: number[];
-    gestureIdx: number;
-  }[][],
-  gestures: GestureData[],
-): Matrix<number> => {
-  const matrix = gestures.map((_, row) => {
-    const results = validationResults[row];
-    if (!results) {
-      return gestures.map(_ => 0);
-    }
-    return gestures.map((_, col) => {
-      return results.reduce((pre, cur) => {
-        return pre + (cur.gestureIdx === col ? 1 : 0);
-      }, 0);
-    });
-  });
-  return new Matrix(matrix);
-};
 
 export const isValidationSetEmpty = derived(
   stores.getValidationSets(),

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { FeatureData } from '../classifier/FeatureData';
+import type { FeatureData } from './FeatureData';
 import type { Vector } from '../vector/Vector';
 import type { DatasetLabels } from './DatasetLabels';
 import type { LabelledFeatureSet } from './LabelledFeatureSet';

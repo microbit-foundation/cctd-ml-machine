@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { FeatureData } from '../classifier/FeatureData';
+import type { FeatureData } from './FeatureData';
 import type { Vector } from '../vector/Vector';
 import type { Dataset } from './Dataset';
 import type { DatasetLabels } from './DatasetLabels';
@@ -13,7 +13,6 @@ export default class DatasetImpl implements Dataset {
   constructor(
     private readonly featureSet: FeatureData[],
     private readonly labels: DatasetLabels,
-    private readonly valid: boolean,
     private readonly numberOfClasses: number,
     private readonly featureSize: number,
     private readonly featureMean: Vector,

@@ -20,6 +20,7 @@ import { MicrobitConnectionStateImpl } from '../domain/implementation/microbit/M
 import { MicrobitReconnectStateImpl } from '../domain/implementation/microbit/MicrobitReconnectStateImpl';
 import type { MakeCodeProject } from '@microbit/makecode-embed';
 import type { Axis } from '../../core/entities/Axis';
+import type { Filter } from '../../core/filter/Filter';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -30,6 +31,7 @@ export class SvelteStates implements AbstractStates {
   private enableFingerprintState: AbstractState<boolean>;
   private availableAxesState: AbstractState<Axis[] | undefined>;
   private selectedAxesState: AbstractState<Axis[] | undefined>;
+  private filtersState: AbstractState<Filter[]>;
 
   public constructor() {
     this.liveDataState = new LiveDataStateAdapter(
@@ -55,6 +57,11 @@ export class SvelteStates implements AbstractStates {
     );
     this.availableAxesState = new SvelteStateAdapter(writable(undefined));
     this.selectedAxesState = new SvelteStateAdapter(writable(undefined));
+    this.filtersState = new SvelteStateAdapter(writable([]));
+  }
+
+  getFilters(): AbstractState<Filter[]> {
+    return this.filtersState;
   }
 
   getSelectedAxes(): AbstractState<Axis[] | undefined> {

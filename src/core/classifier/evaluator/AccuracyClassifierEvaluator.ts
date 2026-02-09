@@ -9,7 +9,7 @@ import type { Dataset } from '../../dataset/Dataset';
 import type { EvaluationResult } from '../EvaluationResult';
 import type { PredictionOutput } from '../PredictionOutput';
 import type { Vector } from '../../vector/Vector';
-import { DataIndexLabel } from '../../dataset/VectorDatasetLabel';
+import { DataIndexLabel } from '../../dataset/DataIndexLabel';
 
 export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
   public getEvaluation(

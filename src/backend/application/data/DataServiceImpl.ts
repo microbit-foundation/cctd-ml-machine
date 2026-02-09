@@ -4,17 +4,33 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { Dataset } from '../../../core/dataset/Dataset';
 import type { Axis } from '../../../core/entities/Axis';
+import type { Filter } from '../../../core/filter/Filter';
 import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
 import type { AxisRepository } from '../../domain/AxisRepository';
 import type { DataService } from '../../domain/DataService';
+import type { FilterRepository } from '../../domain/FilterRepository';
 import type { LiveDataRepository } from '../../domain/LiveDataRepository';
 
 export class DataServiceImpl implements DataService {
   constructor(
     private axisRepository: AxisRepository,
     private liveDataRepository: LiveDataRepository,
+    private filterRepository: FilterRepository,
   ) {}
+
+  getFilters(): Filter[] {
+    throw new Error('Method not implemented.');
+  }
+
+  getTrainingDataset(): Dataset {
+    throw new Error('Method not implemented.');
+  }
+
+  getValidationDataset(): Dataset {
+    throw new Error('Method not implemented.');
+  }
 
   addLiveData(input: LiveDataVector): void {
     this.liveDataRepository.addInput(input);

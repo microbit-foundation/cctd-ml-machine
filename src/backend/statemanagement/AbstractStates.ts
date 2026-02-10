@@ -12,8 +12,10 @@ import type { MicrobitConnection } from '../domain/microbit/MicrobitConnection';
 import type { AbstractState } from './AbstractState';
 import type { Axis } from '../../core/entities/Axis';
 import type { Filter } from '../../core/filter/Filter';
+import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
 
 export interface AbstractStates {
+  getValidationResult(): AbstractState<ValidationResult | undefined>;
   getFilters(): AbstractState<Filter[]>;
   getAvailableAxes(): AbstractState<Axis[] | undefined>;
   getSelectedAxes(): AbstractState<Axis[] | undefined>;
@@ -23,4 +25,5 @@ export interface AbstractStates {
   getLiveData(): AbstractState<LiveDataStore<LiveDataVector>>;
   getMicrobitConnection(): AbstractState<MicrobitConnection>;
   getPopupMessage(): AbstractState<string | undefined>;
+  getValidationAutoUpdate(): AbstractState<boolean>;
 }

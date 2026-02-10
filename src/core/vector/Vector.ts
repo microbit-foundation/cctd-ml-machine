@@ -10,6 +10,8 @@ export interface Vector {
 
   divide(vector: Vector): Vector;
 
+  divideByScalar(scalar: number): Vector;
+
   subtract(vector: Vector): Vector;
 
   add(vector: Vector): Vector;

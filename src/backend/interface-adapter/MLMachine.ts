@@ -48,6 +48,9 @@ import { UserServiceImpl } from '../domain/implementation/UserServiceImpl';
 import { LocalStorageUserSessionRepository } from '../infrastructure/LocalStorageUserSessionRepository';
 import type { UserService } from '../domain/UserService';
 import { StatesNotificationRepository } from '../infrastructure/StatesNotificationRepository';
+import { StatesFilterRepository } from '../infrastructure/StatesFilterRepository';
+import { ValidationServiceImpl } from '../domain/implementation/validation/ValidationServiceImpl';
+import { StatesValidationRepository } from '../infrastructure/StatesValidationRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -67,6 +70,7 @@ export class MLMachine {
   private microbitService: MicrobitService;
   private userService: UserService;
   private notificationService: NotificationService;
+  private classifierService: ClassifierService;
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
@@ -102,6 +106,7 @@ export class MLMachine {
     this.dataService = new DataServiceImpl(
       new StatesAxisRepository(this.gestureService, this.states),
       new InMemoryLiveDataRepository(this.states),
+      new StatesFilterRepository(this.states)
     );
 
     const outputService = new OutputServiceImpl(new StatesOutputRepository(this.states));
@@ -116,6 +121,19 @@ export class MLMachine {
     this.notificationService = new StateNotificationService(
       new StatesNotificationRepository(this.states),
     );
+
+    const initialNeuralNetworkSettings = new NeuralNetworkSettingsImpl(
+      new DefaultNeuralNetworkModelBaseSettings(),
+      new DefaultNeuralNetworkArchitecture(),
+      new LoggingNeuralNetworkTrainingObserver(
+        this.createLogger('LoggingNeuralNetworkTrainingObserver'),
+      ),
+    );
+    this.classifierService = new StateClassifierService(
+      new NeuralNetworkSettingsStateAdapter(initialNeuralNetworkSettings),
+      this.classifier,
+      this.modelTraining,
+    );
     this.controllers = new MLMachineControllers(
       this,
       this.dataService,
@@ -124,6 +142,7 @@ export class MLMachine {
       outputService,
       this.states,
       this.microbitService,
+      new ValidationServiceImpl(this.classifierService, new StatesValidationRepository(this.states), this.dataService),
     );
 
     // const devices = stores.getDevices();
@@ -152,18 +171,7 @@ export class MLMachine {
   }
 
   public getClassifierService(): ClassifierService {
-    const initialNeuralNetworkSettings = new NeuralNetworkSettingsImpl(
-      new DefaultNeuralNetworkModelBaseSettings(),
-      new DefaultNeuralNetworkArchitecture(),
-      new LoggingNeuralNetworkTrainingObserver(
-        this.createLogger('LoggingNeuralNetworkTrainingObserver'),
-      ),
-    );
-    return new StateClassifierService(
-      new NeuralNetworkSettingsStateAdapter(initialNeuralNetworkSettings),
-      this.classifier,
-      this.modelTraining,
-    );
+    return this.classifierService;
   }
 
   public getDataService() {

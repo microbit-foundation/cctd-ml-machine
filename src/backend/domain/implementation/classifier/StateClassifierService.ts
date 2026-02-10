@@ -20,15 +20,15 @@ export class StateClassifierService implements ClassifierService {
   ) {}
 
   public unsetClassifier(): void {
-    this.getClassifier().set(undefined);
+    this.classifier.set(undefined);
   }
 
   public getModelTraining(): AbstractState<ModelTraining> {
     return this.modelTraining;
   }
 
-  public getClassifier(): AbstractState<Classifier | undefined> {
-    return this.classifier;
+  public getClassifier(): Classifier {
+    return this.classifier.get()!;
   }
 
   public getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings> {

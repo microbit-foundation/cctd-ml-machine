@@ -35,7 +35,6 @@ export type ValidationResult = {
 class ValidationResults implements Readable<ValidationResult> {
   private store: Writable<ValidationResult>;
   private accuracy: Readable<number>;
-  private autoUpdate: Writable<boolean>;
 
   public constructor(
     private validationSets: ValidationSets,
@@ -44,7 +43,6 @@ class ValidationResults implements Readable<ValidationResult> {
     private highlightedAxes: HighlightedAxes,
   ) {
     this.store = writable([]);
-    this.autoUpdate = writable(false);
     this.accuracy = derived(this.getMatrix(), matrix => {
       return matrix.accurateResults / this.validationSets.count();
     });
@@ -55,35 +53,6 @@ class ValidationResults implements Readable<ValidationResult> {
     invalidate?: Invalidator<ValidationResult> | undefined,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
-  }
-
-  public async evaluateValidationSet() {
-    const filters = this.classifier.getFilters();
-    const setEvaluations = get(this.validationSets).map(async set => {
-      const recordingEvaluations = set.recordings.map(async rec => {
-        const samples = rec.samples.map(sample => new BaseVector(sample.vector));
-        const classifierInput = ClassifierInput.getInputForAxes(
-          samples,
-          get(this.highlightedAxes),
-        );
-        const inputVector = new BaseVector(classifierInput.getInput(filters));
-        const prediction = await this.classifier.getModel().predict(inputVector);
-        return {
-          recordingId: rec.ID,
-          prediction,
-        };
-      });
-
-      const predictions = await Promise.all(recordingEvaluations);
-
-      return predictions.map(pred => ({
-        gestureIdx: findLargestIndex(pred.prediction),
-        prediction: pred.prediction,
-        recordingId: pred.recordingId,
-      }));
-    });
-    const evaluations = await Promise.all(setEvaluations);
-    this.store.set(evaluations);
   }
 
   public getForGesture(
@@ -118,10 +87,6 @@ class ValidationResults implements Readable<ValidationResult> {
       return undefined;
     }
     return this.gestures.getGestures()[x.gestureIdx];
-  }
-
-  public getAutoUpdate(): Writable<boolean> {
-    return this.autoUpdate;
   }
 
   private createValidationMatrixVisual = (

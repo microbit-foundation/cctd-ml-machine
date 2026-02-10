@@ -5,19 +5,23 @@
  -->
 
 <script lang="ts">
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import Switch from '../../components/ui/Switch.svelte';
   import Tooltip from '../../components/ui/Tooltip.svelte';
   import { tr } from '../../i18n';
   import { stores } from '../../lib/stores/Stores';
 
+  const controllers = getControllers();
+  const validationController = controllers.getValidationController();
+
   const validationResults = stores.getValidationResults();
   const accuracy = validationResults.getAccuracy();
   const model = stores.getClassifier().getModel();
-  const autoUpdate = validationResults.getAutoUpdate();
+  const autoUpdate = validationController.shouldAutoUpdate();
 
-  const handleEvaluateValidationSets = () => {
-    validationResults.evaluateValidationSet();
+  const handleEvaluateValidationSets = async () => {
+    await validationController.evaluateValidationSet();
   };
 </script>
 

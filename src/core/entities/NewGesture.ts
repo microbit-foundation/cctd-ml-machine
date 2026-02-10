@@ -17,7 +17,7 @@ export interface NewGesture {
   setName(name: string): void;
   getName(): string;
   getID(): GestureID;
-  getRecordings(): RecordingData[];
+  getRecordings(): Recording[];
   getValidationRecordings(): Recording[];
   getOutput(): GestureOutput;
   getColor(): string;

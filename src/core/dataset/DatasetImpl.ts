@@ -8,24 +8,27 @@ import type { FeatureData } from './FeatureData';
 import type { Vector } from '../vector/Vector';
 import type { Dataset } from './Dataset';
 import type { DatasetLabels } from './DatasetLabels';
+import type { LabelledFeatureSet } from './LabelledFeatureSet';
 
 export default class DatasetImpl implements Dataset {
+  private numberOfClasses: number;
+
   constructor(
-    private readonly featureSet: FeatureData[],
-    private readonly labels: DatasetLabels,
-    private readonly numberOfClasses: number,
+    private readonly featureSet: LabelledFeatureSet,
     private readonly featureSize: number,
     private readonly featureMean: Vector,
     private readonly featureStdDev: Vector,
-  ) {}
+  ) {
+    this.numberOfClasses = featureSet.getLabels().getIndexLabels().length;
+  }
 
   public getFeatureSet(): FeatureData[] {
-    return this.featureSet;
+    return this.featureSet.getFeatureSet();
   }
 
   public getNormalizedFeatureSet(): FeatureData[] {
     const self = this;
-    return this.featureSet.map(fd => {
+    return this.featureSet.getFeatureSet().map(fd => {
       const raw = fd.getFeatures();
       return {
         getFeatures(): Vector {
@@ -36,17 +39,20 @@ export default class DatasetImpl implements Dataset {
   }
 
   public getLabels(): DatasetLabels {
-    return this.labels;
+    return this.featureSet.getLabels();
   }
 
   public isValid(): boolean {
-    return this.valid;
+    return true;
   }
 
   public getNumberOfClasses(): number {
     return this.numberOfClasses;
   }
 
+  /**
+   * The size of input features. I.e the number of filters times the number of axes
+   */
   public getFeatureSize(): number {
     return this.featureSize;
   }

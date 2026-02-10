@@ -27,6 +27,8 @@ import type { MicrobitService } from '../domain/microbit/MicrobitService';
 import { MicrobitController } from '../interface-controller/MicrobitController';
 import { StatesMakeCodeProjectRepository } from '../infrastructure/StatesMakeCodeProjectRepository';
 import type { NotificationService } from '../domain/NotificationService';
+import { ValidationController } from '../interface-controller/ValidationController';
+import type { ValidationService } from '../domain/ValidationService';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -41,6 +43,7 @@ export class MLMachineControllers {
     private outputService: OutputService,
     private states: AbstractStates,
     private microbitService: MicrobitService,
+    private validationService: ValidationService
   ) {
     this.gestureController = new GestureController(
       new GesturesStateAdapter(this.mlMachine.getGestureService()),
@@ -96,5 +99,9 @@ export class MLMachineControllers {
 
   public getMicrobitController() {
     return new MicrobitController(this.microbitService, this.states);
+  }
+
+  public getValidationController() {
+    return new ValidationController(this.validationService, this.states);
   }
 }

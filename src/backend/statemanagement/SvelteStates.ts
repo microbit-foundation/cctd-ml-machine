@@ -21,6 +21,7 @@ import { MicrobitReconnectStateImpl } from '../domain/implementation/microbit/Mi
 import type { MakeCodeProject } from '@microbit/makecode-embed';
 import type { Axis } from '../../core/entities/Axis';
 import type { Filter } from '../../core/filter/Filter';
+import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -29,9 +30,11 @@ export class SvelteStates implements AbstractStates {
   private makeCodeProjectState: AbstractState<MakeCodeProject | undefined>;
   private popupMessageState: AbstractState<string | undefined>;
   private enableFingerprintState: AbstractState<boolean>;
+  private validationAutoUpdateState: AbstractState<boolean>;
   private availableAxesState: AbstractState<Axis[] | undefined>;
   private selectedAxesState: AbstractState<Axis[] | undefined>;
   private filtersState: AbstractState<Filter[]>;
+  private validationResultState: AbstractState<ValidationResult | undefined>;
 
   public constructor() {
     this.liveDataState = new LiveDataStateAdapter(
@@ -55,9 +58,15 @@ export class SvelteStates implements AbstractStates {
     this.enableFingerprintState = new SvelteStateAdapter(
       writable(StaticConfiguration.enableFingerprintByDefault),
     );
+    this.validationAutoUpdateState = new SvelteStateAdapter(writable(true));
     this.availableAxesState = new SvelteStateAdapter(writable(undefined));
     this.selectedAxesState = new SvelteStateAdapter(writable(undefined));
     this.filtersState = new SvelteStateAdapter(writable([]));
+    this.validationResultState = new SvelteStateAdapter(writable(undefined));
+  }
+
+  getValidationResult(): AbstractState<ValidationResult | undefined> {
+    return this.validationResultState;
   }
 
   getFilters(): AbstractState<Filter[]> {
@@ -73,6 +82,9 @@ export class SvelteStates implements AbstractStates {
   }
   getEnableFingerprint(): AbstractState<boolean> {
     return this.enableFingerprintState;
+  }
+  getValidationAutoUpdate(): AbstractState<boolean> {
+    return this.validationAutoUpdateState;
   }
   getMakeCodeProject(): AbstractState<MakeCodeProject | undefined> {
     return this.makeCodeProjectState;

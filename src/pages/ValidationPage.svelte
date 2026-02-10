@@ -16,17 +16,20 @@
   import Drawer from '../components/ui/drawer/Drawer.svelte';
   import ValidationpageActionContentMinimized from './validation/ValidationpageActionContentMinimized.svelte';
   import { stores } from '../lib/stores/Stores';
+    import { getControllers } from '../backend/interface-adapter/MLMachine';
+  
+  const controllers = getControllers();
+  const validationController = controllers.getValidationController();
 
   const validationSets = stores.getValidationSets();
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
-  const validationResults = stores.getValidationResults();
-  const autoUpdate = validationResults.getAutoUpdate();
+  const autoUpdate = validationController.shouldAutoUpdate();
 
   $: {
     // TODO: This should be encapsulated in the validation results store
     if ($model.isTrained && $autoUpdate && $validationSets.length) {
-      validationResults.evaluateValidationSet();
+      validationController.evaluateValidationSet();
     }
   }
 

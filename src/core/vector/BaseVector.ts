@@ -17,6 +17,11 @@ class BaseVector implements Vector {
     return this.values;
   }
 
+  public divideByScalar(scalar: number): Vector {
+    const vn = this.values.map(val => val / scalar);
+    return new BaseVector(vn);
+  }
+
   public divide(vector: Vector): BaseVector {
     if (this.getSize() !== vector.getSize()) {
       throw new Error(

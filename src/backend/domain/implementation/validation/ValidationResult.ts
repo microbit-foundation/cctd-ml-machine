@@ -8,9 +8,7 @@ import type { EvaluationResult } from '../../../../core/classifier/EvaluationRes
 import type Matrix from '../../../../core/entities/Matrix';
 
 export class ValidationResult {
-  public constructor(
-    private evaluationResult: EvaluationResult
-  ) { }
+  public constructor(private evaluationResult: EvaluationResult) {}
 
   public getAccuracy(): number {
     return this.evaluationResult.getAccuracy();

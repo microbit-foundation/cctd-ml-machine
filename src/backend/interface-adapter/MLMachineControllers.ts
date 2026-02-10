@@ -43,7 +43,7 @@ export class MLMachineControllers {
     private outputService: OutputService,
     private states: AbstractStates,
     private microbitService: MicrobitService,
-    private validationService: ValidationService
+    private validationService: ValidationService,
   ) {
     this.gestureController = new GestureController(
       new GesturesStateAdapter(this.mlMachine.getGestureService()),

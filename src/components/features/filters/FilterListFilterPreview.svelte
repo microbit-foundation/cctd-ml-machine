@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-    import { FilterType } from '../../../core/filter/Filter';
+  import { FilterType } from '../../../core/filter/Filter';
   import { createFilter } from '../../../core/filter/FilterUtils';
   import D3Plot from '../../../pages/filter/D3Plot.svelte';
   import { highlightedFilter, anchorElement, showHighlighted } from './FilterList';

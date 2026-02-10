@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-    import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import Switch from '../../components/ui/Switch.svelte';
   import Tooltip from '../../components/ui/Tooltip.svelte';

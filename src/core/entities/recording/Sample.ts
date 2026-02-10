@@ -1,7 +1,7 @@
-import BaseVector from "../../vector/BaseVector";
+import BaseVector from '../../vector/BaseVector';
 
 export class Sample extends BaseVector {
-    constructor(vector: number[]) {
-        super(vector);
-    }
+  constructor(vector: number[]) {
+    super(vector);
+  }
 }

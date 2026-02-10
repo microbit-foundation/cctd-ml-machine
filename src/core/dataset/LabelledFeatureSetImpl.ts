@@ -4,13 +4,15 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { FeatureData } from "./FeatureData";
-import type { DatasetLabels } from "./DatasetLabels";
-import type { LabelledFeatureSet } from "./LabelledFeatureSet";
+import type { FeatureData } from './FeatureData';
+import type { DatasetLabels } from './DatasetLabels';
+import type { LabelledFeatureSet } from './LabelledFeatureSet';
 
 export class LabelledFeatureSetImpl implements LabelledFeatureSet {
-
-  public constructor(private featureSet: FeatureData[], private labels: DatasetLabels) { }
+  public constructor(
+    private featureSet: FeatureData[],
+    private labels: DatasetLabels,
+  ) {}
 
   getFeatureSet(): FeatureData[] {
     return this.featureSet;

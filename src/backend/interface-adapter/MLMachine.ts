@@ -106,7 +106,7 @@ export class MLMachine {
     this.dataService = new DataServiceImpl(
       new StatesAxisRepository(this.gestureService, this.states),
       new InMemoryLiveDataRepository(this.states),
-      new StatesFilterRepository(this.states)
+      new StatesFilterRepository(this.states),
     );
 
     const outputService = new OutputServiceImpl(new StatesOutputRepository(this.states));
@@ -142,7 +142,11 @@ export class MLMachine {
       outputService,
       this.states,
       this.microbitService,
-      new ValidationServiceImpl(this.classifierService, new StatesValidationRepository(this.states), this.dataService),
+      new ValidationServiceImpl(
+        this.classifierService,
+        new StatesValidationRepository(this.states),
+        this.dataService,
+      ),
     );
 
     // const devices = stores.getDevices();

@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { ValidationResult } from './implementation/validation/ValidationResult';
-
 export interface ValidationService {
   evaluateValidationSet(): Promise<void>;
 }

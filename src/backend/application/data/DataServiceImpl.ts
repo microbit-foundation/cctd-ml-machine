@@ -12,7 +12,6 @@ import type { FeatureData } from '../../../core/dataset/FeatureData';
 import { FeatureDataImpl } from '../../../core/dataset/FeatureDataImpl';
 import { LabelledFeatureSetImpl } from '../../../core/dataset/LabelledFeatureSetImpl';
 import type { Axis } from '../../../core/entities/Axis';
-import type { GestureID } from '../../../core/entities/Gesture';
 import type { Recording } from '../../../core/entities/recording/Recording';
 import type { Filter } from '../../../core/filter/Filter';
 import BaseVector from '../../../core/vector/BaseVector';
@@ -28,7 +27,7 @@ export class DataServiceImpl implements DataService {
     private axisRepository: AxisRepository,
     private liveDataRepository: LiveDataRepository,
     private filterRepository: FilterRepository,
-    private gestureService: GestureService,    
+    private gestureService: GestureService,
   ) {}
 
   getFilters(): Filter[] {
@@ -39,11 +38,14 @@ export class DataServiceImpl implements DataService {
     const gestures = this.gestureService.getGestures();
     const filters = this.filterRepository.getFilters();
 
-
     const featureData: FeatureData[] = gestures.flatMap(gesture => {
       const recordings = gesture.getRecordings();
       return recordings.map(recording => {
-        return this.createFeatureDataFromRecording(recording, filters, this.getSelectedAxes());
+        return this.createFeatureDataFromRecording(
+          recording,
+          filters,
+          this.getSelectedAxes(),
+        );
       });
     });
 
@@ -51,7 +53,7 @@ export class DataServiceImpl implements DataService {
     featureData.forEach(fd => {
       const features = fd.getFeatures();
       featureSum.add(features);
-    })
+    });
     const featureMean = featureSum.divideByScalar(featureData.length);
     const featureStdDeviation = new BaseVector(Array(filters.length).fill(0));
     featureData.forEach(fd => {
@@ -78,10 +80,8 @@ export class DataServiceImpl implements DataService {
       featureSize,
       featureMean,
       featureStdDeviation,
-    )
+    );
   }
-
-  
 
   getValidationDataset(): Dataset {
     throw new Error('Method not implemented.');
@@ -123,9 +123,15 @@ export class DataServiceImpl implements DataService {
     return this.axisRepository.getSelectedAxes();
   }
 
-  private createFeatureDataFromRecording(recording: Recording, filters: Filter[], axes: Axis[]): FeatureData {
+  private createFeatureDataFromRecording(
+    recording: Recording,
+    filters: Filter[],
+    axes: Axis[],
+  ): FeatureData {
     const samples = recording.getSamples();
-    const samplesByAxis = axes.map(axis => samples.map(sample => sample.getValue()[axis.index]));
+    const samplesByAxis = axes.map(axis =>
+      samples.map(sample => sample.getValue()[axis.index]),
+    );
     const features: number[] = [];
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];
@@ -136,8 +142,6 @@ export class DataServiceImpl implements DataService {
       }
     }
 
-    return new FeatureDataImpl(
-      new BaseVector(features)
-    )
+    return new FeatureDataImpl(new BaseVector(features));
   }
 }

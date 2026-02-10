@@ -4,23 +4,25 @@
  * SPDX-License-Identifier: MIT
  */
 
-
-import type { ClassifierService } from "../../ClassifierService";
-import type { DataService } from "../../DataService";
-import type { ValidationRepository } from "../../ValidationRepository";
-import type { ValidationService } from "../../ValidationService";
-import { ValidationResult } from "./ValidationResult";
+import type { ClassifierService } from '../../ClassifierService';
+import type { DataService } from '../../DataService';
+import type { ValidationRepository } from '../../ValidationRepository';
+import type { ValidationService } from '../../ValidationService';
+import { ValidationResult } from './ValidationResult';
 
 export class ValidationServiceImpl implements ValidationService {
+  public constructor(
+    private classifierService: ClassifierService,
+    private validationRepository: ValidationRepository,
+    private dataService: DataService,
+  ) {}
 
-    public constructor(private classifierService: ClassifierService, private validationRepository: ValidationRepository, private dataService: DataService) { }
+  public async evaluateValidationSet(): Promise<void> {
+    const validationSet = this.dataService.getValidationDataset();
+    const classifier = this.classifierService.getClassifier();
+    const evaluation = await classifier.evaluate(validationSet);
 
-    public async evaluateValidationSet(): Promise<void> {
-        const validationSet = this.dataService.getValidationDataset();
-        const classifier = this.classifierService.getClassifier();
-        const evaluation = await classifier.evaluate(validationSet)
-
-        const validationResult = new ValidationResult(evaluation);
-        this.validationRepository.saveValidationResult(validationResult);
-    }
+    const validationResult = new ValidationResult(evaluation);
+    this.validationRepository.saveValidationResult(validationResult);
+  }
 }

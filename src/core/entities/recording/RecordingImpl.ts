@@ -1,4 +1,3 @@
-import type { Recording } from "./Recording";
+import type { Recording } from './Recording';
 
-export class RecordingImpl implements Recording {
-}
+export class RecordingImpl implements Recording {}

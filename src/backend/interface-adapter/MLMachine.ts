@@ -107,6 +107,7 @@ export class MLMachine {
       new StatesAxisRepository(this.gestureService, this.states),
       new InMemoryLiveDataRepository(this.states),
       new StatesFilterRepository(this.states),
+      this.gestureService,
     );
 
     const outputService = new OutputServiceImpl(new StatesOutputRepository(this.states));

@@ -7,13 +7,12 @@
 import type { Confidence } from './Confidence';
 import type { GestureOutput } from './GestureOutput';
 import type { Recording } from './recording/Recording';
-import type { RecordingData } from './RecordingData';
 
 export type GestureID = number;
 
 export interface NewGesture {
   setOutput(ouput: GestureOutput): void;
-  setRecordings(recordings: RecordingData[]): void;
+  setRecordings(recordings: Recording[]): void;
   setName(name: string): void;
   getName(): string;
   getID(): GestureID;

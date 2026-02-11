@@ -6,7 +6,7 @@
 
 import type { GestureID } from '../../../../core/entities/Gesture';
 import type { NewGesture } from '../../../../core/entities/NewGesture';
-import type { RecordingData } from '../../../../core/entities/RecordingData';
+import type { Recording } from '../../../../core/entities/recording/Recording';
 import type { GestureRepository } from '../../GestureRepository';
 import type { GestureService } from '../../GestureService';
 import type { SystemColors } from '../SystemColors';
@@ -24,7 +24,14 @@ export class GestureServiceImpl implements GestureService {
 
   public createGesture(name: string): NewGesture {
     const id = this.gestureRepository.generateGestureId();
-    const gesture = new GestureImpl(id, name, [], {}, this.colors.generateGestureColor());
+    const gesture = new GestureImpl(
+      id,
+      name,
+      [],
+      [],
+      {},
+      this.colors.generateGestureColor(),
+    );
     this.gestureRepository.saveGesture(gesture);
     return gesture;
   }
@@ -32,12 +39,12 @@ export class GestureServiceImpl implements GestureService {
   public deleteRecording(gestureId: GestureID, recordingId: number): void {
     const gesture = this.getOrThrowGesture(gestureId);
     gesture.setRecordings(
-      [...gesture.getRecordings()].filter(rec => rec.ID !== recordingId),
+      [...gesture.getRecordings()].filter(rec => rec.getId() !== recordingId),
     );
     this.gestureRepository.saveGesture(gesture);
   }
 
-  public addRecording(gestureId: number, recording: RecordingData): void {
+  public addRecording(gestureId: number, recording: Recording): void {
     const gesture = this.getOrThrowGesture(gestureId);
     gesture.setRecordings([...gesture.getRecordings(), recording]);
   }

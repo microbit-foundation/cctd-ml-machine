@@ -5,17 +5,9 @@
  */
 
 import type { Dataset } from '../../../core/dataset/Dataset';
-import DatasetImpl from '../../../core/dataset/DatasetImpl';
-import type { DatasetLabels } from '../../../core/dataset/DatasetLabels';
-import { DatasetLabelsImpl } from '../../../core/dataset/DatasetLabelsImpl';
-import type { FeatureData } from '../../../core/dataset/FeatureData';
-import { FeatureDataImpl } from '../../../core/dataset/FeatureDataImpl';
-import { LabelledFeatureSetImpl } from '../../../core/dataset/LabelledFeatureSetImpl';
 import type { Axis } from '../../../core/entities/Axis';
 import type { NewGesture } from '../../../core/entities/NewGesture';
-import type { Recording } from '../../../core/entities/recording/Recording';
 import type { Filter } from '../../../core/filter/Filter';
-import BaseVector from '../../../core/vector/BaseVector';
 import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
 import type { AxisRepository } from '../../domain/AxisRepository';
 import type { DataService } from '../../domain/DataService';
@@ -25,19 +17,23 @@ import type { LiveDataRepository } from '../../domain/LiveDataRepository';
 import { GestureDatasetFactory } from './GestureDatasetFactory';
 
 export class DataServiceImpl implements DataService {
+  private readonly gestureDatasetFactory: GestureDatasetFactory;
+
   constructor(
     private axisRepository: AxisRepository,
     private liveDataRepository: LiveDataRepository,
     private filterRepository: FilterRepository,
     private gestureService: GestureService,
-  ) {}
+  ) {
+    this.gestureDatasetFactory = new GestureDatasetFactory(this.gestureService);
+  }
 
   getFilters(): Filter[] {
     return this.filterRepository.getFilters();
   }
 
   getTrainingDataset(): Dataset {
-    return new GestureDatasetFactory(this.gestureService).buildDataset(
+    return this.gestureDatasetFactory.buildDataset(
       (gesture: NewGesture) => gesture.getRecordings(),
       this.getSelectedAxes(),
       this.getFilters(),
@@ -45,7 +41,7 @@ export class DataServiceImpl implements DataService {
   }
 
   getValidationDataset(): Dataset {
-    return new GestureDatasetFactory(this.gestureService).buildDataset(
+    return this.gestureDatasetFactory.buildDataset(
       (gesture: NewGesture) => gesture.getValidationRecordings(),
       this.getSelectedAxes(),
       this.getFilters(),

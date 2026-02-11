@@ -12,6 +12,7 @@ import type { FeatureData } from '../../../core/dataset/FeatureData';
 import { FeatureDataImpl } from '../../../core/dataset/FeatureDataImpl';
 import { LabelledFeatureSetImpl } from '../../../core/dataset/LabelledFeatureSetImpl';
 import type { Axis } from '../../../core/entities/Axis';
+import type { NewGesture } from '../../../core/entities/NewGesture';
 import type { Recording } from '../../../core/entities/recording/Recording';
 import type { Filter } from '../../../core/filter/Filter';
 import BaseVector from '../../../core/vector/BaseVector';
@@ -21,6 +22,7 @@ import type { DataService } from '../../domain/DataService';
 import type { FilterRepository } from '../../domain/FilterRepository';
 import type { GestureService } from '../../domain/GestureService';
 import type { LiveDataRepository } from '../../domain/LiveDataRepository';
+import { GestureDatasetFactory } from './GestureDatasetFactory';
 
 export class DataServiceImpl implements DataService {
   constructor(
@@ -35,56 +37,19 @@ export class DataServiceImpl implements DataService {
   }
 
   getTrainingDataset(): Dataset {
-    const gestures = this.gestureService.getGestures();
-    const filters = this.filterRepository.getFilters();
-
-    const featureData: FeatureData[] = gestures.flatMap(gesture => {
-      const recordings = gesture.getRecordings();
-      return recordings.map(recording => {
-        return this.createFeatureDataFromRecording(
-          recording,
-          filters,
-          this.getSelectedAxes(),
-        );
-      });
-    });
-
-    const featureSum = new BaseVector(Array(filters.length).fill(0));
-    featureData.forEach(fd => {
-      const features = fd.getFeatures();
-      featureSum.add(features);
-    });
-    const featureMean = featureSum.divideByScalar(featureData.length);
-    const featureStdDeviation = new BaseVector(Array(filters.length).fill(0));
-    featureData.forEach(fd => {
-      const features = fd.getFeatures();
-      const diff = features.subtract(featureMean);
-      const squaredDiff = new BaseVector(diff.getValue().map(val => val * val));
-      featureStdDeviation.add(squaredDiff);
-    });
-    featureStdDeviation.divideByScalar(featureData.length);
-    const featureSize = featureData[0].getFeatures().getSize();
-
-    const labelVectors: BaseVector[] = gestures.flatMap((gesture, idx) => {
-      const recordings = gesture.getRecordings();
-      const vector = Array(recordings.length).fill(0);
-      vector[idx] = 1;
-      return recordings.map(() => new BaseVector(vector));
-    });
-    const datasetLabels: DatasetLabels = new DatasetLabelsImpl(labelVectors);
-
-    const labelledFeatureSet = new LabelledFeatureSetImpl(featureData, datasetLabels);
-
-    return new DatasetImpl(
-      labelledFeatureSet,
-      featureSize,
-      featureMean,
-      featureStdDeviation,
+    return new GestureDatasetFactory(this.gestureService).buildDataset(
+      (gesture: NewGesture) => gesture.getRecordings(),
+      this.getSelectedAxes(),
+      this.getFilters(),
     );
   }
 
   getValidationDataset(): Dataset {
-    throw new Error('Method not implemented.');
+    return new GestureDatasetFactory(this.gestureService).buildDataset(
+      (gesture: NewGesture) => gesture.getValidationRecordings(),
+      this.getSelectedAxes(),
+      this.getFilters(),
+    );
   }
 
   addLiveData(input: LiveDataVector): void {
@@ -121,27 +86,5 @@ export class DataServiceImpl implements DataService {
 
   public getSelectedAxes(): Axis[] {
     return this.axisRepository.getSelectedAxes();
-  }
-
-  private createFeatureDataFromRecording(
-    recording: Recording,
-    filters: Filter[],
-    axes: Axis[],
-  ): FeatureData {
-    const samples = recording.getSamples();
-    const samplesByAxis = axes.map(axis =>
-      samples.map(sample => sample.getValue()[axis.index]),
-    );
-    const features: number[] = [];
-    for (let i = 0; i < filters.length; i++) {
-      const filter = filters[i];
-      for (let j = 0; j < samplesByAxis.length; j++) {
-        const axisSamples = samplesByAxis[j];
-        const filteredValue = filter.filter(axisSamples);
-        features.push(filteredValue);
-      }
-    }
-
-    return new FeatureDataImpl(new BaseVector(features));
   }
 }

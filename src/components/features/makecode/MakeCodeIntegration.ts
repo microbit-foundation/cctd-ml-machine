@@ -30,10 +30,11 @@ export const flashHexContent = async (hexContent: string) => {
 
   try {
     await Microbits.linkMicrobit();
-    Microbits.flashHexToLinked(
+    await Microbits.flashHexToLinked(
       progress => microbitController.setFlashingProgress(progress),
       hexContent,
     );
+    navigate(Paths.MODEL);
   } catch (error) {
     console.log(error);
   }

@@ -18,8 +18,19 @@ import { GestureImpl } from '../domain/implementation/gesture/GestureImpl';
 import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
 import type { GestureOutput } from '../../core/entities/GestureOutput';
 import type { NewGesture } from '../../core/entities/NewGesture';
+import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
+import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 
 export class GestureController {
+
+  getDownloadableGesturesAsJson(): string {
+    const gestures = this.gestureService.getGestures();
+    const serializer = new GestureSerializer();
+    const serializedData: SerializedGesture[] = gestures.map(gesture => serializer.serialize(gesture));
+    return JSON.stringify(serializedData);
+
+  }
+
   setRequiredConfidence(gestureId: GestureID, requiredConfidence: number) {
     const gesture = this.gestureService.getGesture(gestureId);
     if (!gesture) {

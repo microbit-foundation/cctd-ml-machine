@@ -8,14 +8,17 @@ import type { Gesture, GestureID } from '../../core/entities/Gesture';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { Logger } from '../../core/logging/Logger';
 import ControlledStorage from '../../lib/ControlledStorage';
-import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
 import type { GestureRepository } from '../domain/GestureRepository';
-import { GestureImpl } from '../domain/implementation/gesture/GestureImpl';
+import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
+import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
 
 export class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
+  private serializer;
 
-  public constructor(private log: Logger) {}
+  public constructor(private log: Logger) {
+    this.serializer = new GestureSerializer();
+  }
 
   public generateGestureId(): GestureID {
     let proposed = new Date().getTime();
@@ -40,16 +43,7 @@ export class LocalStorageGestureRepository implements GestureRepository {
 
   public getGestures(): NewGesture[] {
     const persisted = this.getPersistedData();
-    return persisted.map(
-      persist =>
-        new GestureImpl(
-          persist.ID,
-          persist.name,
-          persist.recordings,
-          persist.output,
-          persist.color,
-        ),
-    );
+    return persisted.map(gest => this.serializer.deserialize(gest));
   }
 
   public getGesture(gestureId: GestureID): NewGesture | undefined {
@@ -66,14 +60,8 @@ export class LocalStorageGestureRepository implements GestureRepository {
   }
 
   public saveGestures(value: NewGesture[]): NewGesture[] {
-    const persistedData: PersistedGestureData[] = value.map(gest => ({
-      ID: gest.getID(),
-      color: gest.getColor(),
-      name: gest.getName(),
-      output: gest.getOutput(),
-      recordings: gest.getRecordings(),
-    }));
-    ControlledStorage.set(this.LOCAL_STORAGE_KEY, persistedData);
+    const serialized = value.map(gest => this.serializer.serialize(gest));
+    ControlledStorage.set(this.LOCAL_STORAGE_KEY, serialized);
     return value;
   }
 
@@ -85,11 +73,11 @@ export class LocalStorageGestureRepository implements GestureRepository {
     this.saveGestures([...this.getGestures().filter(gest => gest.getID() !== gestureId)]);
   }
 
-  private getPersistedData(): PersistedGestureData[] {
+  private getPersistedData(): SerializedGesture[] {
     if (!ControlledStorage.hasValid(this.LOCAL_STORAGE_KEY)) {
       return [];
     }
-    const storedData = ControlledStorage.get<PersistedGestureData[]>(
+    const storedData = ControlledStorage.get<SerializedGesture[]>(
       this.LOCAL_STORAGE_KEY,
     );
     return storedData;

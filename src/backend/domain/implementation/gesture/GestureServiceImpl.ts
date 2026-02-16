@@ -37,7 +37,7 @@ export class GestureServiceImpl implements GestureService {
   }
 
   public deleteRecording(gestureId: GestureID, recordingId: number): void {
-    const gesture = this.getOrThrowGesture(gestureId);
+    const gesture = this.getGestureOrThrow(gestureId);
     gesture.setRecordings(
       [...gesture.getRecordings()].filter(rec => rec.getId() !== recordingId),
     );
@@ -45,7 +45,7 @@ export class GestureServiceImpl implements GestureService {
   }
 
   public addRecording(gestureId: number, recording: Recording): void {
-    const gesture = this.getOrThrowGesture(gestureId);
+    const gesture = this.getGestureOrThrow(gestureId);
     gesture.setRecordings([...gesture.getRecordings(), recording]);
   }
 
@@ -54,7 +54,7 @@ export class GestureServiceImpl implements GestureService {
   }
 
   public setGestureName(gestureId: GestureID, name: string): void {
-    const gesture = this.getOrThrowGesture(gestureId);
+    const gesture = this.getGestureOrThrow(gestureId);
     gesture.setName(name);
     this.gestureRepository.saveGesture(gesture);
   }
@@ -71,7 +71,7 @@ export class GestureServiceImpl implements GestureService {
     return this.gestureRepository.getGestures();
   }
 
-  private getOrThrowGesture(gestureId: GestureID): NewGesture {
+  private getGestureOrThrow(gestureId: GestureID): NewGesture {
     const gesture = this.getGesture(gestureId);
     if (!gesture) {
       throw new Error(`Couldn't find gesture with id ${gestureId}`);

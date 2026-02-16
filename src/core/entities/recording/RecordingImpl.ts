@@ -1,16 +1,17 @@
-import type { RecordingData } from '../RecordingData';
+import type { Axis } from '../Axis';
 import type { Recording } from './Recording';
 import { Sample } from './Sample';
 
 export class RecordingImpl implements Recording {
-  constructor(private recordingData: RecordingData) {}
+  constructor(private id: number, private samples: Sample[], private axes: Axis[]) { }
 
   getId(): number {
-    return this.recordingData.ID;
+    return this.id;
   }
   getSamples(): Sample[] {
-    return this.recordingData.samples.map(sample => {
-      return new Sample(sample.vector);
-    });
+    return this.samples;
+  }
+  getAxes(): Axis[] {
+    return this.axes;
   }
 }

@@ -1,10 +1,10 @@
-import type { NewGesture } from "../../entities/NewGesture";
-import type { Recording } from "../../entities/recording/Recording";
-import { RecordingImpl } from "../../entities/recording/RecordingImpl";
-import { Sample } from "../../entities/recording/Sample";
-import { GestureImpl } from "../../../backend/domain/implementation/gesture/GestureImpl";
-import type { SerializedGesture } from "./SerializedGesture";
-import type { SerializedRecording } from "./SerializedRecording";
+import type { NewGesture } from '../../entities/NewGesture';
+import type { Recording } from '../../entities/recording/Recording';
+import { RecordingImpl } from '../../entities/recording/RecordingImpl';
+import { Sample } from '../../entities/recording/Sample';
+import { GestureImpl } from '../../../backend/domain/implementation/gesture/GestureImpl';
+import type { SerializedGesture } from './SerializedGesture';
+import type { SerializedRecording } from './SerializedRecording';
 
 export class GestureSerializer {
   public serialize(gesture: NewGesture): SerializedGesture {
@@ -14,7 +14,9 @@ export class GestureSerializer {
       output: gesture.getOutput(),
       color: gesture.getColor(),
       recordings: this.mapRecordingsToSerialized(gesture.getRecordings()),
-      validationRecordings: this.mapRecordingsToSerialized(gesture.getValidationRecordings()),
+      validationRecordings: this.mapRecordingsToSerialized(
+        gesture.getValidationRecordings(),
+      ),
     };
   }
 
@@ -31,23 +33,26 @@ export class GestureSerializer {
       return new RecordingImpl(
         rec.ID,
         rec.samples.map(sample => new Sample(sample.vector)),
-        rec.axes
+        rec.axes,
       );
     });
   }
 
   public deserialize(serializedGesture: SerializedGesture): NewGesture {
-
-    const recordings: Recording[] = this.mapSerializedRecordings(serializedGesture.recordings)
-    const validationRecordings: Recording[] = this.mapSerializedRecordings(serializedGesture.validationRecordings)
+    const recordings: Recording[] = this.mapSerializedRecordings(
+      serializedGesture.recordings,
+    );
+    const validationRecordings: Recording[] = this.mapSerializedRecordings(
+      serializedGesture.validationRecordings,
+    );
 
     return new GestureImpl(
-        serializedGesture.ID,
-        serializedGesture.name,
-        recordings,
-        validationRecordings,
-        serializedGesture.output,
-        serializedGesture.color,
-    )
+      serializedGesture.ID,
+      serializedGesture.name,
+      recordings,
+      validationRecordings,
+      serializedGesture.output,
+      serializedGesture.color,
+    );
   }
 }

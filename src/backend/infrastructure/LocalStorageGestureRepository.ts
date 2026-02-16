@@ -77,9 +77,7 @@ export class LocalStorageGestureRepository implements GestureRepository {
     if (!ControlledStorage.hasValid(this.LOCAL_STORAGE_KEY)) {
       return [];
     }
-    const storedData = ControlledStorage.get<SerializedGesture[]>(
-      this.LOCAL_STORAGE_KEY,
-    );
+    const storedData = ControlledStorage.get<SerializedGesture[]>(this.LOCAL_STORAGE_KEY);
     return storedData;
   }
 }

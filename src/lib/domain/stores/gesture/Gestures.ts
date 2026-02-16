@@ -21,7 +21,7 @@ import type { GestureOutput } from '../../../../core/entities/GestureOutput';
 import type { GestureID } from '../../../../core/entities/Gesture';
 
 /**
- * @deprecated Legacy type. Use SerializedGesture instead. 
+ * @deprecated Legacy type. Use SerializedGesture instead.
  */
 export type PersistedGestureData = {
   name: string;

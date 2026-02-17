@@ -9,6 +9,14 @@ import exampleDataset from '../../assets/exampleDataset.json';
 import { t } from '../../i18n';
 import { derived, get } from 'svelte/store';
 import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
+import FileUtility from '../../lib/utils/FileUtility';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
+
+export const downloadDataset = () => {
+  const gestureController = getControllers().getGestureController();
+  const gesturesJson = gestureController.getDownloadableGesturesAsJson();
+  FileUtility.downloadFile(gesturesJson, 'dataset.json');
+};
 
 export const importExampleDataset = () => {
   const gestures = stores.getGestures();

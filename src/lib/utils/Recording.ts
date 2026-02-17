@@ -12,11 +12,12 @@ import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { alertUser } from '../stores/uiStore';
 import { t } from '../../i18n';
 import { Feature, getFeature } from '../FeatureToggles';
+import type { Recording } from '../../core/entities/recording/Recording';
 
 /**
  * @deprecated Will be removed in the future. Use store.getRecorder().startRecording(...) instead.
  */
-export const startRecording = (onFinished: (recording: RecordingData) => void) => {
+export const startRecording = (onFinished: (recording: Recording) => void) => {
   if (get(stores.getDevices()).isRecording) {
     ConsoleLogger.warn('Recording', 'Failed to start recording, already recording');
     return;

@@ -7,12 +7,12 @@
 import StaticConfiguration from '../../StaticConfiguration';
 import { getRecordingChartDatasets } from '../ChartDataset';
 import type { Axis } from '../../core/entities/Axis';
-import type { RecordingData } from '../../core/entities/RecordingData';
+import type { Recording } from '../../core/entities/recording/Recording';
 
 // Print recordings in a hidden iframe: 4 recordings per A4 landscape page.
 export function printRecordings(
   gestureName: string,
-  recordings: RecordingData[],
+  recordings: Recording[],
   highlightedAxes: Axis[],
 ) {
   if (!recordings || recordings.length === 0) return;
@@ -31,11 +31,11 @@ export function printRecordings(
       : null;
 
   function svgForRecording(
-    recording: RecordingData,
+    recording: Recording,
     globalMinY?: number,
     globalMaxY?: number,
   ) {
-    const datasetsAll = getRecordingChartDatasets(recording.samples);
+    const datasetsAll = getRecordingChartDatasets(recording.getSamples());
     const indices =
       selectedAxisIndices && selectedAxisIndices.length > 0
         ? selectedAxisIndices.filter(i => i >= 0 && i < datasetsAll.length)
@@ -99,8 +99,8 @@ export function printRecordings(
         const color = colors[originalAxisIndex % colors.length];
         // Prefer label from highlightedAxes if provided, else use recording.labels
         let label =
-          recording.labels && recording.labels[originalAxisIndex]
-            ? recording.labels[originalAxisIndex]
+          recording.getAxes() && recording.getAxes()[originalAxisIndex].label
+            ? recording.getAxes()[originalAxisIndex].label
             : `Axis ${originalAxisIndex + 1}`;
         if (highlightedAxes && highlightedAxes.length > 0) {
           const found = highlightedAxes.find(a => a.index === originalAxisIndex);
@@ -171,7 +171,7 @@ export function printRecordings(
   let globalMinY = Infinity;
   let globalMaxY = -Infinity;
   recordings.forEach(rec => {
-    const datasetsAll = getRecordingChartDatasets(rec.samples);
+    const datasetsAll = getRecordingChartDatasets(rec.getSamples());
     const indices =
       selectedAxisIndices && selectedAxisIndices.length > 0
         ? selectedAxisIndices.filter(i => i >= 0 && i < datasetsAll.length)

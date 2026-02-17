@@ -10,14 +10,15 @@
   import { t } from '../../i18n';
   import Gesture from '../../components/features/datacollection/Gesture.svelte';
   import NewGestureButton from '../../components/features/NewGestureButton.svelte';
-  import { stores } from '../../lib/stores/Stores';
   import Information from '../../components/ui/information/Information.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import RecordInformationContent from '../../components/features/datacollection/RecordInformationContent.svelte';
   import ConnectDialogContainer from '../../components/features/connection-prompt/ConnectDialogContainer.svelte';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   let isConnectionDialogOpen = false;
-  const gestures = stores.getGestures();
+  const gestureController = getControllers().getGestureController();
+  const gestures = gestureController.getGestures();
 </script>
 
 <StandardDialog
@@ -61,9 +62,9 @@
 </div>
 <!-- Display all gestures -->
 <div class="flex flex-col gap-2 pt-8">
-  {#each $gestures as gesture (gesture.ID)}
+  {#each $gestures as gesture (gesture.getID())}
     <Gesture
-      gesture={gestures.getGesture(gesture.ID)}
+      gestureId={gesture.getID()}
       onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
   {/each}
   <NewGestureButton />

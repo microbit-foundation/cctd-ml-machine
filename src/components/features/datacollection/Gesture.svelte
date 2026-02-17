@@ -14,51 +14,58 @@
     MicrobitInteractions,
     chosenGesture,
   } from '../../../lib/stores/uiStore';
-  import Recording from '../../ui/recording/Recording.svelte';
   import { t } from '../../../i18n';
   import ImageSkeleton from '../../ui/skeletonloading/ImageSkeleton.svelte';
   import GestureCard from '../../ui/Card.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { stores } from '../../../lib/stores/Stores';
-  import type { RecordingData } from '../../../core/entities/RecordingData';
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
   import IconButton from '../../ui/buttons/IconButton.svelte';
   import { Feature, getFeature, hasFeature } from '../../../lib/FeatureToggles';
   import { printRecordings } from '../../../lib/utils/printRecordings';
-  import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import type { NewGesture } from '../../../core/entities/NewGesture';
+  import type { Recording as RecordingType } from '../../../core/entities/recording/Recording';
+  import Recording from '../../ui/recording/Recording.svelte';
+  import type { GestureID } from '../../../core/entities/Gesture';
 
   export let onNoMicrobitSelect: () => void;
-  export let gesture: GestureState;
+  export let gestureId: GestureID;
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
   const dataController = getControllers().getDataController();
   const enableFingerprint = dataController.isFingerprintEnabled();
-
-  const gestures = stores.getGestures();
+  const gestureController = getControllers().getGestureController();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = getFeature<number>(Feature.RECORDING_DURATION);
-  const highlightedAxes = stores.getHighlightedAxes();
+  const highlightedAxes = dataController.getSelectedAxes();
 
   let isThisRecording = false;
 
-  const nameBind = gesture.bindName();
+  const gesture = gestureController.getGestureState(gestureId);
+  let nameBind = $gesture.getName();
+  $: {
+    gestureController.setGestureName($gesture.getID(), nameBind);
+  }
 
   // When title is clicked. Remove name
   function titleClicked(): void {
-    if (gesture.getName() === defaultNewName) {
-      gesture.setName('');
+    if ($gesture.getName() === defaultNewName) {
+      $gesture.setName('');
     }
   }
 
   function handlePrintRecordings(): void {
-    const recordings = gesture.getRecordings() ?? [];
+    const recordings = $gesture.getRecordings() ?? [];
     if (!recordings || recordings.length === 0) return;
-    printRecordings(gesture.getName(), recordings, $highlightedAxes);
+    printRecordings(
+      $gesture.getName(),
+      recordings,
+      $highlightedAxes ? $highlightedAxes : [],
+    );
   }
 
   function removeClicked(): void {
@@ -67,13 +74,13 @@
     }
 
     if (
-      !window.confirm($t('alert.deleteGestureConfirm') + '"' + gesture.getName() + '"?')
+      !window.confirm($t('alert.deleteGestureConfirm') + '"' + $gesture.getName() + '"?')
     ) {
       return;
     }
 
     setTimeout(() => {
-      gestures.removeGesture(gesture.getId());
+      gestureController.deleteGesture($gesture.getID());
     }, 450);
   }
 
@@ -86,16 +93,16 @@
     isThisRecording = true;
     startRecording(recording => {
       isThisRecording = false;
-      gesture.addRecording(recording);
+      gestureController.addRecording($gesture.getID(), recording);
     });
   }
 
   // Delete recording from recordings array
-  function deleteRecording(recording: RecordingData) {
+  function deleteRecording(recording: RecordingType) {
     if (!areActionsAllowed(false)) {
       return;
     }
-    gesture.removeRecording(recording.ID);
+    gestureController.deleteRecording($gesture.getID(), recording.getId());
   }
 
   // Selecting this gesture for recording. Updates settings accordingly
@@ -111,10 +118,10 @@
       return;
     }
     chosenGesture.update(chosen => {
-      if (chosen === gesture) {
+      if (chosen === $gesture) {
         chosen = null;
       } else {
-        chosen = gesture;
+        chosen = $gesture;
       }
       return chosen;
     });
@@ -124,7 +131,7 @@
   // Assess whether settings match with button-clicked.
   // If so, the gesture calls the recording function.
   function triggerButtonsClicked(buttons: { buttonA: 0 | 1; buttonB: 0 | 1 }): void {
-    if ($chosenGesture !== gesture) {
+    if ($chosenGesture !== $gesture) {
       return;
     }
     const triggerButton = get(microbitInteraction);
@@ -145,7 +152,7 @@
       return true;
     }
 
-    if ($nameBind.length >= StaticConfiguration.gestureNameMaxLength) {
+    if (nameBind.length >= StaticConfiguration.gestureNameMaxLength) {
       event.preventDefault();
       alertUser(
         $t('alert.data.classNameLengthAlert', {
@@ -183,7 +190,7 @@
     <!-- Title of gesture-->
     <GestureCard mr small>
       <div class="top-2 left-3 absolute flex flex-row justify-center items-center gap-4">
-        <GestureDot {gesture} />
+        <GestureDot gesture={$gesture} />
 
         {#if hasFeature(Feature.PRINTABLE_RECORDINGS)}
           <IconButton
@@ -203,7 +210,7 @@
                                     border-solid hover:bg-gray-100">
           <h3
             contenteditable
-            bind:innerText={$nameBind}
+            bind:innerText={nameBind}
             on:click={titleClicked}
             on:keypress={onTitleKeypress} />
         </div>
@@ -220,8 +227,8 @@
       </div>
     </GestureCard>
 
-    <GestureCard small mr elevated={$chosenGesture === gesture}>
-      {#if $chosenGesture !== gesture}
+    <GestureCard small mr elevated={$chosenGesture === $gesture}>
+      {#if $chosenGesture !== $gesture}
         <div class="text-center w-35 cursor-pointer">
           <IconButton
             ariaLabel={$t('content.data.select')}
@@ -257,20 +264,20 @@
       {/if}
     </GestureCard>
     <!-- Show recording for each recording -->
-    {#if $gesture.recordings.length > 0}
+    {#if $gesture.getRecordings().length > 0}
       <GestureCard small>
         <div class="flex p-2 h-30">
-          {#each $gesture.recordings as recording (String($gesture.ID) + String(recording.ID))}
+          {#each $gesture.getRecordings() as recording (String($gesture.getID()) + String(recording.getId()))}
             <Recording
               enableFingerprint={$enableFingerprint}
               downloadable
               {recording}
-              gestureId={$gesture.ID}
+              gestureId={$gesture.getID()}
               onDelete={deleteRecording} />
           {/each}
         </div>
       </GestureCard>
-    {:else if $chosenGesture === gesture}
+    {:else if $chosenGesture === $gesture}
       <GestureCard small>
         <div class="relative float-left text-left h-30 w-60 justify-start flex">
           <div class="text-left float-left mt-auto mb-auto ml-3">

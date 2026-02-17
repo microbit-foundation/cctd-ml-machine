@@ -4,14 +4,14 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
+  import type { NewGesture } from '../../core/entities/NewGesture';
 
   let isDotHovered = false;
-  export let gesture: GestureState;
+  export let gesture: NewGesture;
   export let disableTooltip: boolean = false;
 
-  $: name = $gesture.name;
-  $: color = $gesture.color;
+  $: name = gesture.getName();
+  $: color = gesture.getColor();
 </script>
 
 <div

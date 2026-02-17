@@ -32,4 +32,16 @@ export class DataController {
   public getAvailableAxes(): AbstractState<Axis[] | undefined> {
     return this.states.getAvailableAxes();
   }
+
+  public getSelectedAxes(): AbstractState<Axis[] | undefined> {
+    return this.states.getSelectedAxes();
+  }
+
+  public setSelectedAxes(axes: Axis[]): void {
+    this.dataService.setSelectedAxes(axes);
+  }
+
+  public toggleAxis(axis: Axis): void {
+    this.dataService.toggleAxis(axis);
+  }
 }

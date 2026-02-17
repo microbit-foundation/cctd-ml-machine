@@ -21,20 +21,20 @@
     getRecordingChartDatasets,
     type ChartDataset,
   } from '../../../../lib/ChartDataset';
-  import type { RecordingData } from '../../../../core/entities/RecordingData';
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import { Feature, hasFeature } from '../../../../lib/FeatureToggles';
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
+  import type { Recording } from '../../../../core/entities/recording/Recording';
 
-  export let recording: RecordingData;
+  export let recording: Recording;
   // Option to show y-axis ticks in the chart (default: off)
   export let showYAxisTicks: boolean = false;
   // Configurable y-axis scale (defaults match previous hardcoded values)
   export let yAxisMin: number = -5.5;
   export let yAxisMax: number = 6.5;
-  const samples = recording.samples;
-  const labels = recording.labels;
+  const samples = recording.getSamples();
+  const axes = recording.getAxes();
 
   let verticalLineX = NaN;
   let hoverIndex = NaN;
@@ -50,7 +50,7 @@
     if (isNaN(index)) {
       return [];
     }
-    return samples[index].vector;
+    return samples[index].getValue();
   };
 
   let htmlElement: HTMLDivElement;
@@ -108,7 +108,7 @@
       type: 'line',
       data: {
         datasets: datasets.map((dataset, idx) => ({
-          label: labels[idx],
+          label: axes[idx].label,
           borderColor: getLineColor(idx),
           borderWidth: 1,
           pointRadius: 0,

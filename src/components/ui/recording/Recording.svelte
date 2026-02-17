@@ -9,7 +9,6 @@
   import { stores } from '../../../lib/stores/Stores';
   import GestureDot from './../GestureDot.svelte';
   import RecordingGraph from '../../features/graphs/recording/RecordingGraph.svelte';
-  import type { RecordingData } from '../../../core/entities/RecordingData';
   import IconButton from '../buttons/IconButton.svelte';
   import { serializeRecordingToCsvWithoutGestureName } from '../../../lib/utils/CSVUtils';
   import RecordingFingerprint from './RecordingFingerprint.svelte';
@@ -17,18 +16,20 @@
   import { tr } from '../../../i18n';
   import RecordingDialog from './RecordingDialog.svelte';
   import type { GestureID } from '../../../core/entities/Gesture';
+  import type { Recording } from '../../../core/entities/recording/Recording';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   // get recording from mother prop
-  export let recording: RecordingData;
+  export let recording: Recording;
   export let gestureId: GestureID;
-  export let onDelete: (recording: RecordingData) => void;
+  export let onDelete: (recording: Recording) => void;
   export let dot: { gesture: GestureID; color: string } | undefined = undefined;
   export let downloadable: boolean = false;
   export let enableFingerprint: boolean;
 
-  $: dotGesture = dot?.gesture
-    ? stores.getGestures().getGesture(dot?.gesture)
-    : undefined;
+  const gestureController = getControllers().getGestureController();
+
+  $: dotGesture = dot?.gesture ? gestureController.getGesture(gestureId) : undefined;
 
   $: gesture = stores.getGestures().getGesture(gestureId);
   let hide = false;
@@ -71,7 +72,7 @@
 
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${gesture.getName()}_recording_${recording.ID}.csv`;
+    link.download = `${gesture.getName()}_recording_${recording.getId()}.csv`;
     link.click();
 
     // Clean up the URL object

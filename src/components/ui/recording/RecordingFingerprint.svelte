@@ -4,12 +4,12 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type { RecordingData } from '../../../core/entities/RecordingData';
+  import type { Recording } from '../../../core/entities/recording/Recording';
   import BaseVector from '../../../core/vector/BaseVector';
   import { stores } from '../../../lib/stores/Stores';
   import Fingerprint from './Fingerprint.svelte';
 
-  export let recording: RecordingData;
+  export let recording: Recording;
   export let gestureName: string;
   const classifier = stores.getClassifier();
   const highlightedAxes = stores.getHighlightedAxes();
@@ -28,13 +28,13 @@
 
   $: fingerprint = (() => {
     const sampleInputVectorIndices = $highlightedAxes.map(axis => axis.index);
-    const sampleInput = recording.samples.reduce(
+    const sampleInput = recording.getSamples().reduce(
       (pre, cur) => {
         sampleInputVectorIndices.forEach(idx => {
           if (pre[idx.toString()] === undefined) {
-            pre[idx.toString()] = [cur.vector[idx]];
+            pre[idx.toString()] = [cur.getValue()[idx]];
           } else {
-            pre[idx.toString()]!.push(cur.vector[idx]);
+            pre[idx.toString()]!.push(cur.getValue()[idx]);
           }
         });
         return pre;

@@ -8,6 +8,7 @@ import { get } from 'svelte/store';
 import type { RecordingData } from '../../core/entities/RecordingData';
 import type GestureState from '../domain/stores/gesture/GestureState';
 import { locale } from 'svelte-i18n';
+import type { Recording } from '../../core/entities/recording/Recording';
 
 /**
  * Formats a number according to the current locale's decimal separator
@@ -69,11 +70,14 @@ const serializeRecordingToCsv = (
 };
 
 export const serializeRecordingToCsvWithoutGestureName = (
-  recording: RecordingData,
+  recording: Recording,
 ): string => {
-  const headers = ['sample', ...recording.labels].join(';');
-  const rows = recording.samples
-    .map((sample, idx) => idx + ';' + sample.vector.map(formatNumberForLocale).join(';'))
+  const headers = ['sample', ...recording.getAxes().map(e => e.label)].join(';');
+  const rows = recording
+    .getSamples()
+    .map(
+      (sample, idx) => idx + ';' + sample.getValue().map(formatNumberForLocale).join(';'),
+    )
     .join('\n');
   return [headers, rows].join('\n');
 };

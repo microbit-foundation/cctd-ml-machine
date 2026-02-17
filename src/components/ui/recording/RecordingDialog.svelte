@@ -14,11 +14,11 @@
   import RecordingGraph from '../../features/graphs/recording/RecordingGraph.svelte';
   import RecordingFingerprint from './RecordingFingerprint.svelte';
   import { serializeRecordingToCsvWithoutGestureName } from '../../../lib/utils/CSVUtils';
-  import type { RecordingData } from '../../../core/entities/RecordingData';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { tr } from '../../../i18n';
+  import type { Recording } from '../../../core/entities/recording/Recording';
 
-  export let recording: RecordingData;
+  export let recording: Recording;
   export let gestureName: string = '';
   export let downloadable: boolean = false;
   export let enableFingerprint: boolean = false;
@@ -40,7 +40,7 @@
 
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${gestureName}_recording_${recording.ID}.csv`;
+    link.download = `${gestureName}_recording_${recording.getId()}.csv`;
     link.click();
 
     URL.revokeObjectURL(url);
@@ -55,7 +55,7 @@
   $: {
     const defaultMin = -5.5;
     const defaultMax = 6.5;
-    const allValues: number[] = recording.samples.flatMap(s => s.vector);
+    const allValues: number[] = recording.getSamples().flatMap(s => s.getValue());
 
     if (allValues.length > 0) {
       const minV = Math.min(...allValues);

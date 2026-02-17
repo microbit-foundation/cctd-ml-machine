@@ -4,20 +4,18 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { RecordingData } from '../core/entities/RecordingData';
+import type { Sample } from '../core/entities/recording/Sample';
 
 export type ChartDataset = { x: number; y: number }[];
-export const getRecordingChartDatasets = (
-  recordingData: RecordingData['samples'],
-): ChartDataset[] => {
-  const numberOfAxes = recordingData.length > 0 ? recordingData[0].vector.length : 0;
+export const getRecordingChartDatasets = (samples: Sample[]): ChartDataset[] => {
+  const numberOfAxes = samples.length > 0 ? samples[0].getValue().length : 0;
   const datasets = [];
   for (let i = 0; i < numberOfAxes; i++) {
     const dataset: ChartDataset = [];
-    recordingData.forEach((e, idx) => {
+    samples.forEach((e, idx) => {
       dataset.push({
         x: idx,
-        y: e.vector[i],
+        y: e.getValue()[i],
       });
     });
     datasets.push(dataset);

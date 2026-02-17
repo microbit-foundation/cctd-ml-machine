@@ -5,8 +5,7 @@
  */
 
 import { derived } from 'svelte/store';
-import type { Gesture, GestureID } from '../../core/entities/Gesture';
-import type { RecordingData } from '../../core/entities/RecordingData';
+import type { GestureID } from '../../core/entities/Gesture';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { GestureService } from '../domain/GestureService';
 import { SvelteStateAdapterReadonly } from '../statemanagement/SvelteStateAdapterReadonly';
@@ -15,20 +14,28 @@ import type { AbstractReadonlyState } from '../statemanagement/AbstractReadonlyS
 import type { Logger } from '../../core/logging/Logger';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { GestureImpl } from '../domain/implementation/gesture/GestureImpl';
-import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
 import type { GestureOutput } from '../../core/entities/GestureOutput';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
+import type { Recording } from '../../core/entities/recording/Recording';
 
 export class GestureController {
+  private log: Logger;
+  public constructor(
+    private gesturesState: GesturesStateAdapter,
+    private gestureService: GestureService,
+  ) {
+    this.log = new ConsoleLogger('GestureController');
+  }
+
   getDownloadableGesturesAsJson(): string {
     const gestures = this.gestureService.getGestures();
     const serializer = new GestureSerializer();
     const serializedData: SerializedGesture[] = gestures.map(gesture =>
       serializer.serialize(gesture),
     );
-    return JSON.stringify(serializedData);
+    return JSON.stringify(serializedData, null, 2);
   }
 
   setRequiredConfidence(gestureId: GestureID, requiredConfidence: number) {
@@ -48,13 +55,6 @@ export class GestureController {
     gesture.setOutput(ouput);
     this.gestureService.saveGesture(gesture);
     this.updateState();
-  }
-  private log: Logger;
-  public constructor(
-    private gesturesState: GesturesStateAdapter,
-    private gestureService: GestureService,
-  ) {
-    this.log = new ConsoleLogger('GestureController');
   }
 
   public createGesture(name: string): NewGesture {
@@ -81,7 +81,7 @@ export class GestureController {
       const idx = gests.findIndex(gest => gest.getID() === id);
       if (idx === -1) {
         this.log.warn(`Gesture with id ${id} does not exist`);
-        return new GestureImpl(-1, 'deleted', [], {}, '#000000');
+        return new GestureImpl(-1, 'deleted', [], [], {}, '#000000');
       }
 
       return gests[idx];
@@ -101,7 +101,7 @@ export class GestureController {
     this.updateState();
   }
 
-  public addRecording(gesture: GestureID, recording: RecordingData): void {
+  public addRecording(gesture: GestureID, recording: Recording): void {
     this.gestureService.addRecording(gesture, recording);
     this.updateState();
   }
@@ -112,19 +112,10 @@ export class GestureController {
   }
 
   public importFromJson(importable: string) {
-    const persisted = JSON.parse(importable) as PersistedGestureData[];
-    this.gestureService.setGestures(
-      persisted.map(
-        persist =>
-          new GestureImpl(
-            persist.ID,
-            persist.name,
-            persist.recordings,
-            persist.output,
-            persist.color,
-          ),
-      ),
-    );
+    const serializer = new GestureSerializer();
+    const parsed: SerializedGesture[] = JSON.parse(importable);
+    const deserialized = parsed.map(ser => serializer.deserialize(ser));
+    this.gestureService.setGestures(deserialized);
     this.updateState();
   }
 

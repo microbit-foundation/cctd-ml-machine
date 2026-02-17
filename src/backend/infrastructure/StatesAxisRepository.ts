@@ -51,14 +51,11 @@ export class StatesAxisRepository implements AxisRepository {
     if (gestures.length > 0) {
       const recordings = gestures[0].getRecordings();
       if (recordings.length > 0) {
-        this.log.log('Found default available axes in recordings', recordings[0].labels);
-        return recordings[0].labels.map(
-          (label: string, index: number) =>
-            ({
-              index,
-              label,
-            }) as Axis,
+        this.log.log(
+          'Found default available axes in recordings',
+          recordings[0].getAxes(),
         );
+        return recordings[0].getAxes();
       }
     }
     return [];

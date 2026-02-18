@@ -42,10 +42,7 @@ class Microbits {
   private static outputOrigin = HexOrigin.UNKNOWN;
   private static inputOrigin = HexOrigin.UNKNOWN;
 
-  private static outputHandler = new OutputMicrobitHandler(
-    stores.getDevices(),
-    MLMachine.getInstance().getControllers().getOutputController(),
-  );
+  private static outputHandler = new OutputMicrobitHandler(stores.getDevices());
   private static inputHandler = new CombinedMicrobitHandler(
     this.outputHandler,
     getControllers().getMicrobitController(),

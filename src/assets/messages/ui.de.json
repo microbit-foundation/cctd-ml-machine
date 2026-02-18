@@ -190,6 +190,7 @@
   "connectMB.usb.retry1": "Ein USB-Gerät wurde nicht gefunden. Sie können es erneut versuchen oder ",
   "connectMB.usb.retryLink": "hier",
   "connectMB.usb.retry2": " klicken, um es manuell herunterzuladen.",
+  "connectMB.usb.makecodeWarning": "Warnung: Für MakeCode .hex Dateien, verwende den MakeCode Editor oder flashen aus dem Datei-Ordner",
   "connectMB.usb.button1": "Weiter",
   "connectMB.usb.button2": "USB-Gerät finden",
   "connectMB.usb.pleaseWait": "Bitte warten. Programm wird auf den micro:bit heruntergeladen.",

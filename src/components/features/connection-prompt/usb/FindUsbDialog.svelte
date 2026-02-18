@@ -5,6 +5,8 @@
  -->
 
 <script lang="ts">
+  import { OutputTarget } from '../../../../backend/domain/implementation/output/OutputTarget';
+  import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
   import { t } from '../../../../i18n';
   import Microbits from '../../../../lib/microbit-interfacing/Microbits';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
@@ -22,6 +24,8 @@
       });
   }
 
+  const outputTarget = getControllers().getOutputController().getOutputTarget();
+
   let step = 1;
 </script>
 
@@ -37,6 +41,9 @@
         <p>
           {$t('connectMB.usb.body1')}
         </p>
+        {#if $outputTarget === OutputTarget.MAKECODE}
+          <p class="text-red-500">{$t('connectMB.usb.makecodeWarning')}</p>
+        {/if}
       {/if}
       {#if step === 2}
         <p>

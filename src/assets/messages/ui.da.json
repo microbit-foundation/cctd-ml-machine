@@ -190,6 +190,7 @@
   "connectMB.usb.retry1": "En USB enhed blev ikke fundet. Du kan prøve igen eller trykke ",
   "connectMB.usb.retryLink": "her",
   "connectMB.usb.retry2": " for at downloade manuelt.",
+  "connectMB.usb.makecodeWarning": "Advarsel: For MakeCode .hex filer, brug MakeCode editoren eller flash fra mappens filplacering",
   "connectMB.usb.button1": "Næste",
   "connectMB.usb.button2": "Find USB-enhed",
   "connectMB.usb.pleaseWait": "Vent venligst. Downloader program til micro:bit'en",

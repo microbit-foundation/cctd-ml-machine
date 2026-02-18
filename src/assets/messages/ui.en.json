@@ -190,6 +190,7 @@
   "connectMB.usb.retry1": "A USB unit wasn't found. You can try again or click ",
   "connectMB.usb.retryLink": "here",
   "connectMB.usb.retry2": " to download manually.",
+  "connectMB.usb.makecodeWarning": "Warning: For MakeCode .hex files, use the MakeCode editor or flash from file directory",
   "connectMB.usb.button1": "Next",
   "connectMB.usb.button2": "Find USB unit",
   "connectMB.usb.pleaseWait": "Please wait. Downloading program to the micro:bit",

@@ -124,7 +124,10 @@ class InputMicrobitHandler implements MicrobitHandler {
     }
     if (data === 'id_prop') {
       Microbits.setInputOrigin(HexOrigin.PROPRIETARY);
-      // TODO: Maybe add ModelView.STACK here
+      // MLMachine.getInstance()
+      //   .getControllers()
+      //   .getOutputController()
+      //   .setOutputTargetOutputMicrobit();
     }
 
     if (data.includes('vi_')) {

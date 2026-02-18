@@ -12,18 +12,14 @@ import type Devices from '../domain/Devices';
 import { DeviceRequestStates } from '../domain/Devices';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { onCatastrophicError } from '../utils/ErrorReconnect';
-import type { OutputController } from '../../backend/interface-controller/OutputController';
-import { getControllers } from '../../backend/interface-adapter/MLMachine';
+import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
 import { MicrobitConnectionStateImpl } from '../../backend/domain/implementation/microbit/MicrobitConnectionStateImpl';
 
 class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(
-    private devices: Devices,
-    private outputController: OutputController,
-  ) {}
+  public constructor(private devices: Devices) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('OutputMicrobitHandler', 'onConnected', versionNumber);
@@ -38,7 +34,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
     this.devices.update(s => {
       if (Microbits.isInputOutputTheSame()) {
         if (Microbits.isOutputMakecode()) {
-          this.outputController.setOutputTargetMakecode();
+          getControllers().getOutputController().setOutputTargetMakecode();
         }
       }
       s.isRequestingDevice = DeviceRequestStates.NONE;
@@ -104,11 +100,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
   public onMessageReceived(data: string): void {
     if (data === 'id_mkcd') {
       Microbits.setOutputOrigin(HexOrigin.MAKECODE);
-      this.outputController.setOutputTargetMakecode();
+      getControllers().getOutputController().setOutputTargetMakecode();
     }
     if (data === 'id_prop') {
       Microbits.setOutputOrigin(HexOrigin.PROPRIETARY);
-      this.outputController.setOutputTargetOutputMicrobit();
+      getControllers().getOutputController().setOutputTargetOutputMicrobit();
     }
     if (data.includes('vi_')) {
       const version = parseInt(data.substring(3));

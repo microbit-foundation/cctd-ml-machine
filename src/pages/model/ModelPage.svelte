@@ -40,7 +40,7 @@
 </div>
 
 <div class="h-[calc(100%-48px)] flex flex-col">
-  {#if $outputTarget == OutputTarget.MAKECODE}
+  {#if $outputTarget === OutputTarget.MAKECODE && featureController.hasFeature(Feature.MAKECODE)}
     <ModelPageTileView />
   {:else}
     <ModelPageStackView />

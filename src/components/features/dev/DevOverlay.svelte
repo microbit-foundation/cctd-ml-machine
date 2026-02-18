@@ -22,7 +22,7 @@
   };
 </script>
 
-{#if inDev}
+{#if inDev && false}
   <div
     class="absolute bottom-3 left-3 bg-transparent justify-center self-center items-center z-4"
     style="pointer-events: none;"

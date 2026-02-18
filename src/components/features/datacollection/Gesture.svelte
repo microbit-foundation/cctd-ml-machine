@@ -48,7 +48,9 @@
   const gesture = gestureController.getGestureState(gestureId);
   let nameBind = $gesture.getName();
   $: {
-    gestureController.setGestureName($gesture.getID(), nameBind);
+    if (nameBind != $gesture.getName()) {
+      gestureController.setGestureName($gesture.getID(), nameBind);
+    }
   }
 
   // When title is clicked. Remove name

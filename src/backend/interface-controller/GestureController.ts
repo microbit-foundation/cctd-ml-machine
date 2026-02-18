@@ -103,6 +103,7 @@ export class GestureController {
 
   public addRecording(gesture: GestureID, recording: Recording): void {
     this.gestureService.addRecording(gesture, recording);
+    console.log(recording);
     this.updateState();
   }
 

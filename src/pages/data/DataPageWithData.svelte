@@ -19,6 +19,9 @@
   let isConnectionDialogOpen = false;
   const gestureController = getControllers().getGestureController();
   const gestures = gestureController.getGestures();
+  $: {
+    console.log($gestures);
+  }
 </script>
 
 <StandardDialog
@@ -62,7 +65,7 @@
 </div>
 <!-- Display all gestures -->
 <div class="flex flex-col gap-2 pt-8">
-  {#each $gestures as gesture (gesture.getID())}
+  {#each $gestures as gesture}
     <Gesture
       gestureId={gesture.getID()}
       onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />

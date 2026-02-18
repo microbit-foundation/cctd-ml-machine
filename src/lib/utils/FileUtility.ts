@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { type GestureData } from '../domain/stores/gesture/GestureState';
+import type { NewGesture } from '../../core/entities/NewGesture';
+import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
 
@@ -22,12 +23,14 @@ class FileUtility {
     reader.readAsText(file as Blob);
   }
 
-  public static downloadDataset(gestureData: GestureData[]) {
+  public static downloadDataset(gestureData: NewGesture[]) {
+    const serializer = new GestureSerializer();
+    const serialized = gestureData.map(gest => serializer.serialize(gest));
     const element = document.createElement('a');
     element.setAttribute(
       'href',
       'data:application/json;charset=utf-8,' +
-        encodeURIComponent(JSON.stringify(gestureData, null, 2)),
+        encodeURIComponent(JSON.stringify(serialized, null, 2)),
     );
     element.setAttribute('download', 'dataset');
 

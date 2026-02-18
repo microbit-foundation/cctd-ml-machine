@@ -47,6 +47,7 @@ export class GestureServiceImpl implements GestureService {
   public addRecording(gestureId: number, recording: Recording): void {
     const gesture = this.getGestureOrThrow(gestureId);
     gesture.setRecordings([...gesture.getRecordings(), recording]);
+    this.gestureRepository.saveGesture(gesture);
   }
 
   public deleteGesture(gesture: GestureID): void {

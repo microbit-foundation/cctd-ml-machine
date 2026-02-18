@@ -31,7 +31,7 @@
 
   $: dotGesture = dot?.gesture ? gestureController.getGesture(gestureId) : undefined;
 
-  $: gesture = stores.getGestures().getGesture(gestureId);
+  $: gesture = gestureController.getGestureState(gestureId)!;
   let hide = false;
   let showDialog = false;
 
@@ -72,7 +72,7 @@
 
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${gesture.getName()}_recording_${recording.getId()}.csv`;
+    link.download = `${$gesture.getName()}_recording_${recording.getId()}.csv`;
     link.click();
 
     // Clean up the URL object
@@ -113,7 +113,7 @@
       </div>
       {#if shouldDisplayFingerprint}
         <div class="absolute top-0 left-40 h-24.5 w-10 overflow-hidden">
-          <RecordingFingerprint {recording} gestureName={$gesture.name} />
+          <RecordingFingerprint {recording} gestureName={$gesture.getName()} />
         </div>
       {/if}
     </div>
@@ -154,7 +154,7 @@
   {#if showDialog}
     <RecordingDialog
       {recording}
-      gestureName={$gesture.name}
+      gestureName={$gesture.getName()}
       {downloadable}
       {enableFingerprint}
       on:close={closeDialog}

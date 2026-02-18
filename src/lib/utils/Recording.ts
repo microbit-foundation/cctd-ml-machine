@@ -13,6 +13,9 @@ import { alertUser } from '../stores/uiStore';
 import { t } from '../../i18n';
 import { Feature, getFeature } from '../FeatureToggles';
 import type { Recording } from '../../core/entities/recording/Recording';
+import { RecordingImpl } from '../../core/entities/recording/RecordingImpl';
+import { Sample } from '../../core/entities/recording/Sample';
+import type { Axis } from '../../core/entities/Axis';
 
 /**
  * @deprecated Will be removed in the future. Use store.getRecorder().startRecording(...) instead.
@@ -33,15 +36,13 @@ export const startRecording = (onFinished: (recording: Recording) => void) => {
   });
   ConsoleLogger.log('Recording', 'Creating new recording');
   const recordingId = Date.now();
-  let labels: string[] = [];
+  let axes: Axis[] = [];
 
-  const samples: RecordingData['samples'] = [];
+  const samples: Sample[] = [];
 
   const unsubscriber = liveData.subscribe(data => {
-    samples.push({
-      vector: data.getValue(),
-    });
-    labels = data.getLabels();
+    samples.push(new Sample(data));
+    axes = data.getLabels().map((label, index) => ({ index, label }));
   });
   setTimeout(() => {
     unsubscriber();
@@ -53,15 +54,11 @@ export const startRecording = (onFinished: (recording: Recording) => void) => {
       alertUser(get(t)('alert.recording.disconnectedDuringRecording'));
     }
 
-    if (labels.length === 0) {
-      throw new Error('No labels were present during the recording, was this a mistake?');
+    if (axes.length === 0) {
+      throw new Error('No axes were present during the recording, was this a mistake?');
     }
 
-    const recording: RecordingData = {
-      ID: recordingId,
-      samples: samples,
-      labels: labels,
-    };
+    const recording = new RecordingImpl(recordingId, samples, axes);
 
     onFinished(recording);
 

@@ -10,16 +10,17 @@
   import { onMount } from 'svelte';
   import FileUtility from '../lib/utils/FileUtility';
   import { get } from 'svelte/store';
-  import { stores } from '../lib/stores/Stores';
   import { hasSomeRecordingData } from './data/DataPage';
   import DataPageNoData from './data/DataPageNoData.svelte';
   import DataPageWithData from './data/DataPageWithData.svelte';
+  import { getControllers } from '../backend/interface-adapter/MLMachine';
 
-  const gestures = stores.getGestures();
+  const gestureController = getControllers().getGestureController();
+  const gestures = gestureController.getGestures();
 
   const onClearGestures = () => {
     if (confirm($t('content.data.controlbar.button.clearData.confirm'))) {
-      gestures.clearGestures();
+      gestureController.clearGestures();
     }
   };
 

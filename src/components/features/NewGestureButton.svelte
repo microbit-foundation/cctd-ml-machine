@@ -13,9 +13,10 @@
 <script lang="ts">
   import { areActionsAllowed } from '../../lib/stores/uiStore';
   import { t } from '../../i18n';
-  import { stores } from '../../lib/stores/Stores';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const gestures = stores.getGestures();
+  const gestureController = getControllers().getGestureController();
+  const gestures = gestureController.getGestures();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
 
@@ -23,7 +24,7 @@
     if (!areActionsAllowed(false)) {
       return;
     }
-    gestures.createGesture(defaultNewName);
+    gestureController.createGesture(defaultNewName);
   }
 </script>
 

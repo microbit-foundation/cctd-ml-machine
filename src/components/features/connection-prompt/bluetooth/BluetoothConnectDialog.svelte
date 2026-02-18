@@ -20,7 +20,6 @@
   import { MBSpecs } from 'microbyte';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
   import { DeviceRequestStates } from '../../../../lib/domain/Devices';
-  import { stores } from '../../../../lib/stores/Stores';
   import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
   import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 

@@ -61,6 +61,9 @@ export class JSONFileFeatureProvider implements FeatureProvider {
       case Feature.DIALOG_RECORDINGS:
         value = new BooleanFeature(this.featureMap.dialogRecordings);
         break;
+      case Feature.MAKECODE_INTRODUCTION_VIDEO:
+        value = new BooleanFeature(this.featureMap.makecodeIntroductionVideo);
+        break;
       default:
         // Unknown features are a programmer error — throw so it's caught early.
         throw new Error(`Unknown feature: ${Feature[feature] ?? feature}`);

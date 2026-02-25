@@ -12,7 +12,7 @@
 </script>
 
 <div
-  class="border-gray-200 border border-solid bg-white rounded-lg p-6 shadow-xl {'col-span-' +
+  class="border-gray-200 border border-solid bg-white rounded-lg p-6 shadow-xl flex flex-col {'col-span-' +
     fillColumns}">
   <svelte:component this={contentComponent} />
 </div>

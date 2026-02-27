@@ -160,6 +160,7 @@ ML-Machine utilises several packages, most notable of which are the following:
 - [TensorFlow.js](https://github.com/tensorflow/tfjs) provides machine learning capabilities.
 - [Smoothie Charts](https://github.com/joewalnes/smoothie) and [chart.js](https://github.com/chartjs/Chart.js) provides
   a visualisation kit.
+- [MakeCode-Embed](https://www.npmjs.com/package/@microbit/makecode-embed) for makecode integration. Additional docs: https://microbit-foundation.github.io/makecode-embed/interfaces/react.MakeCodeProject.html
 
 ## Contributions
 

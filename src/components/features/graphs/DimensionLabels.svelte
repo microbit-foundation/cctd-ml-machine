@@ -6,7 +6,7 @@
 </style>
 
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -15,9 +15,9 @@
   import { onDestroy, onMount } from 'svelte';
   import { derived, type Unsubscriber } from 'svelte/store';
   import type SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
-  import type { LiveDataVector } from '../../../lib/domain/stores/LiveDataVector';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
+  import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
 
   type LabelData = {
     id: number;

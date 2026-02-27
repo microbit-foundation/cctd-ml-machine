@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -16,13 +16,14 @@
   import BaseDialog from '../../ui/dialogs/BaseDialog.svelte';
   import MicrobitLiveGraph from '../graphs/MicrobitLiveGraph.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
-  import { stores } from '../../../lib/stores/Stores';
   import LiveDataFingerprint from './LiveDataFingerprint.svelte';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import Switch from '../../ui/Switch.svelte';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
-  const enableFingerprint = stores.getEnableFingerprint();
+  const enableFingerprint = getControllers().getDataController().isFingerprintEnabled();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 
   let componentWidth: number;
   let connectDialogReference: ConnectDialogContainer;
@@ -40,20 +41,16 @@
   };
 
   let isLive3DOpen = false;
-
-  $: isFingerprintEnabled = $enableFingerprint && hasFeature(Feature.FINGERPRINT);
-  const toggleEnabled = (event: any) => {
-    enableFingerprint.set(event.target.checked);
-  };
 </script>
 
 <div
   bind:clientWidth={componentWidth}
   class="h-full w-full bg-white border-t border-solid border-black border-opacity-60 shadow-black shadow-xl"
-  class:bg-gray-300={$devices.isInputAssigned && !$devices.isInputReady}>
+  class:bg-gray-300={$microbitConnection.getInput().isAssigned() &&
+    !$microbitConnection.getInput().isReady()}>
   <ConnectDialogContainer bind:this={connectDialogReference} />
 
-  {#if !$devices.isInputAssigned}
+  {#if !$microbitConnection.getInput().isAssigned()}
     <!-- No input microbit assigned -->
     <div class="h-full w-full flex justify-center items-center bg-white">
       <StandardButton onClick={connectButtonClicked}>
@@ -66,7 +63,7 @@
       <div class="absolute w-full h-full">
         <MicrobitLiveGraph width={componentWidth - 180} />
       </div>
-      {#if $devices.isInputInitializing}
+      {#if $microbitConnection.getInput().isInitializing()}
         <div
           class="absolute w-full h-full flex items-center justify-center text-secondarytext">
           <div class="bg-secondary bg-opacity-80 py-2 px-4 rounded-full" transition:fade>
@@ -90,8 +87,7 @@
 
       <!-- Right part of live-graph -->
       <div class="absolute right-0 bottom-0 h-full w-45 flex flex-col justify-between">
-        <!-- Quick fix: enable feature manually -->
-        <!-- {#if isFingerprintEnabled} -->
+        {#if hasFeature(Feature.FINGERPRINT)}
           <div class="pt-2 pr-2 justify-end flex flex-row gap-2">
             <p>Fingerprint:</p>
             <Switch
@@ -99,13 +95,16 @@
               bind:checked={$enableFingerprint}
               on:change={e => enableFingerprint.set(e.detail.checked)} />
           </div>
-          <div class="absolute h-full">
-            <LiveDataFingerprint gestureName="Live" />
-          </div>
-        <!-- {/if} -->
+          {#if $enableFingerprint}
+            <div class="absolute h-full">
+              <LiveDataFingerprint gestureName="Live" />
+            </div>
+          {/if}
+        {/if}
 
         <div
           class="flex flex-row pl-4 justify-center cursor-pointer hover:bg-secondary hover:bg-opacity-10 transition"
+          class:pl-4={$enableFingerprint}
           on:click={() => (isLive3DOpen = true)}>
           <View3DLive width={140} height={140} freeze={isLive3DOpen} />
         </div>

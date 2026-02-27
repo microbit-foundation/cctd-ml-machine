@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -11,7 +11,8 @@ import ModelMenu from './ModelMenu.svelte';
 import ValidateMenu from './ValidateMenu.svelte';
 import { Paths, type PathType } from '../../router/Router';
 import { writable } from 'svelte/store';
-import { Feature, hasFeature } from '../../lib/FeatureToggles';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
+import { Feature } from '../../backend/application/feature/Feature';
 
 export interface MenuProperties {
   title: string;
@@ -29,7 +30,7 @@ export interface MenuProperties {
  */
 class Menus {
   private static menuStore = writable<MenuProperties[]>(
-    hasFeature(Feature.MODEL_VALIDATION)
+    getControllers().getFeatureController().hasFeature(Feature.MODEL_VALIDATION)
       ? [
           {
             title: 'menu.data.helpHeading',

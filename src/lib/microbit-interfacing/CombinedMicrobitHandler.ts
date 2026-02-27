@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -7,14 +7,14 @@ import { MBSpecs } from 'microbyte';
 import Microbits from './Microbits';
 import InputMicrobitHandler from './InputMicrobitHandler';
 import OutputMicrobitHandler from './OutputMicrobitHandler';
-import type Devices from '../domain/Devices';
+import type { MicrobitController } from '../../backend/interface-controller/MicrobitController';
 
 class CombinedMicrobitHandler extends InputMicrobitHandler {
   public constructor(
     private outputHandler: OutputMicrobitHandler,
-    devices: Devices,
+    microbitController: MicrobitController,
   ) {
-    super(devices);
+    super(microbitController);
   }
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {

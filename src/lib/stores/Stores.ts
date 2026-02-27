@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -19,11 +19,9 @@ import Classifier from '../domain/stores/Classifier';
 import Gestures from '../domain/stores/gesture/Gestures';
 import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
-import Logger from '../utils/Logger';
 import Confidences from '../domain/stores/Confidences';
 import HighlightedAxes from '../domain/stores/HighlightedAxes';
 import SelectedModel from '../domain/SelectedModel';
-import type { LiveDataVector } from '../domain/stores/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import type { Engine } from '../domain/stores/Engine';
 import AvailableAxes from '../domain/stores/AvailableAxes';
@@ -32,11 +30,10 @@ import KNNModelSettings from '../domain/stores/KNNModelSettings';
 import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
 import ValidationResults from '../domain/stores/ValidationResults';
-import Snackbar from './Snackbar';
 import { knnHasTrained } from './KNNStores';
 import Devices from '../domain/Devices';
-import EnableFingerprint from '../domain/stores/EnableFingerprint';
-import StaticConfiguration from '../../StaticConfiguration';
+import type { LiveDataVector } from '../../core/vector/LiveDataVector';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 
 type StoresType = {
   liveData: LiveData<LiveDataVector> | undefined;
@@ -54,34 +51,26 @@ class Stores implements Readable<StoresType> {
   private highlightedAxis: HighlightedAxes;
   private selectedModel: SelectedModel;
   private availableAxes: AvailableAxes;
-  private snackbar: Snackbar;
   private neuralNetworkSettings: NeuralNetworkSettings;
   private knnModelSettings: KNNModelSettings;
   private validationSets: ValidationSets;
   private validationResults: ValidationResults;
   private recorder: Recorder;
   private devices: Devices;
-  private enableFingerprint: EnableFingerprint;
 
   public constructor() {
     this.devices = new Devices();
     this.neuralNetworkSettings = new NeuralNetworkSettings();
-    this.snackbar = new Snackbar();
     this.liveData = writable(undefined);
     this.recorder = new Recorder();
     this.engine = undefined;
-    const repositories: Repositories = new LocalStorageRepositories(this.snackbar);
+    const repositories: Repositories = new LocalStorageRepositories();
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
     this.selectedModel = new SelectedModel(this.classifier, knnHasTrained);
     this.knnModelSettings = new KNNModelSettings(this.selectedModel, this.classifier);
-    this.highlightedAxis = new HighlightedAxes(
-      this.classifier,
-      this.selectedModel,
-      this.devices,
-      this.snackbar,
-    );
+    this.highlightedAxis = new HighlightedAxes(this.classifier, this.selectedModel);
     this.availableAxes = new AvailableAxes(this.liveData, this.gestures);
     this.availableAxes.subscribe(newAxes => {
       this.highlightedAxis.set(newAxes);
@@ -92,9 +81,6 @@ class Stores implements Readable<StoresType> {
       this.classifier,
       this.gestures,
       this.highlightedAxis,
-    );
-    this.enableFingerprint = new EnableFingerprint(
-      StaticConfiguration.enableFingerprintByDefault,
     );
   }
 
@@ -110,7 +96,7 @@ class Stores implements Readable<StoresType> {
   }
 
   public setLiveData<T extends LiveData<LiveDataVector>>(liveDataStore: T): T {
-    Logger.log('stores', 'setting live data');
+    ConsoleLogger.log('stores', 'setting live data');
     if (!liveDataStore) {
       throw new Error('Cannot set live data store to undefined/null');
     }
@@ -161,15 +147,11 @@ class Stores implements Readable<StoresType> {
     return this.availableAxes;
   }
 
-  public getSnackbar() {
-    return this.snackbar;
-  }
-
-  public getNeuralNetworkSettings() {
+  public getNeuralNetworkSettings(): NeuralNetworkSettings {
     return this.neuralNetworkSettings;
   }
 
-  public getKNNModelSettings() {
+  public getKNNModelSettings(): KNNModelSettings {
     return this.knnModelSettings;
   }
 
@@ -187,10 +169,6 @@ class Stores implements Readable<StoresType> {
 
   public getDevices(): Devices {
     return this.devices;
-  }
-
-  public getEnableFingerprint() {
-    return this.enableFingerprint;
   }
 }
 

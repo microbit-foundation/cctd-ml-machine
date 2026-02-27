@@ -1,12 +1,11 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import GestureCard from '../../components/ui/Card.svelte';
-  import type Gesture from '../../lib/domain/stores/gesture/Gesture';
   import {
     buttonPressed,
     chosenGesture,
@@ -16,20 +15,24 @@
   import { t } from '../../i18n';
   import { stores } from '../../lib/stores/Stores';
   import { get } from 'svelte/store';
-  import Logger from '../../lib/utils/Logger';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
+  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
+  import ConsoleLogger from '../../core/logging/ConsoleLogger';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  export let gesture: Gesture;
+  export let gesture: GestureState;
   export let onNoMicrobitSelect: () => void;
 
-  const devices = stores.getDevices();
   const validationSets = stores.getValidationSets();
   const recorder = stores.getRecorder();
 
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
+
   $: isThisRecording = $recorder.recordingGesture === gesture.getId();
 
-  const selectClicked = (gesture: Gesture): void => {
-    if (!$devices.isInputConnected) {
+  const selectClicked = (gesture: GestureState): void => {
+    if (!$microbitConnection.getInput().isConnected()) {
       chosenGesture.update(gesture => {
         gesture = null;
         return gesture;
@@ -54,7 +57,7 @@
     }
 
     if (isThisRecording) {
-      Logger.warn('ValidationGestureSelectGestureCard', 'Already recording');
+      ConsoleLogger.warn('ValidationGestureSelectGestureCard', 'Already recording');
       return;
     }
     const addRecording = () => {

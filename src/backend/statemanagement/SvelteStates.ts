@@ -1,0 +1,89 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+import { writable } from 'svelte/store';
+import { OutputTarget } from '../domain/implementation/output/OutputTarget';
+import type { AbstractState } from './AbstractState';
+import { SvelteStateAdapter } from './SvelteStateAdapter';
+import type { AbstractStates } from './AbstractStates';
+import type { LiveDataVector } from '../../core/vector/LiveDataVector';
+import type { LiveData } from '../../lib/domain/stores/LiveData';
+import { LiveDataStateAdapter } from '../interface-adapter/LiveDataStateAdapter';
+import StaticConfiguration from '../../StaticConfiguration';
+import { MicrobitRole } from '../domain/microbit/MicrobitRole';
+import type { MicrobitConnection } from '../domain/microbit/MicrobitConnection';
+import { MicrobitConnectionImpl } from '../domain/implementation/microbit/MicrobitConnectionImpl';
+import { MicrobitConnectionStateImpl } from '../domain/implementation/microbit/MicrobitConnectionStateImpl';
+import { MicrobitReconnectStateImpl } from '../domain/implementation/microbit/MicrobitReconnectStateImpl';
+import type { MakeCodeProject } from '@microbit/makecode-embed';
+import type { Axis } from '../../core/entities/Axis';
+
+export class SvelteStates implements AbstractStates {
+  private outputTargetState: AbstractState<OutputTarget>;
+  private liveDataState: AbstractState<LiveData<LiveDataVector>>;
+  private microbitConnectionState: AbstractState<MicrobitConnection>;
+  private makeCodeProjectState: AbstractState<MakeCodeProject | undefined>;
+  private popupMessageState: AbstractState<string | undefined>;
+  private enableFingerprintState: AbstractState<boolean>;
+  private availableAxesState: AbstractState<Axis[] | undefined>;
+  private selectedAxesState: AbstractState<Axis[] | undefined>;
+
+  public constructor() {
+    this.liveDataState = new LiveDataStateAdapter(
+      StaticConfiguration.accelerometerLiveDataBufferSize,
+    );
+    this.outputTargetState = new SvelteStateAdapter(
+      writable(OutputTarget.OUTPUT_MICROBIT),
+    );
+    this.microbitConnectionState = new SvelteStateAdapter<MicrobitConnection>(
+      writable(
+        new MicrobitConnectionImpl(
+          new MicrobitConnectionStateImpl(false, false, false, false, false),
+          new MicrobitConnectionStateImpl(false, false, false, false, false),
+          new MicrobitReconnectStateImpl(false, MicrobitRole.INPUT),
+          false,
+        ),
+      ),
+    );
+    this.popupMessageState = new SvelteStateAdapter(writable(undefined));
+    this.makeCodeProjectState = new SvelteStateAdapter(writable(undefined));
+    this.enableFingerprintState = new SvelteStateAdapter(
+      writable(StaticConfiguration.enableFingerprintByDefault),
+    );
+    this.availableAxesState = new SvelteStateAdapter(writable(undefined));
+    this.selectedAxesState = new SvelteStateAdapter(writable(undefined));
+  }
+
+  getSelectedAxes(): AbstractState<Axis[] | undefined> {
+    return this.selectedAxesState;
+  }
+
+  getAvailableAxes(): AbstractState<Axis[] | undefined> {
+    return this.availableAxesState;
+  }
+  getEnableFingerprint(): AbstractState<boolean> {
+    return this.enableFingerprintState;
+  }
+  getMakeCodeProject(): AbstractState<MakeCodeProject | undefined> {
+    return this.makeCodeProjectState;
+  }
+
+  getMicrobitConnection(): AbstractState<MicrobitConnection> {
+    return this.microbitConnectionState;
+  }
+
+  getLiveData(): AbstractState<LiveData<LiveDataVector>> {
+    return this.liveDataState;
+  }
+
+  getPopupMessage(): AbstractState<string | undefined> {
+    return this.popupMessageState;
+  }
+
+  public getOutputTarget(): AbstractState<OutputTarget> {
+    return this.outputTargetState;
+  }
+}

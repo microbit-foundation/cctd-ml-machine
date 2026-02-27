@@ -1,12 +1,12 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
-import type { Axis } from './Axis';
-import BaseVector from './BaseVector';
+import type { Axis } from '../../core/entities/Axis';
+import BaseVector from '../../core/vector/BaseVector';
 import Filters from './Filters';
-import type { Vector } from './Vector';
+import type { Vector } from '../../core/vector/Vector';
 
 export class ClassifierInput {
   public constructor(private samples: Vector[]) {}

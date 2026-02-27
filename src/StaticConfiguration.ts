@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -8,9 +8,9 @@
  * Static configuration values. These values are not expected to change, while the application is running.
  */
 import { MBSpecs } from 'microbyte';
-import { PinTurnOnState } from './lib/PinTurnOnState';
-import { type LayersModelTrainingSettings as NeuralNetworkModelTrainerSettings } from './lib/mlmodels/LayersModelTrainer';
+import { PinTurnOnState } from './core/entities/PinTurnOnState';
 import { HexOrigin } from './lib/microbit-interfacing/HexOrigin';
+import type { LayersModelTrainingSettings } from './core/entities/classifier/models/LayersModelTrainer';
 
 class StaticConfiguration {
   // in milliseconds, how long should be wait for reconnect before determining something catestrophic happened during the process?
@@ -19,9 +19,6 @@ class StaticConfiguration {
 
   // After how long should we consider the connection lost if ping was not able to conclude?
   public static readonly connectionLostTimeoutDuration: number = 3000;
-
-  // In milliseconds, how long should each recording be?
-  public static readonly recordingDuration = 1800;
 
   // Which pins are supported?
   public static supportedPins: MBSpecs.UsableIOPin[] = [0, 1, 2];
@@ -102,11 +99,6 @@ class StaticConfiguration {
   public static readonly pollingPredictionSampleSize = 35;
 
   /**
-   * How far back in time should the engine look for sample data for it's current prediction? (in milliseconds).
-   */
-  public static readonly pollingPredictionSampleDuration = 1800;
-
-  /**
    * The size od the accelerometer livedata buffer. Larger means more memory is consumed.
    * Insertions are O(1) and fetching is O(n) where n is the number of items fetched.
    */
@@ -130,14 +122,13 @@ class StaticConfiguration {
   /**
    * The neural network training settings
    */
-  public static readonly defaultNeuralNetworkSettings: NeuralNetworkModelTrainerSettings =
-    {
-      noOfEpochs: 80,
-      batchSize: 16,
-      learningRate: 0.1,
-      validationSplit: 0.1,
-      noOfUnits: 16, // size of hidden layer
-    };
+  public static readonly defaultNeuralNetworkSettings: LayersModelTrainingSettings = {
+    noOfEpochs: 80,
+    batchSize: 16,
+    learningRate: 0.1,
+    validationSplit: 0.1,
+    noOfUnits: 16, // size of hidden layer
+  };
 
   /**
    * How many samples should the KNN model use for prediction? i.e the k-value.

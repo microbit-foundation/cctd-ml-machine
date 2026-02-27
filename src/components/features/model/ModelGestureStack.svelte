@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -16,8 +16,6 @@
 
 <script lang="ts">
   import { t } from '../../../i18n';
-  import type { SoundData } from '../../../lib/domain/stores/gesture/Gesture';
-  import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
@@ -30,15 +28,20 @@
   import OutputMatrix from './ModelMatrix.svelte';
   import OutputSoundSelector from './ModelSoundSelector.svelte';
   import PinSelector from './ModelPinSelector.svelte';
-  import { PinTurnOnState } from '../../../lib/PinTurnOnState';
+  import { PinTurnOnState } from '../../../core/entities/PinTurnOnState';
   import { MBSpecs } from 'microbyte';
+  import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
+  import type { SoundData } from '../../../core/entities/GestureOutput';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
+
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component
-  export let gesture: Gesture;
+  export let gesture: GestureState;
   export let onUserInteraction: () => void = () => {
     return;
   };
@@ -262,7 +265,7 @@
       width="30px" />
     <img
       class="m-auto"
-      class:hidden={!wasTriggered || !$devices.isInputReady}
+      class:hidden={!wasTriggered || !$microbitConnection.getInput().isReady()}
       src={'imgs/right_arrow_blue.svg'}
       alt="right arrow icon"
       width="30px" />

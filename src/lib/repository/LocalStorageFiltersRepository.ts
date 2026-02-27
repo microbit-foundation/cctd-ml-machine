@@ -1,14 +1,14 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 import { derived, get, type Writable } from 'svelte/store';
 import type { FiltersRepository } from '../domain/FiltersRepository';
-import FilterTypes from '../domain/FilterTypes';
 import PersistantWritable from './PersistantWritable';
-import type { Filter } from '../domain/Filter';
 import Filters from '../domain/Filters';
+import type { Filter } from '../../core/filter/Filter';
+import { createFilter, getFilterTypes } from '../../core/filter/FilterUtils';
 
 export class LocalStorageFiltersRepository implements FiltersRepository {
   private filters: Filters;
@@ -19,12 +19,10 @@ export class LocalStorageFiltersRepository implements FiltersRepository {
 
   private deriveStore(): Writable<Filter[]> {
     // Create and fetch a persistant store
-    const persistedStore = new PersistantWritable(FilterTypes.toIterable(), 'filters');
+    const persistedStore = new PersistantWritable(getFilterTypes(), 'filters');
     const derivedStore = derived([persistedStore], stores => {
       const persistedFilters = stores[0];
-      return persistedFilters.map(persistedFilter =>
-        FilterTypes.createFilter(persistedFilter),
-      );
+      return persistedFilters.map(persistedFilter => createFilter(persistedFilter));
     });
     // Convert a store of type 'FilterType' to type 'filter'.
     return {

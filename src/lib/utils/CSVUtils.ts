@@ -1,13 +1,41 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-import type { RecordingData } from '../domain/RecordingData';
-import type Gesture from '../domain/stores/gesture/Gesture';
+import { get } from 'svelte/store';
+import type { RecordingData } from '../../core/entities/RecordingData';
+import type GestureState from '../domain/stores/gesture/GestureState';
+import { locale } from 'svelte-i18n';
 
-export const serializeGestureRecordingsToCSV = (gestures: Gesture[]) => {
+/**
+ * Formats a number according to the current locale's decimal separator
+ * @param value The number to format
+ * @returns The formatted number string
+ */
+const formatNumberForLocale = (value: number): string => {
+  const currentLocale = get(locale);
+
+  // Convert to string with period as decimal separator (standard JS)
+  const numberString = value.toString();
+
+  // Replace decimal separator based on locale
+  switch (currentLocale) {
+    case 'en':
+      // English uses period (.) - no change needed
+      return numberString;
+    case 'de':
+    case 'da':
+      // German and Danish use comma (,) as decimal separator
+      return numberString.replace('.', ',');
+    default:
+      // Default to English format
+      return numberString;
+  }
+};
+
+export const serializeGestureRecordingsToCSV = (gestures: GestureState[]) => {
   const axes = gestures[0].getRecordings()[0].labels;
   const headers = ['gesture', 'sample', ...axes].join(';');
   return [
@@ -16,7 +44,7 @@ export const serializeGestureRecordingsToCSV = (gestures: Gesture[]) => {
   ].join('\n');
 };
 
-const serializeGestureToCSV = (gesture: Gesture) => {
+const serializeGestureToCSV = (gesture: GestureState) => {
   const gestureName = gesture.getName();
   return gesture
     .getRecordings()
@@ -31,7 +59,11 @@ const serializeRecordingToCsv = (
   return recording.samples
     .map(
       (sample, idx) =>
-        gestureName.replace(';', '\\;') + ';' + idx + ';' + sample.vector.join(';'),
+        gestureName.replace(';', '\\;') +
+        ';' +
+        idx +
+        ';' +
+        sample.vector.map(formatNumberForLocale).join(';'),
     )
     .join('\n');
 };
@@ -41,7 +73,7 @@ export const serializeRecordingToCsvWithoutGestureName = (
 ): string => {
   const headers = ['sample', ...recording.labels].join(';');
   const rows = recording.samples
-    .map((sample, idx) => idx + ';' + sample.vector.join(';'))
+    .map((sample, idx) => idx + ';' + sample.vector.map(formatNumberForLocale).join(';'))
     .join('\n');
   return [headers, rows].join('\n');
 };

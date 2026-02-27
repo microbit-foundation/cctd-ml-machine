@@ -1,0 +1,15 @@
+{
+  "title": "ML-Machine",
+  "knnModel": true,
+  "lossGraph": true,
+  "makecode": true,
+  "liveGraphInputValues": true,
+  "recordingScrubberValues": true,
+  "modelValidation": true,
+  "modelSettings": true,
+  "fingerprint": true,
+  "recordingDuration": 2500,
+  "printableRecordings": true,
+  "dialogRecordings": true,
+  "makecodeIntroductionVideo": true
+}

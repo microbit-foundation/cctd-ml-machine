@@ -1,15 +1,21 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
-import { type Readable, type Subscriber, type Unsubscriber, derived } from 'svelte/store';
-import LiveDataBuffer from '../domain/LiveDataBuffer';
+import {
+  type Readable,
+  type Subscriber,
+  type Unsubscriber,
+  derived,
+  writable,
+} from 'svelte/store';
+import LiveDataBuffer from '../../core/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
-import { type LiveDataVector } from '../domain/stores/LiveDataVector';
-import BaseLiveDataVector from '../domain/BaseLiveDataVector';
+import { type LiveDataVector } from '../../core/vector/LiveDataVector';
+import BaseLiveDataVector from '../../core/vector/BaseLiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
-import BaseVector from '../domain/BaseVector';
+import BaseVector from '../../core/vector/BaseVector';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.

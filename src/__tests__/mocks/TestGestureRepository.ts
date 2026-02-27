@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -12,14 +12,14 @@ import {
   get,
 } from 'svelte/store';
 import type { GestureRepository } from '../../lib/domain/GestureRepository';
-import Gesture from '../../lib/domain/stores/gesture/Gesture';
+import GestureState from '../../lib/domain/stores/gesture/GestureState';
 import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
 import GestureConfidence from '../../lib/domain/stores/gesture/GestureConfidence';
 
 class TestGestureRepository implements GestureRepository {
-  private gestures = writable<Gesture[]>([]);
+  private gestures = writable<GestureState[]>([]);
 
-  getGesture(gestureId: number): Gesture {
+  getGesture(gestureId: number): GestureState {
     const foundGesture = get(this.gestures).find(g => g.getId() === gestureId);
     if (!foundGesture) {
       throw new Error('Could not find gesture with id ' + gestureId);
@@ -31,8 +31,8 @@ class TestGestureRepository implements GestureRepository {
     this.gestures.set([]);
   }
 
-  addGesture(gestureData: PersistedGestureData): Gesture {
-    const gesture = new Gesture(
+  addGesture(gestureData: PersistedGestureData): GestureState {
+    const gesture = new GestureState(
       writable(gestureData),
       new GestureConfidence(0.5, writable(0)),
       () => void 0,
@@ -50,8 +50,8 @@ class TestGestureRepository implements GestureRepository {
   }
 
   subscribe(
-    run: Subscriber<Gesture[]>,
-    invalidate?: Invalidator<Gesture[]> | undefined,
+    run: Subscriber<GestureState[]>,
+    invalidate?: Invalidator<GestureState[]> | undefined,
   ): Unsubscriber {
     return this.gestures.subscribe(run, invalidate);
   }

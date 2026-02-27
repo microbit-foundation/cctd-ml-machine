@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -15,8 +15,6 @@
         return (await import('../pages/Homepage.svelte')).default;
       case Paths.VALIDATE:
         return (await import('../pages/ValidationPage.svelte')).default;
-      case Paths.PLAYGROUND:
-        return (await import('../pages/PlaygroundPage.svelte')).default;
       case Paths.DATA:
         return (await import('../pages/DataPage.svelte')).default;
       case Paths.TRAINING:
@@ -25,6 +23,10 @@
         return (await import('../pages/model/ModelPage.svelte')).default;
       case Paths.FILTERS:
         return (await import('../pages/filter/FilterPage.svelte')).default;
+      case Paths.DEBUG:
+        return (await import('../pages/DebugPage.svelte')).default;
+      case Paths.MAKECODE:
+        return (await import('../pages/MakecodePage.svelte')).default;
     }
   }
 

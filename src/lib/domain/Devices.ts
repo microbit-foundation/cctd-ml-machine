@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -27,18 +27,6 @@ interface DevicesType {
    * @deprecated should be moved to the 'Recorder' store
    */
   isRecording: boolean;
-  isInputConnected: boolean;
-  isOutputConnected: boolean;
-  offerReconnect: boolean;
-  requestDeviceWasCancelled: boolean;
-  reconnectState: DeviceRequestStates;
-  isInputReady: boolean;
-  isInputAssigned: boolean;
-  isOutputAssigned: boolean;
-  isOutputReady: boolean;
-  isInputInitializing: boolean;
-  isInputOutdated: boolean;
-  isOutputOutdated: boolean;
 }
 
 class Devices implements Writable<DevicesType> {

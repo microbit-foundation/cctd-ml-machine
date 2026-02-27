@@ -1,13 +1,13 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-import BaseVector from '../../lib/domain/BaseVector';
-import type { TrainingData } from '../../lib/domain/ModelTrainer';
-import type { TrainingDataRepository } from '../../lib/domain/TrainingDataRepository';
-import type { Vector } from '../../lib/domain/Vector';
+import BaseVector from '../../core/vector/BaseVector';
+import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
+import type { Vector } from '../../core/vector/Vector';
+import type { TrainingData } from '../../core/model/ModelTrainer';
 
 class TestTrainingDataRepository implements TrainingDataRepository {
   getTrainingDataMean(): Vector {

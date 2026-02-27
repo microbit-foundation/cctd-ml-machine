@@ -1,11 +1,11 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
-  import Matrix from '../../lib/domain/Matrix';
+  import Matrix from '../../core/entities/Matrix';
   import { stores } from '../../lib/stores/Stores';
   import type { ValidationSetMatrix } from './ValidationPage';
   import { t } from '../../i18n';

@@ -2,18 +2,18 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-import LiveDataBuffer from '../../lib/domain/LiveDataBuffer';
+import LiveDataBuffer from '../../core/LiveDataBuffer';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
 } from '../../lib/livedata/MicrobitAccelerometerData';
 import { repeat } from '../testUtils';
 import { get } from 'svelte/store';
-import { type LiveDataVector } from '../../lib/domain/stores/LiveDataVector';
+import { type LiveDataVector } from '../../core/vector/LiveDataVector';
 import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
 import { smoothNewValue } from '../../lib/utils/graphUtils';
 import type { LiveData } from '../../lib/domain/stores/LiveData';

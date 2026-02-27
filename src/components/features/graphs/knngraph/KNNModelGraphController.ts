@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -9,8 +9,8 @@ import { knnCurrentPoint, knnTrainingDataPoints } from '../../../../lib/stores/K
 import type Filters from '../../../../lib/domain/Filters';
 import { stores } from '../../../../lib/stores/Stores';
 import type { Point3D } from '../../../../lib/utils/graphUtils';
-import { FilterType } from '../../../../lib/domain/FilterTypes';
-import BaseVector from '../../../../lib/domain/BaseVector';
+import BaseVector from '../../../../core/vector/BaseVector';
+import { FilterType } from '../../../../core/filter/Filter';
 
 type UpdateCall = {
   config: GraphDrawConfig;

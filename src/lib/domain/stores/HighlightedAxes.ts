@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -13,26 +13,28 @@ import {
 import Classifier from './Classifier';
 import { type Subscriber } from 'svelte/motion';
 import SelectedModel from '../SelectedModel';
-import ModelRegistry from '../ModelRegistry';
-import type { Axis } from '../Axis';
+import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
+import type { Axis } from '../../../core/entities/Axis';
 import PersistantWritable from '../../repository/PersistantWritable';
-import Logger from '../../utils/Logger';
 import { t } from '../../../i18n';
-import type Snackbar from '../../stores/Snackbar';
 import { knnHasTrained } from '../../stores/KNNStores';
 import { trainKNNModel } from '../../../pages/training/TrainingPage';
-import type Devices from '../Devices';
+import ConsoleLogger from '../../../core/logging/ConsoleLogger';
+import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
+import type { MicrobitConnection } from '../../../backend/domain/microbit/MicrobitConnection';
 
 class HighlightedAxes implements Writable<Axis[]> {
   private value: PersistantWritable<Axis[]>; // Use this.set instead of this.value.set!
+  private microbitConnection: AbstractState<MicrobitConnection>;
 
   public constructor(
     private classifier: Classifier,
     private selectedModel: SelectedModel,
-    private devices: Devices,
-    private snackbar: Snackbar,
   ) {
     this.value = new PersistantWritable([], 'highlightedAxes');
+    const microbitController = getControllers().getMicrobitController();
+    this.microbitConnection = microbitController.getMicrobitConnectionState();
   }
 
   public set(newValue: Axis[]): void {
@@ -87,24 +89,23 @@ class HighlightedAxes implements Writable<Axis[]> {
    * When the axis that has been selected is EXPLICITLY different from before
    */
   private async onChangedAxes() {
-    Logger.log('HighlightedAxes', 'New axes detected');
+    ConsoleLogger.log('HighlightedAxes', 'New axes detected');
 
     if (
       get(this.selectedModel).id === ModelRegistry.NeuralNetwork.id &&
       this.classifier.getModel().isTrained()
     ) {
-      this.snackbar.sendMessage(get(t)('snackbar.axischanged.NNInvalid'));
+      //this.snackbar.sendMessage(get(t)('snackbar.axischanged.NNInvalid'));
     }
 
     this.classifier.getModel().markAsUntrained();
 
     if (
       get(this.selectedModel).id === ModelRegistry.KNN.id &&
-      get(this.devices).isInputConnected
+      get(this.microbitConnection).getInput().isConnected()
     ) {
       if (get(knnHasTrained)) {
-        Logger.log('HighlightedAxes', 'Retraining KNN model due to axes changed');
-        // Only train if the knn model has been trained before
+        ConsoleLogger.log('HighlightedAxes', 'Retraining KNN model due to axes changed');
         await trainKNNModel();
       }
     }

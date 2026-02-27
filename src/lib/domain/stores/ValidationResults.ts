@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -16,15 +16,16 @@ import {
 } from 'svelte/store';
 import type ValidationSets from './ValidationSets';
 import type Classifier from './Classifier';
-import BaseVector from '../BaseVector';
 import { ClassifierInput } from '../ClassifierInput';
 import { findLargestIndex } from '../../utils/Math';
 import type Gestures from './gesture/Gestures';
-import type Gesture from './gesture/Gesture';
-import type { GestureData, GestureID } from './gesture/Gesture';
+import type GestureState from './gesture/GestureState';
+import type { GestureData } from './gesture/GestureState';
 import type HighlightedAxes from './HighlightedAxes';
 import type { ValidationSetMatrix } from '../../../pages/validation/ValidationPage';
-import Matrix from '../Matrix';
+import Matrix from '../../../core/entities/Matrix';
+import type { GestureID } from '../../../core/entities/Gesture';
+import BaseVector from '../../../core/vector/BaseVector';
 
 export type ValidationResult = {
   prediction: number[];
@@ -109,7 +110,7 @@ class ValidationResults implements Readable<ValidationResult> {
     });
   }
 
-  public getEvaluatedGesture(recordingId: number): Gesture | undefined {
+  public getEvaluatedGesture(recordingId: number): GestureState | undefined {
     const x = get(this.store)
       .find(pred => pred.findIndex(rec => rec.recordingId === recordingId) !== -1)
       ?.find(e => e.recordingId === recordingId);

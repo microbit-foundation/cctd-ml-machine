@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -12,8 +12,8 @@ import {
   type Unsubscriber,
   type Writable,
 } from 'svelte/store';
-import type { LayersModelTrainingSettings } from '../../mlmodels/LayersModelTrainer';
 import StaticConfiguration from '../../../StaticConfiguration';
+import type { LayersModelTrainingSettings } from '../../../core/entities/classifier/models/LayersModelTrainer';
 
 class NeuralNetworkSettings implements Readable<LayersModelTrainingSettings> {
   private store: Writable<LayersModelTrainingSettings>;

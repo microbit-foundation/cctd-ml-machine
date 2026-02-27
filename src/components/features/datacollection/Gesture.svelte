@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -19,21 +19,30 @@
   import ImageSkeleton from '../../ui/skeletonloading/ImageSkeleton.svelte';
   import GestureCard from '../../ui/Card.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import Gesture from '../../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../../lib/stores/Stores';
-  import type { RecordingData } from '../../../lib/domain/RecordingData';
+  import type { RecordingData } from '../../../core/entities/RecordingData';
   import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
+  import IconButton from '../../ui/buttons/IconButton.svelte';
+  import { Feature, getFeature, hasFeature } from '../../../lib/FeatureToggles';
+  import { printRecordings } from '../../../lib/utils/printRecordings';
+  import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   export let onNoMicrobitSelect: () => void;
-  export let gesture: Gesture;
-  const devices = stores.getDevices();
+  export let gesture: GestureState;
+
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
+  const dataController = getControllers().getDataController();
+  const enableFingerprint = dataController.isFingerprintEnabled();
+
   const gestures = stores.getGestures();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
-  const recordingDuration = StaticConfiguration.recordingDuration;
-  const enableFingerprint = stores.getEnableFingerprint();
+  const recordingDuration = getFeature<number>(Feature.RECORDING_DURATION);
+  const highlightedAxes = stores.getHighlightedAxes();
 
   let isThisRecording = false;
 
@@ -44,6 +53,12 @@
     if (gesture.getName() === defaultNewName) {
       gesture.setName('');
     }
+  }
+
+  function handlePrintRecordings(): void {
+    const recordings = gesture.getRecordings() ?? [];
+    if (!recordings || recordings.length === 0) return;
+    printRecordings(gesture.getName(), recordings, $highlightedAxes);
   }
 
   function removeClicked(): void {
@@ -87,7 +102,7 @@
   // If gesture is already selected, the selection is removed.
   // If bluetooth is not connected, open connection prompt by calling callback
   function selectClicked(): void {
-    if (!$devices.isInputConnected) {
+    if (!$microbitConnection.getInput().isConnected()) {
       chosenGesture.update(gesture => {
         gesture = null;
         return gesture;
@@ -167,44 +182,71 @@
   <div class="items-center flex relative">
     <!-- Title of gesture-->
     <GestureCard mr small>
-      <div class="top-3 left-3 absolute">
+      <div class="top-2 left-3 absolute flex flex-row justify-center items-center gap-4">
         <GestureDot {gesture} />
+
+        {#if hasFeature(Feature.PRINTABLE_RECORDINGS)}
+          <IconButton
+            small
+            ariaLabel={$t('content.data.print')}
+            title={$t('content.data.print')}
+            on:click={handlePrintRecordings}>
+            <i class="fa fa-print" aria-hidden="true"></i>
+          </IconButton>
+        {/if}
       </div>
       <div class="grid grid-cols-5 place-items-center p-2 w-50 h-30">
         <div
           class="w-40 col-start-2 col-end-5 text-center
-									font-semibold transition ease
-									rounded-xl border border-gray-300
-									border-solid hover:bg-gray-100">
+                                    font-semibold transition ease
+                                    rounded-xl border border-gray-300
+                                    border-solid hover:bg-gray-100">
           <h3
             contenteditable
             bind:innerText={$nameBind}
             on:click={titleClicked}
             on:keypress={onTitleKeypress} />
         </div>
-        <button class="pl-3 col-start-5 place-self-start justify-self-end outline-none">
+        <IconButton
+          ariaLabel={$t('content.data.delete')}
+          title={$t('content.data.delete')}
+          className="pl-3 col-start-5 place-self-start justify-self-end outline-none"
+          on:click={removeClicked}
+          small>
           <i
             class="far fa-times-circle fa-lg text-light-800 hover:text-black transition ease"
-            on:click={removeClicked} />
-        </button>
+            aria-hidden="true" />
+        </IconButton>
       </div>
     </GestureCard>
 
     <GestureCard small mr elevated={$chosenGesture === gesture}>
       {#if $chosenGesture !== gesture}
-        <div class="text-center w-35 cursor-pointer" on:click={selectClicked}>
-          <div class="w-full text-center">
-            <i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext" />
-          </div>
+        <div class="text-center w-35 cursor-pointer">
+          <IconButton
+            ariaLabel={$t('content.data.select')}
+            title={$t('content.data.select')}
+            className="w-full text-center"
+            on:click={selectClicked}>
+            <i
+              class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext"
+              aria-hidden="true" />
+          </IconButton>
           <p class="w-full text-center">
             {$t('content.data.addData')}
           </p>
         </div>
       {:else}
-        <div class="text-center w-35 cursor-pointer" on:click={selectClicked}>
-          <div class="w-full text-center">
-            <i class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary" />
-          </div>
+        <div class="text-center w-35 cursor-pointer">
+          <IconButton
+            ariaLabel={$t('content.data.select')}
+            title={$t('content.data.select')}
+            className="w-full text-center"
+            on:click={selectClicked}>
+            <i
+              class="w-full h-full m-0 mt-4 p-2 fas fa-check fa-2x text-secondary"
+              aria-hidden="true" />
+          </IconButton>
           <StandardButton
             onClick={recordClicked}
             small

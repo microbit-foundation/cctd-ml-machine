@@ -1,18 +1,17 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 import { get, writable } from 'svelte/store';
-import KNNNonNormalizedModelTrainer from '../../lib/mlmodels/KNNNonNormalizedModelTrainer';
 import { stores } from '../../lib/stores/Stores';
-import { type ModelInfo } from '../../lib/domain/ModelRegistry';
-import LayersModelTrainer, {
-  type LossTrainingIteration,
-} from '../../lib/mlmodels/LayersModelTrainer';
-import KNNModelTrainer from '../../lib/mlmodels/KNNModelTrainer';
-import type { ModelTrainer } from '../../lib/domain/ModelTrainer';
-import type { MLModel } from '../../lib/domain/MLModel';
+import { type ModelInfo } from '../../core/entities/classifier/models/ModelRegistry';
+import type { MLModel } from '../../core/entities/classifier/models/MLModel';
+import type { LossTrainingIteration } from '../../core/entities/classifier/models/LayersModelTrainer';
+import LayersModelTrainer from '../../core/entities/classifier/models/LayersModelTrainer';
+import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
+import KNNModelTrainer from '../../lib/legacy/KNNModelTrainer';
+import KNNNonNormalizedModelTrainer from '../../lib/legacy/KNNNonNormalizedModelTrainer';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 

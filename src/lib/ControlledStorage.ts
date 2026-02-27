@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -13,6 +13,14 @@ class ControlledStorage {
    * What storage version should be used? If old user data is expected to be broken, increasing this number will delete all the data the user has in their storage location
    */
   public static readonly localStorageVersion = 3;
+
+  public static getOrElse<T>(key: string, defaultValue: T): T {
+    try {
+      return this.get<T>(key);
+    } catch {
+      return defaultValue;
+    }
+  }
 
   public static get<T>(key: string): T {
     const storedValue = this.getStoredItem(key);

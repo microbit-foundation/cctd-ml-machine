@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -14,7 +14,7 @@ import {
 } from 'svelte/store';
 import StaticConfiguration from '../../../StaticConfiguration';
 import type SelectedModel from '../SelectedModel';
-import ModelRegistry from '../ModelRegistry';
+import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
 import { trainKNNModel } from '../../../pages/training/TrainingPage';
 import type Classifier from './Classifier';
 import { knnHasTrained } from '../../stores/KNNStores';

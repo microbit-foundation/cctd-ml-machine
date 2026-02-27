@@ -1,27 +1,30 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import { t } from '../../i18n';
-  import Gesture from '../../lib/domain/stores/gesture/Gesture';
+  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
   import { stores } from '../../lib/stores/Stores';
 
   const gestures = stores.getGestures();
   const bestPrediction = gestures.getBestPrediction();
-  const devices = stores.getDevices();
+
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 
   $: confidence =
-    $devices.isInputReady && $bestPrediction
+    $microbitConnection.getInput().isReady() && $bestPrediction
       ? $bestPrediction.getConfidence().getCurrentConfidence()
       : 0;
   confidence = isNaN(confidence) ? 0 : confidence;
 
   const getPredictionLabel = (
     isInputReady: boolean,
-    bestPrediction: Gesture | undefined,
+    bestPrediction: GestureState | undefined,
   ) => {
     if (!bestPrediction) {
       return $t('menu.model.noModel');
@@ -35,7 +38,10 @@
   const model = stores.getClassifier().getModel();
 
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
-  $: predictionLabel = getPredictionLabel($devices.isInputReady, $bestPrediction);
+  $: predictionLabel = getPredictionLabel(
+    $microbitConnection.getInput().isReady(),
+    $bestPrediction,
+  );
 </script>
 
 <div class="w-full text-center justify-center pt-5">
@@ -53,8 +59,8 @@
       class="grid break-words mr-auto ml-auto w-3/4 h-70px border-2 rounded-lg border-solid text-center align-center content-center">
       <p
         class="w-full max-w-[100%] text-2xl break-all"
-        class:text-2xl={$devices.isInputReady}
-        class:text-md={!$devices.isInputReady}>
+        class:text-2xl={$microbitConnection.getInput().isReady()}
+        class:text-md={!$microbitConnection.getInput().isReady()}>
         {predictionLabel}
       </p>
     </div>

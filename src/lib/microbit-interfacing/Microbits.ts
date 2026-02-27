@@ -1,12 +1,9 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-/**
- * Entrypoint for the Microbit facade pattern
- */
 import StaticConfiguration from '../../StaticConfiguration';
 import {
   MBSpecs,
@@ -14,11 +11,13 @@ import {
   MicrobitBluetoothDevice,
   MicrobitDeviceState,
 } from 'microbyte';
-import Logger from '../utils/Logger';
 import OutputMicrobitHandler from './OutputMicrobitHandler';
 import CombinedMicrobitHandler from './CombinedMicrobitHandler';
 import { HexOrigin } from './HexOrigin';
 import { stores } from '../stores/Stores';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
+import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
+import { isUniversalHex, separateUniversalHex } from '@microbit/microbit-universal-hex';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
 
@@ -46,7 +45,7 @@ class Microbits {
   private static outputHandler = new OutputMicrobitHandler(stores.getDevices());
   private static inputHandler = new CombinedMicrobitHandler(
     this.outputHandler,
-    stores.getDevices(),
+    getControllers().getMicrobitController(),
   );
 
   private static linkedMicrobit: Microbit = new Microbit();
@@ -92,7 +91,7 @@ class Microbits {
    * If no name is given, it will search for any nearby microbit.
    */
   public static async connectInput(name?: string) {
-    Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
+    ConsoleLogger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.inputIndexRef = 0;
     this.getInput().setDevice(bluetoothDevice);
@@ -106,7 +105,7 @@ class Microbits {
    * If no name is provided, it will search for any nearby micro:bit.
    */
   public static async connectOutput(name?: string): Promise<void> {
-    Logger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
+    ConsoleLogger.log('Microbits', 'connectToInput', 'Connecting to input microbit');
     const bluetoothDevice = new MicrobitBluetoothDevice();
     this.getOutput().setDevice(bluetoothDevice);
     this.getOutput().setHandler(this.outputHandler);
@@ -135,8 +134,9 @@ class Microbits {
    * @throws {Error} Throws an error if no micro:bit is assigned.
    */
   public static disconnectInputAndOutput() {
-    this.disconnectInput();
+    ConsoleLogger.log('Microbits', 'Attempting to disconnect input and output');
     this.disconnectOutput();
+    this.disconnectInput();
   }
 
   /**
@@ -145,7 +145,7 @@ class Microbits {
    * @throws {Error} Throws an error if no output micro:bit is assigned.
    */
   public static disconnectOutput() {
-    Logger.log('Microbits', 'Attempting to disconnect output');
+    ConsoleLogger.log('Microbits', 'Attempting to disconnect output');
     if (this.isInputOutputTheSame()) {
       this.outputHandler.onDisconnected();
       this.outputHandler.onClosed();
@@ -287,13 +287,23 @@ class Microbits {
    */
   public static async flashHexToLinked(
     progressCallback: (progress: number) => void,
+    hexContent?: string,
   ): Promise<void> {
     const version = this.getLinked().getUsbController().getModelNumber();
-    const hexFileName = this.hexFiles[version]; // Note: For this we CANNOT use the universal hex file (don't know why)
+    const hexFileName = this.hexFiles[version]; // Note: If using the universal hex, we must split up the hex and determine the correct version ourselves, using the @microbit/microbit-universal-hex library
     const hexFile = await fetch(hexFileName);
-    const hex = await hexFile.arrayBuffer();
+    const fetched = await hexFile.arrayBuffer();
 
-    await this.linkedMicrobit.getUsbController().flashHex(hex, progressCallback);
+    const hexContentBuffer = !!hexContent
+      ? this.createHexBuffer(hexContent, version)
+      : fetched;
+
+    // Check if the micro:bit is already connected using bluetooth, and disconnect it if so
+    this.disconnectInputAndOutput();
+
+    await this.linkedMicrobit
+      .getUsbController()
+      .flashHex(hexContentBuffer, progressCallback);
   }
 
   public static async getLinkedFriendlyName(): Promise<string> {
@@ -306,6 +316,25 @@ class Microbits {
 
   public static getOutputOrigin(): HexOrigin {
     return this.outputOrigin;
+  }
+
+  private static createHexBuffer(
+    hexContent: string,
+    mbVersion: MBSpecs.MBVersion,
+  ): Uint8Array | ArrayBuffer {
+    if (isUniversalHex(hexContent)) {
+      const separated = separateUniversalHex(hexContent);
+      const versionedPart = separated.find(part => {
+        return MBSpecs.Utility.getModelNumberFromBoardID(part.boardId) === mbVersion;
+      });
+      if (!versionedPart) {
+        throw new Error(
+          `No compatible hex part found for micro:bit version ${mbVersion}`,
+        );
+      }
+      return (new TextEncoder().encode(versionedPart.hex).buffer as ArrayBuffer).slice(0);
+    }
+    return (new TextEncoder().encode(hexContent).buffer as ArrayBuffer).slice(0);
   }
 }
 

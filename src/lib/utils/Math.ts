@@ -1,11 +1,11 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-import BaseVector from '../domain/BaseVector';
-import type { Vector } from '../domain/Vector';
+import BaseVector from '../../core/vector/BaseVector';
+import type { Vector } from '../../core/vector/Vector';
 
 export const getStandardDeviation = (vectors: Vector[]): Vector => {
   const input = vectors.map(e => e.getValue());
@@ -53,7 +53,10 @@ export const getMean = (vectors: Vector[]): Vector => {
   return new BaseVector(mean);
 };
 
-export const findLargestIndex = (arr: number[]) => {
+export const findLargestIndex = (arr: number[] | Vector) => {
+  if (!Array.isArray(arr)) {
+    arr = arr.getValue();
+  }
   if (arr.length === 0) return -1; // Handle empty array case
 
   let maxIndex = 0;

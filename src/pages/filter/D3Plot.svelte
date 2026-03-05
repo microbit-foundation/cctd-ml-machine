@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -8,20 +8,24 @@
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
-  import FilterTypes, { FilterType } from '../../lib/domain/FilterTypes';
   import FilterGraphLimits from '../../lib/utils/FilterLimits';
-  import { type GestureData } from '../../lib/domain/stores/gesture/Gesture';
   import StaticConfiguration from '../../StaticConfiguration';
-  import type { RecordingData } from '../../lib/domain/RecordingData';
+  import type { RecordingData } from '../../core/entities/RecordingData';
   import { stores } from '../../lib/stores/Stores';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
+  import type { FilterType } from '../../core/entities/filter/Filter';
+  import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
+  import { createFilter } from '../../core/filter/FilterUtils';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 
   export let filterType: FilterType;
   export let fullScreen: boolean = false;
 
-  $: showLive = $devices.isInputConnected;
+  // Use the MicrobitConnection API to check input connection state
+  $: showLive = $microbitConnection.getInput().isConnected();
   $: liveData = $stores.liveData;
   const highlightedAxes = stores.getHighlightedAxes();
 
@@ -40,7 +44,7 @@
 
   // Data
   const uniqueLiveDataID = 983095438740;
-  const filter = FilterTypes.createFilter(filterType);
+  const filter = createFilter(filterType);
   const filterFunction = (data: number[]) => filter.filter(data);
   let classList: { name: string; id: number }[] = [];
   const recordings = createDataRepresentation(); // side effect: updates classList and color

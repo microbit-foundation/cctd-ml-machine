@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -17,13 +17,15 @@
   import type { Writable } from 'svelte/store';
   import Microbits from '../../../../lib/microbit-interfacing/Microbits';
   import StaticConfiguration from '../../../../StaticConfiguration';
-  import Logger from '../../../../lib/utils/Logger';
   import { MBSpecs } from 'microbyte';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
   import { DeviceRequestStates } from '../../../../lib/domain/Devices';
   import { stores } from '../../../../lib/stores/Stores';
+  import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
+  import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 
   export let deviceState: DeviceRequestStates;
   export let onBluetoothConnected: () => void;
@@ -57,7 +59,7 @@
     }
     isConnecting = true;
     const connectionResult = async () => {
-      Logger.log('BluetoothConnectDialog', 'Attempting to connect to micro:bit');
+      ConsoleLogger.log('BluetoothConnectDialog', 'Attempting to connect to micro:bit');
       if (deviceState == DeviceRequestStates.INPUT) {
         await Microbits.connectInput(name);
       } else {
@@ -66,7 +68,7 @@
     };
 
     const connectTimeout = setTimeout(() => {
-      Logger.log('BluetoothConnectDialog', 'Connection timed-out');
+      ConsoleLogger.log('BluetoothConnectDialog', 'Connection timed-out');
       timeouted.set(true);
     }, StaticConfiguration.connectTimeoutDuration);
 
@@ -76,7 +78,11 @@
       timeouted.set(false);
       onBluetoothConnected();
     } catch (error) {
-      Logger.log('BluetoothConnectDialog', 'Failed to connect to micro:bit', error);
+      ConsoleLogger.log(
+        'BluetoothConnectDialog',
+        'Failed to connect to micro:bit',
+        error,
+      );
     } finally {
       isConnecting = false;
     }
@@ -102,8 +108,7 @@
   });
 
   onMount(() => {
-    // Resets the bluetooth connection prompt for cancelled device requests
-    $devices.requestDeviceWasCancelled = false;
+    microbitController.setRequestWasCancelled(false);
   });
 
   const handleSearchWithoutName = () => {
@@ -116,7 +121,7 @@
     {$t('popup.connectMB.bluetooth.heading')}
   </h1>
 
-  {#if $devices.requestDeviceWasCancelled && !isConnecting}
+  {#if $microbitConnection.wasDeviceRequestCancelled() && !isConnecting}
     <p class="text-warning mb-1">{$t('popup.connectMB.bluetooth.cancelledConnection')}</p>
     <p class="text-warning mb-1">
       {$t('popup.connectMB.bluetooth.cancelledConnection.noNameDescription')}

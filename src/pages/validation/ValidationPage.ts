@@ -1,12 +1,12 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
 import { derived } from 'svelte/store';
-import Matrix from '../../lib/domain/Matrix';
-import type { GestureData } from '../../lib/domain/stores/gesture/Gesture';
+import Matrix from '../../core/entities/Matrix';
+import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
 import type { ValidationResult } from '../../lib/domain/stores/ValidationResults';
 import { stores } from '../../lib/stores/Stores';
 
@@ -58,8 +58,3 @@ export const isValidationSetEmpty = derived(
     return validationSets.reduce((pre, cur) => pre + cur.recordings.length, 0) === 0;
   },
 );
-
-export const evaluateValidationSet = () => {
-  const validationResults = stores.getValidationResults();
-  const accuracy = validationResults.getAccuracy();
-};

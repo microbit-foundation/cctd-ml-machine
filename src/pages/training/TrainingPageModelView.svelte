@@ -1,19 +1,21 @@
 <!--
-  (c) 2023-2025, center for computational thinking and design at aarhus university and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
-  spdx-license-identifier: mit
+  SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import KnnModelTrainingPageView from './KnnModelTrainingPageView.svelte';
-  import ModelRegistry from '../../lib/domain/ModelRegistry';
+  import ModelRegistry from '../../core/entities/classifier/models/ModelRegistry';
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import { stores } from '../../lib/stores/Stores';
   import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import FiltersList from '../../components/features/filters/FiltersList.svelte';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
   const selectedModel = stores.getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);
 </script>
@@ -34,7 +36,7 @@
     </div>
   </div>
 </div>
-{#if !$devices.isInputConnected}
+{#if !$microbitConnection.getInput().isConnected()}
   <div class="mt-4">
     <PleaseConnect />
   </div>

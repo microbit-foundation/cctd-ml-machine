@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -7,18 +7,16 @@ import {
   type Readable,
   type Subscriber,
   type Unsubscriber,
-  type Writable,
   derived,
   get,
-  writable,
 } from 'svelte/store';
 import Filters from '../Filters';
 import Model, { type ModelData } from './Model';
-import Gesture, { type GestureID } from './gesture/Gesture';
 import type { ClassifierInput } from '../ClassifierInput';
-import Logger from '../../utils/Logger';
-import BaseVector from '../BaseVector';
-import type { Vector } from '../Vector';
+import type GestureState from './gesture/GestureState';
+import type { GestureID } from '../../../core/entities/Gesture';
+import BaseVector from '../../../core/vector/BaseVector';
+import ConsoleLogger from '../../../core/logging/ConsoleLogger';
 
 type ClassifierData = {
   model: ModelData;
@@ -28,10 +26,10 @@ class Classifier implements Readable<ClassifierData> {
   constructor(
     private model: Model,
     private filters: Filters,
-    private gestures: Readable<Gesture[]>,
+    private gestures: Readable<GestureState[]>,
     private confidenceSetter: (gestureId: GestureID, confidence: number) => void,
   ) {
-    Logger.log('classifier', 'Initialized classifier');
+    ConsoleLogger.log('classifier', 'Initialized classifier');
   }
 
   public subscribe(

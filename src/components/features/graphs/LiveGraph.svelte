@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -10,11 +10,12 @@
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
   import type { LiveData } from '../../../lib/domain/stores/LiveData';
-  import type { LiveDataVector } from '../../../lib/domain/stores/LiveDataVector';
   import StaticConfiguration from '../../../StaticConfiguration';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import { stores } from '../../../lib/stores/Stores';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
+  import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   /**
    * TimesSeries, but with the data array added.
@@ -33,6 +34,8 @@
   let axisColors = StaticConfiguration.graphColors;
 
   const highlightedAxes = stores.getHighlightedAxes();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
   const devices = stores.getDevices();
 
   // Smoothes real-time data by using the 3 most recent data points
@@ -100,7 +103,7 @@
   const model = classifier.getModel();
   $: {
     if (chart !== undefined) {
-      if ($devices.isInputReady) {
+      if ($microbitConnection.getInput().isReady()) {
         if (!$model.isTraining) {
           chart.start();
         } else {
@@ -139,7 +142,7 @@
 
   // When devices changes, update the devices of the canvas
   $: {
-    const isConnected = $devices.isInputReady;
+    const isConnected = $microbitConnection.getInput().isReady();
     updateCanvas(isConnected);
   }
 
@@ -182,7 +185,7 @@
   <canvas bind:this={canvas} height="160" id="smoothie-chart" width={width - 30} />
   {#key cnt}
     <DimensionLabels
-      hidden={!$devices.isInputConnected}
+      hidden={!$microbitConnection.getInput().isConnected()}
       {minValue}
       graphHeight={160}
       {maxValue}

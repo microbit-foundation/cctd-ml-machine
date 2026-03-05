@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -7,9 +7,9 @@
 <script lang="ts">
   import GestureCard from '../../components/ui/Card.svelte';
   import GestureDot from '../../components/ui/GestureDot.svelte';
-  import type Gesture from '../../lib/domain/stores/gesture/Gesture';
+  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
 
-  export let gesture: Gesture;
+  export let gesture: GestureState;
 </script>
 
 <GestureCard validationPage small>

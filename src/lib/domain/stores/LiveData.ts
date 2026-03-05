@@ -1,11 +1,11 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 import { type Readable } from 'svelte/store';
-import LiveDataBuffer from '../LiveDataBuffer';
-import { type LiveDataVector } from './LiveDataVector';
+import LiveDataBuffer from '../../../core/LiveDataBuffer';
+import { type LiveDataVector } from '../../../core/vector/LiveDataVector';
 
 /**
  * A container for real-time data. Uses a LiveDataBuffer to store data points.

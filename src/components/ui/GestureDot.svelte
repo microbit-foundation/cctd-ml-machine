@@ -1,13 +1,13 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type Gesture from '../../lib/domain/stores/gesture/Gesture';
+  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
 
   let isDotHovered = false;
-  export let gesture: Gesture;
+  export let gesture: GestureState;
   export let disableTooltip: boolean = false;
 
   $: name = $gesture.name;

@@ -1,14 +1,14 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import FilterTypes from '../../../lib/domain/FilterTypes';
+  import { getFilterTypes } from '../../../core/filter/FilterUtils';
   import { anchorElement } from './FilterList';
   import FilterListRow from './FilterListRow.svelte';
 
-  const availableFilters = FilterTypes.toIterable();
+  const availableFilters = getFilterTypes();
   let filterElement: HTMLElement;
   $: anchorElement.set(filterElement);
 </script>

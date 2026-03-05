@@ -3,7 +3,7 @@
 </style>
 
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -14,7 +14,7 @@
   import RecordingGraph from '../../features/graphs/recording/RecordingGraph.svelte';
   import RecordingFingerprint from './RecordingFingerprint.svelte';
   import { serializeRecordingToCsvWithoutGestureName } from '../../../lib/utils/CSVUtils';
-  import type { RecordingData } from '../../../lib/domain/RecordingData';
+  import type { RecordingData } from '../../../core/entities/RecordingData';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { tr } from '../../../i18n';
 

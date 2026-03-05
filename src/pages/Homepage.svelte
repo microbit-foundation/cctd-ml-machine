@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -24,17 +24,27 @@
   import ContactUsControlBarButton from '../components/ui/control-bar/control-bar-items/ContactUsControlBarButton.svelte';
   import SelectLanguageControlBarDropdown from '../components/ui/control-bar/control-bar-items/SelectLanguageControlBarDropdown.svelte';
   import { t } from '../i18n';
-  import Environment from '../lib/Environment';
-  import DevTools from '../components/features/GoToPlaygroundButton.svelte';
   import { isLoading } from '../lib/stores/ApplicationState';
+  import MakeCodeVideoIntroductionTile from './home-page-content-tiles/MakeCodeVideoIntroductionTile.svelte';
+  import { getControllers } from '../backend/interface-adapter/MLMachine';
+  import { Feature } from '../backend/application/feature/Feature';
 
+  const featureController = getControllers().getFeatureController();
   type ContentTile = { tile: ComponentType; spanColumns: number };
   // Just add the content titles you wish to put on front page, in the order you wish them to be there
-  const contentTiles: ContentTile[] = [
-    { tile: DoItYourselfMachineLearningTile, spanColumns: 1 },
-    { tile: NewFeaturesTile, spanColumns: 1 },
-    { tile: WhatIsMachineLearningTile, spanColumns: 2 },
-  ];
+  const contentTiles: ContentTile[] = featureController.hasFeature(
+    Feature.MAKECODE_INTRODUCTION_VIDEO,
+  )
+    ? [
+        { tile: DoItYourselfMachineLearningTile, spanColumns: 1 },
+        { tile: MakeCodeVideoIntroductionTile, spanColumns: 1 },
+        { tile: WhatIsMachineLearningTile, spanColumns: 2 },
+      ]
+    : [
+        { tile: DoItYourselfMachineLearningTile, spanColumns: 1 },
+        { tile: NewFeaturesTile, spanColumns: 1 },
+        { tile: WhatIsMachineLearningTile, spanColumns: 2 },
+      ];
 </script>
 
 <main class="h-full flex flex-col">
@@ -42,12 +52,6 @@
     <div>
       <ControlBar>
         <div class="w-full">
-          {#if Environment.isInDevelopment}
-            <div class="float-left flex flex-row">
-              <p>(DevTools)</p>
-              <DevTools />
-            </div>
-          {/if}
           <div class="float-right flex flex-row">
             <ContactUsControlBarButton />
             <SelectLanguageControlBarDropdown />

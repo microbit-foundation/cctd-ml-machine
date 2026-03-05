@@ -1,13 +1,13 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-import type { Axis } from '../domain/Axis';
-import BaseVector from '../domain/BaseVector';
-import { type TrainingData } from '../domain/ModelTrainer';
-import type { Vector } from '../domain/Vector';
+import type { Axis } from '../../core/entities/Axis';
+import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
+import BaseVector from '../../core/vector/BaseVector';
+import type { Vector } from '../../core/vector/Vector';
 import { type MicrobitAccelerometerData } from '../livedata/MicrobitAccelerometerData';
 
 export type Point3D = {

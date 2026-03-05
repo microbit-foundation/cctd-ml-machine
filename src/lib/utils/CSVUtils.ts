@@ -1,12 +1,12 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
 import { get } from 'svelte/store';
-import type { RecordingData } from '../domain/RecordingData';
-import type Gesture from '../domain/stores/gesture/Gesture';
+import type { RecordingData } from '../../core/entities/RecordingData';
+import type GestureState from '../domain/stores/gesture/GestureState';
 import { locale } from 'svelte-i18n';
 
 /**
@@ -35,7 +35,7 @@ const formatNumberForLocale = (value: number): string => {
   }
 };
 
-export const serializeGestureRecordingsToCSV = (gestures: Gesture[]) => {
+export const serializeGestureRecordingsToCSV = (gestures: GestureState[]) => {
   const axes = gestures[0].getRecordings()[0].labels;
   const headers = ['gesture', 'sample', ...axes].join(';');
   return [
@@ -44,7 +44,7 @@ export const serializeGestureRecordingsToCSV = (gestures: Gesture[]) => {
   ].join('\n');
 };
 
-const serializeGestureToCSV = (gesture: Gesture) => {
+const serializeGestureToCSV = (gesture: GestureState) => {
   const gestureName = gesture.getName();
   return gesture
     .getRecordings()

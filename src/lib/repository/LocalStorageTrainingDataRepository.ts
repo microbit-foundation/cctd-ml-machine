@@ -1,20 +1,20 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
 import { get } from 'svelte/store';
 import Filters from '../domain/Filters';
-import { type TrainingData } from '../domain/ModelTrainer';
+import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import type { Repositories } from '../domain/Repositories';
-import type { TrainingDataRepository } from '../domain/TrainingDataRepository';
+import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
 import { stores } from '../stores/Stores';
 import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
-import type { Vector } from '../domain/Vector';
-import BaseVector from '../domain/BaseVector';
 import { getMean, getStandardDeviation } from '../utils/Math';
-import type { RecordingData } from '../domain/RecordingData';
+import type { RecordingData } from '../../core/entities/RecordingData';
+import type { Vector } from '../../core/vector/Vector';
+import BaseVector from '../../core/vector/BaseVector';
 
 class LocalStorageTrainingDataRepository implements TrainingDataRepository {
   constructor(

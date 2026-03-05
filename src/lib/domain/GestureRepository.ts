@@ -1,18 +1,18 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 import { type Readable } from 'svelte/store';
-import Gesture from './stores/gesture/Gesture';
+import GestureState from './stores/gesture/GestureState';
 import { type PersistedGestureData } from './stores/gesture/Gestures';
 
-export interface GestureRepository extends Readable<Gesture[]> {
-  getGesture(gestureId: number): Gesture;
+export interface GestureRepository extends Readable<GestureState[]> {
+  getGesture(gestureId: number): GestureState;
 
   clearGestures(): void;
 
-  addGesture(gestureData: PersistedGestureData): Gesture;
+  addGesture(gestureData: PersistedGestureData): GestureState;
 
   removeGesture(gestureId: number): void;
 }

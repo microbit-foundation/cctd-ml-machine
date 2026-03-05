@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -7,18 +7,19 @@
 <script lang="ts">
   import { derived } from 'svelte/store';
   import Card from '../../components/ui/Card.svelte';
-  import Gesture from '../../lib/domain/stores/gesture/Gesture';
-  import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
   import { stores } from '../../lib/stores/Stores';
   import Recording from '../../components/ui/recording/Recording.svelte';
+  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
+  import type { GestureID } from '../../core/entities/Gesture';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  export let gesture: Gesture;
+  export let gesture: GestureState;
 
   const validationSets = stores.getValidationSets();
   const gestureValidationSet = stores.getValidationSets().getForGesture(gesture.getId());
   // Results are grouped by gestures then recordings [i][j](Gestures -> Recording)
   const results = stores.getValidationResults();
-  const enableFingerprint = stores.getEnableFingerprint();
+  const enableFingerprint = getControllers().getDataController().isFingerprintEnabled();
 
   $: recordings = $gestureValidationSet.recordings;
 

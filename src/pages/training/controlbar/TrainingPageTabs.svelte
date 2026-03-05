@@ -1,11 +1,11 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
   import ControlBar from '../../../components/ui/control-bar/ControlBar.svelte';
-  import ModelRegistry from '../../../lib/domain/ModelRegistry';
+  import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { t } from '../../../i18n';
   import { stores } from '../../../lib/stores/Stores';

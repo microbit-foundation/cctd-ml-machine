@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -9,8 +9,10 @@
   import { t } from './../../../i18n';
   import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
   const gestures = stores.getGestures();
   // Bool flags to know whether output microbit popup should be show
   let hasClosedPopup = false;
@@ -60,7 +62,7 @@
       <OutputGesture variant="stack" {gesture} {onUserInteraction} />
     {/each}
   </div>
-  {#if !$devices.isOutputConnected && !hasClosedPopup && hasInteracted}
+  {#if !$microbitConnection.getOutput().isConnected() && !hasClosedPopup && hasInteracted}
     <div transition:fade class="grid grid-cols-5 absolute bottom-5 w-full min-w-729px">
       <div
         class="flex relative col-start-2 rounded-lg col-end-5 h-35"

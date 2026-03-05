@@ -1,29 +1,27 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 import { type Readable, type Writable, get, writable } from 'svelte/store';
 import Classifier from './stores/Classifier';
 import Filters from './Filters';
-import { type TrainingData } from './ModelTrainer';
+import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import { type TrainerConsumer } from '../repository/LocalStorageClassifierRepository';
-import Gesture, { type GestureID } from './stores/gesture/Gesture';
 import Model from './stores/Model';
-import type { MLModel } from './MLModel';
-import { t } from '../../i18n';
-import BaseVector from './BaseVector';
-import type { RecordingData } from './RecordingData';
-import type Snackbar from '../stores/Snackbar';
+import type { MLModel } from '../../core/entities/classifier/models/MLModel';
+import type { RecordingData } from '../../core/entities/RecordingData';
+import type GestureState from './stores/gesture/GestureState';
+import type { GestureID } from '../../core/entities/Gesture';
+import BaseVector from '../../core/vector/BaseVector';
 
 class ClassifierFactory {
   public buildClassifier(
     model: Writable<MLModel | undefined>,
     trainerConsumer: TrainerConsumer,
     filters: Filters,
-    gestures: Readable<Gesture[]>,
+    gestures: Readable<GestureState[]>,
     confidenceSetter: (gestureId: GestureID, confidence: number) => void,
-    snackbar: Snackbar, // Maybe an event could be fired instead of passing the snackbar around
   ): Classifier {
     const classifier = new Classifier(
       this.buildModel(trainerConsumer, model),
@@ -34,7 +32,7 @@ class ClassifierFactory {
     filters.subscribe(() => {
       // Filters has changed
       if (classifier.getModel().isTrained()) {
-        snackbar.sendMessage(get(t)('snackbar.filtersChanged.modelInvalid'));
+        //snackbar.sendMessage(get(t)('snackbar.filtersChanged.modelInvalid'));
       }
       classifier.getModel().markAsUntrained();
     });
@@ -51,7 +49,7 @@ class ClassifierFactory {
     return classifier;
   }
 
-  public buildTrainingData(gestures: Gesture[], filters: Filters): TrainingData {
+  public buildTrainingData(gestures: GestureState[], filters: Filters): TrainingData {
     const classes = gestures.map(gesture => {
       return {
         samples: this.buildFilteredSamples(gesture.getRecordings(), filters),

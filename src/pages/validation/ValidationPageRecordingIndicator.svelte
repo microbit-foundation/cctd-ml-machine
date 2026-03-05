@@ -1,12 +1,12 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
   import MediaQuery from '../../components/layout/MediaQuery.svelte';
-  import type { GestureID } from '../../lib/domain/stores/gesture/Gesture';
+  import type { GestureID } from '../../core/entities/Gesture';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
   import { stores } from '../../lib/stores/Stores';
 

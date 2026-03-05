@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -8,9 +8,9 @@
   import { derived } from 'svelte/store';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import type { Axis } from '../../../lib/domain/Axis';
   import FixedNumber from '../../ui/FixedNumber.svelte';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
+  import type { Axis } from '../../../core/entities/Axis';
 
   const highlightedAxes = stores.getHighlightedAxes();
   const availableAxes = stores.getAvailableAxes();

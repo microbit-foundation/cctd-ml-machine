@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -7,6 +7,7 @@
 import { get, writable } from 'svelte/store';
 import { DeviceRequestStates } from '../domain/Devices';
 import { stores } from './Stores';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
 export enum ConnectDialogStates {
   NONE, // No connection in progress -> Dialog box closed
@@ -31,12 +32,14 @@ export const connectionDialogState = writable<{
 });
 
 export const startConnectionProcess = (): void => {
-  // Updating the state will cause a popup to appear, from where the connection process will take place
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
+  const inputConnected = microbitConnection.get().getInput().isConnected();
   connectionDialogState.update(s => {
-    s.connectionState = get(stores.getDevices()).isInputConnected
+    s.connectionState = inputConnected
       ? ConnectDialogStates.START_OUTPUT
       : ConnectDialogStates.START;
-    s.deviceState = get(stores.getDevices()).isInputConnected
+    s.deviceState = inputConnected
       ? DeviceRequestStates.OUTPUT
       : DeviceRequestStates.INPUT;
     return s;

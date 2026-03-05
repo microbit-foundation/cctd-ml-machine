@@ -1,15 +1,15 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type Gesture from '../../../lib/domain/stores/gesture/Gesture';
+  import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import OutputGestureStack from './ModelGestureStack.svelte';
   import OutputGestureTile from './ModelGestureTile.svelte';
 
-  export let gesture: Gesture;
+  export let gesture: GestureState;
   let wasTriggered = false;
 
   $: {

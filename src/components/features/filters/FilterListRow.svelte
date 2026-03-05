@@ -1,11 +1,11 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type { FilterType } from '../../../lib/domain/FilterTypes';
-  import FilterTypes from '../../../lib/domain/FilterTypes';
+  import type { FilterType } from '../../../core/entities/filter/Filter';
+  import { createFilter } from '../../../core/filter/FilterUtils';
   import { stores } from '../../../lib/stores/Stores';
   import { navigate, Paths } from '../../../router/Router';
   import {
@@ -15,7 +15,7 @@
   } from './FilterList';
 
   export let filterType: FilterType;
-  const filter = FilterTypes.createFilter(filterType);
+  const filter = createFilter(filterType);
   const classifier = stores.getClassifier();
   const selectedFilters = classifier.getFilters();
   $: checked = $selectedFilters.map(f => f.getType()).includes(filterType);

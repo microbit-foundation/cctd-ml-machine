@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -52,7 +52,7 @@
 </style>
 
 <script lang="ts">
-  import type { GestureData } from '../../../lib/domain/stores/gesture/Gesture';
+  import type { GestureData } from '../../../lib/domain/stores/gesture/GestureState';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import { stores } from '../../../lib/stores/Stores';
 

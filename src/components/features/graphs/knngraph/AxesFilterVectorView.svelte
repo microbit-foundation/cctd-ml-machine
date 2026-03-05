@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -10,10 +10,10 @@
   import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
   import StaticConfiguration from '../../../../StaticConfiguration';
-  import type { Axis } from '../../../../lib/domain/Axis';
   import { stores } from '../../../../lib/stores/Stores';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
   import { knnCurrentPoint } from '../../../../lib/stores/KNNStores';
+  import type { Axis } from '../../../../core/entities/Axis';
 
   const classifier = stores.getClassifier();
 

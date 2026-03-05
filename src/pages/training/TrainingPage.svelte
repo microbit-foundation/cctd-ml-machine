@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -17,6 +17,7 @@
 
 <TrainingFailedDialog />
 <div class="flex flex-col h-full">
+  <!--TODO: Rename the component to TrainingPageControlBar.svelte -->
   <TrainingPageTabs />
   {#if !sufficientData}
     <InsufficientData />

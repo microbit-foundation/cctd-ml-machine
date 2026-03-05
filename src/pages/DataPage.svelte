@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -8,7 +8,7 @@
   import { t } from '../i18n';
   import DataPageControlBar from '../components/features/datacollection/DataPageControlBar.svelte';
   import { onMount } from 'svelte';
-  import FileUtility from '../lib/repository/FileUtility';
+  import FileUtility from '../lib/utils/FileUtility';
   import { get } from 'svelte/store';
   import { stores } from '../lib/stores/Stores';
   import { hasSomeRecordingData } from './data/DataPage';

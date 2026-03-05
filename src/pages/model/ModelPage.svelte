@@ -1,41 +1,46 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
-  import StaticConfiguration from '../../StaticConfiguration';
+  import { t } from 'svelte-i18n';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import ExpandableControlBarMenu from '../../components/ui/control-bar/control-bar-items/ExpandableControlBarMenu.svelte';
-  import { Feature, hasFeature } from '../../lib/FeatureToggles';
-  import { modelView, ModelView } from '../../lib/stores/ApplicationState';
-  import { stores } from '../../lib/stores/Stores';
   import ModelPageStackView from './stackview/ModelPageStackView.svelte';
   import ModelPageTileView from './tileview/ModelPageTileView.svelte';
+  import { navigate, Paths } from '../../router/Router';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { OutputTarget } from '../../backend/domain/implementation/output/OutputTarget';
+  import { Feature } from '../../backend/application/feature/Feature';
 
-  const devices = stores.getDevices();
+  const controllers = getControllers();
+  const outputController = controllers.getOutputController();
+  const featureController = controllers.getFeatureController();
+  const outputTarget = outputController.getOutputTarget();
 
-  const openMakeCodeInNewTab = () => {
-    window.open(StaticConfiguration.makecodeFirmwareUrl, '_blank');
+  const openMakecode = () => {
+    navigate(Paths.MAKECODE);
+    outputController.setOutputTargetMakecode();
   };
 </script>
 
 <div>
   <ControlBar>
-    {#if hasFeature(Feature.MAKECODE)}
+    {#if featureController.hasFeature(Feature.MAKECODE)}
       <ExpandableControlBarMenu>
-        <StandardButton small outlined onClick={openMakeCodeInNewTab}>
-          MakeCode HEX
+        <StandardButton small outlined onClick={openMakecode}>
+          {$t('content.model.output.toMakeCode')}
         </StandardButton>
       </ExpandableControlBarMenu>
     {/if}
   </ControlBar>
 </div>
 
-<div class="pt-4 pl-3">
-  {#if $modelView == ModelView.TILE}
+<div class="h-[calc(100%-48px)] flex flex-col">
+  {#if $outputTarget === OutputTarget.MAKECODE && featureController.hasFeature(Feature.MAKECODE)}
     <ModelPageTileView />
   {:else}
     <ModelPageStackView />

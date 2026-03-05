@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -11,7 +11,7 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import { type GestureID } from './gesture/Gesture';
+import type { GestureID } from '../../../core/entities/Gesture';
 
 type GestureConfidenceMap = Map<GestureID, number>;
 

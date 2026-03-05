@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -8,7 +8,7 @@ import { stores } from '../../lib/stores/Stores';
 import exampleDataset from '../../assets/exampleDataset.json';
 import { t } from '../../i18n';
 import { derived, get } from 'svelte/store';
-import type { GestureData } from '../../lib/domain/stores/gesture/Gesture';
+import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
 
 export const importExampleDataset = () => {
   const gestures = stores.getGestures();

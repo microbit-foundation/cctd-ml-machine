@@ -1,15 +1,18 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
 
 <script lang="ts">
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import { tr } from '../../../i18n';
   import { stores } from '../../../lib/stores/Stores';
   import TypingUtils from '../../../lib/TypingUtils';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
-  const devices = stores.getDevices();
+
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
 
   export let onOutputDisconnectButtonClicked: () => void;
   export let onOutputConnectButtonClicked: () => void;
@@ -20,10 +23,14 @@
 
 <!-- These are the buttons that are present while the input micro:bit is connected-->
 <div class="flex flex-row mr-4">
-  {#if $model.hasModel || $model.isTraining || $devices.isOutputConnected}
-    {#if $devices.isOutputAssigned}
+  {#if $model.hasModel || $model.isTraining || $microbitConnection
+      .getOutput()
+      .isConnected()}
+    {#if $microbitConnection.getOutput().isAssigned()}
       <!-- Output is assigned -->
-      {#if !$devices.isOutputConnected || $devices.isOutputReady}
+      {#if !$microbitConnection.getOutput().isConnected() || $microbitConnection
+          .getOutput()
+          .isReady()}
         <!-- Output MB is not in the connection process -->
         <StandardButton medium onClick={onOutputDisconnectButtonClicked} color="warning">
           {$tr('menu.model.disconnect')}
@@ -41,7 +48,9 @@
     {/if}
   {/if}
   <div class="ml-2">
-    {#if !$devices.isInputConnected || $devices.isInputReady}
+    {#if !$microbitConnection.getInput().isConnected() || $microbitConnection
+        .getInput()
+        .isReady()}
       <!-- Input MB is not in the connection process -->
       <StandardButton medium onClick={onInputDisconnectButtonClicked} color="warning"
         >{$tr('footer.disconnectButton')}</StandardButton>

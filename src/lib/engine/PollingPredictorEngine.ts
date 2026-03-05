@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -12,9 +12,9 @@ import {
   writable,
 } from 'svelte/store';
 import StaticConfiguration from '../../StaticConfiguration';
-import { type TimestampedData } from '../domain/LiveDataBuffer';
+import { type TimestampedData } from '../../core/LiveDataBuffer';
 import Classifier from '../domain/stores/Classifier';
-import { type LiveDataVector } from '../domain/stores/LiveDataVector';
+import { type LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { Engine, EngineData } from '../domain/stores/Engine';
 import type { LiveData } from '../domain/stores/LiveData';
 import type HighlightedAxes from '../domain/stores/HighlightedAxes';

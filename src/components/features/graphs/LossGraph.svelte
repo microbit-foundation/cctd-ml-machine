@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -21,7 +21,7 @@
   import { onMount } from 'svelte';
   import { type Readable } from 'svelte/store';
   import { tr } from '../../../i18n';
-  import type { LossTrainingIteration } from '../../../lib/mlmodels/LayersModelTrainer';
+  import type { LossTrainingIteration } from '../../../core/entities/classifier/models/LayersModelTrainer';
 
   export let loss: Readable<LossTrainingIteration[]>;
   export let maxX: number | undefined = undefined;

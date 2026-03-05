@@ -1,12 +1,14 @@
 <!--
-  (c) 2023-2025, center for computational thinking and design at aarhus university and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
-  spdx-license-identifier: mit
+  SPDX-License-Identifier: MIT
  -->
+
 <script lang="ts">
   import { slide } from 'svelte/transition';
-  import { stores } from '../../../lib/stores/Stores';
-  const snackbar = stores.getSnackbar();
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  const controller = getControllers().getNotificationController();
+  const snackbar = controller.getSnackbarMessage();
   $: isOpen = $snackbar !== undefined;
   $: snackbarText = $snackbar;
 </script>
@@ -19,7 +21,7 @@
       <p class="text-sm text-secondarytext mr-3">{snackbarText}</p>
       <i
         class="far fa-times-circle text-secondarytext cursor-pointer self-center"
-        on:click={() => snackbar.clearMessaage()} />
+        on:click={() => controller.clearSnackbarMessage()} />
     </div>
   </div>
 {/if}

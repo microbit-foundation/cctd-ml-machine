@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -12,11 +12,13 @@ import {
   get,
   writable,
 } from 'svelte/store';
-import Gesture, { type GestureData, type GestureID, type GestureOutput } from './Gesture';
+import GestureState, { type GestureData } from './GestureState';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import type { GestureRepository } from '../../GestureRepository';
-import type { RecordingData } from '../../RecordingData';
-import Logger from '../../../utils/Logger';
+import type { RecordingData } from '../../../../core/entities/RecordingData';
+import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
+import type { GestureOutput } from '../../../../core/entities/GestureOutput';
+import type { GestureID } from '../../../../core/entities/Gesture';
 
 export type PersistedGestureData = {
   name: string;
@@ -27,7 +29,7 @@ export type PersistedGestureData = {
 };
 
 class Gestures implements Readable<GestureData[]> {
-  private static subscribableGestures: Writable<Gesture[]>;
+  private static subscribableGestures: Writable<GestureState[]>;
   private repository: GestureRepository;
 
   constructor(repository: GestureRepository) {
@@ -63,16 +65,16 @@ class Gestures implements Readable<GestureData[]> {
     );
   }
 
-  public getGesture(gestureID: number): Gesture {
+  public getGesture(gestureID: number): GestureState {
     return this.repository.getGesture(gestureID);
   }
 
   // TODO: Change to getCurrent() or something else maybe
-  public getGestures(): Gesture[] {
+  public getGestures(): GestureState[] {
     return get(Gestures.subscribableGestures);
   }
 
-  public createGesture(name = ''): Gesture {
+  public createGesture(name = ''): GestureState {
     const newId = Date.now();
     const color =
       StaticConfiguration.gestureColors[
@@ -100,7 +102,7 @@ class Gestures implements Readable<GestureData[]> {
     return get(Gestures.subscribableGestures).length;
   }
 
-  public getBestPrediction(): Readable<Gesture | undefined> {
+  public getBestPrediction(): Readable<GestureState | undefined> {
     return derived(
       get(Gestures.subscribableGestures).map(gest => gest.getConfidence()),
       confidences => {
@@ -115,7 +117,9 @@ class Gestures implements Readable<GestureData[]> {
         });
 
         sorted.sort((confidence1, confidence2) => {
-          return confidence2.value.confidence - confidence1.value.confidence;
+          return (
+            confidence2.value.currentConfidence - confidence1.value.currentConfidence
+          );
         });
 
         return get(Gestures.subscribableGestures)[sorted[0].index];
@@ -123,15 +127,15 @@ class Gestures implements Readable<GestureData[]> {
     );
   }
 
-  private addGestureFromPersistedData(gestureData: PersistedGestureData): Gesture {
-    Logger.log(
+  private addGestureFromPersistedData(gestureData: PersistedGestureData): GestureState {
+    ConsoleLogger.log(
       'Gestures',
       `Adding gesture from persistedData ${gestureData.name} (id:${gestureData.ID})`,
     );
     return this.repository.addGesture(gestureData);
   }
 
-  private gestureToGestureData(gesture: Gesture): GestureData {
+  private gestureToGestureData(gesture: GestureState): GestureData {
     return {
       ID: gesture.getId(),
       name: gesture.getName(),

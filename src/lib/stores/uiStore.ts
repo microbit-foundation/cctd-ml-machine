@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -10,10 +10,9 @@ import {
   checkCompatibility,
 } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
-import CookieManager from '../CookieManager';
-import { isInputPatternValid } from './connectionStore';
-import Gesture from '../domain/stores/gesture/Gesture';
+import GestureState from '../domain/stores/gesture/GestureState';
 import { stores } from './Stores';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -22,7 +21,7 @@ export const compatibility: Writable<CompatibilityStatus> = writable(
   await checkCompatibility(),
 );
 
-export const chosenGesture = writable<Gesture | null>(null);
+export const chosenGesture = writable<GestureState | null>(null);
 
 export const isBluetoothWarningDialogOpen = derived(
   compatibility,
@@ -62,10 +61,13 @@ function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: strin
   const devices = get(stores.getDevices());
 
   const model = stores.getClassifier().getModel();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
+  const inputConnected = microbitConnection.get().getInput().isConnected();
 
   if (devices.isRecording) return { isReady: false, msg: text('alert.isRecording') };
   if (model.isTraining()) return { isReady: false, msg: text('alert.isTraining') };
-  if (!devices.isInputConnected && actionAllowed)
+  if (!inputConnected && actionAllowed)
     return { isReady: false, msg: text('alert.isNotConnected') };
 
   return { isReady: true, msg: '' };
@@ -87,16 +89,3 @@ const initialMicrobitInteraction: MicrobitInteractions = MicrobitInteractions.AB
 export const microbitInteraction = writable<MicrobitInteractions>(
   initialMicrobitInteraction,
 );
-
-/**
- * Workaround for an unrecoverable reconnect failure due to a bug in chrome/chromium.
- * This error occurs, when a connection is established, but lost again before listening to the characteristics
- * Refresh the page is the only known solution
- */
-export const onCatastrophicError = (reconnect?: boolean) => {
-  // Set flag to offer reconnect when page reloads
-  if (isInputPatternValid() && reconnect) {
-    CookieManager.setReconnectFlag();
-  }
-  location.reload();
-};

@@ -1,5 +1,5 @@
 <!--
-  (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
   SPDX-License-Identifier: MIT
  -->
@@ -12,9 +12,12 @@
   import OutdatedMicrobitWarning from '../features/OutdatedMicrobitWarning.svelte';
   import { isInputPatternValid } from '../../lib/stores/connectionStore';
   import FilterListFilterPreview from '../features/filters/FilterListFilterPreview.svelte';
-  import { stores } from '../../lib/stores/Stores';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import DevOverlay from '../features/dev/DevOverlay.svelte';
+  import MicrobitFlashingProgressOverlay from '../features/microbit-flashing/MicrobitFlashingProgressOverlay.svelte';
 
-  const devices = stores.getDevices();
+  const microbitController = getControllers().getMicrobitController();
+  const microbitConnection = microbitController.getMicrobitConnectionState();
   // Helps show error messages on top of page
   let latestMessage = '';
   let showLatestMessage = false;
@@ -52,11 +55,18 @@
       </div>
     </div>
   {/if}
-  {#if $devices.offerReconnect && isInputPatternValid()}
+  {#if $microbitConnection
+    .getReconnectState()
+    .isOfferingReconnect() && isInputPatternValid()}
     <ReconnectPrompt />
   {/if}
-  {#if $devices.isInputOutdated || $devices.isOutputOutdated}
-    <OutdatedMicrobitWarning targetRole={$devices.isInputOutdated ? 'INPUT' : 'OUTPUT'} />
+  {#if $microbitConnection.getInput().isOutdated() || $microbitConnection
+      .getOutput()
+      .isOutdated()}
+    <OutdatedMicrobitWarning
+      targetRole={$microbitConnection.getInput().isOutdated() ? 'INPUT' : 'OUTPUT'} />
   {/if}
   <FilterListFilterPreview />
+  <MicrobitFlashingProgressOverlay />
+  <DevOverlay />
 </div>

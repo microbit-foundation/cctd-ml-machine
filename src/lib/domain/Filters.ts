@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -10,12 +10,10 @@ import {
   type Writable,
   get,
 } from 'svelte/store';
-import FilterTypes, { FilterType } from './FilterTypes';
-import Logger from '../utils/Logger';
-import type { Filter } from './Filter';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import FilterGraphLimits from '../utils/FilterLimits';
-import type { Vector } from './Vector';
-import BaseVector from './BaseVector';
+import type { Filter, FilterType } from '../../core/filter/Filter';
+import { createFilter } from '../../core/filter/FilterUtils';
 
 class Filters implements Readable<Filter[]> {
   constructor(private filters: Writable<Filter[]>) {}
@@ -50,10 +48,8 @@ class Filters implements Readable<Filter[]> {
   }
 
   public set(filterTypes: FilterType[]) {
-    const newFilters = filterTypes.map(filterType =>
-      FilterTypes.createFilter(filterType),
-    );
-    Logger.log('Setting filter ', newFilters);
+    const newFilters = filterTypes.map(filterType => createFilter(filterType));
+    ConsoleLogger.log('Setting filter ', newFilters);
     this.filters.set(newFilters);
   }
 
@@ -62,10 +58,10 @@ class Filters implements Readable<Filter[]> {
       // Just a thought: Does it make sense to have duplicate filters?
       throw new Error('Cannot add filter type. Filters already has this type');
     }
-    const filter = FilterTypes.createFilter(filterType);
+    const filter = createFilter(filterType);
     const oldFilterArray = [...get(this.filters)];
     this.filters.set([...oldFilterArray, filter]);
-    Logger.log('Filters', 'added filter ', filter);
+    ConsoleLogger.log('Filters', 'added filter ', filter);
   }
 
   public has(filterType: FilterType): boolean {

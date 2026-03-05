@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -9,11 +9,11 @@ import {
   type Writable,
   writable,
 } from 'svelte/store';
-import LiveDataBuffer from '../domain/LiveDataBuffer';
-import type { LiveDataVector } from '../domain/stores/LiveDataVector';
+import LiveDataBuffer from '../../core/LiveDataBuffer';
+import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
-import type { Vector } from '../domain/Vector';
-import BaseVector from '../domain/BaseVector';
+import type { Vector } from '../../core/vector/Vector';
+import BaseVector from '../../core/vector/BaseVector';
 
 export type MicrobitAccelerometerData = {
   x: number;

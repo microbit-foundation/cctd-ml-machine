@@ -14,7 +14,7 @@
 <div class="flex justify-center flex-grow">
   <div class="w-full flex flex-row justify-center">
     <iframe
-      src="https://www.youtube.com/embed/4lHzYr017FI"
+      src="https://www.youtube.com/embed/xjFKZfreaBQ"
       referrerpolicy="strict-origin-when-cross-origin"
       title={$t('content.index.makecodeVideoIframeTitle')}
       class="w-full h-full w-116 h-66"

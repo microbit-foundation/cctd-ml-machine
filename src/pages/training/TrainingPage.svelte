@@ -17,6 +17,7 @@
 
 <TrainingFailedDialog />
 <div class="flex flex-col h-full">
+  <!--TODO: Rename the component to TrainingPageControlBar.svelte -->
   <TrainingPageTabs />
   {#if !sufficientData}
     <InsufficientData />

@@ -22,6 +22,13 @@ import type { MakeCodeProject } from '@microbit/makecode-embed';
 import type { Axis } from '../../core/entities/Axis';
 import type { Filter } from '../../core/filter/Filter';
 import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
+import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
+import { ModelTrainingImpl } from '../../core/model/ModelTrainingImpl';
+import { DefaultNeuralNetworkModelBaseSettings } from '../interface-adapter/DefaultNeuralNetworkModelBaseSettings';
+import { DefaultNeuralNetworkArchitecture } from '../interface-adapter/DefaultNeuralNetworkArchitecture';
+import { LoggingNeuralNetworkTrainingObserver } from '../../core/model/neural-network/LoggingNeuralNetworkTrainingObserver';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
+import type { Classifier } from '../../core/classifier/Classifier';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -35,6 +42,9 @@ export class SvelteStates implements AbstractStates {
   private selectedAxesState: AbstractState<Axis[] | undefined>;
   private filtersState: AbstractState<Filter[]>;
   private validationResultState: AbstractState<ValidationResult | undefined>;
+  private neuralNetworkSettingsState: AbstractState<NeuralNetworkSettingsImpl>;
+  private modelTrainingState: AbstractState<ModelTrainingImpl>;
+  private classifier: AbstractState<Classifier | undefined>;
 
   public constructor() {
     this.liveDataState = new LiveDataStateAdapter(
@@ -63,6 +73,19 @@ export class SvelteStates implements AbstractStates {
     this.selectedAxesState = new SvelteStateAdapter(writable(undefined));
     this.filtersState = new SvelteStateAdapter(writable([]));
     this.validationResultState = new SvelteStateAdapter(writable(undefined));
+    this.neuralNetworkSettingsState = new SvelteStateAdapter(
+      writable(
+        new NeuralNetworkSettingsImpl(
+          new DefaultNeuralNetworkModelBaseSettings(),
+          new DefaultNeuralNetworkArchitecture(),
+          new LoggingNeuralNetworkTrainingObserver(
+            new ConsoleLogger('LoggingNeuralNetworkTrainingObserver'),
+          ),
+        ),
+      ),
+    );
+    this.modelTrainingState = new SvelteStateAdapter(writable(new ModelTrainingImpl()));
+    this.classifier = new SvelteStateAdapter(writable<Classifier | undefined>(undefined));
   }
 
   getValidationResult(): AbstractState<ValidationResult | undefined> {
@@ -104,5 +127,17 @@ export class SvelteStates implements AbstractStates {
 
   public getOutputTarget(): AbstractState<OutputTarget> {
     return this.outputTargetState;
+  }
+
+  getNeuralNetworkSettings(): AbstractState<NeuralNetworkSettingsImpl> {
+    return this.neuralNetworkSettingsState;
+  }
+
+  getModelTrainingState(): AbstractState<ModelTrainingImpl> {
+    return this.modelTrainingState;
+  }
+
+  getClassifier(): AbstractState<Classifier | undefined> {
+    return this.classifier;
   }
 }

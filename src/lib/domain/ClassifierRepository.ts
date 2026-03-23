@@ -7,6 +7,9 @@ import Classifier from './stores/Classifier';
 import Confidences from './stores/Confidences';
 import GestureConfidence from './stores/gesture/GestureConfidence';
 
+/**
+ * @deprecated use the other ClassifierRepository instead
+ */
 export interface ClassifierRepository {
   getClassifier(): Classifier;
 

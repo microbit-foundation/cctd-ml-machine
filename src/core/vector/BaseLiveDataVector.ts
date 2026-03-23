@@ -6,6 +6,7 @@
 
 import BaseVector from './BaseVector';
 import { type LiveDataVector } from './LiveDataVector';
+import type { Vector } from './Vector';
 
 class BaseLiveDataVector implements LiveDataVector {
   public constructor(
@@ -23,6 +24,13 @@ class BaseLiveDataVector implements LiveDataVector {
 
   public getValue(): number[] {
     return this.base.getValue();
+  }
+
+  public divideByScalar(scalar: number): Vector {
+    return new BaseLiveDataVector(
+      new BaseVector(this.base.divideByScalar(scalar).getValue()),
+      this.labels,
+    );
   }
 
   public add(vector: BaseLiveDataVector): BaseLiveDataVector {

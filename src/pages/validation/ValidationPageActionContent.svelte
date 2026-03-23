@@ -13,6 +13,9 @@
   import Tooltip from '../../components/ui/Tooltip.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import Switch from '../../components/ui/Switch.svelte';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
+
+  const validationController = getControllers().getValidationController();
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
@@ -20,10 +23,10 @@
   const accuracy = validationResults.getAccuracy();
   const validationSetMatrix: Readable<ValidationSetMatrix> =
     validationResults.getMatrix();
-  const autoUpdate = validationResults.getAutoUpdate();
+  const autoUpdate = validationController.shouldAutoUpdate();
 
   const handleEvaluateValidationSets = () => {
-    validationResults.evaluateValidationSet();
+    validationController.evaluateValidationSet();
   };
 
   const showPercentages = writable(false);

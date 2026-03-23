@@ -24,4 +24,8 @@ export class ClassifierController {
   public getModelTraining(): AbstractState<ModelTraining> {
     return this.mlMachine.getClassifierService().getModelTraining();
   }
+
+  public getGestureConfidence(gestureId: number) {
+    return this.mlMachine.getClassifierService().getGestureConfidence(gestureId);
+  }
 }

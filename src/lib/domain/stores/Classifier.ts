@@ -22,6 +22,9 @@ type ClassifierData = {
   model: ModelData;
 };
 
+/**
+ * @deprecated use the other Classifier instead
+ */
 class Classifier implements Readable<ClassifierData> {
   constructor(
     private model: Model,

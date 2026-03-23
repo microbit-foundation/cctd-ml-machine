@@ -6,12 +6,11 @@
 
 import type { Classifier } from '../../core/classifier/Classifier';
 import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
-import type { AbstractState } from '../statemanagement/AbstractState';
 import type { ModelTraining } from '../../core/model/ModelTraining';
 
 export interface ClassifierService {
-  getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings>;
-  getClassifier(): Classifier;
-  getModelTraining(): AbstractState<ModelTraining>;
+  getNeuralNetworkSettings(): NeuralNetworkModelSettings;
+  getClassifier(): Classifier | undefined;
+  getModelTraining(): ModelTraining;
   unsetClassifier(): void;
 }

@@ -10,6 +10,9 @@ import type { PredictionOutput } from '../../classifier/PredictionOutput';
 import type { TrainingResult } from '../../classifier/TrainingResult';
 import type { Dataset } from '../../dataset/Dataset';
 
+/**
+ * @deprecated use the other Classifier instead
+ */
 export interface Classifier {
   train(trainingData: Dataset): Promise<TrainingResult>;
   predict(input: PredictionInput): Promise<PredictionOutput>;

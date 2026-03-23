@@ -57,6 +57,16 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
     return this.data;
   }
 
+  public divideByScalar(scalar: number): Vector {
+    const baseVec = new BaseVector(this.getValue());
+    const divided = baseVec.divideByScalar(scalar);
+    return new MicrobitAccelerometerDataVector({
+      x: divided.getValue()[0],
+      y: divided.getValue()[1],
+      z: divided.getValue()[2],
+    });
+  }
+
   public divide(vector: Vector): MicrobitAccelerometerDataVector {
     const baseVec = new BaseVector(this.getValue());
     const divided = baseVec.divide(vector);

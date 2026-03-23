@@ -13,10 +13,10 @@
   import type { RecordingData } from '../../core/entities/RecordingData';
   import { stores } from '../../lib/stores/Stores';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
-  import type { FilterType } from '../../core/entities/filter/Filter';
   import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
   import { createFilter } from '../../core/filter/FilterUtils';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import type { FilterType } from '../../core/filter/Filter';
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();

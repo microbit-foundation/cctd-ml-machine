@@ -52,7 +52,7 @@
 </style>
 
 <script lang="ts">
-  import type { GestureData } from '../../../lib/domain/stores/gesture/GestureState';
+  import type { NewGesture } from '../../../core/entities/NewGesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import { stores } from '../../../lib/stores/Stores';
 
@@ -67,9 +67,9 @@
     }
   };
 
-  export let gesture: GestureData;
+  export let gesture: NewGesture;
 
-  let matrix = gesture.output?.matrix ?? new Array<boolean>(25).fill(false);
+  let matrix = gesture.getOutput()?.matrix ?? new Array<boolean>(25).fill(false);
 
   // Save matrix to output
   // $: gesture.output.matrix = matrix;
@@ -83,7 +83,7 @@
   function elementClick(i: number) {
     setElementTo = !matrix[i];
     matrix[i] = setElementTo;
-    stores.getGestures().getGesture(gesture.ID).setLEDOutput(matrix);
+    stores.getGestures().getGesture(gesture.getID()).setLEDOutput(matrix);
   }
 
   // When user hovers over a box. If user is clicking:
@@ -94,7 +94,7 @@
       return;
     }
     matrix[i] = setElementTo;
-    stores.getGestures().getGesture(gesture.ID).setLEDOutput(matrix);
+    stores.getGestures().getGesture(gesture.getID()).setLEDOutput(matrix);
   }
 </script>
 

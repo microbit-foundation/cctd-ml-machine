@@ -15,15 +15,12 @@ import type { NotificationService } from '../domain/NotificationService';
 import { MLMachineControllers } from './MLMachineControllers';
 import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
 import type { ClassifierService } from '../domain/ClassifierService';
-import { StateClassifierService } from '../domain/implementation/classifier/StateClassifierService';
+import { ClassifierServiceImpl } from '../domain/implementation/classifier/ClassifierServiceImpl';
 import { DefaultNeuralNetworkModelBaseSettings } from './DefaultNeuralNetworkModelBaseSettings';
 import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
 import { LoggingNeuralNetworkTrainingObserver } from '../../core/model/neural-network/LoggingNeuralNetworkTrainingObserver';
-import { NeuralNetworkSettingsStateAdapter } from './NeuralNetworkSettingsStateAdapter';
 import { DefaultNeuralNetworkArchitecture } from './DefaultNeuralNetworkArchitecture';
 import type { Classifier } from '../../core/classifier/Classifier';
-import type { ModelTraining } from '../../core/model/ModelTraining';
-import { ModelTrainingStateAdapter } from './ModelTrainingStateAdapter';
 import { DataServiceImpl } from '../application/data/DataServiceImpl';
 import type { GestureService } from '../domain/GestureService';
 import { GestureServiceImpl } from '../domain/implementation/gesture/GestureServiceImpl';
@@ -32,7 +29,6 @@ import { MLMachineColors } from './MLMachineColors';
 import type { DataService } from '../domain/DataService';
 import { StatesAxisRepository } from '../infrastructure/StatesAxisRepository';
 import { InMemoryLiveDataRepository } from '../infrastructure/StatesLiveDataRepository';
-import { NotifierServiceImpl } from '../application/NotifierServiceImpl';
 import type { FeatureProvider } from '../application/feature/FeatureProvider';
 import { FeatureServiceImpl } from '../application/feature/FeatureServiceImpl';
 import type { FeatureService } from '../application/feature/FeatureService';
@@ -51,6 +47,9 @@ import { StatesNotificationRepository } from '../infrastructure/StatesNotificati
 import { StatesFilterRepository } from '../infrastructure/StatesFilterRepository';
 import { ValidationServiceImpl } from '../domain/implementation/validation/ValidationServiceImpl';
 import { StatesValidationRepository } from '../infrastructure/StatesValidationRepository';
+import { StatesNeuralNetworkSettingsRepository } from '../infrastructure/StatesNeuralNetworkSettingsRepository';
+import { StatesModelTrainingStateRepository } from '../infrastructure/StatesModelTrainingStateRepository';
+import { StatesClassifierRepository } from '../infrastructure/StatesClassifierRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -59,9 +58,6 @@ import { StatesValidationRepository } from '../infrastructure/StatesValidationRe
  */
 export class MLMachine {
   private devices: AbstractState<DevicesType>;
-  private immediateFeedback: AbstractState<string | undefined>;
-  private classifier: AbstractState<Classifier | undefined>;
-  private modelTraining: AbstractState<ModelTraining>;
   private controllers: MLMachineControllers;
   private dataService: DataService;
   private gestureService: GestureService;
@@ -87,11 +83,6 @@ export class MLMachine {
     this.states = new SvelteStates();
 
     this.devices = new SvelteStateAdapter(new Devices());
-    this.immediateFeedback = new SvelteStateAdapter(
-      writable<string | undefined>(undefined),
-    );
-    this.classifier = new SvelteStateAdapter(writable<Classifier | undefined>(undefined));
-    this.modelTraining = new ModelTrainingStateAdapter();
 
     const repository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
@@ -123,17 +114,19 @@ export class MLMachine {
       new StatesNotificationRepository(this.states),
     );
 
-    const initialNeuralNetworkSettings = new NeuralNetworkSettingsImpl(
-      new DefaultNeuralNetworkModelBaseSettings(),
-      new DefaultNeuralNetworkArchitecture(),
-      new LoggingNeuralNetworkTrainingObserver(
-        this.createLogger('LoggingNeuralNetworkTrainingObserver'),
-      ),
+    const neuralNetworkSettingsRepository = new StatesNeuralNetworkSettingsRepository(
+      this.states.getNeuralNetworkSettings(),
     );
-    this.classifierService = new StateClassifierService(
-      new NeuralNetworkSettingsStateAdapter(initialNeuralNetworkSettings),
-      this.classifier,
-      this.modelTraining,
+    const statesModelTrainingRepository = new StatesModelTrainingStateRepository(
+      this.states.getModelTrainingState(),
+    );
+    const classifierRepository = new StatesClassifierRepository(
+      this.states.getClassifier(),
+    );
+    this.classifierService = new ClassifierServiceImpl(
+      classifierRepository,
+      statesModelTrainingRepository,
+      neuralNetworkSettingsRepository,
     );
     this.controllers = new MLMachineControllers(
       this,

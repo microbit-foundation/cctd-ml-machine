@@ -30,34 +30,37 @@
   import PinSelector from './ModelPinSelector.svelte';
   import { PinTurnOnState } from '../../../core/entities/PinTurnOnState';
   import { MBSpecs } from 'microbyte';
-  import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
   import type { SoundData } from '../../../core/entities/GestureOutput';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import type { GestureID } from '../../../core/entities/Gesture';
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
+  const gestureController = getControllers().getGestureController();
 
   const gestures = stores.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component
-  export let gesture: GestureState;
+  export let gestureId: GestureID;
+  const gesture = gestureController.getGestureState(gestureId);
   export let onUserInteraction: () => void = () => {
     return;
   };
   let wasTriggered = false;
   let triggerFunctions: (() => void)[] = [];
-  let selectedSound: SoundData | undefined = $gesture.output.sound;
-  let selectedPin: MBSpecs.UsableIOPin = $gesture.output.outputPin
-    ? $gesture.output.outputPin.pin
+  let selectedSound: SoundData | undefined = $gesture.getOutput().sound;
+  let selectedPin: MBSpecs.UsableIOPin = $gesture.getOutput().outputPin
+    ? // TODO: Fix the forced defined exclamation mark here
+      $gesture.getOutput().outputPin!.pin
     : StaticConfiguration.defaultOutputPin;
 
   let pinIOEnabled = StaticConfiguration.pinIOEnabledByDefault;
-  let turnOnTime = $gesture.output.outputPin
-    ? $gesture.output.outputPin.turnOnTime
+  let turnOnTime = $gesture.getOutput().outputPin
+    ? $gesture.getOutput().outputPin!.turnOnTime
     : StaticConfiguration.defaultPinToggleTime;
-  let turnOnState = $gesture.output.outputPin
-    ? $gesture.output.outputPin.pinState
+  let turnOnState = $gesture.getOutput().outputPin
+    ? $gesture.getOutput().outputPin!.pinState
     : StaticConfiguration.defaultPinTurnOnState;
 
   let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
@@ -103,8 +106,8 @@
   $: {
     let triggerAction = getTriggerAction(
       wasTriggered,
-      $gesture.confidence.currentConfidence,
-      $gesture.confidence.requiredConfidence,
+      $gesture.getConfidence().currentConfidence,
+      $gesture.getConfidence().requiredConfidence,
     );
     handleTriggering(triggerAction);
   }
@@ -131,7 +134,7 @@
 
   function onSoundSelected(sound: SoundData | undefined): void {
     selectedSound = sound;
-    gestures.getGesture($gesture.ID).setSoundOutput(sound);
+    gestures.getGesture(gestureId).setSoundOutput(sound);
     onUserInteraction();
   }
 
@@ -157,7 +160,7 @@
     }
     selectedPin = selected;
     refreshAfterChange();
-    gestures.getGesture($gesture.ID).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
+    gestures.getGesture(gestureId).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
   };
 
   const triggerComponents = () =>
@@ -172,7 +175,7 @@
     turnOnState = state.turnOnState;
     turnOnTime = state.turnOnTime;
     refreshAfterChange();
-    gestures.getGesture($gesture.ID).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
+    gestures.getGesture(gestureId).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
     if (wasTriggered) {
       setOutputPin(true);
     }
@@ -185,12 +188,12 @@
 
   let sliderValue = requiredConfidence * 100;
   $: {
-    gesture.getConfidence().setRequiredConfidence(sliderValue / 100);
+    gestureController.setRequiredConfidence(gestureId, sliderValue / 100);
   }
 
   let hasLoadedMicrobitImage = false;
 
-  $: meterHeightPct = 100 * $gesture.confidence.currentConfidence;
+  $: meterHeightPct = 100 * $gesture.getConfidence().currentConfidence;
 
   const noTypeCheckNonStandardOrientProp = (orient?: 'vertical' | 'horizontal'): any => ({
     orient,
@@ -202,14 +205,14 @@
   <Card>
     <div class="relative">
       <div class="absolute top-3 left-3">
-        <GestureDot {gesture} />
+        <GestureDot gesture={$gesture} />
       </div>
       <div class="items-center flex p-2">
         <div
           class="w-36 text-center font-semibold rounded-xl
                       px-1 py-1 border border-gray-300
                       border-dashed mr-2 break-words">
-          <h3>{$gesture.name}</h3>
+          <h3>{$gesture.getName()}</h3>
         </div>
         <div class="h-31" />
         <input

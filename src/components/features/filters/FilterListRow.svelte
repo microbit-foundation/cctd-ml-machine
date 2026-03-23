@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type { FilterType } from '../../../core/entities/filter/Filter';
+  import type { FilterType } from '../../../core/filter/Filter';
   import { createFilter } from '../../../core/filter/FilterUtils';
   import { stores } from '../../../lib/stores/Stores';
   import { navigate, Paths } from '../../../router/Router';

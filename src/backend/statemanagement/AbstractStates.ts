@@ -13,8 +13,12 @@ import type { AbstractState } from './AbstractState';
 import type { Axis } from '../../core/entities/Axis';
 import type { Filter } from '../../core/filter/Filter';
 import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
+import type { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
+import type { ModelTrainingImpl } from '../../core/model/ModelTrainingImpl';
+import type { Classifier } from '../../core/classifier/Classifier';
 
 export interface AbstractStates {
+  getClassifier(): AbstractState<Classifier | undefined>;
   getValidationResult(): AbstractState<ValidationResult | undefined>;
   getFilters(): AbstractState<Filter[]>;
   getAvailableAxes(): AbstractState<Axis[] | undefined>;
@@ -26,4 +30,6 @@ export interface AbstractStates {
   getMicrobitConnection(): AbstractState<MicrobitConnection>;
   getPopupMessage(): AbstractState<string | undefined>;
   getValidationAutoUpdate(): AbstractState<boolean>;
+  getNeuralNetworkSettings(): AbstractState<NeuralNetworkSettingsImpl>;
+  getModelTrainingState(): AbstractState<ModelTrainingImpl>;
 }

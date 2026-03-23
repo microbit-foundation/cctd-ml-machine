@@ -41,7 +41,7 @@
 </script>
 
 {#if variant === 'stack'}
-  <OutputGestureStack {gesture} {onUserInteraction} />
+  <OutputGestureStack gestureId={gesture.getId()} {onUserInteraction} />
 {/if}
 
 {#if variant === 'tile'}

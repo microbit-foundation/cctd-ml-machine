@@ -17,8 +17,9 @@
 
   const validationSets = stores.getValidationSets();
   const gestureValidationSet = stores.getValidationSets().getForGesture(gesture.getId());
-  // Results are grouped by gestures then recordings [i][j](Gestures -> Recording)
-  const results = stores.getValidationResults();
+  const gestureController = getControllers().getGestureController();
+  const validationController = getControllers().getValidationController();
+  const results = validationController.getValidationResult();
   const enableFingerprint = getControllers().getDataController().isFingerprintEnabled();
 
   $: recordings = $gestureValidationSet.recordings;
@@ -28,14 +29,14 @@
       recordingId: number,
     ): { gesture: GestureID; color: string } | undefined => {
       // recordingId -> Gesture
-      const resultGesture = results.getEvaluatedGesture(recordingId);
+      const resultGesture = gestureController.getGestureFromRecording(recordingId);
 
       if (!resultGesture) {
         return undefined;
       }
 
       return {
-        gesture: resultGesture.getId(),
+        gesture: resultGesture.getID(),
         color: resultGesture.getColor(),
       };
     };
@@ -53,7 +54,7 @@
           gestureId={$gesture.ID}
           {recording}
           onDelete={recording =>
-            validationSets.removeValidationRecording(recording.ID)} />
+            validationSets.removeValidationRecording(recording.getId())} />
       {/key}
     {/each}
   </div>

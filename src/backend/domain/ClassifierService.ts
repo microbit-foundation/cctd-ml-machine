@@ -9,6 +9,7 @@ import type { NeuralNetworkModelSettings } from '../../core/model/neural-network
 import type { ModelTraining } from '../../core/model/ModelTraining';
 
 export interface ClassifierService {
+  setNeuralNetworkSettings(neuralNetworkSettings: NeuralNetworkModelSettings): void;
   getNeuralNetworkSettings(): NeuralNetworkModelSettings;
   getClassifier(): Classifier | undefined;
   getModelTraining(): ModelTraining;

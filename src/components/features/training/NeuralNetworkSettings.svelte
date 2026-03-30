@@ -9,13 +9,15 @@
   import RangeSlider from 'svelte-range-slider-pips';
   import NumberSelector from '../../ui/NumberSelector.svelte';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
-  const neuralNetworkSettings = stores.getNeuralNetworkSettings();
+  const neuralNetworkController = getControllers().getNeuralNetworkController();
+  const neuralNetworkSettings = neuralNetworkController.getNeuralNetworkSettings();
   const color = windi.theme.extend.colors.primary;
 
-  let learningRateSliderValue = $neuralNetworkSettings.learningRate;
+  let learningRateSliderValue = $neuralNetworkSettings.getLearningRate();
   $: {
-    neuralNetworkSettings.setLearningRate(learningRateSliderValue);
+    neuralNetworkController.setLearningRate(learningRateSliderValue);
   }
 </script>
 
@@ -39,8 +41,8 @@
       <NumberSelector
         min={1}
         max={1000}
-        defaultValue={$neuralNetworkSettings.noOfEpochs}
-        onChange={val => neuralNetworkSettings.setNoOfEpochs(val)} />
+        defaultValue={$neuralNetworkSettings.getNumberOfEpochs()}
+        onChange={val => neuralNetworkController.setNumberOfEpochs(val)} />
     </div>
 
     <p class="whitespace-nowrap content-center">Nodes</p>
@@ -48,8 +50,8 @@
       <NumberSelector
         min={1}
         max={200}
-        defaultValue={$neuralNetworkSettings.noOfUnits}
-        onChange={val => neuralNetworkSettings.setNoOfUnits(val)} />
+        defaultValue={$neuralNetworkSettings.getArchitecture().getHiddenLayers()[0].getNumberOfNodes()}
+        onChange={val => neuralNetworkController.setNumberOfUnits(val)} />
     </div>
 
     <p class="whitespace-nowrap content-center">Batch size</p>
@@ -57,8 +59,8 @@
       <NumberSelector
         min={1}
         max={30}
-        defaultValue={$neuralNetworkSettings.batchSize}
-        onChange={val => neuralNetworkSettings.setBatchSize(val)} />
+        defaultValue={$neuralNetworkSettings.getBatchSize()}
+        onChange={val => neuralNetworkController.setBatchSize(val)} />
     </div>
   </div>
 {/if}

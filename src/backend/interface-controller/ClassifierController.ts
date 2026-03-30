@@ -11,10 +11,10 @@ import type { ModelTraining } from '../../core/model/ModelTraining';
 import type { MLMachine } from '../interface-adapter/MLMachine';
 
 export class ClassifierController {
-  constructor(private mlMachine: MLMachine) {}
+  constructor(private mlMachine: MLMachine) { }
 
-  public getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings> {
-    return this.mlMachine.getClassifierService().getNeuralNetworkSettings();
+  public setNeuralNetwork(neuralNetworkSettings: NeuralNetworkModelSettings) {
+    this.mlMachine.getClassifierService().setNeuralNetworkSettings(neuralNetworkSettings);
   }
 
   public getClassifier(): AbstractState<Classifier | undefined> {

@@ -29,6 +29,7 @@ import { DefaultNeuralNetworkArchitecture } from '../interface-adapter/DefaultNe
 import { LoggingNeuralNetworkTrainingObserver } from '../../core/model/neural-network/LoggingNeuralNetworkTrainingObserver';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import type { Classifier } from '../../core/classifier/Classifier';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -42,7 +43,7 @@ export class SvelteStates implements AbstractStates {
   private selectedAxesState: AbstractState<Axis[] | undefined>;
   private filtersState: AbstractState<Filter[]>;
   private validationResultState: AbstractState<ValidationResult | undefined>;
-  private neuralNetworkSettingsState: AbstractState<NeuralNetworkSettingsImpl>;
+  private neuralNetworkSettingsState: AbstractState<NeuralNetworkModelSettings>;
   private modelTrainingState: AbstractState<ModelTrainingImpl>;
   private classifier: AbstractState<Classifier | undefined>;
 

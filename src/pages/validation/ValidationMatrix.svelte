@@ -7,27 +7,28 @@
 <script lang="ts">
   import Matrix from '../../core/entities/Matrix';
   import { stores } from '../../lib/stores/Stores';
-  import type { ValidationSetMatrix } from './ValidationPage';
   import { t } from '../../i18n';
 
   const gestures = stores.getGestures();
 
-  export let validationSetMatrix: ValidationSetMatrix;
+  export let validationSetMatrix: Matrix<number> | undefined;
+  // TODO: Fix, make the correct size (len(gestures)^2)
+  const matrixSafe = validationSetMatrix ?? new Matrix([]);
   export let showPercentages: boolean;
 
   $: rowSums = $gestures.map((_, gestureIdx) => {
-    return validationSetMatrix.matrix
+    return matrixSafe
       .getRow(gestureIdx)
       .reduce((pre, cur) => pre + cur, 0);
   });
   $: percentageMatrix = new Matrix(
-    validationSetMatrix.matrix.getValues().map((row, rowIdx) => {
+    matrixSafe.getValues().map((row, rowIdx) => {
       return row.map(col => {
         return col / rowSums[rowIdx];
       });
     }),
   );
-  $: matrix = showPercentages ? percentageMatrix : validationSetMatrix.matrix;
+  $: matrix = showPercentages ? percentageMatrix : matrixSafe;
 </script>
 
 <table>

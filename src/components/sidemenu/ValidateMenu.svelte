@@ -5,14 +5,15 @@
  -->
 
 <script lang="ts">
-  import { stores } from '../../lib/stores/Stores';
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const accuracy = stores.getValidationResults().getAccuracy();
+  const validationResult = getControllers().getValidationController().getValidationResult();
+  const accuracy = $validationResult?.getAccuracy();
 </script>
 
 <div class="w-full text-center justify-center pt-5 pb-7">
-  {#if !isNaN($accuracy)}
-    <p class="text-4xl mb-4">{($accuracy * 100).toFixed(1)}%</p>
+  {#if !!accuracy}
+    <p class="text-4xl mb-4">{(accuracy * 100).toFixed(1)}%</p>
   {:else}
     <p class="text-4xl mb-4">-</p>
   {/if}

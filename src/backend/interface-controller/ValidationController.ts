@@ -1,6 +1,7 @@
 import type { ValidationService } from '../domain/ValidationService';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 import type { AbstractState } from '../statemanagement/AbstractState';
+import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
 
 export class ValidationController {
   constructor(
@@ -14,5 +15,9 @@ export class ValidationController {
 
   public shouldAutoUpdate(): AbstractState<boolean> {
     return this.states.getValidationAutoUpdate();
+  }
+
+  public getValidationResult(): AbstractState<ValidationResult | undefined> {
+    return this.states.getValidationResult();
   }
 }

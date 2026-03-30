@@ -9,6 +9,7 @@ import type { NewGesture } from '../../core/entities/NewGesture';
 import type { Recording } from '../../core/entities/recording/Recording';
 
 export interface GestureService {
+  getGestureFromRecording(recordingId: number): NewGesture | undefined;
   saveGesture(gesture: NewGesture): void;
   createGesture(name: string): NewGesture;
   deleteRecording(gestureId: GestureID, recordingId: number): void;

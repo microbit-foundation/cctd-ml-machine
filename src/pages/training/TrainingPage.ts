@@ -12,6 +12,7 @@ import LayersModelTrainer from '../../core/entities/classifier/models/LayersMode
 import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTrainer';
 import KNNModelTrainer from '../../lib/legacy/KNNModelTrainer';
 import KNNNonNormalizedModelTrainer from '../../lib/legacy/KNNNonNormalizedModelTrainer';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
 export const loss = writable<LossTrainingIteration[]>([]);
 
@@ -24,8 +25,9 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
 
 export const trainNNModel = async () => {
   loss.set([]); // Reset the loss graph
+  const neuralNetworkSettings = getControllers().getNeuralNetworkController().getNeuralNetworkSettings();
   const modelTrainer = new LayersModelTrainer(
-    get(stores.getNeuralNetworkSettings()),
+    neuralNetworkSettings.get(),
     trainingIterationHandler,
   );
   await stores.getClassifier().getModel().train(modelTrainer);

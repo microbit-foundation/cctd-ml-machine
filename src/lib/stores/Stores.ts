@@ -51,16 +51,13 @@ class Stores implements Readable<StoresType> {
   private highlightedAxis: HighlightedAxes;
   private selectedModel: SelectedModel;
   private availableAxes: AvailableAxes;
-  private neuralNetworkSettings: NeuralNetworkSettings;
   private knnModelSettings: KNNModelSettings;
   private validationSets: ValidationSets;
-  private validationResults: ValidationResults;
   private recorder: Recorder;
   private devices: Devices;
 
   public constructor() {
     this.devices = new Devices();
-    this.neuralNetworkSettings = new NeuralNetworkSettings();
     this.liveData = writable(undefined);
     this.recorder = new Recorder();
     this.engine = undefined;
@@ -76,12 +73,6 @@ class Stores implements Readable<StoresType> {
       this.highlightedAxis.set(newAxes);
     });
     this.validationSets = new ValidationSets(this.gestures);
-    this.validationResults = new ValidationResults(
-      this.validationSets,
-      this.classifier,
-      this.gestures,
-      this.highlightedAxis,
-    );
   }
 
   public subscribe(
@@ -147,20 +138,12 @@ class Stores implements Readable<StoresType> {
     return this.availableAxes;
   }
 
-  public getNeuralNetworkSettings(): NeuralNetworkSettings {
-    return this.neuralNetworkSettings;
-  }
-
   public getKNNModelSettings(): KNNModelSettings {
     return this.knnModelSettings;
   }
 
   public getValidationSets(): ValidationSets {
     return this.validationSets;
-  }
-
-  public getValidationResults(): ValidationResults {
-    return this.validationResults;
   }
 
   public getRecorder(): Recorder {

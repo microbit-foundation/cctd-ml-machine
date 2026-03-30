@@ -18,6 +18,19 @@ export class GestureServiceImpl implements GestureService {
     private colors: SystemColors,
   ) {}
 
+  public getGestureFromRecording(recordingId: number): NewGesture | undefined {
+    const gestures = this.gestureRepository.getGestures();
+    for (const gesture of gestures) {
+      const recordings = gesture.getRecordings();
+      for (const recording of recordings) {
+        if (recording.getId() === recordingId) {
+          return gesture;
+        }
+      }
+    }
+    return undefined;
+  }
+
   public saveGesture(gesture: NewGesture): void {
     this.gestureRepository.saveGesture(gesture);
   }

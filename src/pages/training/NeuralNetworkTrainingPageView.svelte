@@ -13,11 +13,13 @@
   import Tooltip from '../../components/ui/Tooltip.svelte';
   import NeuralNetworkSettings from '../../components/features/training/NeuralNetworkSettings.svelte';
   import ConsoleLogger from '../../core/logging/ConsoleLogger';
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
   const highlightedAxes = stores.getHighlightedAxes();
-  const neuralNetworkSettings = stores.getNeuralNetworkSettings();
+  const neuralNetworkController = getControllers().getNeuralNetworkController();
+  const neuralNetworkSettings = neuralNetworkController.getNeuralNetworkSettings();
 
   const trainModelClickHandler = () => {
     trainNNModel().then(() => {
@@ -63,7 +65,7 @@
       </div>
     {/if}
     {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && ($model.isTrained || $model.isTraining)}
-      <LossGraph {loss} maxX={$neuralNetworkSettings.noOfEpochs} />
+      <LossGraph {loss} maxX={$neuralNetworkSettings.getNumberOfEpochs()} />
     {/if}
   </div>
 </div>

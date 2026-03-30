@@ -15,8 +15,8 @@
   const controllers = getControllers();
   const validationController = controllers.getValidationController();
 
-  const validationResults = stores.getValidationResults();
-  const accuracy = validationResults.getAccuracy();
+  const validationResult = validationController.getValidationResult();
+  const accuracy = $validationResult?.getAccuracy();
   const model = stores.getClassifier().getModel();
   const autoUpdate = validationController.shouldAutoUpdate();
 
@@ -46,12 +46,12 @@
     </div>
 
     <div class="flex flex-row gap-2">
-      {#if !isNaN($accuracy)}
+      {#if !!accuracy}
         <p>
           {$tr('content.validation.accuracy')}:
         </p>
         <p class="text-center">
-          {($accuracy * 100).toFixed(1)} %
+          {(accuracy * 100).toFixed(1)} %
         </p>
       {:else}
         {$tr('content.validation.accuracy')}: -

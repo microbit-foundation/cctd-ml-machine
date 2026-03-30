@@ -37,6 +37,9 @@ export class NeuralNetworkSettingsImpl implements NeuralNetworkModelSettings {
   public getTrainingObserver(): NeuralNetworkTrainingObserver {
     return this.networkObserver;
   }
+  public getBaseSettings(): NeuralNetworkModelBaseSettings {
+    return this.baseSettings;
+  }
   public getLearningRate(): number {
     return this.baseSettings.getLearningRate();
   }

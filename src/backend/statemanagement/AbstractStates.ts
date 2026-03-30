@@ -17,6 +17,9 @@ import type { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/
 import type { ModelTrainingImpl } from '../../core/model/ModelTrainingImpl';
 import type { Classifier } from '../../core/classifier/Classifier';
 
+/**
+ * Both used as a reactive state interface and data source for the backend
+ */
 export interface AbstractStates {
   getClassifier(): AbstractState<Classifier | undefined>;
   getValidationResult(): AbstractState<ValidationResult | undefined>;

@@ -29,6 +29,7 @@ import { StatesMakeCodeProjectRepository } from '../infrastructure/StatesMakeCod
 import type { NotificationService } from '../domain/NotificationService';
 import { ValidationController } from '../interface-controller/ValidationController';
 import type { ValidationService } from '../domain/ValidationService';
+import { NeuralNetworkController } from '../interface-controller/NeuralNetworkController';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -67,6 +68,10 @@ export class MLMachineControllers {
   public getNotificationController(): NotificationController {
     console.log(this.notificationController);
     return this.notificationController;
+  }
+
+  public getNeuralNetworkController(): NeuralNetworkController {
+    return new NeuralNetworkController(this.states, this.mlMachine.getClassifierService());
   }
 
   public getClassifierController(): ClassifierController {

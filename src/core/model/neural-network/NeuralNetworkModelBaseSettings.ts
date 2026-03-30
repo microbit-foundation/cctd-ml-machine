@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
+/**
+ * Used for training
+ */
 export interface NeuralNetworkModelBaseSettings {
   getLearningRate(): number;
   setLearningRate(learningRate: number): void;

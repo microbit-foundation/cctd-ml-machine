@@ -14,15 +14,16 @@
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import Switch from '../../components/ui/Switch.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
+    import type Matrix from '../../core/entities/Matrix';
 
   const validationController = getControllers().getValidationController();
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
-  const validationResults = stores.getValidationResults();
-  const accuracy = validationResults.getAccuracy();
-  const validationSetMatrix: Readable<ValidationSetMatrix> =
-    validationResults.getMatrix();
+  const validationResult = validationController.getValidationResult();
+  const accuracy = $validationResult?.getAccuracy();
+  const validationSetMatrix: Matrix<number> | undefined =
+    $validationResult?.getMatrix();
   const autoUpdate = validationController.shouldAutoUpdate();
 
   const handleEvaluateValidationSets = () => {
@@ -60,18 +61,18 @@
       </div>
       <div class="mx-2 max-h-37 max-w-180 overflow-y-auto">
         <ValidationMatrix
-          validationSetMatrix={$validationSetMatrix}
+          validationSetMatrix={validationSetMatrix}
           showPercentages={$showPercentages} />
       </div>
     </div>
   </div>
   <div class="flex flex-col justify-center">
-    {#if !isNaN($accuracy)}
+    {#if !!accuracy}
       <p>
         {$tr('content.validation.accuracy')}:
       </p>
       <p class="text-center">
-        {($accuracy * 100).toFixed(1)} %
+        {(accuracy * 100).toFixed(1)} %
       </p>
     {:else}
       {$tr('content.validation.accuracy')}: -

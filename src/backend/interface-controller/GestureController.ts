@@ -21,6 +21,9 @@ import { GestureSerializer } from '../../core/serialization/gesture/GestureSeria
 import type { Recording } from '../../core/entities/recording/Recording';
 
 export class GestureController {
+  public getGestureFromRecording(recordingId: number): NewGesture | undefined {
+    return this.gestureService.getGestureFromRecording(recordingId);
+  }
   private log: Logger;
   public constructor(
     private gesturesState: GesturesStateAdapter,

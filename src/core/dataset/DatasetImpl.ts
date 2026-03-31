@@ -22,6 +22,10 @@ export default class DatasetImpl implements Dataset {
     this.numberOfClasses = featureSet.getLabels().getIndexLabels().length;
   }
 
+  public isEmpty(): boolean {
+    return this.featureSet.getFeatureSet().length === 0;
+  }
+
   public getFeatureSet(): FeatureData[] {
     return this.featureSet.getFeatureSet();
   }

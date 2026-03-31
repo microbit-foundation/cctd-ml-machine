@@ -11,6 +11,7 @@ import type { Recording } from './recording/Recording';
 export type GestureID = number;
 
 export interface NewGesture {
+  setValidationRecordings(recordings: Recording[]): void;
   setOutput(ouput: GestureOutput): void;
   setRecordings(recordings: Recording[]): void;
   setName(name: string): void;

@@ -30,6 +30,7 @@ import { LoggingNeuralNetworkTrainingObserver } from '../../core/model/neural-ne
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import type { Classifier } from '../../core/classifier/Classifier';
 import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { NewGesture } from '../../core/entities/NewGesture';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -46,8 +47,9 @@ export class SvelteStates implements AbstractStates {
   private neuralNetworkSettingsState: AbstractState<NeuralNetworkModelSettings>;
   private modelTrainingState: AbstractState<ModelTrainingImpl>;
   private classifier: AbstractState<Classifier | undefined>;
+  private gesturesState: AbstractState<NewGesture[]>;
 
-  public constructor() {
+  public constructor(initialGestures: NewGesture[]) {
     this.liveDataState = new LiveDataStateAdapter(
       StaticConfiguration.accelerometerLiveDataBufferSize,
     );
@@ -87,6 +89,10 @@ export class SvelteStates implements AbstractStates {
     );
     this.modelTrainingState = new SvelteStateAdapter(writable(new ModelTrainingImpl()));
     this.classifier = new SvelteStateAdapter(writable<Classifier | undefined>(undefined));
+    this.gesturesState = new SvelteStateAdapter(writable(initialGestures));
+  }
+  getGestures(): AbstractState<NewGesture[]> {
+    return this.gesturesState;
   }
 
   getValidationResult(): AbstractState<ValidationResult | undefined> {
@@ -130,7 +136,7 @@ export class SvelteStates implements AbstractStates {
     return this.outputTargetState;
   }
 
-  getNeuralNetworkSettings(): AbstractState<NeuralNetworkSettingsImpl> {
+  getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings> {
     return this.neuralNetworkSettingsState;
   }
 

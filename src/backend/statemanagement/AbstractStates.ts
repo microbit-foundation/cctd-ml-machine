@@ -13,15 +13,18 @@ import type { AbstractState } from './AbstractState';
 import type { Axis } from '../../core/entities/Axis';
 import type { Filter } from '../../core/filter/Filter';
 import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
-import type { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
 import type { ModelTrainingImpl } from '../../core/model/ModelTrainingImpl';
 import type { Classifier } from '../../core/classifier/Classifier';
+import type { NewGesture } from '../../core/entities/NewGesture';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { AbstractReadonlyState } from './AbstractReadonlyState';
 
 /**
  * Both used as a reactive state interface and data source for the backend
  */
 export interface AbstractStates {
   getClassifier(): AbstractState<Classifier | undefined>;
+  getGestures(): AbstractReadonlyState<NewGesture[]>;
   getValidationResult(): AbstractState<ValidationResult | undefined>;
   getFilters(): AbstractState<Filter[]>;
   getAvailableAxes(): AbstractState<Axis[] | undefined>;
@@ -33,6 +36,6 @@ export interface AbstractStates {
   getMicrobitConnection(): AbstractState<MicrobitConnection>;
   getPopupMessage(): AbstractState<string | undefined>;
   getValidationAutoUpdate(): AbstractState<boolean>;
-  getNeuralNetworkSettings(): AbstractState<NeuralNetworkSettingsImpl>;
+  getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings>;
   getModelTrainingState(): AbstractState<ModelTrainingImpl>;
 }

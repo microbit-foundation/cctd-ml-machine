@@ -8,3 +8,7 @@ export type Axis = {
   index: number;
   label: string;
 };
+
+export const strArrToAxisArr = (strArr: string[]): Axis[] => {
+  return strArr.map((label, index) => ({ index, label }));
+};

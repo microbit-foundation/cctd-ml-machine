@@ -38,7 +38,7 @@ export class MLMachineControllers {
 
   public constructor(
     private mlMachine: MLMachine,
-    dataService: DataService,
+    private dataService: DataService,
     private notificationService: NotificationService,
     private featureService: FeatureService,
     private outputService: OutputService,
@@ -110,6 +110,10 @@ export class MLMachineControllers {
   }
 
   public getValidationController() {
-    return new ValidationController(this.validationService, this.states);
+    return new ValidationController(
+      this.validationService,
+      this.dataService,
+      this.states,
+    );
   }
 }

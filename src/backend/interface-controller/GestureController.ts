@@ -19,14 +19,30 @@ import type { NewGesture } from '../../core/entities/NewGesture';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { Recording } from '../../core/entities/recording/Recording';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class GestureController {
+  clearValidationRecordings() {
+    const gestures = this.gestureService.getGestures();
+    gestures.forEach(gesture => {
+      gesture.setValidationRecordings([]);
+    });
+    this.gestureService.saveGestures(gestures);
+  }
+  public getValidationRecordings(): AbstractReadonlyState<Recording[]> {
+    const derivation = derived(this.states.getGestures(), gests => {
+      gests.map(gest => gest.getValidationRecordings()).flat();
+      const recordings = gests.map(gest => gest.getValidationRecordings()).flat();
+      return recordings;
+    });
+    return new SvelteStateAdapterReadonly(derivation);
+  }
   public getGestureFromRecording(recordingId: number): NewGesture | undefined {
     return this.gestureService.getGestureFromRecording(recordingId);
   }
   private log: Logger;
   public constructor(
-    private gesturesState: GesturesStateAdapter,
+    private states: AbstractStates,
     private gestureService: GestureService,
   ) {
     this.log = new ConsoleLogger('GestureController');
@@ -41,6 +57,10 @@ export class GestureController {
     return JSON.stringify(serializedData, null, 2);
   }
 
+  deleteValidationRecording(gestureId: GestureID, recordingId: number): void {
+    this.gestureService.deleteValidationRecording(gestureId, recordingId);
+  }
+
   setRequiredConfidence(gestureId: GestureID, requiredConfidence: number) {
     const gesture = this.gestureService.getGesture(gestureId);
     if (!gesture) {
@@ -48,7 +68,6 @@ export class GestureController {
     }
     gesture.getConfidence().requiredConfidence = requiredConfidence;
     this.gestureService.saveGesture(gesture);
-    this.updateState();
   }
   setGestureOuput(gestureId: GestureID, ouput: GestureOutput) {
     const gesture = this.gestureService.getGesture(gestureId);
@@ -57,22 +76,18 @@ export class GestureController {
     }
     gesture.setOutput(ouput);
     this.gestureService.saveGesture(gesture);
-    this.updateState();
   }
 
   public createGesture(name: string): NewGesture {
-    const newGesture = this.gestureService.createGesture(name);
-    this.updateState();
-    return newGesture;
+    return this.gestureService.createGesture(name);
   }
 
   public setGestureName(gesture: GestureID, name: string) {
     this.gestureService.setGestureName(gesture, name);
-    this.updateState();
   }
 
   public getGestures(): AbstractReadonlyState<NewGesture[]> {
-    return this.gesturesState;
+    return this.states.getGestures();
   }
 
   public getGesture(id: GestureID): NewGesture | undefined {
@@ -80,7 +95,7 @@ export class GestureController {
   }
 
   public getGestureState(id: GestureID): AbstractState<NewGesture> {
-    const derivation = derived(this.gesturesState, gests => {
+    const derivation = derived(this.states.getGestures(), gests => {
       const idx = gests.findIndex(gest => gest.getID() === id);
       if (idx === -1) {
         this.log.warn(`Gesture with id ${id} does not exist`);
@@ -95,24 +110,19 @@ export class GestureController {
 
   public clearGestures() {
     this.gestureService.setGestures([]);
-    this.updateState();
   }
 
   public deleteGesture(gesture: GestureID): void {
     this.log.log(`Deleting gesture with id ${gesture}`);
     this.gestureService.deleteGesture(gesture);
-    this.updateState();
   }
 
   public addRecording(gesture: GestureID, recording: Recording): void {
     this.gestureService.addRecording(gesture, recording);
-    console.log(recording);
-    this.updateState();
   }
 
   public deleteRecording(gestureId: GestureID, recordingId: number) {
     this.gestureService.deleteRecording(gestureId, recordingId);
-    this.updateState();
   }
 
   public importFromJson(importable: string) {
@@ -120,11 +130,5 @@ export class GestureController {
     const parsed: SerializedGesture[] = JSON.parse(importable);
     const deserialized = parsed.map(ser => serializer.deserialize(ser));
     this.gestureService.setGestures(deserialized);
-    this.updateState();
-  }
-
-  private updateState() {
-    const updatedState = this.gestureService.getGestures();
-    this.gesturesState.set(updatedState);
   }
 }

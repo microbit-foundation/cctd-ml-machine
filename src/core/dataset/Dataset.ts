@@ -14,6 +14,7 @@ export interface Dataset extends LabelledFeatureSet {
   getNormalizedFeatureSet(): FeatureData[];
   getLabels(): DatasetLabels;
   isValid(): boolean;
+  isEmpty(): boolean;
   getNumberOfClasses(): number;
   getFeatureSize(): number;
   getFeatureMean(): Vector;

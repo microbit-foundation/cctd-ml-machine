@@ -21,14 +21,13 @@
   const controllers = getControllers();
   const validationController = controllers.getValidationController();
 
-  const validationSets = stores.getValidationSets();
+  const validationDataset = validationController.getValidationDataset();
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
   const autoUpdate = validationController.shouldAutoUpdate();
 
   $: {
-    // TODO: This should be encapsulated in the validation results store
-    if ($model.isTrained && $autoUpdate && $validationSets.length) {
+    if ($model.isTrained && $autoUpdate && validationDataset.isValid()) {
       validationController.evaluateValidationSet();
     }
   }

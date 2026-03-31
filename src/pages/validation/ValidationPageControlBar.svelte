@@ -5,18 +5,20 @@
  -->
 
 <script lang="ts">
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import { tr } from '../../i18n';
   import { stores } from '../../lib/stores/Stores';
-  const validationSets = stores.getValidationSets();
-  $: isClearDisabled =
-    $validationSets.length === 0 ||
-    $validationSets.map(e => e.recordings.length).reduce((pre, cur) => pre + cur, 0) ===
-      0;
-  const clearValidationSets = () =>
+
+  const gestureController = getControllers().getGestureController();
+
+  const validationRecordings = gestureController.getValidationRecordings();
+
+  const isClearDisabled = $validationRecordings.length === 0;
+  const clearValidationRecordings = () =>
     confirm($tr('content.data.controlbar.button.clearData.confirm')) &&
-    validationSets.clear();
+    gestureController.clearValidationRecordings();
 </script>
 
 <ControlBar>
@@ -24,7 +26,7 @@
     fillOnHover
     small
     disabled={isClearDisabled}
-    onClick={clearValidationSets}
+    onClick={clearValidationRecordings}
     bold={false}
     outlined
     shadows={false}

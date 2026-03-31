@@ -11,15 +11,20 @@ import ControlledStorage from '../../lib/ControlledStorage';
 import type { GestureRepository } from '../domain/GestureRepository';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
+import { s } from 'vite/dist/node/types.d-aGj9QkWt';
 
 export class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private serializer;
 
-  public constructor(private log: Logger) {
+  public constructor(
+    private log: Logger,
+    private subscription: (gestures: NewGesture[]) => void,
+  ) {
     this.serializer = new GestureSerializer();
   }
 
+  // TODO: This could be swapped for UUID. The reason for this is to allow the core application to create gestures
   public generateGestureId(): GestureID {
     let proposed = new Date().getTime();
     while (this.getGestures().find(gest => gest.getID() === proposed)) {
@@ -62,11 +67,13 @@ export class LocalStorageGestureRepository implements GestureRepository {
   public saveGestures(value: NewGesture[]): NewGesture[] {
     const serialized = value.map(gest => this.serializer.serialize(gest));
     ControlledStorage.set(this.LOCAL_STORAGE_KEY, serialized);
+    this.subscription?.(value);
     return value;
   }
 
   public clearGestures(): void {
     ControlledStorage.set(this.LOCAL_STORAGE_KEY, []);
+    this.subscription?.([]);
   }
 
   public removeGesture(gestureId: number): void {

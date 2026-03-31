@@ -20,6 +20,10 @@ export class GestureImpl implements NewGesture {
     private color: string,
   ) {}
 
+  setValidationRecordings(recordings: Recording[]): void {
+    this.validationRecordings = recordings;
+  }
+
   getValidationRecordings(): Recording[] {
     return this.validationRecordings;
   }

@@ -19,7 +19,13 @@ export class ValidationServiceImpl implements ValidationService {
 
   public async evaluateValidationSet(): Promise<void> {
     const validationSet = this.dataService.getValidationDataset();
+    if (!validationSet.isValid() || validationSet.isEmpty()) {
+      throw new Error('Validation dataset is not valid or empty');
+    }
     const classifier = this.classifierService.getClassifier();
+    if (!classifier) {
+      throw new Error('Theres no classifier to evaluate the validation set with');
+    }
     const evaluation = await classifier.evaluate(validationSet);
 
     const validationResult = new ValidationResult(evaluation);

@@ -80,19 +80,18 @@ export class MLMachine {
     this.log.log('Bootstrapped ML-Machine');
     const userSessionRepository = new LocalStorageUserSessionRepository();
     this.userService = new UserServiceImpl(userSessionRepository);
-    this.states = new SvelteStates();
 
     this.devices = new SvelteStateAdapter(new Devices());
 
-    const repository = new LocalStorageGestureRepository(
+    const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
+      gestures => this.states.getGestures().set(gestures),
     );
+    this.states = new SvelteStates(gestureRepository.getGestures());
     this.featureService = new FeatureServiceImpl(featureProvider);
     this.gestureService = new GestureServiceImpl(
-      new LocalStorageGestureRepository(
-        new ConsoleLogger('LocalStorageGestureRepository'),
-      ),
-      new MLMachineColors(repository),
+      gestureRepository,
+      new MLMachineColors(gestureRepository),
     );
     this.dataService = new DataServiceImpl(
       new StatesAxisRepository(this.gestureService, this.states),

@@ -18,6 +18,14 @@ export class GestureServiceImpl implements GestureService {
     private colors: SystemColors,
   ) {}
 
+  deleteValidationRecording(gestureId: number, recordingId: number): void {
+    const gesture = this.getGestureOrThrow(gestureId);
+    gesture.setValidationRecordings(
+      [...gesture.getValidationRecordings()].filter(rec => rec.getId() !== recordingId),
+    );
+    this.gestureRepository.saveGesture(gesture);
+  }
+
   public getGestureFromRecording(recordingId: number): NewGesture | undefined {
     const gestures = this.gestureRepository.getGestures();
     for (const gesture of gestures) {

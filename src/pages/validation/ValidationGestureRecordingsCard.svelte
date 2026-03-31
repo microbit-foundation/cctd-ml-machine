@@ -13,16 +13,16 @@
   import type { GestureID } from '../../core/entities/Gesture';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  export let gesture: GestureState;
+  export let gestureId: GestureID;
 
-  const validationSets = stores.getValidationSets();
-  const gestureValidationSet = stores.getValidationSets().getForGesture(gesture.getId());
   const gestureController = getControllers().getGestureController();
+  const gesture = gestureController.getGestureState(gestureId);
   const validationController = getControllers().getValidationController();
+  const validationRecordings = derived(gestureController.getGestures(), gestures => {
+    return gestures.flatMap(g => g.getValidationRecordings());
+  });
   const results = validationController.getValidationResult();
   const enableFingerprint = getControllers().getDataController().isFingerprintEnabled();
-
-  $: recordings = $gestureValidationSet.recordings;
 
   const dotGetter = derived(results, res => {
     const getDot = (
@@ -46,15 +46,18 @@
 
 <Card validationPage={true} small>
   <div class="flex flex-row h-full gap-1 items-center pl-2">
-    {#each recordings as recording}
-      {#key recording.ID}
+    {#each $validationRecordings as recording}
+      {#key recording.getId()}
         <Recording
           enableFingerprint={$enableFingerprint}
-          dot={$dotGetter(recording.ID)}
-          gestureId={$gesture.ID}
+          dot={$dotGetter(recording.getId())}
+          gestureId={$gesture.getID()}
           {recording}
           onDelete={recording =>
-            validationSets.removeValidationRecording(recording.getId())} />
+            gestureController.deleteValidationRecording(
+              $gesture.getID(),
+              recording.getId(),
+            )} />
       {/key}
     {/each}
   </div>

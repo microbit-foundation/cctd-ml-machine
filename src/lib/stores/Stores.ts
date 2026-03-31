@@ -52,7 +52,6 @@ class Stores implements Readable<StoresType> {
   private selectedModel: SelectedModel;
   private availableAxes: AvailableAxes;
   private knnModelSettings: KNNModelSettings;
-  private validationSets: ValidationSets;
   private recorder: Recorder;
   private devices: Devices;
 
@@ -72,7 +71,6 @@ class Stores implements Readable<StoresType> {
     this.availableAxes.subscribe(newAxes => {
       this.highlightedAxis.set(newAxes);
     });
-    this.validationSets = new ValidationSets(this.gestures);
   }
 
   public subscribe(
@@ -140,10 +138,6 @@ class Stores implements Readable<StoresType> {
 
   public getKNNModelSettings(): KNNModelSettings {
     return this.knnModelSettings;
-  }
-
-  public getValidationSets(): ValidationSets {
-    return this.validationSets;
   }
 
   public getRecorder(): Recorder {

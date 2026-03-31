@@ -2,10 +2,13 @@ import type { ValidationService } from '../domain/ValidationService';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
+import type { Dataset } from '../../core/dataset/Dataset';
+import type { DataService } from '../domain/DataService';
 
 export class ValidationController {
   constructor(
     private validationService: ValidationService,
+    private dataservice: DataService,
     private states: AbstractStates,
   ) {}
 
@@ -19,5 +22,9 @@ export class ValidationController {
 
   public getValidationResult(): AbstractState<ValidationResult | undefined> {
     return this.states.getValidationResult();
+  }
+
+  public getValidationDataset(): Dataset {
+    return this.dataservice.getValidationDataset();
   }
 }

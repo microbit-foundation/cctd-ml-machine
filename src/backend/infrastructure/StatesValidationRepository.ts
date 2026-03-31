@@ -1,3 +1,4 @@
+import type { Dataset } from '../../core/dataset/Dataset';
 import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
 import type { ValidationRepository } from '../domain/ValidationRepository';
 import type { AbstractStates } from '../statemanagement/AbstractStates';

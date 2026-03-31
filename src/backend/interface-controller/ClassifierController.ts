@@ -11,7 +11,7 @@ import type { ModelTraining } from '../../core/model/ModelTraining';
 import type { MLMachine } from '../interface-adapter/MLMachine';
 
 export class ClassifierController {
-  constructor(private mlMachine: MLMachine) { }
+  constructor(private mlMachine: MLMachine) {}
 
   public setNeuralNetwork(neuralNetworkSettings: NeuralNetworkModelSettings) {
     this.mlMachine.getClassifierService().setNeuralNetworkSettings(neuralNetworkSettings);

@@ -8,6 +8,9 @@ import type { Confidence } from './Confidence';
 import type { GestureOutput } from './GestureOutput';
 import type { RecordingData } from './RecordingData';
 
+/**
+ * TODO: Change to a value object instead.
+ */
 export type GestureID = number;
 
 export interface Gesture {

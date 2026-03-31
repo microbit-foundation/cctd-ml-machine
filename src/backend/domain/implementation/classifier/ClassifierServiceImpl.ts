@@ -19,9 +19,11 @@ export class ClassifierServiceImpl implements ClassifierService {
     private classifierRepository: ClassifierRepository,
     private modelTraining: ModelTrainingStateRepository,
     private neuralNetworkRepository: NeuralNetworkRepository,
-  ) { }
+  ) {}
 
-  public setNeuralNetworkSettings(neuralNetworkSettings: NeuralNetworkModelSettings): void {
+  public setNeuralNetworkSettings(
+    neuralNetworkSettings: NeuralNetworkModelSettings,
+  ): void {
     this.neuralNetworkRepository.setNeuralNetworkSettings(neuralNetworkSettings);
   }
 

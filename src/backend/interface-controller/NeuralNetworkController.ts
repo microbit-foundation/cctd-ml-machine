@@ -1,49 +1,61 @@
-import { BasicNeuralNetworkArchitecture } from "../../core/model/neural-network/BasicNeuralNetworkArchitecture";
-import type { NeuralNetworkModelSettings } from "../../core/model/neural-network/NeuralNetworkModelSettings";
-import { NeuralNetworkSettingsImpl } from "../../core/model/neural-network/NeuralNetworkSettingsImpl";
-import type { ClassifierService } from "../domain/ClassifierService";
-import type { AbstractState } from "../statemanagement/AbstractState";
-import type { AbstractStates } from "../statemanagement/AbstractStates";
+import { BasicNeuralNetworkArchitecture } from '../../core/model/neural-network/BasicNeuralNetworkArchitecture';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
+import type { ClassifierService } from '../domain/ClassifierService';
+import type { AbstractState } from '../statemanagement/AbstractState';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class NeuralNetworkController {
-    public setBatchSize(val: number): void {
-        const currentSettings = this.states.getNeuralNetworkSettings().get();
-        currentSettings.setBatchSize(val);
-        this.setNeuralNetworkSettings(currentSettings);
-    }
-    public setNumberOfUnits(val: number): void {
-        const currentSettings = this.states.getNeuralNetworkSettings().get();
-        const noOfClasses = currentSettings.getArchitecture().getOutputLayer().getNumberOfNodes();
-        const noOfFilters = currentSettings.getArchitecture().getInputLayer().getNumberOfNodes();
-        const newArchitecture = new BasicNeuralNetworkArchitecture(noOfClasses, noOfFilters, val);
-        const newSettings = new NeuralNetworkSettingsImpl(
-            currentSettings.getBaseSettings(),
-            newArchitecture,
-            currentSettings.getTrainingObserver()
-        );
-        this.setNeuralNetworkSettings(newSettings);
-    }
+  public setBatchSize(val: number): void {
+    const currentSettings = this.states.getNeuralNetworkSettings().get();
+    currentSettings.setBatchSize(val);
+    this.setNeuralNetworkSettings(currentSettings);
+  }
+  public setNumberOfUnits(val: number): void {
+    const currentSettings = this.states.getNeuralNetworkSettings().get();
+    const noOfClasses = currentSettings
+      .getArchitecture()
+      .getOutputLayer()
+      .getNumberOfNodes();
+    const noOfFilters = currentSettings
+      .getArchitecture()
+      .getInputLayer()
+      .getNumberOfNodes();
+    const newArchitecture = new BasicNeuralNetworkArchitecture(
+      noOfClasses,
+      noOfFilters,
+      val,
+    );
+    const newSettings = new NeuralNetworkSettingsImpl(
+      currentSettings.getBaseSettings(),
+      newArchitecture,
+      currentSettings.getTrainingObserver(),
+    );
+    this.setNeuralNetworkSettings(newSettings);
+  }
 
-    public constructor(private states: AbstractStates, private classifierService: ClassifierService) { }
+  public constructor(
+    private states: AbstractStates,
+    private classifierService: ClassifierService,
+  ) {}
 
-    public getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings> {
-        return this.states.getNeuralNetworkSettings();
-    }
+  public getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings> {
+    return this.states.getNeuralNetworkSettings();
+  }
 
-    public setNeuralNetworkSettings(neuralNetworkSettings: NeuralNetworkModelSettings) {
-        this.classifierService.setNeuralNetworkSettings(neuralNetworkSettings);
-    }
+  public setNeuralNetworkSettings(neuralNetworkSettings: NeuralNetworkModelSettings) {
+    this.classifierService.setNeuralNetworkSettings(neuralNetworkSettings);
+  }
 
-    public setLearningRate(learningRate: number) {
-        const currentSettings = this.states.getNeuralNetworkSettings().get();
-        currentSettings.setLearningRate(learningRate);
-        this.setNeuralNetworkSettings(currentSettings);
-    }
+  public setLearningRate(learningRate: number) {
+    const currentSettings = this.states.getNeuralNetworkSettings().get();
+    currentSettings.setLearningRate(learningRate);
+    this.setNeuralNetworkSettings(currentSettings);
+  }
 
-    public setNumberOfEpochs(val: number): void {
-        const currentSettings = this.states.getNeuralNetworkSettings().get();
-        currentSettings.setNumberOfEpochs(val);
-        this.setNeuralNetworkSettings(currentSettings);
-    }
-
+  public setNumberOfEpochs(val: number): void {
+    const currentSettings = this.states.getNeuralNetworkSettings().get();
+    currentSettings.setNumberOfEpochs(val);
+    this.setNeuralNetworkSettings(currentSettings);
+  }
 }

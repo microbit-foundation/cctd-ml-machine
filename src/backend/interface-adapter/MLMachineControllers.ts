@@ -71,7 +71,10 @@ export class MLMachineControllers {
   }
 
   public getNeuralNetworkController(): NeuralNetworkController {
-    return new NeuralNetworkController(this.states, this.mlMachine.getClassifierService());
+    return new NeuralNetworkController(
+      this.states,
+      this.mlMachine.getClassifierService(),
+    );
   }
 
   public getClassifierController(): ClassifierController {

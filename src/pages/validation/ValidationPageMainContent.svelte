@@ -26,7 +26,7 @@
 
     {#each stores.getGestures().getGestures() as gesture, idx}
       <div class="col-start-1">
-        <ValidationGestureNameCard gesture={gestures.getGesture(gesture.getId())} />
+        <ValidationGestureNameCard gestureId={gesture.getId()} />
       </div>
 
       <div class="col-start-2">
@@ -37,7 +37,7 @@
       <div class="col-start-3">
         {#if !$isValidationSetEmpty}
           <ValidationGestureRecordingsCard {gesture} />
-        {:else if $chosenGesture?.getId() === gesture.getId() || (!$chosenGesture && idx === 0)}
+        {:else if $chosenGesture?.getID() === gesture.getId() || (!$chosenGesture && idx === 0)}
           <ValidationPageTutorial />
         {/if}
       </div>

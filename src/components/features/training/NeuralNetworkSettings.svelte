@@ -50,7 +50,10 @@
       <NumberSelector
         min={1}
         max={200}
-        defaultValue={$neuralNetworkSettings.getArchitecture().getHiddenLayers()[0].getNumberOfNodes()}
+        defaultValue={$neuralNetworkSettings
+          .getArchitecture()
+          .getHiddenLayers()[0]
+          .getNumberOfNodes()}
         onChange={val => neuralNetworkController.setNumberOfUnits(val)} />
     </div>
 

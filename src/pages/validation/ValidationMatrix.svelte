@@ -17,9 +17,7 @@
   export let showPercentages: boolean;
 
   $: rowSums = $gestures.map((_, gestureIdx) => {
-    return matrixSafe
-      .getRow(gestureIdx)
-      .reduce((pre, cur) => pre + cur, 0);
+    return matrixSafe.getRow(gestureIdx).reduce((pre, cur) => pre + cur, 0);
   });
   $: percentageMatrix = new Matrix(
     matrixSafe.getValues().map((row, rowIdx) => {

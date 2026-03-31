@@ -14,7 +14,7 @@
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import Switch from '../../components/ui/Switch.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
-    import type Matrix from '../../core/entities/Matrix';
+  import type Matrix from '../../core/entities/Matrix';
 
   const validationController = getControllers().getValidationController();
 
@@ -22,8 +22,7 @@
   const model = classifier.getModel();
   const validationResult = validationController.getValidationResult();
   const accuracy = $validationResult?.getAccuracy();
-  const validationSetMatrix: Matrix<number> | undefined =
-    $validationResult?.getMatrix();
+  const validationSetMatrix: Matrix<number> | undefined = $validationResult?.getMatrix();
   const autoUpdate = validationController.shouldAutoUpdate();
 
   const handleEvaluateValidationSets = () => {
@@ -60,9 +59,7 @@
         <input type="checkbox" bind:checked={$showPercentages} />
       </div>
       <div class="mx-2 max-h-37 max-w-180 overflow-y-auto">
-        <ValidationMatrix
-          validationSetMatrix={validationSetMatrix}
-          showPercentages={$showPercentages} />
+        <ValidationMatrix {validationSetMatrix} showPercentages={$showPercentages} />
       </div>
     </div>
   </div>

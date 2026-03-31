@@ -5,9 +5,11 @@
  -->
 
 <script lang="ts">
-    import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const validationResult = getControllers().getValidationController().getValidationResult();
+  const validationResult = getControllers()
+    .getValidationController()
+    .getValidationResult();
   const accuracy = $validationResult?.getAccuracy();
 </script>
 

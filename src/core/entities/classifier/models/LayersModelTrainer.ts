@@ -62,7 +62,10 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
     const input = tf.input({ shape: inputShape });
     const normalizer = tf.layers.batchNormalization().apply(input);
     const dense = tf.layers
-      .dense({ units: this.settings.getArchitecture().getHiddenLayers()[0].getNumberOfNodes(), activation: 'relu' })
+      .dense({
+        units: this.settings.getArchitecture().getHiddenLayers()[0].getNumberOfNodes(),
+        activation: 'relu',
+      })
       .apply(normalizer);
     const softmax = tf.layers
       .dense({ units: numberOfClasses, activation: 'softmax' })

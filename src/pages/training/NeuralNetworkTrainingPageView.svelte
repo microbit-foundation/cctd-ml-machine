@@ -13,7 +13,7 @@
   import Tooltip from '../../components/ui/Tooltip.svelte';
   import NeuralNetworkSettings from '../../components/features/training/NeuralNetworkSettings.svelte';
   import ConsoleLogger from '../../core/logging/ConsoleLogger';
-    import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();

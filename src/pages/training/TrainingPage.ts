@@ -25,7 +25,9 @@ const trainingIterationHandler = (h: LossTrainingIteration) => {
 
 export const trainNNModel = async () => {
   loss.set([]); // Reset the loss graph
-  const neuralNetworkSettings = getControllers().getNeuralNetworkController().getNeuralNetworkSettings();
+  const neuralNetworkSettings = getControllers()
+    .getNeuralNetworkController()
+    .getNeuralNetworkSettings();
   const modelTrainer = new LayersModelTrainer(
     neuralNetworkSettings.get(),
     trainingIterationHandler,

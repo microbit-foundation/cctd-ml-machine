@@ -20,7 +20,6 @@ import { GestureController } from '../interface-controller/GestureController';
 import { MLMachineAppController } from '../interface-controller/MLMachineAppController';
 import { MLMachineNotificationController } from '../interface-controller/MLMachineNotificationController';
 import { OutputController } from '../interface-controller/OutputController';
-import { GesturesStateAdapter } from './GesturesStateAdapter';
 import { MLMachine } from './MLMachine';
 import { MakeCodeController } from '../interface-controller/makecode/MakeCodeController';
 import type { MicrobitService } from '../domain/microbit/MicrobitService';
@@ -30,6 +29,8 @@ import type { NotificationService } from '../domain/NotificationService';
 import { ValidationController } from '../interface-controller/ValidationController';
 import type { ValidationService } from '../domain/ValidationService';
 import { NeuralNetworkController } from '../interface-controller/NeuralNetworkController';
+import { KNNController } from '../interface-controller/KNNController';
+import type { KNNSettingsService } from '../domain/KNNSettingsService';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -45,9 +46,10 @@ export class MLMachineControllers {
     private states: AbstractStates,
     private microbitService: MicrobitService,
     private validationService: ValidationService,
+    private knnSettingsService: KNNSettingsService,
   ) {
     this.gestureController = new GestureController(
-      new GesturesStateAdapter(this.mlMachine.getGestureService()),
+      states,
       this.mlMachine.getGestureService(),
     );
     this.dataController = new DataController(dataService, states);
@@ -65,6 +67,10 @@ export class MLMachineControllers {
     );
   }
 
+  public getKnnController(): KNNController {
+    return new KNNController(this.states, this.knnSettingsService);
+  }
+
   public getNotificationController(): NotificationController {
     console.log(this.notificationController);
     return this.notificationController;
@@ -78,7 +84,7 @@ export class MLMachineControllers {
   }
 
   public getClassifierController(): ClassifierController {
-    return new ClassifierController(this.mlMachine);
+    return new ClassifierController(this.states, this.mlMachine);
   }
 
   public getAxisController(): AxisController {

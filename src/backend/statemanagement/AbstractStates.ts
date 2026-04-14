@@ -13,16 +13,23 @@ import type { AbstractState } from './AbstractState';
 import type { Axis } from '../../core/entities/Axis';
 import type { Filter } from '../../core/filter/Filter';
 import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
-import type { ModelTrainingImpl } from '../../core/model/ModelTrainingImpl';
 import type { Classifier } from '../../core/classifier/Classifier';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { AbstractReadonlyState } from './AbstractReadonlyState';
+import type { KNNModelSettings } from '../../core/model/KNN/KNNModelSettings';
+import type { NeuralNetworkTrainingIteration } from '../../core/model/neural-network/NeuralNetworkTrainingIteration';
+import type { ModelTraining } from '../../core/model/ModelTraining';
 
 /**
  * Both used as a reactive state interface and data source for the backend
  */
 export interface AbstractStates {
+  getNeuralNetworkTrainingIteration(): AbstractState<
+    NeuralNetworkTrainingIteration | undefined
+  >;
+  getKNNModelSettings(): AbstractState<KNNModelSettings>;
+  setGestures(gestures: NewGesture[]): void;
   getClassifier(): AbstractState<Classifier | undefined>;
   getGestures(): AbstractReadonlyState<NewGesture[]>;
   getValidationResult(): AbstractState<ValidationResult | undefined>;
@@ -37,5 +44,5 @@ export interface AbstractStates {
   getPopupMessage(): AbstractState<string | undefined>;
   getValidationAutoUpdate(): AbstractState<boolean>;
   getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings>;
-  getModelTrainingState(): AbstractState<ModelTrainingImpl>;
+  getModelTraining(): AbstractState<ModelTraining>;
 }

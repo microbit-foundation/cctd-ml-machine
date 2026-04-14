@@ -5,7 +5,10 @@
  */
 
 export interface KNNModelSettings {
-  k: number;
-  numberOfClasses: number;
-  normalize: boolean;
+  getK(): number;
+  getNumberOfClasses(): number;
+  shouldNormalize(): boolean;
+  setK(k: number): void;
+  setNumberOfClasses(numberOfClasses: number): void;
+  setNormalize(normalize: boolean): void;
 }

@@ -15,6 +15,11 @@ export class NeuralNetworkSettingsImpl implements NeuralNetworkModelSettings {
     private networkArchitecture: NeuralNetworkArchitecture,
     private networkObserver: NeuralNetworkTrainingObserver,
   ) {}
+
+  public setTrainingObserver(observer: NeuralNetworkTrainingObserver): void {
+    this.networkObserver = observer;
+  }
+
   public setLearningRate(learningRate: number): void {
     this.baseSettings.setLearningRate(learningRate);
   }

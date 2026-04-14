@@ -33,6 +33,8 @@ export const trainNNModel = async () => {
     trainingIterationHandler,
   );
   await stores.getClassifier().getModel().train(modelTrainer);
+
+  await getControllers().getClassifierController().trainNeuralNetworkModel();
 };
 
 export const trainKNNModel = async () => {

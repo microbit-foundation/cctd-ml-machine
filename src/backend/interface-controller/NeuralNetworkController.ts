@@ -1,6 +1,7 @@
 import { BasicNeuralNetworkArchitecture } from '../../core/model/neural-network/BasicNeuralNetworkArchitecture';
 import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
+import type { NeuralNetworkTrainingIteration } from '../../core/model/neural-network/NeuralNetworkTrainingIteration';
 import type { ClassifierService } from '../domain/ClassifierService';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
@@ -38,6 +39,12 @@ export class NeuralNetworkController {
     private states: AbstractStates,
     private classifierService: ClassifierService,
   ) {}
+
+  public getTrainingIteration(): AbstractState<
+    NeuralNetworkTrainingIteration | undefined
+  > {
+    return this.states.getNeuralNetworkTrainingIteration();
+  }
 
   public getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings> {
     return this.states.getNeuralNetworkSettings();

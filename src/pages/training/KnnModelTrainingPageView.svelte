@@ -14,16 +14,11 @@
   import { knnHasTrained } from '../../lib/stores/KNNStores';
   import { trainKNNModel } from './TrainingPage';
   import KnnModelSettings from '../../components/features/training/KNNModelSettings.svelte';
-  import { onMount } from 'svelte';
 
-  const devices = stores.getDevices();
   const classifier = stores.getClassifier();
-  const gestures = stores.getGestures();
   const filters = classifier.getFilters();
   const highlightedAxis = stores.getHighlightedAxes();
   const availableAxes = stores.getAvailableAxes();
-
-  const knnModelSettings = stores.getKNNModelSettings();
 
   $: {
     if (!$classifier.model.isTrained && $classifier.model.hasModel) {
@@ -31,21 +26,6 @@
         // Only train if the knn model has been trained before
         trainKNNModel();
       }
-    }
-  }
-
-  const noOfRecordings = $gestures.reduce(
-    (acc, gesture) => acc + gesture.recordings.length,
-    0,
-  );
-  const maxK = noOfRecordings;
-  const changeK = (amount: number) => {
-    const newVal = Math.max($knnModelSettings.k + amount, 1);
-    knnModelSettings.setK(newVal);
-  };
-  $: {
-    if ($knnModelSettings.k > maxK) {
-      knnModelSettings.setK(maxK);
     }
   }
 </script>

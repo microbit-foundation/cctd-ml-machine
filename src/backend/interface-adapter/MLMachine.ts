@@ -50,6 +50,11 @@ import { StatesValidationRepository } from '../infrastructure/StatesValidationRe
 import { StatesNeuralNetworkSettingsRepository } from '../infrastructure/StatesNeuralNetworkSettingsRepository';
 import { StatesModelTrainingStateRepository } from '../infrastructure/StatesModelTrainingStateRepository';
 import { StatesClassifierRepository } from '../infrastructure/StatesClassifierRepository';
+import { StatesKNNModelSettingsRepository } from '../infrastructure/StatesKNNModelSettingsRepository';
+import type { KNNSettingsService } from '../domain/KNNSettingsService';
+import { KNNSettingsServiceImpl } from '../domain/implementation/KNNSettingsServiceImpl';
+import { k } from 'vite/dist/node/types.d-aGj9QkWt';
+import { StatesTrainingIterationRepository } from '../infrastructure/StatesTrainingIterationRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -67,6 +72,7 @@ export class MLMachine {
   private userService: UserService;
   private notificationService: NotificationService;
   private classifierService: ClassifierService;
+  private knnSettingsService: KNNSettingsService;
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
@@ -117,15 +123,25 @@ export class MLMachine {
       this.states.getNeuralNetworkSettings(),
     );
     const statesModelTrainingRepository = new StatesModelTrainingStateRepository(
-      this.states.getModelTrainingState(),
+      this.states.getModelTraining(),
     );
     const classifierRepository = new StatesClassifierRepository(
       this.states.getClassifier(),
+    );
+    const knnSettingsRepository = new StatesKNNModelSettingsRepository(this.states);
+    const trainingIterationRepository = new StatesTrainingIterationRepository(
+      this.states,
     );
     this.classifierService = new ClassifierServiceImpl(
       classifierRepository,
       statesModelTrainingRepository,
       neuralNetworkSettingsRepository,
+      this.dataService,
+      trainingIterationRepository,
+    );
+    this.knnSettingsService = new KNNSettingsServiceImpl(
+      knnSettingsRepository,
+      this.gestureService,
     );
     this.controllers = new MLMachineControllers(
       this,
@@ -140,6 +156,7 @@ export class MLMachine {
         new StatesValidationRepository(this.states),
         this.dataService,
       ),
+      this.knnSettingsService,
     );
 
     // const devices = stores.getDevices();

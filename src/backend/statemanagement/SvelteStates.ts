@@ -31,6 +31,10 @@ import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import type { Classifier } from '../../core/classifier/Classifier';
 import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { NewGesture } from '../../core/entities/NewGesture';
+import type { KNNModelSettings } from '../../core/model/KNN/KNNModelSettings';
+import type { AbstractReadonlyState } from './AbstractReadonlyState';
+import { KNNModelSettingsImpl } from '../../core/model/KNN/KNNModelSettingsImpl';
+import type { NeuralNetworkTrainingIteration } from '../../core/model/neural-network/NeuralNetworkTrainingIteration';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -48,6 +52,10 @@ export class SvelteStates implements AbstractStates {
   private modelTrainingState: AbstractState<ModelTrainingImpl>;
   private classifier: AbstractState<Classifier | undefined>;
   private gesturesState: AbstractState<NewGesture[]>;
+  private knnModelSettingsState: AbstractState<KNNModelSettings>;
+  private trainingIterationState: AbstractState<
+    NeuralNetworkTrainingIteration | undefined
+  >;
 
   public constructor(initialGestures: NewGesture[]) {
     this.liveDataState = new LiveDataStateAdapter(
@@ -90,6 +98,26 @@ export class SvelteStates implements AbstractStates {
     this.modelTrainingState = new SvelteStateAdapter(writable(new ModelTrainingImpl()));
     this.classifier = new SvelteStateAdapter(writable<Classifier | undefined>(undefined));
     this.gesturesState = new SvelteStateAdapter(writable(initialGestures));
+    this.knnModelSettingsState = new SvelteStateAdapter(
+      writable(
+        new KNNModelSettingsImpl(
+          StaticConfiguration.defaultKnnNeighbourCount,
+          0, // TODO: Maybe this should just be undefined, since it's based on the number of gestures. Maybe this shouldn't even be a part of the KNNModelSettings, since it's not really a setting, but rather a property of the dataset.
+          false,
+        ),
+      ),
+    );
+    this.trainingIterationState = new SvelteStateAdapter(writable(undefined));
+  }
+
+  getNeuralNetworkTrainingIteration(): AbstractState<
+    NeuralNetworkTrainingIteration | undefined
+  > {
+    return this.trainingIterationState;
+  }
+
+  getKNNModelSettings(): AbstractState<KNNModelSettings> {
+    return this.knnModelSettingsState;
   }
 
   setGestures(gestures: NewGesture[]): void {
@@ -145,7 +173,7 @@ export class SvelteStates implements AbstractStates {
     return this.neuralNetworkSettingsState;
   }
 
-  getModelTrainingState(): AbstractState<ModelTrainingImpl> {
+  getModelTraining(): AbstractState<ModelTrainingImpl> {
     return this.modelTrainingState;
   }
 

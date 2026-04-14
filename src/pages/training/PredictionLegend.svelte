@@ -5,29 +5,12 @@
  -->
 <script lang="ts">
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
-  import GestureDot from '../../components/ui/GestureDot.svelte';
+  import PredictionLegendGesture from './PredictionLegendGesture.svelte';
 
-  const microbitController = getControllers().getMicrobitController();
-  const microbitConnection = microbitController.getMicrobitConnectionState();
   const gestureController = getControllers().getGestureController();
   const gestures = gestureController.getGestures();
-  const classifierController = getControllers().getClassifierController();
 </script>
 
 {#each $gestures as gesture}
-  <div class="flex flex-row justify-between">
-    <div class="flex flex-row">
-      <div class="flex flex-col justify-center mr-1">
-        <GestureDot disableTooltip {gesture} />
-      </div>
-      <p>{gesture.getName()}</p>
-    </div>
-    {#if $microbitConnection.getInput().isReady()}
-      <p>
-        {(
-          (classifierController.getGestureConfidence(gesture.getID()) ?? 0) * 100
-        ).toFixed(1)}%
-      </p>
-    {/if}
-  </div>
+  <PredictionLegendGesture gestureId={gesture.getID()} />
 {/each}

@@ -4,14 +4,15 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
-  import { stores } from '../../../lib/stores/Stores';
   import NumberSelector from '../../ui/NumberSelector.svelte';
 
-  const knnModelSettings = stores.getKNNModelSettings();
+  const knnController = getControllers().getKnnController();
+  const knnModelSettings = knnController.getKNNModelSettings();
 
   const handleCheckboxEvent = (event: any) => {
-    knnModelSettings.setNormalized(event.target.checked);
+    knnController.setNormalized(event.target.checked);
   };
 </script>
 
@@ -22,14 +23,14 @@
       <NumberSelector
         min={1}
         max={30}
-        defaultValue={$knnModelSettings.k}
-        onChange={val => knnModelSettings.setK(val)} />
+        defaultValue={$knnModelSettings.getK()}
+        onChange={val => knnController.setK(val)} />
     </div>
     <p class="whitespace-nowrap content-center">Normalize</p>
     <div class="justify-self-center">
       <input
         type="checkbox"
-        checked={$knnModelSettings.normalized}
+        checked={$knnModelSettings.shouldNormalize()}
         on:click={handleCheckboxEvent} />
     </div>
   </div>

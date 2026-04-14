@@ -103,6 +103,10 @@ class Stores implements Readable<StoresType> {
     return get(this.liveData) as T;
   }
 
+  /**
+   *
+   * @deprecated Use backend instead
+   */
   public getClassifier(): Classifier {
     return this.classifier;
   }

@@ -9,23 +9,28 @@ import type { NeuralNetworkModelSettings } from '../../core/model/neural-network
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { ModelTraining } from '../../core/model/ModelTraining';
 import type { MLMachine } from '../interface-adapter/MLMachine';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class ClassifierController {
-  constructor(private mlMachine: MLMachine) {}
+  constructor(
+    private states: AbstractStates,
+    private mlMachine: MLMachine,
+  ) {}
+
+  public async trainNeuralNetworkModel() {
+    const classifierService = this.mlMachine.getClassifierService();
+    await classifierService.trainNeuralNetworkModel();
+  }
 
   public setNeuralNetwork(neuralNetworkSettings: NeuralNetworkModelSettings) {
     this.mlMachine.getClassifierService().setNeuralNetworkSettings(neuralNetworkSettings);
   }
 
   public getClassifier(): AbstractState<Classifier | undefined> {
-    return this.mlMachine.getClassifierService().getClassifier();
+    return this.states.getClassifier();
   }
 
   public getModelTraining(): AbstractState<ModelTraining> {
-    return this.mlMachine.getClassifierService().getModelTraining();
-  }
-
-  public getGestureConfidence(gestureId: number) {
-    return this.mlMachine.getClassifierService().getGestureConfidence(gestureId);
+    return this.states.getModelTraining();
   }
 }

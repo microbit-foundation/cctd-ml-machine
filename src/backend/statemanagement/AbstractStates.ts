@@ -25,8 +25,8 @@ import type { ModelTraining } from '../../core/model/ModelTraining';
  * Both used as a reactive state interface and data source for the backend
  */
 export interface AbstractStates {
-  getNeuralNetworkTrainingIteration(): AbstractState<
-    NeuralNetworkTrainingIteration | undefined
+  getNeuralNetworkTrainingIterations(): AbstractState<
+    NeuralNetworkTrainingIteration[] | undefined
   >;
   getKNNModelSettings(): AbstractState<KNNModelSettings>;
   setGestures(gestures: NewGesture[]): void;

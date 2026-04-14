@@ -5,19 +5,16 @@
  */
 
 import type { Classifier } from '../../../../core/classifier/Classifier';
-import type { KNNModelSettings } from '../../../../core/model/KNN/KNNModelSettings';
 import type { ModelTraining } from '../../../../core/model/ModelTraining';
 import type { NeuralNetworkModelSettings } from '../../../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { ClassifierRepository } from '../../ClassifierRepository';
 import type { ClassifierService } from '../../ClassifierService';
 import type { ModelTrainingStateRepository } from '../../ModelTrainingStateRepository';
 import type { NeuralNetworkRepository } from '../../NeuralNetworkRepository';
-import type { KNNModelSettingsRepository } from '../../KNNModelSettingsRepository';
 import { VectorClassifier } from '../../../../core/classifier/vector-classifier/VectorClassifier';
 import { NeuralNetworkModelTrainer } from '../../../../core/model/neural-network/NeuralNetworkModelTrainer';
 import type { DataService } from '../../DataService';
 import { AccuracyClassifierEvaluator } from '../../../../core/classifier/evaluator/AccuracyClassifierEvaluator';
-import { LoggingNeuralNetworkTrainingObserver } from '../../../../core/model/neural-network/LoggingNeuralNetworkTrainingObserver';
 import { NeuralNetworkTrainingLossObserver } from './NeuralNetworkTrainingLossObserver';
 import type { NerualNetworkTrainingIterationRepository } from '../../NerualNetworkTrainingIterationRepository';
 
@@ -31,6 +28,7 @@ export class ClassifierServiceImpl implements ClassifierService {
   ) {}
 
   public async trainNeuralNetworkModel(): Promise<void> {
+    this.trainingIterationRepository.clear();
     const settings = this.getNeuralNetworkSettings();
     settings.setTrainingObserver(
       new NeuralNetworkTrainingLossObserver(this.trainingIterationRepository),

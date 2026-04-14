@@ -54,7 +54,7 @@ export class SvelteStates implements AbstractStates {
   private gesturesState: AbstractState<NewGesture[]>;
   private knnModelSettingsState: AbstractState<KNNModelSettings>;
   private trainingIterationState: AbstractState<
-    NeuralNetworkTrainingIteration | undefined
+    NeuralNetworkTrainingIteration[] | undefined
   >;
 
   public constructor(initialGestures: NewGesture[]) {
@@ -110,8 +110,8 @@ export class SvelteStates implements AbstractStates {
     this.trainingIterationState = new SvelteStateAdapter(writable(undefined));
   }
 
-  getNeuralNetworkTrainingIteration(): AbstractState<
-    NeuralNetworkTrainingIteration | undefined
+  getNeuralNetworkTrainingIterations(): AbstractState<
+    NeuralNetworkTrainingIteration[] | undefined
   > {
     return this.trainingIterationState;
   }

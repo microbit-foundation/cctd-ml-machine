@@ -7,6 +7,6 @@ export class NeuralNetworkTrainingLossObserver implements NeuralNetworkTrainingO
     private trainingIterationRepository: NerualNetworkTrainingIterationRepository,
   ) {}
   handleTrainingIteration(iteration: NeuralNetworkTrainingIteration): void {
-    this.trainingIterationRepository.save(iteration);
+    this.trainingIterationRepository.add(iteration);
   }
 }

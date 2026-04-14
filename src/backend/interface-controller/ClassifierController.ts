@@ -17,7 +17,7 @@ export class ClassifierController {
     private mlMachine: MLMachine,
   ) {}
 
-  public async trainNeuralNetworkModel() {
+  public async trainNeuralNetworkModel(): Promise<void> {
     const classifierService = this.mlMachine.getClassifierService();
     await classifierService.trainNeuralNetworkModel();
   }

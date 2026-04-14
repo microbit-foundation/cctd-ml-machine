@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { NeuralNetworkModelBaseSettings } from '../../core/model/neural-network/NeuralNetworkModelBaseSettings';
+import type { NeuralNetworkModelLearningSettings } from '../../core/model/neural-network/NeuralNetworkModelBaseSettings';
 
 export class DefaultNeuralNetworkModelBaseSettings
-  implements NeuralNetworkModelBaseSettings
+  implements NeuralNetworkModelLearningSettings
 {
   private learningRate: number;
   private numberOfEpochs: number;

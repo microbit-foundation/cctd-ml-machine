@@ -7,7 +7,7 @@
 /**
  * Used for training
  */
-export interface NeuralNetworkModelBaseSettings {
+export interface NeuralNetworkModelLearningSettings {
   getLearningRate(): number;
   setLearningRate(learningRate: number): void;
   getNumberOfEpochs(): number;

@@ -85,7 +85,7 @@ export class MLMachine {
 
     const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
-      gestures => this.states.getGestures().set(gestures),
+      gestures => this.states.setGestures(gestures),
     );
     this.states = new SvelteStates(gestureRepository.getGestures());
     this.featureService = new FeatureServiceImpl(featureProvider);

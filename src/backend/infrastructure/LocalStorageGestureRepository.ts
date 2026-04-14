@@ -11,7 +11,6 @@ import ControlledStorage from '../../lib/ControlledStorage';
 import type { GestureRepository } from '../domain/GestureRepository';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
-import { s } from 'vite/dist/node/types.d-aGj9QkWt';
 
 export class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';

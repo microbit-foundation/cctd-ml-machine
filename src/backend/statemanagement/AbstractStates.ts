@@ -16,7 +16,7 @@ import type { ValidationResult } from '../domain/implementation/validation/Valid
 import type { ModelTrainingImpl } from '../../core/model/ModelTrainingImpl';
 import type { Classifier } from '../../core/classifier/Classifier';
 import type { NewGesture } from '../../core/entities/NewGesture';
-import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { AbstractReadonlyState } from './AbstractReadonlyState';
 
 /**

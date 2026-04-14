@@ -29,7 +29,7 @@ import { DefaultNeuralNetworkArchitecture } from '../interface-adapter/DefaultNe
 import { LoggingNeuralNetworkTrainingObserver } from '../../core/model/neural-network/LoggingNeuralNetworkTrainingObserver';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import type { Classifier } from '../../core/classifier/Classifier';
-import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { NewGesture } from '../../core/entities/NewGesture';
 
 export class SvelteStates implements AbstractStates {
@@ -91,6 +91,11 @@ export class SvelteStates implements AbstractStates {
     this.classifier = new SvelteStateAdapter(writable<Classifier | undefined>(undefined));
     this.gesturesState = new SvelteStateAdapter(writable(initialGestures));
   }
+
+  setGestures(gestures: NewGesture[]): void {
+    this.gesturesState.set(gestures);
+  }
+
   getGestures(): AbstractState<NewGesture[]> {
     return this.gesturesState;
   }

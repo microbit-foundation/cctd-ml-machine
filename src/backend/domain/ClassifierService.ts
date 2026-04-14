@@ -5,7 +5,7 @@
  */
 
 import type { Classifier } from '../../core/classifier/Classifier';
-import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { ModelTraining } from '../../core/model/ModelTraining';
 
 export interface ClassifierService {

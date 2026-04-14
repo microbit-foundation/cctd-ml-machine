@@ -6,7 +6,7 @@
 
 import { writable } from 'svelte/store';
 import type { NeuralNetworkArchitecture } from '../../core/model/neural-network/NeuralNetworkArchitecture';
-import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { NeuralNetworkTrainingObserver } from '../../core/model/neural-network/NeuralNetworkTrainingObserver';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';

@@ -10,7 +10,7 @@ import ModelRegistry from '../ModelRegistry';
 import type { ModelTrainer, ModelTrainerResult } from '../ModelTrainer';
 import { NeuralNetworkLayersModelFactory } from './NeuralNetworkLayersFactory';
 import { NeuralNetworkModel } from './NeuralNetworkModel';
-import type { NeuralNetworkModelSettings } from './NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from './NeuralNetworkLearningSettings';
 import * as tf from '@tensorflow/tfjs';
 
 export class NeuralNetworkModelTrainer

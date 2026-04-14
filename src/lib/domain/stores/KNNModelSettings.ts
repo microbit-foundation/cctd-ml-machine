@@ -19,11 +19,17 @@ import { trainKNNModel } from '../../../pages/training/TrainingPage';
 import type Classifier from './Classifier';
 import { knnHasTrained } from '../../stores/KNNStores';
 
+/**
+ * @deprecated Old stores flow. Will be removed
+ */
 interface KNNModelSettingsType {
   k: number;
   normalized: boolean;
 }
 
+/**
+ * @deprecated Old stores flow. Will be removed
+ */
 class KNNModelSettings implements Readable<KNNModelSettingsType> {
   private store: Writable<KNNModelSettingsType>;
 

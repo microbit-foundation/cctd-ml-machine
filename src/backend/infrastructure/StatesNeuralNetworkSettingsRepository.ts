@@ -1,4 +1,4 @@
-import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { NeuralNetworkRepository } from '../domain/NeuralNetworkRepository';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';

@@ -1,5 +1,5 @@
 import { BasicNeuralNetworkArchitecture } from '../../core/model/neural-network/BasicNeuralNetworkArchitecture';
-import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
 import type { ClassifierService } from '../domain/ClassifierService';
 import type { AbstractState } from '../statemanagement/AbstractState';
@@ -8,7 +8,7 @@ import type { AbstractStates } from '../statemanagement/AbstractStates';
 export class NeuralNetworkController {
   public setBatchSize(val: number): void {
     const currentSettings = this.states.getNeuralNetworkSettings().get();
-    currentSettings.setBatchSize(val);
+    currentSettings.getLearningSettings().setBatchSize(val);
     this.setNeuralNetworkSettings(currentSettings);
   }
   public setNumberOfUnits(val: number): void {
@@ -27,7 +27,7 @@ export class NeuralNetworkController {
       val,
     );
     const newSettings = new NeuralNetworkSettingsImpl(
-      currentSettings.getBaseSettings(),
+      currentSettings.getLearningSettings(),
       newArchitecture,
       currentSettings.getTrainingObserver(),
     );
@@ -49,13 +49,13 @@ export class NeuralNetworkController {
 
   public setLearningRate(learningRate: number) {
     const currentSettings = this.states.getNeuralNetworkSettings().get();
-    currentSettings.setLearningRate(learningRate);
+    currentSettings.getLearningSettings().setLearningRate(learningRate);
     this.setNeuralNetworkSettings(currentSettings);
   }
 
   public setNumberOfEpochs(val: number): void {
     const currentSettings = this.states.getNeuralNetworkSettings().get();
-    currentSettings.setNumberOfEpochs(val);
+    currentSettings.getLearningSettings().setNumberOfEpochs(val);
     this.setNeuralNetworkSettings(currentSettings);
   }
 }

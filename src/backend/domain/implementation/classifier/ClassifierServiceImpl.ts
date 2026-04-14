@@ -6,7 +6,7 @@
 
 import type { Classifier } from '../../../../core/classifier/Classifier';
 import type { ModelTraining } from '../../../../core/model/ModelTraining';
-import type { NeuralNetworkModelSettings } from '../../../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from '../../../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { ClassifierRepository } from '../../ClassifierRepository';
 import type { ClassifierService } from '../../ClassifierService';
 import type { ModelTrainingStateRepository } from '../../ModelTrainingStateRepository';

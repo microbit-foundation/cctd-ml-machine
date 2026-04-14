@@ -9,7 +9,7 @@ import type { ModelTrainer } from './ModelTrainer';
 import type { ModelInfo } from './ModelRegistry';
 import ModelRegistry from './ModelRegistry';
 import type { TrainingDataRepository } from '../../../repository/TrainingDataRepository';
-import type { NeuralNetworkModelSettings } from '../../../model/neural-network/NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from '../../../model/neural-network/NeuralNetworkLearningSettings';
 export type LayersModelTrainingSettings = {
   noOfEpochs: number;
   noOfUnits: number;

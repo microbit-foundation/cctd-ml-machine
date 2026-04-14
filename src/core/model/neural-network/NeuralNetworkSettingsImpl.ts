@@ -5,13 +5,13 @@
  */
 
 import type { NeuralNetworkArchitecture } from './NeuralNetworkArchitecture';
-import type { NeuralNetworkModelBaseSettings } from './NeuralNetworkModelBaseSettings';
-import type { NeuralNetworkModelSettings } from './NeuralNetworkModelSettings';
+import type { NeuralNetworkModelLearningSettings } from './NeuralNetworkModelBaseSettings';
+import type { NeuralNetworkModelSettings } from './NeuralNetworkLearningSettings';
 import type { NeuralNetworkTrainingObserver } from './NeuralNetworkTrainingObserver';
 
 export class NeuralNetworkSettingsImpl implements NeuralNetworkModelSettings {
   public constructor(
-    private baseSettings: NeuralNetworkModelBaseSettings,
+    private baseSettings: NeuralNetworkModelLearningSettings,
     private networkArchitecture: NeuralNetworkArchitecture,
     private networkObserver: NeuralNetworkTrainingObserver,
   ) {}
@@ -37,7 +37,7 @@ export class NeuralNetworkSettingsImpl implements NeuralNetworkModelSettings {
   public getTrainingObserver(): NeuralNetworkTrainingObserver {
     return this.networkObserver;
   }
-  public getBaseSettings(): NeuralNetworkModelBaseSettings {
+  public getLearningSettings(): NeuralNetworkModelLearningSettings {
     return this.baseSettings;
   }
   public getLearningRate(): number {

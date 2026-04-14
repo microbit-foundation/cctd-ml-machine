@@ -1,4 +1,4 @@
-import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 
 export interface NeuralNetworkRepository {
   getNeuralNetworkSettings(): NeuralNetworkModelSettings;

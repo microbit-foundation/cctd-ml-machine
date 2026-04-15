@@ -17,6 +17,8 @@ import type { DataService } from '../../DataService';
 import { AccuracyClassifierEvaluator } from '../../../../core/classifier/evaluator/AccuracyClassifierEvaluator';
 import { NeuralNetworkTrainingLossObserver } from './NeuralNetworkTrainingLossObserver';
 import type { NerualNetworkTrainingIterationRepository } from '../../NerualNetworkTrainingIterationRepository';
+import type { KNNSettingsService } from '../../KNNSettingsService';
+import KNNModelTrainer from '../../../../core/model/KNN/KNNModelTrainer';
 
 export class ClassifierServiceImpl implements ClassifierService {
   constructor(
@@ -24,8 +26,19 @@ export class ClassifierServiceImpl implements ClassifierService {
     private modelTraining: ModelTrainingStateRepository,
     private neuralNetworkRepository: NeuralNetworkRepository,
     private dataService: DataService,
+    private knnSettingsService: KNNSettingsService,
     private trainingIterationRepository: NerualNetworkTrainingIterationRepository,
   ) {}
+
+  public async trainKNNModel(): Promise<void> {
+    const knnSettings = this.knnSettingsService.getKNNModelSettings();
+    const trainer = new KNNModelTrainer(knnSettings);
+    const trainingResult = await trainer.trainModel(this.dataService.getTrainingDataset());
+    const model = trainingResult.model;
+    const evaluator = new AccuracyClassifierEvaluator();
+    const classifier = new VectorClassifier(model, evaluator);
+    this.classifierRepository.setClassifier(classifier);
+  }
 
   public async trainNeuralNetworkModel(): Promise<void> {
     this.trainingIterationRepository.clear();

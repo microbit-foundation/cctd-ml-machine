@@ -46,7 +46,7 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel, KNNMLModelTrainingResu
   }
 
   private getFeatureSet(dataset: Dataset): FeatureData[] {
-    if (this.settings.normalize) {
+    if (this.settings.shouldNormalize()) {
       return dataset.getNormalizedFeatureSet();
     }
     return dataset.getFeatureSet();

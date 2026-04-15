@@ -33,4 +33,9 @@ export class ClassifierController {
   public getModelTraining(): AbstractState<ModelTraining> {
     return this.states.getModelTraining();
   }
+
+  public async trainKNNModel(): Promise<void> {
+    const classifierService = this.mlMachine.getClassifierService();
+    await classifierService.trainKNNModel();
+  }
 }

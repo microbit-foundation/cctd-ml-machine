@@ -15,6 +15,7 @@ import type { ModelTrainer } from '../../core/entities/classifier/models/ModelTr
 
 /**
  * Trains a K-Nearest Neighbour model. Unlike the version provided by tensorflow, the points are not normalized
+ * @deprecated Use the new KNNModelTrainer in core/model/KNN/KNNModelTrainer.ts instead, which is more flexible and works with the new Dataset structure.
  */
 class KNNNonNormalizedModelTrainer implements ModelTrainer<KNNNonNormalizedMLModel> {
   constructor(private k: number) {}

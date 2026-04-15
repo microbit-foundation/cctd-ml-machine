@@ -13,6 +13,7 @@ import type { LabelledPoint } from './KNNNonNormalizedMLModel';
 
 /**
  * Trains a K-Nearest Neighbour model
+ * @deprecated Use the new KNNModelTrainer in core/model/KNN/KNNModelTrainer.ts instead, which is more flexible and works with the new Dataset structure.
  */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel> {
   constructor(private k: number) {}

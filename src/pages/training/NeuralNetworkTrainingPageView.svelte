@@ -65,7 +65,7 @@
       </div>
     {/if}
     {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && ($model.isTrained || $model.isTraining)}
-      <LossGraph {loss} maxX={$neuralNetworkSettings.getNumberOfEpochs()} />
+      <LossGraph {loss} maxX={$neuralNetworkSettings.getLearningSettings().getNumberOfEpochs()} />
     {/if}
   </div>
 </div>

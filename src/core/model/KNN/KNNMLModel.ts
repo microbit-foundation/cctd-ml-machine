@@ -41,7 +41,7 @@ class KNNMLModel implements MLModel {
 
     // Find the nearest gesture class indices
     const neighbours = [];
-    for (let i = 0; i < this.settings.k; i++) {
+    for (let i = 0; i < this.settings.getK(); i++) {
       const neighbour = orderedPoints[i];
       neighbours.push(neighbour);
     }
@@ -52,9 +52,9 @@ class KNNMLModel implements MLModel {
 
     // Compute the confidences and create the confidences array.
     const confidences = [];
-    for (let i = 0; i < this.settings.numberOfClasses; i++) {
+    for (let i = 0; i < this.settings.getNumberOfClasses(); i++) {
       confidences.push(
-        neighbours.map(e => e.classIndex).filter(e => e === i).length / this.settings.k,
+        neighbours.map(e => e.classIndex).filter(e => e === i).length / this.settings.getK(),
       );
     }
 
@@ -66,7 +66,7 @@ class KNNMLModel implements MLModel {
   }
 
   private getInputPoint(filteredData: Vector): Vector {
-    if (this.settings.normalize) {
+    if (this.settings.shouldNormalize()) {
       return this.normalizePoint(filteredData);
     }
     return filteredData;

@@ -40,9 +40,7 @@ export class NeuralNetworkController {
     private classifierService: ClassifierService,
   ) {}
 
-  public getTrainingIterations(): AbstractState<
-    NeuralNetworkTrainingIteration[] | undefined
-  > {
+  public getTrainingIterations(): AbstractState<NeuralNetworkTrainingIteration[]> {
     return this.states.getNeuralNetworkTrainingIterations();
   }
 

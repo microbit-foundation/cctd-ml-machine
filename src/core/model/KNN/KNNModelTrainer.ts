@@ -6,12 +6,12 @@
 import type { Dataset } from '../../dataset/Dataset';
 import KNNMLModel from './KNNMLModel';
 import type { KNNModelSettings } from './KNNModelSettings';
-import type { ModelInfo } from '../ModelRegistry';
 import ModelRegistry from '../ModelRegistry';
 import type { ModelTrainer, ModelTrainerResult } from '../ModelTrainer';
 import type { FeatureData } from '../../dataset/FeatureData';
 import { KNNMLModelTrainingResult } from './KNNMLModelTrainingResult';
 import type { LabelledPoint } from './LabelledPoint';
+import type { ModelInfo } from '../ModelInfo';
 
 /**
  * Trains a K-Nearest Neighbour model

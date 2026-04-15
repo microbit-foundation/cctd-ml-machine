@@ -53,8 +53,8 @@ import { StatesClassifierRepository } from '../infrastructure/StatesClassifierRe
 import { StatesKNNModelSettingsRepository } from '../infrastructure/StatesKNNModelSettingsRepository';
 import type { KNNSettingsService } from '../domain/KNNSettingsService';
 import { KNNSettingsServiceImpl } from '../domain/implementation/KNNSettingsServiceImpl';
-import { k } from 'vite/dist/node/types.d-aGj9QkWt';
 import { StatesTrainingIterationRepository } from '../infrastructure/StatesTrainingIterationRepository';
+import type { PollingPredictorEngine } from '../application/PollingPredictorEngine';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -73,6 +73,7 @@ export class MLMachine {
   private notificationService: NotificationService;
   private classifierService: ClassifierService;
   private knnSettingsService: KNNSettingsService;
+  private engine: PollingPredictorEngine;
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
@@ -125,23 +126,22 @@ export class MLMachine {
     const statesModelTrainingRepository = new StatesModelTrainingStateRepository(
       this.states.getModelTraining(),
     );
-    const classifierRepository = new StatesClassifierRepository(
-      this.states.getClassifier(),
-    );
+    const classifierRepository = new StatesClassifierRepository(this.states);
     const knnSettingsRepository = new StatesKNNModelSettingsRepository(this.states);
     const trainingIterationRepository = new StatesTrainingIterationRepository(
       this.states,
+    );
+    this.knnSettingsService = new KNNSettingsServiceImpl(
+      knnSettingsRepository,
+      this.gestureService,
     );
     this.classifierService = new ClassifierServiceImpl(
       classifierRepository,
       statesModelTrainingRepository,
       neuralNetworkSettingsRepository,
       this.dataService,
+      this.knnSettingsService,
       trainingIterationRepository,
-    );
-    this.knnSettingsService = new KNNSettingsServiceImpl(
-      knnSettingsRepository,
-      this.gestureService,
     );
     this.controllers = new MLMachineControllers(
       this,
@@ -157,6 +157,12 @@ export class MLMachine {
         this.dataService,
       ),
       this.knnSettingsService,
+    );
+
+    this.engine = new PollingPredictorEngine(
+      this.dataService,
+      this.classifierService,
+      this.notificationService,
     );
 
     // const devices = stores.getDevices();

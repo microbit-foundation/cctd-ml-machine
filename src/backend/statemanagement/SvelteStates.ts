@@ -35,6 +35,8 @@ import type { KNNModelSettings } from '../../core/model/KNN/KNNModelSettings';
 import type { AbstractReadonlyState } from './AbstractReadonlyState';
 import { KNNModelSettingsImpl } from '../../core/model/KNN/KNNModelSettingsImpl';
 import type { NeuralNetworkTrainingIteration } from '../../core/model/neural-network/NeuralNetworkTrainingIteration';
+import type { ModelInfo } from '../../core/model/ModelInfo';
+import ModelRegistry from '../../core/model/ModelRegistry';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -53,9 +55,8 @@ export class SvelteStates implements AbstractStates {
   private classifier: AbstractState<Classifier | undefined>;
   private gesturesState: AbstractState<NewGesture[]>;
   private knnModelSettingsState: AbstractState<KNNModelSettings>;
-  private trainingIterationState: AbstractState<
-    NeuralNetworkTrainingIteration[] | undefined
-  >;
+  private trainingIterationState: AbstractState<NeuralNetworkTrainingIteration[]>;
+  private selectedModelState: AbstractState<ModelInfo>;
 
   public constructor(initialGestures: NewGesture[]) {
     this.liveDataState = new LiveDataStateAdapter(
@@ -107,12 +108,16 @@ export class SvelteStates implements AbstractStates {
         ),
       ),
     );
-    this.trainingIterationState = new SvelteStateAdapter(writable(undefined));
+    this.trainingIterationState = new SvelteStateAdapter(writable([]));
+    this.selectedModelState = new SvelteStateAdapter(
+      writable(ModelRegistry.NeuralNetwork),
+    );
+  }
+  getSelectedModel(): AbstractState<ModelInfo> {
+    throw new Error('Method not implemented.');
   }
 
-  getNeuralNetworkTrainingIterations(): AbstractState<
-    NeuralNetworkTrainingIteration[] | undefined
-  > {
+  getNeuralNetworkTrainingIterations(): AbstractState<NeuralNetworkTrainingIteration[]> {
     return this.trainingIterationState;
   }
 

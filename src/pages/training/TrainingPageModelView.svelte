@@ -6,17 +6,16 @@
 
 <script lang="ts">
   import KnnModelTrainingPageView from './KnnModelTrainingPageView.svelte';
-  import ModelRegistry from '../../core/entities/classifier/models/ModelRegistry';
   import NeuralNetworkTrainingPageView from './NeuralNetworkTrainingPageView.svelte';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
-  import { stores } from '../../lib/stores/Stores';
   import PleaseConnect from '../../components/features/PleaseConnect.svelte';
   import FiltersList from '../../components/features/filters/FiltersList.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { ModelType } from '../../core/model/ModelType';
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
-  const selectedModel = stores.getSelectedModel();
+  const selectedModel = getControllers().getClassifierController().getSelectedModel();
   const showFilterList = hasFeature(Feature.KNN_MODEL);
 </script>
 
@@ -28,9 +27,9 @@
   </div>
   <div class="flex flex-grow justify-center flex-col gap-2">
     <div class="flex flex-row p-2">
-      {#if $selectedModel.id === ModelRegistry.KNN.id}
+      {#if $selectedModel.getType() === ModelType.KNN}
         <KnnModelTrainingPageView />
-      {:else if $selectedModel.id === ModelRegistry.NeuralNetwork.id}
+      {:else if $selectedModel.getType() === ModelType.NeuralNetwork}
         <NeuralNetworkTrainingPageView />
       {/if}
     </div>

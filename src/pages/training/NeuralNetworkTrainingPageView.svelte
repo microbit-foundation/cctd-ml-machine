@@ -5,7 +5,7 @@
  -->
 <script lang="ts">
   import { stores } from '../../lib/stores/Stores';
-  import { loss, trainNNModel } from './TrainingPage';
+  import { trainNNModel } from './TrainingPage';
   import { t } from './../../i18n';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';
   import LossGraph from '../../components/features/graphs/LossGraph.svelte';
@@ -20,6 +20,7 @@
   const highlightedAxes = stores.getHighlightedAxes();
   const neuralNetworkController = getControllers().getNeuralNetworkController();
   const neuralNetworkSettings = neuralNetworkController.getNeuralNetworkSettings();
+  const loss = neuralNetworkController.getTrainingIterations();
 
   const trainModelClickHandler = () => {
     trainNNModel().then(() => {
@@ -65,7 +66,9 @@
       </div>
     {/if}
     {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && ($model.isTrained || $model.isTraining)}
-      <LossGraph {loss} maxX={$neuralNetworkSettings.getLearningSettings().getNumberOfEpochs()} />
+      <LossGraph
+        {loss}
+        maxX={$neuralNetworkSettings.getLearningSettings().getNumberOfEpochs()} />
     {/if}
   </div>
 </div>

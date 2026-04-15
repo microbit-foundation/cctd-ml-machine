@@ -1,34 +1,30 @@
+import { ModelInfo } from './ModelInfo';
+import { ModelType } from './ModelType';
+
 /**
  * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
-export type ModelInfo = {
-  id: string;
-  title: string;
-  label: string;
-};
-
-export enum ModelType {
-  NeuralNetwork = 'NN',
-  KNN = 'KNN',
-}
-
 class ModelRegistry {
-  public static NeuralNetwork: ModelInfo = {
-    id: 'NN',
-    title: 'Neural network',
-    label: 'neural network',
-  };
+  public static NeuralNetwork: ModelInfo = new ModelInfo(
+    ModelType.NeuralNetwork,
+    'Neural Network',
+    'Neural Network',
+  );
 
-  public static KNN: ModelInfo = {
-    id: 'KNN',
-    title: 'KNN',
-    label: 'KNN',
-  };
+  public static KNN: ModelInfo = new ModelInfo(
+    ModelType.KNN,
+    'K-Nearest Neighbour',
+    'KNN',
+  );
 
-  public static getModels(): ModelInfo[] {
+  public static getModelsInfo(): ModelInfo[] {
     return [this.NeuralNetwork, this.KNN];
+  }
+
+  public static getModelInfo(modelType: ModelType): ModelInfo {
+    return this.getModelsInfo().find(modelInfo => modelInfo.getType() === modelType)!;
   }
 }
 

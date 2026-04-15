@@ -5,22 +5,26 @@
  -->
 <script lang="ts">
   import ControlBar from '../../../components/ui/control-bar/ControlBar.svelte';
-  import ModelRegistry from '../../../core/entities/classifier/models/ModelRegistry';
   import { Feature, hasFeature } from '../../../lib/FeatureToggles';
   import { t } from '../../../i18n';
-  import { stores } from '../../../lib/stores/Stores';
   import { navigate, Paths } from '../../../router/Router';
   import StandardButton from '../../../components/ui/buttons/StandardButton.svelte';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import ModelRegistry from '../../../core/model/ModelRegistry';
+  import type { ModelType } from '../../../core/model/ModelType';
 
-  const selectedModel = stores.getSelectedModel();
+  const selectedModel = getControllers().getClassifierController().getSelectedModel();
 
   const showTabBar = hasFeature(Feature.KNN_MODEL);
   if (!showTabBar) {
+    getControllers()
+      .getClassifierController()
+      .setSelectedModel(ModelRegistry.NeuralNetwork);
     $selectedModel = ModelRegistry.NeuralNetwork;
   }
 
-  $: isSelected = (id: string) => {
-    return $selectedModel.id === id;
+  $: isSelected = (modelType: ModelType) => {
+    return $selectedModel.getType() === modelType;
   };
 </script>
 
@@ -28,12 +32,12 @@
   <ControlBar expanded shadows={false}>
     <div class="flex justify-end flex-row flex-grow h-full px-2">
       <div class="flex flex-row gap-2 justify-center py-2">
-        {#each ModelRegistry.getModels() as model}
+        {#each ModelRegistry.getModelsInfo() as model}
           <StandardButton
             small
-            outlined={!isSelected(model.id)}
+            outlined={!isSelected(model.getType())}
             onClick={() => selectedModel.set(model)}>
-            {model.title}
+            {model.getLabel()}
           </StandardButton>
         {/each}
       </div>

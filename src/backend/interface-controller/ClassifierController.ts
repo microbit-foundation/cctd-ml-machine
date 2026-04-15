@@ -10,6 +10,7 @@ import type { AbstractState } from '../statemanagement/AbstractState';
 import type { ModelTraining } from '../../core/model/ModelTraining';
 import type { MLMachine } from '../interface-adapter/MLMachine';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
+import type { ModelInfo } from '../../core/model/ModelInfo';
 
 export class ClassifierController {
   constructor(
@@ -37,5 +38,13 @@ export class ClassifierController {
   public async trainKNNModel(): Promise<void> {
     const classifierService = this.mlMachine.getClassifierService();
     await classifierService.trainKNNModel();
+  }
+
+  public getSelectedModel(): AbstractState<ModelInfo> {
+    return this.states.getSelectedModel();
+  }
+
+  public setSelectedModel(model: ModelInfo): void {
+    this.mlMachine.getClassifierService().setSelectedModel(model);
   }
 }

@@ -7,8 +7,11 @@
 import type { Classifier } from '../../core/classifier/Classifier';
 import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { ModelTraining } from '../../core/model/ModelTraining';
+import type { ModelInfo } from '../../core/model/ModelInfo';
 
 export interface ClassifierService {
+  setSelectedModel(model: ModelInfo): void;
+  getSelectedModel(): ModelInfo;
   trainKNNModel(): Promise<void>;
   trainNeuralNetworkModel(): Promise<void>;
   setNeuralNetworkSettings(neuralNetworkSettings: NeuralNetworkModelSettings): void;

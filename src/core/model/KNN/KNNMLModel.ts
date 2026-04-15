@@ -54,7 +54,8 @@ class KNNMLModel implements MLModel {
     const confidences = [];
     for (let i = 0; i < this.settings.getNumberOfClasses(); i++) {
       confidences.push(
-        neighbours.map(e => e.classIndex).filter(e => e === i).length / this.settings.getK(),
+        neighbours.map(e => e.classIndex).filter(e => e === i).length /
+          this.settings.getK(),
       );
     }
 

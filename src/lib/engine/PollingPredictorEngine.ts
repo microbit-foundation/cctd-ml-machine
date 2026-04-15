@@ -23,6 +23,7 @@ import { Feature, getFeature } from '../FeatureToggles';
 
 /**
  * The PollingPredictorEngine will predict on the current input with consistent intervals.
+ * @deprecated Use the backend version instead.
  */
 class PollingPredictorEngine implements Engine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;

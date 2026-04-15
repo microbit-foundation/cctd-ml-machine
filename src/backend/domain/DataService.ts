@@ -11,6 +11,7 @@ import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 
 export interface DataService {
   addLiveData(input: LiveDataVector): void;
+  getLiveData(duration: number, noOfSamples: number): LiveDataVector[];
   setSelectedAxes(axes: Axis[]): void;
   toggleAxis(axis: Axis): void;
   getAvailableAxes(): Axis[];

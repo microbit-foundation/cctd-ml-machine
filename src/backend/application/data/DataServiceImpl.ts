@@ -28,6 +28,10 @@ export class DataServiceImpl implements DataService {
     this.gestureDatasetFactory = new GestureDatasetFactory(this.gestureService);
   }
 
+  getLiveData(duration: number, noOfSamples: number): LiveDataVector[] {
+    return this.liveDataRepository.getSeries(duration, noOfSamples).map(e => e.value);
+  }
+
   getFilters(): Filter[] {
     return this.filterRepository.getFilters();
   }

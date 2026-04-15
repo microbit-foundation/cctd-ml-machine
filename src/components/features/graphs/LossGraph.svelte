@@ -19,11 +19,11 @@
   } from 'chart.js';
 
   import { onMount } from 'svelte';
-  import { type Readable } from 'svelte/store';
   import { tr } from '../../../i18n';
   import type { LossTrainingIteration } from '../../../core/entities/classifier/models/LayersModelTrainer';
+  import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
 
-  export let loss: Readable<LossTrainingIteration[]>;
+  export let loss: AbstractState<LossTrainingIteration[]>;
   export let maxX: number | undefined = undefined;
 
   function getConfig(

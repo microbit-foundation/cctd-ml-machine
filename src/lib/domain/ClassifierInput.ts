@@ -8,6 +8,9 @@ import BaseVector from '../../core/vector/BaseVector';
 import Filters from './Filters';
 import type { Vector } from '../../core/vector/Vector';
 
+/**
+ * @deprecated replace with PredictionInput.
+ */
 export class ClassifierInput {
   public constructor(private samples: Vector[]) {}
 

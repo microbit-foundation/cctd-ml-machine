@@ -44,7 +44,6 @@ type StoresType = {
  */
 class Stores implements Readable<StoresType> {
   private liveData: Writable<LiveData<LiveDataVector> | undefined>;
-  private engine: Engine | undefined;
   private classifier: Classifier;
   private gestures: Gestures;
   private confidences: Confidences;
@@ -59,7 +58,6 @@ class Stores implements Readable<StoresType> {
     this.devices = new Devices();
     this.liveData = writable(undefined);
     this.recorder = new Recorder();
-    this.engine = undefined;
     const repositories: Repositories = new LocalStorageRepositories();
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
@@ -92,14 +90,6 @@ class Stores implements Readable<StoresType> {
     this.liveData.set(liveDataStore);
 
     // We stop the previous engine from making predictions
-    if (this.engine) {
-      this.engine.stop();
-    }
-    this.engine = new PollingPredictorEngine(
-      this.classifier,
-      liveDataStore,
-      this.highlightedAxis,
-    );
     return get(this.liveData) as T;
   }
 
@@ -113,15 +103,6 @@ class Stores implements Readable<StoresType> {
 
   public getGestures(): Gestures {
     return this.gestures;
-  }
-
-  public getEngine(): Engine {
-    if (!this.engine) {
-      throw new Error(
-        'Cannot get engine store, the liveData store has not been set. You must set it using setLiveData(...)',
-      );
-    }
-    return this.engine;
   }
 
   public getConfidences(): Confidences {

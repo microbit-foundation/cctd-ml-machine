@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { Axis } from '../../../../core/entities/Axis';
 import type { GestureID } from '../../../../core/entities/Gesture';
 import type { NewGesture } from '../../../../core/entities/NewGesture';
 import type { Recording } from '../../../../core/entities/recording/Recording';
+import type { AxisRepository } from '../../AxisRepository';
 import type { GestureRepository } from '../../GestureRepository';
 import type { GestureService } from '../../GestureService';
 import type { SystemColors } from '../SystemColors';
@@ -16,7 +18,8 @@ export class GestureServiceImpl implements GestureService {
   public constructor(
     private gestureRepository: GestureRepository,
     private colors: SystemColors,
-  ) {}
+    private axisRepository: AxisRepository,
+  ) { }
 
   saveGestures(gestures: NewGesture[]): void {
     this.gestureRepository.saveGestures(gestures);
@@ -91,6 +94,8 @@ export class GestureServiceImpl implements GestureService {
 
   public setGestures(value: NewGesture[]): void {
     this.gestureRepository.saveGestures(value);
+    const axes = this.getAvailableAxesFromGestures(value);
+    this.axisRepository.setAvailableAxes(axes);
   }
 
   public getGestures(): NewGesture[] {
@@ -103,5 +108,14 @@ export class GestureServiceImpl implements GestureService {
       throw new Error(`Couldn't find gesture with id ${gestureId}`);
     }
     return gesture;
+  }
+
+  private getAvailableAxesFromGestures(gestures: NewGesture[]): Axis[] {
+    for (const gesture of gestures) {
+      for (const recording of gesture.getRecordings()) {
+        return recording.getAxes(); // Dictate the axes from the first recording
+      }
+    }
+    return []
   }
 }

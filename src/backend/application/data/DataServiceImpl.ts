@@ -28,6 +28,16 @@ export class DataServiceImpl implements DataService {
     this.gestureDatasetFactory = new GestureDatasetFactory(this.gestureService);
   }
 
+  hasSufficientDataForTraining(): boolean {
+    const gestures = this.gestureService.getGestures();
+    for (const gesture of gestures) {
+      if (gesture.getRecordings().length < 3) {
+        return false;
+      }
+    }
+    return gestures.length >= 2;
+  }
+
   getLiveData(duration: number, noOfSamples: number): LiveDataVector[] {
     return this.liveDataRepository.getSeries(duration, noOfSamples).map(e => e.value);
   }

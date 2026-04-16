@@ -12,8 +12,11 @@
   import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   const devices = stores.getDevices();
+  const gestureController = getControllers().getGestureController();
+  const gestures = gestureController.getGestures();
   // In case of manual classification, variables for evaluation
   let recordingTime = 0;
   // let lastRecording;
@@ -81,7 +84,7 @@
 <MediaQuery query="(max-width: 1000px)" let:matches>
   {#if matches}
     <div class="grid grid-cols-3 gap-4">
-      {#each stores.getGestures().getGestures() as gesture}
+      {#each $gestures.map(e => gestureController.getGestureState(e.getID())) as gesture}
         <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
       {/each}
     </div>
@@ -90,7 +93,7 @@
 <MediaQuery query="(min-width: 1000px) and (max-width: 1367px)" let:matches>
   {#if matches}
     <div class="grid grid-cols-4 gap-4">
-      {#each stores.getGestures().getGestures() as gesture}
+      {#each $gestures.map(e => gestureController.getGestureState(e.getID())) as gesture}
         <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
       {/each}
     </div>
@@ -99,7 +102,7 @@
 <MediaQuery query="(min-width: 1367px)" let:matches>
   {#if matches}
     <div class="grid grid-cols-5 gap-4">
-      {#each stores.getGestures().getGestures() as gesture}
+      {#each $gestures.map(e => gestureController.getGestureState(e.getID())) as gesture}
         <OutputGesture {gesture} {onUserInteraction} variant={'tile'} />
       {/each}
     </div>

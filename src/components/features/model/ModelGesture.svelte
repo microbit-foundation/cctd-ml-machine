@@ -4,16 +4,21 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import type GestureState from '../../../lib/domain/stores/gesture/GestureState';
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+    import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
+    import type { Confidences } from '../../../core/entities/Confidences';
+    import type { NewGesture } from '../../../core/entities/NewGesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import OutputGestureStack from './ModelGestureStack.svelte';
   import OutputGestureTile from './ModelGestureTile.svelte';
 
-  export let gesture: GestureState;
+  const gestureController = getControllers().getGestureController();
+  const confidences: AbstractState<Confidences> = gestureController.getConfidences();
+  export let gesture: AbstractState<NewGesture>;
   let wasTriggered = false;
 
   $: {
-    let isConfident = $gesture.confidence.isConfident;
+    let isConfident = $confidences.isConfident($gesture);
     if (isConfident) {
       if (!wasTriggered) {
         wasTurnedOn();
@@ -29,7 +34,7 @@
   const wasTurnedOff = () => {};
   const wasTurnedOn = () => {
     if (Microbits.isOutputMakecode()) {
-      Microbits.sendUARTGestureMessageToOutput($gesture.name);
+      Microbits.sendUARTGestureMessageToOutput($gesture.getName());
       return;
     }
   };
@@ -41,7 +46,7 @@
 </script>
 
 {#if variant === 'stack'}
-  <OutputGestureStack gestureId={gesture.getId()} {onUserInteraction} />
+  <OutputGestureStack gestureId={$gesture.getID()} {onUserInteraction} />
 {/if}
 
 {#if variant === 'tile'}

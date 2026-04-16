@@ -7,13 +7,12 @@
   import { fade } from 'svelte/transition';
   import Information from '../../../components/ui/information/Information.svelte';
   import { t } from './../../../i18n';
-  import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
-  const gestures = stores.getGestures();
+  const gestures = getControllers().getGestureController().getGestures();
   // Bool flags to know whether output microbit popup should be show
   let hasClosedPopup = false;
 
@@ -58,7 +57,7 @@
 
   <div class="pl-1">
     <!-- Display all gestures and their output capabilities -->
-    {#each gestures.getGestures() as gesture}
+    {#each $gestures.map(e => getControllers().getGestureController().getGestureState(e.getID())) as gesture}
       <OutputGesture variant="stack" {gesture} {onUserInteraction} />
     {/each}
   </div>

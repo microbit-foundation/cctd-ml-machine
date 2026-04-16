@@ -17,6 +17,8 @@
   import { createFilter } from '../../core/filter/FilterUtils';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import type { FilterType } from '../../core/filter/Filter';
+    import type { NewGesture } from '../../core/entities/NewGesture';
+    import type { Recording } from '../../core/entities/recording/Recording';
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
@@ -29,7 +31,7 @@
   $: liveData = $stores.liveData;
   const highlightedAxes = stores.getHighlightedAxes();
 
-  const gestures = stores.getGestures();
+  const gestures = getControllers().getGestureController().getGestures();
 
   type RecordingRepresentation = {
     ID: number;
@@ -136,10 +138,10 @@
 
   function getColorForClass(gestureID: number): string {
     if (gestureID === uniqueLiveDataID) {
-      return StaticConfiguration.graphColors[gestures.getNumberOfGestures()];
+      return StaticConfiguration.graphColors[$gestures.length];
     }
 
-    return gestures.getGesture(gestureID).getColor();
+    return getControllers().getGestureController().getGesture(gestureID)!.getColor();
   }
 
   function getStrokeColor(gesture: unknown) {
@@ -181,20 +183,20 @@
   // Side effect: updates classList and color
   function createDataRepresentation() {
     const classes: { name: string; id: number }[] = [];
-    const data: GestureData[] = get(stores.getGestures());
+    const data: NewGesture[] = get(getControllers().getGestureController().getGestures());
     const recordings: RecordingRepresentation[] = [];
     data.map(gestureClassObject => {
-      const gestureClassName: string = gestureClassObject.name;
-      const gestureClassID: number = gestureClassObject.ID;
+      const gestureClassName: string = gestureClassObject.getName();
+      const gestureClassID: number = gestureClassObject.getID();
       const gestureClass = { name: gestureClassName, id: gestureClassID };
       if (!classes.includes(gestureClass)) {
         classes.push(gestureClass);
       }
-      gestureClassObject.recordings.map((recording: RecordingData) => {
-        const ID = recording.ID;
-        const x = filterFunction(recording.samples.map(e => e.vector[0]));
-        const y = filterFunction(recording.samples.map(e => e.vector[1]));
-        const z = filterFunction(recording.samples.map(e => e.vector[2]));
+      gestureClassObject.getRecordings().map((recording: Recording) => {
+        const ID = recording.getId();
+        const x = filterFunction(recording.getSamples().map(e => e.getValue()[0]));
+        const y = filterFunction(recording.getSamples().map(e => e.getValue()[1]));
+        const z = filterFunction(recording.getSamples().map(e => e.getValue()[2]));
         recordings.push({ ID, gestureClassName, gestureClassID, x, y, z });
       });
     });

@@ -44,4 +44,8 @@ export class DataController {
   public toggleAxis(axis: Axis): void {
     this.dataService.toggleAxis(axis);
   }
+
+  public hasSufficientDataForTraining(): boolean {
+    return this.dataService.hasSufficientDataForTraining();
+  }
 }

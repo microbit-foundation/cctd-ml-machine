@@ -6,13 +6,14 @@
 
 <script lang="ts">
   import TrainingFailedDialog from './TrainingFailedDialog.svelte';
-  import { stores } from '../../lib/stores/Stores';
   import TrainingPageModelView from './TrainingPageModelView.svelte';
   import InsufficientData from './InsufficientData.svelte';
   import TrainingPageTabs from './controlbar/TrainingPageTabs.svelte';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const gestures = stores.getGestures();
-  const sufficientData = gestures.hasSufficientData();
+  const sufficientData = getControllers()
+    .getDataController()
+    .hasSufficientDataForTraining();
 </script>
 
 <TrainingFailedDialog />

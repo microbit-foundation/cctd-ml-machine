@@ -8,16 +8,16 @@
   import FilterToggler from './FilterToggler.svelte';
   import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import { t } from '../../i18n';
-  import { stores } from '../../lib/stores/Stores';
   import { navigate, Paths } from '../../router/Router';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import { getFilterTypes } from '../../core/filter/FilterUtils';
   import type { FilterType } from '../../core/filter/Filter';
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   let isFilterInspectorDialogOpen = false;
   let currentFilter: FilterType | undefined = undefined;
 
-  const gestures = stores.getGestures();
+  const gestures = getControllers().getGestureController().getGestures();
 
   const openFilterInspector = (filter: FilterType, fullScreen: boolean) => {
     currentFilter = filter;

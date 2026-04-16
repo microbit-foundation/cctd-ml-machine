@@ -1,4 +1,4 @@
-import type { GestureID } from "./NewGesture";
+import type { GestureID, NewGesture } from "./NewGesture";
 
 export class Confidences {
     private confidences: Map<GestureID, number>;
@@ -16,5 +16,13 @@ export class Confidences {
 
     setConfidence(gestureID: GestureID, confidence: number): void {
         this.confidences.set(gestureID, confidence);
+    }
+
+    isConfident(gesture: NewGesture) : boolean {
+        const confidence = this.getConfidence(gesture.getID());
+        if (confidence === undefined) {
+            return false;
+        }
+        return confidence >= gesture.getConfidence().requiredConfidence;
     }
 }

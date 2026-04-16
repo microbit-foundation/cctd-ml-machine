@@ -6,10 +6,10 @@
 
 <script lang="ts">
   import Matrix from '../../core/entities/Matrix';
-  import { stores } from '../../lib/stores/Stores';
   import { t } from '../../i18n';
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const gestures = stores.getGestures();
+  const gestures = getControllers().getGestureController().getGestures();
 
   export let validationSetMatrix: Matrix<number> | undefined;
   // TODO: Fix, make the correct size (len(gestures)^2)
@@ -43,13 +43,13 @@
       </td>
       <td />
       {#each $gestures as gesture}
-        <td class="w-20 border-1">{gesture.name}</td>
+        <td class="w-20 border-1">{gesture.getName()}</td>
       {/each}
     </tr>
 
     {#each $gestures as gesture, rowIdx}
       <tr>
-        <td class="border-l-1 pl-2 border-1">{gesture.name}</td>
+        <td class="border-l-1 pl-2 border-1">{gesture.getName()}</td>
         {#each matrix.getRow(rowIdx) as val, colIdx}
           <td class="border-1" class:bg-green-50={rowIdx === colIdx}>
             {#if showPercentages}

@@ -20,6 +20,7 @@ import type { SerializedGesture } from '../../core/serialization/gesture/Seriali
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { Recording } from '../../core/entities/recording/Recording';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
+import type { Confidences } from '../../core/entities/Confidences';
 
 export class GestureController {
   clearValidationRecordings() {
@@ -130,5 +131,9 @@ export class GestureController {
     const parsed: SerializedGesture[] = JSON.parse(importable);
     const deserialized = parsed.map(ser => serializer.deserialize(ser));
     this.gestureService.setGestures(deserialized);
+  }
+
+  public getConfidences(): AbstractState<Confidences> {
+    return this.states.getConfidences();
   }
 }

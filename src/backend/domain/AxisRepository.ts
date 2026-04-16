@@ -10,4 +10,5 @@ export interface AxisRepository {
   setSelectedAxes(axes: Axis[]): void;
   getSelectedAxes(): Axis[];
   getAvailableAxes(): Axis[];
+  setAvailableAxes(axes: Axis[]): unknown;
 }

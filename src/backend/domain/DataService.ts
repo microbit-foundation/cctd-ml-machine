@@ -21,4 +21,5 @@ export interface DataService {
   getFilters(): Filter[];
   getTrainingDataset(): Dataset;
   getValidationDataset(): Dataset;
+  hasSufficientDataForTraining(): boolean;
 }

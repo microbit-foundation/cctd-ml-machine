@@ -33,6 +33,9 @@ export class StatesAxisRepository implements AxisRepository {
       states.getSelectedAxes().set(selectedAxes);
     }
   }
+  setAvailableAxes(axes: Axis[]): void {
+    this.states.getAvailableAxes().set(axes);
+  }
 
   setSelectedAxes(axes: Axis[]): void {
     this.states.getSelectedAxes().set(axes);

@@ -4,13 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { InMemoryLiveDataStore } from '../../core/InMemoryLiveDataStore';
 import type { TimestampedData } from '../../core/LiveDataBuffer';
-import type { LiveDataStore } from '../../core/LiveDataStore';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { LiveDataRepository } from '../domain/LiveDataRepository';
-import type { AbstractState } from '../statemanagement/AbstractState';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class InMemoryLiveDataRepository implements LiveDataRepository {

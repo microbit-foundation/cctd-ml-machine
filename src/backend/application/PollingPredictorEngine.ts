@@ -1,7 +1,11 @@
-import type { PredictionInput } from '../../core/classifier/Predictioninput';
+import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 import { VectorPredictionInput } from '../../core/classifier/vector-classifier/VectorPredictionInput';
+import { Confidences } from '../../core/entities/Confidences';
+import type { GestureID } from '../../core/entities/NewGesture';
 import type { ClassifierService } from '../domain/ClassifierService';
+import type { ConfidenceService } from '../domain/ConfidenceService';
 import type { DataService } from '../domain/DataService';
+import type { GestureRepository } from '../domain/GestureRepository';
 
 export class PollingPredictorEngine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;
@@ -10,6 +14,8 @@ export class PollingPredictorEngine {
   constructor(
     private classifierService: ClassifierService,
     private dataService: DataService,
+    private confidenceService: ConfidenceService,
+    private gestureRepository: GestureRepository,
     private pollingPredictionInterval: number,
     private pollingPredictionSampleSize: number,
     private pollingPredictionSampleDuration: number,
@@ -19,22 +25,40 @@ export class PollingPredictorEngine {
   }
 
   private startPolling() {
-    this.pollingInterval = setInterval(() => {
-      void this.predict();
+    this.pollingInterval = setInterval(async () => {
+      const prediction = await this.predict();
+      if (prediction === undefined) {
+        return;
+      }
+        const outputVectorValue = prediction.getPrediction().getValue();
+        const gestures = this.gestureRepository.getGestures();
+        const confidenceMap = new Map<GestureID, number>();
+        for (let i = 0; i < gestures.length; i++) {
+            confidenceMap.set(gestures[i].getID(), outputVectorValue[i]);
+        }
+        const confidences = new Confidences(confidenceMap)
+      this.confidenceService.setConfidences(confidences);
     }, this.pollingPredictionInterval);
   }
 
-  private predict() {
+  private async predict(): Promise<PredictionOutput | undefined> {
     const classifier = this.classifierService.getClassifier();
-    const liveData = this.dataService.getLiveData(
+    const liveDataSeries = this.dataService.getLiveData(
       this.pollingPredictionSampleDuration,
       this.pollingPredictionSampleSize,
     );
+    if (liveDataSeries.length === 0) {
+      return;
+    }
+    if (liveDataSeries.length < 8) {
+      // The filters require at least 8 data points, so if there are too few, we cannot make a prediction
+      return;
+    }
     const selectedAxes = this.dataService.getSelectedAxes();
     const filters = this.dataService.getFilters();
     const predictionInput = VectorPredictionInput.getFilteredForAxes(
       filters,
-      liveData,
+      liveDataSeries,
       selectedAxes,
     );
     if (classifier === undefined) {
@@ -43,43 +67,20 @@ export class PollingPredictorEngine {
     if (!this.isRunning) {
       return;
     }
-    // SO FAR SO GOOD.
+    return await classifier.predict(predictionInput);
+  }
 
-    const numberOfSamples = input.getNumberOfSamples();
-    const requiredNumberOfSamples = Math.max(
-      ...get(this.classifier.getFilters()).map(filter => filter.getMinNumberOfSamples()),
-    );
-    if (numberOfSamples < requiredNumberOfSamples) {
-      return;
+  public stop() {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
     }
-    void this.classifier.classify(input);
+    this.isRunning = false;
   }
 
-  private bufferToInput(): PredictionInput {
-    const bufferedData = this.getRawDataFromBuffer(this.pollingPredictionSampleSize);
-    return ClassifierInput.getInputForAxes(
-      bufferedData.map(e => e.value),
-      get(this.highlightedAxes),
-    );
-  }
-
-  /**
-   * Searches for an applicable amount of data, by iterately trying fewer data points if buffer fetch fails
-   */
-  private getRawDataFromBuffer(sampleSize: number): TimestampedData<LiveDataVector>[] {
-    try {
-      return this.liveData
-        .getBuffer()
-        .getSeries(getFeature<number>(Feature.RECORDING_DURATION), sampleSize);
-    } catch (_e) {
-      if (sampleSize < 8) {
-        return []; // The minimum number of points is 8, otherwise the filters will throw an exception
-      } else {
-        // If too few samples are available, try again with fewer samples
-        return this.getRawDataFromBuffer(
-          sampleSize - StaticConfiguration.pollingPredictionSampleSizeSearchStepSize,
-        );
-      }
+  public start() {
+    if (!this.isRunning) {
+      this.isRunning = true;
+      this.startPolling();
     }
   }
 }

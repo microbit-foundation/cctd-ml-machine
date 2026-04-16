@@ -54,7 +54,10 @@ import { StatesKNNModelSettingsRepository } from '../infrastructure/StatesKNNMod
 import type { KNNSettingsService } from '../domain/KNNSettingsService';
 import { KNNSettingsServiceImpl } from '../domain/implementation/KNNSettingsServiceImpl';
 import { StatesTrainingIterationRepository } from '../infrastructure/StatesTrainingIterationRepository';
-import type { PollingPredictorEngine } from '../application/PollingPredictorEngine';
+import { PollingPredictorEngine } from '../application/PollingPredictorEngine';
+import StaticConfiguration from '../../StaticConfiguration';
+import { ConfidenceServiceImpl } from '../domain/implementation/ConfidenceServiceImpl';
+import { StatesConfidenceRepository } from '../infrastructure/StatesConfidenceRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -159,10 +162,17 @@ export class MLMachine {
       this.knnSettingsService,
     );
 
+    const confidenceRepository = new StatesConfidenceRepository(this.states);
+    const confidenceService = new ConfidenceServiceImpl(confidenceRepository, gestureRepository);
+
     this.engine = new PollingPredictorEngine(
-      this.dataService,
       this.classifierService,
-      this.notificationService,
+      this.dataService,
+      confidenceService,
+      gestureRepository,
+      StaticConfiguration.pollingPredictionInterval,
+      StaticConfiguration.pollingPredictionSampleSize,
+      StaticConfiguration.pollingPredictionInterval,
     );
 
     // const devices = stores.getDevices();

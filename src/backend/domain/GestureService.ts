@@ -7,6 +7,7 @@
 import type { GestureID } from '../../core/entities/Gesture';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { Recording } from '../../core/entities/recording/Recording';
+import type { Vector } from '../../core/vector/Vector';
 
 export interface GestureService {
   deleteValidationRecording(gestureId: number, recordingId: number): void;

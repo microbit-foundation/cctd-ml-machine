@@ -32,11 +32,11 @@ import type { Classifier } from '../../core/classifier/Classifier';
 import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { KNNModelSettings } from '../../core/model/KNN/KNNModelSettings';
-import type { AbstractReadonlyState } from './AbstractReadonlyState';
 import { KNNModelSettingsImpl } from '../../core/model/KNN/KNNModelSettingsImpl';
 import type { NeuralNetworkTrainingIteration } from '../../core/model/neural-network/NeuralNetworkTrainingIteration';
 import type { ModelInfo } from '../../core/model/ModelInfo';
 import ModelRegistry from '../../core/model/ModelRegistry';
+import { Confidences } from '../../core/entities/Confidences';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -57,6 +57,7 @@ export class SvelteStates implements AbstractStates {
   private knnModelSettingsState: AbstractState<KNNModelSettings>;
   private trainingIterationState: AbstractState<NeuralNetworkTrainingIteration[]>;
   private selectedModelState: AbstractState<ModelInfo>;
+  private confidencesState: AbstractState<Confidences>;
 
   public constructor(initialGestures: NewGesture[]) {
     this.liveDataState = new LiveDataStateAdapter(
@@ -112,9 +113,15 @@ export class SvelteStates implements AbstractStates {
     this.selectedModelState = new SvelteStateAdapter(
       writable(ModelRegistry.NeuralNetwork),
     );
+    this.confidencesState = new SvelteStateAdapter(writable(new Confidences(new Map())));
   }
+
+  getConfidences(): AbstractState<Confidences> {
+    return this.confidencesState;
+  }
+
   getSelectedModel(): AbstractState<ModelInfo> {
-    throw new Error('Method not implemented.');
+    return this.selectedModelState;
   }
 
   getNeuralNetworkTrainingIterations(): AbstractState<NeuralNetworkTrainingIteration[]> {

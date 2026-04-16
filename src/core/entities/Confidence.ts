@@ -3,6 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
+/**
+ * @deprecated Replace with only the required confidence as a setting. Use Confidences from the ConfidenceService instead.
+ */
 export interface Confidence {
   currentConfidence: number;
   requiredConfidence: number;

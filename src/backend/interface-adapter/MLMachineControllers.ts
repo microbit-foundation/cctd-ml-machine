@@ -31,6 +31,7 @@ import type { ValidationService } from '../domain/ValidationService';
 import { NeuralNetworkController } from '../interface-controller/NeuralNetworkController';
 import { KNNController } from '../interface-controller/KNNController';
 import type { KNNSettingsService } from '../domain/KNNSettingsService';
+import { RecordingController } from '../interface-controller/RecordingController';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -51,6 +52,7 @@ export class MLMachineControllers {
     this.gestureController = new GestureController(
       states,
       this.mlMachine.getGestureService(),
+      mlMachine.getConfidenceService()
     );
     this.dataController = new DataController(dataService, states);
     this.notificationController = new MLMachineNotificationController(
@@ -121,5 +123,9 @@ export class MLMachineControllers {
       this.dataService,
       this.states,
     );
+  }
+
+  public getRecordingController() {
+    return new RecordingController(this.states);
   }
 }

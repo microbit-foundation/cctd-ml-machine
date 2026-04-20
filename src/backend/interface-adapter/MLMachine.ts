@@ -58,6 +58,8 @@ import { PollingPredictorEngine } from '../application/PollingPredictorEngine';
 import StaticConfiguration from '../../StaticConfiguration';
 import { ConfidenceServiceImpl } from '../domain/implementation/ConfidenceServiceImpl';
 import { StatesConfidenceRepository } from '../infrastructure/StatesConfidenceRepository';
+import type { ConfidenceService } from '../domain/ConfidenceService';
+import { ax } from 'vitest/dist/chunks/reporters.nr4dxCkA';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -77,6 +79,7 @@ export class MLMachine {
   private classifierService: ClassifierService;
   private knnSettingsService: KNNSettingsService;
   private engine: PollingPredictorEngine;
+  private confidenceService: ConfidenceService;
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
@@ -98,13 +101,17 @@ export class MLMachine {
       gestures => this.states.setGestures(gestures),
     );
     this.states = new SvelteStates(gestureRepository.getGestures());
+    const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
+    const axisRepository = new StatesAxisRepository(gestureRepository, this.states);
     this.gestureService = new GestureServiceImpl(
       gestureRepository,
       new MLMachineColors(gestureRepository),
+      axisRepository,
     );
+    this.confidenceService = new ConfidenceServiceImpl(confidenceRepository, this.gestureService);
     this.dataService = new DataServiceImpl(
-      new StatesAxisRepository(this.gestureService, this.states),
+      axisRepository,
       new InMemoryLiveDataRepository(this.states),
       new StatesFilterRepository(this.states),
       this.gestureService,
@@ -162,8 +169,7 @@ export class MLMachine {
       this.knnSettingsService,
     );
 
-    const confidenceRepository = new StatesConfidenceRepository(this.states);
-    const confidenceService = new ConfidenceServiceImpl(confidenceRepository, gestureRepository);
+    const confidenceService = new ConfidenceServiceImpl(confidenceRepository, this.gestureService);
 
     this.engine = new PollingPredictorEngine(
       this.classifierService,
@@ -218,6 +224,10 @@ export class MLMachine {
 
   public getControllers(): MLMachineControllers {
     return this.controllers;
+  }
+
+  getConfidenceService(): ConfidenceService {
+    return this.confidenceService;
   }
 }
 

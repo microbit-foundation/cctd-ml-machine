@@ -52,9 +52,9 @@
 </style>
 
 <script lang="ts">
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import type { NewGesture } from '../../../core/entities/NewGesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
-  import { stores } from '../../../lib/stores/Stores';
 
   // TODO: Shares a lot with 'PatternMatrix'. Extract 'Matrix' component and reuse
 
@@ -83,7 +83,8 @@
   function elementClick(i: number) {
     setElementTo = !matrix[i];
     matrix[i] = setElementTo;
-    stores.getGestures().getGesture(gesture.getID()).setLEDOutput(matrix);
+    
+    getControllers().getGestureController().setLEDMatrixOutput(gesture.getID(), matrix);
   }
 
   // When user hovers over a box. If user is clicking:
@@ -94,7 +95,7 @@
       return;
     }
     matrix[i] = setElementTo;
-    stores.getGestures().getGesture(gesture.getID()).setLEDOutput(matrix);
+    getControllers().getGestureController().setLEDMatrixOutput(gesture.getID(), matrix);
   }
 </script>
 

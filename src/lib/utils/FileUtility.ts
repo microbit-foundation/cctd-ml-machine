@@ -3,10 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
-import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
-import { stores } from '../stores/Stores';
 
 class FileUtility {
   public static loadDatasetFromFile(file: File) {
@@ -17,7 +16,7 @@ class FileUtility {
       }
       const contents = e.target.result;
       if (typeof contents === 'string') {
-        stores.getGestures().importFrom(JSON.parse(contents) as PersistedGestureData[]);
+        getControllers().getGestureController().importFromJson(contents);
       }
     };
     reader.readAsText(file as Blob);

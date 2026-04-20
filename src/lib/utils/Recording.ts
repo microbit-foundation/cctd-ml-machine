@@ -18,7 +18,7 @@ import { Sample } from '../../core/entities/recording/Sample';
 import type { Axis } from '../../core/entities/Axis';
 
 /**
- * @deprecated Will be removed in the future. Use store.getRecorder().startRecording(...) instead.
+ * @deprecated Will be removed in the future. Use getController().getRecordingController().startRecording(...) instead.
  */
 export const startRecording = (onFinished: (recording: Recording) => void) => {
   if (get(stores.getDevices()).isRecording) {

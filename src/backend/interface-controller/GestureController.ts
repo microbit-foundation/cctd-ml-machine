@@ -9,18 +9,21 @@ import type { GestureID } from '../../core/entities/Gesture';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { GestureService } from '../domain/GestureService';
 import { SvelteStateAdapterReadonly } from '../statemanagement/SvelteStateAdapterReadonly';
-import type { GesturesStateAdapter } from '../interface-adapter/GesturesStateAdapter';
 import type { AbstractReadonlyState } from '../statemanagement/AbstractReadonlyState';
 import type { Logger } from '../../core/logging/Logger';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { GestureImpl } from '../domain/implementation/gesture/GestureImpl';
-import type { GestureOutput } from '../../core/entities/GestureOutput';
+import type { GestureOutput, SoundData } from '../../core/entities/GestureOutput';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { Recording } from '../../core/entities/recording/Recording';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 import type { Confidences } from '../../core/entities/Confidences';
+import type { ConfidenceService } from '../domain/ConfidenceService';
+import type { MBSpecs } from 'microbyte';
+import { c } from 'vite/dist/node/types.d-aGj9QkWt';
+import { PinTurnOnState } from '../../core/entities/PinTurnOnState';
 
 export class GestureController {
   clearValidationRecordings() {
@@ -45,8 +48,16 @@ export class GestureController {
   public constructor(
     private states: AbstractStates,
     private gestureService: GestureService,
+    private confidenceService: ConfidenceService,
   ) {
     this.log = new ConsoleLogger('GestureController');
+  }
+
+  getMostConfident(): AbstractReadonlyState<NewGesture | undefined> {
+    const confidences = this.states.getConfidences();
+    return new SvelteStateAdapterReadonly(derived(confidences, () => {
+      return this.confidenceService.getMostConfidentPrediction();
+    }));
   }
 
   getDownloadableGesturesAsJson(): string {
@@ -135,5 +146,48 @@ export class GestureController {
 
   public getConfidences(): AbstractState<Confidences> {
     return this.states.getConfidences();
+  }
+
+  public setLEDMatrixOutput(gestureId: GestureID, output: boolean[]) {
+    const gesture = this.gestureService.getGesture(gestureId);
+    if (!gesture) {
+      throw new Error('Invalid gesture id, not found, id: ' + gestureId);
+    }
+    const oldOutput = gesture.getOutput();
+    gesture.setOutput({
+      ...oldOutput,
+      matrix: output,
+    });
+    this.gestureService.saveGesture(gesture);
+  }
+
+  public setSoundOutput(gestureId: GestureID, output: SoundData | undefined) {
+    const gesture = this.gestureService.getGesture(gestureId);
+    if (!gesture) {
+      throw new Error('Invalid gesture id, not found, id: ' + gestureId);
+    }
+    const oldOutput = gesture.getOutput();
+    gesture.setOutput({
+      ...oldOutput,
+      sound: output,
+    });
+    this.gestureService.saveGesture(gesture);
+  }
+
+  public setIOPinOutput(gestureId: GestureID, pin: MBSpecs.UsableIOPin, turnOnState: PinTurnOnState, turnOnTime: number) {
+    const gesture = this.gestureService.getGesture(gestureId);
+    if (!gesture) {
+      throw new Error('Invalid gesture id, not found, id: ' + gestureId);
+    }
+    const oldOutput = gesture.getOutput();
+    gesture.setOutput({
+      ...oldOutput,
+      outputPin: {
+        pin,
+        pinState: turnOnState,
+        turnOnTime,
+      },
+    });
+    this.gestureService.saveGesture(gesture);
   }
 }

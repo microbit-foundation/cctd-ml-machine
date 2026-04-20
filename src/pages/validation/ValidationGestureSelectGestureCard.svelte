@@ -27,14 +27,15 @@
   export let gestureId: GestureID;
   export let onNoMicrobitSelect: () => void;
 
-  const recorder = stores.getRecorder();
+  const recordingController = getControllers().getRecordingController();
+  const recordingState = recordingController.getRecordingState();
   const gestureController = getControllers().getGestureController();
   const gesture = gestureController.getGestureState(gestureId);
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
 
-  $: isThisRecording = $recorder.recordingGesture === $gesture.getID();
+  $: isThisRecording = $recordingState.getRecordingGesture()?.getID() === $gesture.getID();
 
   const selectClicked = (gesture: NewGesture): void => {
     if (!$microbitConnection.getInput().isConnected()) {
@@ -64,14 +65,7 @@
       return;
     }
     const addRecording = () => {
-      recorder.startRecording($gesture.getID(), recording => {
-        const rec = new RecordingImpl(
-          recording.ID,
-          recording.samples.map(data => new Sample(data.vector)),
-          strArrToAxisArr(recording.labels),
-        );
-        gestureController.addRecording($gesture.getID(), rec);
-      });
+      getControllers().getRecordingController().startRecording($gesture)
     };
 
     if (!buttons) {

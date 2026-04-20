@@ -6,18 +6,18 @@
 
 import type { Axis } from '../../core/entities/Axis';
 import type { AxisRepository } from '../domain/AxisRepository';
-import type { GestureService } from '../domain/GestureService';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import type { Logger } from '../../core/logging/Logger';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
+import type { GestureRepository } from '../domain/GestureRepository';
 
 // TODO: Rename to StatesAxisRepository
 export class StatesAxisRepository implements AxisRepository {
   private log: Logger;
 
   constructor(
-    private gestureService: GestureService,
+    private gestureRepository: GestureRepository,
     private states: AbstractStates,
   ) {
     this.log = new ConsoleLogger('InMemoryAxisRepository');
@@ -50,7 +50,7 @@ export class StatesAxisRepository implements AxisRepository {
   }
 
   private getAvailableAxesFromRecordings(): Axis[] {
-    const gestures: NewGesture[] = this.gestureService.getGestures();
+    const gestures: NewGesture[] = this.gestureRepository.getGestures();
     if (gestures.length > 0) {
       const recordings = gestures[0].getRecordings();
       if (recordings.length > 0) {

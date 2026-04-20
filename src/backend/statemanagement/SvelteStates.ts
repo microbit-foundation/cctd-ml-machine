@@ -37,6 +37,7 @@ import type { NeuralNetworkTrainingIteration } from '../../core/model/neural-net
 import type { ModelInfo } from '../../core/model/ModelInfo';
 import ModelRegistry from '../../core/model/ModelRegistry';
 import { Confidences } from '../../core/entities/Confidences';
+import { GestureRecordingState } from '../domain/recording/GestureRecordingState';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -58,6 +59,7 @@ export class SvelteStates implements AbstractStates {
   private trainingIterationState: AbstractState<NeuralNetworkTrainingIteration[]>;
   private selectedModelState: AbstractState<ModelInfo>;
   private confidencesState: AbstractState<Confidences>;
+  private recordingState: AbstractState<GestureRecordingState>;
 
   public constructor(initialGestures: NewGesture[]) {
     this.liveDataState = new LiveDataStateAdapter(
@@ -114,6 +116,11 @@ export class SvelteStates implements AbstractStates {
       writable(ModelRegistry.NeuralNetwork),
     );
     this.confidencesState = new SvelteStateAdapter(writable(new Confidences(new Map())));
+    this.recordingState = new SvelteStateAdapter(writable(new GestureRecordingState(false, undefined)));
+  }
+
+  getRecordingState(): AbstractState<GestureRecordingState> {
+    return this.recordingState;
   }
 
   getConfidences(): AbstractState<Confidences> {

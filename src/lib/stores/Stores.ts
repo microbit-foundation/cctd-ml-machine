@@ -17,19 +17,14 @@ import {
 import { type Repositories } from '../domain/Repositories';
 import Classifier from '../domain/stores/Classifier';
 import Gestures from '../domain/stores/gesture/Gestures';
-import PollingPredictorEngine from '../engine/PollingPredictorEngine';
 import LocalStorageRepositories from '../repository/LocalStorageRepositories';
 import Confidences from '../domain/stores/Confidences';
 import HighlightedAxes from '../domain/stores/HighlightedAxes';
 import SelectedModel from '../domain/SelectedModel';
 import type { LiveData } from '../domain/stores/LiveData';
-import type { Engine } from '../domain/stores/Engine';
 import AvailableAxes from '../domain/stores/AvailableAxes';
-import NeuralNetworkSettings from '../domain/stores/NeuralNetworkSettings';
 import KNNModelSettings from '../domain/stores/KNNModelSettings';
-import ValidationSets from '../domain/stores/ValidationSets';
 import { Recorder } from '../domain/stores/Recorder';
-import ValidationResults from '../domain/stores/ValidationResults';
 import { knnHasTrained } from './KNNStores';
 import Devices from '../domain/Devices';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
@@ -99,10 +94,6 @@ class Stores implements Readable<StoresType> {
    */
   public getClassifier(): Classifier {
     return this.classifier;
-  }
-
-  public getGestures(): Gestures {
-    return this.gestures;
   }
 
   public getConfidences(): Confidences {

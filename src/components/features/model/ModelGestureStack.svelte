@@ -38,7 +38,7 @@
   const microbitConnection = microbitController.getMicrobitConnectionState();
   const gestureController = getControllers().getGestureController();
 
-  const gestures = stores.getGestures();
+  const gestures = gestureController.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component
@@ -134,7 +134,7 @@
 
   function onSoundSelected(sound: SoundData | undefined): void {
     selectedSound = sound;
-    gestures.getGesture(gestureId).setSoundOutput(sound);
+    gestureController.setSoundOutput(gestureId, sound);
     onUserInteraction();
   }
 
@@ -160,7 +160,7 @@
     }
     selectedPin = selected;
     refreshAfterChange();
-    gestures.getGesture(gestureId).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
+    gestureController.setIOPinOutput(gestureId, selectedPin, turnOnState, turnOnTime);
   };
 
   const triggerComponents = () =>
@@ -175,7 +175,7 @@
     turnOnState = state.turnOnState;
     turnOnTime = state.turnOnTime;
     refreshAfterChange();
-    gestures.getGesture(gestureId).setIOPinOutput(selectedPin, turnOnState, turnOnTime);
+    gestureController.setIOPinOutput(gestureId, selectedPin, turnOnState, turnOnTime);
     if (wasTriggered) {
       setOutputPin(true);
     }

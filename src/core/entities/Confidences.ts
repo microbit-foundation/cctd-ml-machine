@@ -10,8 +10,8 @@ export class Confidences {
         return this.confidences;
     }
 
-    getConfidence(gestureID: GestureID): number | undefined {
-        return this.confidences.get(gestureID);
+    getConfidence(gesture: NewGesture): number | undefined {
+        return this.confidences.get(gesture.getID());
     }
 
     setConfidence(gestureID: GestureID, confidence: number): void {
@@ -19,10 +19,22 @@ export class Confidences {
     }
 
     isConfident(gesture: NewGesture) : boolean {
-        const confidence = this.getConfidence(gesture.getID());
+        const confidence = this.getConfidence(gesture);
         if (confidence === undefined) {
             return false;
         }
         return confidence >= gesture.getConfidence().requiredConfidence;
+    }
+    
+    getMostConfidentGestureID(): GestureID | undefined {
+        let mostConfidentGestureID: GestureID | undefined = undefined;
+        let highestConfidence = -Infinity;
+        for (const [gestureID, confidence] of this.confidences.entries()) {
+            if (confidence > highestConfidence) {
+                highestConfidence = confidence;
+                mostConfidentGestureID = gestureID;
+            }
+        }
+        return mostConfidentGestureID;
     }
 }

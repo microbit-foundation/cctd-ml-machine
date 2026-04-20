@@ -28,7 +28,7 @@ export class ClassifierServiceImpl implements ClassifierService {
     private neuralNetworkRepository: NeuralNetworkRepository,
     private dataService: DataService,
     private knnSettingsService: KNNSettingsService,
-    private trainingIterationRepository: NerualNetworkTrainingIterationRepository,
+    private trainingIterationRepository: NerualNetworkTrainingIterationRepository
   ) {}
 
   public setSelectedModel(model: ModelInfo): void {

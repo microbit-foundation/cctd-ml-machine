@@ -5,14 +5,14 @@
  -->
 
 <script lang="ts">
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import { t } from '../../i18n';
-  import { stores } from '../../lib/stores/Stores';
 
-  const gestures = stores.getGestures();
+  const gestures = getControllers().getGestureController().getGestures();
 
   // Count of amount of recordings
   $: numberOfRecodings = $gestures.reduce(
-    (sum, val) => (sum += val.recordings.length),
+    (sum, val) => (sum += val.getRecordings().length),
     0,
   );
 </script>

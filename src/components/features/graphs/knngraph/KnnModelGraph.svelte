@@ -13,9 +13,10 @@
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import { FilterType } from '../../../../core/filter/Filter';
+    import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   const classifier = stores.getClassifier();
-  const gestures = stores.getGestures();
+  const gestures = getControllers().getGestureController().getGestures();
   const filters = classifier.getFilters();
   const highlightedAxes = stores.getHighlightedAxes();
 
@@ -29,7 +30,7 @@
   const initSingle = () => {
     const svgSingle = d3.select('.d3-3d-single');
     const graphColors = [
-      ...$gestures.map(data => data.color),
+      ...$gestures.map(data => data.getColor()),
       StaticConfiguration.gestureColors[$gestures.length],
     ];
     if (graphColors.length <= $gestures.length) {

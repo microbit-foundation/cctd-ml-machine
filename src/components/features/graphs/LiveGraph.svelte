@@ -33,7 +33,6 @@
 
   let axisColors = StaticConfiguration.graphColors;
 
-  const highlightedAxes = stores.getHighlightedAxes();
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
   const devices = stores.getDevices();
@@ -77,7 +76,7 @@
     });
 
     lines.forEach((line, index) => {
-      const opaque = highlightedAxes.isAxisIndexHighlighted(index);
+      const opaque = getControllers().getAxisController().isAxisIndexSelected(index);
       const color = axisColors[index] + (opaque ? 'ff' : '00');
       chart!.addTimeSeries(line, {
         lineWidth,

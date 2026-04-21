@@ -5,17 +5,17 @@
  -->
 
 <script lang="ts">
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import MediaQuery from '../../components/layout/MediaQuery.svelte';
   import type { GestureID } from '../../core/entities/Gesture';
-  import { Feature, getFeature } from '../../lib/FeatureToggles';
-  import { stores } from '../../lib/stores/Stores';
 
   export let gestureId: GestureID;
-  const recorder = stores.getRecorder();
+  const recordingState = getControllers().getRecordingController().getRecordingState();
+  const settings = getControllers().getRecordingController().getRecordingSettings();
 
-  $: isThisRecording = $recorder.recordingGesture === gestureId;
+  $: isThisRecording = $recordingState.getRecordingGesture()?.getID() === gestureId;
 
-  const recordingDuration = getFeature<number>(Feature.RECORDING_DURATION);
+  const recordingDuration = $settings.getRecordingDuration();
 </script>
 
 <!-- We use mediaquery, since the side-bar changes size based on this media query -->

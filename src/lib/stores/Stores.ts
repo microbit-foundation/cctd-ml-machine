@@ -46,13 +46,11 @@ class Stores implements Readable<StoresType> {
   private selectedModel: SelectedModel;
   private availableAxes: AvailableAxes;
   private knnModelSettings: KNNModelSettings;
-  private recorder: Recorder;
   private devices: Devices;
 
   public constructor() {
     this.devices = new Devices();
     this.liveData = writable(undefined);
-    this.recorder = new Recorder();
     const repositories: Repositories = new LocalStorageRepositories();
     this.classifier = repositories.getClassifierRepository().getClassifier();
     this.confidences = repositories.getClassifierRepository().getConfidences();
@@ -94,26 +92,6 @@ class Stores implements Readable<StoresType> {
    */
   public getClassifier(): Classifier {
     return this.classifier;
-  }
-
-  public getConfidences(): Confidences {
-    return this.confidences;
-  }
-
-  public getHighlightedAxes(): HighlightedAxes {
-    return this.highlightedAxis;
-  }
-
-  public getAvailableAxes(): AvailableAxes {
-    return this.availableAxes;
-  }
-
-  public getKNNModelSettings(): KNNModelSettings {
-    return this.knnModelSettings;
-  }
-
-  public getRecorder(): Recorder {
-    return this.recorder;
   }
 
   public getDevices(): Devices {

@@ -18,7 +18,7 @@
   const classifier = stores.getClassifier();
   const gestures = getControllers().getGestureController().getGestures();
   const filters = classifier.getFilters();
-  const highlightedAxes = stores.getHighlightedAxes();
+  const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
 
   const canvasWidth = 450;
   const canvasHeight = 300;

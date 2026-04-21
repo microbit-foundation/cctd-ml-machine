@@ -26,6 +26,7 @@
   import { Feature, hasFeature } from '../../../../lib/FeatureToggles';
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
   import type { Recording } from '../../../../core/entities/recording/Recording';
+    import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   export let recording: Recording;
   // Option to show y-axis ticks in the chart (default: off)
@@ -41,7 +42,7 @@
   let modalPosition = { x: 0, y: 0 };
   let modalSize = 250;
 
-  const highlightedAxis = stores.getHighlightedAxes();
+  const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
 
   const verticalLineCol = 'black';
   const verticalLineWidth = 1;
@@ -87,7 +88,7 @@
     return { x, y };
   }
   const getLineColor = (axisIndex: number) => {
-    if ($highlightedAxis.find(e => e.index === axisIndex) != undefined) {
+    if ($highlightedAxes.find(e => e.index === axisIndex) != undefined) {
       return StaticConfiguration.graphColors[axisIndex] + 'ff';
     }
     return StaticConfiguration.graphColors[axisIndex] + '00';
@@ -205,7 +206,7 @@
   let canvas: HTMLCanvasElement | undefined;
   let chart: Chart | undefined;
 
-  const unsubscribe = highlightedAxis.subscribe(() => {
+  const unsubscribe = highlightedAxes.subscribe(() => {
     if (chart) {
       chart.destroy();
       const context = canvas?.getContext('2d')!;

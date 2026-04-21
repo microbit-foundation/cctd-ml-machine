@@ -14,11 +14,12 @@
   import { knnHasTrained } from '../../lib/stores/KNNStores';
   import { trainKNNModel } from './TrainingPage';
   import KnnModelSettings from '../../components/features/training/KNNModelSettings.svelte';
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   const classifier = stores.getClassifier();
   const filters = classifier.getFilters();
-  const highlightedAxis = stores.getHighlightedAxes();
-  const availableAxes = stores.getAvailableAxes();
+  const highlightedAxis = getControllers().getAxisController().getSelectedAxes();
+  const availableAxes = getControllers().getAxisController().getAvailableAxes();
 
   $: {
     if (!$classifier.model.isTrained && $classifier.model.hasModel) {
@@ -76,17 +77,19 @@
       <div class="flex flex-row gap-2">
         <StandardButton
           colorOverride={StaticConfiguration.graphColors[0]}
-          onClick={() => highlightedAxis.set([$availableAxes[0]])}>
+          onClick={() => {
+            getControllers().getAxisController().setSelectedAxes([$availableAxes[0]])
+          }}>
           X
         </StandardButton>
         <StandardButton
           colorOverride={StaticConfiguration.graphColors[1]}
-          onClick={() => highlightedAxis.set([$availableAxes[1]])}>
+          onClick={() => getControllers().getAxisController().setSelectedAxes([$availableAxes[1]])}>
           Y
         </StandardButton>
         <StandardButton
           colorOverride={StaticConfiguration.graphColors[2]}
-          onClick={() => highlightedAxis.set([$availableAxes[2]])}>
+          onClick={() => getControllers().getAxisController().setSelectedAxes([$availableAxes[2]])}>
           Z
         </StandardButton>
       </div>

@@ -5,11 +5,12 @@
  -->
 
 <script lang="ts">
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import LiveGraph from './LiveGraph.svelte';
 
-  const highlightedAxes = stores.getHighlightedAxes();
+  const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
   export let width: number;
 </script>
 

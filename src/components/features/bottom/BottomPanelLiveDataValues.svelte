@@ -11,12 +11,13 @@
   import FixedNumber from '../../ui/FixedNumber.svelte';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import type { Axis } from '../../../core/entities/Axis';
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
-  const highlightedAxes = stores.getHighlightedAxes();
-  const availableAxes = stores.getAvailableAxes();
+  const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
+  const availableAxes = getControllers().getAxisController().getAvailableAxes();
 
   const clickNumber = (axis: Axis) => {
-    highlightedAxes.toggleAxis(axis);
+    getControllers().getAxisController().toggleAxis(axis);
   };
 
   $: liveData = $stores.liveData ? new SmoothedLiveData($stores.liveData, 3) : undefined;

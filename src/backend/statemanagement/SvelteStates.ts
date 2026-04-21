@@ -38,6 +38,9 @@ import type { ModelInfo } from '../../core/model/ModelInfo';
 import ModelRegistry from '../../core/model/ModelRegistry';
 import { Confidences } from '../../core/entities/Confidences';
 import { GestureRecordingState } from '../domain/recording/GestureRecordingState';
+import { RecordingSettings } from '../domain/recording/RecordingSettings';
+import type { FeatureProvider } from '../application/feature/FeatureProvider';
+import { Feature } from '../application/feature/Feature';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -60,8 +63,9 @@ export class SvelteStates implements AbstractStates {
   private selectedModelState: AbstractState<ModelInfo>;
   private confidencesState: AbstractState<Confidences>;
   private recordingState: AbstractState<GestureRecordingState>;
+  private recordingSettingsState: AbstractState<RecordingSettings>;
 
-  public constructor(initialGestures: NewGesture[]) {
+  public constructor(initialGestures: NewGesture[], featureProvider: FeatureProvider) {
     this.liveDataState = new LiveDataStateAdapter(
       StaticConfiguration.accelerometerLiveDataBufferSize,
     );
@@ -117,6 +121,14 @@ export class SvelteStates implements AbstractStates {
     );
     this.confidencesState = new SvelteStateAdapter(writable(new Confidences(new Map())));
     this.recordingState = new SvelteStateAdapter(writable(new GestureRecordingState(false, undefined)));
+    this.recordingSettingsState = new SvelteStateAdapter(writable(
+      new RecordingSettings(featureProvider.getFeature<number>(Feature.RECORDING_DURATION).getValue(), StaticConfiguration.pollingPredictionSampleSize)
+    ));
+
+  }
+
+  getRecordingSettings(): AbstractState<RecordingSettings> {
+    throw new Error('Method not implemented.');
   }
 
   getRecordingState(): AbstractState<GestureRecordingState> {

@@ -8,10 +8,11 @@
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import FixedNumber from '../../../ui/FixedNumber.svelte';
+    import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   export let sample: number[];
   export let offest: number;
-  const highlightedAxes = stores.getHighlightedAxes();
+  const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
 
   const sampleEnabled = derived(highlightedAxes, axes => {
     return sample.map((_, idx) => axes.find(axis => axis.index === idx) !== undefined);

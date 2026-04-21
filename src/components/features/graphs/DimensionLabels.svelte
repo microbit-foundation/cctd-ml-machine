@@ -18,6 +18,7 @@
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   type LabelData = {
     id: number;
@@ -96,7 +97,7 @@
     }
   }
 
-  const highlightedAxes = stores.getHighlightedAxes();
+  const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
   const labelEnabled = derived(highlightedAxes, axes => {
     return labels.map((_, idx) => axes.find(axis => axis.index === idx) !== undefined);
   });

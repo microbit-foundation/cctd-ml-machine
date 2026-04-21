@@ -10,11 +10,12 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import Fingerprint from '../../ui/recording/Fingerprint.svelte';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   export let gestureName: string;
   const classifier = stores.getClassifier();
   const filters = classifier.getFilters();
-  const highlightedAxes = stores.getHighlightedAxes();
+  const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
   $: liveData = $stores.liveData;
   let filteredNormalizedInput: null | number[] = null;
 

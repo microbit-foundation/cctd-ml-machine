@@ -17,7 +17,7 @@
 
   const classifier = stores.getClassifier();
   const model = classifier.getModel();
-  const highlightedAxes = stores.getHighlightedAxes();
+  const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
   const neuralNetworkController = getControllers().getNeuralNetworkController();
   const neuralNetworkSettings = neuralNetworkController.getNeuralNetworkSettings();
   const loss = neuralNetworkController.getTrainingIterations();

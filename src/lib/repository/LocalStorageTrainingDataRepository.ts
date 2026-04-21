@@ -15,6 +15,7 @@ import { getMean, getStandardDeviation } from '../utils/Math';
 import type { RecordingData } from '../../core/entities/RecordingData';
 import type { Vector } from '../../core/vector/Vector';
 import BaseVector from '../../core/vector/BaseVector';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
 class LocalStorageTrainingDataRepository implements TrainingDataRepository {
   constructor(
@@ -57,7 +58,7 @@ class LocalStorageTrainingDataRepository implements TrainingDataRepository {
   ): { value: Vector }[] {
     return recordings.map(recording => {
       const data = recording.samples;
-      const highlightedAxes = get(stores.getHighlightedAxes());
+      const highlightedAxes = getControllers().getAxisController().getSelectedAxes().get();
       const value = highlightedAxes
         .toSorted((a, b) => a.index - b.index)
         .flatMap(e => {

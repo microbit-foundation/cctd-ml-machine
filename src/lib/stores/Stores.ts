@@ -41,11 +41,9 @@ class Stores implements Readable<StoresType> {
   private liveData: Writable<LiveData<LiveDataVector> | undefined>;
   private classifier: Classifier;
   private gestures: Gestures;
-  private confidences: Confidences;
   private highlightedAxis: HighlightedAxes;
   private selectedModel: SelectedModel;
   private availableAxes: AvailableAxes;
-  private knnModelSettings: KNNModelSettings;
   private devices: Devices;
 
   public constructor() {
@@ -53,10 +51,8 @@ class Stores implements Readable<StoresType> {
     this.liveData = writable(undefined);
     const repositories: Repositories = new LocalStorageRepositories();
     this.classifier = repositories.getClassifierRepository().getClassifier();
-    this.confidences = repositories.getClassifierRepository().getConfidences();
     this.gestures = new Gestures(repositories.getGestureRepository());
     this.selectedModel = new SelectedModel(this.classifier, knnHasTrained);
-    this.knnModelSettings = new KNNModelSettings(this.selectedModel, this.classifier);
     this.highlightedAxis = new HighlightedAxes(this.classifier, this.selectedModel);
     this.availableAxes = new AvailableAxes(this.liveData, this.gestures);
     this.availableAxes.subscribe(newAxes => {

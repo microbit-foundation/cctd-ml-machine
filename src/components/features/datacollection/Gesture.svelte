@@ -18,7 +18,6 @@
   import ImageSkeleton from '../../ui/skeletonloading/ImageSkeleton.svelte';
   import GestureCard from '../../ui/Card.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
-  import { startRecording } from '../../../lib/utils/Recording';
   import GestureDot from '../../ui/GestureDot.svelte';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
   import IconButton from '../../ui/buttons/IconButton.svelte';
@@ -38,6 +37,7 @@
   const dataController = getControllers().getDataController();
   const enableFingerprint = dataController.isFingerprintEnabled();
   const gestureController = getControllers().getGestureController();
+  const recordingController = getControllers().getRecordingController();
 
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = getFeature<number>(Feature.RECORDING_DURATION);
@@ -93,9 +93,8 @@
       return;
     }
     isThisRecording = true;
-    startRecording(recording => {
+    recordingController.startRecording($gesture).then(() => {
       isThisRecording = false;
-      gestureController.addRecording($gesture.getID(), recording);
     });
   }
 

@@ -6,81 +6,21 @@
 
 <script lang="ts">
   import TrainModelFirstTitle from '../../../components/features/model/TrainModelFirstTitle.svelte';
-  import { areActionsAllowed, buttonPressed } from '../../../lib/stores/uiStore';
   import { onMount } from 'svelte';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
   import { stores } from '../../../lib/stores/Stores';
-  import { Feature, getFeature } from '../../../lib/FeatureToggles';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import MakeCodeProjectBlocks from '../../../components/features/makecode/MakeCodeProjectBlocks.svelte';
   import { navigate, Paths } from '../../../router/Router';
   import { t } from 'svelte-i18n';
 
-  const devices = stores.getDevices();
   const classifier = stores.getClassifier();
 
   const makecodeController = getControllers().getMakeCodeController();
   const outputController = getControllers().getOutputController();
 
-  // In case of manual classification, variables for evaluation
-  let recordingTime = 0;
-  // let lastRecording;
-
-  // Bool flags to know whether output microbit popup should be show
-  let hasInteracted = false;
-
-  function onUserInteraction(): void {
-    hasInteracted = true;
-  }
-
-  /**
-   * Classify based on button click
-   */
-  // method for recording gesture for that specific gesture
-  function classifyClicked() {
-    if (!areActionsAllowed()) return;
-
-    $devices.isRecording = true;
-    // lastRecording = undefined;
-
-    // Get duration
-    const duration = getFeature<number>(Feature.RECORDING_DURATION);
-
-    // Loading interval
-    const loadingInterval = setInterval(() => {
-      recordingTime++;
-    }, duration / 30);
-
-    // TODO: Clean this up to avoid 'firstMount' hack
-    // Once duration is over (1000ms default), stop recording
-    setTimeout(() => {
-      clearInterval(loadingInterval);
-      // lastRecording = getPrevData();
-      $devices.isRecording = false;
-      recordingTime = 0;
-      // classify();
-    }, duration);
-  }
-
-  // When microbit buttons are pressed, this is called
-  // Assess whether settings match with button-clicked.
-  // If so, the gesture calls the recording function.
-  function triggerButtonsClicked(buttons: { buttonA: 0 | 1; buttonB: 0 | 1 }) {
-    if (firstMount) {
-      return;
-    }
-
-    let shouldClassify: boolean = buttons.buttonA === 1 || buttons.buttonB === 1;
-
-    if (shouldClassify) {
-      classifyClicked();
-    }
-  }
-
-  let firstMount = true;
-  onMount(() => {
-    firstMount = false;
+   onMount(() => {
     Microbits.resetIOPins();
   });
 
@@ -88,8 +28,6 @@
     navigate(Paths.MAKECODE);
     outputController.setOutputTargetMakecode();
   };
-
-  $: triggerButtonsClicked($buttonPressed);
 
   const model = classifier.getModel();
 </script>

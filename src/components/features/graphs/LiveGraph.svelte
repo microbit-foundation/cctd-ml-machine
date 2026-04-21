@@ -35,7 +35,7 @@
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
-  const devices = stores.getDevices();
+  const recordingState = getControllers().getRecordingController().getRecordingState();
 
   // Smoothes real-time data by using the 3 most recent data points
   let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
@@ -118,7 +118,7 @@
   // The jagged edges problem is caused by repeating the recordingStarted function.
   // We will simply block the recording from starting, while it's recording
   let blockRecordingStart = false;
-  $: recordingStarted($devices.isRecording);
+  $: recordingStarted($recordingState.isRecording());
 
   // Function to clearly diplay the area in which users are recording
   function recordingStarted(isRecording: boolean): void {

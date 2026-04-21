@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-    import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import MediaQuery from '../../components/layout/MediaQuery.svelte';
   import type { GestureID } from '../../core/entities/Gesture';
 

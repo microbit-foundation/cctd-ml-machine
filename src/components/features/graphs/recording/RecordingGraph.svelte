@@ -26,7 +26,7 @@
   import { Feature, hasFeature } from '../../../../lib/FeatureToggles';
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';
   import type { Recording } from '../../../../core/entities/recording/Recording';
-    import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   export let recording: Recording;
   // Option to show y-axis ticks in the chart (default: off)

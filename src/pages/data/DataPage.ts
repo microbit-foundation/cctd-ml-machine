@@ -20,18 +20,30 @@ export const downloadDataset = () => {
 export const importExampleDataset = () => {
   // TODO: Move this to the gesture controller instead!
   const gestureController = getControllers().getGestureController();
-  getControllers().getGestureController().importFromJson(exampleDataset.toString())
+  getControllers().getGestureController().importFromJson(exampleDataset.toString());
 
   // Translate the names, that are originally english
   const gestures = get(gestureController.getGestures());
-  gestureController.setGestureName(gestures[0].getID(), (get(t)('content.data.noData.exampleName.shake')));
-  gestureController.setGestureName(gestures[1].getID(), (get(t)('content.data.noData.exampleName.still')));
-  gestureController.setGestureName(gestures[2].getID(), (get(t)('content.data.noData.exampleName.circle')));
+  gestureController.setGestureName(
+    gestures[0].getID(),
+    get(t)('content.data.noData.exampleName.shake'),
+  );
+  gestureController.setGestureName(
+    gestures[1].getID(),
+    get(t)('content.data.noData.exampleName.still'),
+  );
+  gestureController.setGestureName(
+    gestures[2].getID(),
+    get(t)('content.data.noData.exampleName.circle'),
+  );
 };
 
-export const hasSomeRecordingData = derived(getControllers().getGestureController().getGestures(), gestures => {
-  if (gestures.length === 0) {
-    return false;
-  }
-  return gestures.some((gesture: NewGesture) => gesture.getRecordings().length > 0);
-});
+export const hasSomeRecordingData = derived(
+  getControllers().getGestureController().getGestures(),
+  gestures => {
+    if (gestures.length === 0) {
+      return false;
+    }
+    return gestures.some((gesture: NewGesture) => gesture.getRecordings().length > 0);
+  },
+);

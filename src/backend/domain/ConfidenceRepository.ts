@@ -1,4 +1,4 @@
-import type { Confidences } from "../../core/entities/Confidences";
+import type { Confidences } from '../../core/entities/Confidences';
 
 export interface ConfidenceRepository {
   setConfidences(confidence: Confidences): void;

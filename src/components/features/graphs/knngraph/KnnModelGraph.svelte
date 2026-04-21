@@ -13,7 +13,7 @@
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import { FilterType } from '../../../../core/filter/Filter';
-    import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   const classifier = stores.getClassifier();
   const gestures = getControllers().getGestureController().getGestures();

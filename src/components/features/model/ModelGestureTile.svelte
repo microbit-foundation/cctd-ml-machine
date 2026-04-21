@@ -15,9 +15,9 @@
 </style>
 
 <script lang="ts">
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
-    import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
-    import type { NewGesture } from '../../../core/entities/NewGesture';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
+  import type { NewGesture } from '../../../core/entities/NewGesture';
 
   // IMPORT AND DEFAULTS
   import { t } from '../../../i18n';
@@ -26,7 +26,7 @@
 
   // Variables for component
   export let gesture: AbstractState<NewGesture>;
-    const gestureController = getControllers().getGestureController();
+  const gestureController = getControllers().getGestureController();
 
   let sliderValue = $gesture.getConfidence().requiredConfidence * 100;
   $: {

@@ -35,7 +35,8 @@
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
 
-  $: isThisRecording = $recordingState.getRecordingGesture()?.getID() === $gesture.getID();
+  $: isThisRecording =
+    $recordingState.getRecordingGesture()?.getID() === $gesture.getID();
 
   const selectClicked = (gesture: NewGesture): void => {
     if (!$microbitConnection.getInput().isConnected()) {
@@ -65,7 +66,7 @@
       return;
     }
     const addRecording = () => {
-      getControllers().getRecordingController().startRecording($gesture)
+      getControllers().getRecordingController().startRecording($gesture);
     };
 
     if (!buttons) {

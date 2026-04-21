@@ -52,7 +52,7 @@ export class MLMachineControllers {
     this.gestureController = new GestureController(
       states,
       this.mlMachine.getGestureService(),
-      mlMachine.getConfidenceService()
+      mlMachine.getConfidenceService(),
     );
     this.dataController = new DataController(dataService, states);
     this.notificationController = new MLMachineNotificationController(

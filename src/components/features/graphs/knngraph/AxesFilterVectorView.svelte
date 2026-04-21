@@ -14,7 +14,7 @@
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
   import { knnCurrentPoint } from '../../../../lib/stores/KNNStores';
   import type { Axis } from '../../../../core/entities/Axis';
-    import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   const classifier = stores.getClassifier();
 

@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import type { Recording } from '../../../core/entities/recording/Recording';
   import BaseVector from '../../../core/vector/BaseVector';
   import { stores } from '../../../lib/stores/Stores';

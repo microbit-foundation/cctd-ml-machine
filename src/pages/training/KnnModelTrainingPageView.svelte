@@ -14,7 +14,7 @@
   import { knnHasTrained } from '../../lib/stores/KNNStores';
   import { trainKNNModel } from './TrainingPage';
   import KnnModelSettings from '../../components/features/training/KNNModelSettings.svelte';
-    import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   const classifier = stores.getClassifier();
   const filters = classifier.getFilters();
@@ -78,18 +78,20 @@
         <StandardButton
           colorOverride={StaticConfiguration.graphColors[0]}
           onClick={() => {
-            getControllers().getAxisController().setSelectedAxes([$availableAxes[0]])
+            getControllers().getAxisController().setSelectedAxes([$availableAxes[0]]);
           }}>
           X
         </StandardButton>
         <StandardButton
           colorOverride={StaticConfiguration.graphColors[1]}
-          onClick={() => getControllers().getAxisController().setSelectedAxes([$availableAxes[1]])}>
+          onClick={() =>
+            getControllers().getAxisController().setSelectedAxes([$availableAxes[1]])}>
           Y
         </StandardButton>
         <StandardButton
           colorOverride={StaticConfiguration.graphColors[2]}
-          onClick={() => getControllers().getAxisController().setSelectedAxes([$availableAxes[2]])}>
+          onClick={() =>
+            getControllers().getAxisController().setSelectedAxes([$availableAxes[2]])}>
           Z
         </StandardButton>
       </div>

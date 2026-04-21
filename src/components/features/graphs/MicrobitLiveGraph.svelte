@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import LiveGraph from './LiveGraph.svelte';

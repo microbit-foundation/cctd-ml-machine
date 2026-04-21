@@ -7,7 +7,7 @@
 <script lang="ts">
   import Matrix from '../../core/entities/Matrix';
   import { t } from '../../i18n';
-    import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   const gestures = getControllers().getGestureController().getGestures();
 

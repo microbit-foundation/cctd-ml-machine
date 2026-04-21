@@ -12,7 +12,7 @@
   import { stores } from '../../../lib/stores/Stores';
   import OutputGesture from '../../../components/features/model/ModelGesture.svelte';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   const devices = stores.getDevices();
   const gestureController = getControllers().getGestureController();

@@ -19,7 +19,7 @@ export class GestureServiceImpl implements GestureService {
     private gestureRepository: GestureRepository,
     private colors: SystemColors,
     private axisRepository: AxisRepository,
-  ) { }
+  ) {}
 
   saveGestures(gestures: NewGesture[]): void {
     this.gestureRepository.saveGestures(gestures);
@@ -116,6 +116,6 @@ export class GestureServiceImpl implements GestureService {
         return recording.getAxes(); // Dictate the axes from the first recording
       }
     }
-    return []
+    return [];
   }
 }

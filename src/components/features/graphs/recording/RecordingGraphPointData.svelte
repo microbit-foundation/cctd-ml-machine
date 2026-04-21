@@ -8,7 +8,7 @@
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import FixedNumber from '../../../ui/FixedNumber.svelte';
-    import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   export let sample: number[];
   export let offest: number;

@@ -17,8 +17,8 @@
   import { createFilter } from '../../core/filter/FilterUtils';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import type { FilterType } from '../../core/filter/Filter';
-    import type { NewGesture } from '../../core/entities/NewGesture';
-    import type { Recording } from '../../core/entities/recording/Recording';
+  import type { NewGesture } from '../../core/entities/NewGesture';
+  import type { Recording } from '../../core/entities/recording/Recording';
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();

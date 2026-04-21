@@ -18,7 +18,7 @@
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
   type LabelData = {
     id: number;

@@ -58,7 +58,10 @@ class LocalStorageTrainingDataRepository implements TrainingDataRepository {
   ): { value: Vector }[] {
     return recordings.map(recording => {
       const data = recording.samples;
-      const highlightedAxes = getControllers().getAxisController().getSelectedAxes().get();
+      const highlightedAxes = getControllers()
+        .getAxisController()
+        .getSelectedAxes()
+        .get();
       const value = highlightedAxes
         .toSorted((a, b) => a.index - b.index)
         .flatMap(e => {

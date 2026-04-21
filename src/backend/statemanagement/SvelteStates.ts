@@ -120,11 +120,17 @@ export class SvelteStates implements AbstractStates {
       writable(ModelRegistry.NeuralNetwork),
     );
     this.confidencesState = new SvelteStateAdapter(writable(new Confidences(new Map())));
-    this.recordingState = new SvelteStateAdapter(writable(new GestureRecordingState(false, undefined)));
-    this.recordingSettingsState = new SvelteStateAdapter(writable(
-      new RecordingSettings(featureProvider.getFeature<number>(Feature.RECORDING_DURATION).getValue(), StaticConfiguration.pollingPredictionSampleSize)
-    ));
-
+    this.recordingState = new SvelteStateAdapter(
+      writable(new GestureRecordingState(false, undefined)),
+    );
+    this.recordingSettingsState = new SvelteStateAdapter(
+      writable(
+        new RecordingSettings(
+          featureProvider.getFeature<number>(Feature.RECORDING_DURATION).getValue(),
+          StaticConfiguration.pollingPredictionSampleSize,
+        ),
+      ),
+    );
   }
 
   getRecordingSettings(): AbstractState<RecordingSettings> {

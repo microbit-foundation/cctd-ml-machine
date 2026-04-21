@@ -1,12 +1,14 @@
 export class RecordingSettings {
-        constructor(private recordingDuration: number, private minNoOfSamples: number) {
-        }
+  constructor(
+    private recordingDuration: number,
+    private minNoOfSamples: number,
+  ) {}
 
-        getRecordingDuration(): number {
-                return this.recordingDuration;
-        }
+  getRecordingDuration(): number {
+    return this.recordingDuration;
+  }
 
-        getMinNoOfSamples(): number {
-                return this.minNoOfSamples;
-        }
+  getMinNoOfSamples(): number {
+    return this.minNoOfSamples;
+  }
 }

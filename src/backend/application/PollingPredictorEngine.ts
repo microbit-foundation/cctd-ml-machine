@@ -30,13 +30,13 @@ export class PollingPredictorEngine {
       if (prediction === undefined) {
         return;
       }
-        const outputVectorValue = prediction.getPrediction().getValue();
-        const gestures = this.gestureRepository.getGestures();
-        const confidenceMap = new Map<GestureID, number>();
-        for (let i = 0; i < gestures.length; i++) {
-            confidenceMap.set(gestures[i].getID(), outputVectorValue[i]);
-        }
-        const confidences = new Confidences(confidenceMap)
+      const outputVectorValue = prediction.getPrediction().getValue();
+      const gestures = this.gestureRepository.getGestures();
+      const confidenceMap = new Map<GestureID, number>();
+      for (let i = 0; i < gestures.length; i++) {
+        confidenceMap.set(gestures[i].getID(), outputVectorValue[i]);
+      }
+      const confidences = new Confidences(confidenceMap);
       this.confidenceService.setConfidences(confidences);
     }, this.pollingPredictionInterval);
   }

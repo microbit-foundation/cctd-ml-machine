@@ -4,10 +4,10 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
-    import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
-    import type { Confidences } from '../../../core/entities/Confidences';
-    import type { NewGesture } from '../../../core/entities/NewGesture';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
+  import type { Confidences } from '../../../core/entities/Confidences';
+  import type { NewGesture } from '../../../core/entities/NewGesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import OutputGestureStack from './ModelGestureStack.svelte';
   import OutputGestureTile from './ModelGestureTile.svelte';

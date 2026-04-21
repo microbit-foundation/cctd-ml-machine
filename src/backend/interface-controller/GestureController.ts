@@ -55,9 +55,11 @@ export class GestureController {
 
   getMostConfident(): AbstractReadonlyState<NewGesture | undefined> {
     const confidences = this.states.getConfidences();
-    return new SvelteStateAdapterReadonly(derived(confidences, () => {
-      return this.confidenceService.getMostConfidentPrediction();
-    }));
+    return new SvelteStateAdapterReadonly(
+      derived(confidences, () => {
+        return this.confidenceService.getMostConfidentPrediction();
+      }),
+    );
   }
 
   getDownloadableGesturesAsJson(): string {
@@ -174,7 +176,12 @@ export class GestureController {
     this.gestureService.saveGesture(gesture);
   }
 
-  public setIOPinOutput(gestureId: GestureID, pin: MBSpecs.UsableIOPin, turnOnState: PinTurnOnState, turnOnTime: number) {
+  public setIOPinOutput(
+    gestureId: GestureID,
+    pin: MBSpecs.UsableIOPin,
+    turnOnState: PinTurnOnState,
+    turnOnTime: number,
+  ) {
     const gesture = this.gestureService.getGesture(gestureId);
     if (!gesture) {
       throw new Error('Invalid gesture id, not found, id: ' + gestureId);

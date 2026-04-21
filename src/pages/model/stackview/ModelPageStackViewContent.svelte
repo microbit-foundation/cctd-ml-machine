@@ -57,7 +57,9 @@
 
   <div class="pl-1">
     <!-- Display all gestures and their output capabilities -->
-    {#each $gestures.map(e => getControllers().getGestureController().getGestureState(e.getID())) as gesture}
+    {#each $gestures.map(e => getControllers()
+        .getGestureController()
+        .getGestureState(e.getID())) as gesture}
       <OutputGesture variant="stack" {gesture} {onUserInteraction} />
     {/each}
   </div>

@@ -6,14 +6,18 @@
 
 <script lang="ts">
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
-    import type { AbstractReadonlyState } from '../../backend/statemanagement/AbstractReadonlyState';
-    import type { NewGesture } from '../../core/entities/NewGesture';
+  import type { AbstractReadonlyState } from '../../backend/statemanagement/AbstractReadonlyState';
+  import type { NewGesture } from '../../core/entities/NewGesture';
   import { t } from '../../i18n';
   import { stores } from '../../lib/stores/Stores';
 
-  const bestPrediction: AbstractReadonlyState<NewGesture | undefined> = getControllers().getGestureController().getMostConfident();
+  const bestPrediction: AbstractReadonlyState<NewGesture | undefined> = getControllers()
+    .getGestureController()
+    .getMostConfident();
   const confidences = getControllers().getGestureController().getConfidences();
-  $: confidence = !!$bestPrediction ? $confidences.getConfidence($bestPrediction) ?? 0 : 0
+  $: confidence = !!$bestPrediction
+    ? ($confidences.getConfidence($bestPrediction) ?? 0)
+    : 0;
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();

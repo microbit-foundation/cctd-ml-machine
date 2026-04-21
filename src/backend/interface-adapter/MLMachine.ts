@@ -109,7 +109,10 @@ export class MLMachine {
       new MLMachineColors(gestureRepository),
       axisRepository,
     );
-    this.confidenceService = new ConfidenceServiceImpl(confidenceRepository, this.gestureService);
+    this.confidenceService = new ConfidenceServiceImpl(
+      confidenceRepository,
+      this.gestureService,
+    );
     this.dataService = new DataServiceImpl(
       axisRepository,
       new InMemoryLiveDataRepository(this.states),
@@ -169,7 +172,10 @@ export class MLMachine {
       this.knnSettingsService,
     );
 
-    const confidenceService = new ConfidenceServiceImpl(confidenceRepository, this.gestureService);
+    const confidenceService = new ConfidenceServiceImpl(
+      confidenceRepository,
+      this.gestureService,
+    );
 
     this.engine = new PollingPredictorEngine(
       this.classifierService,

@@ -52,7 +52,7 @@
 </style>
 
 <script lang="ts">
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import type { NewGesture } from '../../../core/entities/NewGesture';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
 
@@ -83,7 +83,7 @@
   function elementClick(i: number) {
     setElementTo = !matrix[i];
     matrix[i] = setElementTo;
-    
+
     getControllers().getGestureController().setLEDMatrixOutput(gesture.getID(), matrix);
   }
 

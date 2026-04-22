@@ -6,7 +6,7 @@
 
 import type { Dataset } from '../../core/dataset/Dataset';
 import type { Axis } from '../../core/entities/Axis';
-import type { Filter } from '../../core/filter/Filter';
+import type { Filter, FilterType } from '../../core/filter/Filter';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 
 export interface DataService {
@@ -19,7 +19,9 @@ export interface DataService {
   getAxisFromIndex(index: number): Axis | undefined;
   isAxisSelected(axis: Axis): boolean;
   getFilters(): Filter[];
+  toggleFilter(filterType: FilterType): void;
   getTrainingDataset(): Dataset;
   getValidationDataset(): Dataset;
   hasSufficientDataForTraining(): boolean;
+  applyFilters(data: LiveDataVector): LiveDataVector;
 }

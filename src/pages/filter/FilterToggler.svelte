@@ -5,13 +5,11 @@
  -->
 
 <script lang="ts">
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import Information from '../../components/ui/information/Information.svelte';
   import type { Filter, FilterType } from '../../core/filter/Filter';
   import { createFilter } from '../../core/filter/FilterUtils';
-  import { stores } from '../../lib/stores/Stores';
   import D3Plot from './D3Plot.svelte';
-
-  const classifier = stores.getClassifier();
 
   export let filterType: FilterType;
   export let openFilterInspector: (filter: FilterType, fullScreen: boolean) => void;
@@ -22,18 +20,14 @@
   const filterName = filter.getName();
   const filterDescription = filter.getDescription();
 
-  const filters = classifier.getFilters();
+  const filters = getControllers().getFilterController().getFilters();
 
   $: isActive = $filters
     .map((currentFilter: Filter) => currentFilter.getType())
     .includes(filterType);
 
   const toggleFilter = () => {
-    if (filters.has(filterType)) {
-      filters.remove(filterType);
-    } else {
-      filters.add(filterType);
-    }
+    getControllers().getFilterController().toggleFilter(filterType);
   };
 </script>
 

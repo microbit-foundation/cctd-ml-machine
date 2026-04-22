@@ -17,6 +17,7 @@ import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
 import type { GestureRepository } from '../domain/GestureRepository';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
 class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
@@ -114,7 +115,7 @@ class LocalStorageGestureRepository implements GestureRepository {
 
   private buildGesture(persistedData: PersistedGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
-    const onRecordingsChanged = () => stores.getClassifier().getModel().markAsUntrained();
+    const onRecordingsChanged = () => getControllers().getClassifierController().clearClassifier();
 
     if (!this.classifierRepository.hasGestureConfidence(get(store).ID)) {
       this.classifierRepository.setGestureConfidence(get(store).ID, 0);

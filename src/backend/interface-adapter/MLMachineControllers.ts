@@ -32,6 +32,8 @@ import { NeuralNetworkController } from '../interface-controller/NeuralNetworkCo
 import { KNNController } from '../interface-controller/KNNController';
 import type { KNNSettingsService } from '../domain/KNNSettingsService';
 import { RecordingController } from '../interface-controller/RecordingController';
+import { FilterController } from '../interface-controller/FilterController';
+import type { RecordingService } from '../domain/RecordingService';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -48,6 +50,7 @@ export class MLMachineControllers {
     private microbitService: MicrobitService,
     private validationService: ValidationService,
     private knnSettingsService: KNNSettingsService,
+    private recordingService: RecordingService
   ) {
     this.gestureController = new GestureController(
       states,
@@ -67,6 +70,10 @@ export class MLMachineControllers {
       new UserServiceImpl(new LocalStorageUserSessionRepository()),
       this.featureService,
     );
+  }
+
+  public getFilterController() {
+    return new FilterController(this.states, this.dataService);
   }
 
   public getKnnController(): KNNController {
@@ -126,6 +133,6 @@ export class MLMachineControllers {
   }
 
   public getRecordingController() {
-    return new RecordingController(this.states);
+    return new RecordingController(this.recordingService, this.states);
   }
 }

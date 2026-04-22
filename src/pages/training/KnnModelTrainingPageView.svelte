@@ -12,20 +12,21 @@
   import KnnModelGraph from '../../components/features/graphs/knngraph/KnnModelGraph.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import { knnHasTrained } from '../../lib/stores/KNNStores';
-  import { trainKNNModel } from './TrainingPage';
   import KnnModelSettings from '../../components/features/training/KNNModelSettings.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const classifier = stores.getClassifier();
-  const filters = classifier.getFilters();
+  const classifierController = getControllers().getClassifierController();
+  const modelTraining = classifierController.getModelTraining();
+  const classifier = classifierController.getClassifier();
+  const filters = getControllers().getFilterController().getFilters();
   const highlightedAxis = getControllers().getAxisController().getSelectedAxes();
   const availableAxes = getControllers().getAxisController().getAvailableAxes();
 
   $: {
-    if (!$classifier.model.isTrained && $classifier.model.hasModel) {
+    if (!!$classifier && $modelTraining.hasPendingSettings()) {
       if ($knnHasTrained) {
         // Only train if the knn model has been trained before
-        trainKNNModel();
+        getControllers().getClassifierController().trainKNNModel();
       }
     }
   }
@@ -39,7 +40,7 @@
       </div>
       {#if $highlightedAxis.length === 1}
         <div class="flex justify-center">
-          <StandardButton onClick={() => trainKNNModel()}>
+          <StandardButton onClick={() => getControllers().getClassifierController().trainKNNModel()}>
             {$t('menu.trainer.trainModelButtonSimple')}
           </StandardButton>
         </div>
@@ -47,9 +48,7 @@
     </div>
   {/if}
   {#if $highlightedAxis.length === 1}
-    <div
-      class="flex flex-row flex-grow justify-evenly"
-      class:hidden={!$classifier.model.isTrained}>
+    <div class="flex flex-row flex-grow justify-evenly" class:hidden={!$classifier}>
       <div class="flex flex-col mr-6 flex-grow justify-center gap-6">
         <div class="flex">
           <KnnModelSettings />
@@ -61,7 +60,7 @@
           <PredictionLegend />
         </div>
       </div>
-      {#if $filters.length == 2 && $classifier.model.isTrained && $highlightedAxis.length === 1}
+      {#if $filters.length == 2 && !!$classifier && $highlightedAxis.length === 1}
         <KnnModelGraph />
       {:else}
         <div class="max-w-[450px] flex-grow flex flex-col justify-center">

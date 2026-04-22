@@ -9,13 +9,13 @@
   import { onMount } from 'svelte';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
-  import { stores } from '../../../lib/stores/Stores';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import MakeCodeProjectBlocks from '../../../components/features/makecode/MakeCodeProjectBlocks.svelte';
   import { navigate, Paths } from '../../../router/Router';
   import { t } from 'svelte-i18n';
 
-  const classifier = stores.getClassifier();
+  const classifierController = getControllers().getClassifierController();
+  const classifier = classifierController.getClassifier();
 
   const makecodeController = getControllers().getMakeCodeController();
   const outputController = getControllers().getOutputController();
@@ -28,13 +28,11 @@
     navigate(Paths.MAKECODE);
     outputController.setOutputTargetMakecode();
   };
-
-  const model = classifier.getModel();
 </script>
 
 <main class="px-4 pt-4 flex flex-grow">
   <div class="flex-col flex-grow">
-    {#if !$model.hasModel}
+    {#if !$classifier}
       <TrainModelFirstTitle />
     {:else}
       <ModelPageTileViewTiles />

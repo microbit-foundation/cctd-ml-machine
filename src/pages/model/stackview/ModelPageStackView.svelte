@@ -9,26 +9,25 @@
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import TrainModelFirstTitle from '../../../components/features/model/TrainModelFirstTitle.svelte';
   import ModelPageStackViewContent from './ModelPageStackViewContent.svelte';
-  import { stores } from '../../../lib/stores/Stores';
   import PleaseConnect from '../../../components/features/PleaseConnect.svelte';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
-
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
-  const classifier = stores.getClassifier();
+
+  const classifierController = getControllers().getClassifierController();
+  const modelTraining = classifierController.getModelTraining();
   // In case of manual classification, variables for evaluation
 
   onMount(() => {
     Microbits.resetIOPins();
   });
 
-  const model = classifier.getModel();
 </script>
 
 <!-- Main pane -->
 <main class="h-full flex flex-col">
-  {#if $model.isTrained}
+  {#if $modelTraining.hasPendingSettings()}
     {#if $microbitConnection.getInput().isReady()}
       <ModelPageStackViewContent />
     {:else}

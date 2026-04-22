@@ -8,7 +8,3 @@ import { getControllers } from '../../backend/interface-adapter/MLMachine';
 export const trainNNModel = async () => {
   await getControllers().getClassifierController().trainNeuralNetworkModel();
 };
-
-export const trainKNNModel = async () => {
-  getControllers().getClassifierController().trainKNNModel();
-};

@@ -8,18 +8,17 @@
   import { t } from '../../i18n';
   import StandardDialog from '../../components/ui/dialogs/StandardDialog.svelte';
   import { slide } from 'svelte/transition';
-
-  import { TrainingStatus } from '../../lib/domain/stores/Model';
-  import { stores } from '../../lib/stores/Stores';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   let isFailedTrainingDialogOpen = false;
 
-  const model = stores.getClassifier().getModel();
+  const classifierController = getControllers().getClassifierController();
+  const modelTraining = classifierController.getModelTraining();
 
   $: {
-    if ($model.trainingStatus === TrainingStatus.Failure) {
+    if (!!$modelTraining.getError()) {
       isFailedTrainingDialogOpen = true;
-      model.markAsUntrained();
+      classifierController.clearClassifier();
     }
   }
 </script>

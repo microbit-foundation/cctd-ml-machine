@@ -11,13 +11,18 @@ import type { ModelTraining } from '../../core/model/ModelTraining';
 import type { MLMachine } from '../interface-adapter/MLMachine';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 import type { ModelInfo } from '../../core/model/ModelInfo';
-import type { GestureID } from '../../core/entities/NewGesture';
+import type { ClassifierService } from '../domain/ClassifierService';
 
 export class ClassifierController {
   constructor(
     private states: AbstractStates,
     private mlMachine: MLMachine,
+    private classifierService: ClassifierService,
   ) {}
+
+  public clearClassifier() {
+    this.classifierService.unsetClassifier();
+  }
 
   public async trainNeuralNetworkModel(): Promise<void> {
     const classifierService = this.mlMachine.getClassifierService();

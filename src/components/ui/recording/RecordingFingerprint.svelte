@@ -7,14 +7,12 @@
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import type { Recording } from '../../../core/entities/recording/Recording';
   import BaseVector from '../../../core/vector/BaseVector';
-  import { stores } from '../../../lib/stores/Stores';
   import Fingerprint from './Fingerprint.svelte';
 
   export let recording: Recording;
   export let gestureName: string;
-  const classifier = stores.getClassifier();
   const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
-  const filters = classifier.getFilters();
+  const filters = getControllers().getFilterController().getFilters();
 
   $: filtersLabels = (() => {
     const labels: string[] = [];

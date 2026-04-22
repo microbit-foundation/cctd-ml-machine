@@ -15,4 +15,7 @@ export const knnTrainingDataPoints = writable<LabelledPoint[]>([]);
 
 export const knnNeighbours = writable<LabelledPoint[]>([]);
 
+/**
+ * @deprecated Will be swapped for a training history. Remove in future
+ */
 export const knnHasTrained = writable<boolean>(false);

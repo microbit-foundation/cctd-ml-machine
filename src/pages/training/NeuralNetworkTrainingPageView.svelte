@@ -15,8 +15,9 @@
   import ConsoleLogger from '../../core/logging/ConsoleLogger';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
-  const classifier = stores.getClassifier();
-  const model = classifier.getModel();
+  const classifierController = getControllers().getClassifierController();
+  const modelTraining = classifierController.getModelTraining();
+  const classifier = classifierController.getClassifier();
   const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
   const neuralNetworkController = getControllers().getNeuralNetworkController();
   const neuralNetworkSettings = neuralNetworkController.getNeuralNetworkSettings();
@@ -28,7 +29,7 @@
     });
   };
 
-  $: trainButtonSimpleLabel = !$model.hasModel
+  $: trainButtonSimpleLabel = !$classifier
     ? 'menu.trainer.trainModelButtonSimple'
     : 'menu.trainer.trainNewModelButtonSimple';
 </script>
@@ -39,7 +40,7 @@
   </div>
 
   <div class="flex flex-col flex-grow justify-center items-center text-center">
-    {#if $model.isTraining}
+    {#if $modelTraining.isTraining()}
       <div class="ml-auto mr-auto flex center-items justify-center">
         <i
           class="fa fa-solid fa-circle-notch text-5xl animate-spin animate-duration-[2s]" />
@@ -48,7 +49,7 @@
         <p class="text-2xl mt-3">{$t('menu.trainer.isTrainingModelButton')}</p>
       {/if}
     {:else}
-      {#if $model.isTrained && !hasFeature(Feature.LOSS_GRAPH)}
+      {#if !!$classifier && !hasFeature(Feature.LOSS_GRAPH)}
         <p class="text-2xl">{$t('menu.trainer.TrainingFinished')}</p>
         <p class="text-lg mt-4 mb-4">{$t('menu.trainer.TrainingFinished.body')}</p>
       {/if}
@@ -65,7 +66,7 @@
         </Tooltip>
       </div>
     {/if}
-    {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && ($model.isTrained || $model.isTraining)}
+    {#if $loss.length > 0 && hasFeature(Feature.LOSS_GRAPH) && (!!$classifier || $modelTraining.isTraining())}
       <LossGraph
         {loss}
         maxX={$neuralNetworkSettings.getLearningSettings().getNumberOfEpochs()} />

@@ -7,8 +7,10 @@
 import type { Dataset } from '../../../core/dataset/Dataset';
 import type { Axis } from '../../../core/entities/Axis';
 import type { NewGesture } from '../../../core/entities/NewGesture';
-import type { Filter } from '../../../core/filter/Filter';
+import type { Filter, FilterType } from '../../../core/filter/Filter';
+import { createFilter } from '../../../core/filter/FilterUtils';
 import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+import type { Vector } from '../../../core/vector/Vector';
 import type { AxisRepository } from '../../domain/AxisRepository';
 import type { DataService } from '../../domain/DataService';
 import type { FilterRepository } from '../../domain/FilterRepository';
@@ -44,6 +46,16 @@ export class DataServiceImpl implements DataService {
 
   getFilters(): Filter[] {
     return this.filterRepository.getFilters();
+  }
+
+  toggleFilter(filterType: FilterType): void {
+    const filters = this.filterRepository.getFilters();
+    const isActive = filters.some(f => f.getType() === filterType);
+    if (isActive) {
+      this.filterRepository.saveFilters(filters.filter(f => f.getType() !== filterType));
+    } else {
+      this.filterRepository.saveFilters([...filters, createFilter(filterType)]);
+    }
   }
 
   getTrainingDataset(): Dataset {

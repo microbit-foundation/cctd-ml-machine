@@ -10,15 +10,15 @@
   import Switch from '../../components/ui/Switch.svelte';
   import Tooltip from '../../components/ui/Tooltip.svelte';
   import { tr } from '../../i18n';
-  import { stores } from '../../lib/stores/Stores';
 
   const controllers = getControllers();
   const validationController = controllers.getValidationController();
 
   const validationResult = validationController.getValidationResult();
   const accuracy = $validationResult?.getAccuracy();
-  const model = stores.getClassifier().getModel();
   const autoUpdate = validationController.shouldAutoUpdate();
+  const classifierController = controllers.getClassifierController();
+  const modelTraining = classifierController.getModelTraining();
 
   const handleEvaluateValidationSets = async () => {
     await validationController.evaluateValidationSet();
@@ -33,12 +33,12 @@
       </p>
       <Switch size="sm" bind:checked={$autoUpdate} />
       <Tooltip
-        disabled={$model.isTrained}
+        disabled={$modelTraining.hasPendingSettings()}
         offset={{ x: 230, y: 0 }}
         title={$tr('content.validation.tutorial.trainmodelfirst')}>
         <StandardButton
           tiny
-          disabled={!$model.isTrained}
+          disabled={!$modelTraining.hasPendingSettings()}
           onClick={handleEvaluateValidationSets}>
           {$tr('content.validation.testButton.test')}
         </StandardButton>

@@ -17,10 +17,9 @@
   import type Matrix from '../../core/entities/Matrix';
 
   const validationController = getControllers().getValidationController();
-
-  const classifier = stores.getClassifier();
-  const model = classifier.getModel();
   const validationResult = validationController.getValidationResult();
+  const classifierController = getControllers().getClassifierController();
+  const modelTraining = classifierController.getModelTraining();
   const accuracy = $validationResult?.getAccuracy();
   const validationSetMatrix: Matrix<number> | undefined = $validationResult?.getMatrix();
   const autoUpdate = validationController.shouldAutoUpdate();
@@ -41,10 +40,10 @@
       <Switch size="sm" bind:checked={$autoUpdate} />
     </div>
     <Tooltip
-      disabled={$model.isTrained}
+      disabled={$modelTraining.hasPendingSettings()}
       offset={{ x: 30, y: 20 }}
       title={$tr('content.validation.tutorial.trainmodelfirst')}>
-      <StandardButton disabled={!$model.isTrained} onClick={handleEvaluateValidationSets}>
+      <StandardButton disabled={!$modelTraining.hasPendingSettings()} onClick={handleEvaluateValidationSets}>
         {$tr('content.validation.testButton.test')}
       </StandardButton>
     </Tooltip>

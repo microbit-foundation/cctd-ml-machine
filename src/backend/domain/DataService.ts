@@ -8,6 +8,7 @@ import type { Dataset } from '../../core/dataset/Dataset';
 import type { Axis } from '../../core/entities/Axis';
 import type { Filter, FilterType } from '../../core/filter/Filter';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
+import type { Vector } from '../../core/vector/Vector';
 
 export interface DataService {
   addLiveData(input: LiveDataVector): void;
@@ -23,5 +24,7 @@ export interface DataService {
   getTrainingDataset(): Dataset;
   getValidationDataset(): Dataset;
   hasSufficientDataForTraining(): boolean;
-  applyFilters(data: LiveDataVector): LiveDataVector;
+  extractSelectedAxesFromVector(data: Vector): Vector
+  graphNormalize(value: Vector): Vector;
+  applyFilters(data: Vector[]): Vector;
 }

@@ -11,7 +11,7 @@ import {
   get,
 } from 'svelte/store';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
-import FilterGraphLimits from '../utils/FilterLimits';
+import FilterGraphLimits from '../utils/FilterGraphLimits';
 import type { Filter, FilterType } from '../../core/filter/Filter';
 import { createFilter } from '../../core/filter/FilterUtils';
 
@@ -30,7 +30,7 @@ class Filters implements Readable<Filter[]> {
     });
   }
 
-  public computeNormalized(values: number[]): number[] {
+  public computeGraphNormalized(values: number[]): number[] {
     return get(this.filters).map(filter => {
       return this.normalizeFilterResult(filter.filter(values), filter);
     });

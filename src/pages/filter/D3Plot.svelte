@@ -8,7 +8,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import * as d3 from 'd3';
-  import FilterGraphLimits from '../../lib/utils/FilterLimits';
+  import FilterGraphLimits from '../../lib/utils/FilterGraphLimits';
   import StaticConfiguration from '../../StaticConfiguration';
   import type { RecordingData } from '../../core/entities/RecordingData';
   import { stores } from '../../lib/stores/Stores';

@@ -17,6 +17,13 @@ class BaseVector implements Vector {
     return this.values;
   }
 
+  getValueByIndex(index: number): number {
+    if (index < 0 || index >= this.values.length) {
+      throw new Error(`Index out of bounds. Attempted to access index ${index} in vector of size ${this.getSize()}`);
+    }
+    return this.values[index];
+  }
+
   public divideByScalar(scalar: number): Vector {
     const vn = this.values.map(val => val / scalar);
     return new BaseVector(vn);
@@ -59,6 +66,16 @@ class BaseVector implements Vector {
 
     const vn = v1.map((val, inx) => val + v2[inx]);
     return new BaseVector(vn);
+  }
+
+  extract(indices: number[]): Vector {
+    const extractedValues = indices.map(index => {
+      if (index < 0 || index >= this.values.length) {
+        throw new Error(`Index out of bounds. Attempted to access index ${index} in vector of size ${this.getSize()}`);
+      }
+      return this.values[index];
+    });
+    return new BaseVector(extractedValues);
   }
 }
 

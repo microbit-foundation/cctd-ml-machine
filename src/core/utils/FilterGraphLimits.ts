@@ -6,13 +6,13 @@
 
 import { FilterType, type Filter } from '../../core/filter/Filter';
 
-export type FilterGraphType = {
+export type FilterGraphLimit = {
   min: number;
   max: number;
 };
 
 class FilterGraphLimits {
-  public static getFilterLimits(filter: Filter): { min: number; max: number } {
+  public static getFilterLimits(filter: Filter): FilterGraphLimit {
     const filterType = filter.getType();
     switch (filterType) {
       case FilterType.MAX:

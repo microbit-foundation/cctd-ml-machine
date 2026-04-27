@@ -32,7 +32,7 @@ export class ClassifierInput {
     const vectorSize = this.samples[0].getSize();
 
     return Array.from({ length: vectorSize }, (_, i) =>
-      filters.computeNormalized(this.samples.map(e => e.getValue()[i])),
+      filters.computeGraphNormalized(this.samples.map(e => e.getValue()[i])),
     ).flat();
   }
 

@@ -44,7 +44,7 @@
     const vectorInput: number[] = [];
     Object.entries(sampleInput).forEach(([key, val]) => {
       if (!val) return;
-      vectorInput.push(...filters.computeNormalized(val));
+      vectorInput.push(...filters.computeGraphNormalized(val));
     });
 
     return new BaseVector(vectorInput).getValue();

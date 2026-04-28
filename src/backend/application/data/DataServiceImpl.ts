@@ -7,6 +7,9 @@
 import type { Dataset } from '../../../core/dataset/Dataset';
 import type { Axis } from '../../../core/entities/Axis';
 import type { NewGesture } from '../../../core/entities/NewGesture';
+import type { Recording } from '../../../core/entities/recording/Recording';
+import { RecordingImpl } from '../../../core/entities/recording/RecordingImpl';
+import { Sample } from '../../../core/entities/recording/Sample';
 import type { Filter, FilterType } from '../../../core/filter/Filter';
 import { createFilter } from '../../../core/filter/FilterUtils';
 import FilterGraphLimits from '../../../core/utils/FilterGraphLimits';
@@ -115,6 +118,21 @@ export class DataServiceImpl implements DataService {
   extractSelectedAxesFromVector(data: Vector): Vector {
     const selectedAxisIndices = this.getSelectedAxes().map(ax => ax.index);
     return data.extract(selectedAxisIndices);
+  }
+
+  extractSelectedAxesFromVectors(data: Vector[]): Vector[] {
+    return data.map(vector => this.extractSelectedAxesFromVector(vector));
+  }
+
+  extractSelectedAxesFromRecording(recording: Recording): Recording {
+    const selectedAxisIndices = this.getSelectedAxes().map(ax => ax.index);
+    const samplesValuesExtracted = this.extractSelectedAxesFromVectors(recording.getSamples());
+    const axes = selectedAxisIndices.map(index => this.getAxisFromIndex(index)).filter((ax): ax is Axis => ax !== undefined);
+    return new RecordingImpl(
+      recording.getId(),
+      samplesValuesExtracted.map(sampleValue => new Sample(sampleValue)),
+      axes
+    )
   }
 
   /**

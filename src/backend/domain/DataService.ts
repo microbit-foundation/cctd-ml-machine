@@ -6,6 +6,7 @@
 
 import type { Dataset } from '../../core/dataset/Dataset';
 import type { Axis } from '../../core/entities/Axis';
+import type { Recording } from '../../core/entities/recording/Recording';
 import type { Filter, FilterType } from '../../core/filter/Filter';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { Vector } from '../../core/vector/Vector';
@@ -25,6 +26,7 @@ export interface DataService {
   getValidationDataset(): Dataset;
   hasSufficientDataForTraining(): boolean;
   extractSelectedAxesFromVector(data: Vector): Vector
+  extractSelectedAxesFromRecording(recording: Recording): Recording;
   graphNormalize(value: Vector): Vector;
   applyFilters(data: Vector[]): Vector;
 }

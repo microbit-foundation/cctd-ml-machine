@@ -5,6 +5,7 @@
  -->
 
 <script lang="ts">
+  import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
   import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import { knnHighlightedPoint } from './KnnPointToolTip';
@@ -15,14 +16,13 @@
     x: ($knnHighlightedPoint?.pointTransformed.projected.x ?? 0) + offsetX,
     y: ($knnHighlightedPoint?.pointTransformed.projected.y ?? 0) + offsetY,
   };
+  const filters = getControllers().getDataController().getFilters();
 
   $: content = {
     values: [
       $knnHighlightedPoint?.pointTransformed.x,
       $knnHighlightedPoint?.pointTransformed.y,
-      stores.getClassifier().getFilters().count() === 3
-        ? $knnHighlightedPoint?.pointTransformed.z
-        : undefined,
+      $filters.length === 3 ? $knnHighlightedPoint?.pointTransformed.z : undefined,
     ],
   };
 

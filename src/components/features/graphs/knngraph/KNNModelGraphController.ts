@@ -10,7 +10,8 @@ import type Filters from '../../../../lib/domain/Filters';
 import { stores } from '../../../../lib/stores/Stores';
 import type { Point3D } from '../../../../lib/utils/graphUtils';
 import BaseVector from '../../../../core/vector/BaseVector';
-import { FilterType } from '../../../../core/filter/Filter';
+import { FilterType, type Filter } from '../../../../core/filter/Filter';
+import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
 type UpdateCall = {
   config: GraphDrawConfig;
@@ -29,7 +30,7 @@ class KNNModelGraphController {
   private origin: Writable<{ x: number; y: number }>;
   private scale: Writable<number>;
   private graphDrawer: KNNModelGraphDrawer;
-  private filters: Filters;
+  private filters: Filter[];
   private redrawTrainingData = false; // Only draw training data when rotation/scale/origin changes
   private unsubscriber;
   private currentPointUnsubscriber;
@@ -40,7 +41,7 @@ class KNNModelGraphController {
     classId: string,
     colors: string[],
   ) {
-    this.filters = stores.getClassifier().getFilters();
+    this.filters = getControllers().getFilterController().getFilters().get();
     this.graphDrawer = new KNNModelGraphDrawer(svg, classId);
     this.rotationX = writable(3);
     this.rotationY = writable(0.5);
@@ -78,8 +79,10 @@ class KNNModelGraphController {
   }
 
   private getDefaultScale() {
+    const hasAcc = getControllers().getFilterController().hasFilterType(FilterType.ACC);
+    const hasPeaks = getControllers().getFilterController().hasFilterType(FilterType.PEAKS);
     // TODO: This is a hack to make the data fit inside the graph. The proper solution is to calculate the scale based on the data
-    return this.filters.has(FilterType.ACC) || this.filters.has(FilterType.PEAKS)
+    return hasAcc || hasPeaks
       ? 18
       : 100;
   }
@@ -94,7 +97,7 @@ class KNNModelGraphController {
   }
 
   private getControllerData(): { config: GraphDrawConfig } {
-    const classifier = stores.getClassifier();
+    const filters = getControllers().getFilterController().getFilters().get();
     const xRot = get(this.rotationX);
     const yRot = get(this.rotationY);
     const zRot = get(this.rotationZ);
@@ -104,8 +107,8 @@ class KNNModelGraphController {
     // Given as input to the draw function
     return {
       config: {
-        xRot: classifier.getFilters().count() === 3 ? xRot : Math.PI,
-        yRot: classifier.getFilters().count() === 3 ? yRot : 0,
+        xRot: filters.length === 3 ? xRot : Math.PI,
+        yRot: filters.length === 3 ? yRot : 0,
         zRot,
         origin,
         scale,

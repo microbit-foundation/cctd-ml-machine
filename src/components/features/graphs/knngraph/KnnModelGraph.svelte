@@ -10,14 +10,12 @@
   import KnnModelGraphSvgWithControls from './KnnModelGraphSvgWithControls.svelte';
   import KnnPointToolTipView from './KnnPointToolTipView.svelte';
   import { get } from 'svelte/store';
-  import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import { FilterType } from '../../../../core/filter/Filter';
   import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
-  const classifier = stores.getClassifier();
   const gestures = getControllers().getGestureController().getGestures();
-  const filters = classifier.getFilters();
+  const filters = getControllers().getDataController().getFilters();
   const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
 
   const canvasWidth = 450;
@@ -52,8 +50,10 @@
     }
   }
 
-  filters.subscribe(() => {
-    const expandedZoom = filters.has(FilterType.ACC) || filters.has(FilterType.PEAKS);
+  filters.subscribe((state) => {
+    const hasAcc = state.findIndex(s => s.getType() === FilterType.ACC)
+    const hasPeaks = state.findIndex(s => s.getType() === FilterType.PEAKS)
+    const expandedZoom = hasAcc || hasPeaks;
     get(controller)?.multiplyScale(expandedZoom ? 1.5 : 1);
   });
 

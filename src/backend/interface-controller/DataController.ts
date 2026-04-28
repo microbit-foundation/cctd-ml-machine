@@ -5,8 +5,11 @@
  */
 
 import type { Axis } from '../../core/entities/Axis';
+import type { Recording } from '../../core/entities/recording/Recording';
+import type { Filter, FilterType } from '../../core/filter/Filter';
 import type { LiveDataStore } from '../../core/LiveDataStore';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
+import type { Vector } from '../../core/vector/Vector';
 import type { DataService } from '../domain/DataService';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
@@ -47,5 +50,17 @@ export class DataController {
 
   public hasSufficientDataForTraining(): boolean {
     return this.dataService.hasSufficientDataForTraining();
+  }
+
+  public graphNormalize(data: Vector): Vector {
+    return this.dataService.graphNormalize(data);
+  }
+
+  public extractSelectedAxesFromRecording(recording: Recording): Recording {
+    return this.dataService.extractSelectedAxesFromRecording(recording);
+  }
+
+  public applyFilters(data: Vector[]): Vector {
+    return this.dataService.applyFilters(data);
   }
 }

@@ -5,15 +5,15 @@
  -->
 
 <script lang="ts">
+    import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import { t } from '../../i18n';
   import ImageSkeleton from '../ui/skeletonloading/ImageSkeleton.svelte';
-  import { stores } from '../../lib/stores/Stores';
 
-  const model = stores.getClassifier().getModel();
+  const classifier = getControllers().getClassifierController().getClassifier();
 </script>
 
 <div class="h-40 w-40 m-auto mt-2 flex flex-col justify-center">
-  {#if $model.isTrained}
+  {#if !!$classifier}
     <div class="text-white text-center flex flex-col justify-center items-center">
       <ImageSkeleton
         alt="Model Icon"

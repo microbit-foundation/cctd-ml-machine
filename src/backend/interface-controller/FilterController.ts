@@ -9,6 +9,12 @@ export class FilterController {
         private dataService: DataService
     ) { }
 
+
+    hasFilterType(ACC: FilterType): boolean {
+        const filters = this.states.getFilters().get();
+        return filters.some(f => f.getType() === ACC);
+    }
+
     getFilters(): AbstractState<Filter[]> {
         return this.states.getFilters();
     }

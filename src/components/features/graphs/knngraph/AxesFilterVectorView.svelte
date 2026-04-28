@@ -10,14 +10,13 @@
   import { onMount } from 'svelte';
   import { vectorArrows } from './AxesFilterVector';
   import StaticConfiguration from '../../../../StaticConfiguration';
-  import { stores } from '../../../../lib/stores/Stores';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
   import { knnCurrentPoint } from '../../../../lib/stores/KNNStores';
   import type { Axis } from '../../../../core/entities/Axis';
   import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
-  const classifier = stores.getClassifier();
-
+  const classifier = getControllers().getClassifierController().getClassifier();
+  const filters = getControllers().getFilterController().getFilters();
   const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
   const availableAxes = getControllers().getAxisController().getAvailableAxes();
 
@@ -29,7 +28,7 @@
     }
 
     vectorArrows.update(newVal => {
-      for (let i = 0; i < filters.count(); i++) {
+      for (let i = 0; i < $filters.length; i++) {
         const to = document.getElementById('arrowTo' + i.toString());
         if (!to) {
           throw new Error("Cant draw arrow, no destination 'arrowTo" + i + "'");
@@ -93,11 +92,9 @@
   unsubscribe = derived([highlightedAxes, classifier], s => s).subscribe(s => {
     init();
   });
-
-  const filters = classifier.getFilters();
 </script>
 
-<div class:hidden={!$classifier.model.isTrained && !$classifier.model.isTraining}>
+<div class:hidden={!$classifier}>
   <div>
     {#if $highlightedAxes !== undefined}
       <div class="flex flex-row space-x-1 flex-grow">

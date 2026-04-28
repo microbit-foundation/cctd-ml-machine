@@ -9,7 +9,6 @@ import { get } from 'svelte/store';
 import * as d3 from 'd3';
 import { knnNeighbours } from '../../../../lib/stores/KNNStores';
 import type { Point3D, Point3DTransformed } from '../../../../lib/utils/graphUtils';
-import { stores } from '../../../../lib/stores/Stores';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
@@ -109,7 +108,8 @@ class KNNModelGraphDrawer {
       drawConfig,
       StaticConfiguration.graphColors[1],
     );
-    if (stores.getClassifier().getFilters().count() === 3) {
+    const filters = getControllers().getFilterController().getFilters().get();
+    if (filters.length === 3) {
       // 3d, draw z-axis (forward/backward)
       this.addAxis(
         { x: 0, y: 0, z: 1 },
@@ -243,11 +243,12 @@ class KNNModelGraphDrawer {
 
   private addGrid(drawConfig: GraphDrawConfig) {
     const grid3d = this.getGridTransformer(drawConfig);
+    const filters = getControllers().getFilterController().getFilters().get();
     const xGrid = [];
     const j = 30;
     for (let z = -j; z < j; z++) {
       for (let x = -j; x < j; x++) {
-        if (stores.getClassifier().getFilters().count() === 2) {
+        if (filters.length === 2) {
           xGrid.push({ x: x, y: z, z: 0 }); // Draw grid vertically (2d)
         } else {
           xGrid.push({ x: x, y: 0, z: z }); // Draw grid horizontally (3d)

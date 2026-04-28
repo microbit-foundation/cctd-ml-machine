@@ -35,7 +35,7 @@
     return bestPrediction.getName();
   };
 
-  const model = stores.getClassifier().getModel();
+  const classifier = getControllers().getClassifierController().getClassifier();
 
   $: confidenceLabel = Math.round(confidence * 100).toString() + '%';
   $: predictionLabel = getPredictionLabel(
@@ -45,7 +45,7 @@
 </script>
 
 <div class="w-full text-center justify-center pt-5">
-  {#if !$model.hasModel}
+  {#if !$classifier}
     <div
       class="h-34 w-34 m-auto mb-8 border-2 border-white border-opacity-30 rounded-lg border-dashed font-bold text-warm-gray-300">
       <div class="flex h-full">

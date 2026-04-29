@@ -19,7 +19,9 @@ class BaseVector implements Vector {
 
   getValueByIndex(index: number): number {
     if (index < 0 || index >= this.values.length) {
-      throw new Error(`Index out of bounds. Attempted to access index ${index} in vector of size ${this.getSize()}`);
+      throw new Error(
+        `Index out of bounds. Attempted to access index ${index} in vector of size ${this.getSize()}`,
+      );
     }
     return this.values[index];
   }
@@ -71,7 +73,9 @@ class BaseVector implements Vector {
   extract(indices: number[]): Vector {
     const extractedValues = indices.map(index => {
       if (index < 0 || index >= this.values.length) {
-        throw new Error(`Index out of bounds. Attempted to access index ${index} in vector of size ${this.getSize()}`);
+        throw new Error(
+          `Index out of bounds. Attempted to access index ${index} in vector of size ${this.getSize()}`,
+        );
       }
       return this.values[index];
     });

@@ -27,7 +27,7 @@ export interface DataService {
   getTrainingDataset(): Dataset;
   getValidationDataset(): Dataset;
   hasSufficientDataForTraining(): boolean;
-  extractSelectedAxesFromVector(data: Vector): Vector
+  extractSelectedAxesFromVector(data: Vector): Vector;
   extractSelectedAxesFromRecording(recording: Recording): Recording;
   graphNormalize(value: Vector): Vector;
   applyFilters(data: Vector[]): Vector;

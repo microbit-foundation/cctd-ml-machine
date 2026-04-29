@@ -57,8 +57,11 @@ export function areActionsAllowed(actionAllowed = true, alertIfNotReady = true):
 
 // Assess status and return message to alert user.
 function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: string } {
-
-  const isRecording = getControllers().getRecordingController().getRecordingState().get().isRecording()
+  const isRecording = getControllers()
+    .getRecordingController()
+    .getRecordingState()
+    .get()
+    .isRecording();
   const classifierController = getControllers().getClassifierController();
   const modelTraining = classifierController.getModelTraining();
   const microbitController = getControllers().getMicrobitController();
@@ -66,7 +69,8 @@ function assessStateStatus(actionAllowed = true): { isReady: boolean; msg: strin
   const inputConnected = microbitConnection.get().getInput().isConnected();
 
   if (isRecording) return { isReady: false, msg: text('alert.isRecording') };
-  if (modelTraining.get().isTraining()) return { isReady: false, msg: text('alert.isTraining') };
+  if (modelTraining.get().isTraining())
+    return { isReady: false, msg: text('alert.isTraining') };
   if (!inputConnected && actionAllowed)
     return { isReady: false, msg: text('alert.isNotConnected') };
 

@@ -24,7 +24,9 @@ export class MicrobitServiceImpl implements MicrobitService {
   }
 
   getDeviceRequestState(): DeviceRequestState {
-    return this.microbitConnectionRepository.getMicrobitConnection().getDeviceRequestState();
+    return this.microbitConnectionRepository
+      .getMicrobitConnection()
+      .getDeviceRequestState();
   }
 
   setMicrobitConnection(connection: MicrobitConnection): void {

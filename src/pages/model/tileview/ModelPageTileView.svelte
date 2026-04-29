@@ -20,7 +20,7 @@
   const makecodeController = getControllers().getMakeCodeController();
   const outputController = getControllers().getOutputController();
 
-   onMount(() => {
+  onMount(() => {
     Microbits.resetIOPins();
   });
 

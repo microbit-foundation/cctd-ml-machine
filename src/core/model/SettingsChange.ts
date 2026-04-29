@@ -1,10 +1,10 @@
-import type { ModelOption } from "./ModelOption";
+import type { ModelOption } from './ModelOption';
 
 export class SettingsChange<T> {
   public constructor(
     private readonly option: ModelOption,
     private readonly oldValue: T,
-    private readonly newValue: T
+    private readonly newValue: T,
   ) {}
 
   public getOption(): ModelOption {

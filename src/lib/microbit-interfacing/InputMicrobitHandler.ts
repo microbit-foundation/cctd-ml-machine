@@ -24,7 +24,7 @@ class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private microbitController: MicrobitController) { }
+  public constructor(private microbitController: MicrobitController) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnected', versionNumber);
@@ -33,7 +33,9 @@ class InputMicrobitHandler implements MicrobitHandler {
     const buffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(
       StaticConfiguration.accelerometerLiveDataBufferSize,
     );
-    getControllers().getDataController().setLiveDataStore(new MicrobitAccelerometerLiveData(buffer));
+    getControllers()
+      .getDataController()
+      .setLiveDataStore(new MicrobitAccelerometerLiveData(buffer));
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
     const curConn = microbitConnection.get();
     const oldInput = curConn.getInput();
@@ -57,13 +59,15 @@ class InputMicrobitHandler implements MicrobitHandler {
     const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
 
-    getControllers().getDataController().addLiveData(
-      new MicrobitAccelerometerDataVector({
-        x: accelX,
-        y: accelY,
-        z: accelZ,
-      }),
-    );
+    getControllers()
+      .getDataController()
+      .addLiveData(
+        new MicrobitAccelerometerDataVector({
+          x: accelX,
+          y: accelY,
+          z: accelZ,
+        }),
+      );
   }
 
   public onInitializing(): void {

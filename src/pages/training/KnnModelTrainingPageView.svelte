@@ -39,7 +39,8 @@
       </div>
       {#if $highlightedAxis.length === 1}
         <div class="flex justify-center">
-          <StandardButton onClick={() => getControllers().getClassifierController().trainKNNModel()}>
+          <StandardButton
+            onClick={() => getControllers().getClassifierController().trainKNNModel()}>
             {$t('menu.trainer.trainModelButtonSimple')}
           </StandardButton>
         </div>

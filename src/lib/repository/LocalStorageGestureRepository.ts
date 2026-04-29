@@ -114,7 +114,8 @@ class LocalStorageGestureRepository implements GestureRepository {
 
   private buildGesture(persistedData: PersistedGestureData) {
     const store = this.buildPersistedGestureStore(persistedData);
-    const onRecordingsChanged = () => getControllers().getClassifierController().clearClassifier();
+    const onRecordingsChanged = () =>
+      getControllers().getClassifierController().clearClassifier();
 
     if (!this.classifierRepository.hasGestureConfidence(get(store).ID)) {
       this.classifierRepository.setGestureConfidence(get(store).ID, 0);

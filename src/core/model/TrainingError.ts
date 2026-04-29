@@ -1,3 +1,3 @@
 export class TrainingError {
-    public constructor(private message: string) { }
+  public constructor(private message: string) {}
 }

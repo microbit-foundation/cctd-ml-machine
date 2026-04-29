@@ -78,11 +78,11 @@ class KNNModelGraphController {
 
   private getDefaultScale() {
     const hasAcc = getControllers().getFilterController().hasFilterType(FilterType.ACC);
-    const hasPeaks = getControllers().getFilterController().hasFilterType(FilterType.PEAKS);
+    const hasPeaks = getControllers()
+      .getFilterController()
+      .hasFilterType(FilterType.PEAKS);
     // TODO: This is a hack to make the data fit inside the graph. The proper solution is to calculate the scale based on the data
-    return hasAcc || hasPeaks
-      ? 18
-      : 100;
+    return hasAcc || hasPeaks ? 18 : 100;
   }
 
   public multiplyScale(amount: number) {

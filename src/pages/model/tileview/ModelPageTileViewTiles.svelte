@@ -17,7 +17,6 @@
   onMount(() => {
     Microbits.resetIOPins();
   });
-
 </script>
 
 <MediaQuery query="(max-width: 1000px)" let:matches>

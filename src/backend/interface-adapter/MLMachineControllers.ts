@@ -50,7 +50,7 @@ export class MLMachineControllers {
     private microbitService: MicrobitService,
     private validationService: ValidationService,
     private knnSettingsService: KNNSettingsService,
-    private recordingService: RecordingService
+    private recordingService: RecordingService,
   ) {
     this.gestureController = new GestureController(
       states,

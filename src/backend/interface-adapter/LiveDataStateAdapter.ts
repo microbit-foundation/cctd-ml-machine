@@ -11,19 +11,21 @@ import type { AbstractState } from '../statemanagement/AbstractState';
 import type { LiveDataStore } from '../../core/LiveDataStore';
 import { InMemoryLiveDataStore } from '../../core/InMemoryLiveDataStore';
 
-export class LiveDataStateAdapter implements AbstractState<LiveDataStore<LiveDataVector>> {
+export class LiveDataStateAdapter
+  implements AbstractState<LiveDataStore<LiveDataVector>>
+{
   private store: Writable<LiveDataStore<LiveDataVector>>;
   constructor(bufferLen: number) {
-    this.store = writable(
-      new InMemoryLiveDataStore(bufferLen)
-    );
+    this.store = writable(new InMemoryLiveDataStore(bufferLen));
   }
 
   set(value: LiveDataStore<LiveDataVector>): void {
     return this.store.set(value);
   }
   update(
-    updater: (currentValue: LiveDataStore<LiveDataVector>) => LiveDataStore<LiveDataVector>,
+    updater: (
+      currentValue: LiveDataStore<LiveDataVector>,
+    ) => LiveDataStore<LiveDataVector>,
   ): void {
     return this.store.update(updater);
   }
@@ -33,7 +35,9 @@ export class LiveDataStateAdapter implements AbstractState<LiveDataStore<LiveDat
   }
   subscribe(
     run: (value: LiveDataStore<LiveDataVector>) => void,
-    invalidate?: ((value?: LiveDataStore<LiveDataVector> | undefined) => void) | undefined,
+    invalidate?:
+      | ((value?: LiveDataStore<LiveDataVector> | undefined) => void)
+      | undefined,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

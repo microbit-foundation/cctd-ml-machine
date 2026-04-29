@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-    import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import Information from '../../components/ui/information/Information.svelte';
   import type { Filter, FilterType } from '../../core/filter/Filter';
   import { createFilter } from '../../core/filter/FilterUtils';

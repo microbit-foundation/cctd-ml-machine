@@ -42,7 +42,9 @@
       disabled={$modelTraining.hasPendingSettings()}
       offset={{ x: 30, y: 20 }}
       title={$tr('content.validation.tutorial.trainmodelfirst')}>
-      <StandardButton disabled={!$modelTraining.hasPendingSettings()} onClick={handleEvaluateValidationSets}>
+      <StandardButton
+        disabled={!$modelTraining.hasPendingSettings()}
+        onClick={handleEvaluateValidationSets}>
         {$tr('content.validation.testButton.test')}
       </StandardButton>
     </Tooltip>

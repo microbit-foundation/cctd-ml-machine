@@ -19,7 +19,7 @@
     <LiveGraph
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      liveData={liveData}
+      {liveData}
       {width} />
   {/key}
 {/if}

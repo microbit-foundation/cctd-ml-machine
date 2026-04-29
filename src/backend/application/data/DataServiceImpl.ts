@@ -131,24 +131,28 @@ export class DataServiceImpl implements DataService {
 
   extractSelectedAxesFromRecording(recording: Recording): Recording {
     const selectedAxisIndices = this.getSelectedAxes().map(ax => ax.index);
-    const samplesValuesExtracted = this.extractSelectedAxesFromVectors(recording.getSamples());
-    const axes = selectedAxisIndices.map(index => this.getAxisFromIndex(index)).filter((ax): ax is Axis => ax !== undefined);
+    const samplesValuesExtracted = this.extractSelectedAxesFromVectors(
+      recording.getSamples(),
+    );
+    const axes = selectedAxisIndices
+      .map(index => this.getAxisFromIndex(index))
+      .filter((ax): ax is Axis => ax !== undefined);
     return new RecordingImpl(
       recording.getId(),
       samplesValuesExtracted.map(sampleValue => new Sample(sampleValue)),
-      axes
-    )
+      axes,
+    );
   }
 
   /**
    * Graph normalization is used to make data look nicer in graphs.
-   * 
+   *
    * Expects format: [f1r1, f1r2, f1r3, f2r1, f2r2, f2r3] where f1 is filter 1 and r1 is row 1
    */
   graphNormalize(value: Vector): Vector {
     const filters = this.getFilters();
     const noOfFilters = filters.length;
-    const result: number[] = []
+    const result: number[] = [];
     value.getValue().forEach((val, index) => {
       const filterIndex = index % noOfFilters;
       const filter = filters[filterIndex];
@@ -168,7 +172,9 @@ export class DataServiceImpl implements DataService {
   applyFilters(data: Vector[]): Vector {
     const filters = this.getFilters();
     const vectorSize = data[0].getSize();
-    const byRowData = [...Array(vectorSize)].map((_, i) => data.map(vector => vector.getValueByIndex(i)));
+    const byRowData = [...Array(vectorSize)].map((_, i) =>
+      data.map(vector => vector.getValueByIndex(i)),
+    );
     const filteredData: number[] = [];
     filters.forEach(filter => {
       byRowData.forEach(row => {

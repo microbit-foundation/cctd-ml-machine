@@ -17,8 +17,8 @@
   export let onOutputConnectButtonClicked: () => void;
   export let onInputDisconnectButtonClicked: () => void;
 
-const modelTraining = getControllers().getClassifierController().getModelTraining();
-const classifier = getControllers().getClassifierController().getClassifier();
+  const modelTraining = getControllers().getClassifierController().getModelTraining();
+  const classifier = getControllers().getClassifierController().getClassifier();
 </script>
 
 <!-- These are the buttons that are present while the input micro:bit is connected-->

@@ -14,7 +14,6 @@ import MicrobitFlashingImpl from './MicrobitFlashingImpl';
 import { MicrobitReconnectStateImpl } from './MicrobitReconnectStateImpl';
 
 export class MicrobitConnectionImpl implements MicrobitConnection {
-
   private flashing: MicrobitFlashing;
   private deviceRequestState: DeviceRequestState = DeviceRequestState.NONE;
 

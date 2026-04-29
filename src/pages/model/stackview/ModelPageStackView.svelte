@@ -22,7 +22,6 @@
   onMount(() => {
     Microbits.resetIOPins();
   });
-
 </script>
 
 <!-- Main pane -->

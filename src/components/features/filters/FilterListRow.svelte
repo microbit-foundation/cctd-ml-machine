@@ -4,7 +4,7 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import type { FilterType } from '../../../core/filter/Filter';
   import { createFilter } from '../../../core/filter/FilterUtils';
   import { navigate, Paths } from '../../../router/Router';

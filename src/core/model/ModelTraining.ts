@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { SettingsChange } from "./SettingsChange";
-import type { TrainingError } from "./TrainingError";
+import type { SettingsChange } from './SettingsChange';
+import type { TrainingError } from './TrainingError';
 
 export interface ModelTraining {
   isTraining(): boolean;

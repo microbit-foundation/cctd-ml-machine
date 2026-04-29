@@ -12,7 +12,7 @@ class BaseLiveDataVector implements LiveDataVector {
   public constructor(
     private base: BaseVector,
     private labels: string[],
-  ) { }
+  ) {}
 
   public getLabels(): string[] {
     return this.labels;
@@ -27,8 +27,8 @@ class BaseLiveDataVector implements LiveDataVector {
   }
 
   extract(indices: number[]): Vector {
-    const extractedValues = indices.map((index) => this.base.getValue()[index]);
-    const extractedLabels = indices.map((index) => this.labels[index]);
+    const extractedValues = indices.map(index => this.base.getValue()[index]);
+    const extractedLabels = indices.map(index => this.labels[index]);
     return new BaseLiveDataVector(new BaseVector(extractedValues), extractedLabels);
   }
 

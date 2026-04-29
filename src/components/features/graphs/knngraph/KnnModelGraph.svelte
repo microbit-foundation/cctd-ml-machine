@@ -50,9 +50,9 @@
     }
   }
 
-  filters.subscribe((state) => {
-    const hasAcc = state.findIndex(s => s.getType() === FilterType.ACC)
-    const hasPeaks = state.findIndex(s => s.getType() === FilterType.PEAKS)
+  filters.subscribe(state => {
+    const hasAcc = state.findIndex(s => s.getType() === FilterType.ACC);
+    const hasPeaks = state.findIndex(s => s.getType() === FilterType.PEAKS);
     const expandedZoom = hasAcc || hasPeaks;
     get(controller)?.multiplyScale(expandedZoom ? 1.5 : 1);
   });

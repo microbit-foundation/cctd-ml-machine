@@ -5,7 +5,7 @@
  -->
 
 <script lang="ts">
-    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import View3D from './View3D.svelte';
   import { type Vector3 } from './View3DUtility';
@@ -18,9 +18,7 @@
   let liveDataPoint: Vector3 = { x: 0, y: 0, z: 0 };
 
   const liveData = getControllers().getDataController().getLiveData();
-  $: smoothedLiveData = $liveData
-    ? new SmoothedLiveData(liveData, 3)
-    : undefined;
+  $: smoothedLiveData = $liveData ? new SmoothedLiveData(liveData, 3) : undefined;
 
   $: {
     if (!freeze && $smoothedLiveData !== undefined) {

@@ -26,7 +26,11 @@
   const modelTraining = classifierController.getModelTraining();
 
   $: {
-    if ($modelTraining.hasPendingSettings() && $autoUpdate && validationDataset.isValid()) {
+    if (
+      $modelTraining.hasPendingSettings() &&
+      $autoUpdate &&
+      validationDataset.isValid()
+    ) {
       validationController.evaluateValidationSet();
     }
   }

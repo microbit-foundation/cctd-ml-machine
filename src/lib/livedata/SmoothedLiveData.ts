@@ -24,7 +24,9 @@ import type { AbstractState } from '../../backend/statemanagement/AbstractState'
  *
  * Each entry in the SmoothedLiveData will be interpolated with previous values seen. I.e `y_i = 0.75x_(i-1) + 0.25x_i`
  */
-class SmoothedLiveData<T extends LiveDataVector> implements LiveDataStore<LiveDataVector> {
+class SmoothedLiveData<T extends LiveDataVector>
+  implements LiveDataStore<LiveDataVector>
+{
   private smoothedStore: Readable<LiveDataVector>;
 
   /**
@@ -86,7 +88,10 @@ class SmoothedLiveData<T extends LiveDataVector> implements LiveDataStore<LiveDa
         return new BaseLiveDataVector(new BaseVector([]), []);
       }
 
-      const oldValues = this.referenceStore.get().getBuffer().getNewestValues(this.noOfSamples);
+      const oldValues = this.referenceStore
+        .get()
+        .getBuffer()
+        .getNewestValues(this.noOfSamples);
       if (oldValues.some(val => val === null)) {
         // Theres not enough data in the buffer yet.
         return referenceData;

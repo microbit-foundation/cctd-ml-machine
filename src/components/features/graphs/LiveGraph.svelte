@@ -16,7 +16,7 @@
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import type { LiveDataStore } from '../../../core/LiveDataStore';
   import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
-    import { SvelteStateAdapter } from '../../../backend/statemanagement/SvelteStateAdapter';
+  import { SvelteStateAdapter } from '../../../backend/statemanagement/SvelteStateAdapter';
 
   /**
    * TimesSeries, but with the data array added.

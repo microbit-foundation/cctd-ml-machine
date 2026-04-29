@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { DeviceRequestState } from '../../../application/devices/DeviceRequestState';
 import type { MicrobitConnection } from '../../microbit/MicrobitConnection';
 import type { MicrobitConnectionRepository } from '../../microbit/MicrobitConnectionRepository';
 import type { MicrobitRole } from '../../microbit/MicrobitRole';
@@ -15,14 +16,27 @@ export class MicrobitServiceImpl implements MicrobitService {
     private microbitConnectionRepository: MicrobitConnectionRepository,
     private userService: UserService,
   ) {}
+
+  setDeviceRequestState(state: DeviceRequestState): void {
+    const connection = this.getMicrobitConnection();
+    connection.setDeviceRequestState(state);
+    this.microbitConnectionRepository.setMicrobitConnection(connection);
+  }
+
+  getDeviceRequestState(): DeviceRequestState {
+    return this.microbitConnectionRepository.getMicrobitConnection().getDeviceRequestState();
+  }
+
   setMicrobitConnection(connection: MicrobitConnection): void {
     this.microbitConnectionRepository.setMicrobitConnection(connection);
   }
+
   clearReconnectOffering(): void {
     const connection = this.getMicrobitConnection();
     connection.clearReconnectOffering();
     this.microbitConnectionRepository.setMicrobitConnection(connection);
   }
+
   setRequestWasCancelled(cancelled: boolean): void {
     const connection = this.getMicrobitConnection();
     connection.setRequestWasCancelled(cancelled);

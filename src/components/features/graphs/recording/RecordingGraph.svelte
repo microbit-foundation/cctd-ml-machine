@@ -21,7 +21,6 @@
     getRecordingChartDatasets,
     type ChartDataset,
   } from '../../../../lib/ChartDataset';
-  import { stores } from '../../../../lib/stores/Stores';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import { Feature, hasFeature } from '../../../../lib/FeatureToggles';
   import RecordingInspector from '../../3d-inspector/RecordingInspector.svelte';

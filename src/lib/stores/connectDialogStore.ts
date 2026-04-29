@@ -6,7 +6,6 @@
 
 import { get, writable } from 'svelte/store';
 import { DeviceRequestStates } from '../domain/Devices';
-import { stores } from './Stores';
 import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
 export enum ConnectDialogStates {

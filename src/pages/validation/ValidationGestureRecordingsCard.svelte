@@ -7,7 +7,6 @@
 <script lang="ts">
   import { derived } from 'svelte/store';
   import Card from '../../components/ui/Card.svelte';
-  import { stores } from '../../lib/stores/Stores';
   import Recording from '../../components/ui/recording/Recording.svelte';
   import type GestureState from '../../lib/domain/stores/gesture/GestureState';
   import type { GestureID } from '../../core/entities/Gesture';

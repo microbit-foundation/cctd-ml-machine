@@ -10,7 +10,6 @@ import type { AbstractState } from './AbstractState';
 import { SvelteStateAdapter } from './SvelteStateAdapter';
 import type { AbstractStates } from './AbstractStates';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import type { LiveData } from '../../lib/domain/stores/LiveData';
 import { LiveDataStateAdapter } from '../interface-adapter/LiveDataStateAdapter';
 import StaticConfiguration from '../../StaticConfiguration';
 import { MicrobitRole } from '../domain/microbit/MicrobitRole';
@@ -41,10 +40,11 @@ import { GestureRecordingState } from '../domain/recording/GestureRecordingState
 import { RecordingSettings } from '../domain/recording/RecordingSettings';
 import type { FeatureProvider } from '../application/feature/FeatureProvider';
 import { Feature } from '../application/feature/Feature';
+import type { LiveDataStore } from '../../core/LiveDataStore';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
-  private liveDataState: AbstractState<LiveData<LiveDataVector>>;
+  private liveDataState: AbstractState<LiveDataStore<LiveDataVector>>;
   private microbitConnectionState: AbstractState<MicrobitConnection>;
   private makeCodeProjectState: AbstractState<MakeCodeProject | undefined>;
   private popupMessageState: AbstractState<string | undefined>;
@@ -134,7 +134,7 @@ export class SvelteStates implements AbstractStates {
   }
 
   getRecordingSettings(): AbstractState<RecordingSettings> {
-    throw new Error('Method not implemented.');
+    return this.recordingSettingsState;
   }
 
   getRecordingState(): AbstractState<GestureRecordingState> {
@@ -194,7 +194,7 @@ export class SvelteStates implements AbstractStates {
     return this.microbitConnectionState;
   }
 
-  getLiveData(): AbstractState<LiveData<LiveDataVector>> {
+  getLiveData(): AbstractState<LiveDataStore<LiveDataVector>> {
     return this.liveDataState;
   }
 

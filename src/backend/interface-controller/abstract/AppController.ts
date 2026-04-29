@@ -5,7 +5,7 @@
  */
 
 import type { AbstractState } from '../../statemanagement/AbstractState';
-import type { DevicesType } from '../../application/devices/Devices';
+import type { DevicesType } from '../../application/devices/DeviceRequestState';
 
 export interface AppController {
   setReconnectFlag(state: boolean): unknown;

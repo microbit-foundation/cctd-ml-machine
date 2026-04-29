@@ -14,7 +14,6 @@ import {
 import LocalStorageClassifierRepository from './LocalStorageClassifierRepository';
 import GestureState from '../domain/stores/gesture/GestureState';
 import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
-import { stores } from '../stores/Stores';
 import type { GestureRepository } from '../domain/GestureRepository';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { getControllers } from '../../backend/interface-adapter/MLMachine';

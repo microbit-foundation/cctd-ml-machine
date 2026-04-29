@@ -6,7 +6,6 @@
 import { MBSpecs, type MicrobitHandler } from 'microbyte';
 import { buttonPressed } from '../stores/uiStore';
 import TypingUtils from '../TypingUtils';
-import { get } from 'svelte/store';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
 } from '../livedata/MicrobitAccelerometerData';
@@ -14,19 +13,18 @@ import LiveDataBuffer from '../../core/LiveDataBuffer';
 import StaticConfiguration from '../../StaticConfiguration';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
-import { stores } from '../stores/Stores';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { onCatastrophicError } from '../utils/ErrorReconnect';
 import type { MicrobitController } from '../../backend/interface-controller/MicrobitController';
 import { MicrobitRole } from '../../backend/domain/microbit/MicrobitRole';
 import { MicrobitConnectionStateImpl } from '../../backend/domain/implementation/microbit/MicrobitConnectionStateImpl';
-import { MLMachine } from '../../backend/interface-adapter/MLMachine';
+import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private microbitController: MicrobitController) {}
+  public constructor(private microbitController: MicrobitController) { }
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnected', versionNumber);
@@ -35,7 +33,7 @@ class InputMicrobitHandler implements MicrobitHandler {
     const buffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(
       StaticConfiguration.accelerometerLiveDataBufferSize,
     );
-    stores.setLiveData(new MicrobitAccelerometerLiveData(buffer));
+    getControllers().getDataController().setLiveDataStore(new MicrobitAccelerometerLiveData(buffer));
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
     const curConn = microbitConnection.get();
     const oldInput = curConn.getInput();
@@ -59,16 +57,13 @@ class InputMicrobitHandler implements MicrobitHandler {
     const accelY = y / 1000.0;
     const accelZ = z / 1000.0;
 
-    const liveDataStore = get(stores).liveData;
-    if (liveDataStore !== undefined) {
-      liveDataStore.put(
-        new MicrobitAccelerometerDataVector({
-          x: accelX,
-          y: accelY,
-          z: accelZ,
-        }),
-      );
-    }
+    getControllers().getDataController().addLiveData(
+      new MicrobitAccelerometerDataVector({
+        x: accelX,
+        y: accelY,
+        z: accelZ,
+      }),
+    );
   }
 
   public onInitializing(): void {

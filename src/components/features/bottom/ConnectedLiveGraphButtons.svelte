@@ -7,7 +7,6 @@
 <script lang="ts">
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import { tr } from '../../../i18n';
-  import { stores } from '../../../lib/stores/Stores';
   import TypingUtils from '../../../lib/TypingUtils';
   import StandardButton from '../../ui/buttons/StandardButton.svelte';
 
@@ -18,12 +17,13 @@
   export let onOutputConnectButtonClicked: () => void;
   export let onInputDisconnectButtonClicked: () => void;
 
-  const model = stores.getClassifier().getModel();
+const modelTraining = getControllers().getClassifierController().getModelTraining();
+const classifier = getControllers().getClassifierController().getClassifier();
 </script>
 
 <!-- These are the buttons that are present while the input micro:bit is connected-->
 <div class="flex flex-row mr-4">
-  {#if $model.hasModel || $model.isTraining || $microbitConnection
+  {#if !!$classifier || $modelTraining.isTraining() || $microbitConnection
       .getOutput()
       .isConnected()}
     {#if $microbitConnection.getOutput().isAssigned()}

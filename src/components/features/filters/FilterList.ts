@@ -4,16 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 import { writable } from 'svelte/store';
-import { stores } from '../../../lib/stores/Stores';
 import { FilterType } from '../../../core/filter/Filter';
+import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 
 export const toggleFilterCheckmarkClickHandler =
   (filterType: FilterType) => (e: MouseEvent) => {
     e.preventDefault();
-    const selectedFilters = stores.getClassifier().getFilters();
-    selectedFilters.has(filterType)
-      ? selectedFilters.remove(filterType)
-      : selectedFilters.add(filterType);
+    getControllers().getFilterController().toggleFilter(filterType);
   };
 
 export const highlightedFilter = writable<FilterType>(FilterType.MAX);

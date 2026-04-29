@@ -17,7 +17,6 @@
 <script lang="ts">
   import { t } from '../../../i18n';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
-  import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Card from '../../ui/Card.svelte';
   import GestureDot from '../../ui/GestureDot.svelte';

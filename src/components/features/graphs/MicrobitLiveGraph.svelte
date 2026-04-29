@@ -6,20 +6,20 @@
 
 <script lang="ts">
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
-  import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import LiveGraph from './LiveGraph.svelte';
 
+  const liveData = getControllers().getDataController().getLiveData();
   const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
   export let width: number;
 </script>
 
-{#if $stores.liveData !== undefined}
+{#if $liveData !== undefined}
   {#key $highlightedAxes.map(e => `${e.index}`).join('-')}
     <LiveGraph
       minValue={StaticConfiguration.liveGraphValueBounds.min}
       maxValue={StaticConfiguration.liveGraphValueBounds.max}
-      liveData={$stores.liveData}
+      liveData={liveData}
       {width} />
   {/key}
 {/if}

@@ -4,7 +4,6 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { stores } from '../../../lib/stores/Stores';
   import windi from '../../../../windi.config';
   import RangeSlider from 'svelte-range-slider-pips';
   import NumberSelector from '../../ui/NumberSelector.svelte';

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { DeviceRequestState } from '../../../application/devices/DeviceRequestState';
 import type { MicrobitConnection } from '../../microbit/MicrobitConnection';
 import type { MicrobitConnectionState } from '../../microbit/MicrobitConnectionState';
 import type { MicrobitFlashing } from '../../microbit/MicrobitFlashing';
@@ -13,7 +14,9 @@ import MicrobitFlashingImpl from './MicrobitFlashingImpl';
 import { MicrobitReconnectStateImpl } from './MicrobitReconnectStateImpl';
 
 export class MicrobitConnectionImpl implements MicrobitConnection {
+
   private flashing: MicrobitFlashing;
+  private deviceRequestState: DeviceRequestState = DeviceRequestState.NONE;
 
   public constructor(
     private inputState: MicrobitConnectionState,
@@ -22,6 +25,12 @@ export class MicrobitConnectionImpl implements MicrobitConnection {
     private wasRequestCancelled: boolean,
   ) {
     this.flashing = new MicrobitFlashingImpl();
+  }
+  getDeviceRequestState(): DeviceRequestState {
+    return this.deviceRequestState;
+  }
+  setDeviceRequestState(state: DeviceRequestState): void {
+    this.deviceRequestState = state;
   }
   getFlashing(): MicrobitFlashing {
     return this.flashing;

@@ -16,13 +16,15 @@ import { type LiveDataVector } from '../../core/vector/LiveDataVector';
 import BaseLiveDataVector from '../../core/vector/BaseLiveDataVector';
 import type { LiveData } from '../domain/stores/LiveData';
 import BaseVector from '../../core/vector/BaseVector';
+import type { LiveDataStore } from '../../core/LiveDataStore';
+import type { AbstractState } from '../../backend/statemanagement/AbstractState';
 
 /**
  * Uses interpolation to produce a 'smoothed' representation of a live data object.
  *
  * Each entry in the SmoothedLiveData will be interpolated with previous values seen. I.e `y_i = 0.75x_(i-1) + 0.25x_i`
  */
-class SmoothedLiveData<T extends LiveDataVector> implements LiveData<LiveDataVector> {
+class SmoothedLiveData<T extends LiveDataVector> implements LiveDataStore<LiveDataVector> {
   private smoothedStore: Readable<LiveDataVector>;
 
   /**
@@ -30,7 +32,7 @@ class SmoothedLiveData<T extends LiveDataVector> implements LiveData<LiveDataVec
    * @param noOfSamples The number of samples to interpolate over
    */
   constructor(
-    private referenceStore: LiveData<T>,
+    private referenceStore: AbstractState<LiveDataStore<T>>,
     private noOfSamples: number,
   ) {
     this.smoothedStore = this.deriveStore();
@@ -40,7 +42,7 @@ class SmoothedLiveData<T extends LiveDataVector> implements LiveData<LiveDataVec
    * Inserts a data point into the reference LiveData store.
    */
   public put(data: T): void {
-    this.referenceStore.put(data);
+    this.referenceStore.get().put(data);
   }
 
   /**
@@ -56,7 +58,7 @@ class SmoothedLiveData<T extends LiveDataVector> implements LiveData<LiveDataVec
    * Returns the series size of the refence LiveData store.
    */
   public getSeriesSize(): number {
-    return this.referenceStore.getSeriesSize();
+    return this.referenceStore.get().getSeriesSize();
   }
 
   public subscribe(
@@ -70,17 +72,21 @@ class SmoothedLiveData<T extends LiveDataVector> implements LiveData<LiveDataVec
    * Returns the labels associated with the refence store.
    */
   public getLabels(): string[] {
-    return this.referenceStore.getLabels();
+    return this.referenceStore.get().getLabels();
   }
 
   /**
    * Uses the buffer of the original store to derive a store with smoothed values when subscribing
    */
   private deriveStore(): Readable<LiveDataVector> {
-    return derived([this.referenceStore], stores => {
-      const referenceData = stores[0];
+    return derived(this.referenceStore, store => {
+      const referenceData = store.getBuffer().getNewestValues(1)[0];
+      if (referenceData === null) {
+        // Theres not enough data in the buffer yet.
+        return new BaseLiveDataVector(new BaseVector([]), []);
+      }
 
-      const oldValues = this.referenceStore.getBuffer().getNewestValues(this.noOfSamples);
+      const oldValues = this.referenceStore.get().getBuffer().getNewestValues(this.noOfSamples);
       if (oldValues.some(val => val === null)) {
         // Theres not enough data in the buffer yet.
         return referenceData;

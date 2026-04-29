@@ -14,9 +14,8 @@ import {
 import OutputMicrobitHandler from './OutputMicrobitHandler';
 import CombinedMicrobitHandler from './CombinedMicrobitHandler';
 import { HexOrigin } from './HexOrigin';
-import { stores } from '../stores/Stores';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
-import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 import { isUniversalHex, separateUniversalHex } from '@microbit/microbit-universal-hex';
 
 type UARTMessageType = 'g' | 's'; // Gesture or sound
@@ -42,7 +41,7 @@ class Microbits {
   private static outputOrigin = HexOrigin.UNKNOWN;
   private static inputOrigin = HexOrigin.UNKNOWN;
 
-  private static outputHandler = new OutputMicrobitHandler(stores.getDevices());
+  private static outputHandler = new OutputMicrobitHandler();
   private static inputHandler = new CombinedMicrobitHandler(
     this.outputHandler,
     getControllers().getMicrobitController(),

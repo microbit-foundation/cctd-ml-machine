@@ -8,10 +8,12 @@ import type { Dataset } from '../../core/dataset/Dataset';
 import type { Axis } from '../../core/entities/Axis';
 import type { Recording } from '../../core/entities/recording/Recording';
 import type { Filter, FilterType } from '../../core/filter/Filter';
+import type { LiveDataStore } from '../../core/LiveDataStore';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { Vector } from '../../core/vector/Vector';
 
 export interface DataService {
+  setLiveDataStore(data: LiveDataStore<LiveDataVector>): void;
   addLiveData(input: LiveDataVector): void;
   getLiveData(duration: number, noOfSamples: number): LiveDataVector[];
   setSelectedAxes(axes: Axis[]): void;

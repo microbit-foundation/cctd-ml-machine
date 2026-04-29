@@ -4,9 +4,9 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
+    import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import type { FilterType } from '../../../core/filter/Filter';
   import { createFilter } from '../../../core/filter/FilterUtils';
-  import { stores } from '../../../lib/stores/Stores';
   import { navigate, Paths } from '../../../router/Router';
   import {
     highlightedFilter,
@@ -16,8 +16,7 @@
 
   export let filterType: FilterType;
   const filter = createFilter(filterType);
-  const classifier = stores.getClassifier();
-  const selectedFilters = classifier.getFilters();
+  const selectedFilters = getControllers().getFilterController().getFilters();
   $: checked = $selectedFilters.map(f => f.getType()).includes(filterType);
 </script>
 

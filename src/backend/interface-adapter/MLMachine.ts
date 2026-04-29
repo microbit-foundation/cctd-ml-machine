@@ -9,7 +9,7 @@ import ConsoleLogger, { welcomeLog } from '../../core/logging/ConsoleLogger';
 import type { Logger } from '../../core/logging/Logger';
 import Devices from '../../lib/domain/Devices';
 import type { AbstractState } from '../statemanagement/AbstractState';
-import type { DevicesType } from '../application/devices/Devices';
+import type { DevicesType } from '../application/devices/DeviceRequestState';
 import { StateNotificationService } from '../domain/implementation/notification/StateNotificationService';
 import type { NotificationService } from '../domain/NotificationService';
 import { MLMachineControllers } from './MLMachineControllers';

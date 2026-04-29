@@ -5,9 +5,11 @@
  */
 
 import type { TimestampedData } from '../../core/LiveDataBuffer';
+import type { LiveDataStore } from '../../core/LiveDataStore';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 
 export interface LiveDataRepository {
+  setLiveDataStore(data: LiveDataStore<LiveDataVector>): void;
   addInput(data: LiveDataVector): void;
   getSeries(time: number, noOfElements: number): TimestampedData<LiveDataVector>[];
 }

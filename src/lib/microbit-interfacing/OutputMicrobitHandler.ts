@@ -8,18 +8,17 @@ import StaticConfiguration from '../../StaticConfiguration';
 import TypingUtils from '../TypingUtils';
 import Microbits from './Microbits';
 import { HexOrigin } from './HexOrigin';
-import type Devices from '../domain/Devices';
-import { DeviceRequestStates } from '../domain/Devices';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import { onCatastrophicError } from '../utils/ErrorReconnect';
-import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
+import { getControllers } from '../../backend/interface-adapter/MLMachine';
 import { MicrobitConnectionStateImpl } from '../../backend/domain/implementation/microbit/MicrobitConnectionStateImpl';
+import { DeviceRequestState } from '../../backend/application/devices/DeviceRequestState';
 
 class OutputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private devices: Devices) {}
+  public constructor() { }
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('OutputMicrobitHandler', 'onConnected', versionNumber);
@@ -31,16 +30,14 @@ class OutputMicrobitHandler implements MicrobitHandler {
     });
 
     Microbits.sendToOutputPin(pinResetArguments);
-    this.devices.update(s => {
-      if (Microbits.isInputOutputTheSame()) {
-        if (Microbits.isOutputMakecode()) {
-          getControllers().getOutputController().setOutputTargetMakecode();
-        }
+    if (Microbits.isInputOutputTheSame()) {
+      if (Microbits.isOutputMakecode()) {
+        getControllers().getOutputController().setOutputTargetMakecode();
       }
-      s.isRequestingDevice = DeviceRequestStates.NONE;
-      return s;
-    });
+    }
     const microbitController = getControllers().getMicrobitController();
+    microbitController.setDeviceRequestState(DeviceRequestState.NONE);
+
     const microbitConnection = microbitController.getMicrobitConnectionState();
     const curConn = microbitConnection.get();
     const oldOutput = curConn.getOutput();
@@ -73,9 +70,6 @@ class OutputMicrobitHandler implements MicrobitHandler {
 
   public onDisconnected(): void {
     ConsoleLogger.log('OutputMicrobitHandler', 'onDisconnected');
-    this.devices.update(s => {
-      return s;
-    });
     const microbitController = getControllers().getMicrobitController();
     const microbitConnection = microbitController.getMicrobitConnectionState();
     const curConnDisc = microbitConnection.get();
@@ -91,11 +85,11 @@ class OutputMicrobitHandler implements MicrobitHandler {
     microbitController.setMicrobitConnection(curConnDisc);
   }
 
-  public onAccelerometerDataReceived(x: number, y: number, z: number): void {}
+  public onAccelerometerDataReceived(x: number, y: number, z: number): void { }
 
-  public onButtonAPressed(state: MBSpecs.ButtonState): void {}
+  public onButtonAPressed(state: MBSpecs.ButtonState): void { }
 
-  public onButtonBPressed(state: MBSpecs.ButtonState): void {}
+  public onButtonBPressed(state: MBSpecs.ButtonState): void { }
 
   public onMessageReceived(data: string): void {
     if (data === 'id_mkcd') {
@@ -128,9 +122,6 @@ class OutputMicrobitHandler implements MicrobitHandler {
 
   public onConnectError(error: Error): void {
     ConsoleLogger.log('OutputMicrobitHandler', 'onConnectError', error);
-    this.devices.update(s => {
-      return s;
-    });
     const microbitController = getControllers().getMicrobitController();
     const microbitConnection = microbitController.getMicrobitConnectionState();
     const curConnErr = microbitConnection.get();

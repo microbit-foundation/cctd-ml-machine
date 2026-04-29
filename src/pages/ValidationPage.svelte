@@ -15,7 +15,6 @@
   import ConnectDialogContainer from '../components/features/connection-prompt/ConnectDialogContainer.svelte';
   import Drawer from '../components/ui/drawer/Drawer.svelte';
   import ValidationpageActionContentMinimized from './validation/ValidationpageActionContentMinimized.svelte';
-  import { stores } from '../lib/stores/Stores';
   import { getControllers } from '../backend/interface-adapter/MLMachine';
 
   const controllers = getControllers();

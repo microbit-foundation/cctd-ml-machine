@@ -5,7 +5,6 @@
  -->
 
 <script lang="ts">
-  import { stores } from '../../lib/stores/Stores';
   import { writable, type Readable } from 'svelte/store';
   import ValidationMatrix from './ValidationMatrix.svelte';
   import { type ValidationSetMatrix } from './ValidationPage';

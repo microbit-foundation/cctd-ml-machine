@@ -6,7 +6,6 @@
 
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import { stores } from '../../../lib/stores/Stores';
   import GestureDot from './../GestureDot.svelte';
   import RecordingGraph from '../../features/graphs/recording/RecordingGraph.svelte';
   import IconButton from '../buttons/IconButton.svelte';

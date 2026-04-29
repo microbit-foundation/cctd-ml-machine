@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { DeviceRequestState } from '../application/devices/DeviceRequestState';
 import type { MicrobitConnection } from '../domain/microbit/MicrobitConnection';
 import type { MicrobitRole } from '../domain/microbit/MicrobitRole';
 import type { MicrobitService } from '../domain/microbit/MicrobitService';
@@ -15,6 +16,10 @@ export class MicrobitController {
     private microbitService: MicrobitService,
     private states: AbstractStates,
   ) {}
+
+  public setDeviceRequestState(NONE: DeviceRequestState): void {
+    this.microbitService.setDeviceRequestState(NONE);
+  }
 
   public setFlashingProgress(progress: number): void {
     const connection = this.getMicrobitConnectionState().get();

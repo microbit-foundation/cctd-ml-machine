@@ -24,6 +24,10 @@ export class DataController {
     this.dataService.addLiveData(input);
   }
 
+  public setLiveDataStore(data: LiveDataStore<LiveDataVector>): void {
+    this.dataService.setLiveDataStore(data);
+  }
+
   public getLiveData(): AbstractState<LiveDataStore<LiveDataVector>> {
     return this.states.getLiveData();
   }

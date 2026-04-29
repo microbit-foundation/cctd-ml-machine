@@ -9,7 +9,6 @@
   import type { AbstractReadonlyState } from '../../backend/statemanagement/AbstractReadonlyState';
   import type { NewGesture } from '../../core/entities/NewGesture';
   import { t } from '../../i18n';
-  import { stores } from '../../lib/stores/Stores';
 
   const bestPrediction: AbstractReadonlyState<NewGesture | undefined> = getControllers()
     .getGestureController()

@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { DeviceRequestState } from '../../application/devices/DeviceRequestState';
 import type { MicrobitConnection } from './MicrobitConnection';
 import type { MicrobitRole } from './MicrobitRole';
 
 export interface MicrobitService {
+  setDeviceRequestState(state: DeviceRequestState): void;
+  getDeviceRequestState(): DeviceRequestState;
   setMicrobitConnection(connection: MicrobitConnection): void;
   offerReconnect(role: MicrobitRole): void;
   clearReconnectOffering(): void;

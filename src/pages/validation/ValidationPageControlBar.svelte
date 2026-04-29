@@ -9,7 +9,6 @@
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import ControlBar from '../../components/ui/control-bar/ControlBar.svelte';
   import { tr } from '../../i18n';
-  import { stores } from '../../lib/stores/Stores';
 
   const gestureController = getControllers().getGestureController();
 

@@ -6,16 +6,17 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { type Unsubscriber } from 'svelte/store';
+  import { writable, type Unsubscriber } from 'svelte/store';
   import { SmoothieChart, TimeSeries } from 'smoothie';
   import DimensionLabels from './DimensionLabels.svelte';
-  import type { LiveData } from '../../../lib/domain/stores/LiveData';
   import StaticConfiguration from '../../../StaticConfiguration';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
-  import { stores } from '../../../lib/stores/Stores';
   import { Feature, getFeature } from '../../../lib/FeatureToggles';
   import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+  import type { LiveDataStore } from '../../../core/LiveDataStore';
+  import type { AbstractState } from '../../../backend/statemanagement/AbstractState';
+    import { SvelteStateAdapter } from '../../../backend/statemanagement/SvelteStateAdapter';
 
   /**
    * TimesSeries, but with the data array added.
@@ -23,11 +24,10 @@
    * `data[i][1]` is the value,
    */
   type TimeSeriesWithData = TimeSeries & { data: number[][] };
-  const classifier = stores.getClassifier();
 
   // Updates width to ensure that the canvas fills the whole screen
   export let width: number;
-  export let liveData: LiveData<LiveDataVector>;
+  export let liveData: AbstractState<LiveDataStore<LiveDataVector>>;
   export let maxValue: number;
   export let minValue: number;
 
@@ -43,11 +43,9 @@
 
   // Subscribing to the stores object, allows us to detect changes in the LiveData store
   // Without it, reconnecting would cause the component to use an outdated reference of the liveData store.
-  stores.subscribe(e => {
+  liveData.subscribe(e => {
     cnt++; // The cnt variable is the key that will force the dimension labels to update
-    if (e.liveData !== undefined) {
-      smoothedLiveData = new SmoothedLiveData(e.liveData, 3);
-    }
+    smoothedLiveData = new SmoothedLiveData(new SvelteStateAdapter(writable(e)), 3);
   });
 
   var canvas: HTMLCanvasElement | undefined = undefined;
@@ -99,11 +97,11 @@
   });
 
   // Start and stop chart when microbit connect/disconnect
-  const model = classifier.getModel();
+  const modelTraining = getControllers().getClassifierController().getModelTraining();
   $: {
     if (chart !== undefined) {
       if ($microbitConnection.getInput().isReady()) {
-        if (!$model.isTraining) {
+        if (!$modelTraining.isTraining()) {
           chart.start();
         } else {
           chart.stop();

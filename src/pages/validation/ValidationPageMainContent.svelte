@@ -5,7 +5,6 @@
  -->
 
 <script lang="ts">
-  import { stores } from '../../lib/stores/Stores';
   import ValidationGestureNameCard from './ValidationGestureNameCard.svelte';
   import ValidationPageInformationLabels from './ValidationPageInformationLabels.svelte';
   import ValidationGestureSelectGestureCard from './ValidationGestureSelectGestureCard.svelte';

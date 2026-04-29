@@ -4,7 +4,6 @@
   SPDX-License-Identifier: MIT
  -->
 <script lang="ts">
-  import { stores } from '../../lib/stores/Stores';
   import { trainNNModel } from './TrainingPage';
   import { t } from './../../i18n';
   import { Feature, hasFeature } from '../../lib/FeatureToggles';

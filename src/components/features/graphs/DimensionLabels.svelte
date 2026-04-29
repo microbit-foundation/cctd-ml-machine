@@ -15,7 +15,6 @@
   import { onDestroy, onMount } from 'svelte';
   import { derived, type Unsubscriber } from 'svelte/store';
   import type SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
-  import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';

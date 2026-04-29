@@ -13,7 +13,6 @@
     MicrobitInteractions,
   } from '../../lib/stores/uiStore';
   import { t } from '../../i18n';
-  import { stores } from '../../lib/stores/Stores';
   import { get } from 'svelte/store';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import ConsoleLogger from '../../core/logging/ConsoleLogger';

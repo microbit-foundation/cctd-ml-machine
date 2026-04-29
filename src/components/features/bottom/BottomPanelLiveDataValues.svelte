@@ -6,7 +6,6 @@
 
 <script lang="ts">
   import { derived } from 'svelte/store';
-  import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import FixedNumber from '../../ui/FixedNumber.svelte';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
@@ -20,7 +19,8 @@
     getControllers().getAxisController().toggleAxis(axis);
   };
 
-  $: liveData = $stores.liveData ? new SmoothedLiveData($stores.liveData, 3) : undefined;
+  const data = getControllers().getDataController().getLiveData();
+  $: liveData = $data ? new SmoothedLiveData(data, 3) : undefined;
   $: input = $liveData ? $liveData.getValue() : undefined;
   $: axes = derived([highlightedAxes, availableAxes], stores => {
     const highlighted = stores[0];

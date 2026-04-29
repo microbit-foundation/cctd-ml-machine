@@ -10,10 +10,7 @@
   import * as d3 from 'd3';
   import FilterGraphLimits from '../../lib/utils/FilterGraphLimits';
   import StaticConfiguration from '../../StaticConfiguration';
-  import type { RecordingData } from '../../core/entities/RecordingData';
-  import { stores } from '../../lib/stores/Stores';
   import { Feature, getFeature } from '../../lib/FeatureToggles';
-  import type { GestureData } from '../../lib/domain/stores/gesture/GestureState';
   import { createFilter } from '../../core/filter/FilterUtils';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import type { FilterType } from '../../core/filter/Filter';
@@ -28,7 +25,7 @@
 
   // Use the MicrobitConnection API to check input connection state
   $: showLive = $microbitConnection.getInput().isConnected();
-  $: liveData = $stores.liveData;
+  const liveData = getControllers().getDataController().getLiveData();
   const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
 
   const gestures = getControllers().getGestureController().getGestures();
@@ -156,7 +153,7 @@
     if (!liveData) {
       return undefined;
     }
-    const liveD = liveData
+    const liveD = $liveData
       .getBuffer()
       .getSeries(
         getFeature<number>(Feature.RECORDING_DURATION),

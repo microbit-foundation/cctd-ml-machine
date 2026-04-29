@@ -12,6 +12,7 @@ import { RecordingImpl } from '../../../core/entities/recording/RecordingImpl';
 import { Sample } from '../../../core/entities/recording/Sample';
 import type { Filter, FilterType } from '../../../core/filter/Filter';
 import { createFilter } from '../../../core/filter/FilterUtils';
+import type { LiveDataStore } from '../../../core/LiveDataStore';
 import FilterGraphLimits from '../../../core/utils/FilterGraphLimits';
 import BaseVector from '../../../core/vector/BaseVector';
 import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
@@ -33,6 +34,10 @@ export class DataServiceImpl implements DataService {
     private gestureService: GestureService,
   ) {
     this.gestureDatasetFactory = new GestureDatasetFactory(this.gestureService);
+  }
+
+  setLiveDataStore(data: LiveDataStore<LiveDataVector>): void {
+    this.liveDataRepository.setLiveDataStore(data);
   }
 
   hasSufficientDataForTraining(): boolean {

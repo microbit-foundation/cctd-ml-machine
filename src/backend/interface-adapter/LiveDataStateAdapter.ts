@@ -6,35 +6,34 @@
 
 import { get, writable, type Writable } from 'svelte/store';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import type { LiveData } from '../../lib/domain/stores/LiveData';
 import type { Unsubscriber } from '../statemanagement/AbstractReadonlyState';
 import type { AbstractState } from '../statemanagement/AbstractState';
-import MicrobitAccelerometerLiveData from '../../lib/livedata/MicrobitAccelerometerData';
-import LiveDataBuffer from '../../core/LiveDataBuffer';
+import type { LiveDataStore } from '../../core/LiveDataStore';
+import { InMemoryLiveDataStore } from '../../core/InMemoryLiveDataStore';
 
-export class LiveDataStateAdapter implements AbstractState<LiveData<LiveDataVector>> {
-  private store: Writable<LiveData<LiveDataVector>>;
+export class LiveDataStateAdapter implements AbstractState<LiveDataStore<LiveDataVector>> {
+  private store: Writable<LiveDataStore<LiveDataVector>>;
   constructor(bufferLen: number) {
     this.store = writable(
-      new MicrobitAccelerometerLiveData(new LiveDataBuffer(bufferLen)),
+      new InMemoryLiveDataStore(bufferLen)
     );
   }
 
-  set(value: LiveData<LiveDataVector>): void {
+  set(value: LiveDataStore<LiveDataVector>): void {
     return this.store.set(value);
   }
   update(
-    updater: (currentValue: LiveData<LiveDataVector>) => LiveData<LiveDataVector>,
+    updater: (currentValue: LiveDataStore<LiveDataVector>) => LiveDataStore<LiveDataVector>,
   ): void {
     return this.store.update(updater);
   }
 
-  get(): LiveData<LiveDataVector> {
+  get(): LiveDataStore<LiveDataVector> {
     return get(this.store);
   }
   subscribe(
-    run: (value: LiveData<LiveDataVector>) => void,
-    invalidate?: ((value?: LiveData<LiveDataVector> | undefined) => void) | undefined,
+    run: (value: LiveDataStore<LiveDataVector>) => void,
+    invalidate?: ((value?: LiveDataStore<LiveDataVector> | undefined) => void) | undefined,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

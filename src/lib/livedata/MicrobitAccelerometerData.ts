@@ -67,6 +67,24 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
     });
   }
 
+  getValueByIndex(index: number): number {
+    if (index < 0 || index >= this.getSize()) {
+      throw new Error('Index out of bounds');
+    }
+    return this.getValue()[index];
+  }
+
+  extract(indices: number[]): Vector {
+    // TODO: This may fail, since we are potentially extract values that don't exist after extracting on base vector.
+    const baseVec = new BaseVector(this.getValue());
+    const extracted = baseVec.extract(indices);
+    return new MicrobitAccelerometerDataVector({
+      x: extracted.getValue()[0],
+      y: extracted.getValue()[1],
+      z: extracted.getValue()[2],
+    });
+  }
+
   public divide(vector: Vector): MicrobitAccelerometerDataVector {
     const baseVec = new BaseVector(this.getValue());
     const divided = baseVec.divide(vector);

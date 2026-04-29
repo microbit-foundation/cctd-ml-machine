@@ -9,7 +9,6 @@ import Filters from '../domain/Filters';
 import { type TrainingData } from '../../core/entities/classifier/models/ModelTrainer';
 import type { Repositories } from '../domain/Repositories';
 import type { TrainingDataRepository } from '../../core/repository/TrainingDataRepository';
-import { stores } from '../stores/Stores';
 import type { LocalStorageFiltersRepository } from './LocalStorageFiltersRepository';
 import { getMean, getStandardDeviation } from '../utils/Math';
 import type { RecordingData } from '../../core/entities/RecordingData';

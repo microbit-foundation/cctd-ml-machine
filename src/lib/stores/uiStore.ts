@@ -10,7 +10,6 @@ import {
   checkCompatibility,
 } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
-import { stores } from './Stores';
 import { getControllers } from '../../backend/interface-adapter/MLMachine';
 import type { NewGesture } from '../../core/entities/NewGesture';
 

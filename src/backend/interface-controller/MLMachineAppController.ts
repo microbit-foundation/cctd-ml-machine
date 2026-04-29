@@ -5,15 +5,12 @@
  */
 
 import type { AppController } from './abstract/AppController';
-import type { AbstractState } from '../statemanagement/AbstractState';
-import type { DevicesType } from '../application/devices/DeviceRequestState';
 import type { UserService } from '../domain/UserService';
 import type { FeatureService } from '../application/feature/FeatureService';
 import { Feature } from '../application/feature/Feature';
 
 export class MLMachineAppController implements AppController {
   public constructor(
-    private devices: AbstractState<DevicesType>,
     private userService: UserService,
     private featureService: FeatureService,
   ) {}
@@ -30,9 +27,6 @@ export class MLMachineAppController implements AppController {
     return this.userService.shouldReconnect();
   }
 
-  public getDevices(): AbstractState<DevicesType> {
-    return this.devices;
-  }
   public getDocumentTitle(): string {
     return this.featureService.getFeature<string>(Feature.TITLE).getValue();
   }

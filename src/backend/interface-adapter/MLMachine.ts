@@ -4,23 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { writable } from 'svelte/store';
 import ConsoleLogger, { welcomeLog } from '../../core/logging/ConsoleLogger';
 import type { Logger } from '../../core/logging/Logger';
-import Devices from '../../lib/domain/Devices';
-import type { AbstractState } from '../statemanagement/AbstractState';
-import type { DevicesType } from '../application/devices/DeviceRequestState';
 import { StateNotificationService } from '../domain/implementation/notification/StateNotificationService';
 import type { NotificationService } from '../domain/NotificationService';
 import { MLMachineControllers } from './MLMachineControllers';
-import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
 import type { ClassifierService } from '../domain/ClassifierService';
 import { ClassifierServiceImpl } from '../domain/implementation/classifier/ClassifierServiceImpl';
-import { DefaultNeuralNetworkModelBaseSettings } from './DefaultNeuralNetworkModelBaseSettings';
-import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
-import { LoggingNeuralNetworkTrainingObserver } from '../../core/model/neural-network/LoggingNeuralNetworkTrainingObserver';
-import { DefaultNeuralNetworkArchitecture } from './DefaultNeuralNetworkArchitecture';
-import type { Classifier } from '../../core/classifier/Classifier';
 import { DataServiceImpl } from '../application/data/DataServiceImpl';
 import type { GestureService } from '../domain/GestureService';
 import { GestureServiceImpl } from '../domain/implementation/gesture/GestureServiceImpl';
@@ -59,7 +49,9 @@ import StaticConfiguration from '../../StaticConfiguration';
 import { ConfidenceServiceImpl } from '../domain/implementation/ConfidenceServiceImpl';
 import { StatesConfidenceRepository } from '../infrastructure/StatesConfidenceRepository';
 import type { ConfidenceService } from '../domain/ConfidenceService';
-import { ax } from 'vitest/dist/chunks/reporters.nr4dxCkA';
+import { RecordingServiceImpl } from '../domain/implementation/RecordingServiceImpl';
+import { StatesRecordingStateRepository } from '../infrastructure/StatesRecordingStateRepository';
+import { StatesRecordingSettingsRepository } from '../infrastructure/StatesRecordingSettingsRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -67,7 +59,6 @@ import { ax } from 'vitest/dist/chunks/reporters.nr4dxCkA';
  * Singleton class
  */
 export class MLMachine {
-  private devices: AbstractState<DevicesType>;
   private controllers: MLMachineControllers;
   private dataService: DataService;
   private gestureService: GestureService;
@@ -94,13 +85,12 @@ export class MLMachine {
     const userSessionRepository = new LocalStorageUserSessionRepository();
     this.userService = new UserServiceImpl(userSessionRepository);
 
-    this.devices = new SvelteStateAdapter(new Devices());
 
     const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
       gestures => this.states.setGestures(gestures),
     );
-    this.states = new SvelteStates(gestureRepository.getGestures());
+    this.states = new SvelteStates(gestureRepository.getGestures(), featureProvider);
     const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
     const axisRepository = new StatesAxisRepository(gestureRepository, this.states);
@@ -170,6 +160,8 @@ export class MLMachine {
         this.dataService,
       ),
       this.knnSettingsService,
+      new RecordingServiceImpl(new StatesRecordingStateRepository(this.states), new StatesRecordingSettingsRepository(this.states),this.gestureService, this.dataService),
+      this.classifierService,
     );
 
     const confidenceService = new ConfidenceServiceImpl(
@@ -202,10 +194,6 @@ export class MLMachine {
       MLMachine.instance = this;
     }
     welcomeLog();
-  }
-
-  public getDevices(): AbstractState<DevicesType> {
-    return this.devices;
   }
 
   public getNotificationService(): NotificationService {

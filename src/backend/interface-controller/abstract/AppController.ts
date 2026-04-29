@@ -4,14 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { AbstractState } from '../../statemanagement/AbstractState';
-import type { DevicesType } from '../../application/devices/DeviceRequestState';
-
 export interface AppController {
   setReconnectFlag(state: boolean): unknown;
   getDocumentTitle(): string;
-  // TODO; Should be a domain entity, but it's too large for refactoring now
-  getDevices(): AbstractState<DevicesType>;
   isReconnectFlagSet(): boolean;
   unsetReconnectFlag(): void;
 }

@@ -34,6 +34,7 @@ import type { KNNSettingsService } from '../domain/KNNSettingsService';
 import { RecordingController } from '../interface-controller/RecordingController';
 import { FilterController } from '../interface-controller/FilterController';
 import type { RecordingService } from '../domain/RecordingService';
+import type { ClassifierService } from '../domain/ClassifierService';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -51,6 +52,7 @@ export class MLMachineControllers {
     private validationService: ValidationService,
     private knnSettingsService: KNNSettingsService,
     private recordingService: RecordingService,
+    private classifierService: ClassifierService
   ) {
     this.gestureController = new GestureController(
       states,
@@ -66,7 +68,6 @@ export class MLMachineControllers {
 
   public getAppController(): AppController {
     return new MLMachineAppController(
-      this.mlMachine.getDevices(),
       new UserServiceImpl(new LocalStorageUserSessionRepository()),
       this.featureService,
     );
@@ -93,7 +94,7 @@ export class MLMachineControllers {
   }
 
   public getClassifierController(): ClassifierController {
-    return new ClassifierController(this.states, this.mlMachine);
+    return new ClassifierController(this.states, this.mlMachine, this.classifierService);
   }
 
   public getAxisController(): AxisController {

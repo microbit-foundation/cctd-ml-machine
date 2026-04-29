@@ -22,7 +22,6 @@ import type { AbstractStates } from '../statemanagement/AbstractStates';
 import type { Confidences } from '../../core/entities/Confidences';
 import type { ConfidenceService } from '../domain/ConfidenceService';
 import type { MBSpecs } from 'microbyte';
-import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 import { PinTurnOnState } from '../../core/entities/PinTurnOnState';
 
 export class GestureController {

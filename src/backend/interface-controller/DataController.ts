@@ -28,6 +28,10 @@ export class DataController {
     this.dataService.setLiveDataStore(data);
   }
 
+  public setAvailableAxes(axes: Axis[]): void {
+    this.dataService.setAvailableAxes(axes);
+  }
+
   public getLiveData(): AbstractState<LiveDataStore<LiveDataVector>> {
     return this.states.getLiveData();
   }
@@ -36,11 +40,11 @@ export class DataController {
     return this.states.getEnableFingerprint();
   }
 
-  public getAvailableAxes(): AbstractState<Axis[] | undefined> {
+  public getAvailableAxes(): AbstractState<Axis[]> {
     return this.states.getAvailableAxes();
   }
 
-  public getSelectedAxes(): AbstractState<Axis[] | undefined> {
+  public getSelectedAxes(): AbstractState<Axis[]> {
     return this.states.getSelectedAxes();
   }
 

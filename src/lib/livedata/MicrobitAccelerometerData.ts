@@ -40,7 +40,16 @@ export const asAccelerometerData = (input: LiveDataVector) => {
 };
 
 export class MicrobitAccelerometerDataVector implements LiveDataVector {
-  public constructor(private data: MicrobitAccelerometerData) {}
+  scale(scalar: number): Vector {
+    const baseVec = new BaseVector(this.getValue());
+    const scaled = baseVec.scale(scalar);
+    return new MicrobitAccelerometerDataVector({
+      x: scaled.getValue()[0],
+      y: scaled.getValue()[1],
+      z: scaled.getValue()[2],
+    });
+  }
+  public constructor(private data: MicrobitAccelerometerData) { }
 
   public getLabels(): string[] {
     return ['X', 'Y', 'Z'];

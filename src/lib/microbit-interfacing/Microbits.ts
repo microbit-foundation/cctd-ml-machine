@@ -45,6 +45,7 @@ class Microbits {
   private static inputHandler = new CombinedMicrobitHandler(
     this.outputHandler,
     getControllers().getMicrobitController(),
+    getControllers().getDataController(),
   );
 
   private static linkedMicrobit: Microbit = new Microbit();

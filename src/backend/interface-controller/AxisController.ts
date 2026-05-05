@@ -4,45 +4,37 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { writable } from 'svelte/store';
 import type { Axis } from '../../core/entities/Axis';
-import type { AbstractState } from '../statemanagement/AbstractState';
 import type { MLMachine } from '../interface-adapter/MLMachine';
-import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
 import type { AbstractReadonlyState } from '../statemanagement/AbstractReadonlyState';
 import type { DataService } from '../domain/DataService';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class AxisController {
   setSelectedAxes(axes: Axis[]): void {
     this.dataService.setSelectedAxes(axes);
-    this.updateSelectedAxesState();
   }
 
   toggleAxis(axis: Axis) {
     this.dataService.toggleAxis(axis);
-    this.updateSelectedAxesState();
   }
 
   getAvailableAxes() {
-    return this.availableAxesState;
+    return this.states.getAvailableAxes();
   }
 
-  private selectedAxesState: AbstractState<Axis[]>;
-  private availableAxesState: AbstractState<Axis[]>;
+  setAvailableAxes(axes: Axis[]): void {
+    this.dataService.setAvailableAxes(axes);
+  }
+
   private dataService: DataService;
 
-  constructor(private mlMachine: MLMachine) {
-    this.selectedAxesState = new SvelteStateAdapter(
-      writable(mlMachine.getDataService().getSelectedAxes()),
-    );
-    this.availableAxesState = new SvelteStateAdapter(
-      writable(mlMachine.getDataService().getAvailableAxes()),
-    );
+  constructor(private mlMachine: MLMachine, private states: AbstractStates) {
     this.dataService = mlMachine.getDataService();
   }
 
   public getSelectedAxes(): AbstractReadonlyState<Axis[]> {
-    return this.selectedAxesState;
+    return this.states.getSelectedAxes();
   }
 
   public isAxisIndexSelected(index: number): boolean {
@@ -51,9 +43,5 @@ export class AxisController {
       return false;
     }
     return this.dataService.isAxisSelected(axis);
-  }
-
-  private updateSelectedAxesState() {
-    this.selectedAxesState.set(this.dataService.getSelectedAxes());
   }
 }

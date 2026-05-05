@@ -36,6 +36,18 @@ export class DataServiceImpl implements DataService {
     this.gestureDatasetFactory = new GestureDatasetFactory(this.gestureService);
   }
 
+  setAvailableAxes(axes: Axis[]): void {
+    const oldAxes = this.axisRepository.getAvailableAxes();
+    this.axisRepository.setAvailableAxes(axes);
+
+    // If theres any changes to the available axes, we select them all
+    const oldAxisIndices = oldAxes.map(ax => ax.index).sort().join(',');
+    const newAxisIndices = axes.map(ax => ax.index).sort().join(',');
+    if (oldAxisIndices !== newAxisIndices) {
+      this.axisRepository.setSelectedAxes(axes);
+    }
+  }
+
   setLiveDataStore(data: LiveDataStore<LiveDataVector>): void {
     this.liveDataRepository.setLiveDataStore(data);
   }

@@ -9,7 +9,7 @@ import type { GestureRepository } from '../domain/GestureRepository';
 
 export class PollingPredictorEngine {
   private pollingInterval: ReturnType<typeof setInterval> | undefined;
-  private isRunning: boolean;
+  private isRunning: boolean = false;
 
   constructor(
     private classifierService: ClassifierService,
@@ -20,11 +20,10 @@ export class PollingPredictorEngine {
     private pollingPredictionSampleSize: number,
     private pollingPredictionSampleDuration: number,
   ) {
-    this.isRunning = true;
-    this.startPolling();
   }
 
   private startPolling() {
+    this.isRunning = true;
     this.pollingInterval = setInterval(async () => {
       const prediction = await this.predict();
       if (prediction === undefined) {
@@ -42,6 +41,9 @@ export class PollingPredictorEngine {
   }
 
   private async predict(): Promise<PredictionOutput | undefined> {
+    if (!this.isRunning) {
+      return;
+    }
     const classifier = this.classifierService.getClassifier();
     const liveDataSeries = this.dataService.getLiveData(
       this.pollingPredictionSampleDuration,
@@ -62,9 +64,6 @@ export class PollingPredictorEngine {
       selectedAxes,
     );
     if (classifier === undefined) {
-      return;
-    }
-    if (!this.isRunning) {
       return;
     }
     return await classifier.predict(predictionInput);

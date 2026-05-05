@@ -20,9 +20,14 @@
     outp = Microbits.getOutput().getDevice()?.getId();
     inp = Microbits.getInput().getDevice()?.getId();
   };
+  const liveData = controllers.getDataController().getLiveData();
+  let liveDataUpdateCount = 0;
+  liveData.subscribe(() => {
+    liveDataUpdateCount++;
+  })
 </script>
 
-{#if inDev && false}
+{#if inDev}
   <div
     class="absolute bottom-3 left-3 bg-transparent justify-center self-center items-center z-4"
     style="pointer-events: none;"
@@ -42,9 +47,11 @@
         </p>
       {/each}
       <div class="pointer-events-auto">
-        <button on:click={test}>button</button>
+        <button on:click={test} class="border-solid border-black border-2 p-1">button</button>
         <p>input:{inp}</p>
         <p>output:{outp}</p>
+        <p>LiveData: {$liveData.getBuffer().getNewestValue()?.getValue().map(e => e.toFixed(2))}</p>
+        <p>LD-Updates: {liveDataUpdateCount}</p>
       </div>
     </div>
   </div>

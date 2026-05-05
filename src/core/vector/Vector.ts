@@ -19,4 +19,6 @@ export interface Vector {
   add(vector: Vector): Vector;
 
   extract(indices: number[]): Vector;
+
+  scale(scalar: number): Vector;
 }

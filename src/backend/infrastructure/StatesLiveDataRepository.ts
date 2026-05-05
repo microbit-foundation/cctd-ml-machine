@@ -10,7 +10,7 @@ import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { LiveDataRepository } from '../domain/LiveDataRepository';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 
-export class InMemoryLiveDataRepository implements LiveDataRepository {
+export class StatesLiveDataRepository implements LiveDataRepository {
   constructor(private states: AbstractStates) {}
 
   setLiveDataStore(data: LiveDataStore<LiveDataVector>): void {
@@ -22,6 +22,8 @@ export class InMemoryLiveDataRepository implements LiveDataRepository {
   }
 
   addInput(data: LiveDataVector): void {
-    this.states.getLiveData().get().put(data);
+    const store = this.states.getLiveData().get();
+    store.put(data);
+    this.states.getLiveData().set(store);
   }
 }

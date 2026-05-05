@@ -19,12 +19,13 @@ import type { MicrobitController } from '../../backend/interface-controller/Micr
 import { MicrobitRole } from '../../backend/domain/microbit/MicrobitRole';
 import { MicrobitConnectionStateImpl } from '../../backend/domain/implementation/microbit/MicrobitConnectionStateImpl';
 import { getControllers, MLMachine } from '../../backend/interface-adapter/MLMachine';
+import type { DataController } from '../../backend/interface-controller/DataController';
 
 class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private microbitController: MicrobitController) {}
+  public constructor(private microbitController: MicrobitController, private dataController: DataController) { }
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnected', versionNumber);
@@ -33,9 +34,12 @@ class InputMicrobitHandler implements MicrobitHandler {
     const buffer = new LiveDataBuffer<MicrobitAccelerometerDataVector>(
       StaticConfiguration.accelerometerLiveDataBufferSize,
     );
-    getControllers()
-      .getDataController()
-      .setLiveDataStore(new MicrobitAccelerometerLiveData(buffer));
+    this.dataController.setLiveDataStore(new MicrobitAccelerometerLiveData(buffer));
+    this.dataController.setAvailableAxes([
+      {index: 0, label: 'X'},
+      {index: 1, label: 'Y'},
+      {index: 2, label: 'Z'},
+    ]);
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
     const curConn = microbitConnection.get();
     const oldInput = curConn.getInput();

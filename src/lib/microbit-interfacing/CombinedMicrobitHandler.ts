@@ -8,13 +8,15 @@ import Microbits from './Microbits';
 import InputMicrobitHandler from './InputMicrobitHandler';
 import OutputMicrobitHandler from './OutputMicrobitHandler';
 import type { MicrobitController } from '../../backend/interface-controller/MicrobitController';
+import type { DataController } from '../../backend/interface-controller/DataController';
 
 class CombinedMicrobitHandler extends InputMicrobitHandler {
   public constructor(
     private outputHandler: OutputMicrobitHandler,
     microbitController: MicrobitController,
+    dataController: DataController,
   ) {
-    super(microbitController);
+    super(microbitController, dataController);
   }
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {

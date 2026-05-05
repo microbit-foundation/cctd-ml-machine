@@ -39,8 +39,8 @@ export interface AbstractStates {
   getGestures(): AbstractReadonlyState<NewGesture[]>;
   getValidationResult(): AbstractState<ValidationResult | undefined>;
   getFilters(): AbstractState<Filter[]>;
-  getAvailableAxes(): AbstractState<Axis[] | undefined>;
-  getSelectedAxes(): AbstractState<Axis[] | undefined>;
+  getAvailableAxes(): AbstractState<Axis[]>;
+  getSelectedAxes(): AbstractState<Axis[]>;
   getEnableFingerprint(): AbstractState<boolean>;
   getMakeCodeProject(): AbstractState<MakeCodeProject | undefined>;
   getOutputTarget(): AbstractState<OutputTarget>;

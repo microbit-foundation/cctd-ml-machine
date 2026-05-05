@@ -50,8 +50,8 @@ export class SvelteStates implements AbstractStates {
   private popupMessageState: AbstractState<string | undefined>;
   private enableFingerprintState: AbstractState<boolean>;
   private validationAutoUpdateState: AbstractState<boolean>;
-  private availableAxesState: AbstractState<Axis[] | undefined>;
-  private selectedAxesState: AbstractState<Axis[] | undefined>;
+  private availableAxesState: AbstractState<Axis[]>;
+  private selectedAxesState: AbstractState<Axis[]>;
   private filtersState: AbstractState<Filter[]>;
   private validationResultState: AbstractState<ValidationResult | undefined>;
   private neuralNetworkSettingsState: AbstractState<NeuralNetworkModelSettings>;
@@ -88,8 +88,8 @@ export class SvelteStates implements AbstractStates {
       writable(StaticConfiguration.enableFingerprintByDefault),
     );
     this.validationAutoUpdateState = new SvelteStateAdapter(writable(true));
-    this.availableAxesState = new SvelteStateAdapter(writable(undefined));
-    this.selectedAxesState = new SvelteStateAdapter(writable(undefined));
+    this.availableAxesState = new SvelteStateAdapter(writable([]));
+    this.selectedAxesState = new SvelteStateAdapter(writable([]));
     this.filtersState = new SvelteStateAdapter(writable([]));
     this.validationResultState = new SvelteStateAdapter(writable(undefined));
     this.neuralNetworkSettingsState = new SvelteStateAdapter(
@@ -173,11 +173,11 @@ export class SvelteStates implements AbstractStates {
     return this.filtersState;
   }
 
-  getSelectedAxes(): AbstractState<Axis[] | undefined> {
+  getSelectedAxes(): AbstractState<Axis[]> {
     return this.selectedAxesState;
   }
 
-  getAvailableAxes(): AbstractState<Axis[] | undefined> {
+  getAvailableAxes(): AbstractState<Axis[]> {
     return this.availableAxesState;
   }
   getEnableFingerprint(): AbstractState<boolean> {

@@ -98,7 +98,7 @@ export class MLMachineControllers {
   }
 
   public getAxisController(): AxisController {
-    return new AxisController(this.mlMachine);
+    return new AxisController(this.mlMachine, this.states);
   }
 
   public getGestureController(): GestureController {

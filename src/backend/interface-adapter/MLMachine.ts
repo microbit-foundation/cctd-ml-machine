@@ -18,7 +18,7 @@ import { LocalStorageGestureRepository } from '../infrastructure/LocalStorageGes
 import { MLMachineColors } from './MLMachineColors';
 import type { DataService } from '../domain/DataService';
 import { StatesAxisRepository } from '../infrastructure/StatesAxisRepository';
-import { InMemoryLiveDataRepository } from '../infrastructure/StatesLiveDataRepository';
+import { StatesLiveDataRepository } from '../infrastructure/StatesLiveDataRepository';
 import type { FeatureProvider } from '../application/feature/FeatureProvider';
 import { FeatureServiceImpl } from '../application/feature/FeatureServiceImpl';
 import type { FeatureService } from '../application/feature/FeatureService';
@@ -105,7 +105,7 @@ export class MLMachine {
     );
     this.dataService = new DataServiceImpl(
       axisRepository,
-      new InMemoryLiveDataRepository(this.states),
+      new StatesLiveDataRepository(this.states),
       new StatesFilterRepository(this.states),
       this.gestureService,
     );

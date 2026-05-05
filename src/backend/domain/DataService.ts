@@ -13,6 +13,7 @@ import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import type { Vector } from '../../core/vector/Vector';
 
 export interface DataService {
+  setAvailableAxes(axes: Axis[]): void;
   setLiveDataStore(data: LiveDataStore<LiveDataVector>): void;
   addLiveData(input: LiveDataVector): void;
   getLiveData(duration: number, noOfSamples: number): LiveDataVector[];

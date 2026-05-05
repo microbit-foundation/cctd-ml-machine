@@ -22,12 +22,12 @@ export class StatesAxisRepository implements AxisRepository {
   ) {
     this.log = new ConsoleLogger('InMemoryAxisRepository');
 
-    if (!states.getAvailableAxes().get()) {
+    if (!states.getAvailableAxes().get().length) {
       const availableAxes = this.getAvailableAxesFromRecordings();
       this.log.log('Setting available axes in state from recordings', availableAxes);
       states.getAvailableAxes().set(availableAxes);
     }
-    if (!states.getSelectedAxes().get()) {
+    if (!states.getSelectedAxes().get().length) {
       const selectedAxes = this.getAvailableAxesFromRecordings();
       this.log.log('Setting selected axes in state from recordings', selectedAxes);
       states.getSelectedAxes().set(selectedAxes);

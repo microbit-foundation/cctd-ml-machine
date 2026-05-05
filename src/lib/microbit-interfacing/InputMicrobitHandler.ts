@@ -25,7 +25,10 @@ class InputMicrobitHandler implements MicrobitHandler {
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
-  public constructor(private microbitController: MicrobitController, private dataController: DataController) { }
+  public constructor(
+    private microbitController: MicrobitController,
+    private dataController: DataController,
+  ) {}
 
   public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnected', versionNumber);
@@ -36,9 +39,9 @@ class InputMicrobitHandler implements MicrobitHandler {
     );
     this.dataController.setLiveDataStore(new MicrobitAccelerometerLiveData(buffer));
     this.dataController.setAvailableAxes([
-      {index: 0, label: 'X'},
-      {index: 1, label: 'Y'},
-      {index: 2, label: 'Z'},
+      { index: 0, label: 'X' },
+      { index: 1, label: 'Y' },
+      { index: 2, label: 'Z' },
     ]);
     const microbitConnection = this.microbitController.getMicrobitConnectionState();
     const curConn = microbitConnection.get();

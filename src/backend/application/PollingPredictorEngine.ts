@@ -19,8 +19,7 @@ export class PollingPredictorEngine {
     private pollingPredictionInterval: number,
     private pollingPredictionSampleSize: number,
     private pollingPredictionSampleDuration: number,
-  ) {
-  }
+  ) {}
 
   private startPolling() {
     this.isRunning = true;

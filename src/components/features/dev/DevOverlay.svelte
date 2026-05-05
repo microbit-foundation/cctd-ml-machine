@@ -24,7 +24,7 @@
   let liveDataUpdateCount = 0;
   liveData.subscribe(() => {
     liveDataUpdateCount++;
-  })
+  });
 </script>
 
 {#if inDev}
@@ -47,10 +47,17 @@
         </p>
       {/each}
       <div class="pointer-events-auto">
-        <button on:click={test} class="border-solid border-black border-2 p-1">button</button>
+        <button on:click={test} class="border-solid border-black border-2 p-1"
+          >button</button>
         <p>input:{inp}</p>
         <p>output:{outp}</p>
-        <p>LiveData: {$liveData.getBuffer().getNewestValue()?.getValue().map(e => e.toFixed(2))}</p>
+        <p>
+          LiveData: {$liveData
+            .getBuffer()
+            .getNewestValue()
+            ?.getValue()
+            .map(e => e.toFixed(2))}
+        </p>
         <p>LD-Updates: {liveDataUpdateCount}</p>
       </div>
     </div>

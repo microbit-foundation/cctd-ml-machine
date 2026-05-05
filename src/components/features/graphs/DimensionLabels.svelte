@@ -97,11 +97,11 @@
   }
 
   const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
-  console.log($highlightedAxes)
+  console.log($highlightedAxes);
   const labelEnabled = derived(highlightedAxes, axes => {
     return labels.map((_, idx) => axes.find(axis => axis.index === idx) !== undefined);
   });
-  console.log("dimension labels isHidden? " + hidden)
+  console.log('dimension labels isHidden? ' + hidden);
 </script>
 
 {#if !hidden}

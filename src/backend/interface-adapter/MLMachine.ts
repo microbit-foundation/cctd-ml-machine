@@ -85,7 +85,6 @@ export class MLMachine {
     const userSessionRepository = new LocalStorageUserSessionRepository();
     this.userService = new UserServiceImpl(userSessionRepository);
 
-
     const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
       gestures => this.states.setGestures(gestures),
@@ -160,7 +159,12 @@ export class MLMachine {
         this.dataService,
       ),
       this.knnSettingsService,
-      new RecordingServiceImpl(new StatesRecordingStateRepository(this.states), new StatesRecordingSettingsRepository(this.states),this.gestureService, this.dataService),
+      new RecordingServiceImpl(
+        new StatesRecordingStateRepository(this.states),
+        new StatesRecordingSettingsRepository(this.states),
+        this.gestureService,
+        this.dataService,
+      ),
       this.classifierService,
     );
 

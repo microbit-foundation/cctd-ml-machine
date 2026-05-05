@@ -41,8 +41,14 @@ export class DataServiceImpl implements DataService {
     this.axisRepository.setAvailableAxes(axes);
 
     // If theres any changes to the available axes, we select them all
-    const oldAxisIndices = oldAxes.map(ax => ax.index).sort().join(',');
-    const newAxisIndices = axes.map(ax => ax.index).sort().join(',');
+    const oldAxisIndices = oldAxes
+      .map(ax => ax.index)
+      .sort()
+      .join(',');
+    const newAxisIndices = axes
+      .map(ax => ax.index)
+      .sort()
+      .join(',');
     if (oldAxisIndices !== newAxisIndices) {
       this.axisRepository.setSelectedAxes(axes);
     }

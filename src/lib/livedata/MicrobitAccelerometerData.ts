@@ -49,7 +49,7 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
       z: scaled.getValue()[2],
     });
   }
-  public constructor(private data: MicrobitAccelerometerData) { }
+  public constructor(private data: MicrobitAccelerometerData) {}
 
   public getLabels(): string[] {
     return ['X', 'Y', 'Z'];

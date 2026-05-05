@@ -52,7 +52,7 @@ export class MLMachineControllers {
     private validationService: ValidationService,
     private knnSettingsService: KNNSettingsService,
     private recordingService: RecordingService,
-    private classifierService: ClassifierService
+    private classifierService: ClassifierService,
   ) {
     this.gestureController = new GestureController(
       states,

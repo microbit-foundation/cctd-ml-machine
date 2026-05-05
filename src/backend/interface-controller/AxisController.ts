@@ -29,7 +29,10 @@ export class AxisController {
 
   private dataService: DataService;
 
-  constructor(private mlMachine: MLMachine, private states: AbstractStates) {
+  constructor(
+    private mlMachine: MLMachine,
+    private states: AbstractStates,
+  ) {
     this.dataService = mlMachine.getDataService();
   }
 

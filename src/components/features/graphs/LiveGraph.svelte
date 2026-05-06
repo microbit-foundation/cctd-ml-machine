@@ -7,8 +7,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import DimensionLabels from './DimensionLabels.svelte';
-  import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
-  import { Feature, getFeature } from '../../../lib/FeatureToggles';
   import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import type { LiveDataStore } from '../../../core/LiveDataStore';
@@ -24,15 +22,18 @@
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
   const recordingState = getControllers().getRecordingController().getRecordingState();
+  const recordingSettings = getControllers()
+    .getRecordingController()
+    .getRecordingSettings();
   const selectedAxes = getControllers().getDataController().getSelectedAxes();
 
-  let smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
   let canvas: HTMLCanvasElement | undefined = undefined;
 
   const control = new LiveGraphControl(
     minValue,
     maxValue,
-    getFeature<number>(Feature.RECORDING_DURATION)
+    $recordingSettings.getRecordingDuration(),
+    liveData,
   );
 
   onMount(() => {
@@ -43,11 +44,6 @@
       control.stop();
     };
   });
-
-  $: {
-    const values = $smoothedLiveData.getValue();
-    control.updateData(values);
-  }
 
   $: control.recordingStarted($recordingState.isRecording());
 
@@ -63,5 +59,5 @@
     {minValue}
     graphHeight={160}
     {maxValue}
-    liveData={smoothedLiveData} />
+    liveData={control.getSmoothedLiveData()} />
 </main>

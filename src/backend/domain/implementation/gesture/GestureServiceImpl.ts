@@ -19,10 +19,14 @@ export class GestureServiceImpl implements GestureService {
     private gestureRepository: GestureRepository,
     private colors: SystemColors,
     private axisRepository: AxisRepository,
-  ) {}
+  ) { }
 
   saveGestures(gestures: NewGesture[]): void {
     this.gestureRepository.saveGestures(gestures);
+  }
+
+  selectGesture(gesture: NewGesture | undefined): void {
+    this.gestureRepository.setSelectedGesture(gesture);
   }
 
   deleteValidationRecording(gestureId: number, recordingId: number): void {

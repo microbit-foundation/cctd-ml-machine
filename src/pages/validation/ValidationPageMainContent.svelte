@@ -11,12 +11,12 @@
   import ValidationGestureRecordingsCard from './ValidationGestureRecordingsCard.svelte';
   import ValidationPageRecordingIndicator from './ValidationPageRecordingIndicator.svelte';
   import ValidationPageTutorial from './ValidationPageTutorial.svelte';
-  import { chosenGesture } from '../../lib/stores/uiStore';
   import { tr } from '../../i18n';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
   const gestureController = getControllers().getGestureController();
   const gestures = gestureController.getGestures();
+  const selectedGesture = gestureController.getSelectedGesture();
   const validationRecordings = gestureController.getValidationRecordings();
   export let onNoMicrobitSelect: () => void;
 </script>
@@ -40,7 +40,7 @@
       <div class="col-start-3">
         {#if $validationRecordings.length > 0}
           <ValidationGestureRecordingsCard gestureId={gesture.getID()} />
-        {:else if $chosenGesture?.getID() === gesture.getID() || (!$chosenGesture && idx === 0)}
+        {:else if $selectedGesture?.getID() === gesture.getID() || (!$selectedGesture && idx === 0)}
           <ValidationPageTutorial />
         {/if}
       </div>

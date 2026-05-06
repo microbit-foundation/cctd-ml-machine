@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Gesture, GestureID } from '../../core/entities/Gesture';
+import type { GestureID } from '../../core/entities/Gesture';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { Logger } from '../../core/logging/Logger';
 import ControlledStorage from '../../lib/ControlledStorage';
 import type { GestureRepository } from '../domain/GestureRepository';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
+import type { AbstractState } from '../statemanagement/AbstractState';
 
 export class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
@@ -19,8 +20,13 @@ export class LocalStorageGestureRepository implements GestureRepository {
   public constructor(
     private log: Logger,
     private subscription: (gestures: NewGesture[]) => void,
+    private selectedGesture: AbstractState<NewGesture | undefined>,
   ) {
     this.serializer = new GestureSerializer();
+  }
+
+  setSelectedGesture(gesture: NewGesture | undefined): void {
+    this.selectedGesture.set(gesture);
   }
 
   // TODO: This could be swapped for UUID. The reason for this is to allow the core application to create gestures

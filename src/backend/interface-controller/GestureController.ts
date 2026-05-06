@@ -25,6 +25,32 @@ import type { MBSpecs } from 'microbyte';
 import { PinTurnOnState } from '../../core/entities/PinTurnOnState';
 
 export class GestureController {
+  private log: Logger;
+  public constructor(
+    private states: AbstractStates,
+    private gestureService: GestureService,
+    private confidenceService: ConfidenceService,
+  ) {
+    this.log = new ConsoleLogger('GestureController');
+  }
+
+  getMostConfident(): AbstractReadonlyState<NewGesture | undefined> {
+    const confidences = this.states.getConfidences();
+    return new SvelteStateAdapterReadonly(
+      derived(confidences, () => {
+        return this.confidenceService.getMostConfidentPrediction();
+      }),
+    );
+  }
+
+  getSelectedGesture(): AbstractReadonlyState<NewGesture | undefined> {
+    return this.states.getSelectedGesture();
+  }
+
+  selectGesture(gesture: NewGesture | undefined) {
+    this.gestureService.selectGesture(gesture);
+  }
+
   clearValidationRecordings() {
     const gestures = this.gestureService.getGestures();
     gestures.forEach(gesture => {
@@ -42,23 +68,6 @@ export class GestureController {
   }
   public getGestureFromRecording(recordingId: number): NewGesture | undefined {
     return this.gestureService.getGestureFromRecording(recordingId);
-  }
-  private log: Logger;
-  public constructor(
-    private states: AbstractStates,
-    private gestureService: GestureService,
-    private confidenceService: ConfidenceService,
-  ) {
-    this.log = new ConsoleLogger('GestureController');
-  }
-
-  getMostConfident(): AbstractReadonlyState<NewGesture | undefined> {
-    const confidences = this.states.getConfidences();
-    return new SvelteStateAdapterReadonly(
-      derived(confidences, () => {
-        return this.confidenceService.getMostConfidentPrediction();
-      }),
-    );
   }
 
   getDownloadableGesturesAsJson(): string {

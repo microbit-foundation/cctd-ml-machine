@@ -51,4 +51,5 @@ export interface AbstractStates {
   getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings>;
   getModelTraining(): AbstractState<ModelTraining>;
   getSelectedModel(): AbstractState<ModelInfo>;
+  getSelectedGesture(): AbstractState<NewGesture | undefined>;
 }

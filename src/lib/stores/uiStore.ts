@@ -11,7 +11,6 @@ import {
 } from '../compatibility/CompatibilityChecker';
 import { t } from '../../i18n';
 import { getControllers } from '../../backend/interface-adapter/MLMachine';
-import type { NewGesture } from '../../core/entities/NewGesture';
 
 let text: (key: string, vars?: object) => string;
 t.subscribe(t => (text = t));
@@ -19,8 +18,6 @@ t.subscribe(t => (text = t));
 export const compatibility: Writable<CompatibilityStatus> = writable(
   await checkCompatibility(),
 );
-
-export const chosenGesture = writable<NewGesture | null>(null);
 
 export const isBluetoothWarningDialogOpen = derived(
   compatibility,

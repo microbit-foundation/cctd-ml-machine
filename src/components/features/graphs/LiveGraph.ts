@@ -95,7 +95,6 @@ export class LiveGraphControl {
             this.chart.start();
         }
         this.dataUnsubscriber = this.smoothedLiveData.subscribe(values => {
-            this.log.log('Updating data for live graph', values);
             this.updateData(values.getValue());
         });
     }

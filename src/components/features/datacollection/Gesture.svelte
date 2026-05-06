@@ -12,7 +12,6 @@
     areActionsAllowed,
     microbitInteraction,
     MicrobitInteractions,
-    chosenGesture,
   } from '../../../lib/stores/uiStore';
   import { t } from '../../../i18n';
   import ImageSkeleton from '../../ui/skeletonloading/ImageSkeleton.svelte';
@@ -42,6 +41,7 @@
   const defaultNewName = $t('content.data.classPlaceholderNewClass');
   const recordingDuration = getFeature<number>(Feature.RECORDING_DURATION);
   const highlightedAxes = dataController.getSelectedAxes();
+  const selectedGesture = gestureController.getSelectedGesture();
 
   let isThisRecording = false;
 
@@ -111,28 +111,24 @@
   // If bluetooth is not connected, open connection prompt by calling callback
   function selectClicked(): void {
     if (!$microbitConnection.getInput().isConnected()) {
-      chosenGesture.update(gesture => {
-        gesture = null;
-        return gesture;
-      });
+      gestureController.selectGesture(undefined);
       onNoMicrobitSelect();
       return;
     }
-    chosenGesture.update(chosen => {
-      if (chosen === $gesture) {
-        chosen = null;
-      } else {
-        chosen = $gesture;
-      }
-      return chosen;
-    });
+
+    // TODO: Move this toggling logic to backend
+    if ($selectedGesture?.getID() === $gesture.getID()) {
+      gestureController.selectGesture(undefined);
+    } else {
+      gestureController.selectGesture($gesture);
+    }
   }
 
   // When microbit buttons are pressed, this is called
   // Assess whether settings match with button-clicked.
   // If so, the gesture calls the recording function.
   function triggerButtonsClicked(buttons: { buttonA: 0 | 1; buttonB: 0 | 1 }): void {
-    if ($chosenGesture !== $gesture) {
+    if ($selectedGesture?.getID() !== $gesture.getID()) {
       return;
     }
     const triggerButton = get(microbitInteraction);
@@ -228,8 +224,8 @@
       </div>
     </GestureCard>
 
-    <GestureCard small mr elevated={$chosenGesture === $gesture}>
-      {#if $chosenGesture !== $gesture}
+    <GestureCard small mr elevated={$selectedGesture?.getID() === $gesture.getID()}>
+      {#if $selectedGesture?.getID() !== $gesture.getID()}
         <div class="text-center w-35 cursor-pointer">
           <IconButton
             ariaLabel={$t('content.data.select')}
@@ -278,7 +274,7 @@
           {/each}
         </div>
       </GestureCard>
-    {:else if $chosenGesture === $gesture}
+    {:else if $selectedGesture?.getID() === $gesture.getID()}
       <GestureCard small>
         <div class="relative float-left text-left h-30 w-60 justify-start flex">
           <div class="text-left float-left mt-auto mb-auto ml-3">

@@ -8,7 +8,6 @@
   import GestureCard from '../../components/ui/Card.svelte';
   import {
     buttonPressed,
-    chosenGesture,
     microbitInteraction,
     MicrobitInteractions,
   } from '../../lib/stores/uiStore';
@@ -18,10 +17,6 @@
   import ConsoleLogger from '../../core/logging/ConsoleLogger';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import type { GestureID, NewGesture } from '../../core/entities/NewGesture';
-  import type { AbstractState } from '../../backend/statemanagement/AbstractState';
-  import { RecordingImpl } from '../../core/entities/recording/RecordingImpl';
-  import { Sample } from '../../core/entities/recording/Sample';
-  import { strArrToAxisArr } from '../../core/entities/Axis';
 
   export let gestureId: GestureID;
   export let onNoMicrobitSelect: () => void;
@@ -30,6 +25,7 @@
   const recordingState = recordingController.getRecordingState();
   const gestureController = getControllers().getGestureController();
   const gesture = gestureController.getGestureState(gestureId);
+  const selectedGesture = gestureController.getSelectedGesture();
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
@@ -39,24 +35,20 @@
 
   const selectClicked = (gesture: NewGesture): void => {
     if (!$microbitConnection.getInput().isConnected()) {
-      chosenGesture.update(gesture => {
-        gesture = null;
-        return gesture;
-      });
+      gestureController.selectGesture(undefined);
       onNoMicrobitSelect();
       return;
     }
-    chosenGesture.update(chosen => {
-      if (chosen?.getID() === gesture.getID()) {
-        return null;
-      }
-      return gesture;
-    });
+    if ($selectedGesture?.getID() === gesture.getID()) {
+      gestureController.selectGesture(undefined)
+    } else {
+      gestureController.selectGesture(gesture);
+    }
   };
 
   const createRecording = (buttons?: { buttonA: 0 | 1; buttonB: 0 | 1 }) => {
     // Make sure only *this* gesture get's the recording indicator
-    if ($gesture.getID() !== $chosenGesture?.getID()) {
+    if ($gesture.getID() !== $selectedGesture?.getID()) {
       return;
     }
 
@@ -96,7 +88,7 @@
 </script>
 
 <GestureCard validationPage small>
-  {#if $chosenGesture?.getID() !== $gesture.getID()}
+  {#if $selectedGesture?.getID() !== $gesture.getID()}
     <div class="text-center w-35 cursor-pointer" on:click={() => selectClicked($gesture)}>
       <div class="w-full text-center">
         <i class="w-full h-full m-0 mt-4 p-2 fas fa-plus fa-2x text-primarytext" />

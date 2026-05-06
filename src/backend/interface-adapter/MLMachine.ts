@@ -52,6 +52,8 @@ import type { ConfidenceService } from '../domain/ConfidenceService';
 import { RecordingServiceImpl } from '../domain/implementation/RecordingServiceImpl';
 import { StatesRecordingStateRepository } from '../infrastructure/StatesRecordingStateRepository';
 import { StatesRecordingSettingsRepository } from '../infrastructure/StatesRecordingSettingsRepository';
+import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
+import { writable } from 'svelte/store';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -85,11 +87,13 @@ export class MLMachine {
     const userSessionRepository = new LocalStorageUserSessionRepository();
     this.userService = new UserServiceImpl(userSessionRepository);
 
+  const selectedGestureState = new SvelteStateAdapter(writable(undefined));
     const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
       gestures => this.states.setGestures(gestures),
+        selectedGestureState,
     );
-    this.states = new SvelteStates(gestureRepository.getGestures(), featureProvider);
+    this.states = new SvelteStates(gestureRepository.getGestures(), featureProvider, selectedGestureState);
     const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
     const axisRepository = new StatesAxisRepository(gestureRepository, this.states);

@@ -25,6 +25,7 @@
   liveData.subscribe(() => {
     liveDataUpdateCount++;
   });
+  const recState = getControllers().getRecordingController().getRecordingState();
 </script>
 
 {#if inDev}
@@ -59,6 +60,7 @@
             .map(e => e.toFixed(2))}
         </p>
         <p>LD-Updates: {liveDataUpdateCount}</p>
+        <p>Rec: {$recState.isRecording()}</p>
       </div>
     </div>
   </div>

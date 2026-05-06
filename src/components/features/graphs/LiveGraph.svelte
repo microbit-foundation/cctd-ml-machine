@@ -45,6 +45,8 @@
   var canvas: HTMLCanvasElement | undefined = undefined;
 
   let timeSeries: TimeSeriesWithData[] = [];
+  let recordLines = new TimeSeries();
+  let blockRecordingStart = false;
 
   let chart: SmoothieChart | undefined;
 
@@ -72,6 +74,26 @@
     });
   }
 
+  $: recordingStarted($recordingState.isRecording());
+
+  // Draw on graph to display that users are recording.
+  // blockRecordingStart prevents jagged edges caused by the function repeating.
+  function recordingStarted(isRecording: boolean): void {
+    if (!isRecording || blockRecordingStart) {
+      return;
+    }
+
+    recordLines.append(new Date().getTime() - 1, minValue, false);
+    recordLines.append(new Date().getTime(), maxValue, false);
+
+    blockRecordingStart = true;
+    setTimeout(() => {
+      recordLines.append(new Date().getTime() - 1, maxValue, false);
+      recordLines.append(new Date().getTime(), minValue, false);
+      blockRecordingStart = false;
+    }, getFeature<number>(Feature.RECORDING_DURATION));
+  }
+
   const createChart = () => {
     if (chart) {
       chart.stop();
@@ -96,136 +118,14 @@
         });
       }
     });
+    newChart.addTimeSeries(recordLines, {
+      lineWidth: 3,
+      strokeStyle: '#4040ff44',
+      fillStyle: '#0000ff07',
+    });
     newChart.streamTo(<HTMLCanvasElement>canvas, 0);
     return newChart;
   };
-
-  // var chart: SmoothieChart | undefined;
-  // const lines: TimeSeriesWithData[] = [];
-
-  // for (let i = 0; i < smoothedLiveData.getSeriesSize(); i++) {
-  //   lines.push(new TimeSeries() as TimeSeriesWithData);
-  // }
-
-  // let recordLines = new TimeSeries();
-  // const lineWidth = 2;
-
-  // const init = () => {
-  //   chart = new SmoothieChart({
-  //     maxValue,
-  //     minValue,
-  //     millisPerPixel: 7,
-  //     grid: {
-  //       fillStyle: '#ffffff00',
-  //       strokeStyle: 'rgba(48,48,48,0.20)',
-  //       millisPerLine: 3000,
-  //       borderVisible: false,
-  //     },
-  //     interpolation: 'linear',
-  //   });
-
-  //   lines.forEach((line, index) => {
-  //     const opaque = getControllers().getAxisController().isAxisIndexSelected(index);
-  //     const color = axisColors[index] + (opaque ? 'ff' : '00');
-  //     chart!.addTimeSeries(line, {
-  //       lineWidth,
-  //       strokeStyle: color,
-  //     });
-  //   });
-
-  //   chart.addTimeSeries(recordLines, {
-  //     lineWidth: 3,
-  //     strokeStyle: '#4040ff44',
-  //     fillStyle: '#0000ff07',
-  //   });
-  //   chart.streamTo(<HTMLCanvasElement>canvas, 0);
-  //   chart.stop();
-  // };
-
-  // // On mount draw smoothieChart
-  // onMount(() => {
-  //   init();
-  // });
-
-  // // Start and stop chart when microbit connect/disconnect
-  // const modelTraining = getControllers().getClassifierController().getModelTraining();
-  // $: {
-  //   if (chart !== undefined) {
-  //     if ($microbitConnection.getInput().isReady()) {
-  //       if (!$modelTraining.isTraining()) {
-  //         chart.start();
-  //       } else {
-  //         chart.stop();
-  //       }
-  //     } else {
-  //       chart.stop();
-  //     }
-  //   }
-  // }
-
-  // // Draw on graph to display that users are recording
-  // // The jagged edges problem is caused by repeating the recordingStarted function.
-  // // We will simply block the recording from starting, while it's recording
-  // let blockRecordingStart = false;
-  // $: recordingStarted($recordingState.isRecording());
-
-  // // Function to clearly diplay the area in which users are recording
-  // function recordingStarted(isRecording: boolean): void {
-  //   if (!isRecording || blockRecordingStart) {
-  //     return;
-  //   }
-
-  //   // Set start line
-  //   recordLines.append(new Date().getTime() - 1, minValue, false);
-  //   recordLines.append(new Date().getTime(), maxValue, false);
-
-  //   // Wait a second and set end line
-  //   blockRecordingStart = true;
-  //   setTimeout(() => {
-  //     recordLines.append(new Date().getTime() - 1, maxValue, false);
-  //     recordLines.append(new Date().getTime(), minValue, false);
-  //     blockRecordingStart = false;
-  //   }, getFeature<number>(Feature.RECORDING_DURATION));
-  // }
-
-  // // When devices changes, update the devices of the canvas
-  // $: {
-  //   const isConnected = $microbitConnection.getInput().isReady();
-  //   updateCanvas(isConnected);
-  // }
-
-  // let unsubscribeFromData: Unsubscriber | undefined;
-
-  // // If devices is connected. Start updating the graph whenever there is new data
-  // // From the Micro:Bit
-  // function updateCanvas(isConnected: boolean) {
-  //   if (isConnected || !unsubscribeFromData) {
-  //     unsubscribeFromData = smoothedLiveData.subscribe(data => {
-  //       if (!$liveData.getBuffer().isEmpty()) {
-  //         addDataToGraphLines(data);
-  //       }
-  //     });
-
-  //     // Else if we're currently subscribed to data. Unsubscribe.
-  //     // This means that the micro:bit has been disconnected
-  //   } else if (unsubscribeFromData !== undefined) {
-  //     unsubscribeFromData();
-  //     unsubscribeFromData = undefined;
-  //   }
-  // }
-
-  // const addDataToGraphLines = (data: LiveDataVector) => {
-  //   const t = new Date().getTime();
-  //   let i = 0;
-  //   for (const num of data.getValue()) {
-  //     const line: TimeSeriesWithData = lines[i];
-  //     if (!line) {
-  //       break;
-  //     }
-  //     line.append(t, num, false);
-  //     i++;
-  //   }
-  // };
 </script>
 
 <main class="flex">

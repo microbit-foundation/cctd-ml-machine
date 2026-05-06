@@ -1,4 +1,5 @@
 import type { NewGesture } from '../../core/entities/NewGesture';
+import type { Recording } from '../../core/entities/recording/Recording';
 import type { GestureRecordingState } from '../domain/recording/GestureRecordingState';
 import type { RecordingSettings } from '../domain/recording/RecordingSettings';
 import type { RecordingService } from '../domain/RecordingService';
@@ -11,7 +12,7 @@ export class RecordingController {
     private states: AbstractStates,
   ) {}
 
-  startRecording(gesture: NewGesture): Promise<void> {
+  public startRecording(gesture: NewGesture): Promise<Recording> {
     return this.recordingService.startRecording(gesture);
   }
 

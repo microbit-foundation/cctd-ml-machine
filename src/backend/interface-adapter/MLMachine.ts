@@ -87,13 +87,17 @@ export class MLMachine {
     const userSessionRepository = new LocalStorageUserSessionRepository();
     this.userService = new UserServiceImpl(userSessionRepository);
 
-  const selectedGestureState = new SvelteStateAdapter(writable(undefined));
+    const selectedGestureState = new SvelteStateAdapter(writable(undefined));
     const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
       gestures => this.states.setGestures(gestures),
-        selectedGestureState,
+      selectedGestureState,
     );
-    this.states = new SvelteStates(gestureRepository.getGestures(), featureProvider, selectedGestureState);
+    this.states = new SvelteStates(
+      gestureRepository.getGestures(),
+      featureProvider,
+      selectedGestureState,
+    );
     const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
     const axisRepository = new StatesAxisRepository(gestureRepository, this.states);

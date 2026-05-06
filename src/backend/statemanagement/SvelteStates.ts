@@ -65,7 +65,11 @@ export class SvelteStates implements AbstractStates {
   private recordingState: AbstractState<GestureRecordingState>;
   private recordingSettingsState: AbstractState<RecordingSettings>;
 
-  public constructor(initialGestures: NewGesture[], featureProvider: FeatureProvider, private selectedGestureState: AbstractState<NewGesture | undefined>) {
+  public constructor(
+    initialGestures: NewGesture[],
+    featureProvider: FeatureProvider,
+    private selectedGestureState: AbstractState<NewGesture | undefined>,
+  ) {
     this.liveDataState = new LiveDataStateAdapter(
       StaticConfiguration.accelerometerLiveDataBufferSize,
     );

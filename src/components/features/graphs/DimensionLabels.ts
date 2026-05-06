@@ -39,7 +39,9 @@ export class DimensionLabelsController {
   public get labelEnabled(): Readable<boolean[]> {
     const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
     return derived([highlightedAxes, this.labelsStore], ([axes, currentLabels]) => {
-      return currentLabels.map((_, idx) => axes.find(axis => axis.index === idx) !== undefined);
+      return currentLabels.map(
+        (_, idx) => axes.find(axis => axis.index === idx) !== undefined,
+      );
     });
   }
 
@@ -95,8 +97,12 @@ export class DimensionLabelsController {
     for (let i = 1; i < sorted.length; i++) {
       const element = sorted[i];
       const previousLabel = sorted[i - 1];
-      if (element.textHeight < previousLabel.textHeight + DimensionLabelsController.CHARACTER_HEIGHT) {
-        element.textHeight = previousLabel.textHeight + DimensionLabelsController.CHARACTER_HEIGHT;
+      if (
+        element.textHeight <
+        previousLabel.textHeight + DimensionLabelsController.CHARACTER_HEIGHT
+      ) {
+        element.textHeight =
+          previousLabel.textHeight + DimensionLabelsController.CHARACTER_HEIGHT;
       }
     }
     // Return to original order based on ID to keep the store predictable

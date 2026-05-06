@@ -40,7 +40,7 @@
       return;
     }
     if ($selectedGesture?.getID() === gesture.getID()) {
-      gestureController.selectGesture(undefined)
+      gestureController.selectGesture(undefined);
     } else {
       gestureController.selectGesture(gesture);
     }

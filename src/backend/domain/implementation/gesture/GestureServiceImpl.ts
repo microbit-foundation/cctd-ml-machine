@@ -19,7 +19,7 @@ export class GestureServiceImpl implements GestureService {
     private gestureRepository: GestureRepository,
     private colors: SystemColors,
     private axisRepository: AxisRepository,
-  ) { }
+  ) {}
 
   saveGestures(gestures: NewGesture[]): void {
     this.gestureRepository.saveGestures(gestures);

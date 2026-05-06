@@ -17,7 +17,7 @@ export class RecordingServiceImpl implements RecordingService {
     private recordingSettingsRepository: RecordingSettingsRepository,
     private gestureService: GestureService,
     private dataService: DataService,
-  ) { }
+  ) {}
 
   async startRecording(gesture: NewGesture): Promise<Recording> {
     const settings = this.recordingSettingsRepository.getRecordingSettings();
@@ -60,10 +60,10 @@ export class RecordingServiceImpl implements RecordingService {
     this.recordingStateRepository.setRecordingState(state);
   }
 
-  private createRecordingFromBufferedData(
-    gesture: NewGesture,
-  ) {
-    const recordingRaw = this.getBufferedRecordingData(this.recordingSettingsRepository.getRecordingSettings());
+  private createRecordingFromBufferedData(gesture: NewGesture) {
+    const recordingRaw = this.getBufferedRecordingData(
+      this.recordingSettingsRepository.getRecordingSettings(),
+    );
     const axes = recordingRaw[0]
       .getLabels()
       .map((label, index) => ({ label, index }) as Axis);

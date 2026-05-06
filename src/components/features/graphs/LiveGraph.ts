@@ -37,6 +37,9 @@ export class LiveGraphControl {
         this.smoothedLiveData = new SmoothedLiveData<LiveDataVector>(liveData, 3);
     }
 
+    /**
+     * Sets the canvas element for the chart and the axes to display. This will stop the current chart (if any), create a new one with the specified axes, and start it.
+     */
     public setCanvas(canvas: HTMLCanvasElement, selectedAxes: Axis[]) {
         this.selectedAxes = selectedAxes;
 
@@ -45,21 +48,16 @@ export class LiveGraphControl {
         this.start();
     }
 
+    /**
+     * Returns the SmoothedLiveData instance used by this control. This can be used to subscribe to live data updates or to access the current smoothed values.
+     */
     public getSmoothedLiveData() {
         return this.smoothedLiveData;
     }
 
-    public updateData(values: number[]) {
-        const time = new Date().getTime();
-        const filteredValues = this.selectedAxes.map(axis => values[axis.index]);
-        this.timeSeries.forEach((ts, idx) => {
-            const val = filteredValues[idx];
-            ts.append(time, val, false);
-        });
-    }
 
-    public recordingStarted(isRecording: boolean): void {
-        if (!isRecording || this.blockRecordingStart) {
+    public recordingStarted(): void {
+        if (this.blockRecordingStart) {
             return;
         }
 
@@ -76,6 +74,9 @@ export class LiveGraphControl {
         }, this.recordingDuration);
     }
 
+    /**
+     * Stops the live graph by unsubscribing from the smoothed live data and stopping the chart. This will halt any updates to the chart until `start()` is called again.
+     */
     public stop() {
         if (this.dataUnsubscriber) {
             this.dataUnsubscriber();
@@ -86,6 +87,9 @@ export class LiveGraphControl {
         }
     }
 
+    /**
+     * Starts the live graph by subscribing to the smoothed live data and updating the chart whenever new data is available. This method should be called after setting the canvas and axes to begin displaying live data on the chart.
+     */
     public start() {
         if (this.chart) {
             this.chart.start();
@@ -93,6 +97,18 @@ export class LiveGraphControl {
         this.dataUnsubscriber = this.smoothedLiveData.subscribe(values => {
             this.log.log('Updating data for live graph', values);
             this.updateData(values.getValue());
+        });
+    }
+
+    /**
+     * Updates the chart with new data values. This method is called whenever new smoothed live data is available. It filters the incoming values based on the selected axes and appends them to the corresponding time series for display on the chart.
+     */
+    private updateData(values: number[]) {
+        const time = new Date().getTime();
+        const filteredValues = this.selectedAxes.map(axis => values[axis.index]);
+        this.timeSeries.forEach((ts, idx) => {
+            const val = filteredValues[idx];
+            ts.append(time, val, false);
         });
     }
 

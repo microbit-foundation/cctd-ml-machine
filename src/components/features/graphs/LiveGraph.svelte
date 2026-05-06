@@ -45,7 +45,9 @@
     };
   });
 
-  $: control.recordingStarted($recordingState.isRecording());
+  $: if ($recordingState.isRecording()) {
+    control.recordingStarted();
+  }
 
   $: if (canvas && $selectedAxes) {
     control.setCanvas(canvas, $selectedAxes);

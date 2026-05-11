@@ -82,7 +82,6 @@ export class MLMachineControllers {
   }
 
   public getNotificationController(): NotificationController {
-    console.log(this.notificationController);
     return this.notificationController;
   }
 

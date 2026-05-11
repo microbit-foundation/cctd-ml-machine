@@ -20,7 +20,7 @@ export const downloadDataset = () => {
 export const importExampleDataset = () => {
   // TODO: Move this to the gesture controller instead!
   const gestureController = getControllers().getGestureController();
-  getControllers().getGestureController().importFromJson(exampleDataset.toString());
+  getControllers().getGestureController().importFromJson(exampleDataset);
 
   // Translate the names, that are originally english
   const gestures = get(gestureController.getGestures());

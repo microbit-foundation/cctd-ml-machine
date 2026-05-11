@@ -100,6 +100,7 @@ export class GestureServiceImpl implements GestureService {
     this.gestureRepository.saveGestures(value);
     const axes = this.getAvailableAxesFromGestures(value);
     this.axisRepository.setAvailableAxes(axes);
+    this.axisRepository.setSelectedAxes(axes);
   }
 
   public getGestures(): NewGesture[] {

@@ -28,16 +28,6 @@ export class GestureSerializer {
     }));
   }
 
-  private mapSerializedRecordings(serialized: SerializedRecording[]): Recording[] {
-    return serialized.map(rec => {
-      return new RecordingImpl(
-        rec.ID,
-        rec.samples.map(sample => new Sample(sample.vector)),
-        rec.axes,
-      );
-    });
-  }
-
   public deserialize(serializedGesture: SerializedGesture): NewGesture {
     const recordings: Recording[] = this.mapSerializedRecordings(
       serializedGesture.recordings,
@@ -54,5 +44,15 @@ export class GestureSerializer {
       serializedGesture.output,
       serializedGesture.color,
     );
+  }
+
+  private mapSerializedRecordings(serialized: SerializedRecording[]): Recording[] {
+    return serialized.map(rec => {
+      return new RecordingImpl(
+        rec.ID,
+        rec.samples.map(sample => new Sample(sample.vector)),
+        rec.axes,
+      );
+    });
   }
 }

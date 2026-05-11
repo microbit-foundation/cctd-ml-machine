@@ -19,9 +19,6 @@
   let isConnectionDialogOpen = false;
   const gestureController = getControllers().getGestureController();
   const gestures = gestureController.getGestures();
-  $: {
-    console.log($gestures);
-  }
 </script>
 
 <StandardDialog

@@ -147,9 +147,12 @@ export class GestureController {
     this.gestureService.deleteRecording(gestureId, recordingId);
   }
 
-  public importFromJson(importable: string) {
+  public importFromJson(importable: string | object) {
+    const importString: string = typeof importable === 'string'
+      ? importable
+       : JSON.stringify(importable);
     const serializer = new GestureSerializer();
-    const parsed: SerializedGesture[] = JSON.parse(importable);
+    const parsed: SerializedGesture[] = JSON.parse(importString);
     const deserialized = parsed.map(ser => serializer.deserialize(ser));
     this.gestureService.setGestures(deserialized);
   }

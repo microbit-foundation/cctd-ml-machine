@@ -12,7 +12,6 @@ import type { NewGesture } from '../../core/entities/NewGesture';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 import type { GestureRepository } from '../domain/GestureRepository';
 
-// TODO: Rename to StatesAxisRepository
 export class StatesAxisRepository implements AxisRepository {
   private log: Logger;
 
@@ -33,6 +32,7 @@ export class StatesAxisRepository implements AxisRepository {
       states.getSelectedAxes().set(selectedAxes);
     }
   }
+
   setAvailableAxes(axes: Axis[]): void {
     this.states.getAvailableAxes().set(axes);
   }

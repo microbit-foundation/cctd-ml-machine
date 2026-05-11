@@ -54,6 +54,9 @@ import { StatesRecordingStateRepository } from '../infrastructure/StatesRecordin
 import { StatesRecordingSettingsRepository } from '../infrastructure/StatesRecordingSettingsRepository';
 import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
 import { writable } from 'svelte/store';
+import type { NewGesture } from '../../core/entities/NewGesture';
+import type { Axis } from '../../core/entities/Axis';
+import type { AxisRepository } from '../domain/AxisRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -98,10 +101,11 @@ export class MLMachine {
       gestureRepository.getGestures(),
       featureProvider,
       selectedGestureState,
+      gestureRepository.getAxesFromGestures()
     );
     const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
-    const axisRepository = new StatesAxisRepository(gestureRepository, this.states);
+    const axisRepository: AxisRepository = new StatesAxisRepository(gestureRepository, this.states);
     const neuralNetworkSettingsRepository = new StatesNeuralNetworkSettingsRepository(
       this.states.getNeuralNetworkSettings(),
     );

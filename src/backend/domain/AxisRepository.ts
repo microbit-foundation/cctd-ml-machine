@@ -5,10 +5,11 @@
  */
 
 import type { Axis } from '../../core/entities/Axis';
+import type { NewGesture } from '../../core/entities/NewGesture';
 
 export interface AxisRepository {
   setSelectedAxes(axes: Axis[]): void;
   getSelectedAxes(): Axis[];
   getAvailableAxes(): Axis[];
-  setAvailableAxes(axes: Axis[]): unknown;
+  setAvailableAxes(axes: Axis[]): void;
 }

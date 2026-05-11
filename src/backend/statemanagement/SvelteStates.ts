@@ -23,7 +23,7 @@ import type { Filter } from '../../core/filter/Filter';
 import type { ValidationResult } from '../domain/implementation/validation/ValidationResult';
 import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
 import { ModelTrainingImpl } from '../../core/model/ModelTrainingImpl';
-import { DefaultNeuralNetworkModelBaseSettings } from '../interface-adapter/DefaultNeuralNetworkModelBaseSettings';
+import { DefaultNeuralNetworkModelLearningSettings } from '../interface-adapter/DefaultNeuralNetworkModelLearningSettings';
 import { DefaultNeuralNetworkArchitecture } from '../interface-adapter/DefaultNeuralNetworkArchitecture';
 import { LoggingNeuralNetworkTrainingObserver } from '../../core/model/neural-network/LoggingNeuralNetworkTrainingObserver';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
@@ -41,6 +41,7 @@ import { RecordingSettings } from '../domain/recording/RecordingSettings';
 import type { FeatureProvider } from '../application/feature/FeatureProvider';
 import { Feature } from '../application/feature/Feature';
 import type { LiveDataStore } from '../../core/LiveDataStore';
+import { createFilter, getFilterTypes } from '../../core/filter/FilterUtils';
 
 export class SvelteStates implements AbstractStates {
   private outputTargetState: AbstractState<OutputTarget>;
@@ -69,6 +70,7 @@ export class SvelteStates implements AbstractStates {
     initialGestures: NewGesture[],
     featureProvider: FeatureProvider,
     private selectedGestureState: AbstractState<NewGesture | undefined>,
+    initialAxes: Axis[],
   ) {
     this.liveDataState = new LiveDataStateAdapter(
       StaticConfiguration.accelerometerLiveDataBufferSize,
@@ -92,15 +94,17 @@ export class SvelteStates implements AbstractStates {
       writable(StaticConfiguration.enableFingerprintByDefault),
     );
     this.validationAutoUpdateState = new SvelteStateAdapter(writable(true));
-    this.availableAxesState = new SvelteStateAdapter(writable([]));
-    this.selectedAxesState = new SvelteStateAdapter(writable([]));
-    this.filtersState = new SvelteStateAdapter(writable([]));
+    this.availableAxesState = new SvelteStateAdapter(writable(initialAxes));
+    this.selectedAxesState = new SvelteStateAdapter(writable(initialAxes));
+    const allFilters = getFilterTypes().map(createFilter);
+    this.filtersState = new SvelteStateAdapter(writable(allFilters));
     this.validationResultState = new SvelteStateAdapter(writable(undefined));
+    const defaultFeatureCount = allFilters.length * this.selectedAxesState.get().length;
     this.neuralNetworkSettingsState = new SvelteStateAdapter(
       writable(
         new NeuralNetworkSettingsImpl(
-          new DefaultNeuralNetworkModelBaseSettings(),
-          new DefaultNeuralNetworkArchitecture(),
+          new DefaultNeuralNetworkModelLearningSettings(),
+          new DefaultNeuralNetworkArchitecture(initialGestures.length, defaultFeatureCount),
           new LoggingNeuralNetworkTrainingObserver(
             new ConsoleLogger('LoggingNeuralNetworkTrainingObserver'),
           ),

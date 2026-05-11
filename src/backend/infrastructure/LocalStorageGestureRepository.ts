@@ -12,6 +12,7 @@ import type { GestureRepository } from '../domain/GestureRepository';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
 import type { AbstractState } from '../statemanagement/AbstractState';
+import type { Axis } from '../../core/entities/Axis';
 
 export class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
@@ -91,5 +92,18 @@ export class LocalStorageGestureRepository implements GestureRepository {
     }
     const storedData = ControlledStorage.get<SerializedGesture[]>(this.LOCAL_STORAGE_KEY);
     return storedData;
+  }
+
+  public getAxesFromGestures(): Axis[] {
+    const gestures = this.getGestures();
+    if (!gestures.length) {
+      return [];
+    }
+    const recording = gestures[0].getRecordings()[0];
+
+    if (!recording) {
+      return [];
+    }
+    return recording.getAxes();
   }
 }

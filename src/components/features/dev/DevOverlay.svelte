@@ -8,6 +8,7 @@
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
   import Environment from '../../../core/Environment';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
+  import NeuralNetworkArchitectureDebug from './NeuralNetworkArchitectureDebug.svelte';
 
   const inDev = Environment.isInDevelopment;
   const controllers = getControllers();
@@ -65,6 +66,7 @@
         </p>
         <p>LD-Updates: {liveDataUpdateCount}</p>
         <p>Rec: {$recState.isRecording()}</p>
+        <NeuralNetworkArchitectureDebug settings={$neuralNetworkSettings} />
       </div>
     </div>
   </div>

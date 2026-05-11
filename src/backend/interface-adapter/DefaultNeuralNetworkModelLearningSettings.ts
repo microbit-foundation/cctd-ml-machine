@@ -6,7 +6,7 @@
 
 import type { NeuralNetworkModelLearningSettings } from '../../core/model/neural-network/NeuralNetworkModelBaseSettings';
 
-export class DefaultNeuralNetworkModelBaseSettings
+export class DefaultNeuralNetworkModelLearningSettings
   implements NeuralNetworkModelLearningSettings
 {
   private learningRate: number;

@@ -20,7 +20,7 @@ export class StatesAxisRepository implements AxisRepository {
     private gestureRepository: GestureRepository,
     private states: AbstractStates,
   ) {
-    this.log = new ConsoleLogger('InMemoryAxisRepository');
+    this.log = new ConsoleLogger(StatesAxisRepository.name);
 
     if (!states.getAvailableAxes().get().length) {
       const availableAxes = this.getAvailableAxesFromRecordings();

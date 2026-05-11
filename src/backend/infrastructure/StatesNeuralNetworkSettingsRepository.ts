@@ -1,9 +1,10 @@
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkLearningSettings';
 import type { NeuralNetworkRepository } from '../domain/NeuralNetworkRepository';
 import type { AbstractState } from '../statemanagement/AbstractState';
-import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
 
 export class StatesNeuralNetworkSettingsRepository implements NeuralNetworkRepository {
+  private log = new ConsoleLogger(StatesNeuralNetworkSettingsRepository.name);
   private neuralNetworkSettings: AbstractState<NeuralNetworkModelSettings>;
 
   public constructor(initialSettings: AbstractState<NeuralNetworkModelSettings>) {

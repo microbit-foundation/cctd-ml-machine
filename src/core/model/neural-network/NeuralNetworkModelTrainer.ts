@@ -5,13 +5,13 @@
  */
 import type { TrainingResult } from '../../classifier/TrainingResult';
 import type { Dataset } from '../../dataset/Dataset';
-import type { ModelInfo } from '../ModelRegistry';
 import ModelRegistry from '../ModelRegistry';
 import type { ModelTrainer, ModelTrainerResult } from '../ModelTrainer';
 import { NeuralNetworkLayersModelFactory } from './NeuralNetworkLayersFactory';
 import { NeuralNetworkModel } from './NeuralNetworkModel';
 import type { NeuralNetworkModelSettings } from './NeuralNetworkLearningSettings';
 import * as tf from '@tensorflow/tfjs';
+import type { ModelInfo } from '../ModelInfo';
 
 export class NeuralNetworkModelTrainer
   implements ModelTrainer<NeuralNetworkModel, TrainingResult>
@@ -44,16 +44,16 @@ export class NeuralNetworkModelTrainer
 
     model.compile({
       loss: 'categoricalCrossentropy',
-      optimizer: tf.train.sgd(this.settings.getLearningRate()),
+      optimizer: tf.train.sgd(this.settings.getLearningSettings().getLearningRate()),
       metrics: ['accuracy'],
     });
 
-    for (let i = 0; i < this.settings.getNumberOfEpochs(); i++) {
+    for (let i = 0; i < this.settings.getLearningSettings().getNumberOfEpochs(); i++) {
       try {
         const iteration = await model.fit(tensorFeatures, tensorLabels, {
           epochs: 1,
-          batchSize: this.settings.getBatchSize(),
-          validationSplit: this.settings.getValidationSplit(),
+          batchSize: this.settings.getLearningSettings().getBatchSize(),
+          validationSplit: this.settings.getLearningSettings().getValidationSplit(),
         });
         this.settings.getTrainingObserver().handleTrainingIteration({
           epoch: i,

@@ -73,6 +73,7 @@ export class MLMachine {
   private knnSettingsService: KNNSettingsService;
   private engine: PollingPredictorEngine;
   private confidenceService: ConfidenceService;
+  private filterRepository: StatesFilterRepository;
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
@@ -101,10 +102,16 @@ export class MLMachine {
     const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
     const axisRepository = new StatesAxisRepository(gestureRepository, this.states);
+    const neuralNetworkSettingsRepository = new StatesNeuralNetworkSettingsRepository(
+      this.states.getNeuralNetworkSettings(),
+    );
+    this.filterRepository = new StatesFilterRepository(this.states);
     this.gestureService = new GestureServiceImpl(
       gestureRepository,
       new MLMachineColors(gestureRepository),
       axisRepository,
+      neuralNetworkSettingsRepository,
+      this.filterRepository,
     );
     this.confidenceService = new ConfidenceServiceImpl(
       confidenceRepository,
@@ -113,7 +120,7 @@ export class MLMachine {
     this.dataService = new DataServiceImpl(
       axisRepository,
       new StatesLiveDataRepository(this.states),
-      new StatesFilterRepository(this.states),
+      this.filterRepository,
       this.gestureService,
     );
 
@@ -130,9 +137,6 @@ export class MLMachine {
       new StatesNotificationRepository(this.states),
     );
 
-    const neuralNetworkSettingsRepository = new StatesNeuralNetworkSettingsRepository(
-      this.states.getNeuralNetworkSettings(),
-    );
     const statesModelTrainingRepository = new StatesModelTrainingStateRepository(
       this.states.getModelTraining(),
     );

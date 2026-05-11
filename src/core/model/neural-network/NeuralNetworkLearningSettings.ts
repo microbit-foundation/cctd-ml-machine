@@ -9,7 +9,7 @@ import type { NeuralNetworkArchitecture } from './NeuralNetworkArchitecture';
 import type { NeuralNetworkModelLearningSettings } from './NeuralNetworkModelBaseSettings';
 
 export interface NeuralNetworkModelSettings {
-  setTrainingObserver(observer: NeuralNetworkTrainingObserver): unknown;
+  setTrainingObserver(observer: NeuralNetworkTrainingObserver): void;
   getLearningSettings(): NeuralNetworkModelLearningSettings;
   getArchitecture(): NeuralNetworkArchitecture;
   getTrainingObserver(): NeuralNetworkTrainingObserver;

@@ -26,6 +26,10 @@
     liveDataUpdateCount++;
   });
   const recState = getControllers().getRecordingController().getRecordingState();
+  const filterController = controllers.getFilterController();
+  const filters = filterController.getFilters();
+  const nnController = controllers.getNeuralNetworkController();
+  const neuralNetworkSettings = nnController.getNeuralNetworkSettings();
 </script>
 
 {#if inDev}

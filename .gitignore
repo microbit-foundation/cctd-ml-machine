@@ -17,3 +17,8 @@
 .env
 
 /src/.DS_Store
+
+# Agent files
+TASKS.md
+ARCHITECTURE.md
+DECISIONS.md

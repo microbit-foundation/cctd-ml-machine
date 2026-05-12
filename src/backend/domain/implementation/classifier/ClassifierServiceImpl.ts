@@ -20,6 +20,9 @@ import type { NerualNetworkTrainingIterationRepository } from '../../NerualNetwo
 import type { KNNSettingsService } from '../../KNNSettingsService';
 import KNNModelTrainer from '../../../../core/model/KNN/KNNModelTrainer';
 import type { ModelInfo } from '../../../../core/model/ModelInfo';
+import type { FilterRepository } from '../../FilterRepository';
+import { BasicNeuralNetworkArchitecture } from '../../../../core/model/neural-network/BasicNeuralNetworkArchitecture';
+import { NeuralNetworkSettingsImpl } from '../../../../core/model/neural-network/NeuralNetworkSettingsImpl';
 
 export class ClassifierServiceImpl implements ClassifierService {
   constructor(
@@ -29,6 +32,7 @@ export class ClassifierServiceImpl implements ClassifierService {
     private dataService: DataService,
     private knnSettingsService: KNNSettingsService,
     private trainingIterationRepository: NerualNetworkTrainingIterationRepository,
+    private filterRepository: FilterRepository,
   ) {}
 
   public setSelectedModel(model: ModelInfo): void {
@@ -88,5 +92,35 @@ export class ClassifierServiceImpl implements ClassifierService {
 
   public getNeuralNetworkSettings(): NeuralNetworkModelSettings {
     return this.neuralNetworkRepository.getNeuralNetworkSettings();
+  }
+
+  public setNeuralNetworkOutputNodeCount(gestureCount: number): void {
+    const settings = this.getNeuralNetworkSettings();
+    const newArchitecture = new BasicNeuralNetworkArchitecture(
+      gestureCount,
+      settings.getArchitecture().getInputLayer().getNumberOfNodes(),
+      settings.getArchitecture().getHiddenLayers()[0].getNumberOfNodes(),
+    );
+    const newSettings = new NeuralNetworkSettingsImpl(
+      settings.getLearningSettings(),
+      newArchitecture,
+      settings.getTrainingObserver(),
+    );
+    this.setNeuralNetworkSettings(newSettings);
+  }
+
+  public setNeuralNetworkInputNodeCount(filterCount: number, axesCount: number): void {
+    const settings = this.getNeuralNetworkSettings();
+    const newArchitecture = new BasicNeuralNetworkArchitecture(
+      settings.getArchitecture().getOutputLayer().getNumberOfNodes(),
+      filterCount * axesCount,
+      settings.getArchitecture().getHiddenLayers()[0].getNumberOfNodes(),
+    );
+    const newSettings = new NeuralNetworkSettingsImpl(
+      settings.getLearningSettings(),
+      newArchitecture,
+      settings.getTrainingObserver(),
+    );
+    this.setNeuralNetworkSettings(newSettings);
   }
 }

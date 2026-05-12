@@ -17,13 +17,15 @@ import type { Axis } from '../../core/entities/Axis';
 export class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private serializer;
+  private listeners: Array<(gestures: NewGesture[]) => void> = [];
 
   public constructor(
     private log: Logger,
-    private subscription: (gestures: NewGesture[]) => void,
+    onGesturesChanged: (gestures: NewGesture[]) => void,
     private selectedGesture: AbstractState<NewGesture | undefined>,
   ) {
     this.serializer = new GestureSerializer();
+    this.listeners.push(onGesturesChanged);
   }
 
   setSelectedGesture(gesture: NewGesture | undefined): void {
@@ -70,16 +72,29 @@ export class LocalStorageGestureRepository implements GestureRepository {
     return filtered[0];
   }
 
+  public subscribe(listener: (gestures: NewGesture[]) => void): () => void {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this.listeners.filter(l => l !== listener);
+    };
+  }
+
+  private publish(gestures: NewGesture[]): void {
+    for (const listener of this.listeners) {
+      listener(gestures);
+    }
+  }
+
   public saveGestures(value: NewGesture[]): NewGesture[] {
     const serialized = value.map(gest => this.serializer.serialize(gest));
     ControlledStorage.set(this.LOCAL_STORAGE_KEY, serialized);
-    this.subscription?.(value);
+    this.publish(value);
     return value;
   }
 
   public clearGestures(): void {
     ControlledStorage.set(this.LOCAL_STORAGE_KEY, []);
-    this.subscription?.([]);
+    this.publish([]);
   }
 
   public removeGesture(gestureId: number): void {

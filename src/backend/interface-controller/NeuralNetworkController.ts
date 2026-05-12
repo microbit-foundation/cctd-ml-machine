@@ -18,13 +18,13 @@ export class NeuralNetworkController {
       .getArchitecture()
       .getOutputLayer()
       .getNumberOfNodes();
-    const noOfFilters = currentSettings
+    const totalInputNodes = currentSettings
       .getArchitecture()
       .getInputLayer()
       .getNumberOfNodes();
     const newArchitecture = new BasicNeuralNetworkArchitecture(
       noOfClasses,
-      noOfFilters,
+      totalInputNodes,
       val,
     );
     const newSettings = new NeuralNetworkSettingsImpl(

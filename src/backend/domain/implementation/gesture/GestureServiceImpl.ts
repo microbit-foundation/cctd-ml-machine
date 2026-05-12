@@ -8,13 +8,9 @@ import type { Axis } from '../../../../core/entities/Axis';
 import type { GestureID } from '../../../../core/entities/Gesture';
 import type { NewGesture } from '../../../../core/entities/NewGesture';
 import type { Recording } from '../../../../core/entities/recording/Recording';
-import { BasicNeuralNetworkArchitecture } from '../../../../core/model/neural-network/BasicNeuralNetworkArchitecture';
-import { NeuralNetworkSettingsImpl } from '../../../../core/model/neural-network/NeuralNetworkSettingsImpl';
 import type { AxisRepository } from '../../AxisRepository';
-import type { FilterRepository } from '../../FilterRepository';
 import type { GestureRepository } from '../../GestureRepository';
 import type { GestureService } from '../../GestureService';
-import type { NeuralNetworkRepository } from '../../NeuralNetworkRepository';
 import type { SystemColors } from '../SystemColors';
 import { GestureImpl } from './GestureImpl';
 
@@ -23,13 +19,10 @@ export class GestureServiceImpl implements GestureService {
     private gestureRepository: GestureRepository,
     private colors: SystemColors,
     private axisRepository: AxisRepository,
-    private neuralNetworkRepository: NeuralNetworkRepository,
-    private filterRepository: FilterRepository
   ) { }
 
   saveGestures(gestures: NewGesture[]): void {
     this.gestureRepository.saveGestures(gestures);
-    this.setNeuralNetworkArchitectureOutputCount(this.gestureRepository.getGestures().length);
   }
 
   selectGesture(gesture: NewGesture | undefined): void {
@@ -59,7 +52,6 @@ export class GestureServiceImpl implements GestureService {
 
   public saveGesture(gesture: NewGesture): void {
     this.gestureRepository.saveGesture(gesture);
-    this.setNeuralNetworkArchitectureOutputCount(this.gestureRepository.getGestures().length);
   }
 
   public createGesture(name: string): NewGesture {
@@ -73,7 +65,6 @@ export class GestureServiceImpl implements GestureService {
       this.colors.generateGestureColor(),
     );
     this.gestureRepository.saveGesture(gesture);
-    this.setNeuralNetworkArchitectureOutputCount(this.gestureRepository.getGestures().length);
     return gesture;
   }
 
@@ -93,7 +84,6 @@ export class GestureServiceImpl implements GestureService {
 
   public deleteGesture(gesture: GestureID): void {
     this.gestureRepository.removeGesture(gesture);
-    this.setNeuralNetworkArchitectureOutputCount(this.gestureRepository.getGestures().length);
   }
 
   public setGestureName(gestureId: GestureID, name: string): void {
@@ -111,8 +101,6 @@ export class GestureServiceImpl implements GestureService {
     const axes = this.getAvailableAxesFromGestures(value);
     this.axisRepository.setAvailableAxes(axes);
     this.axisRepository.setSelectedAxes(axes);
-    // Updating the number of gestures means updating the output layer of the neural network model
-    this.setNeuralNetworkArchitectureOutputCount(value.length);
   }
 
   public getGestures(): NewGesture[] {
@@ -136,22 +124,5 @@ export class GestureServiceImpl implements GestureService {
     return [];
   }
 
-  /**
-   * Updates the output layer of the neural network architecture to match the number of gestures. This is necessary to be able to train a model with the current set of gestures.
-   */
-  private setNeuralNetworkArchitectureOutputCount(outputNodeCount: number): void {
-    // TODO: Add helpers, maybe builder to make it easier to change individual settings
-    const settings = this.neuralNetworkRepository.getNeuralNetworkSettings();
-    const newArchitecture = new BasicNeuralNetworkArchitecture(
-      outputNodeCount,
-      this.filterRepository.getFilters().length,
-      settings.getArchitecture().getHiddenLayers()[0].getNumberOfNodes()
-    );
-    const newSettings = new NeuralNetworkSettingsImpl(
-      settings.getLearningSettings(),
-      newArchitecture,
-      settings.getTrainingObserver()
-    )
-    this.neuralNetworkRepository.setNeuralNetworkSettings(newSettings);
-  }
 }
+

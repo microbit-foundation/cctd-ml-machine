@@ -19,4 +19,6 @@ export interface ClassifierService {
   getClassifier(): Classifier | undefined;
   getModelTraining(): ModelTraining;
   unsetClassifier(): void;
+  setNeuralNetworkOutputNodeCount(gestureCount: number): void;
+  setNeuralNetworkInputNodeCount(filterCount: number, axesCount: number): void;
 }

@@ -114,8 +114,6 @@ export class MLMachine {
       gestureRepository,
       new MLMachineColors(gestureRepository),
       axisRepository,
-      neuralNetworkSettingsRepository,
-      this.filterRepository,
     );
     this.confidenceService = new ConfidenceServiceImpl(
       confidenceRepository,
@@ -160,6 +158,7 @@ export class MLMachine {
       this.dataService,
       this.knnSettingsService,
       trainingIterationRepository,
+      this.filterRepository,
     );
     this.controllers = new MLMachineControllers(
       this,
@@ -198,6 +197,10 @@ export class MLMachine {
       StaticConfiguration.pollingPredictionSampleSize,
       StaticConfiguration.pollingPredictionInterval,
     );
+
+    gestureRepository.subscribe(gestures => {
+      this.classifierService.setNeuralNetworkOutputNodeCount(gestures.length);
+    });
 
     // const devices = stores.getDevices();
     // const outputHandler = new OutputMicrobitHandler(devices);

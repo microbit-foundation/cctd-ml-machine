@@ -23,4 +23,10 @@ export interface GestureRepository {
   clearGestures(): void;
 
   removeGesture(gestureId: number): void;
+
+  /**
+   * Subscribe to gesture change events. The listener is called whenever gestures are saved or removed.
+   * Returns an unsubscribe function.
+   */
+  subscribe(listener: (gestures: NewGesture[]) => void): () => void;
 }

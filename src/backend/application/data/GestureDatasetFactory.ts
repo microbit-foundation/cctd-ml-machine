@@ -29,13 +29,13 @@ export class GestureDatasetFactory {
       );
     });
 
-    const featureSum = new BaseVector(Array(filters.length).fill(0));
+    const featureSum = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
     featureData.forEach(fd => {
       const features = fd.getFeatures();
       featureSum.add(features);
     });
     const featureMean = featureSum.divideByScalar(featureData.length);
-    const featureStdDeviation = new BaseVector(Array(filters.length).fill(0));
+    const featureStdDeviation = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
     featureData.forEach(fd => {
       const features = fd.getFeatures();
       const diff = features.subtract(featureMean);
@@ -47,7 +47,7 @@ export class GestureDatasetFactory {
 
     const labelVectors: BaseVector[] = gestures.flatMap((gesture, idx) => {
       const recordings = getRecordings(gesture);
-      const vector = Array(recordings.length).fill(0);
+      const vector = Array(gestures.length).fill(0);
       vector[idx] = 1;
       return recordings.map(() => new BaseVector(vector));
     });
@@ -62,6 +62,7 @@ export class GestureDatasetFactory {
       featureStdDeviation,
     );
   }
+  
   private createFeatureDataFromRecording(
     recording: Recording,
     filters: Filter[],
@@ -71,6 +72,7 @@ export class GestureDatasetFactory {
     const samplesByAxis = axes.map(axis =>
       samples.map(sample => sample.getValue()[axis.index]),
     );
+    console.log(samplesByAxis)
     const features: number[] = [];
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];

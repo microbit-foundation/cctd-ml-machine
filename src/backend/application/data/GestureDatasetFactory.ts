@@ -72,7 +72,6 @@ export class GestureDatasetFactory {
     const samplesByAxis = axes.map(axis =>
       samples.map(sample => sample.getValue()[axis.index]),
     );
-    console.log(samplesByAxis)
     const features: number[] = [];
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];

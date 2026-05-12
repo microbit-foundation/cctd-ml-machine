@@ -162,7 +162,6 @@ export class MLMachine {
       this.dataService,
       this.knnSettingsService,
       trainingIterationRepository,
-      this.filterRepository,
     );
     classifierNodeCountHandler.setClassifierService(this.classifierService);
     this.controllers = new MLMachineControllers(

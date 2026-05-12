@@ -32,7 +32,6 @@ export class ClassifierServiceImpl implements ClassifierService {
     private dataService: DataService,
     private knnSettingsService: KNNSettingsService,
     private trainingIterationRepository: NerualNetworkTrainingIterationRepository,
-    private filterRepository: FilterRepository,
   ) {}
 
   public setSelectedModel(model: ModelInfo): void {
@@ -44,6 +43,7 @@ export class ClassifierServiceImpl implements ClassifierService {
   }
 
   public async trainKNNModel(): Promise<void> {
+    this.setModelIsTraining(true);
     const knnSettings = this.knnSettingsService.getKNNModelSettings();
     const trainer = new KNNModelTrainer(knnSettings);
     const trainingResult = await trainer.trainModel(
@@ -53,9 +53,11 @@ export class ClassifierServiceImpl implements ClassifierService {
     const evaluator = new AccuracyClassifierEvaluator();
     const classifier = new VectorClassifier(model, evaluator);
     this.classifierRepository.setClassifier(classifier);
+    this.setModelIsTraining(false);
   }
 
   public async trainNeuralNetworkModel(): Promise<void> {
+    this.setModelIsTraining(true);
     this.trainingIterationRepository.clear();
     const settings = this.getNeuralNetworkSettings();
     settings.setTrainingObserver(
@@ -70,6 +72,7 @@ export class ClassifierServiceImpl implements ClassifierService {
     const classifier = new VectorClassifier(model, evaluator);
 
     this.classifierRepository.setClassifier(classifier);
+    this.setModelIsTraining(false);
   }
 
   public setNeuralNetworkSettings(
@@ -122,5 +125,11 @@ export class ClassifierServiceImpl implements ClassifierService {
       settings.getTrainingObserver(),
     );
     this.setNeuralNetworkSettings(newSettings);
+  }
+
+  private setModelIsTraining(isTraining: boolean): void {
+    const modelTraining = this.getModelTraining();
+    modelTraining.setIsTraining(isTraining);
+    this.modelTraining.setModelTraining(modelTraining);
   }
 }

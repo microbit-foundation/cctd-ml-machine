@@ -12,20 +12,23 @@ import type { GestureRepository } from '../domain/GestureRepository';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
 import type { AbstractState } from '../statemanagement/AbstractState';
+import type { GestureListListener } from '../domain/GestureListListener';
 import type { Axis } from '../../core/entities/Axis';
 
 export class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
   private serializer;
-  private listeners: Array<(gestures: NewGesture[]) => void> = [];
+  private listeners: GestureListListener[] = [];
 
   public constructor(
     private log: Logger,
-    onGesturesChanged: (gestures: NewGesture[]) => void,
+    initialListeners: GestureListListener[],
     private selectedGesture: AbstractState<NewGesture | undefined>,
   ) {
     this.serializer = new GestureSerializer();
-    this.listeners.push(onGesturesChanged);
+    for (const l of initialListeners) {
+      this.listeners.push(l);
+    }
   }
 
   setSelectedGesture(gesture: NewGesture | undefined): void {
@@ -72,16 +75,9 @@ export class LocalStorageGestureRepository implements GestureRepository {
     return filtered[0];
   }
 
-  public subscribe(listener: (gestures: NewGesture[]) => void): () => void {
-    this.listeners.push(listener);
-    return () => {
-      this.listeners = this.listeners.filter(l => l !== listener);
-    };
-  }
-
   private publish(gestures: NewGesture[]): void {
     for (const listener of this.listeners) {
-      listener(gestures);
+      listener.onGesturesChanged(gestures);
     }
   }
 

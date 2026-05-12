@@ -54,9 +54,9 @@ import { StatesRecordingStateRepository } from '../infrastructure/StatesRecordin
 import { StatesRecordingSettingsRepository } from '../infrastructure/StatesRecordingSettingsRepository';
 import { SvelteStateAdapter } from '../statemanagement/SvelteStateAdapter';
 import { writable } from 'svelte/store';
-import type { NewGesture } from '../../core/entities/NewGesture';
-import type { Axis } from '../../core/entities/Axis';
 import type { AxisRepository } from '../domain/AxisRepository';
+import { GestureStateHandler } from '../interface-listener/GestureStateHandler';
+import { ClassifierNodeCountHandler } from '../interface-listener/ClassifierNodeCountHandler';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -92,9 +92,12 @@ export class MLMachine {
     this.userService = new UserServiceImpl(userSessionRepository);
 
     const selectedGestureState = new SvelteStateAdapter(writable(undefined));
+    const gestureStateHandler = new GestureStateHandler();
+
+    const classifierNodeCountHandler = new ClassifierNodeCountHandler();
     const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
-      gestures => this.states.setGestures(gestures),
+      [gestureStateHandler, classifierNodeCountHandler],
       selectedGestureState,
     );
     this.states = new SvelteStates(
@@ -103,6 +106,7 @@ export class MLMachine {
       selectedGestureState,
       gestureRepository.getAxesFromGestures()
     );
+    gestureStateHandler.setStates(this.states);
     const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
     const axisRepository: AxisRepository = new StatesAxisRepository(gestureRepository, this.states);
@@ -160,6 +164,7 @@ export class MLMachine {
       trainingIterationRepository,
       this.filterRepository,
     );
+    classifierNodeCountHandler.setClassifierService(this.classifierService);
     this.controllers = new MLMachineControllers(
       this,
       this.dataService,
@@ -198,9 +203,7 @@ export class MLMachine {
       StaticConfiguration.pollingPredictionInterval,
     );
 
-    gestureRepository.subscribe(gestures => {
-      this.classifierService.setNeuralNetworkOutputNodeCount(gestures.length);
-    });
+    
 
     // const devices = stores.getDevices();
     // const outputHandler = new OutputMicrobitHandler(devices);

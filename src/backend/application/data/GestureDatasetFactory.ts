@@ -15,6 +15,7 @@ import type { GestureService } from '../../domain/GestureService';
 export class GestureDatasetFactory {
   constructor(private gestureService: GestureService) {}
 
+    /** Builds dataset from filters and selected axes. Provide the getRecordings method to determine how to fetch recordings. Can be used for validation- or regular recordings */
   public buildDataset(
     getRecordings: (gesture: NewGesture) => Recording[],
     selectedAxes: Axis[],
@@ -22,12 +23,24 @@ export class GestureDatasetFactory {
   ): Dataset {
     const gestures = this.gestureService.getGestures();
 
+    const labelVectors: BaseVector[] = gestures.flatMap((gesture, idx) => {
+      const recordings = getRecordings(gesture);
+      const vector = Array(gestures.length).fill(0);
+      vector[idx] = 1;
+      return recordings.map(() => new BaseVector(vector));
+    });
+    const datasetLabels: DatasetLabels = new DatasetLabelsImpl(labelVectors);
+
     const featureData: FeatureData[] = gestures.flatMap(gesture => {
       const recordings = getRecordings(gesture);
       return recordings.map(recording =>
         this.createFeatureDataFromRecording(recording, filters, selectedAxes),
       );
     });
+
+    if (featureData.length === 0) {
+      return new DatasetImpl(new LabelledFeatureSetImpl([], datasetLabels), 0, new BaseVector([]), new BaseVector([]));
+    }
 
     const featureSum = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
     featureData.forEach(fd => {
@@ -44,14 +57,6 @@ export class GestureDatasetFactory {
     });
     featureStdDeviation.divideByScalar(featureData.length);
     const featureSize = featureData[0].getFeatures().getSize();
-
-    const labelVectors: BaseVector[] = gestures.flatMap((gesture, idx) => {
-      const recordings = getRecordings(gesture);
-      const vector = Array(gestures.length).fill(0);
-      vector[idx] = 1;
-      return recordings.map(() => new BaseVector(vector));
-    });
-    const datasetLabels: DatasetLabels = new DatasetLabelsImpl(labelVectors);
 
     const labelledFeatureSet = new LabelledFeatureSetImpl(featureData, datasetLabels);
 

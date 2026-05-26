@@ -57,6 +57,7 @@ import { writable } from 'svelte/store';
 import type { AxisRepository } from '../domain/AxisRepository';
 import { GestureStateHandler } from '../interface-listener/GestureStateHandler';
 import { ClassifierNodeCountHandler } from '../interface-listener/ClassifierNodeCountHandler';
+import { FilterSelectionListener } from '../interface-listener/FilterSelectionListener';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -107,13 +108,21 @@ export class MLMachine {
       gestureRepository.getAxesFromGestures()
     );
     gestureStateHandler.setStates(this.states);
+    const filterSelectionListener = new FilterSelectionListener(
+      this.states.getSelectedAxes().get(),
+      this.states.getFilters().get(),
+    );
     const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
-    const axisRepository: AxisRepository = new StatesAxisRepository(gestureRepository, this.states);
+    const axisRepository: AxisRepository = new StatesAxisRepository(
+      gestureRepository,
+      this.states,
+      [filterSelectionListener],
+    );
     const neuralNetworkSettingsRepository = new StatesNeuralNetworkSettingsRepository(
       this.states.getNeuralNetworkSettings(),
     );
-    this.filterRepository = new StatesFilterRepository(this.states);
+    this.filterRepository = new StatesFilterRepository(this.states, [filterSelectionListener]);
     this.gestureService = new GestureServiceImpl(
       gestureRepository,
       new MLMachineColors(gestureRepository),
@@ -163,6 +172,7 @@ export class MLMachine {
       this.knnSettingsService,
       trainingIterationRepository,
     );
+    filterSelectionListener.setClassifierService(this.classifierService);
     classifierNodeCountHandler.setClassifierService(this.classifierService);
     this.controllers = new MLMachineControllers(
       this,

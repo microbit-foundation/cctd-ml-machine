@@ -11,15 +11,19 @@ import type { Logger } from '../../core/logging/Logger';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 import type { GestureRepository } from '../domain/GestureRepository';
+import type { SelectedAxesListener } from '../domain/SelectedAxesListener';
 
 export class StatesAxisRepository implements AxisRepository {
   private log: Logger;
+  private listeners: SelectedAxesListener[];
 
   constructor(
     private gestureRepository: GestureRepository,
     private states: AbstractStates,
+    initialListeners: SelectedAxesListener[] = [],
   ) {
     this.log = new ConsoleLogger(StatesAxisRepository.name);
+    this.listeners = [...initialListeners];
 
     if (!states.getAvailableAxes().get().length) {
       const availableAxes = this.getAvailableAxesFromRecordings();
@@ -39,6 +43,7 @@ export class StatesAxisRepository implements AxisRepository {
 
   setSelectedAxes(axes: Axis[]): void {
     this.states.getSelectedAxes().set(axes);
+    this.publishSelectedAxes(axes);
   }
 
   public getAvailableAxes(): Axis[] {
@@ -47,6 +52,12 @@ export class StatesAxisRepository implements AxisRepository {
 
   public getSelectedAxes(): Axis[] {
     return this.states.getSelectedAxes().get() || [];
+  }
+
+  private publishSelectedAxes(selectedAxes: Axis[]): void {
+    for (const listener of this.listeners) {
+      listener.onSelectedAxesChanged(selectedAxes);
+    }
   }
 
   private getAvailableAxesFromRecordings(): Axis[] {

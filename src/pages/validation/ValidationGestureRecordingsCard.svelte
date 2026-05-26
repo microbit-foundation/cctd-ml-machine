@@ -17,9 +17,7 @@
   const gestureController = getControllers().getGestureController();
   const gesture = gestureController.getGestureState(gestureId);
   const validationController = getControllers().getValidationController();
-  const validationRecordings = derived(gestureController.getGestures(), gestures => {
-    return gestures.flatMap(g => g.getValidationRecordings());
-  });
+  const validationRecordings = $gesture.getValidationRecordings();
   const results = validationController.getValidationResult();
   const enableFingerprint = getControllers().getDataController().isFingerprintEnabled();
 
@@ -45,7 +43,7 @@
 
 <Card validationPage={true} small>
   <div class="flex flex-row h-full gap-1 items-center pl-2">
-    {#each $validationRecordings as recording}
+    {#each validationRecordings as recording}
       {#key recording.getId()}
         <Recording
           enableFingerprint={$enableFingerprint}

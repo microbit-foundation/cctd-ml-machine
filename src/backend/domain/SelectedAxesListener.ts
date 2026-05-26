@@ -6,9 +6,6 @@
 
 import type { Axis } from '../../core/entities/Axis';
 
-export interface AxisRepository {
-  setSelectedAxes(axes: Axis[]): void;
-  getSelectedAxes(): Axis[];
-  getAvailableAxes(): Axis[];
-  setAvailableAxes(axes: Axis[]): void;
+export interface SelectedAxesListener {
+  onSelectedAxesChanged(selectedAxes: Axis[]): void;
 }

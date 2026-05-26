@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
 import type { ClassifierService } from '../../ClassifierService';
 import type { DataService } from '../../DataService';
 import type { ValidationRepository } from '../../ValidationRepository';
@@ -11,6 +12,9 @@ import type { ValidationService } from '../../ValidationService';
 import { ValidationResult } from './ValidationResult';
 
 export class ValidationServiceImpl implements ValidationService {
+
+  private log = new ConsoleLogger('ValidationServiceImpl');
+
   public constructor(
     private classifierService: ClassifierService,
     private validationRepository: ValidationRepository,
@@ -20,11 +24,13 @@ export class ValidationServiceImpl implements ValidationService {
   public async evaluateValidationSet(): Promise<void> {
     const validationSet = this.dataService.getValidationDataset();
     if (!validationSet.isValid() || validationSet.isEmpty()) {
-      throw new Error('Validation dataset is not valid or empty');
+      this.log.warn('Validation dataset is not valid or empty, skipping evaluation');
+      return;
     }
     const classifier = this.classifierService.getClassifier();
     if (!classifier) {
-      throw new Error('Theres no classifier to evaluate the validation set with');
+      this.log.warn('No classifier available, skipping validation evaluation');
+      return;
     }
     const evaluation = await classifier.evaluate(validationSet);
 

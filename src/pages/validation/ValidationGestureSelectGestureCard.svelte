@@ -57,7 +57,7 @@
       return;
     }
     const addRecording = () => {
-      getControllers().getRecordingController().startRecording($gesture);
+      getControllers().getRecordingController().startValidationRecording($gesture);
     };
 
     if (!buttons) {

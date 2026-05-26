@@ -17,6 +17,7 @@ export interface GestureService {
   createGesture(name: string): NewGesture;
   deleteRecording(gestureId: GestureID, recordingId: number): void;
   addRecording(gestureId: GestureID, recording: Recording): void;
+  addValidationRecording(gestureId: GestureID, recording: Recording): void;
   deleteGesture(gestureId: GestureID): void;
   setGestureName(gesture: GestureID, name: string): void;
   getGesture(id: GestureID): NewGesture | undefined;

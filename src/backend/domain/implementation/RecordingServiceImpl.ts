@@ -19,7 +19,22 @@ export class RecordingServiceImpl implements RecordingService {
     private dataService: DataService,
   ) {}
 
-  async startRecording(gesture: NewGesture): Promise<Recording> {
+async recordValidationExample(gesture: NewGesture): Promise<Recording> {
+    return this.performRecording(gesture, recording => {
+      this.gestureService.addValidationRecording(gesture.getID(), recording);
+    });
+  }
+
+  async recordDataExample(gesture: NewGesture): Promise<Recording> {
+    return this.performRecording(gesture, recording => {
+      this.gestureService.addRecording(gesture.getID(), recording);
+    });
+  }
+
+  private async performRecording(
+    gesture: NewGesture,
+    onRecorded: (recording: Recording) => void,
+  ): Promise<Recording> {
     const settings = this.recordingSettingsRepository.getRecordingSettings();
 
     if (this.isRecording()) {
@@ -31,7 +46,7 @@ export class RecordingServiceImpl implements RecordingService {
     try {
       await new Promise(resolve => setTimeout(resolve, settings.getRecordingDuration()));
       const recording = this.createRecordingFromBufferedData(gesture);
-      this.gestureService.addRecording(gesture.getID(), recording);
+      onRecorded(recording);
       return recording;
     } finally {
       this.clearRecordingState();

@@ -13,7 +13,11 @@ export class RecordingController {
   ) {}
 
   public startRecording(gesture: NewGesture): Promise<Recording> {
-    return this.recordingService.startRecording(gesture);
+    return this.recordingService.recordDataExample(gesture);
+  }
+
+  public startValidationRecording(gesture: NewGesture): Promise<Recording> {
+    return this.recordingService.recordValidationExample(gesture);
   }
 
   public getRecordingState(): AbstractState<GestureRecordingState> {

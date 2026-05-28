@@ -10,15 +10,21 @@ import type { EvaluationResult } from '../EvaluationResult';
 import type { PredictionOutput } from '../PredictionOutput';
 import type { Vector } from '../../vector/Vector';
 import { DataIndexLabel } from '../../dataset/DataIndexLabel';
+import ConsoleLogger from '../../logging/ConsoleLogger';
 
 export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
+
+  private log = new ConsoleLogger(AccuracyClassifierEvaluator.name);
+
   public getEvaluation(
     dataset: Dataset,
     predictionOutput: PredictionOutput[],
   ): EvaluationResult {
+    console.log(dataset);
     const labelIndices = this.getLabelIndices(dataset.getLabels().getLabelVectors());
     const predictedIndices = this.getLabelIndices(
-      predictionOutput.map(output => output.getPrediction()),
+      // We round because label indices are expected to be 0 or 1. Confidence is rarely 100% on one class.
+      predictionOutput.map(output => output.getPrediction().round(0)),
     );
 
     if (labelIndices.length !== predictedIndices.length) {
@@ -26,6 +32,8 @@ export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
     }
 
     const accuracy = this.calculateAccuracy(labelIndices, predictedIndices);
+
+    this.log.log(`Evaluation result: ${accuracy}`);
 
     return {
       getAccuracy: () => accuracy,

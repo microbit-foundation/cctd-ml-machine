@@ -22,6 +22,7 @@ export class GestureDatasetFactory {
     filters: Filter[],
   ): Dataset {
     const gestures = this.gestureService.getGestures();
+    const numberOfClasses = gestures.length;
 
     const labelVectors: BaseVector[] = gestures.flatMap((gesture, idx) => {
       const recordings = getRecordings(gesture);
@@ -39,7 +40,7 @@ export class GestureDatasetFactory {
     });
 
     if (featureData.length === 0) {
-      return new DatasetImpl(new LabelledFeatureSetImpl([], datasetLabels), 0, new BaseVector([]), new BaseVector([]));
+      return new DatasetImpl(new LabelledFeatureSetImpl([], datasetLabels), 0, new BaseVector([]), new BaseVector([]), numberOfClasses);
     }
 
     const featureSum = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
@@ -65,6 +66,7 @@ export class GestureDatasetFactory {
       featureSize,
       featureMean,
       featureStdDeviation,
+      numberOfClasses
     );
   }
   

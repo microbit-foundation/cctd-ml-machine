@@ -123,6 +123,16 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
       z: divided.getValue()[2],
     });
   }
+
+  round(decimalPlaces: number): MicrobitAccelerometerDataVector {
+    const baseVec = new BaseVector(this.getValue());
+    const rounded = baseVec.round(decimalPlaces);
+    return new MicrobitAccelerometerDataVector({
+      x: rounded.getValue()[0],
+      y: rounded.getValue()[1],
+      z: rounded.getValue()[2],
+    });
+  }
 }
 
 class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDataVector> {

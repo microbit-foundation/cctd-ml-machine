@@ -8,7 +8,6 @@
   import { derived } from 'svelte/store';
   import Card from '../../components/ui/Card.svelte';
   import Recording from '../../components/ui/recording/Recording.svelte';
-  import type GestureState from '../../lib/domain/stores/gesture/GestureState';
   import type { GestureID } from '../../core/entities/Gesture';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
 
@@ -17,7 +16,7 @@
   const gestureController = getControllers().getGestureController();
   const gesture = gestureController.getGestureState(gestureId);
   const validationController = getControllers().getValidationController();
-  const validationRecordings = $gesture.getValidationRecordings();
+  $: validationRecordings = $gesture.getValidationRecordings();
   const results = validationController.getValidationResult();
   const enableFingerprint = getControllers().getDataController().isFingerprintEnabled();
 
@@ -39,6 +38,7 @@
     };
     return getDot;
   });
+  
 </script>
 
 <Card validationPage={true} small>

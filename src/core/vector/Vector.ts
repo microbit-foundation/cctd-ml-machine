@@ -21,4 +21,6 @@ export interface Vector {
   extract(indices: number[]): Vector;
 
   scale(scalar: number): Vector;
+
+  round(decimalPlaces: number): Vector;
 }

@@ -9,8 +9,11 @@ import type { DataIndexLabel } from './DataIndexLabel';
 
 export interface DatasetLabels {
   /**
-   * Examlpe [0,0,0,1,0] for a index representation of 3
+   * Examlpe [[0,0,0,1,0]] for a index representation of 3 out of 5 classes in a dataset with 1 example.
    */
   getLabelVectors(): Vector[];
+  /**
+   * Complex label vectors containing logic for index computation. (Wrapper of label vectors)
+   */
   getIndexLabels(): DataIndexLabel[];
 }

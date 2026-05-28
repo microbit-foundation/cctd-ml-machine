@@ -3,12 +3,30 @@ import type { DatasetLabels } from './DatasetLabels';
 import { DataIndexLabel } from './DataIndexLabel';
 
 export class DatasetLabelsImpl implements DatasetLabels {
-  constructor(private labelVectors: Vector[]) {}
+
+  private indexLabels: DataIndexLabel[];
+
+  constructor(private labelVectors: Vector[]) {
+    this.indexLabels = labelVectors.map(vec => {
+      return new DataIndexLabel(vec);
+    });
+    this.validateLabelVectors(labelVectors);
+  }
 
   getLabelVectors(): Vector[] {
     return this.labelVectors;
   }
+
   getIndexLabels(): DataIndexLabel[] {
-    return this.labelVectors.map(vec => new DataIndexLabel(vec));
+    return this.indexLabels;
+  }
+
+  private validateLabelVectors(labelVectors: Vector[]): void {
+    const vectorLength = labelVectors[0].getValue().length;
+    for (const vector of labelVectors) {
+      if (vector.getValue().length !== vectorLength) {
+        throw new Error('All label vectors must have the same length');
+      }
+    }
   }
 }

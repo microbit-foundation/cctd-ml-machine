@@ -66,6 +66,8 @@ export class SvelteStates implements AbstractStates {
   private recordingState: AbstractState<GestureRecordingState>;
   private recordingSettingsState: AbstractState<RecordingSettings>;
 
+  private log = new ConsoleLogger(SvelteStates.name);
+
   public constructor(
     initialGestures: NewGesture[],
     featureProvider: FeatureProvider,
@@ -170,6 +172,7 @@ export class SvelteStates implements AbstractStates {
   }
 
   setGestures(gestures: NewGesture[]): void {
+    this.log.log(`Updating gestures state with ${gestures.length} gestures`);
     this.gesturesState.set(gestures);
   }
 

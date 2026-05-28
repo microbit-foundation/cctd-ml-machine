@@ -11,28 +11,26 @@ import type { DatasetLabels } from './DatasetLabels';
 import type { LabelledFeatureSet } from './LabelledFeatureSet';
 
 export default class DatasetImpl implements Dataset {
-  private numberOfClasses: number;
-
   constructor(
-    private readonly featureSet: LabelledFeatureSet,
+    private readonly labelledFeatureSet: LabelledFeatureSet,
     private readonly featureSize: number,
     private readonly featureMean: Vector,
     private readonly featureStdDev: Vector,
+    private readonly numberOfClasses: number,
   ) {
-    this.numberOfClasses = featureSet.getLabels().getIndexLabels().length;
   }
 
   public isEmpty(): boolean {
-    return this.featureSet.getFeatureSet().length === 0;
+    return this.labelledFeatureSet.getFeatureSet().length === 0;
   }
 
   public getFeatureSet(): FeatureData[] {
-    return this.featureSet.getFeatureSet();
+    return this.labelledFeatureSet.getFeatureSet();
   }
 
   public getNormalizedFeatureSet(): FeatureData[] {
     const self = this;
-    return this.featureSet.getFeatureSet().map(fd => {
+    return this.labelledFeatureSet.getFeatureSet().map(fd => {
       const raw = fd.getFeatures();
       return {
         getFeatures(): Vector {
@@ -43,7 +41,7 @@ export default class DatasetImpl implements Dataset {
   }
 
   public getLabels(): DatasetLabels {
-    return this.featureSet.getLabels();
+    return this.labelledFeatureSet.getLabels();
   }
 
   public isValid(): boolean {

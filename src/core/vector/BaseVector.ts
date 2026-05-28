@@ -86,6 +86,12 @@ class BaseVector implements Vector {
     });
     return new BaseVector(extractedValues);
   }
+
+  round(decimalPlaces: number): Vector {
+    const factor = Math.pow(10, decimalPlaces);
+    const roundedValues = this.values.map(val => Math.round(val * factor) / factor);
+    return new BaseVector(roundedValues);
+  }
 }
 
 export default BaseVector;

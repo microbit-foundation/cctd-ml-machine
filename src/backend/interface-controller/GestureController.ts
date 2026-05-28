@@ -123,7 +123,6 @@ export class GestureController {
         this.log.warn(`Gesture with id ${id} does not exist`);
         return new GestureImpl(-1, 'deleted', [], [], {}, '#000000');
       }
-
       return gests[idx];
     });
 
@@ -150,7 +149,7 @@ export class GestureController {
   public importFromJson(importable: string | object) {
     const importString: string = typeof importable === 'string'
       ? importable
-       : JSON.stringify(importable);
+      : JSON.stringify(importable);
     const serializer = new GestureSerializer();
     const parsed: SerializedGesture[] = JSON.parse(importString);
     const deserialized = parsed.map(ser => serializer.deserialize(ser));

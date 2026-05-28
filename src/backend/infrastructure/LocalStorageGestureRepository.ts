@@ -75,12 +75,6 @@ export class LocalStorageGestureRepository implements GestureRepository {
     return filtered[0];
   }
 
-  private publish(gestures: NewGesture[]): void {
-    for (const listener of this.listeners) {
-      listener.onGesturesChanged(gestures);
-    }
-  }
-
   public saveGestures(value: NewGesture[]): NewGesture[] {
     const serialized = value.map(gest => this.serializer.serialize(gest));
     ControlledStorage.set(this.LOCAL_STORAGE_KEY, serialized);
@@ -116,5 +110,11 @@ export class LocalStorageGestureRepository implements GestureRepository {
       return [];
     }
     return recording.getAxes();
+  }
+
+  private publish(gestures: NewGesture[]): void {
+    for (const listener of this.listeners) {
+      listener.onGesturesChanged(gestures);
+    }
   }
 }

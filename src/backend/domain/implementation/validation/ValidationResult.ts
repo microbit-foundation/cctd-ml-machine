@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type AccuracyMatrix from '../../../../core/classifier/AccuracyMatrix';
 import type { EvaluationResult } from '../../../../core/classifier/EvaluationResult';
-import type Matrix from '../../../../core/entities/Matrix';
 
 export class ValidationResult {
   public constructor(private evaluationResult: EvaluationResult) {}
@@ -14,7 +14,11 @@ export class ValidationResult {
     return this.evaluationResult.getAccuracy();
   }
 
-  public getMatrix(): Matrix<number> {
-    throw new Error('Method not implemented.');
+  public getMatrix(): AccuracyMatrix {
+    return this.evaluationResult.getAccuracyMatrix();
+  }
+
+  public getPredictions(): number[] {
+    return this.evaluationResult.getPredictionIndices();
   }
 }

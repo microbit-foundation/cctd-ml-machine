@@ -17,4 +17,17 @@ export class VectorPredictionOutput implements PredictionOutput {
   public getPrediction(): Vector {
     return this.vector;
   }
+
+  public getPredictedIndex(): number {
+    const roundedVector = this.getRoundedPrediction();
+    const index = roundedVector.getValue().findIndex(value => value === 1);
+    if (index === -1) {
+      throw new Error(`Invalid prediction vector: ${roundedVector.getValue()}`);
+    }
+    return index;
+  }
+
+  private getRoundedPrediction(): Vector {
+    return this.vector.round(0);
+  }
 }

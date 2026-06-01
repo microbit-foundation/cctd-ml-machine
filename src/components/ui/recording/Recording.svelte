@@ -28,7 +28,7 @@
 
   const gestureController = getControllers().getGestureController();
 
-  $: dotGesture = dot?.gesture ? gestureController.getGesture(gestureId) : undefined;
+  $: dotGesture = dot?.gesture ? gestureController.getGesture(dot.gesture) : undefined;
 
   $: gesture = gestureController.getGestureState(gestureId)!;
   let hide = false;

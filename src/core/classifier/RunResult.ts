@@ -3,4 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
+/**
+ * Run result is the result of running a classifier on a dataset.
+ */
 export interface RunResult {}

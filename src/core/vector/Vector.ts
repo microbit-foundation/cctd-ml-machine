@@ -23,4 +23,6 @@ export interface Vector {
   scale(scalar: number): Vector;
 
   round(decimalPlaces: number): Vector;
+
+  indexOfMax(): number;
 }

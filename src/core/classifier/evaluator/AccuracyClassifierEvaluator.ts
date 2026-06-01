@@ -11,6 +11,7 @@ import type { PredictionOutput } from '../PredictionOutput';
 import type { Vector } from '../../vector/Vector';
 import { DataIndexLabel } from '../../dataset/DataIndexLabel';
 import ConsoleLogger from '../../logging/ConsoleLogger';
+import { AccuracyMatrixFactory } from '../AccuracyMatrixFactory';
 
 export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
 
@@ -20,8 +21,8 @@ export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
     dataset: Dataset,
     predictionOutput: PredictionOutput[],
   ): EvaluationResult {
-    console.log(dataset);
-    const labelIndices = this.getLabelIndices(dataset.getLabels().getLabelVectors());
+    const labels = dataset.getLabels();
+    const labelIndices = this.getLabelIndices(labels.getLabelVectors());
     const predictedIndices = this.getLabelIndices(
       // We round because label indices are expected to be 0 or 1. Confidence is rarely 100% on one class.
       predictionOutput.map(output => output.getPrediction().round(0)),
@@ -33,10 +34,15 @@ export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
 
     const accuracy = this.calculateAccuracy(labelIndices, predictedIndices);
 
+    const matrixFactory = new AccuracyMatrixFactory();
+    const matrix = matrixFactory.create(dataset.getNumberOfClasses(), labels, predictionOutput);
+
     this.log.log(`Evaluation result: ${accuracy}`);
 
     return {
       getAccuracy: () => accuracy,
+      getAccuracyMatrix: () => matrix,
+      getPredictionIndices: () => predictionOutput.map(output => output.getPrediction().indexOfMax()),
     };
   }
 

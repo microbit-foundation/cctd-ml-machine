@@ -8,4 +8,5 @@ import type { Vector } from '../vector/Vector';
 
 export interface PredictionOutput {
   getPrediction(): Vector;
+  getPredictedIndex(): number
 }

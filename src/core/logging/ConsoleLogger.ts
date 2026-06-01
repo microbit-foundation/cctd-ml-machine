@@ -32,8 +32,8 @@ class ConsoleLogger implements Logger {
       return;
     }
     welcomeLog();
-    const outputMessage = `[${origin}] ${message} ${params}`;
-    isStackTraceEnabled() && console.trace(outputMessage);
+    const outputMessage = `[${origin}] %c${message} ${params}`;
+    isStackTraceEnabled() && console.trace(outputMessage, 'color: orange;');
     !isStackTraceEnabled() && console.warn(outputMessage);
   }
 

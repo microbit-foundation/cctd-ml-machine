@@ -10,6 +10,7 @@
   import Recording from '../../components/ui/recording/Recording.svelte';
   import type { GestureID } from '../../core/entities/Gesture';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
+    import Matrix from '../../core/entities/Matrix';
 
   export let gestureId: GestureID;
 
@@ -25,17 +26,39 @@
       recordingId: number,
     ): { gesture: GestureID; color: string } | undefined => {
       // recordingId -> Gesture
-      const resultGesture = gestureController.getGestureFromRecording(recordingId);
+      const resultGesture = gestureController.getGestureFromValidationRecording(recordingId);
+      if (!resultGesture || !res) {
+        return undefined;
+      }
 
-      if (!resultGesture) {
+      const indexOfRecording = resultGesture.getValidationRecordings().findIndex(rec => rec.getId() === recordingId);
+
+      const classIndex = gestureController.getClassIndex(resultGesture.getID());
+      if (classIndex == null) {
+        throw new Error("Something went wrong, could find gesture, but not it's class index");
+      }
+
+      const predictionLookup: number[][] = new Array(gestureController.getGestures().get().length);
+      let i = 0;
+      gestureController.getGestures().get().forEach((gest,j) => {
+        predictionLookup[j] = []
+        gest.getValidationRecordings().forEach((vRec,k) => {
+          predictionLookup[j].push(res.getPredictions()[i])
+          i++;
+        })
+      })
+      console.log(predictionLookup[classIndex][indexOfRecording])
+      const predirectedGesture = gestureController.getGestureFromClassIndex(predictionLookup[classIndex][indexOfRecording]);
+      if (!predirectedGesture) {
         return undefined;
       }
 
       return {
-        gesture: resultGesture.getID(),
-        color: resultGesture.getColor(),
+        gesture: predirectedGesture.getID(),
+        color: predirectedGesture.getColor(),
       };
     };
+    
     return getDot;
   });
   

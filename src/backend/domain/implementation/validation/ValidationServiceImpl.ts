@@ -33,6 +33,8 @@ export class ValidationServiceImpl implements ValidationService {
       return;
     }
     const evaluation = await classifier.evaluate(validationSet);
+    this.log.log(`Validation evaluation completed with accuracy: ${evaluation.getAccuracy()}`);
+    console.log(evaluation);
 
     const validationResult = new ValidationResult(evaluation);
     this.validationRepository.saveValidationResult(validationResult);

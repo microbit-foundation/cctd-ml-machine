@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { get } from 'http';
 import type { Axis } from '../../../../core/entities/Axis';
 import type { GestureID } from '../../../../core/entities/Gesture';
 import type { NewGesture } from '../../../../core/entities/NewGesture';
@@ -41,6 +42,19 @@ export class GestureServiceImpl implements GestureService {
     const gestures = this.gestureRepository.getGestures();
     for (const gesture of gestures) {
       const recordings = gesture.getRecordings();
+      for (const recording of recordings) {
+        if (recording.getId() === recordingId) {
+          return gesture;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  getGestureFromValidationRecording(recordingId: number): NewGesture | undefined {
+    const gestures = this.gestureRepository.getGestures();
+    for (const gesture of gestures) {
+      const recordings = gesture.getValidationRecordings();
       for (const recording of recordings) {
         if (recording.getId() === recordingId) {
           return gesture;

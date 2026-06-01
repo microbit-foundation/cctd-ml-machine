@@ -66,8 +66,32 @@ export class GestureController {
     });
     return new SvelteStateAdapterReadonly(derivation);
   }
+  
+  public getGestureFromValidationRecording(recordingId: number): NewGesture | undefined {
+    return this.gestureService.getGestureFromValidationRecording(recordingId);
+  }
+
   public getGestureFromRecording(recordingId: number): NewGesture | undefined {
     return this.gestureService.getGestureFromRecording(recordingId);
+  }
+
+  public getClassIndex(gestureId: GestureID): number | undefined {
+    const gestures = this.gestureService.getGestures();
+    const index = gestures.findIndex(gesture => gesture.getID() === gestureId);
+    if (index === -1) {
+      this.log.warn(`Gesture with id ${gestureId} does not exist`);
+      return undefined;
+    }
+    return index;
+  }
+
+  public getGestureFromClassIndex(classIndex: number): NewGesture | undefined {
+    const gestures = this.gestureService.getGestures();
+    if (classIndex < 0 || classIndex >= gestures.length) {
+      this.log.warn(`Invalid class index ${classIndex}`);
+      return undefined;
+    }
+    return gestures[classIndex];
   }
 
   getDownloadableGesturesAsJson(): string {

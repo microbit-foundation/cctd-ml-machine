@@ -29,6 +29,9 @@ export class VectorClassifier implements Classifier {
     return new VectorPredictionOutput(prediction);
   }
 
+  /**
+   * Evaluates the classifier on the provided test dataset and returns an EvaluationResult containing the accuracy and other relevant metrics.
+   */
   public async evaluate(testData: Dataset): Promise<EvaluationResult> {
     const predictionInputs = this.getPredictionInputForDataset(testData);
     const predictions = predictionInputs.map(predInput => this.predict(predInput));

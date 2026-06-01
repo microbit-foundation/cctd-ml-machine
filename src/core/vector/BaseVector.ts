@@ -92,6 +92,19 @@ class BaseVector implements Vector {
     const roundedValues = this.values.map(val => Math.round(val * factor) / factor);
     return new BaseVector(roundedValues);
   }
+
+  indexOfMax(): number {
+    if (this.values.length === 0) {
+      throw new Error('Cannot find index of max in an empty vector');
+    }
+    let maxIndex = 0;
+    for (let i = 1; i < this.values.length; i++) {
+      if (this.values[i] > this.values[maxIndex]) {
+        maxIndex = i;
+      }
+    }
+    return maxIndex;
+  }
 }
 
 export default BaseVector;

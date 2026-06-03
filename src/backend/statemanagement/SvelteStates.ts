@@ -172,7 +172,7 @@ export class SvelteStates implements AbstractStates {
   }
 
   setGestures(gestures: NewGesture[]): void {
-    this.log.log(`Updating gestures state with ${gestures.length} gestures`);
+    this.log.info(`Updating gestures state with ${gestures.length} gestures`);
     this.gesturesState.set(gestures);
   }
 

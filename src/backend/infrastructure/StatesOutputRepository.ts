@@ -22,7 +22,7 @@ export class StatesOutputRepository implements OutputRepository {
   }
 
   public setOutputTarget(outputTarget: OutputTarget): void {
-    this.log.log('setOutputTarget', outputTarget);
+    this.log.info('setOutputTarget', outputTarget);
     return this.states.getOutputTarget().set(outputTarget);
   }
 }

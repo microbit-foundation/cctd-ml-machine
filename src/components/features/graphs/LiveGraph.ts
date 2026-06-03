@@ -33,7 +33,7 @@ export class LiveGraphControl {
     private recordingDuration: number,
     liveData: AbstractState<LiveDataStore<LiveDataVector>>,
   ) {
-    this.log.log(
+    this.log.info(
       'Initializing LiveGraphControl with minValue:',
       minValue,
       'maxValue:',
@@ -118,7 +118,7 @@ export class LiveGraphControl {
   }
 
   private updateChart(canvas: HTMLCanvasElement) {
-    this.log.log('Updating chart with new canvas');
+    this.log.info('Updating chart with new canvas');
     if (this.chart) {
       this.chart.stop();
     }

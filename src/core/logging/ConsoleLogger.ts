@@ -16,7 +16,7 @@ const setStackTraceEnabled = (val: boolean) =>
 class ConsoleLogger implements Logger {
   constructor(private origin: any) {}
 
-  public log(message: any, ...params: any[]) {
+  public info(message: any, ...params: any[]) {
     ConsoleLogger.log(this.origin, message, params);
   }
 
@@ -32,9 +32,10 @@ class ConsoleLogger implements Logger {
       return;
     }
     welcomeLog();
-    const outputMessage = `[${origin}] %c${message} ${params}`;
-    isStackTraceEnabled() && console.trace(outputMessage, 'color: orange;');
-    !isStackTraceEnabled() && console.warn(outputMessage);
+    const warnOutputMessage = `[${origin}] ${message} ${params}`;
+    const traceOutputMessage = `[${origin}] %c${message} ${params}`;
+    isStackTraceEnabled() && console.trace(traceOutputMessage, 'color: orange;');
+    !isStackTraceEnabled() && console.warn(warnOutputMessage);
   }
 
   /**

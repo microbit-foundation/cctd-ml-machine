@@ -9,7 +9,7 @@ export class AccuracyMatrixFactory {
     private log = new ConsoleLogger(AccuracyMatrixFactory.name);
 
     create(numberOfClasses: number, labels: DatasetLabels, outputs: PredictionOutput[]): AccuracyMatrix {
-        this.log.log(`Creating accuracy matrix for ${numberOfClasses} classes, ${labels.getLabelVectors().length} labels and ${outputs.length} outputs`);
+        this.log.info(`Creating accuracy matrix for ${numberOfClasses} classes, ${labels.getLabelVectors().length} labels and ${outputs.length} outputs`);
         const matrix = AccuracyMatrix.fromSize(numberOfClasses);
         const labelVectors = labels.getLabelVectors();
 

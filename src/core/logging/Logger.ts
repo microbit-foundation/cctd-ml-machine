@@ -4,6 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 export interface Logger {
-  log(message: any, ...params: any[]): void;
+  info(message: any, ...params: any[]): void;
   warn(message: any, ...params: any[]): void;
 }

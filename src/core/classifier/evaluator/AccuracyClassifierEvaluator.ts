@@ -37,7 +37,7 @@ export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
     const matrixFactory = new AccuracyMatrixFactory();
     const matrix = matrixFactory.create(dataset.getNumberOfClasses(), labels, predictionOutput);
     const confusionBuckets = this.getConfusionBuckets(labelIndices, predictedIndices, dataset.getNumberOfClasses());
-    this.log.log(`Evaluation result: ${accuracy}`);
+    this.log.info(`Evaluation result: ${accuracy}`);
 
     return {
       getAccuracy: () => accuracy,

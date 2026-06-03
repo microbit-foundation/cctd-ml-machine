@@ -158,7 +158,7 @@ export class GestureController {
   }
 
   public deleteGesture(gesture: GestureID): void {
-    this.log.log(`Deleting gesture with id ${gesture}`);
+    this.log.info(`Deleting gesture with id ${gesture}`);
     this.gestureService.deleteGesture(gesture);
   }
 

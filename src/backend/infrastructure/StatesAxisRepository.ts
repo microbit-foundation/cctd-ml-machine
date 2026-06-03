@@ -27,12 +27,12 @@ export class StatesAxisRepository implements AxisRepository {
 
     if (!states.getAvailableAxes().get().length) {
       const availableAxes = this.getAvailableAxesFromRecordings();
-      this.log.log('Setting available axes in state from recordings', availableAxes);
+      this.log.info('Setting available axes in state from recordings', availableAxes);
       states.getAvailableAxes().set(availableAxes);
     }
     if (!states.getSelectedAxes().get().length) {
       const selectedAxes = this.getAvailableAxesFromRecordings();
-      this.log.log('Setting selected axes in state from recordings', selectedAxes);
+      this.log.info('Setting selected axes in state from recordings', selectedAxes);
       states.getSelectedAxes().set(selectedAxes);
     }
   }
@@ -65,7 +65,7 @@ export class StatesAxisRepository implements AxisRepository {
     if (gestures.length > 0) {
       const recordings = gestures[0].getRecordings();
       if (recordings.length > 0) {
-        this.log.log(
+        this.log.info(
           'Found default available axes in recordings',
           recordings[0].getAxes(),
         );

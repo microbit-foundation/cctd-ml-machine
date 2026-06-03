@@ -88,7 +88,7 @@ export class MLMachine {
   }
 
   private constructor(private featureProvider: FeatureProvider) {
-    this.log.log('Bootstrapped ML-Machine');
+    this.log.info('Bootstrapped ML-Machine');
     const userSessionRepository = new LocalStorageUserSessionRepository();
     this.userService = new UserServiceImpl(userSessionRepository);
 

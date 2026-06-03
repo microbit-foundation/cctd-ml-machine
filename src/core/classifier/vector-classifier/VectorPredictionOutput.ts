@@ -5,17 +5,15 @@
  */
 
 import type { Vector } from '../../vector/Vector';
+import type { PredictionInput } from '../Predictioninput';
 import type { PredictionOutput } from '../PredictionOutput';
 
 export class VectorPredictionOutput implements PredictionOutput {
-  private vector: Vector;
-
-  constructor(inputVector: Vector) {
-    this.vector = inputVector;
+  constructor(private predictionInput: PredictionInput, private outputVector: Vector) {
   }
 
   public getPrediction(): Vector {
-    return this.vector;
+    return this.outputVector;
   }
 
   public getPredictedIndex(): number {
@@ -27,7 +25,11 @@ export class VectorPredictionOutput implements PredictionOutput {
     return index;
   }
 
+  public getInput(): PredictionInput {
+    return this.predictionInput;
+  }
+
   private getRoundedPrediction(): Vector {
-    return this.vector.round(0);
+    return this.outputVector.round(0);
   }
 }

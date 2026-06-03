@@ -15,7 +15,7 @@
     x: ($knnHighlightedPoint?.pointTransformed.projected.x ?? 0) + offsetX,
     y: ($knnHighlightedPoint?.pointTransformed.projected.y ?? 0) + offsetY,
   };
-  const filters = getControllers().getDataController().getFilters();
+  const filters = getControllers().getFilterController().getFilters();
 
   $: content = {
     values: [

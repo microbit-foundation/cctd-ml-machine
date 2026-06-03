@@ -42,8 +42,10 @@ import type { FeatureProvider } from '../application/feature/FeatureProvider';
 import { Feature } from '../application/feature/Feature';
 import type { LiveDataStore } from '../../core/LiveDataStore';
 import { createFilter, getFilterTypes } from '../../core/filter/FilterUtils';
+import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 
 export class SvelteStates implements AbstractStates {
+  private predictionState: AbstractState<PredictionOutput | undefined>;
   private outputTargetState: AbstractState<OutputTarget>;
   private liveDataState: AbstractState<LiveDataStore<LiveDataVector>>;
   private microbitConnectionState: AbstractState<MicrobitConnection>;
@@ -74,6 +76,7 @@ export class SvelteStates implements AbstractStates {
     private selectedGestureState: AbstractState<NewGesture | undefined>,
     initialAxes: Axis[],
   ) {
+    this.predictionState = new SvelteStateAdapter(writable(undefined));
     this.liveDataState = new LiveDataStateAdapter(
       StaticConfiguration.accelerometerLiveDataBufferSize,
     );
@@ -141,6 +144,9 @@ export class SvelteStates implements AbstractStates {
         ),
       ),
     );
+  }
+  getPredictionState(): AbstractState<PredictionOutput | undefined> {
+    return this.predictionState;
   }
 
   getRecordingSettings(): AbstractState<RecordingSettings> {

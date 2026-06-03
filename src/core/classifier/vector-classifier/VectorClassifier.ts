@@ -26,7 +26,8 @@ export class VectorClassifier implements Classifier {
 
   public async predict(input: PredictionInput): Promise<PredictionOutput> {
     const prediction: Vector = await this.model.predict(input.getInput());
-    return new VectorPredictionOutput(prediction);
+    const predictionOutput = new VectorPredictionOutput(input, prediction);
+    return predictionOutput;
   }
 
   /**

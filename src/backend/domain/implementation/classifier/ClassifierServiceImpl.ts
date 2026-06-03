@@ -20,11 +20,14 @@ import type { NerualNetworkTrainingIterationRepository } from '../../NerualNetwo
 import type { KNNSettingsService } from '../../KNNSettingsService';
 import KNNModelTrainer from '../../../../core/model/KNN/KNNModelTrainer';
 import type { ModelInfo } from '../../../../core/model/ModelInfo';
-import type { FilterRepository } from '../../FilterRepository';
 import { BasicNeuralNetworkArchitecture } from '../../../../core/model/neural-network/BasicNeuralNetworkArchitecture';
 import { NeuralNetworkSettingsImpl } from '../../../../core/model/neural-network/NeuralNetworkSettingsImpl';
+import type { PredictionOutput } from '../../../../core/classifier/PredictionOutput';
+import type { PredictionInput } from '../../../../core/classifier/Predictioninput';
+import type { PredictionRepository } from '../../PredictionRepository';
 
 export class ClassifierServiceImpl implements ClassifierService {
+
   constructor(
     private classifierRepository: ClassifierRepository,
     private modelTraining: ModelTrainingStateRepository,
@@ -32,7 +35,18 @@ export class ClassifierServiceImpl implements ClassifierService {
     private dataService: DataService,
     private knnSettingsService: KNNSettingsService,
     private trainingIterationRepository: NerualNetworkTrainingIterationRepository,
+    private predictionRepository: PredictionRepository,
   ) {}
+
+  async predict(predictionInput: PredictionInput): Promise<PredictionOutput> {
+    const classifier = this.getClassifier();
+    if (classifier === undefined) {
+      throw new Error('No classifier is currently selected.');
+    }
+    const predictedOutput = await classifier.predict(predictionInput);
+    this.predictionRepository.savePrediction(predictedOutput);
+    return predictedOutput;
+  }
 
   public setSelectedModel(model: ModelInfo): void {
     this.classifierRepository.setSelectedModel(model);

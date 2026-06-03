@@ -15,7 +15,7 @@
   import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   const gestures = getControllers().getGestureController().getGestures();
-  const filters = getControllers().getDataController().getFilters();
+  const filters = getControllers().getFilterController().getFilters();
   const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
 
   const canvasWidth = 450;

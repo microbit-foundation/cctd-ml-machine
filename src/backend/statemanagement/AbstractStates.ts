@@ -24,11 +24,13 @@ import type { ModelInfo } from '../../core/model/ModelInfo';
 import type { Confidences } from '../../core/entities/Confidences';
 import type { GestureRecordingState } from '../domain/recording/GestureRecordingState';
 import type { RecordingSettings } from '../domain/recording/RecordingSettings';
+import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 
 /**
  * Both used as a reactive state interface and data source for the backend
  */
 export interface AbstractStates {
+  getPredictionState(): AbstractState<PredictionOutput | undefined>;
   getRecordingSettings(): AbstractState<RecordingSettings>;
   getRecordingState(): AbstractState<GestureRecordingState>;
   getNeuralNetworkTrainingIterations(): AbstractState<NeuralNetworkTrainingIteration[]>;

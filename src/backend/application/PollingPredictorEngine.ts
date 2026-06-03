@@ -19,24 +19,25 @@ export class PollingPredictorEngine {
     private pollingPredictionInterval: number,
     private pollingPredictionSampleSize: number,
     private pollingPredictionSampleDuration: number,
-  ) {}
+  ) { }
+
+  public stop() {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+    }
+    this.isRunning = false;
+  }
+
+  public start() {
+    if (!this.isRunning) {
+      this.isRunning = true;
+      this.startPolling();
+    }
+  }
 
   private startPolling() {
     this.isRunning = true;
-    this.pollingInterval = setInterval(async () => {
-      const prediction = await this.predict();
-      if (prediction === undefined) {
-        return;
-      }
-      const outputVectorValue = prediction.getPrediction().getValue();
-      const gestures = this.gestureRepository.getGestures();
-      const confidenceMap = new Map<GestureID, number>();
-      for (let i = 0; i < gestures.length; i++) {
-        confidenceMap.set(gestures[i].getID(), outputVectorValue[i]);
-      }
-      const confidences = new Confidences(confidenceMap);
-      this.confidenceService.setConfidences(confidences);
-    }, this.pollingPredictionInterval);
+    this.pollingInterval = setInterval(async () => this.poll, this.pollingPredictionInterval);
   }
 
   private async predict(): Promise<PredictionOutput | undefined> {
@@ -65,20 +66,21 @@ export class PollingPredictorEngine {
     if (classifier === undefined) {
       return;
     }
-    return await classifier.predict(predictionInput);
+    return await this.classifierService.predict(predictionInput);
   }
 
-  public stop() {
-    if (this.pollingInterval) {
-      clearInterval(this.pollingInterval);
+  private async poll(): Promise<void> {
+    const prediction = await this.predict();
+    if (prediction === undefined) {
+      return;
     }
-    this.isRunning = false;
-  }
-
-  public start() {
-    if (!this.isRunning) {
-      this.isRunning = true;
-      this.startPolling();
+    const outputVectorValue = prediction.getPrediction().getValue();
+    const gestures = this.gestureRepository.getGestures();
+    const confidenceMap = new Map<GestureID, number>();
+    for (let i = 0; i < gestures.length; i++) {
+      confidenceMap.set(gestures[i].getID(), outputVectorValue[i]);
     }
+    const confidences = new Confidences(confidenceMap);
+    this.confidenceService.setConfidences(confidences);
   }
 }

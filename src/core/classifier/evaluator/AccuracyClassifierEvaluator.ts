@@ -36,14 +36,27 @@ export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
 
     const matrixFactory = new AccuracyMatrixFactory();
     const matrix = matrixFactory.create(dataset.getNumberOfClasses(), labels, predictionOutput);
-
+    const confusionBuckets = this.getConfusionBuckets(labelIndices, predictedIndices, dataset.getNumberOfClasses());
     this.log.log(`Evaluation result: ${accuracy}`);
 
     return {
       getAccuracy: () => accuracy,
       getAccuracyMatrix: () => matrix,
       getPredictionIndices: () => predictionOutput.map(output => output.getPrediction().indexOfMax()),
+      getConfusionBuckets: () => confusionBuckets,
     };
+  }
+
+  private getConfusionBuckets(labelIndices: number[], predictedIndices: number[], numberOfClasses: number): number[][] {
+    const buckets: number[][] = Array.from({ length: numberOfClasses }, () => []);
+
+    for (let i = 0; i < labelIndices.length; i++) {
+      const trueLabelIdx = labelIndices[i];
+      const predictedLabelIdx = predictedIndices[i];
+      buckets[trueLabelIdx].push(predictedLabelIdx);
+    }
+
+    return buckets;
   }
 
   private getLabelIndices(labelVectors: Vector[]): number[] {

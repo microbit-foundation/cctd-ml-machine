@@ -31,24 +31,17 @@
         return undefined;
       }
 
+
       const indexOfRecording = resultGesture.getValidationRecordings().findIndex(rec => rec.getId() === recordingId);
 
       const classIndex = gestureController.getClassIndex(resultGesture.getID());
       if (classIndex == null) {
         throw new Error("Something went wrong, could find gesture, but not it's class index");
       }
+      const bucket = res.getConfusionBuckets()[classIndex];
+      const predicted = bucket[indexOfRecording];
 
-      const predictionLookup: number[][] = new Array(gestureController.getGestures().get().length);
-      let i = 0;
-      gestureController.getGestures().get().forEach((gest,j) => {
-        predictionLookup[j] = []
-        gest.getValidationRecordings().forEach((vRec,k) => {
-          predictionLookup[j].push(res.getPredictions()[i])
-          i++;
-        })
-      })
-      console.log(predictionLookup[classIndex][indexOfRecording])
-      const predirectedGesture = gestureController.getGestureFromClassIndex(predictionLookup[classIndex][indexOfRecording]);
+      const predirectedGesture = gestureController.getGestureFromClassIndex(predicted);
       if (!predirectedGesture) {
         return undefined;
       }

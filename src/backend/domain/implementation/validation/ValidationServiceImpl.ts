@@ -19,9 +19,9 @@ export class ValidationServiceImpl implements ValidationService {
     private classifierService: ClassifierService,
     private validationRepository: ValidationRepository,
     private dataService: DataService,
-  ) {}
+  ) { }
 
-  public async evaluateValidationSet(): Promise<void> {
+  async evaluateValidationSet(): Promise<void> {
     const validationSet = this.dataService.getValidationDataset();
     if (!validationSet.isValid() || validationSet.isEmpty()) {
       this.log.warn('Validation dataset is not valid or empty, skipping evaluation');
@@ -34,9 +34,13 @@ export class ValidationServiceImpl implements ValidationService {
     }
     const evaluation = await classifier.evaluate(validationSet);
     this.log.log(`Validation evaluation completed with accuracy: ${evaluation.getAccuracy()}`);
-    console.log(evaluation);
 
     const validationResult = new ValidationResult(evaluation);
     this.validationRepository.saveValidationResult(validationResult);
   }
+
+  clearValidationResult(): void {
+    this.validationRepository.clearValidationResult();
+  }
+
 }

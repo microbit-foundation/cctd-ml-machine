@@ -7,6 +7,7 @@
 import type AccuracyMatrix from '../../../../core/classifier/AccuracyMatrix';
 import type { EvaluationResult } from '../../../../core/classifier/EvaluationResult';
 
+// TODO: Maybe it should just be evaluation result that's used, since this just mirrors all of the methods
 export class ValidationResult {
   public constructor(private evaluationResult: EvaluationResult) {}
 
@@ -20,5 +21,9 @@ export class ValidationResult {
 
   public getPredictions(): number[] {
     return this.evaluationResult.getPredictionIndices();
+  }
+
+  public getConfusionBuckets(): number[][] {
+    return this.evaluationResult.getConfusionBuckets();
   }
 }

@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { Vector } from '../vector/Vector';
 import type AccuracyMatrix from './AccuracyMatrix';
 import type { RunResult } from './RunResult';
 
@@ -14,4 +13,5 @@ export interface EvaluationResult extends RunResult {
   getAccuracy(): number;
   getAccuracyMatrix(): AccuracyMatrix;
   getPredictionIndices(): number[];
+  getConfusionBuckets(): number[][];
 }

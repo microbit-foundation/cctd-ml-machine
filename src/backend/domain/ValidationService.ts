@@ -6,4 +6,5 @@
 
 export interface ValidationService {
   evaluateValidationSet(): Promise<void>;
+  clearValidationResult(): void;
 }

@@ -107,11 +107,12 @@ export class MLMachine {
       selectedGestureState,
       gestureRepository.getAxesFromGestures()
     );
-    gestureStateHandler.setStates(this.states);
     const filterSelectionListener = new FilterSelectionListener(
       this.states.getSelectedAxes().get(),
       this.states.getFilters().get(),
     );
+    this.filterRepository = new StatesFilterRepository(this.states, [filterSelectionListener]);
+    gestureStateHandler.setStates(this.states);
     const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
     const axisRepository: AxisRepository = new StatesAxisRepository(
@@ -122,11 +123,20 @@ export class MLMachine {
     const neuralNetworkSettingsRepository = new StatesNeuralNetworkSettingsRepository(
       this.states.getNeuralNetworkSettings(),
     );
-    this.filterRepository = new StatesFilterRepository(this.states, [filterSelectionListener]);
+    const statesModelTrainingRepository = new StatesModelTrainingStateRepository(
+      this.states.getModelTraining(),
+    );
+    const classifierRepository = new StatesClassifierRepository(this.states);
+    const knnSettingsRepository = new StatesKNNModelSettingsRepository(this.states);
+    const trainingIterationRepository = new StatesTrainingIterationRepository(
+      this.states,
+    );
+    const validationRepository = new StatesValidationRepository(this.states);
     this.gestureService = new GestureServiceImpl(
       gestureRepository,
       new MLMachineColors(gestureRepository),
       axisRepository,
+      validationRepository,
     );
     this.confidenceService = new ConfidenceServiceImpl(
       confidenceRepository,
@@ -138,6 +148,24 @@ export class MLMachine {
       this.filterRepository,
       this.gestureService,
     );
+    this.knnSettingsService = new KNNSettingsServiceImpl(
+      knnSettingsRepository,
+      this.gestureService,
+    );
+    this.classifierService = new ClassifierServiceImpl(
+      classifierRepository,
+      statesModelTrainingRepository,
+      neuralNetworkSettingsRepository,
+      this.dataService,
+      this.knnSettingsService,
+      trainingIterationRepository,
+    );
+    const validationService = new ValidationServiceImpl(
+      this.classifierService,
+      validationRepository,
+      this.dataService,
+    );
+
 
     const outputService = new OutputServiceImpl(new StatesOutputRepository(this.states));
     const microbitConnectionRepository = new StatesMicrobitConnectionRepository(
@@ -152,28 +180,14 @@ export class MLMachine {
       new StatesNotificationRepository(this.states),
     );
 
-    const statesModelTrainingRepository = new StatesModelTrainingStateRepository(
-      this.states.getModelTraining(),
-    );
-    const classifierRepository = new StatesClassifierRepository(this.states);
-    const knnSettingsRepository = new StatesKNNModelSettingsRepository(this.states);
-    const trainingIterationRepository = new StatesTrainingIterationRepository(
-      this.states,
-    );
-    this.knnSettingsService = new KNNSettingsServiceImpl(
-      knnSettingsRepository,
-      this.gestureService,
-    );
-    this.classifierService = new ClassifierServiceImpl(
-      classifierRepository,
-      statesModelTrainingRepository,
-      neuralNetworkSettingsRepository,
-      this.dataService,
-      this.knnSettingsService,
-      trainingIterationRepository,
-    );
+
+
+
+
+
     filterSelectionListener.setClassifierService(this.classifierService);
     classifierNodeCountHandler.setClassifierService(this.classifierService);
+
     this.controllers = new MLMachineControllers(
       this,
       this.dataService,
@@ -182,11 +196,7 @@ export class MLMachine {
       outputService,
       this.states,
       this.microbitService,
-      new ValidationServiceImpl(
-        this.classifierService,
-        new StatesValidationRepository(this.states),
-        this.dataService,
-      ),
+      validationService,
       this.knnSettingsService,
       new RecordingServiceImpl(
         new StatesRecordingStateRepository(this.states),
@@ -212,7 +222,7 @@ export class MLMachine {
       StaticConfiguration.pollingPredictionInterval,
     );
 
-    
+
 
     // const devices = stores.getDevices();
     // const outputHandler = new OutputMicrobitHandler(devices);

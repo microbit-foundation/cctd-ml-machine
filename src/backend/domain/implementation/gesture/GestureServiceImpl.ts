@@ -14,12 +14,14 @@ import type { GestureRepository } from '../../GestureRepository';
 import type { GestureService } from '../../GestureService';
 import type { SystemColors } from '../SystemColors';
 import { GestureImpl } from './GestureImpl';
+import type { ValidationRepository } from '../../ValidationRepository';
 
 export class GestureServiceImpl implements GestureService {
   public constructor(
     private gestureRepository: GestureRepository,
     private colors: SystemColors,
     private axisRepository: AxisRepository,
+    private validationRepository: ValidationRepository,
   ) { }
 
   saveGestures(gestures: NewGesture[]): void {
@@ -35,6 +37,7 @@ export class GestureServiceImpl implements GestureService {
     gesture.setValidationRecordings(
       [...gesture.getValidationRecordings()].filter(rec => rec.getId() !== recordingId),
     );
+    this.validationRepository.clearValidationResult();
     this.gestureRepository.saveGesture(gesture);
   }
 
@@ -99,6 +102,7 @@ export class GestureServiceImpl implements GestureService {
   public addValidationRecording(gestureId: GestureID, recording: Recording): void {
     const gesture = this.getGestureOrThrow(gestureId);
     gesture.setValidationRecordings([...gesture.getValidationRecordings(), recording]);
+    this.validationRepository.clearValidationResult();
     this.gestureRepository.saveGesture(gesture);
   }
 

@@ -8,25 +8,26 @@
   import Matrix from '../../core/entities/Matrix';
   import { t } from '../../i18n';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
+    import type AccuracyMatrix from '../../core/classifier/AccuracyMatrix';
 
   const gestures = getControllers().getGestureController().getGestures();
 
-  export let validationSetMatrix: Matrix<number> | undefined;
+  export let matrix: AccuracyMatrix;
   // TODO: Fix, make the correct size (len(gestures)^2)
-  const matrixSafe = validationSetMatrix ?? new Matrix([]);
   export let showPercentages: boolean;
 
   $: rowSums = $gestures.map((_, gestureIdx) => {
-    return matrixSafe.getRow(gestureIdx).reduce((pre, cur) => pre + cur, 0);
+    return matrix.getRow(gestureIdx).reduce((pre, cur) => pre + cur, 0);
   });
+
   $: percentageMatrix = new Matrix(
-    matrixSafe.getValues().map((row, rowIdx) => {
+    matrix.toArray().map((row, rowIdx) => {
       return row.map(col => {
         return col / rowSums[rowIdx];
       });
     }),
   );
-  $: matrix = showPercentages ? percentageMatrix : matrixSafe;
+  $: displayMatrix = showPercentages ? percentageMatrix : matrix;
 </script>
 
 <table>
@@ -50,7 +51,7 @@
     {#each $gestures as gesture, rowIdx}
       <tr>
         <td class="border-l-1 pl-2 border-1">{gesture.getName()}</td>
-        {#each matrix.getRow(rowIdx) as val, colIdx}
+        {#each displayMatrix.getRow(rowIdx) as val, colIdx}
           <td class="border-1" class:bg-green-50={rowIdx === colIdx}>
             {#if showPercentages}
               {isNaN(val) ? '-' : (val * 100).toFixed(0) + '%'}

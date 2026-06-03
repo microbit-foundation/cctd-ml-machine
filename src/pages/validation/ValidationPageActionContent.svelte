@@ -14,14 +14,18 @@
   import Switch from '../../components/ui/Switch.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import type Matrix from '../../core/entities/Matrix';
+    import AccuracyMatrix from '../../core/classifier/AccuracyMatrix';
 
+  const gestureController = getControllers().getGestureController();
+  const gestures = gestureController.getGestures();
   const validationController = getControllers().getValidationController();
   const validationResult = validationController.getValidationResult();
   const classifierController = getControllers().getClassifierController();
   const modelTraining = classifierController.getModelTraining();
   const accuracy = $validationResult?.getAccuracy();
-  const validationSetMatrix: Matrix<number> | undefined = $validationResult?.getMatrix();
   const autoUpdate = validationController.shouldAutoUpdate();
+
+  $: accuracyMatrix = $validationResult?.getMatrix();
 
   const handleEvaluateValidationSets = () => {
     validationController.evaluateValidationSet();
@@ -59,7 +63,7 @@
         <input type="checkbox" bind:checked={$showPercentages} />
       </div>
       <div class="mx-2 max-h-37 max-w-180 overflow-y-auto">
-        <ValidationMatrix {validationSetMatrix} showPercentages={$showPercentages} />
+        <ValidationMatrix matrix={accuracyMatrix || AccuracyMatrix.fromSize($gestures.length)} showPercentages={$showPercentages} />
       </div>
     </div>
   </div>

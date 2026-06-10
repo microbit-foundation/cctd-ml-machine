@@ -30,22 +30,19 @@ export class VectorPredictionInput implements PredictionInput {
     if (samples.length === 0) {
       return new VectorPredictionInput(new BaseVector([]));
     }
-    const sampleVectors = samples.map(
-      e =>
-        new BaseVector(
-          e
-            .getValue()
-            .filter(
-              (vecVal, vecIdx) => axes.findIndex(axis => axis.index === vecIdx) !== -1,
-            ),
-        ),
+    // Keep feature ordering identical to training: iterate filters first, then axes.
+    const samplesByAxis = axes.map(axis =>
+      samples.map(sample => sample.getValue()[axis.index]),
     );
-    const vectorSize = sampleVectors[0].getSize();
-    const filtered = new BaseVector(
-      Array.from({ length: vectorSize }, (_, i) =>
-        filters.map(filter => filter.filter(sampleVectors.map(e => e.getValue()[i]))),
-      ).flat(),
-    );
+
+    const features: number[] = [];
+    for (let i = 0; i < filters.length; i++) {
+      for (let j = 0; j < samplesByAxis.length; j++) {
+        features.push(filters[i].filter(samplesByAxis[j]));
+      }
+    }
+
+    const filtered = new BaseVector(features);
 
     return new VectorPredictionInput(filtered);
   }

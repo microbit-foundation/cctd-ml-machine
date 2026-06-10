@@ -23,7 +23,7 @@ describe('FilterSelectionListener', () => {
       initialSelectedAxes,
       initialFilters,
     );
-    listener.setClassifierService(classifierService);
+    listener.setModelService(classifierService);
 
     listener.onFiltersChanged([
       createFilter(FilterType.MAX),
@@ -46,7 +46,7 @@ describe('FilterSelectionListener', () => {
       [{ index: 0, label: 'x' }, { index: 1, label: 'y' }],
       initialFilters,
     );
-    listener.setClassifierService(classifierService);
+    listener.setModelService(classifierService);
 
     listener.onSelectedAxesChanged([{ index: 0, label: 'x' }]);
 
@@ -61,7 +61,7 @@ describe('FilterSelectionListener', () => {
       [{ index: 0, label: 'x' }],
       [createFilter(FilterType.MAX)],
     );
-    listener.setClassifierService(classifierService);
+    listener.setModelService(classifierService);
 
     listener.onFiltersChanged([createFilter(FilterType.MAX)]);
     listener.onSelectedAxesChanged([{ index: 0, label: 'x' }]);

@@ -1,5 +1,5 @@
 import type { Filter } from '../../core/filter/Filter';
-import type { FilterListListener } from '../domain/FilterListListener';
+import type { FilterListListener } from '../domain/eventlistener/FilterListListener';
 import type { FilterRepository } from '../domain/FilterRepository';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 

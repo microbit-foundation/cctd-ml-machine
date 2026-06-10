@@ -1,4 +1,4 @@
-import type { GestureListListener } from '../domain/GestureListListener';
+import type { GestureListListener } from '../domain/eventlistener/GestureListListener';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 

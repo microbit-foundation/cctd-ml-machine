@@ -94,7 +94,7 @@ describe('Neural network architecture sync integration', () => {
         getCurrentIteration: () => undefined,
       } as any,
     );
-    filterSelectionListener.setClassifierService(classifierService);
+    filterSelectionListener.setModelService(classifierService);
     const axisController = new AxisController(
       {
         getDataService: () => dataService,

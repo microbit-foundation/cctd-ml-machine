@@ -32,4 +32,8 @@ export class VectorPredictionOutput implements PredictionOutput {
   private getRoundedPrediction(): Vector {
     return this.outputVector.round(0);
   }
+
+  toString(): string {
+    return `VectorPredictionOutput(predictionInput=${JSON.stringify(this.predictionInput)}, outputVector=${this.outputVector.getValue()})`;
+  }
 }

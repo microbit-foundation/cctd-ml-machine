@@ -6,12 +6,14 @@
 
 <script lang="ts">
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+    import { ClassifierController } from '../../../backend/interface-controller/ClassifierController';
   import Environment from '../../../core/Environment';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import NeuralNetworkArchitectureDebug from './NeuralNetworkArchitectureDebug.svelte';
 
   const inDev = Environment.isInDevelopment;
   const controllers = getControllers();
+  const classifierController = controllers.getClassifierController();
   const microbitController = controllers.getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
 
@@ -31,7 +33,16 @@
   const filters = filterController.getFilters();
   const nnController = controllers.getNeuralNetworkController();
   const neuralNetworkSettings = nnController.getNeuralNetworkSettings();
+  const prediction = classifierController.getPrediction();
+  const engineController = controllers.getEngineController();
 </script>
+
+<style>
+  button {
+    border: 2px solid black;
+    padding: 8px;
+  }
+</style>
 
 {#if inDev}
   <div
@@ -53,8 +64,7 @@
         </p>
       {/each}
       <div class="pointer-events-auto">
-        <button on:click={test} class="border-solid border-black border-2 p-1"
-          >button</button>
+        <button on:click={test}>button</button>
         <p>input:{inp}</p>
         <p>output:{outp}</p>
         <p>
@@ -67,6 +77,12 @@
         <p>LD-Updates: {liveDataUpdateCount}</p>
         <p>Rec: {$recState.isRecording()}</p>
         <NeuralNetworkArchitectureDebug settings={$neuralNetworkSettings} />
+        <p>Prediction: {$prediction?.getPrediction().round(1).getValue()}</p>
+        <div class="flex flex-row gap-2">
+        <p class="self-center">Engine:</p>
+          <button on:click={() => engineController.startPollingPredictorEngine()}>Start</button>
+          <button on:click={() => engineController.stopPollingPredictorEngine()}>Stop</button>
+        </div>
       </div>
     </div>
   </div>

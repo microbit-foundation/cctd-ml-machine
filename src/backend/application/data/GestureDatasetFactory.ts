@@ -9,13 +9,18 @@ import type { Axis } from '../../../core/entities/Axis';
 import type { NewGesture } from '../../../core/entities/NewGesture';
 import type { Recording } from '../../../core/entities/recording/Recording';
 import type { Filter } from '../../../core/filter/Filter';
+import ConsoleLogger from '../../../core/logging/ConsoleLogger';
 import BaseVector from '../../../core/vector/BaseVector';
+import type { Vector } from '../../../core/vector/Vector';
 import type { GestureService } from '../../domain/GestureService';
 
 export class GestureDatasetFactory {
-  constructor(private gestureService: GestureService) {}
+  
+  private log = new ConsoleLogger(GestureDatasetFactory.name);
 
-    /** Builds dataset from filters and selected axes. Provide the getRecordings method to determine how to fetch recordings. Can be used for validation- or regular recordings */
+  constructor(private gestureService: GestureService) { }
+
+  /** Builds dataset from filters and selected axes. Provide the getRecordings method to determine how to fetch recordings. Can be used for validation- or regular recordings */
   public buildDataset(
     getRecordings: (gesture: NewGesture) => Recording[],
     selectedAxes: Axis[],
@@ -43,23 +48,24 @@ export class GestureDatasetFactory {
       return new DatasetImpl(new LabelledFeatureSetImpl([], datasetLabels), 0, new BaseVector([]), new BaseVector([]), numberOfClasses);
     }
 
-    const featureSum = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
+    let featureSum: Vector = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
     featureData.forEach(fd => {
       const features = fd.getFeatures();
-      featureSum.add(features);
+      featureSum = featureSum.add(features);
     });
     const featureMean = featureSum.divideByScalar(featureData.length);
-    const featureStdDeviation = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
+    let featureStdDeviation: Vector = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
     featureData.forEach(fd => {
       const features = fd.getFeatures();
       const diff = features.subtract(featureMean);
       const squaredDiff = new BaseVector(diff.getValue().map(val => val * val));
-      featureStdDeviation.add(squaredDiff);
+      featureStdDeviation = featureStdDeviation.add(squaredDiff);
     });
-    featureStdDeviation.divideByScalar(featureData.length);
+    featureStdDeviation = featureStdDeviation.divideByScalar(featureData.length);
     const featureSize = featureData[0].getFeatures().getSize();
 
     const labelledFeatureSet = new LabelledFeatureSetImpl(featureData, datasetLabels);
+    this.log.info('Built dataset with', featureData.length, 'feature sets, feature size of', featureSize, 'and', numberOfClasses, 'classes');
 
     return new DatasetImpl(
       labelledFeatureSet,
@@ -69,7 +75,7 @@ export class GestureDatasetFactory {
       numberOfClasses
     );
   }
-  
+
   private createFeatureDataFromRecording(
     recording: Recording,
     filters: Filter[],

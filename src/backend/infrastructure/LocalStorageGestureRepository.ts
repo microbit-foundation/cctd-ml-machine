@@ -12,7 +12,7 @@ import type { GestureRepository } from '../domain/GestureRepository';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
 import type { AbstractState } from '../statemanagement/AbstractState';
-import type { GestureListListener } from '../domain/GestureListListener';
+import type { GestureListListener } from '../domain/eventlistener/GestureListListener';
 import type { Axis } from '../../core/entities/Axis';
 
 export class LocalStorageGestureRepository implements GestureRepository {

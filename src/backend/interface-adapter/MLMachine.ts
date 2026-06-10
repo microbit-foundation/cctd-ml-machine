@@ -58,6 +58,13 @@ import type { AxisRepository } from '../domain/AxisRepository';
 import { GestureStateHandler } from '../interface-listener/GestureStateHandler';
 import { ClassifierNodeCountHandler } from '../interface-listener/ClassifierNodeCountHandler';
 import { FilterSelectionListener } from '../interface-listener/FilterSelectionListener';
+import type { PredictionRepository } from '../domain/PredictionRepository';
+import { StatesPredictionRepository } from '../infrastructure/StatesPredictionRepository';
+import type { ModelService } from '../domain/ModelService';
+import { ModelServiceImpl } from '../domain/implementation/ModelServiceImpl';
+import type { ModelRepository } from '../domain/ModelRepository';
+import { StatesModelRepository } from '../infrastructure/StatesModelRepository';
+import { Feature } from '../application/feature/Feature';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -78,6 +85,10 @@ export class MLMachine {
   private engine: PollingPredictorEngine;
   private confidenceService: ConfidenceService;
   private filterRepository: StatesFilterRepository;
+  private predictionRepository: PredictionRepository;
+  private modelService: ModelService;
+  private modelRepository: ModelRepository;
+
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
 
@@ -87,11 +98,14 @@ export class MLMachine {
     return MLMachine.instance;
   }
 
+  /**
+   * Bootstraps the entire application. This is a rather dirty constructor, but it injects all the dependencies and sets up the entire application. 
+   * It also sets up the state management and repositories.
+   */
   private constructor(private featureProvider: FeatureProvider) {
     this.log.info('Bootstrapped ML-Machine');
     const userSessionRepository = new LocalStorageUserSessionRepository();
     this.userService = new UserServiceImpl(userSessionRepository);
-
     const selectedGestureState = new SvelteStateAdapter(writable(undefined));
     const gestureStateHandler = new GestureStateHandler();
 
@@ -152,13 +166,11 @@ export class MLMachine {
       knnSettingsRepository,
       this.gestureService,
     );
+    this.predictionRepository = new StatesPredictionRepository(this.states);
+    
     this.classifierService = new ClassifierServiceImpl(
       classifierRepository,
-      statesModelTrainingRepository,
-      neuralNetworkSettingsRepository,
-      this.dataService,
-      this.knnSettingsService,
-      trainingIterationRepository,
+      this.predictionRepository,
     );
     const validationService = new ValidationServiceImpl(
       this.classifierService,
@@ -180,14 +192,36 @@ export class MLMachine {
       new StatesNotificationRepository(this.states),
     );
 
+    const confidenceService = new ConfidenceServiceImpl(
+      confidenceRepository,
+      this.gestureService,
+    );
 
+    this.engine = new PollingPredictorEngine(
+      this.classifierService,
+      this.dataService,
+      confidenceService,
+      gestureRepository,
+      StaticConfiguration.pollingPredictionInterval,
+      StaticConfiguration.pollingPredictionSampleSize,
+      featureProvider.getFeature<number>(Feature.RECORDING_DURATION).getValue(),
+    );
+    this.engine.start();
 
+    this.modelRepository = new StatesModelRepository(this.states);
 
+    this.modelService = new ModelServiceImpl(
+      this.knnSettingsService,
+      this.dataService,
+      statesModelTrainingRepository,
+      trainingIterationRepository,
+      neuralNetworkSettingsRepository,
+      this.modelRepository,
+    );
+    filterSelectionListener.setModelService(this.modelService);
+    classifierNodeCountHandler.setModelService(this.modelService);
 
-
-    filterSelectionListener.setClassifierService(this.classifierService);
-    classifierNodeCountHandler.setClassifierService(this.classifierService);
-
+    // This is the controller layer, probably should be last in the constructor
     this.controllers = new MLMachineControllers(
       this,
       this.dataService,
@@ -205,31 +239,9 @@ export class MLMachine {
         this.dataService,
       ),
       this.classifierService,
+      this.modelService,
+      this.engine
     );
-
-    const confidenceService = new ConfidenceServiceImpl(
-      confidenceRepository,
-      this.gestureService,
-    );
-
-    this.engine = new PollingPredictorEngine(
-      this.classifierService,
-      this.dataService,
-      confidenceService,
-      gestureRepository,
-      StaticConfiguration.pollingPredictionInterval,
-      StaticConfiguration.pollingPredictionSampleSize,
-      StaticConfiguration.pollingPredictionInterval,
-    );
-
-
-
-    // const devices = stores.getDevices();
-    // const outputHandler = new OutputMicrobitHandler(devices);
-    /* Microbits.setHandlers(
-            new CombinedMicrobitHandler(outputHandler, devices),
-            outputHandler
-        );*/
   }
 
   public init(): void {

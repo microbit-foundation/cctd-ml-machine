@@ -3,6 +3,7 @@ import type { NeuralNetworkModelSettings } from '../../core/model/neural-network
 import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
 import type { NeuralNetworkTrainingIteration } from '../../core/model/neural-network/NeuralNetworkTrainingIteration';
 import type { ClassifierService } from '../domain/ClassifierService';
+import type { ModelService } from '../domain/ModelService';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 
@@ -37,7 +38,7 @@ export class NeuralNetworkController {
 
   public constructor(
     private states: AbstractStates,
-    private classifierService: ClassifierService,
+    private modelService: ModelService
   ) {}
 
   public getTrainingIterations(): AbstractState<NeuralNetworkTrainingIteration[]> {
@@ -49,7 +50,7 @@ export class NeuralNetworkController {
   }
 
   public setNeuralNetworkSettings(neuralNetworkSettings: NeuralNetworkModelSettings) {
-    this.classifierService.setNeuralNetworkSettings(neuralNetworkSettings);
+    this.modelService.setNeuralNetworkSettings(neuralNetworkSettings);
   }
 
   public setLearningRate(learningRate: number) {

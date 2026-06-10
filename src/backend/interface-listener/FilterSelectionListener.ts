@@ -7,13 +7,14 @@
 import type { Axis } from '../../core/entities/Axis';
 import type { Filter } from '../../core/filter/Filter';
 import type { ClassifierService } from '../domain/ClassifierService';
-import type { FilterListListener } from '../domain/FilterListListener';
-import type { SelectedAxesListener } from '../domain/SelectedAxesListener';
+import type { FilterListListener } from '../domain/eventlistener/FilterListListener';
+import type { SelectedAxesListener } from '../domain/eventlistener/SelectedAxesListener';
+import type { ModelService } from '../domain/ModelService';
 
 export class FilterSelectionListener
   implements FilterListListener, SelectedAxesListener
 {
-  private classifierService?: ClassifierService;
+  private modelService?: ModelService;
   private lastSyncedSignature?: string;
   private selectedAxesCount: number;
   private selectedFilterCount: number;
@@ -26,8 +27,8 @@ export class FilterSelectionListener
     this.selectedFilterCount = initialFilters.length;
   }
 
-  public setClassifierService(classifierService: ClassifierService): void {
-    this.classifierService = classifierService;
+  public setModelService(modelService: ModelService): void {
+    this.modelService = modelService;
   }
 
   public onFiltersChanged(filters: Filter[]): void {
@@ -41,7 +42,7 @@ export class FilterSelectionListener
   }
 
   private syncInputNodeCount(): void {
-    if (!this.classifierService) {
+    if (!this.modelService) {
       return;
     }
 
@@ -51,7 +52,7 @@ export class FilterSelectionListener
     }
 
     this.lastSyncedSignature = signature;
-    this.classifierService.setNeuralNetworkInputNodeCount(
+    this.modelService.setNeuralNetworkInputNodeCount(
       this.selectedFilterCount,
       this.selectedAxesCount,
     );

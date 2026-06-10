@@ -35,6 +35,9 @@ import { RecordingController } from '../interface-controller/RecordingController
 import { FilterController } from '../interface-controller/FilterController';
 import type { RecordingService } from '../domain/RecordingService';
 import type { ClassifierService } from '../domain/ClassifierService';
+import type { ModelService } from '../domain/ModelService';
+import { EngineController } from '../interface-controller/EngineController';
+import type { PollingPredictorEngine } from '../application/PollingPredictorEngine';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -53,6 +56,8 @@ export class MLMachineControllers {
     private knnSettingsService: KNNSettingsService,
     private recordingService: RecordingService,
     private classifierService: ClassifierService,
+    private modelService: ModelService,
+    private pollingPredictorEngine: PollingPredictorEngine,
   ) {
     this.gestureController = new GestureController(
       states,
@@ -88,12 +93,12 @@ export class MLMachineControllers {
   public getNeuralNetworkController(): NeuralNetworkController {
     return new NeuralNetworkController(
       this.states,
-      this.mlMachine.getClassifierService(),
+      this.modelService,
     );
   }
 
   public getClassifierController(): ClassifierController {
-    return new ClassifierController(this.states, this.mlMachine, this.classifierService);
+    return new ClassifierController(this.states, this.mlMachine, this.classifierService, this.modelService);
   }
 
   public getAxisController(): AxisController {
@@ -134,5 +139,9 @@ export class MLMachineControllers {
 
   public getRecordingController() {
     return new RecordingController(this.recordingService, this.states);
+  }
+
+  getEngineController() {
+    return new EngineController(this.pollingPredictorEngine);
   }
 }

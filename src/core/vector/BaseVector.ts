@@ -36,7 +36,7 @@ class BaseVector implements Vector {
     return new BaseVector(vn);
   }
 
-  public divide(vector: Vector): BaseVector {
+  public divide(vector: Vector): Vector {
     if (this.getSize() !== vector.getSize()) {
       throw new Error(
         `Attempted to divide two vectors of unequal size. Vector1 size: ${this.getSize()} - Vector2 size: ${vector.getSize()}`,
@@ -49,7 +49,7 @@ class BaseVector implements Vector {
     return new BaseVector(vn);
   }
 
-  public subtract(vector: Vector): BaseVector {
+  public subtract(vector: Vector): Vector {
     if (this.getSize() !== vector.getSize()) {
       throw new Error(
         `Attempted to subtract two vectors of unequal size. Vector1 size: ${this.getSize()} - Vector2 size: ${vector.getSize()}`,
@@ -62,7 +62,7 @@ class BaseVector implements Vector {
     return new BaseVector(vn);
   }
 
-  public add(vector: Vector): BaseVector {
+  public add(vector: Vector): Vector {
     if (this.getSize() !== vector.getSize()) {
       throw new Error(
         `Attempted to add two vectors of unequal size. Vector1 size: ${this.getSize()} - Vector2 size: ${vector.getSize()}`,

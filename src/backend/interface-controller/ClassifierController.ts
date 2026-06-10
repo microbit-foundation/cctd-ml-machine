@@ -12,25 +12,39 @@ import type { MLMachine } from '../interface-adapter/MLMachine';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 import type { ModelInfo } from '../../core/model/ModelInfo';
 import type { ClassifierService } from '../domain/ClassifierService';
+import type { ModelService } from '../domain/ModelService';
+import { AccuracyClassifierEvaluator } from '../../core/classifier/evaluator/AccuracyClassifierEvaluator';
+import { VectorClassifier } from '../../core/classifier/vector-classifier/VectorClassifier';
+import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 
 export class ClassifierController {
   constructor(
     private states: AbstractStates,
     private mlMachine: MLMachine,
     private classifierService: ClassifierService,
+    private modelService: ModelService
   ) {}
 
-  public clearClassifier() {
+  getPrediction(): AbstractState<PredictionOutput | undefined> {
+    return this.states.getPredictionState();
+  }
+
+  public clearClassifier(): void {
     this.classifierService.unsetClassifier();
   }
 
   public async trainNeuralNetworkModel(): Promise<void> {
     const classifierService = this.mlMachine.getClassifierService();
-    await classifierService.trainNeuralNetworkModel();
+    const model = await this.modelService.trainNeuralNetworkModel();
+
+    // TODO: add this in a factory
+    const evaluator = new AccuracyClassifierEvaluator();
+    const classifier = new VectorClassifier(model, evaluator);
+    classifierService.setClassifier(classifier);
   }
 
   public setNeuralNetwork(neuralNetworkSettings: NeuralNetworkModelSettings) {
-    this.mlMachine.getClassifierService().setNeuralNetworkSettings(neuralNetworkSettings);
+    this.modelService.setNeuralNetworkSettings(neuralNetworkSettings);
   }
 
   public getClassifier(): AbstractState<Classifier | undefined> {
@@ -43,7 +57,12 @@ export class ClassifierController {
 
   public async trainKNNModel(): Promise<void> {
     const classifierService = this.mlMachine.getClassifierService();
-    await classifierService.trainKNNModel();
+    const model = await this.modelService.trainKNNModel();
+
+    // TODO: add this in a factory
+    const evaluator = new AccuracyClassifierEvaluator();
+    const classifier = new VectorClassifier(model, evaluator);
+    classifierService.setClassifier(classifier);
   }
 
   public getSelectedModel(): AbstractState<ModelInfo> {
@@ -51,6 +70,6 @@ export class ClassifierController {
   }
 
   public setSelectedModel(model: ModelInfo): void {
-    this.mlMachine.getClassifierService().setSelectedModel(model);
+    this.modelService.setSelectedModel(model);
   }
 }

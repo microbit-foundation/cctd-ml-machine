@@ -16,7 +16,7 @@ export interface ModelTraining {
   setError(error: TrainingError): void;
   clearError(): void;
   hasPendingSettings(): boolean;
-  pendingSettings(): SettingsChange<any>[];
+  getPendingSettings(): SettingsChange<any>[];
   clearPendingSettings(): void;
   addPendingSetting(settingChange: SettingsChange<any>): void;
 }

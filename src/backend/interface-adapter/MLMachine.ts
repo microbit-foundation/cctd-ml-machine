@@ -65,6 +65,8 @@ import { ModelServiceImpl } from '../domain/implementation/ModelServiceImpl';
 import type { ModelRepository } from '../domain/ModelRepository';
 import { StatesModelRepository } from '../infrastructure/StatesModelRepository';
 import { Feature } from '../application/feature/Feature';
+import type { KNNPointsRepository } from '../domain/KNNPointsRepository';
+import { StatesKNNPointsRepository } from '../infrastructure/StatesKNNPointsRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -88,6 +90,7 @@ export class MLMachine {
   private predictionRepository: PredictionRepository;
   private modelService: ModelService;
   private modelRepository: ModelRepository;
+  private knnPointsRepository: KNNPointsRepository;
 
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
@@ -167,7 +170,7 @@ export class MLMachine {
       this.gestureService,
     );
     this.predictionRepository = new StatesPredictionRepository(this.states);
-    
+
     this.classifierService = new ClassifierServiceImpl(
       classifierRepository,
       this.predictionRepository,
@@ -210,6 +213,7 @@ export class MLMachine {
 
     this.modelRepository = new StatesModelRepository(this.states);
 
+    this.knnPointsRepository = new StatesKNNPointsRepository(this.states);
     this.modelService = new ModelServiceImpl(
       this.knnSettingsService,
       this.dataService,
@@ -217,9 +221,11 @@ export class MLMachine {
       trainingIterationRepository,
       neuralNetworkSettingsRepository,
       this.modelRepository,
+      this.knnPointsRepository,
     );
     filterSelectionListener.setModelService(this.modelService);
-    classifierNodeCountHandler.setModelService(this.modelService);
+    classifierNodeCountHandler.setServices(this.modelService, this.knnSettingsService);
+    classifierNodeCountHandler.onGesturesChanged(gestureRepository.getGestures());
 
     // This is the controller layer, probably should be last in the constructor
     this.controllers = new MLMachineControllers(

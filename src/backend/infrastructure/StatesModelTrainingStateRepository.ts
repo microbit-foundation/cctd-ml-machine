@@ -13,7 +13,7 @@ export class StatesModelTrainingStateRepository implements ModelTrainingStateRep
     return this.modelTraining.get();
   }
 
-  public setModelTraining(modelTraining: ModelTraining): void {
+  public saveModelTraining(modelTraining: ModelTraining): void {
     this.modelTraining.set(modelTraining);
   }
 }

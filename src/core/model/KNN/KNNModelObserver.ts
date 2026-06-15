@@ -9,5 +9,6 @@ import type { LabelledPoint } from './LabelledPoint';
 
 export interface KNNModelObserver {
   onInputComputed: (knnInput: Vector) => void;
-  onNeighboursFound: (points: LabelledPoint[]) => void;
+  onNearestNeighboursFound: (points: LabelledPoint[]) => void;
+  onPointsCreated: (points: LabelledPoint[]) => void;
 }

@@ -18,6 +18,12 @@ export class KNNSettingsServiceImpl implements KNNSettingsService {
     return this.knnModelSettingsRepository.getKNNModelSettings();
   }
 
+  public setNumberOfClasses(numberOfClasses: number): void {
+    const settings = this.knnModelSettingsRepository.getKNNModelSettings();
+    settings.setNumberOfClasses(numberOfClasses);
+    this.knnModelSettingsRepository.save(settings);
+  }
+
   public setK(k: number): void {
     let safeK = Math.max(k, 1);
     const noOfRecordings = this.gestureService

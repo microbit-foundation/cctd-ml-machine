@@ -54,9 +54,7 @@ export class NeuralNetworkController {
   }
 
   public setLearningRate(learningRate: number) {
-    const currentSettings = this.states.getNeuralNetworkSettings().get();
-    currentSettings.getLearningSettings().setLearningRate(learningRate);
-    this.setNeuralNetworkSettings(currentSettings);
+    this.modelService.setLearningRate(learningRate);
   }
 
   public setNumberOfEpochs(val: number): void {

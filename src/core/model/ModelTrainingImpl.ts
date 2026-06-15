@@ -42,10 +42,10 @@ export class ModelTrainingImpl implements ModelTraining {
   }
 
   hasPendingSettings(): boolean {
-    return this.pendingSettingsList.length === 0;
+    return this.pendingSettingsList.length !== 0;
   }
 
-  pendingSettings(): SettingsChange<any>[] {
+  getPendingSettings(): SettingsChange<any>[] {
     return this.pendingSettingsList;
   }
 

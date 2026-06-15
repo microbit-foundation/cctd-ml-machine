@@ -2,6 +2,7 @@ import type { GestureListListener } from '../domain/eventlistener/GestureListLis
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { ClassifierService } from '../domain/ClassifierService';
 import type { ModelService } from '../domain/ModelService';
+import type { KNNSettingsService } from '../domain/KNNSettingsService';
 
 /**
  * ClassifierNodeCountHandler
@@ -10,13 +11,19 @@ import type { ModelService } from '../domain/ModelService';
 export class ClassifierNodeCountHandler implements GestureListListener {
   private modelService?: ModelService;
 
-  setModelService(modelService: ModelService) {
+  private knnSettingsService?: KNNSettingsService
+
+  setServices(modelService: ModelService, knnSettingsService: KNNSettingsService): void {
     this.modelService = modelService;
+    this.knnSettingsService = knnSettingsService;
   }
 
   onGesturesChanged(gestures: NewGesture[]): void {
     if (this.modelService) {
       this.modelService.setNeuralNetworkOutputNodeCount(gestures.length);
+    }
+    if (this.knnSettingsService) {
+      this.knnSettingsService.setNumberOfClasses(gestures.length);
     }
   }
 }

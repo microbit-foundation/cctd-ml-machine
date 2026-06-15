@@ -1,3 +1,10 @@
+<style>
+  button {
+    border: 2px solid black;
+    padding: 0px 8px;
+  }
+</style>
+
 <!--
   (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  
@@ -6,7 +13,7 @@
 
 <script lang="ts">
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
-    import { ClassifierController } from '../../../backend/interface-controller/ClassifierController';
+  import { ClassifierController } from '../../../backend/interface-controller/ClassifierController';
   import Environment from '../../../core/Environment';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import NeuralNetworkArchitectureDebug from './NeuralNetworkArchitectureDebug.svelte';
@@ -35,21 +42,15 @@
   const neuralNetworkSettings = nnController.getNeuralNetworkSettings();
   const prediction = classifierController.getPrediction();
   const engineController = controllers.getEngineController();
+  const modelTraining = controllers.getClassifierController().getModelTraining();
 </script>
-
-<style>
-  button {
-    border: 2px solid black;
-    padding: 8px;
-  }
-</style>
 
 {#if inDev}
   <div
-    class="absolute bottom-3 left-3 bg-transparent justify-center self-center items-center z-4"
+    class="absolute bottom-3 left-3 bg-transparent justify-center self-center items-center z-4 opacity-75"
     style="pointer-events: none;"
     aria-hidden="true">
-    <div class="text-sm text-violet-700 bg-white p-2">
+    <div class="text-xs text-violet-700 bg-white p-2">
       <p><span>WasCancelled</span>: {$microbitConnection.wasDeviceRequestCancelled()}</p>
       {#each [$microbitConnection.getInput(), $microbitConnection.getInput()] as connection, idx}
         <p><span>{idx === 0 ? 'Input' : 'Output'}-Ready</span>: {connection.isReady()}</p>
@@ -79,10 +80,13 @@
         <NeuralNetworkArchitectureDebug settings={$neuralNetworkSettings} />
         <p>Prediction: {$prediction?.getPrediction().round(1).getValue()}</p>
         <div class="flex flex-row gap-2">
-        <p class="self-center">Engine:</p>
-          <button on:click={() => engineController.startPollingPredictorEngine()}>Start</button>
-          <button on:click={() => engineController.stopPollingPredictorEngine()}>Stop</button>
+          <p class="self-center">Engine:</p>
+          <button on:click={() => engineController.startPollingPredictorEngine()}
+            >Start</button>
+          <button on:click={() => engineController.stopPollingPredictorEngine()}
+            >Stop</button>
         </div>
+        <p>Sttngs pend: {$modelTraining.hasPendingSettings()}</p>
       </div>
     </div>
   </div>

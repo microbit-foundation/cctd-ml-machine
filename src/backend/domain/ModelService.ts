@@ -6,9 +6,13 @@ import type { NeuralNetworkModelSettings } from "../../core/model/neural-network
 import type { NeuralNetworkModel } from "../../core/model/neural-network/NeuralNetworkModel";
 
 export interface ModelService {
+    setLearningRate(learningRate: number): void;
+    setEpochs(epochs: number): void;
+    setBatchSize(batchSize: number): void;
     trainKNNModel(): Promise<KNNMLModel>
     trainNeuralNetworkModel(): Promise<NeuralNetworkModel>
     getModelTraining(): ModelTraining;
+    setModelTraining(modelTraining: ModelTraining): void;
     getNeuralNetworkSettings(): NeuralNetworkModelSettings
     setNeuralNetworkSettings(neuralNetworkSettings: NeuralNetworkModelSettings): void;
     getKNNModelSettings(): KNNModelSettings;

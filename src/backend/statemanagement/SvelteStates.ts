@@ -43,6 +43,7 @@ import { Feature } from '../application/feature/Feature';
 import type { LiveDataStore } from '../../core/LiveDataStore';
 import { createFilter, getFilterTypes } from '../../core/filter/FilterUtils';
 import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
+import type { Vector } from '../../core/vector/Vector';
 
 export class SvelteStates implements AbstractStates {
   private predictionState: AbstractState<PredictionOutput | undefined>;
@@ -67,6 +68,7 @@ export class SvelteStates implements AbstractStates {
   private confidencesState: AbstractState<Confidences>;
   private recordingState: AbstractState<GestureRecordingState>;
   private recordingSettingsState: AbstractState<RecordingSettings>;
+  private knnInputState: AbstractState<Vector | undefined>;
 
   private log = new ConsoleLogger(SvelteStates.name);
 
@@ -144,7 +146,13 @@ export class SvelteStates implements AbstractStates {
         ),
       ),
     );
+    this.knnInputState = new SvelteStateAdapter(writable(undefined));
   }
+
+  getKNNInput(): AbstractState<Vector | undefined> {
+    return this.knnInputState;
+  }
+
   getPredictionState(): AbstractState<PredictionOutput | undefined> {
     return this.predictionState;
   }

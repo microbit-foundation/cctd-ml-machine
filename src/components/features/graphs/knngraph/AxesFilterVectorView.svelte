@@ -11,7 +11,6 @@
   import { vectorArrows } from './AxesFilterVector';
   import StaticConfiguration from '../../../../StaticConfiguration';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
-  import { knnCurrentPoint } from '../../../../lib/stores/KNNStores';
   import type { Axis } from '../../../../core/entities/Axis';
   import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
@@ -19,6 +18,7 @@
   const filters = getControllers().getFilterController().getFilters();
   const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
   const availableAxes = getControllers().getAxisController().getAvailableAxes();
+  const knnController = getControllers().getKnnController();
 
   const drawArrows = (fromId: string) => {
     get(vectorArrows).forEach(arr => arr.clear());
@@ -55,7 +55,8 @@
     drawArrows(`from${axis.label}`);
   };
 
-  $: liveFilteredAxesData = $knnCurrentPoint?.getValue() ?? [];
+  const knnInputPoint = knnController.getKNNInput();
+  $: inputPoint = $knnInputPoint?.getValue() || []
 
   let valueInterval: NodeJS.Timeout = setInterval(() => {}, 100);
 
@@ -86,8 +87,6 @@
       }
     };
   });
-
-  $: console.log($filters);
 
   unsubscribe = derived([highlightedAxes, classifier], s => s).subscribe(s => {
     init();
@@ -134,7 +133,7 @@
           <!-- Numbers -->
           <div
             class="flex flex-col justify-around w-14 overflow-hidden whitespace-nowrap">
-            {#each liveFilteredAxesData as val, index}
+            {#each inputPoint as val, index}
               <p style={`color:${StaticConfiguration.graphColors[index]}`}>
                 {val.toFixed(2)}
               </p>

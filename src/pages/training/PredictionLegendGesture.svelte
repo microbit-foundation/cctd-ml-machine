@@ -6,7 +6,13 @@
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
   export let gestureId: GestureID;
-  const gesture = getControllers().getGestureController().getGestureState(gestureId);
+  const gestureController = getControllers().getGestureController();
+  const gesture = gestureController.getGestureState(gestureId);
+
+  const classifierController = getControllers().getClassifierController();
+  const idx = gestureController.getClassIndex(gestureId);
+  const predictions = classifierController.getPrediction();
+  $: prediction = (idx != null && $predictions != null) ? $predictions.getPrediction().getValue()[idx] : 0
 </script>
 
 <div class="flex flex-row justify-between">
@@ -18,7 +24,7 @@
   </div>
   {#if $microbitConnection.getInput().isReady()}
     <p>
-      {($gesture.getConfidence().currentConfidence * 100).toFixed(1)}%
+      {(prediction * 100).toFixed(1)}%
     </p>
   {/if}
 </div>

@@ -14,13 +14,13 @@
   import type { ModelType } from '../../../core/model/ModelType';
 
   const selectedModel = getControllers().getClassifierController().getSelectedModel();
+  const classifierController = getControllers()
+      .getClassifierController()
 
   const showTabBar = hasFeature(Feature.KNN_MODEL);
   if (!showTabBar) {
-    getControllers()
-      .getClassifierController()
+    classifierController
       .setSelectedModel(ModelRegistry.NeuralNetwork);
-    $selectedModel = ModelRegistry.NeuralNetwork;
   }
 
   $: isSelected = (modelType: ModelType) => {
@@ -36,7 +36,7 @@
           <StandardButton
             small
             outlined={!isSelected(model.getType())}
-            onClick={() => selectedModel.set(model)}>
+            onClick={() => classifierController.setSelectedModel(model)}>
             {model.getLabel()}
           </StandardButton>
         {/each}

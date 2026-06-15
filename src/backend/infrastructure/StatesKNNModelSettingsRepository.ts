@@ -1,9 +1,11 @@
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 import type { KNNModelSettings } from '../../core/model/KNN/KNNModelSettings';
 import type { KNNModelSettingsRepository } from '../domain/KNNModelSettingsRepository';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class StatesKNNModelSettingsRepository implements KNNModelSettingsRepository {
-  public constructor(private states: AbstractStates) {}
+  private log = new ConsoleLogger(StatesKNNModelSettingsRepository.name);
+  public constructor(private states: AbstractStates) { }
 
   public getKNNModelSettings(): KNNModelSettings {
     return this.states.getKNNModelSettings().get();
@@ -11,5 +13,6 @@ export class StatesKNNModelSettingsRepository implements KNNModelSettingsReposit
 
   public save(settings: KNNModelSettings): void {
     this.states.getKNNModelSettings().set(settings);
+    this.log.info('Saved KNNModelSettings', settings);
   }
 }

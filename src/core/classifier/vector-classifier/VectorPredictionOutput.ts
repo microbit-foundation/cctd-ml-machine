@@ -12,6 +12,14 @@ export class VectorPredictionOutput implements PredictionOutput {
   constructor(private predictionInput: PredictionInput, private outputVector: Vector) {
   }
 
+  getPredcitionByClassIndex(classIndex: number): number {
+    const predictionValue = this.outputVector.getValueByIndex(classIndex);
+    if (predictionValue === undefined) {
+      return 0;
+    }
+    return predictionValue;
+  }
+
   public getPrediction(): Vector {
     return this.outputVector;
   }

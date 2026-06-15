@@ -14,11 +14,9 @@ export class NeuralNetworkModel implements MLModel {
 
   public async predict(filteredData: Vector): Promise<Vector> {
     const inputTensor = tf.tensor([filteredData.getValue()]);
-    console.log('Input tensor for prediction:', inputTensor.toString());
     const prediction: tf.Tensor = this.neuralNet.predict(inputTensor) as tf.Tensor;
     try {
       const predictionOutput = (await prediction.data()) as Float32Array;
-      console.log('Raw prediction output:', predictionOutput);
       return new BaseVector(Array.from(predictionOutput));
     } catch (err) {
       console.error('Prediction error:', err);

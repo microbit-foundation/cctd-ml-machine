@@ -12,12 +12,13 @@ import type { FeatureData } from '../../dataset/FeatureData';
 import { KNNMLModelTrainingResult } from './KNNMLModelTrainingResult';
 import type { LabelledPoint } from './LabelledPoint';
 import type { ModelInfo } from '../ModelInfo';
+import type { KNNModelObserver } from './KNNModelObserver';
 
 /**
  * Trains a K-Nearest Neighbour model
  */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel, KNNMLModelTrainingResult> {
-  constructor(private settings: KNNModelSettings) {}
+  constructor(private settings: KNNModelSettings, private observer: KNNModelObserver) { }
 
   public getModelInfo(): ModelInfo {
     return ModelRegistry.KNN;
@@ -33,6 +34,7 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel, KNNMLModelTrainingResu
       classIndex: labels[idx].getIndex(),
       vector: featureData.getFeatures(),
     }));
+    this.observer.onPointsCreated(labelledPoints);
 
     return Promise.resolve({
       model: new KNNMLModel(
@@ -40,6 +42,7 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel, KNNMLModelTrainingResu
         labelledPoints,
         dataset.getFeatureMean(),
         dataset.getFeatureStandardDeviation(),
+        this.observer
       ),
       trainingInformation: new KNNMLModelTrainingResult(labelledPoints),
     });

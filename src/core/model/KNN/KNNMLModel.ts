@@ -14,15 +14,21 @@ import type { KNNModelSettings } from './KNNModelSettings';
 import type { LabelledPoint } from './LabelledPoint';
 
 class KNNMLModel implements MLModel {
-  private observer: KNNModelObserver | undefined;
-
   constructor(
     private settings: KNNModelSettings,
     private points: LabelledPoint[],
     private mean: Vector,
     private stdDeviation: Vector,
+    private observer: KNNModelObserver
   ) {
     ConsoleLogger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
+    ConsoleLogger.log('KNNMLModel', 'Settings:', JSON.stringify({
+      k: settings.getK(),
+      numberOfClasses: settings.getNumberOfClasses(),
+      shouldNormalize: settings.shouldNormalize(),
+    }));
+    ConsoleLogger.log('KNNMLModel', 'Mean:', mean.getValue());
+    ConsoleLogger.log('KNNMLModel', 'Standd Deviation:', stdDeviation.getValue());
   }
 
   public async predict(filteredData: Vector): Promise<Vector> {
@@ -47,23 +53,19 @@ class KNNMLModel implements MLModel {
     }
 
     if (this.observer) {
-      this.observer.onNeighboursFound(neighbours);
+      this.observer.onNearestNeighboursFound(neighbours);
     }
 
     // Compute the confidences and create the confidences array.
     const confidences = [];
     for (let i = 0; i < this.settings.getNumberOfClasses(); i++) {
+      const neighbourIndices = neighbours.map(e => e.classIndex);
       confidences.push(
-        neighbours.map(e => e.classIndex).filter(e => e === i).length /
-          this.settings.getK(),
+        neighbourIndices.filter(e => e === i).length / this.settings.getK(),
       );
     }
 
     return Promise.resolve(new BaseVector(confidences));
-  }
-
-  public setObserver(observer: KNNModelObserver) {
-    this.observer = observer;
   }
 
   private getInputPoint(filteredData: Vector): Vector {

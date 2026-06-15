@@ -22,6 +22,9 @@ export class DatasetLabelsImpl implements DatasetLabels {
   }
 
   private validateLabelVectors(labelVectors: Vector[]): void {
+    if (labelVectors.length === 0) {
+      return; // Empty dataset, no need to validate vector lengths
+    }
     const vectorLength = labelVectors[0].getValue().length;
     for (const vector of labelVectors) {
       if (vector.getValue().length !== vectorLength) {

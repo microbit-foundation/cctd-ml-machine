@@ -82,7 +82,6 @@ export class PollingPredictorEngine {
       liveDataSeries,
       selectedAxes,
     );
-    console.log('Prediction input after filtering:', predictionInput.getInput().getValue());
     return await this.classifierService.predict(predictionInput);
   }
 }

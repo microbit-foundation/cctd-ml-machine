@@ -6,7 +6,7 @@
 
 import { get, writable, type Writable } from 'svelte/store';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import type { Unsubscriber } from '../statemanagement/AbstractReadonlyState';
+import type { AbstractReadonlyState, Unsubscriber } from '../statemanagement/AbstractReadonlyState';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { LiveDataStore } from '../../core/LiveDataStore';
 import { InMemoryLiveDataStore } from '../../core/InMemoryLiveDataStore';
@@ -17,6 +17,13 @@ export class LiveDataStateAdapter
   private store: Writable<LiveDataStore<LiveDataVector>>;
   constructor(bufferLen: number) {
     this.store = writable(new InMemoryLiveDataStore(bufferLen));
+  }
+
+  readOnly(): AbstractReadonlyState<LiveDataStore<LiveDataVector>> {
+    return {
+      get: () => get(this.store),
+      subscribe: (run, invalidate) => this.store.subscribe(run, invalidate),
+    };
   }
 
   set(value: LiveDataStore<LiveDataVector>): void {

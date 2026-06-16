@@ -5,7 +5,7 @@
  */
 import { type Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { type GraphDrawConfig } from './KNNModelGraphDrawer';
-import { knnCurrentPoint, knnTrainingDataPoints } from '../../../../lib/stores/KNNStores';
+import { knnTrainingDataPoints } from '../../../../lib/stores/KNNStores';
 import type { Point3D } from '../../../../lib/utils/graphUtils';
 import BaseVector from '../../../../core/vector/BaseVector';
 import { FilterType, type Filter } from '../../../../core/filter/Filter';
@@ -53,6 +53,8 @@ class KNNModelGraphController {
       [this.rotationX, this.rotationY, this.rotationZ, this.scale, this.origin],
       () => ({}), // We don't need to use the values to anything. We just do this instead of subscribing to each store individually
     ).subscribe(() => (this.redrawTrainingData = true));
+
+    const knnCurrentPoint = getControllers().getKnnController().getKNNInput();
 
     this.currentPointUnsubscriber = knnCurrentPoint.subscribe(() => {
       const controllerData = this.getControllerData();
@@ -119,6 +121,8 @@ class KNNModelGraphController {
   private onUpdate(draw: UpdateCall) {
     try {
       // Some filters throw when no filters data is available
+
+    const knnCurrentPoint = getControllers().getKnnController().getKNNInput();
       const liveDataVec = get(knnCurrentPoint) ?? new BaseVector([0, 0, 0]);
       this.graphDrawer.drawLiveData(draw.config, {
         x: liveDataVec.getValue()[0],

@@ -13,9 +13,17 @@ import {
   type Writable,
 } from 'svelte/store';
 import type { AbstractState } from './AbstractState';
+import type { AbstractReadonlyState } from './AbstractReadonlyState';
 
 export class SvelteStateAdapterReadonly<T> implements AbstractState<T>, Readable<T> {
-  constructor(private svelteState: Readable<T>) {}
+  constructor(private svelteState: Readable<T>) { }
+
+  readOnly(): AbstractReadonlyState<T> {
+    return {
+      get: () => get(this.svelteState),
+      subscribe: (run, invalidate) => this.svelteState.subscribe(run, invalidate),
+    };
+  }
 
   set(value: T): void {
     throw new Error('Method not implemented.');

@@ -43,10 +43,6 @@ export class ClassifierController {
     classifierService.setClassifier(classifier);
   }
 
-  public setNeuralNetwork(neuralNetworkSettings: NeuralNetworkModelSettings) {
-    this.modelService.setNeuralNetworkSettings(neuralNetworkSettings);
-  }
-
   public getClassifier(): AbstractState<Classifier | undefined> {
     return this.states.getClassifier();
   }

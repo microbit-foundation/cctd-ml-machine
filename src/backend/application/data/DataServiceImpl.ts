@@ -13,6 +13,8 @@ import { Sample } from '../../../core/entities/recording/Sample';
 import type { Filter, FilterType } from '../../../core/filter/Filter';
 import { createFilter } from '../../../core/filter/FilterUtils';
 import type { LiveDataStore } from '../../../core/LiveDataStore';
+import { ModelOption } from '../../../core/model/ModelOption';
+import { SettingsChange } from '../../../core/model/SettingsChange';
 import FilterGraphLimits from '../../../core/utils/FilterGraphLimits';
 import BaseVector from '../../../core/vector/BaseVector';
 import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
@@ -22,6 +24,7 @@ import type { DataService } from '../../domain/DataService';
 import type { FilterRepository } from '../../domain/FilterRepository';
 import type { GestureService } from '../../domain/GestureService';
 import type { LiveDataRepository } from '../../domain/LiveDataRepository';
+import type { ModelTrainingStateRepository } from '../../domain/ModelTrainingStateRepository';
 import { GestureDatasetFactory } from './GestureDatasetFactory';
 
 export class DataServiceImpl implements DataService {
@@ -32,6 +35,7 @@ export class DataServiceImpl implements DataService {
     private liveDataRepository: LiveDataRepository,
     private filterRepository: FilterRepository,
     private gestureService: GestureService,
+    private modelTrainingRepository: ModelTrainingStateRepository,
   ) {
     this.gestureDatasetFactory = new GestureDatasetFactory(this.gestureService);
   }
@@ -78,12 +82,18 @@ export class DataServiceImpl implements DataService {
 
   toggleFilter(filterType: FilterType): void {
     const filters = this.filterRepository.getFilters();
+
     const isActive = filters.some(f => f.getType() === filterType);
+    let newFilters: Filter[];
     if (isActive) {
-      this.filterRepository.saveFilters(filters.filter(f => f.getType() !== filterType));
+      newFilters = filters.filter(f => f.getType() !== filterType);
     } else {
-      this.filterRepository.saveFilters([...filters, createFilter(filterType)]);
+      newFilters = [...filters, createFilter(filterType)];
     }
+    this.filterRepository.saveFilters(newFilters);
+    const modelTraining = this.modelTrainingRepository.getModelTraining();
+    modelTraining.addPendingSetting(new SettingsChange(new ModelOption("Filters"), filters.map(f => f.getType()), newFilters.map(f => f.getType())));
+    this.modelTrainingRepository.saveModelTraining(modelTraining);
   }
 
   getTrainingDataset(): Dataset {
@@ -107,7 +117,12 @@ export class DataServiceImpl implements DataService {
   }
 
   setSelectedAxes(axes: Axis[]): void {
+    const oldAxes = this.axisRepository.getSelectedAxes();
     this.axisRepository.setSelectedAxes(axes);
+
+    const modelTraining = this.modelTrainingRepository.getModelTraining();
+    modelTraining.addPendingSetting(new SettingsChange(new ModelOption("Selected Axes"), oldAxes.map(ax => ax.index), axes.map(ax => ax.index)));
+    this.modelTrainingRepository.saveModelTraining(modelTraining);
   }
 
   toggleAxis(axis: Axis): void {

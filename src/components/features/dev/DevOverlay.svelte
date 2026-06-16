@@ -43,14 +43,15 @@
   const prediction = classifierController.getPrediction();
   const engineController = controllers.getEngineController();
   const modelTraining = controllers.getClassifierController().getModelTraining();
+  $: pendingSettings = $modelTraining.getPendingSettings();
 </script>
 
 {#if inDev}
   <div
-    class="absolute bottom-3 left-3 bg-transparent justify-center self-center items-center z-4 opacity-75"
+    class="absolute bottom-2 left-2 justify-center self-center items-center z-4 opacity-75 bg-white p-2 text-xs text-violet-700 flex"
     style="pointer-events: none;"
     aria-hidden="true">
-    <div class="text-xs text-violet-700 bg-white p-2">
+    <div>
       <p><span>WasCancelled</span>: {$microbitConnection.wasDeviceRequestCancelled()}</p>
       {#each [$microbitConnection.getInput(), $microbitConnection.getInput()] as connection, idx}
         <p><span>{idx === 0 ? 'Input' : 'Output'}-Ready</span>: {connection.isReady()}</p>
@@ -87,6 +88,15 @@
             >Stop</button>
         </div>
         <p>Sttngs pend: {$modelTraining.hasPendingSettings()}</p>
+      </div>
+    </div>
+
+    <div>
+      <p>Pend. setns.:</p>
+      <div>
+        {#each pendingSettings.slice(-10) as setting}
+        <p>{setting.getOption().getName()} {setting.getOldValue()}->{setting.getNewValue()}</p>
+        {/each}
       </div>
     </div>
   </div>

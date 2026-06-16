@@ -38,6 +38,7 @@ import type { ClassifierService } from '../domain/ClassifierService';
 import type { ModelService } from '../domain/ModelService';
 import { EngineController } from '../interface-controller/EngineController';
 import type { PollingPredictorEngine } from '../application/PollingPredictorEngine';
+import type { NeuralNetworkSettingsService } from '../domain/NeuralNetworkSettingsService';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -58,6 +59,7 @@ export class MLMachineControllers {
     private classifierService: ClassifierService,
     private modelService: ModelService,
     private pollingPredictorEngine: PollingPredictorEngine,
+    private neuralNetworkSettingsService: NeuralNetworkSettingsService,
   ) {
     this.gestureController = new GestureController(
       states,
@@ -93,7 +95,7 @@ export class MLMachineControllers {
   public getNeuralNetworkController(): NeuralNetworkController {
     return new NeuralNetworkController(
       this.states,
-      this.modelService,
+      this.neuralNetworkSettingsService,
     );
   }
 

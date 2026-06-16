@@ -67,6 +67,9 @@ import { StatesModelRepository } from '../infrastructure/StatesModelRepository';
 import { Feature } from '../application/feature/Feature';
 import type { KNNPointsRepository } from '../domain/KNNPointsRepository';
 import { StatesKNNPointsRepository } from '../infrastructure/StatesKNNPointsRepository';
+import type { NeuralNetworkSettingsService } from '../domain/NeuralNetworkSettingsService';
+import { NeuralNetworkSettingsServiceImpl } from '../domain/implementation/NeuralNetworkSettingsServiceImpl';
+import type { ModelTrainingStateRepository } from '../domain/ModelTrainingStateRepository';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -91,6 +94,8 @@ export class MLMachine {
   private modelService: ModelService;
   private modelRepository: ModelRepository;
   private knnPointsRepository: KNNPointsRepository;
+  private neuralNetworkSettingsService: NeuralNetworkSettingsService;
+  private modelTrainingRepository: ModelTrainingStateRepository;
 
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
@@ -140,7 +145,7 @@ export class MLMachine {
     const neuralNetworkSettingsRepository = new StatesNeuralNetworkSettingsRepository(
       this.states.getNeuralNetworkSettings(),
     );
-    const statesModelTrainingRepository = new StatesModelTrainingStateRepository(
+    this.modelTrainingRepository = new StatesModelTrainingStateRepository(
       this.states.getModelTraining(),
     );
     const classifierRepository = new StatesClassifierRepository(this.states);
@@ -164,10 +169,16 @@ export class MLMachine {
       new StatesLiveDataRepository(this.states),
       this.filterRepository,
       this.gestureService,
+      this.modelTrainingRepository,
     );
     this.knnSettingsService = new KNNSettingsServiceImpl(
       knnSettingsRepository,
       this.gestureService,
+      this.modelTrainingRepository,
+    );
+    this.neuralNetworkSettingsService = new NeuralNetworkSettingsServiceImpl(
+      neuralNetworkSettingsRepository,
+      this.modelTrainingRepository,
     );
     this.predictionRepository = new StatesPredictionRepository(this.states);
 
@@ -217,7 +228,7 @@ export class MLMachine {
     this.modelService = new ModelServiceImpl(
       this.knnSettingsService,
       this.dataService,
-      statesModelTrainingRepository,
+      this.modelTrainingRepository,
       trainingIterationRepository,
       neuralNetworkSettingsRepository,
       this.modelRepository,
@@ -246,7 +257,8 @@ export class MLMachine {
       ),
       this.classifierService,
       this.modelService,
-      this.engine
+      this.engine,
+      this.neuralNetworkSettingsService,
     );
   }
 

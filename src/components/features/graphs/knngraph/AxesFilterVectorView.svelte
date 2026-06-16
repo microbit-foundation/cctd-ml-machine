@@ -16,7 +16,8 @@
 
   const classifier = getControllers().getClassifierController().getClassifier();
   const filters = getControllers().getFilterController().getFilters();
-  const highlightedAxes = getControllers().getAxisController().getSelectedAxes();
+  const axisController = getControllers().getAxisController();
+  const highlightedAxes = axisController.getSelectedAxes();
   const availableAxes = getControllers().getAxisController().getAvailableAxes();
   const knnController = getControllers().getKnnController();
 
@@ -106,7 +107,7 @@
                 outlined={$highlightedAxes.find(e => e.index === axis.index) ===
                   undefined}
                 onClick={() => {
-                  $highlightedAxes = [axis];
+                  axisController.setSelectedAxes([axis]);
                 }}>
                 {axis.label}
               </StandardButton>

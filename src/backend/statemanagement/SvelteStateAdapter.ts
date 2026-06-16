@@ -12,9 +12,17 @@ import {
   type Writable,
 } from 'svelte/store';
 import type { AbstractState } from './AbstractState';
+import type { AbstractReadonlyState } from './AbstractReadonlyState';
 
 export class SvelteStateAdapter<T> implements AbstractState<T>, Writable<T> {
   constructor(private svelteState: Writable<T>) {}
+
+  readOnly(): AbstractReadonlyState<T> {
+    return {
+      get: () => this.get(),
+      subscribe: (run, invalidate) => this.subscribe(run, invalidate),
+    };
+  }
 
   public get(): T {
     return get(this.svelteState);

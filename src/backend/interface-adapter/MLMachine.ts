@@ -70,6 +70,8 @@ import { StatesKNNPointsRepository } from '../infrastructure/StatesKNNPointsRepo
 import type { NeuralNetworkSettingsService } from '../domain/NeuralNetworkSettingsService';
 import { NeuralNetworkSettingsServiceImpl } from '../domain/implementation/NeuralNetworkSettingsServiceImpl';
 import type { ModelTrainingStateRepository } from '../domain/ModelTrainingStateRepository';
+import type { KNNModelService } from '../domain/KNNModelService';
+import { KNNModelServiceImpl } from '../domain/implementation/KNNModelServiceImpl';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -96,6 +98,7 @@ export class MLMachine {
   private knnPointsRepository: KNNPointsRepository;
   private neuralNetworkSettingsService: NeuralNetworkSettingsService;
   private modelTrainingRepository: ModelTrainingStateRepository;
+  private knnModelService: KNNModelService;
 
   // TODO: Should probably be a logging factory taken as argument instead
   private log: Logger = new ConsoleLogger('MLMachine');
@@ -238,6 +241,7 @@ export class MLMachine {
     classifierNodeCountHandler.setServices(this.modelService, this.knnSettingsService);
     classifierNodeCountHandler.onGesturesChanged(gestureRepository.getGestures());
 
+    this.knnModelService = new KNNModelServiceImpl(this.dataService);
     // This is the controller layer, probably should be last in the constructor
     this.controllers = new MLMachineControllers(
       this,
@@ -259,6 +263,7 @@ export class MLMachine {
       this.modelService,
       this.engine,
       this.neuralNetworkSettingsService,
+      this.knnModelService,
     );
   }
 

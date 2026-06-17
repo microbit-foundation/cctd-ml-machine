@@ -44,6 +44,7 @@ import type { LiveDataStore } from '../../core/LiveDataStore';
 import { createFilter, getFilterTypes } from '../../core/filter/FilterUtils';
 import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 import type { Vector } from '../../core/vector/Vector';
+import type { LabelledPoint } from '../../core/model/KNN/LabelledPoint';
 
 export class SvelteStates implements AbstractStates {
   private predictionState: AbstractState<PredictionOutput | undefined>;
@@ -69,6 +70,8 @@ export class SvelteStates implements AbstractStates {
   private recordingState: AbstractState<GestureRecordingState>;
   private recordingSettingsState: AbstractState<RecordingSettings>;
   private knnInputState: AbstractState<Vector | undefined>;
+  private knnNearestNeighboursState: AbstractState<LabelledPoint[]>;
+  private knnPointsState: AbstractState<LabelledPoint[]>;
 
   private log = new ConsoleLogger(SvelteStates.name);
 
@@ -147,6 +150,14 @@ export class SvelteStates implements AbstractStates {
       ),
     );
     this.knnInputState = new SvelteStateAdapter(writable(undefined));
+    this.knnNearestNeighboursState = new SvelteStateAdapter(writable([]));
+    this.knnPointsState = new SvelteStateAdapter(writable([]));
+  }
+  getKNNNearestNeighbours(): AbstractState<LabelledPoint[]> {
+    return this.knnNearestNeighboursState;
+  }
+  getKNNPoints(): AbstractState<LabelledPoint[]> {
+    return this.knnPointsState;
   }
 
   getKNNInput(): AbstractState<Vector | undefined> {

@@ -13,10 +13,10 @@ export class KNNModelObserverImpl implements KNNModelObserver {
     }
 
     onNearestNeighboursFound(points: LabelledPoint[]): void {
-
+        this.pointsRepository.saveNearestNeighbours(points);
     }
 
     onPointsCreated(points: LabelledPoint[]): void {
-
+        this.pointsRepository.savePoints(points);
     }
 }

@@ -26,12 +26,15 @@ import type { GestureRecordingState } from '../domain/recording/GestureRecording
 import type { RecordingSettings } from '../domain/recording/RecordingSettings';
 import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 import type { Vector } from '../../core/vector/Vector';
+import type { LabelledPoint } from '../../lib/legacy/KNNNonNormalizedMLModel';
 
 /**
  * Both used as a reactive state interface and data source for the backend
  */
 export interface AbstractStates {
   getKNNInput(): AbstractState<Vector | undefined>;
+  getKNNNearestNeighbours(): AbstractState<LabelledPoint[]>;
+  getKNNPoints(): AbstractState<LabelledPoint[]>;
   getPredictionState(): AbstractState<PredictionOutput | undefined>;
   getRecordingSettings(): AbstractState<RecordingSettings>;
   getRecordingState(): AbstractState<GestureRecordingState>;

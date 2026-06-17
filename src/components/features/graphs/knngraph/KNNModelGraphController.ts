@@ -10,6 +10,9 @@ import type { Point3D } from '../../../../lib/utils/graphUtils';
 import BaseVector from '../../../../core/vector/BaseVector';
 import { FilterType, type Filter } from '../../../../core/filter/Filter';
 import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
+import type { LabelledPoint } from '../../../../core/model/KNN/LabelledPoint';
+import type { AbstractState } from '../../../../backend/statemanagement/AbstractState';
+import type { AbstractReadonlyState } from '../../../../backend/statemanagement/AbstractReadonlyState';
 
 type UpdateCall = {
   config: GraphDrawConfig;
@@ -32,6 +35,7 @@ class KNNModelGraphController {
   private redrawTrainingData = false; // Only draw training data when rotation/scale/origin changes
   private unsubscriber;
   private currentPointUnsubscriber;
+  private knnPoints: LabelledPoint[];
 
   public constructor(
     svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -55,6 +59,7 @@ class KNNModelGraphController {
     ).subscribe(() => (this.redrawTrainingData = true));
 
     const knnCurrentPoint = getControllers().getKnnController().getKNNInput();
+    this.knnPoints = getControllers().getKnnController().getKNNPoints();
 
     this.currentPointUnsubscriber = knnCurrentPoint.subscribe(() => {
       const controllerData = this.getControllerData();
@@ -122,14 +127,14 @@ class KNNModelGraphController {
     try {
       // Some filters throw when no filters data is available
 
-    const knnCurrentPoint = getControllers().getKnnController().getKNNInput();
+      const knnCurrentPoint = getControllers().getKnnController().getKNNInput();
       const liveDataVec = get(knnCurrentPoint) ?? new BaseVector([0, 0, 0]);
       this.graphDrawer.drawLiveData(draw.config, {
         x: liveDataVec.getValue()[0],
         y: liveDataVec.getValue()[1],
         z: 0, // Unsupported for now
       });
-    } catch (_ignored) {}
+    } catch (_ignored) { }
 
     if (this.redrawTrainingData) {
       this.redrawTrainingData = false; // Won't redraw next time until flag is set
@@ -139,9 +144,8 @@ class KNNModelGraphController {
   }
 
   private getTrainingDataPoints = () => {
-    const trainingDataPointsFromTrainer = get(knnTrainingDataPoints);
     const groupedByClass = Object.groupBy(
-      trainingDataPointsFromTrainer,
+      this.knnPoints,
       e => e.classIndex,
     );
     const groupedByIndex: Point3D[][] = [];

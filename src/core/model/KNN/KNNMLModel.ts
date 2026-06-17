@@ -14,6 +14,7 @@ import type { KNNModelSettings } from './KNNModelSettings';
 import type { LabelledPoint } from './LabelledPoint';
 
 class KNNMLModel implements MLModel {
+  private normalize: boolean;
   constructor(
     private settings: KNNModelSettings,
     private points: LabelledPoint[],
@@ -21,7 +22,8 @@ class KNNMLModel implements MLModel {
     private stdDeviation: Vector,
     private observer: KNNModelObserver
   ) {
-    ConsoleLogger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
+    this.normalize = settings.shouldNormalize();
+    ConsoleLogger.log('KNNMLModel', 'New KNN model was initialized');
     ConsoleLogger.log('KNNMLModel', 'Settings:', JSON.stringify({
       k: settings.getK(),
       numberOfClasses: settings.getNumberOfClasses(),
@@ -69,7 +71,7 @@ class KNNMLModel implements MLModel {
   }
 
   private getInputPoint(filteredData: Vector): Vector {
-    if (this.settings.shouldNormalize()) {
+    if (this.normalize) {
       return this.normalizePoint(filteredData);
     }
     return filteredData;

@@ -26,7 +26,6 @@
   };
 
   $: borderColor = $knnHighlightedPoint?.color;
-  $: console.log(content.values);
 </script>
 
 <div

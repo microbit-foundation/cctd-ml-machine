@@ -39,6 +39,7 @@ import type { ModelService } from '../domain/ModelService';
 import { EngineController } from '../interface-controller/EngineController';
 import type { PollingPredictorEngine } from '../application/PollingPredictorEngine';
 import type { NeuralNetworkSettingsService } from '../domain/NeuralNetworkSettingsService';
+import type { KNNModelService } from '../domain/KNNModelService';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -60,6 +61,7 @@ export class MLMachineControllers {
     private modelService: ModelService,
     private pollingPredictorEngine: PollingPredictorEngine,
     private neuralNetworkSettingsService: NeuralNetworkSettingsService,
+    private knnModelService: KNNModelService,
   ) {
     this.gestureController = new GestureController(
       states,
@@ -85,7 +87,7 @@ export class MLMachineControllers {
   }
 
   public getKnnController(): KNNController {
-    return new KNNController(this.states, this.knnSettingsService);
+    return new KNNController(this.states, this.knnSettingsService, this.knnModelService);
   }
 
   public getNotificationController(): NotificationController {

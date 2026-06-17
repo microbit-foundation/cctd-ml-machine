@@ -34,7 +34,6 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel, KNNMLModelTrainingResu
       classIndex: labels[idx].getIndex(),
       vector: featureData.getFeatures(),
     }));
-    this.observer.onPointsCreated(labelledPoints);
 
     return Promise.resolve({
       model: new KNNMLModel(

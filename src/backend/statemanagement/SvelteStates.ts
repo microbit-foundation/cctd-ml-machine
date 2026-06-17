@@ -71,7 +71,6 @@ export class SvelteStates implements AbstractStates {
   private recordingSettingsState: AbstractState<RecordingSettings>;
   private knnInputState: AbstractState<Vector | undefined>;
   private knnNearestNeighboursState: AbstractState<LabelledPoint[]>;
-  private knnPointsState: AbstractState<LabelledPoint[]>;
 
   private log = new ConsoleLogger(SvelteStates.name);
 
@@ -151,13 +150,10 @@ export class SvelteStates implements AbstractStates {
     );
     this.knnInputState = new SvelteStateAdapter(writable(undefined));
     this.knnNearestNeighboursState = new SvelteStateAdapter(writable([]));
-    this.knnPointsState = new SvelteStateAdapter(writable([]));
   }
+
   getKNNNearestNeighbours(): AbstractState<LabelledPoint[]> {
     return this.knnNearestNeighboursState;
-  }
-  getKNNPoints(): AbstractState<LabelledPoint[]> {
-    return this.knnPointsState;
   }
 
   getKNNInput(): AbstractState<Vector | undefined> {

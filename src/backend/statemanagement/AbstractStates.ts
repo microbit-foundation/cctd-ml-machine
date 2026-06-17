@@ -34,7 +34,6 @@ import type { LabelledPoint } from '../../lib/legacy/KNNNonNormalizedMLModel';
 export interface AbstractStates {
   getKNNInput(): AbstractState<Vector | undefined>;
   getKNNNearestNeighbours(): AbstractState<LabelledPoint[]>;
-  getKNNPoints(): AbstractState<LabelledPoint[]>;
   getPredictionState(): AbstractState<PredictionOutput | undefined>;
   getRecordingSettings(): AbstractState<RecordingSettings>;
   getRecordingState(): AbstractState<GestureRecordingState>;

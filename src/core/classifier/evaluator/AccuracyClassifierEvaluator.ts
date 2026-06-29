@@ -25,7 +25,9 @@ export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
     const labelIndices = this.getLabelIndices(labels.getLabelVectors());
     const predictedIndices = this.getLabelIndices(
       // We round because label indices are expected to be 0 or 1. Confidence is rarely 100% on one class.
-      predictionOutput.map(output => output.getPrediction().round(0)),
+      predictionOutput.map(output => {
+        return output.getPrediction().round(0);
+      }),
     );
 
     if (labelIndices.length !== predictedIndices.length) {

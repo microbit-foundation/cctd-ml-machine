@@ -25,6 +25,7 @@
   export let dot: { gesture: GestureID; color: string } | undefined = undefined;
   export let downloadable: boolean = false;
   export let enableFingerprint: boolean;
+  export let showDot = false;
 
   const gestureController = getControllers().getGestureController();
 
@@ -87,7 +88,7 @@
   class:w-40={!shouldDisplayFingerprint}
   class:w-50={shouldDisplayFingerprint}
   on:click={openDialog}>
-  {#if dotGesture !== undefined}
+  {#if showDot}
     <div
       class="absolute px-1 py-0.5 z-3 right-1 top-2"
       class:right-1={!shouldDisplayFingerprint}

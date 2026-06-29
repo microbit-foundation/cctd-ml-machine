@@ -102,6 +102,7 @@
   "content.model.output.prediction.iconTitle": "Vorhersage",
   "content.model.output.prediction.descriptionTitle": "Vorhersage",
   "content.model.output.prediction.descriptionBody": "Hier siehst du die Vorhersage des Modells für die aktuelle Geste. In der Anzeige kannst du sehen, wie zuversichtlich das Modell mit seiner Vorhersage ist.",
+  "content.model.output.prediction.unknownGesture": "Geste konnte nicht bestimmt werden",
   "content.model.output.ledOutput.descriptionTitle": "LED Ausgabe",
   "content.model.output.ledOutput.descriptionBody": "Hier kannst du auswählen, wie sich die LEDs auf deinem Ausgabe-micro:bit verhalten, wenn dein Modell Vorhersagen macht. Versuche, einige Muster zu zeichnen und sehe, wie sie auf dem Ausgabe-micro:bit erscheinen, wenn du den Eingangs-micro:bit bewegst.",
   "content.model.output.sound.iconTitle": "Töne",

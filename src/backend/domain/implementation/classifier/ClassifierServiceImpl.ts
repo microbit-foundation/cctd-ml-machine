@@ -10,8 +10,10 @@ import type { ClassifierService } from '../../ClassifierService';
 import type { PredictionOutput } from '../../../../core/classifier/PredictionOutput';
 import type { PredictionInput } from '../../../../core/classifier/Predictioninput';
 import type { PredictionRepository } from '../../PredictionRepository';
+import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
 
 export class ClassifierServiceImpl implements ClassifierService {
+  private log = new ConsoleLogger(ClassifierServiceImpl.name);
 
   constructor(
     private classifierRepository: ClassifierRepository,
@@ -19,6 +21,7 @@ export class ClassifierServiceImpl implements ClassifierService {
   ) { }
 
   setClassifier(classifier: Classifier): void {
+    this.log.info('Setting classifier to', classifier);
     this.classifierRepository.setClassifier(classifier);
   }
 

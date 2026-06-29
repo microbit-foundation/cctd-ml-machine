@@ -88,7 +88,7 @@ export class GestureController {
   public getGestureFromClassIndex(classIndex: number): NewGesture | undefined {
     const gestures = this.gestureService.getGestures();
     if (classIndex < 0 || classIndex >= gestures.length) {
-      this.log.warn(`Invalid class index ${classIndex}`);
+      this.log.warn(`Class index ${classIndex} can't be correlated with a gesture!`);
       return undefined;
     }
     return gestures[classIndex];

@@ -62,6 +62,7 @@
     {#each validationRecordings as recording}
       {#key recording.getId()}
         <Recording
+        showDot={!!$results}
           enableFingerprint={$enableFingerprint}
           dot={$dotGetter(recording.getId())}
           gestureId={$gesture.getID()}

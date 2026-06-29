@@ -150,6 +150,7 @@ export class MLMachine {
     );
     this.modelTrainingRepository = new StatesModelTrainingStateRepository(
       this.states.getModelTraining(),
+      []
     );
     const classifierRepository = new StatesClassifierRepository(this.states);
     const knnSettingsRepository = new StatesKNNModelSettingsRepository(this.states);

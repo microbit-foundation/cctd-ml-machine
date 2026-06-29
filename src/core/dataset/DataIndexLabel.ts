@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+import ConsoleLogger from '../logging/ConsoleLogger';
 import type { Vector } from '../vector/Vector';
 
 export class DataIndexLabel {
+
+  private log = new ConsoleLogger(DataIndexLabel.name);
   private labelVector: Vector;
   private index: number;
 
@@ -25,9 +28,7 @@ export class DataIndexLabel {
     const values = labelVector.getValue();
     const numberOfOnes = values.filter(val => val === 1).length;
     if (numberOfOnes !== 1) {
-      throw new Error(
-        `Invalid label vector: ${labelVector.getValue()}. A label vector must have exactly one index with the value 1.`,
-      );
+        this.log.warn(`Invalid label vector: ${labelVector.getValue()}. A label vector must have exactly one index with the value 1.`);
     }
   }
 }

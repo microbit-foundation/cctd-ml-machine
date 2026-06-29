@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+import type { DataIndexLabel } from '../dataset/DataIndexLabel';
 import type { Vector } from '../vector/Vector';
 
 export interface PredictionOutput {
   getPrediction(): Vector;
   getPredcitionByClassIndex(classIndex: number): number;
   getPredictedIndex(): number
+  getDataIndexLabel(): DataIndexLabel;
 }

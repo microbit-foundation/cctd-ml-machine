@@ -28,7 +28,6 @@ export class Confidences {
       this.log.warn(`No confidence value found for gesture ${gesture.getID()}`);
       return false;
     }
-    console.log(`Confidence for gesture ${gesture.getID()}: ${confidence}, required: ${gesture.getOutput().requiredConfidence}`);
     return confidence >= gesture.getOutput().requiredConfidence;
   }
 

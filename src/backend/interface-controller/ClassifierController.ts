@@ -16,8 +16,12 @@ import type { ModelService } from '../domain/ModelService';
 import { AccuracyClassifierEvaluator } from '../../core/classifier/evaluator/AccuracyClassifierEvaluator';
 import { VectorClassifier } from '../../core/classifier/vector-classifier/VectorClassifier';
 import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
 
 export class ClassifierController {
+
+  private log = new ConsoleLogger(ClassifierController.name);
+
   constructor(
     private states: AbstractStates,
     private mlMachine: MLMachine,

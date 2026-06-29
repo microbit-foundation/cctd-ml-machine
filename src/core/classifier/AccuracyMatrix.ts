@@ -41,8 +41,7 @@ export class AccuracyMatrix {
 	}
 
 	private getIndex(id: number): number {
-		const idx = this.indexMap.get(id);
-		if (idx === undefined) throw new Error(`Unknown label index: ${id}`);
+		const idx = this.indexMap.get(id) ?? -1;
 		return idx;
 	}
 

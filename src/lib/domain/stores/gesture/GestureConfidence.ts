@@ -14,6 +14,9 @@ import {
 } from 'svelte/store';
 import type { Confidence } from '../../../../core/entities/Confidence';
 
+/**
+ * @deprecated Replace with only the required confidence as a setting. Use Confidences from the ConfidenceService instead.
+ */
 class GestureConfidence implements Readable<Confidence> {
   private requiredConfidence: Writable<number>;
 

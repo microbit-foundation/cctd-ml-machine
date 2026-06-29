@@ -13,6 +13,7 @@ import { getControllers } from '../../../../backend/interface-adapter/MLMachine'
 import type { LabelledPoint } from '../../../../core/model/KNN/LabelledPoint';
 import type { AbstractState } from '../../../../backend/statemanagement/AbstractState';
 import type { AbstractReadonlyState } from '../../../../backend/statemanagement/AbstractReadonlyState';
+import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
 
 type UpdateCall = {
   config: GraphDrawConfig;
@@ -24,6 +25,9 @@ type UpdateCall = {
  * Generally the controller will be instantiated, whenever the model is retrained or the user navigates to the KNNModelGraph.
  */
 class KNNModelGraphController {
+
+  private log = new ConsoleLogger(KNNModelGraphController.name);
+
   private rotationX: Writable<number>;
   private rotationY: Writable<number>;
   private rotationZ: Writable<number>;
@@ -51,10 +55,11 @@ class KNNModelGraphController {
     this.scale = writable(this.getDefaultScale());
     this.origin = writable(origin);
     this.graphColors = colors;
+    const modelTraining = getControllers().getClassifierController().getModelTraining()
 
     // To avoid redrawing data, only flag the training data to be drawn if any of these stores are altered
     this.unsubscriber = derived(
-      [this.rotationX, this.rotationY, this.rotationZ, this.scale, this.origin],
+      [this.rotationX, this.rotationY, this.rotationZ, this.scale, this.origin, modelTraining],
       () => ({}), // We don't need to use the values to anything. We just do this instead of subscribing to each store individually
     ).subscribe(() => (this.redrawTrainingData = true));
 
@@ -137,6 +142,8 @@ class KNNModelGraphController {
     } catch (_ignored) { }
 
     if (this.redrawTrainingData) {
+      this.log.info('Redrawing training data');
+      this.knnPoints = getControllers().getKnnController().getKNNPoints();
       this.redrawTrainingData = false; // Won't redraw next time until flag is set
       const groupedByIndex = this.getTrainingDataPoints();
       this.graphDrawer.draw(draw.config, groupedByIndex);

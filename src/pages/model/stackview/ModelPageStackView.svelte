@@ -19,6 +19,9 @@
   const modelTraining = classifierController.getModelTraining();
   // In case of manual classification, variables for evaluation
 
+  $: hasPendingSettings = $modelTraining.hasPendingSettings();
+  $: isTraining = $modelTraining.isTraining();
+
   onMount(() => {
     Microbits.resetIOPins();
   });
@@ -26,7 +29,7 @@
 
 <!-- Main pane -->
 <main class="h-full flex flex-col">
-  {#if $modelTraining.hasPendingSettings()}
+  {#if !hasPendingSettings}
     {#if $microbitConnection.getInput().isReady()}
       <ModelPageStackViewContent />
     {:else}

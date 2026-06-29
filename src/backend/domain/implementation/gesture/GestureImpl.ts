@@ -48,12 +48,15 @@ export class GestureImpl implements NewGesture {
   getRecordings(): Recording[] {
     return this.recordings;
   }
+
   getOutput(): GestureOutput {
     return this.ouput;
   }
+
   getColor(): string {
     return this.color;
   }
+
   getConfidence(): Confidence {
     return {
       currentConfidence: 0,

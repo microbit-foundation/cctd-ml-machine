@@ -241,7 +241,7 @@ export class MLMachine {
     classifierNodeCountHandler.setServices(this.modelService, this.knnSettingsService);
     classifierNodeCountHandler.onGesturesChanged(gestureRepository.getGestures());
 
-    this.knnModelService = new KNNModelServiceImpl(this.dataService);
+    this.knnModelService = new KNNModelServiceImpl(this.dataService, this.knnSettingsService);
     // This is the controller layer, probably should be last in the constructor
     this.controllers = new MLMachineControllers(
       this,

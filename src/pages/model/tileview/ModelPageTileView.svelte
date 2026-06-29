@@ -15,7 +15,9 @@
   import { t } from 'svelte-i18n';
 
   const classifierController = getControllers().getClassifierController();
-  const classifier = classifierController.getClassifier();
+  const modelTraining = classifierController.getModelTraining();
+  $: hasPendingSettings = $modelTraining.hasPendingSettings();
+  $: isTraining = $modelTraining.isTraining();
 
   const makecodeController = getControllers().getMakeCodeController();
   const outputController = getControllers().getOutputController();
@@ -28,11 +30,12 @@
     navigate(Paths.MAKECODE);
     outputController.setOutputTargetMakecode();
   };
+  console.log(hasPendingSettings, isTraining)
 </script>
 
 <main class="px-4 pt-4 flex flex-grow">
   <div class="flex-col flex-grow">
-    {#if !$classifier}
+    {#if hasPendingSettings}
       <TrainModelFirstTitle />
     {:else}
       <ModelPageTileViewTiles />

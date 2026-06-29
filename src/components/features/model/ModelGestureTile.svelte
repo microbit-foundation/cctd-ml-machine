@@ -28,17 +28,20 @@
   export let gesture: AbstractState<NewGesture>;
   const gestureController = getControllers().getGestureController();
 
-  let sliderValue = $gesture.getConfidence().requiredConfidence * 100;
+  let sliderValue = $gesture.getOutput().requiredConfidence * 100;
   $: {
-    gestureController.setRequiredConfidence($gesture.getID(), sliderValue / 100);
+    const newCofidence = sliderValue / 100;
+    gestureController.setRequiredConfidence($gesture.getID(), newCofidence);
   }
 
   const confidences = gestureController.getConfidences();
   $: active = $confidences.isConfident($gesture);
+  $: confidence = $confidences.getConfidence($gesture) ?? 0;
 
   const noTypeCheckNonStandardOrientProp = (orient?: 'vertical' | 'horizontal'): any => ({
     orient,
   });
+  $: console.log($confidences)
 </script>
 
 <Card>
@@ -69,12 +72,12 @@
             {active ? 'bg-primary' : 'bg-info'}
               z-index: -10"
             style="height: {100 *
-              $gesture.getConfidence().currentConfidence}px; margin-top: {100 -
-              100 * $gesture.getConfidence().currentConfidence}px;" />
+              confidence}px; margin-top: {100 -
+              100 * confidence}px;" />
           <div
             class="absolute w-5 bg-primary"
             style="height: 1px; margin-top: {6.5 -
-              0.068 * $gesture.getConfidence().requiredConfidence * 100}rem;" />
+              0.068 * $gesture.getOutput().requiredConfidence * 100}rem;" />
           <div class="absolute">
             {#each [75, 50, 25] as line}
               <div class="w-5 bg-gray-300 mt-6" style="height: 1px;">

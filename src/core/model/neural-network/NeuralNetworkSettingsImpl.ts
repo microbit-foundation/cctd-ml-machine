@@ -16,6 +16,10 @@ export class NeuralNetworkSettingsImpl implements NeuralNetworkModelSettings {
     private networkObserver: NeuralNetworkTrainingObserver,
   ) {}
 
+  shouldNormalize(): boolean {
+    return false; // Normalization not supported for neural network yet.
+  }
+
   public setTrainingObserver(observer: NeuralNetworkTrainingObserver): void {
     this.networkObserver = observer;
   }

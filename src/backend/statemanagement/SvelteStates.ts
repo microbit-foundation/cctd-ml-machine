@@ -102,7 +102,7 @@ export class SvelteStates implements AbstractStates {
     this.enableFingerprintState = new SvelteStateAdapter(
       writable(StaticConfiguration.enableFingerprintByDefault),
     );
-    this.validationAutoUpdateState = new SvelteStateAdapter(writable(true));
+    this.validationAutoUpdateState = new SvelteStateAdapter(writable(false));
     this.availableAxesState = new SvelteStateAdapter(writable(initialAxes));
     this.selectedAxesState = new SvelteStateAdapter(writable(initialAxes));
     const allFilters = getFilterTypes().map(createFilter);

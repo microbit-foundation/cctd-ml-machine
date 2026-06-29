@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Confidence } from './Confidence';
 import type { GestureOutput } from './GestureOutput';
 import type { Recording } from './recording/Recording';
 
@@ -21,5 +20,4 @@ export interface NewGesture {
   getValidationRecordings(): Recording[];
   getOutput(): GestureOutput;
   getColor(): string;
-  getConfidence(): Confidence;
 }

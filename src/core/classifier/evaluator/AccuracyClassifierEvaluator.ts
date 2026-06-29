@@ -71,6 +71,7 @@ export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
   ): number {
     console.assert(correctIndices.length === predictedIndices.length);
     const totalPredictionsCount = predictedIndices.length;
+    console.log(correctIndices, predictedIndices, totalPredictionsCount);
 
     let accuratePredictionCount = 0;
     for (let i = 0; i < correctIndices.length; i++) {

@@ -78,7 +78,7 @@ export class GestureServiceImpl implements GestureService {
       name,
       [],
       [],
-      {},
+      { requiredConfidence: .8 },
       this.colors.generateGestureColor(),
     );
     this.gestureRepository.saveGesture(gesture);

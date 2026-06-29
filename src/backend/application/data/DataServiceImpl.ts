@@ -96,12 +96,41 @@ export class DataServiceImpl implements DataService {
     this.modelTrainingRepository.saveModelTraining(modelTraining);
   }
 
-  getTrainingDataset(): Dataset {
-    return this.gestureDatasetFactory.buildDataset(
+  getTrainingDataset(normalize: boolean): Dataset {
+    const dataset = this.gestureDatasetFactory.buildDataset(
       (gesture: NewGesture) => gesture.getRecordings(),
       this.getSelectedAxes(),
       this.getFilters(),
     );
+    if (!normalize) {
+      return dataset;
+    }
+    const mean = dataset.getFeatureMean();
+    const std = dataset.getFeatureStandardDeviation();
+    const labels = dataset.getLabels();
+    const normalizedFeatureSet = dataset
+      .getFeatureSet()
+      .map((featureData,featureIdx) => {
+        const normalizedFeatures = featureData
+          .getFeatures()
+          .getValue()
+          .map((feature, index) => (feature - mean.getValueByIndex(index)) / std.getValueByIndex(index));
+        return {
+          getFeatures: () => new BaseVector(normalizedFeatures),
+          getLabel: () => labels.getIndexLabels()[featureIdx],
+        };
+      });
+    return {
+      getFeatureSet: () => normalizedFeatureSet,
+      getNormalizedFeatureSet: () => normalizedFeatureSet,
+      getLabels: () => dataset.getLabels(),
+      isValid: () => dataset.isValid(),
+      isEmpty: () => dataset.isEmpty(),
+      getNumberOfClasses: () => dataset.getNumberOfClasses(),
+      getFeatureSize: () => dataset.getFeatureSize(),
+      getFeatureMean: () => mean,
+      getFeatureStandardDeviation: () => std,
+    };
   }
 
   getValidationDataset(): Dataset {

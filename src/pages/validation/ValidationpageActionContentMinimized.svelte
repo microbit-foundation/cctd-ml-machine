@@ -15,7 +15,7 @@
   const validationController = controllers.getValidationController();
 
   const validationResult = validationController.getValidationResult();
-  const accuracy = $validationResult?.getAccuracy();
+  $: accuracy = $validationResult?.getAccuracy();
   const autoUpdate = validationController.shouldAutoUpdate();
   const classifierController = controllers.getClassifierController();
   const modelTraining = classifierController.getModelTraining();
@@ -33,12 +33,12 @@
       </p>
       <Switch size="sm" bind:checked={$autoUpdate} />
       <Tooltip
-        disabled={$modelTraining.hasPendingSettings()}
+        disabled={!$modelTraining.hasPendingSettings()}
         offset={{ x: 230, y: 0 }}
         title={$tr('content.validation.tutorial.trainmodelfirst')}>
         <StandardButton
           tiny
-          disabled={!$modelTraining.hasPendingSettings()}
+          disabled={$modelTraining.hasPendingSettings()}
           onClick={handleEvaluateValidationSets}>
           {$tr('content.validation.testButton.test')}
         </StandardButton>

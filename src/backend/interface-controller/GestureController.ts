@@ -66,7 +66,7 @@ export class GestureController {
     });
     return new SvelteStateAdapterReadonly(derivation);
   }
-  
+
   public getGestureFromValidationRecording(recordingId: number): NewGesture | undefined {
     return this.gestureService.getGestureFromValidationRecording(recordingId);
   }
@@ -112,9 +112,17 @@ export class GestureController {
     if (!gesture) {
       throw new Error('Invalid gesture id, not found, id: ' + gestureId);
     }
-    gesture.getConfidence().requiredConfidence = requiredConfidence;
+    if (requiredConfidence < 0 || requiredConfidence > 1) {
+      throw new Error('Invalid required confidence, must be between 0 and 1, got: ' + requiredConfidence);
+    }
+    if (gesture.getOutput().requiredConfidence === requiredConfidence) {
+      this.log.info(`Required confidence for gesture ${gestureId} is already ${requiredConfidence}, no change needed.`);
+      return;
+    }
+    gesture.getOutput().requiredConfidence = requiredConfidence;
     this.gestureService.saveGesture(gesture);
   }
+  
   setGestureOuput(gestureId: GestureID, ouput: GestureOutput) {
     const gesture = this.gestureService.getGesture(gestureId);
     if (!gesture) {
@@ -145,7 +153,7 @@ export class GestureController {
       const idx = gests.findIndex(gest => gest.getID() === id);
       if (idx === -1) {
         this.log.warn(`Gesture with id ${id} does not exist`);
-        return new GestureImpl(-1, 'deleted', [], [], {}, '#000000');
+        return new GestureImpl(-1, 'deleted', [], [], { requiredConfidence: .8 }, '#000000');
       }
       return gests[idx];
     });

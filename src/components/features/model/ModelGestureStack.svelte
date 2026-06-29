@@ -36,13 +36,19 @@
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
   const gestureController = getControllers().getGestureController();
+  const classifierController = getControllers().getClassifierController();
 
-  const gestures = gestureController.getGestures();
   type TriggerAction = 'turnOn' | 'turnOff' | 'none';
 
   // Variables for component
   export let gestureId: GestureID;
   const gesture = gestureController.getGestureState(gestureId);
+  const classIdx = gestureController.getClassIndex(gestureId);
+  const prediction = classifierController.getPrediction();
+
+  const confidences = gestureController.getConfidences();
+  $: active = $confidences.isConfident($gesture);
+  $: confidence = $confidences.getConfidence($gesture) ?? 0;
   export let onUserInteraction: () => void = () => {
     return;
   };
@@ -53,6 +59,8 @@
     ? // TODO: Fix the forced defined exclamation mark here
       $gesture.getOutput().outputPin!.pin
     : StaticConfiguration.defaultOutputPin;
+  
+    
 
   let pinIOEnabled = StaticConfiguration.pinIOEnabledByDefault;
   let turnOnTime = $gesture.getOutput().outputPin
@@ -63,6 +71,8 @@
     : StaticConfiguration.defaultPinTurnOnState;
 
   let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
+
+  $: console.log(active)
 
   const getTriggerAction = (
     lastWasTriggered: boolean,
@@ -105,8 +115,8 @@
   $: {
     let triggerAction = getTriggerAction(
       wasTriggered,
-      $gesture.getConfidence().currentConfidence,
-      $gesture.getConfidence().requiredConfidence,
+      confidence,
+      $gesture.getOutput().requiredConfidence,
     );
     handleTriggering(triggerAction);
   }
@@ -192,11 +202,13 @@
 
   let hasLoadedMicrobitImage = false;
 
-  $: meterHeightPct = 100 * $gesture.getConfidence().currentConfidence;
+  $: meterHeightPct = 100 * confidence;
 
   const noTypeCheckNonStandardOrientProp = (orient?: 'vertical' | 'horizontal'): any => ({
     orient,
   });
+
+  
 </script>
 
 <main class="mb-4 items-center flex flex-row">

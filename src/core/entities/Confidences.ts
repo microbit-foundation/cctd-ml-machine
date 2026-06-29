@@ -1,6 +1,10 @@
+import ConsoleLogger from '../logging/ConsoleLogger';
 import type { GestureID, NewGesture } from './NewGesture';
 
 export class Confidences {
+
+  private log = new ConsoleLogger(Confidences.name);
+
   private confidences: Map<GestureID, number>;
   constructor(confidences: Map<GestureID, number>) {
     this.confidences = confidences;
@@ -21,9 +25,11 @@ export class Confidences {
   isConfident(gesture: NewGesture): boolean {
     const confidence = this.getConfidence(gesture);
     if (confidence === undefined) {
+      this.log.warn(`No confidence value found for gesture ${gesture.getID()}`);
       return false;
     }
-    return confidence >= gesture.getConfidence().requiredConfidence;
+    console.log(`Confidence for gesture ${gesture.getID()}: ${confidence}, required: ${gesture.getOutput().requiredConfidence}`);
+    return confidence >= gesture.getOutput().requiredConfidence;
   }
 
   getMostConfidentGestureID(): GestureID | undefined {

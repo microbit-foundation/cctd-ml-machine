@@ -11,6 +11,7 @@ import { knnNeighbours } from '../../../../lib/stores/KNNStores';
 import type { Point3D, Point3DTransformed } from '../../../../lib/utils/graphUtils';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
+import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
 
 export type GraphDrawConfig = {
   xRot: number;
@@ -33,6 +34,7 @@ export type DrawablePoint = {
 
 class KNNModelGraphDrawer {
   private drawnTrainingPoints: Point3DTransformed[] = [];
+  private log = new ConsoleLogger(KNNModelGraphDrawer.name);
 
   constructor(
     private svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
@@ -56,7 +58,8 @@ class KNNModelGraphDrawer {
       return; // May happen if the model has just been trained.
     }
 
-    const predictedVectorPoints = get(knnNeighbours).map(e => e.vector);
+    const knnController = getControllers().getKnnController();
+    const predictedVectorPoints = knnController.getKNNNearestNeighbours().get().map(p => p.vector);
     const transformedPredictedPoints: Point3DTransformed[] = predictedVectorPoints.map(
       point =>
         this.transformPoint(drawConfig, {
@@ -73,6 +76,7 @@ class KNNModelGraphDrawer {
 
       // Draw lines from live point to the nearest neighbours
       const predictedPoints = [...transformedPredictedPoints];
+
 
       const lines = this.svg.selectAll(`line.points-class`).data(predictedPoints);
       lines

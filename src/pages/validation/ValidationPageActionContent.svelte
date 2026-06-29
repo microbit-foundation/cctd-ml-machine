@@ -5,16 +5,14 @@
  -->
 
 <script lang="ts">
-  import { writable, type Readable } from 'svelte/store';
+  import { writable } from 'svelte/store';
   import ValidationMatrix from './ValidationMatrix.svelte';
-  import { type ValidationSetMatrix } from './ValidationPage';
   import { tr } from '../../i18n';
   import Tooltip from '../../components/ui/Tooltip.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import Switch from '../../components/ui/Switch.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
-  import type Matrix from '../../core/entities/Matrix';
-    import AccuracyMatrix from '../../core/classifier/AccuracyMatrix';
+  import AccuracyMatrix from '../../core/classifier/AccuracyMatrix';
 
   const gestureController = getControllers().getGestureController();
   const gestures = gestureController.getGestures();
@@ -22,7 +20,7 @@
   const validationResult = validationController.getValidationResult();
   const classifierController = getControllers().getClassifierController();
   const modelTraining = classifierController.getModelTraining();
-  const accuracy = $validationResult?.getAccuracy();
+  $: accuracy = $validationResult?.getAccuracy();
   const autoUpdate = validationController.shouldAutoUpdate();
 
   $: accuracyMatrix = $validationResult?.getMatrix();
@@ -43,11 +41,11 @@
       <Switch size="sm" bind:checked={$autoUpdate} />
     </div>
     <Tooltip
-      disabled={$modelTraining.hasPendingSettings()}
+      disabled={!$modelTraining.hasPendingSettings()}
       offset={{ x: 30, y: 20 }}
       title={$tr('content.validation.tutorial.trainmodelfirst')}>
       <StandardButton
-        disabled={!$modelTraining.hasPendingSettings()}
+        disabled={$modelTraining.hasPendingSettings()}
         onClick={handleEvaluateValidationSets}>
         {$tr('content.validation.testButton.test')}
       </StandardButton>
@@ -63,7 +61,9 @@
         <input type="checkbox" bind:checked={$showPercentages} />
       </div>
       <div class="mx-2 max-h-37 max-w-180 overflow-y-auto">
-        <ValidationMatrix matrix={accuracyMatrix || AccuracyMatrix.fromSize($gestures.length)} showPercentages={$showPercentages} />
+        <ValidationMatrix
+          matrix={accuracyMatrix || AccuracyMatrix.fromSize($gestures.length)}
+          showPercentages={$showPercentages} />
       </div>
     </div>
   </div>

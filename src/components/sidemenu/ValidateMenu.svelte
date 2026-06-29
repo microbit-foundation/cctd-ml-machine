@@ -10,7 +10,7 @@
   const validationResult = getControllers()
     .getValidationController()
     .getValidationResult();
-  const accuracy = $validationResult?.getAccuracy();
+  $: accuracy = $validationResult?.getAccuracy();
 </script>
 
 <div class="w-full text-center justify-center pt-5 pb-7">

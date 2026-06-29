@@ -25,6 +25,9 @@ export class KNNSettingsServiceImpl implements KNNSettingsService {
 
   public setNumberOfClasses(numberOfClasses: number): void {
     const settings = this.knnModelSettingsRepository.getKNNModelSettings();
+    if (settings.getNumberOfClasses() === numberOfClasses) {
+      return;
+    }
     settings.setNumberOfClasses(numberOfClasses);
     this.setKNNModelSettings(settings, new SettingsChange(new ModelOption("Number of Classes"), settings.getNumberOfClasses(), numberOfClasses));
   }
@@ -36,7 +39,9 @@ export class KNNSettingsServiceImpl implements KNNSettingsService {
       .reduce((sum, gesture) => sum + gesture.getRecordings().length, 0);
     safeK = Math.min(safeK, noOfRecordings);
     const settings = this.knnModelSettingsRepository.getKNNModelSettings();
-    this.setKNNModelSettings(settings, new SettingsChange(new ModelOption("K"), settings.getK(), safeK));
+    const oldK = settings.getK();
+    settings.setK(safeK);
+    this.setKNNModelSettings(settings, new SettingsChange(new ModelOption("K"), oldK, safeK));
   }
 
   private setKNNModelSettings<T>(knnModelSettings: KNNModelSettings, settingsChange: SettingsChange<T>) {

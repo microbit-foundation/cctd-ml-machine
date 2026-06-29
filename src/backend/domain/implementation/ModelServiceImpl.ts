@@ -77,7 +77,7 @@ export class ModelServiceImpl implements ModelService {
         const observer = new KNNModelObserverImpl(this.knnPointsRepository);
         const trainer = new KNNModelTrainer(knnSettings, observer);
         const trainingResult = await trainer.trainModel(
-            this.dataService.getTrainingDataset(),
+            this.dataService.getTrainingDataset(knnSettings.shouldNormalize()),
         );
         const model = trainingResult.model;
         this.setModelIsTraining(false);
@@ -124,7 +124,7 @@ export class ModelServiceImpl implements ModelService {
         );
         const modelTrainer = new NeuralNetworkModelTrainer(settings);
         const trainingResult = await modelTrainer.trainModel(
-            this.dataService.getTrainingDataset(),
+            this.dataService.getTrainingDataset(settings.shouldNormalize()),
         );
         const model = trainingResult.model;
         this.setModelIsTraining(false);
@@ -147,6 +147,7 @@ export class ModelServiceImpl implements ModelService {
     }
 
     private clearPendingSettings(): void {
+        this.log.info('Clearing pending settings');
         const modelTraining = this.getModelTraining();
         modelTraining.clearPendingSettings();
         this.modelTrainingRepository.saveModelTraining(modelTraining);

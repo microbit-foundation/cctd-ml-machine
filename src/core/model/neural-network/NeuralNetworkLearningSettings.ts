@@ -10,6 +10,7 @@ import type { NeuralNetworkModelLearningSettings } from './NeuralNetworkModelBas
 
 export interface NeuralNetworkModelSettings {
   setTrainingObserver(observer: NeuralNetworkTrainingObserver): void;
+  shouldNormalize(): boolean;
   getLearningSettings(): NeuralNetworkModelLearningSettings;
   getArchitecture(): NeuralNetworkArchitecture;
   getTrainingObserver(): NeuralNetworkTrainingObserver;

@@ -25,7 +25,7 @@ export interface DataService {
   isAxisSelected(axis: Axis): boolean;
   getFilters(): Filter[];
   toggleFilter(filterType: FilterType): void;
-  getTrainingDataset(): Dataset;
+  getTrainingDataset(normalize: boolean): Dataset;
   getValidationDataset(): Dataset;
   hasSufficientDataForTraining(): boolean;
   extractSelectedAxesFromVector(data: Vector): Vector;

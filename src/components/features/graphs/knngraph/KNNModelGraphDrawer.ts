@@ -5,9 +5,7 @@
  */
 import { gridPlanes3D, points3D, lines3D } from 'd3-3d';
 import { knnHighlightedPoint } from './KnnPointToolTip';
-import { get } from 'svelte/store';
 import * as d3 from 'd3';
-import { knnNeighbours } from '../../../../lib/stores/KNNStores';
 import type { Point3D, Point3DTransformed } from '../../../../lib/utils/graphUtils';
 import StaticConfiguration from '../../../../StaticConfiguration';
 import { getControllers } from '../../../../backend/interface-adapter/MLMachine';

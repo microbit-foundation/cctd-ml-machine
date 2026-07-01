@@ -113,7 +113,10 @@ export class SvelteStates implements AbstractStates {
       writable(
         new NeuralNetworkSettingsImpl(
           new DefaultNeuralNetworkModelLearningSettings(),
-          new DefaultNeuralNetworkArchitecture(initialGestures.length, defaultFeatureCount),
+          new DefaultNeuralNetworkArchitecture(
+            initialGestures.length,
+            defaultFeatureCount,
+          ),
           new LoggingNeuralNetworkTrainingObserver(
             new ConsoleLogger('LoggingNeuralNetworkTrainingObserver'),
           ),

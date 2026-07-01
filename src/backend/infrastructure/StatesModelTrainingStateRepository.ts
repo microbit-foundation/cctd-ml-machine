@@ -6,7 +6,10 @@ import type { AbstractState } from '../statemanagement/AbstractState';
 export class StatesModelTrainingStateRepository implements ModelTrainingStateRepository {
   private modelTraining: AbstractState<ModelTraining>;
 
-  public constructor(initialModelTraining: AbstractState<ModelTraining>, modelTrainingObserver: ModelTrainingObserver[]) {
+  public constructor(
+    initialModelTraining: AbstractState<ModelTraining>,
+    modelTrainingObserver: ModelTrainingObserver[],
+  ) {
     this.modelTraining = initialModelTraining;
   }
 

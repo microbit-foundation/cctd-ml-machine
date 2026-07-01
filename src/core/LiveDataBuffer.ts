@@ -92,7 +92,11 @@ class LiveDataBuffer<T extends LiveDataVector> {
 
     if (foundElements < noOfElements) {
       throw new Error(
-        'Insufficient buffer data! Try increasing the polling rate or decrease the number of elements requested (found ' + foundElements + ' elements, but ' + noOfElements + ' were requested).',
+        'Insufficient buffer data! Try increasing the polling rate or decrease the number of elements requested (found ' +
+          foundElements +
+          ' elements, but ' +
+          noOfElements +
+          ' were requested).',
       );
     }
 

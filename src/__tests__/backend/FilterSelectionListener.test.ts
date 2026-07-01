@@ -19,10 +19,7 @@ describe('FilterSelectionListener', () => {
       { index: 1, label: 'y' },
     ];
     const initialFilters = [createFilter(FilterType.MAX)];
-    const listener = new FilterSelectionListener(
-      initialSelectedAxes,
-      initialFilters,
-    );
+    const listener = new FilterSelectionListener(initialSelectedAxes, initialFilters);
     listener.setModelService(classifierService);
 
     listener.onFiltersChanged([
@@ -43,7 +40,10 @@ describe('FilterSelectionListener', () => {
       createFilter(FilterType.RMS),
     ];
     const listener = new FilterSelectionListener(
-      [{ index: 0, label: 'x' }, { index: 1, label: 'y' }],
+      [
+        { index: 0, label: 'x' },
+        { index: 1, label: 'y' },
+      ],
       initialFilters,
     );
     listener.setModelService(classifierService);

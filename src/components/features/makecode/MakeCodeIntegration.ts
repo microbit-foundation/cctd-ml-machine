@@ -66,7 +66,6 @@ export const createFrameDriver = (iframe: HTMLIFrameElement | undefined) => {
       // When the editor loads, hide the simulator to make more space
       onEditorContentLoaded: e => driverRef.hideSimulator(),
       onWorkspaceSave: e => {
-        console.log(e.project);
         makeCodeController.setMakeCodeProject(e.project);
       },
       onDownload: ({ hex }) => flashHexContent(hex),

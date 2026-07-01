@@ -1,4 +1,4 @@
-import type { ModelInfo } from "../../core/model/ModelInfo";
+import type { ModelInfo } from '../../core/model/ModelInfo';
 
 export interface ModelRepository {
   getSelectedModel(): ModelInfo;

@@ -11,7 +11,7 @@ import type { KNNSettingsService } from '../domain/KNNSettingsService';
 export class ClassifierNodeCountHandler implements GestureListListener {
   private modelService?: ModelService;
 
-  private knnSettingsService?: KNNSettingsService
+  private knnSettingsService?: KNNSettingsService;
 
   setServices(modelService: ModelService, knnSettingsService: KNNSettingsService): void {
     this.modelService = modelService;

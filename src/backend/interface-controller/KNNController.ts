@@ -10,7 +10,7 @@ export class KNNController {
   constructor(
     private states: AbstractStates,
     private knnSettingsService: KNNSettingsService,
-    private knnModelService: KNNModelService
+    private knnModelService: KNNModelService,
   ) {}
 
   public getKNNModelSettings(): AbstractReadonlyState<KNNModelSettings> {

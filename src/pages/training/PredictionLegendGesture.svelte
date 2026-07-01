@@ -12,7 +12,10 @@
   const classifierController = getControllers().getClassifierController();
   const idx = gestureController.getClassIndex(gestureId);
   const predictions = classifierController.getPrediction();
-  $: prediction = (idx != null && $predictions != null) ? $predictions.getPrediction().getValue()[idx] : 0
+  $: prediction =
+    idx != null && $predictions != null
+      ? $predictions.getPrediction().getValue()[idx]
+      : 0;
 </script>
 
 <div class="flex flex-row justify-between">

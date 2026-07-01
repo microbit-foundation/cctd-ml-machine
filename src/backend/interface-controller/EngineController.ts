@@ -1,15 +1,13 @@
-import type { PollingPredictorEngine } from "../application/PollingPredictorEngine";
+import type { PollingPredictorEngine } from '../application/PollingPredictorEngine';
 
 export class EngineController {
-    constructor(
-        private pollingPredictorEngine: PollingPredictorEngine,
-    ) { }
+  constructor(private pollingPredictorEngine: PollingPredictorEngine) {}
 
-    public startPollingPredictorEngine() {
-        this.pollingPredictorEngine.start();
-    }
+  public startPollingPredictorEngine() {
+    this.pollingPredictorEngine.start();
+  }
 
-    public stopPollingPredictorEngine() {
-        this.pollingPredictorEngine.stop();
-    }
+  public stopPollingPredictorEngine() {
+    this.pollingPredictorEngine.stop();
+  }
 }

@@ -17,8 +17,7 @@ export default class DatasetImpl implements Dataset {
     private readonly featureMean: Vector,
     private readonly featureStdDev: Vector,
     private readonly numberOfClasses: number,
-  ) {
-  }
+  ) {}
 
   public isEmpty(): boolean {
     return this.labelledFeatureSet.getFeatureSet().length === 0;

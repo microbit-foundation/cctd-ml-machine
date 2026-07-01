@@ -110,7 +110,7 @@ export class MLMachine {
   }
 
   /**
-   * Bootstraps the entire application. This is a rather dirty constructor, but it injects all the dependencies and sets up the entire application. 
+   * Bootstraps the entire application. This is a rather dirty constructor, but it injects all the dependencies and sets up the entire application.
    * It also sets up the state management and repositories.
    */
   private constructor(private featureProvider: FeatureProvider) {
@@ -130,13 +130,15 @@ export class MLMachine {
       gestureRepository.getGestures(),
       featureProvider,
       selectedGestureState,
-      gestureRepository.getAxesFromGestures()
+      gestureRepository.getAxesFromGestures(),
     );
     const filterSelectionListener = new FilterSelectionListener(
       this.states.getSelectedAxes().get(),
       this.states.getFilters().get(),
     );
-    this.filterRepository = new StatesFilterRepository(this.states, [filterSelectionListener]);
+    this.filterRepository = new StatesFilterRepository(this.states, [
+      filterSelectionListener,
+    ]);
     gestureStateHandler.setStates(this.states);
     const confidenceRepository = new StatesConfidenceRepository(this.states);
     this.featureService = new FeatureServiceImpl(featureProvider);
@@ -150,7 +152,7 @@ export class MLMachine {
     );
     this.modelTrainingRepository = new StatesModelTrainingStateRepository(
       this.states.getModelTraining(),
-      []
+      [],
     );
     const classifierRepository = new StatesClassifierRepository(this.states);
     const knnSettingsRepository = new StatesKNNModelSettingsRepository(this.states);
@@ -195,7 +197,6 @@ export class MLMachine {
       validationRepository,
       this.dataService,
     );
-
 
     const outputService = new OutputServiceImpl(new StatesOutputRepository(this.states));
     const microbitConnectionRepository = new StatesMicrobitConnectionRepository(
@@ -242,7 +243,10 @@ export class MLMachine {
     classifierNodeCountHandler.setServices(this.modelService, this.knnSettingsService);
     classifierNodeCountHandler.onGesturesChanged(gestureRepository.getGestures());
 
-    this.knnModelService = new KNNModelServiceImpl(this.dataService, this.knnSettingsService);
+    this.knnModelService = new KNNModelServiceImpl(
+      this.dataService,
+      this.knnSettingsService,
+    );
     // This is the controller layer, probably should be last in the constructor
     this.controllers = new MLMachineControllers(
       this,

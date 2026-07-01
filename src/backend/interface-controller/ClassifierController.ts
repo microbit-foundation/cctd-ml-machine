@@ -19,14 +19,13 @@ import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
 
 export class ClassifierController {
-
   private log = new ConsoleLogger(ClassifierController.name);
 
   constructor(
     private states: AbstractStates,
     private mlMachine: MLMachine,
     private classifierService: ClassifierService,
-    private modelService: ModelService
+    private modelService: ModelService,
   ) {}
 
   getPrediction(): AbstractState<PredictionOutput | undefined> {

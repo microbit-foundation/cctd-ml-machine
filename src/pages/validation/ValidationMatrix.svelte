@@ -8,7 +8,7 @@
   import Matrix from '../../core/entities/Matrix';
   import { t } from '../../i18n';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
-    import type AccuracyMatrix from '../../core/classifier/AccuracyMatrix';
+  import type AccuracyMatrix from '../../core/classifier/AccuracyMatrix';
 
   const gestures = getControllers().getGestureController().getGestures();
 

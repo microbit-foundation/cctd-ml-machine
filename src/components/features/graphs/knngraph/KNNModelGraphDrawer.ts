@@ -57,7 +57,10 @@ class KNNModelGraphDrawer {
     }
 
     const knnController = getControllers().getKnnController();
-    const predictedVectorPoints = knnController.getKNNNearestNeighbours().get().map(p => p.vector);
+    const predictedVectorPoints = knnController
+      .getKNNNearestNeighbours()
+      .get()
+      .map(p => p.vector);
     const transformedPredictedPoints: Point3DTransformed[] = predictedVectorPoints.map(
       point =>
         this.transformPoint(drawConfig, {
@@ -74,7 +77,6 @@ class KNNModelGraphDrawer {
 
       // Draw lines from live point to the nearest neighbours
       const predictedPoints = [...transformedPredictedPoints];
-
 
       const lines = this.svg.selectAll(`line.points-class`).data(predictedPoints);
       lines

@@ -42,7 +42,11 @@ export class NeuralNetworkModelTrainer
     const tensorFeatures = tf.tensor(features);
     const tensorLabels = tf.tensor(labels);
     const modelFactory = new NeuralNetworkLayersModelFactory();
-    console.log('Building model with settings:', this.settings.getArchitecture(), this.settings.getLearningSettings());
+    console.log(
+      'Building model with settings:',
+      this.settings.getArchitecture(),
+      this.settings.getLearningSettings(),
+    );
     const model = modelFactory.buildLayers(this.settings.getArchitecture());
 
     model.compile({

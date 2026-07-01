@@ -50,7 +50,9 @@ describe('Neural network architecture sync integration', () => {
       states.getSelectedAxes().get(),
       states.getFilters().get(),
     );
-    const filterRepository = new StatesFilterRepository(states, [filterSelectionListener]);
+    const filterRepository = new StatesFilterRepository(states, [
+      filterSelectionListener,
+    ]);
     const axisRepository = new StatesAxisRepository(
       {
         getGestures: () => [],

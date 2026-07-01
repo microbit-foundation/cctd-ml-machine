@@ -95,7 +95,10 @@
       <p>Pend. setns.:</p>
       <div>
         {#each pendingSettings.slice(-10) as setting}
-        <p>{setting.getOption().getName()} {setting.getOldValue()}->{setting.getNewValue()}</p>
+          <p>
+            {setting.getOption().getName()}
+            {setting.getOldValue()}->{setting.getNewValue()}
+          </p>
         {/each}
       </div>
     </div>

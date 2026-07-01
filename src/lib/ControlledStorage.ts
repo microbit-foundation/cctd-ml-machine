@@ -12,7 +12,7 @@ class ControlledStorage {
   /**
    * What storage version should be used? If old user data is expected to be broken, increasing this number will delete all the data the user has in their storage location
    */
-  public static readonly localStorageVersion = 6;
+  public static readonly localStorageVersion = 7;
 
   public static getOrElse<T>(key: string, defaultValue: T): T {
     try {

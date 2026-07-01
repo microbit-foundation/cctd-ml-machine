@@ -14,7 +14,6 @@ import ConsoleLogger from '../../logging/ConsoleLogger';
 import { AccuracyMatrixFactory } from '../AccuracyMatrixFactory';
 
 export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
-
   private log = new ConsoleLogger(AccuracyClassifierEvaluator.name);
 
   public getEvaluation(
@@ -37,19 +36,32 @@ export class AccuracyClassifierEvaluator implements ClassifierEvaluator {
     const accuracy = this.calculateAccuracy(labelIndices, predictedIndices);
 
     const matrixFactory = new AccuracyMatrixFactory();
-    const matrix = matrixFactory.create(dataset.getNumberOfClasses(), labels, predictionOutput);
-    const confusionBuckets = this.getConfusionBuckets(labelIndices, predictedIndices, dataset.getNumberOfClasses());
+    const matrix = matrixFactory.create(
+      dataset.getNumberOfClasses(),
+      labels,
+      predictionOutput,
+    );
+    const confusionBuckets = this.getConfusionBuckets(
+      labelIndices,
+      predictedIndices,
+      dataset.getNumberOfClasses(),
+    );
     this.log.info(`Evaluation result: ${accuracy}`);
 
     return {
       getAccuracy: () => accuracy,
       getAccuracyMatrix: () => matrix,
-      getPredictionIndices: () => predictionOutput.map(output => output.getPrediction().indexOfMax()),
+      getPredictionIndices: () =>
+        predictionOutput.map(output => output.getPrediction().indexOfMax()),
       getConfusionBuckets: () => confusionBuckets,
     };
   }
 
-  private getConfusionBuckets(labelIndices: number[], predictedIndices: number[], numberOfClasses: number): number[][] {
+  private getConfusionBuckets(
+    labelIndices: number[],
+    predictedIndices: number[],
+    numberOfClasses: number,
+  ): number[][] {
     const buckets: number[][] = Array.from({ length: numberOfClasses }, () => []);
 
     for (let i = 0; i < labelIndices.length; i++) {

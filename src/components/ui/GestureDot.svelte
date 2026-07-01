@@ -31,6 +31,8 @@
     style="background-color: {color};" />
 {:else}
   <div class="z-2 absolute right-1 top-[-4px]">
-    <Information bodyText={$t('content.model.output.prediction.unknownGesture')} isLightTheme={false}/>
+    <Information
+      bodyText={$t('content.model.output.prediction.unknownGesture')}
+      isLightTheme={false} />
   </div>
 {/if}

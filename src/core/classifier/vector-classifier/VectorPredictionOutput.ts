@@ -10,8 +10,10 @@ import type { PredictionInput } from '../Predictioninput';
 import type { PredictionOutput } from '../PredictionOutput';
 
 export class VectorPredictionOutput implements PredictionOutput {
-  constructor(private predictionInput: PredictionInput, private outputVector: Vector) {
-  }
+  constructor(
+    private predictionInput: PredictionInput,
+    private outputVector: Vector,
+  ) {}
 
   getPredcitionByClassIndex(classIndex: number): number {
     const predictionValue = this.outputVector.getValueByIndex(classIndex);
@@ -39,7 +41,7 @@ export class VectorPredictionOutput implements PredictionOutput {
   }
 
   getDataIndexLabel(): DataIndexLabel {
-    const rounded = this.getRoundedPrediction()
+    const rounded = this.getRoundedPrediction();
     return new DataIndexLabel(rounded);
   }
 

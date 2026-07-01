@@ -57,7 +57,7 @@
   };
 
   const knnInputPoint = knnController.getKNNInput();
-  $: inputPoint = $knnInputPoint?.getValue() || []
+  $: inputPoint = $knnInputPoint?.getValue() || [];
 
   let valueInterval: NodeJS.Timeout = setInterval(() => {}, 100);
 

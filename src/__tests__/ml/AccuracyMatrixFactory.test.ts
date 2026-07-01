@@ -35,7 +35,10 @@ describe('AccuracyMatrixFactory', () => {
       [0, 1],
     ]);
 
-    const outputs = [new SimplePrediction(new BaseVector([1, 0])), new SimplePrediction(new BaseVector([0, 1]))];
+    const outputs = [
+      new SimplePrediction(new BaseVector([1, 0])),
+      new SimplePrediction(new BaseVector([0, 1])),
+    ];
 
     const matrix = factory.create(2, labels as any, outputs as any);
 
@@ -49,7 +52,10 @@ describe('AccuracyMatrixFactory', () => {
 
     const factory = new AccuracyMatrixFactory();
     const labels = new SimpleLabels([[1]]);
-    const outputs = [new SimplePrediction(new BaseVector([1])), new SimplePrediction(new BaseVector([1]))];
+    const outputs = [
+      new SimplePrediction(new BaseVector([1])),
+      new SimplePrediction(new BaseVector([1])),
+    ];
 
     expect(() => factory.create(2, labels as any, outputs as any)).toThrow();
   });

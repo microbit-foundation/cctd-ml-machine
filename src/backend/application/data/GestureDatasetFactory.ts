@@ -15,10 +15,9 @@ import type { Vector } from '../../../core/vector/Vector';
 import type { GestureService } from '../../domain/GestureService';
 
 export class GestureDatasetFactory {
-  
   private log = new ConsoleLogger(GestureDatasetFactory.name);
 
-  constructor(private gestureService: GestureService) { }
+  constructor(private gestureService: GestureService) {}
 
   /** Builds dataset from filters and selected axes. Provide the getRecordings method to determine how to fetch recordings. Can be used for validation- or regular recordings */
   public buildDataset(
@@ -45,16 +44,26 @@ export class GestureDatasetFactory {
     });
 
     if (featureData.length === 0) {
-      return new DatasetImpl(new LabelledFeatureSetImpl([], datasetLabels), 0, new BaseVector([]), new BaseVector([]), numberOfClasses);
+      return new DatasetImpl(
+        new LabelledFeatureSetImpl([], datasetLabels),
+        0,
+        new BaseVector([]),
+        new BaseVector([]),
+        numberOfClasses,
+      );
     }
 
-    let featureSum: Vector = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
+    let featureSum: Vector = new BaseVector(
+      Array(filters.length * selectedAxes.length).fill(0),
+    );
     featureData.forEach(fd => {
       const features = fd.getFeatures();
       featureSum = featureSum.add(features);
     });
     const featureMean = featureSum.divideByScalar(featureData.length);
-    let featureStdDeviation: Vector = new BaseVector(Array(filters.length * selectedAxes.length).fill(0));
+    let featureStdDeviation: Vector = new BaseVector(
+      Array(filters.length * selectedAxes.length).fill(0),
+    );
     featureData.forEach(fd => {
       const features = fd.getFeatures();
       const diff = features.subtract(featureMean);
@@ -65,14 +74,22 @@ export class GestureDatasetFactory {
     const featureSize = featureData[0].getFeatures().getSize();
 
     const labelledFeatureSet = new LabelledFeatureSetImpl(featureData, datasetLabels);
-    this.log.info('Built dataset with', featureData.length, 'feature sets, feature size of', featureSize, 'and', numberOfClasses, 'classes');
+    this.log.info(
+      'Built dataset with',
+      featureData.length,
+      'feature sets, feature size of',
+      featureSize,
+      'and',
+      numberOfClasses,
+      'classes',
+    );
 
     return new DatasetImpl(
       labelledFeatureSet,
       featureSize,
       featureMean,
       featureStdDeviation,
-      numberOfClasses
+      numberOfClasses,
     );
   }
 

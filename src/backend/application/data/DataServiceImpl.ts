@@ -92,7 +92,13 @@ export class DataServiceImpl implements DataService {
     }
     this.filterRepository.saveFilters(newFilters);
     const modelTraining = this.modelTrainingRepository.getModelTraining();
-    modelTraining.addPendingSetting(new SettingsChange(new ModelOption("Filters"), filters.map(f => f.getType()), newFilters.map(f => f.getType())));
+    modelTraining.addPendingSetting(
+      new SettingsChange(
+        new ModelOption('Filters'),
+        filters.map(f => f.getType()),
+        newFilters.map(f => f.getType()),
+      ),
+    );
     this.modelTrainingRepository.saveModelTraining(modelTraining);
   }
 
@@ -110,11 +116,14 @@ export class DataServiceImpl implements DataService {
     const labels = dataset.getLabels();
     const normalizedFeatureSet = dataset
       .getFeatureSet()
-      .map((featureData,featureIdx) => {
+      .map((featureData, featureIdx) => {
         const normalizedFeatures = featureData
           .getFeatures()
           .getValue()
-          .map((feature, index) => (feature - mean.getValueByIndex(index)) / std.getValueByIndex(index));
+          .map(
+            (feature, index) =>
+              (feature - mean.getValueByIndex(index)) / std.getValueByIndex(index),
+          );
         return {
           getFeatures: () => new BaseVector(normalizedFeatures),
           getLabel: () => labels.getIndexLabels()[featureIdx],
@@ -150,7 +159,13 @@ export class DataServiceImpl implements DataService {
     this.axisRepository.setSelectedAxes(axes);
 
     const modelTraining = this.modelTrainingRepository.getModelTraining();
-    modelTraining.addPendingSetting(new SettingsChange(new ModelOption("Selected Axes"), oldAxes.map(ax => ax.index), axes.map(ax => ax.index)));
+    modelTraining.addPendingSetting(
+      new SettingsChange(
+        new ModelOption('Selected Axes'),
+        oldAxes.map(ax => ax.index),
+        axes.map(ax => ax.index),
+      ),
+    );
     this.modelTrainingRepository.saveModelTraining(modelTraining);
   }
 

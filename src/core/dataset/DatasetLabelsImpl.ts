@@ -3,7 +3,6 @@ import type { DatasetLabels } from './DatasetLabels';
 import { DataIndexLabel } from './DataIndexLabel';
 
 export class DatasetLabelsImpl implements DatasetLabels {
-
   private indexLabels: DataIndexLabel[];
 
   constructor(private labelVectors: Vector[]) {

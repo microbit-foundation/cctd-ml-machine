@@ -30,7 +30,7 @@
     navigate(Paths.MAKECODE);
     outputController.setOutputTargetMakecode();
   };
-  console.log(hasPendingSettings, isTraining)
+  console.log(hasPendingSettings, isTraining);
 </script>
 
 <main class="px-4 pt-4 flex flex-grow">

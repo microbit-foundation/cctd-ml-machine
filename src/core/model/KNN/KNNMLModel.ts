@@ -20,15 +20,19 @@ class KNNMLModel implements MLModel {
     private points: LabelledPoint[],
     private mean: Vector,
     private stdDeviation: Vector,
-    private observer: KNNModelObserver
+    private observer: KNNModelObserver,
   ) {
     this.normalize = settings.shouldNormalize();
     ConsoleLogger.log('KNNMLModel', 'New KNN model was initialized');
-    ConsoleLogger.log('KNNMLModel', 'Settings:', JSON.stringify({
-      k: settings.getK(),
-      numberOfClasses: settings.getNumberOfClasses(),
-      shouldNormalize: settings.shouldNormalize(),
-    }));
+    ConsoleLogger.log(
+      'KNNMLModel',
+      'Settings:',
+      JSON.stringify({
+        k: settings.getK(),
+        numberOfClasses: settings.getNumberOfClasses(),
+        shouldNormalize: settings.shouldNormalize(),
+      }),
+    );
     ConsoleLogger.log('KNNMLModel', 'Mean:', mean.getValue());
     ConsoleLogger.log('KNNMLModel', 'Standd Deviation:', stdDeviation.getValue());
   }

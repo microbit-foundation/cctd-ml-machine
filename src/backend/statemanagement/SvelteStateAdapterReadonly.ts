@@ -16,7 +16,7 @@ import type { AbstractState } from './AbstractState';
 import type { AbstractReadonlyState } from './AbstractReadonlyState';
 
 export class SvelteStateAdapterReadonly<T> implements AbstractState<T>, Readable<T> {
-  constructor(private svelteState: Readable<T>) { }
+  constructor(private svelteState: Readable<T>) {}
 
   readOnly(): AbstractReadonlyState<T> {
     return {

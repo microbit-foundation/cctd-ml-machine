@@ -6,7 +6,10 @@
 
 import { get, writable, type Writable } from 'svelte/store';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import type { AbstractReadonlyState, Unsubscriber } from '../statemanagement/AbstractReadonlyState';
+import type {
+  AbstractReadonlyState,
+  Unsubscriber,
+} from '../statemanagement/AbstractReadonlyState';
 import type { AbstractState } from '../statemanagement/AbstractState';
 import type { LiveDataStore } from '../../core/LiveDataStore';
 import { InMemoryLiveDataStore } from '../../core/InMemoryLiveDataStore';

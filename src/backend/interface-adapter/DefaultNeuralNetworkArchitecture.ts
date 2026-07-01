@@ -11,13 +11,16 @@ import {
 } from '../../core/model/neural-network/NeuralNetworkLayerSettings';
 import { NeuralNetworkLayerSettingsImpl } from '../../core/model/neural-network/NeuralNetworkLayerSettingsImpl';
 
-  /**
-   * Used for initializing the neural network architecture in the ML machine. The architecture is not known at this point, so we just return a default architecture with one hidden layer. The actual architecture will be set later when the user changes the settings.
-   */
+/**
+ * Used for initializing the neural network architecture in the ML machine. The architecture is not known at this point, so we just return a default architecture with one hidden layer. The actual architecture will be set later when the user changes the settings.
+ */
 export class DefaultNeuralNetworkArchitecture implements NeuralNetworkArchitecture {
   private hiddenLayers: NeuralNetworkLayerSettings[];
 
-  public constructor(private noOfGestures: number, private noOfFeatures: number) {
+  public constructor(
+    private noOfGestures: number,
+    private noOfFeatures: number,
+  ) {
     this.hiddenLayers = [new NeuralNetworkLayerSettingsImpl(16, ActivationFunction.RELU)];
   }
 
@@ -30,6 +33,9 @@ export class DefaultNeuralNetworkArchitecture implements NeuralNetworkArchitectu
   }
 
   public getOutputLayer(): NeuralNetworkLayerSettings {
-    return new NeuralNetworkLayerSettingsImpl(this.noOfGestures, ActivationFunction.SOFTMAX);
+    return new NeuralNetworkLayerSettingsImpl(
+      this.noOfGestures,
+      ActivationFunction.SOFTMAX,
+    );
   }
 }

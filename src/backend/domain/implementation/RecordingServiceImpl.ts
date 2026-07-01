@@ -19,7 +19,7 @@ export class RecordingServiceImpl implements RecordingService {
     private dataService: DataService,
   ) {}
 
-async recordValidationExample(gesture: NewGesture): Promise<Recording> {
+  async recordValidationExample(gesture: NewGesture): Promise<Recording> {
     return this.performRecording(gesture, recording => {
       this.gestureService.addValidationRecording(gesture.getID(), recording);
     });

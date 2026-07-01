@@ -12,14 +12,13 @@ import type { ValidationService } from '../../ValidationService';
 import { ValidationResult } from './ValidationResult';
 
 export class ValidationServiceImpl implements ValidationService {
-
   private log = new ConsoleLogger('ValidationServiceImpl');
 
   public constructor(
     private classifierService: ClassifierService,
     private validationRepository: ValidationRepository,
     private dataService: DataService,
-  ) { }
+  ) {}
 
   async evaluateValidationSet(): Promise<void> {
     const validationSet = this.dataService.getValidationDataset();
@@ -33,7 +32,9 @@ export class ValidationServiceImpl implements ValidationService {
       return;
     }
     const evaluation = await classifier.evaluate(validationSet);
-    this.log.info(`Validation evaluation completed with accuracy: ${evaluation.getAccuracy()}`);
+    this.log.info(
+      `Validation evaluation completed with accuracy: ${evaluation.getAccuracy()}`,
+    );
 
     const validationResult = new ValidationResult(evaluation);
     this.validationRepository.saveValidationResult(validationResult);
@@ -42,5 +43,4 @@ export class ValidationServiceImpl implements ValidationService {
   clearValidationResult(): void {
     this.validationRepository.clearValidationResult();
   }
-
 }

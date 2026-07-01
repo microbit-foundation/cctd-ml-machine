@@ -15,6 +15,7 @@ import { MicrobitConnectionStateImpl } from '../../backend/domain/implementation
 import { DeviceRequestState } from '../../backend/application/devices/DeviceRequestState';
 
 class OutputMicrobitHandler implements MicrobitHandler {
+  private log = new ConsoleLogger(OutputMicrobitHandler.name);
   private reconnectTimeout = setTimeout(TypingUtils.emptyFunction, 0);
   private lastConnectedVersion: MBSpecs.MBVersion | undefined;
 
@@ -30,6 +31,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
     });
 
     Microbits.sendToOutputPin(pinResetArguments);
+
     if (Microbits.isInputOutputTheSame()) {
       if (Microbits.isOutputMakecode()) {
         getControllers().getOutputController().setOutputTargetMakecode();

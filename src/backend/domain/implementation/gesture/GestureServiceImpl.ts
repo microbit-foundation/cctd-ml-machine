@@ -22,7 +22,7 @@ export class GestureServiceImpl implements GestureService {
     private colors: SystemColors,
     private axisRepository: AxisRepository,
     private validationRepository: ValidationRepository,
-  ) { }
+  ) {}
 
   saveGestures(gestures: NewGesture[]): void {
     this.gestureRepository.saveGestures(gestures);
@@ -78,7 +78,7 @@ export class GestureServiceImpl implements GestureService {
       name,
       [],
       [],
-      { requiredConfidence: .8 },
+      { requiredConfidence: 0.8 },
       this.colors.generateGestureColor(),
     );
     this.gestureRepository.saveGesture(gesture);
@@ -147,6 +147,4 @@ export class GestureServiceImpl implements GestureService {
     }
     return [];
   }
-
 }
-

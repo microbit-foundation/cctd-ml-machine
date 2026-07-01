@@ -25,7 +25,6 @@ type UpdateCall = {
  * Generally the controller will be instantiated, whenever the model is retrained or the user navigates to the KNNModelGraph.
  */
 class KNNModelGraphController {
-
   private log = new ConsoleLogger(KNNModelGraphController.name);
 
   private rotationX: Writable<number>;
@@ -55,11 +54,18 @@ class KNNModelGraphController {
     this.scale = writable(this.getDefaultScale());
     this.origin = writable(origin);
     this.graphColors = colors;
-    const modelTraining = getControllers().getClassifierController().getModelTraining()
+    const modelTraining = getControllers().getClassifierController().getModelTraining();
 
     // To avoid redrawing data, only flag the training data to be drawn if any of these stores are altered
     this.unsubscriber = derived(
-      [this.rotationX, this.rotationY, this.rotationZ, this.scale, this.origin, modelTraining],
+      [
+        this.rotationX,
+        this.rotationY,
+        this.rotationZ,
+        this.scale,
+        this.origin,
+        modelTraining,
+      ],
       () => ({}), // We don't need to use the values to anything. We just do this instead of subscribing to each store individually
     ).subscribe(() => (this.redrawTrainingData = true));
 
@@ -139,7 +145,7 @@ class KNNModelGraphController {
         y: liveDataVec.getValue()[1],
         z: 0, // Unsupported for now
       });
-    } catch (_ignored) { }
+    } catch (_ignored) {}
 
     if (this.redrawTrainingData) {
       this.log.info('Redrawing training data');
@@ -151,10 +157,7 @@ class KNNModelGraphController {
   }
 
   private getTrainingDataPoints = () => {
-    const groupedByClass = Object.groupBy(
-      this.knnPoints,
-      e => e.classIndex,
-    );
+    const groupedByClass = Object.groupBy(this.knnPoints, e => e.classIndex);
     const groupedByIndex: Point3D[][] = [];
     for (const key in groupedByClass) {
       groupedByIndex.push(

@@ -24,6 +24,7 @@ type UARTMessageType = 'g' | 's'; // Gesture or sound
  * Entry point for microbit interfaces
  */
 class Microbits {
+  private static log = new ConsoleLogger(Microbits.name);
   private static microbits: Microbit[] = [
     new Microbit(), // Input
     new Microbit(), // Output (May not be used if input/output is the same, then defer to the above)
@@ -169,6 +170,7 @@ class Microbits {
    * @throws {Error} Throws an error if no output microbit is assigned, or no outputIO service could be found.
    */
   public static async sendToOutputPin(data: { pin: MBSpecs.UsableIOPin; on: boolean }[]) {
+    this.log.info('Sending to output pins', data);
     for (const state of data) {
       await this.getOutput().setIOPin(state.pin, state.on);
     }
@@ -215,6 +217,7 @@ class Microbits {
    * @param value The message
    */
   private static async sendToOutputUart(type: UARTMessageType, value: string) {
+    this.log.info('Sending UART message to output', { type, value });
     await this.getOutput().sendMessage(`${type}_${value}`);
   }
 

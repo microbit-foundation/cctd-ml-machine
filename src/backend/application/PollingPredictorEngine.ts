@@ -21,7 +21,7 @@ export class PollingPredictorEngine {
     private pollingPredictionInterval: number,
     private pollingPredictionSampleSize: number,
     private pollingPredictionSampleDuration: number,
-  ) { }
+  ) {}
 
   public stop() {
     this.log.info('Stopping PollingPredictorEngine');
@@ -34,7 +34,15 @@ export class PollingPredictorEngine {
 
   public start() {
     if (!this.isRunning) {
-      this.log.info('Starting PollingPredictorEngine with interval', this.pollingPredictionInterval, 'ms, sample size', this.pollingPredictionSampleSize, 'and sample duration', this.pollingPredictionSampleDuration, 'ms');
+      this.log.info(
+        'Starting PollingPredictorEngine with interval',
+        this.pollingPredictionInterval,
+        'ms, sample size',
+        this.pollingPredictionSampleSize,
+        'and sample duration',
+        this.pollingPredictionSampleDuration,
+        'ms',
+      );
       this.startPolling();
     }
   }

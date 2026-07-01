@@ -41,7 +41,6 @@
   const noTypeCheckNonStandardOrientProp = (orient?: 'vertical' | 'horizontal'): any => ({
     orient,
   });
-  $: console.log($confidences)
 </script>
 
 <Card>
@@ -71,8 +70,7 @@
             class="absolute w-5
             {active ? 'bg-primary' : 'bg-info'}
               z-index: -10"
-            style="height: {100 *
-              confidence}px; margin-top: {100 -
+            style="height: {100 * confidence}px; margin-top: {100 -
               100 * confidence}px;" />
           <div
             class="absolute w-5 bg-primary"

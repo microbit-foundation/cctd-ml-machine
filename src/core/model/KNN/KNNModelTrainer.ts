@@ -18,7 +18,10 @@ import type { KNNModelObserver } from './KNNModelObserver';
  * Trains a K-Nearest Neighbour model
  */
 class KNNModelTrainer implements ModelTrainer<KNNMLModel, KNNMLModelTrainingResult> {
-  constructor(private settings: KNNModelSettings, private observer: KNNModelObserver) { }
+  constructor(
+    private settings: KNNModelSettings,
+    private observer: KNNModelObserver,
+  ) {}
 
   public getModelInfo(): ModelInfo {
     return ModelRegistry.KNN;
@@ -41,7 +44,7 @@ class KNNModelTrainer implements ModelTrainer<KNNMLModel, KNNMLModelTrainingResu
         labelledPoints,
         dataset.getFeatureMean(),
         dataset.getFeatureStandardDeviation(),
-        this.observer
+        this.observer,
       ),
       trainingInformation: new KNNMLModelTrainingResult(labelledPoints),
     });

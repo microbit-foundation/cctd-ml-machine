@@ -2,7 +2,6 @@ import ConsoleLogger from '../logging/ConsoleLogger';
 import type { GestureID, NewGesture } from './NewGesture';
 
 export class Confidences {
-
   private log = new ConsoleLogger(Confidences.name);
 
   private confidences: Map<GestureID, number>;

@@ -5,11 +5,10 @@ import type { AbstractState } from '../statemanagement/AbstractState';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class NeuralNetworkController {
-
   public constructor(
     private states: AbstractStates,
     private settingsService: NeuralNetworkSettingsService,
-  ) { }
+  ) {}
 
   public setBatchSize(val: number): void {
     this.settingsService.setBatchSize(val);

@@ -5,7 +5,7 @@ import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class StatesKNNModelSettingsRepository implements KNNModelSettingsRepository {
   private log = new ConsoleLogger(StatesKNNModelSettingsRepository.name);
-  public constructor(private states: AbstractStates) { }
+  public constructor(private states: AbstractStates) {}
 
   public getKNNModelSettings(): KNNModelSettings {
     return this.states.getKNNModelSettings().get();

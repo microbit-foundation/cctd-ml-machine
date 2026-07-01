@@ -29,12 +29,12 @@
       <span class="bg-blue-100 px-1 rounded">IN:</span>
       <span>{inputLayer ? inputLayer.getNumberOfNodes() : 'unknown'} nodes</span>
     </div>
-    
+
     {#each hiddenLayers as layer, i}
-    <div class="flex items-center gap-1">
-      <span class="bg-gray-100 px-1 rounded">H{i+1}:</span>
-      <span>{layer.getNumberOfNodes()} nodes</span>
-    </div>
+      <div class="flex items-center gap-1">
+        <span class="bg-gray-100 px-1 rounded">H{i + 1}:</span>
+        <span>{layer.getNumberOfNodes()} nodes</span>
+      </div>
     {/each}
 
     <div class="flex items-center gap-1">

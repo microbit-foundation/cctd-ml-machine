@@ -95,14 +95,16 @@ export class MLMachineControllers {
   }
 
   public getNeuralNetworkController(): NeuralNetworkController {
-    return new NeuralNetworkController(
-      this.states,
-      this.neuralNetworkSettingsService,
-    );
+    return new NeuralNetworkController(this.states, this.neuralNetworkSettingsService);
   }
 
   public getClassifierController(): ClassifierController {
-    return new ClassifierController(this.states, this.mlMachine, this.classifierService, this.modelService);
+    return new ClassifierController(
+      this.states,
+      this.mlMachine,
+      this.classifierService,
+      this.modelService,
+    );
   }
 
   public getAxisController(): AxisController {

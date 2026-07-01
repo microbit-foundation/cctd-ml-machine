@@ -10,7 +10,7 @@
   import Recording from '../../components/ui/recording/Recording.svelte';
   import type { GestureID } from '../../core/entities/Gesture';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
-    import Matrix from '../../core/entities/Matrix';
+  import Matrix from '../../core/entities/Matrix';
 
   export let gestureId: GestureID;
 
@@ -26,17 +26,21 @@
       recordingId: number,
     ): { gesture: GestureID; color: string } | undefined => {
       // recordingId -> Gesture
-      const resultGesture = gestureController.getGestureFromValidationRecording(recordingId);
+      const resultGesture =
+        gestureController.getGestureFromValidationRecording(recordingId);
       if (!resultGesture || !res) {
         return undefined;
       }
 
-
-      const indexOfRecording = resultGesture.getValidationRecordings().findIndex(rec => rec.getId() === recordingId);
+      const indexOfRecording = resultGesture
+        .getValidationRecordings()
+        .findIndex(rec => rec.getId() === recordingId);
 
       const classIndex = gestureController.getClassIndex(resultGesture.getID());
       if (classIndex == null) {
-        throw new Error("Something went wrong, could find gesture, but not it's class index");
+        throw new Error(
+          "Something went wrong, could find gesture, but not it's class index",
+        );
       }
       const bucket = res.getConfusionBuckets()[classIndex];
       const predicted = bucket[indexOfRecording];
@@ -51,10 +55,9 @@
         color: predirectedGesture.getColor(),
       };
     };
-    
+
     return getDot;
   });
-  
 </script>
 
 <Card validationPage={true} small>
@@ -62,7 +65,7 @@
     {#each validationRecordings as recording}
       {#key recording.getId()}
         <Recording
-        showDot={!!$results}
+          showDot={!!$results}
           enableFingerprint={$enableFingerprint}
           dot={$dotGetter(recording.getId())}
           gestureId={$gesture.getID()}

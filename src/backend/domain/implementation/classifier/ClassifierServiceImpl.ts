@@ -18,7 +18,7 @@ export class ClassifierServiceImpl implements ClassifierService {
   constructor(
     private classifierRepository: ClassifierRepository,
     private predictionRepository: PredictionRepository,
-  ) { }
+  ) {}
 
   setClassifier(classifier: Classifier): void {
     this.log.info('Setting classifier to', classifier);

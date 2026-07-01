@@ -59,8 +59,6 @@
     ? // TODO: Fix the forced defined exclamation mark here
       $gesture.getOutput().outputPin!.pin
     : StaticConfiguration.defaultOutputPin;
-  
-    
 
   let pinIOEnabled = StaticConfiguration.pinIOEnabledByDefault;
   let turnOnTime = $gesture.getOutput().outputPin
@@ -71,8 +69,6 @@
     : StaticConfiguration.defaultPinTurnOnState;
 
   let requiredConfidence = StaticConfiguration.defaultRequiredConfidence;
-
-  $: console.log(active)
 
   const getTriggerAction = (
     lastWasTriggered: boolean,
@@ -96,6 +92,7 @@
   };
 
   const handleTriggering = (action: TriggerAction) => {
+    console.log(action, pinIOEnabled);
     if (action === 'none') {
       return;
     }
@@ -207,8 +204,6 @@
   const noTypeCheckNonStandardOrientProp = (orient?: 'vertical' | 'horizontal'): any => ({
     orient,
   });
-
-  
 </script>
 
 <main class="mb-4 items-center flex flex-row">

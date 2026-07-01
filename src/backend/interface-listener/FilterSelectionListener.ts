@@ -11,18 +11,13 @@ import type { FilterListListener } from '../domain/eventlistener/FilterListListe
 import type { SelectedAxesListener } from '../domain/eventlistener/SelectedAxesListener';
 import type { ModelService } from '../domain/ModelService';
 
-export class FilterSelectionListener
-  implements FilterListListener, SelectedAxesListener
-{
+export class FilterSelectionListener implements FilterListListener, SelectedAxesListener {
   private modelService?: ModelService;
   private lastSyncedSignature?: string;
   private selectedAxesCount: number;
   private selectedFilterCount: number;
 
-  public constructor(
-    initialSelectedAxes: Axis[],
-    initialFilters: Filter[],
-  ) {
+  public constructor(initialSelectedAxes: Axis[], initialFilters: Filter[]) {
     this.selectedAxesCount = initialSelectedAxes.length;
     this.selectedFilterCount = initialFilters.length;
   }

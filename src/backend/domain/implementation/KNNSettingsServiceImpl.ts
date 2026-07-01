@@ -10,13 +10,20 @@ export class KNNSettingsServiceImpl implements KNNSettingsService {
   constructor(
     private knnModelSettingsRepository: KNNModelSettingsRepository,
     private gestureService: GestureService,
-    private modelTrainingRepository: ModelTrainingStateRepository
+    private modelTrainingRepository: ModelTrainingStateRepository,
   ) {}
 
   public setNormalized(checked: any): void {
     const settings = this.knnModelSettingsRepository.getKNNModelSettings();
     settings.setNormalize(checked);
-    this.setKNNModelSettings(settings, new SettingsChange(new ModelOption("Normalize"), settings.shouldNormalize(), checked));
+    this.setKNNModelSettings(
+      settings,
+      new SettingsChange(
+        new ModelOption('Normalize'),
+        settings.shouldNormalize(),
+        checked,
+      ),
+    );
   }
 
   public getKNNModelSettings(): KNNModelSettings {
@@ -29,7 +36,14 @@ export class KNNSettingsServiceImpl implements KNNSettingsService {
       return;
     }
     settings.setNumberOfClasses(numberOfClasses);
-    this.setKNNModelSettings(settings, new SettingsChange(new ModelOption("Number of Classes"), settings.getNumberOfClasses(), numberOfClasses));
+    this.setKNNModelSettings(
+      settings,
+      new SettingsChange(
+        new ModelOption('Number of Classes'),
+        settings.getNumberOfClasses(),
+        numberOfClasses,
+      ),
+    );
   }
 
   public setK(k: number): void {
@@ -41,10 +55,16 @@ export class KNNSettingsServiceImpl implements KNNSettingsService {
     const settings = this.knnModelSettingsRepository.getKNNModelSettings();
     const oldK = settings.getK();
     settings.setK(safeK);
-    this.setKNNModelSettings(settings, new SettingsChange(new ModelOption("K"), oldK, safeK));
+    this.setKNNModelSettings(
+      settings,
+      new SettingsChange(new ModelOption('K'), oldK, safeK),
+    );
   }
 
-  private setKNNModelSettings<T>(knnModelSettings: KNNModelSettings, settingsChange: SettingsChange<T>) {
+  private setKNNModelSettings<T>(
+    knnModelSettings: KNNModelSettings,
+    settingsChange: SettingsChange<T>,
+  ) {
     const training = this.modelTrainingRepository.getModelTraining();
     training.addPendingSetting(settingsChange);
     this.modelTrainingRepository.saveModelTraining(training);

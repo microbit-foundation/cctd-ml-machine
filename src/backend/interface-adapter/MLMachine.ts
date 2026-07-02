@@ -58,6 +58,7 @@ import type { AxisRepository } from '../domain/AxisRepository';
 import { GestureStateHandler } from '../interface-listener/GestureStateHandler';
 import { ClassifierNodeCountHandler } from '../interface-listener/ClassifierNodeCountHandler';
 import { FilterSelectionListener } from '../interface-listener/FilterSelectionListener';
+import { ValidationAutoUpdateGestureListener } from '../interface-listener/ValidationAutoUpdateGestureListener.ts';
 import type { PredictionRepository } from '../domain/PredictionRepository';
 import { StatesPredictionRepository } from '../infrastructure/StatesPredictionRepository';
 import type { ModelService } from '../domain/ModelService';
@@ -121,9 +122,15 @@ export class MLMachine {
     const gestureStateHandler = new GestureStateHandler();
 
     const classifierNodeCountHandler = new ClassifierNodeCountHandler();
+    const validationAutoUpdateGestureListener =
+      new ValidationAutoUpdateGestureListener();
     const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
-      [gestureStateHandler, classifierNodeCountHandler],
+      [
+        gestureStateHandler,
+        classifierNodeCountHandler,
+        validationAutoUpdateGestureListener,
+      ],
       selectedGestureState,
     );
     this.states = new SvelteStates(
@@ -196,6 +203,10 @@ export class MLMachine {
       this.classifierService,
       validationRepository,
       this.dataService,
+    );
+    validationAutoUpdateGestureListener.setValidationDependencies(
+      validationService,
+      validationRepository,
     );
 
     const outputService = new OutputServiceImpl(new StatesOutputRepository(this.states));

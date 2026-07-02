@@ -25,6 +25,11 @@ class SimplePrediction {
   getPrediction() {
     return this.vec;
   }
+
+  getPredictedIndex() {
+    const values = this.vec.getValue();
+    return values.findIndex(v => v === Math.max(...values));
+  }
 }
 
 describe('AccuracyMatrixFactory', () => {

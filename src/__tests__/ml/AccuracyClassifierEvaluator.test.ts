@@ -37,6 +37,9 @@ class SimpleDataset implements Dataset {
     this.featureSet = features;
     this.labels = new SimpleDatasetLabels(labelVectors);
   }
+  isEmpty(): boolean {
+    throw new Error('Method not implemented.');
+  }
   getNormalizedFeatureSet(): FeatureData[] {
     throw new Error('Method not implemented.');
   }

@@ -5,14 +5,11 @@
  */
 import { type Writable, derived, get, writable } from 'svelte/store';
 import KNNModelGraphDrawer, { type GraphDrawConfig } from './KNNModelGraphDrawer';
-import { knnTrainingDataPoints } from '../../../../lib/stores/KNNStores';
 import type { Point3D } from '../../../../lib/utils/graphUtils';
 import BaseVector from '../../../../core/vector/BaseVector';
 import { FilterType, type Filter } from '../../../../core/filter/Filter';
 import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 import type { LabelledPoint } from '../../../../core/model/KNN/LabelledPoint';
-import type { AbstractState } from '../../../../backend/statemanagement/AbstractState';
-import type { AbstractReadonlyState } from '../../../../backend/statemanagement/AbstractReadonlyState';
 import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
 
 type UpdateCall = {

@@ -18,11 +18,11 @@ import { SvelteStateAdapter } from '../../backend/statemanagement/SvelteStateAda
 import { DataServiceImpl } from '../../backend/application/data/DataServiceImpl';
 import { StatesAxisRepository } from '../../backend/infrastructure/StatesAxisRepository';
 import { StatesFilterRepository } from '../../backend/infrastructure/StatesFilterRepository';
-import { StatesNeuralNetworkSettingsRepository } from '../../backend/infrastructure/StatesNeuralNetworkSettingsRepository';
-import { ClassifierServiceImpl } from '../../backend/domain/implementation/classifier/ClassifierServiceImpl';
 import { AxisController } from '../../backend/interface-controller/AxisController';
 import { FilterController } from '../../backend/interface-controller/FilterController';
 import { FilterSelectionListener } from '../../backend/interface-listener/FilterSelectionListener';
+import { BasicNeuralNetworkArchitecture } from '../../core/model/neural-network/BasicNeuralNetworkArchitecture';
+import { NeuralNetworkSettingsImpl } from '../../core/model/neural-network/NeuralNetworkSettingsImpl';
 
 const createStates = (initialAxes: Axis[]) => {
   return new SvelteStates(
@@ -76,32 +76,32 @@ describe('Neural network architecture sync integration', () => {
       {
         getGestures: () => [],
       } as any,
-    );
-    const classifierService = new ClassifierServiceImpl(
       {
-        setSelectedModel: () => {},
-        getSelectedModel: () => states.getSelectedModel().get(),
-        setClassifier: () => {},
-        getClassifier: () => undefined,
-      } as any,
-      {
-        getModelTraining: () => states.getModelTraining().get(),
-        setModelTraining: () => {},
-      } as any,
-      new StatesNeuralNetworkSettingsRepository(states.getNeuralNetworkSettings()),
-      dataService,
-      {
-        getKNNModelSettings: () => states.getKNNModelSettings().get(),
-        setNormalized: () => {},
-        setK: () => {},
-      } as any,
-      {
-        clear: () => {},
-        add: () => {},
-        getCurrentIteration: () => undefined,
+        getModelTraining: () => ({
+          addPendingSetting: () => {},
+        }),
+        saveModelTraining: () => {},
       } as any,
     );
-    filterSelectionListener.setModelService(classifierService);
+    filterSelectionListener.setModelService({
+      setNeuralNetworkInputNodeCount: (filterCount: number, axesCount: number) => {
+        const currentSettings = states.getNeuralNetworkSettings().get();
+        const newArchitecture = new BasicNeuralNetworkArchitecture(
+          currentSettings.getArchitecture().getOutputLayer().getNumberOfNodes(),
+          filterCount * axesCount,
+          currentSettings.getArchitecture().getHiddenLayers()[0].getNumberOfNodes(),
+        );
+        states
+          .getNeuralNetworkSettings()
+          .set(
+            new NeuralNetworkSettingsImpl(
+              currentSettings.getLearningSettings(),
+              newArchitecture,
+              currentSettings.getTrainingObserver(),
+            ),
+          );
+      },
+    } as any);
     const axisController = new AxisController(
       {
         getDataService: () => dataService,

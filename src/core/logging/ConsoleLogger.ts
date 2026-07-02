@@ -33,7 +33,7 @@ const setStackTraceEnabled = (val: boolean) =>
   getStorage()?.setItem('dev_print_stacktrace', val.toString());
 
 class ConsoleLogger implements Logger {
-  constructor(private origin: any) { }
+  constructor(private origin: any) {}
 
   public info(message: any, ...params: any[]) {
     ConsoleLogger.log(this.origin, message, params);
@@ -73,10 +73,7 @@ class ConsoleLogger implements Logger {
 
 export const welcomeLog = () => {
   const devWindow = getDevWindow();
-  if (
-    !Environment.isInDevelopment ||
-    devWindow?.hasLogged
-  ) {
+  if (!Environment.isInDevelopment || devWindow?.hasLogged) {
     return;
   }
   console.log(`⚙️ Development Mode:

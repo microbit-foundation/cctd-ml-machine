@@ -5,8 +5,6 @@
  */
 
 import { get } from 'svelte/store';
-import type { RecordingData } from '../../core/entities/RecordingData';
-import type GestureState from '../domain/stores/gesture/GestureState';
 import { locale } from 'svelte-i18n';
 import type { Recording } from '../../core/entities/recording/Recording';
 
@@ -34,39 +32,6 @@ const formatNumberForLocale = (value: number): string => {
       // Default to English format
       return numberString;
   }
-};
-
-export const serializeGestureRecordingsToCSV = (gestures: GestureState[]) => {
-  const axes = gestures[0].getRecordings()[0].labels;
-  const headers = ['gesture', 'sample', ...axes].join(';');
-  return [
-    headers,
-    gestures.map(gesture => serializeGestureToCSV(gesture)).join('\n'),
-  ].join('\n');
-};
-
-const serializeGestureToCSV = (gesture: GestureState) => {
-  const gestureName = gesture.getName();
-  return gesture
-    .getRecordings()
-    .map(recording => serializeRecordingToCsv(recording, gestureName))
-    .join('\n');
-};
-
-const serializeRecordingToCsv = (
-  recording: RecordingData,
-  gestureName: string,
-): string => {
-  return recording.samples
-    .map(
-      (sample, idx) =>
-        gestureName.replace(';', '\\;') +
-        ';' +
-        idx +
-        ';' +
-        sample.vector.map(formatNumberForLocale).join(';'),
-    )
-    .join('\n');
 };
 
 export const serializeRecordingToCsvWithoutGestureName = (

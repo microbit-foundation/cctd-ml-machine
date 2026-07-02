@@ -17,6 +17,8 @@ import { type LiveDataVector } from '../../core/vector/LiveDataVector';
 import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
 import { smoothNewValue } from '../../lib/utils/graphUtils';
 import type { LiveData } from '../../lib/domain/stores/LiveData';
+import { writable } from 'svelte/store';
+import { SvelteStateAdapter } from '../../backend/statemanagement/SvelteStateAdapter';
 
 describe('Data representation tests', () => {
   test('Creating accelerometer live data does not throw', () => {
@@ -57,7 +59,10 @@ describe('Data representation tests', () => {
   test('Test smoothed values', () => {
     const liveData: LiveData<MicrobitAccelerometerDataVector> =
       new MicrobitAccelerometerLiveData(new LiveDataBuffer(20));
-    const smoothLiveData = new SmoothedLiveData(liveData, 2);
+    const smoothLiveData = new SmoothedLiveData(
+      new SvelteStateAdapter(writable(liveData)),
+      2,
+    );
 
     const point1 = new MicrobitAccelerometerDataVector({ x: 3, y: 2, z: 1 });
     const point2 = new MicrobitAccelerometerDataVector({ x: 1, y: 2, z: 3 });

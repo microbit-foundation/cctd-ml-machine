@@ -5,15 +5,6 @@
  */
 
 import { writable } from 'svelte/store';
-import type { LabelledPoint } from '../legacy/KNNNonNormalizedMLModel';
-import type { Vector } from '../../core/vector/Vector';
-
-// TODO: Could be part of a greater 'currently predicted point' thing, that is updated by the engine.
-export const knnCurrentPoint = writable<undefined | Vector>(undefined);
-
-export const knnTrainingDataPoints = writable<LabelledPoint[]>([]);
-
-export const knnNeighbours = writable<LabelledPoint[]>([]);
 
 /**
  * @deprecated Will be swapped for a training history. Remove in future

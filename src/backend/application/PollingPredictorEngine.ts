@@ -27,7 +27,7 @@ export class PollingPredictorEngine {
     private pollingPredictionInterval: number,
     private pollingPredictionSampleSize: number,
     private pollingPredictionSampleDuration: number,
-  ) { }
+  ) {}
 
   public stop() {
     this.log.info('Stopping PollingPredictorEngine');

@@ -55,7 +55,7 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
     return baseVec.indexOfMax();
   }
 
-  public constructor(private data: MicrobitAccelerometerData) { }
+  public constructor(private data: MicrobitAccelerometerData) {}
 
   public getLabels(): string[] {
     return ['X', 'Y', 'Z'];

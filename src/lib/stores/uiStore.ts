@@ -30,9 +30,6 @@ export const message = writable<{ warning: boolean; text: string }>({
   text: '',
 });
 
-// Message store to propagate allow all components to inform users.
-export const outputting = writable<{ text: string }>({ text: '' });
-
 // Alert user sets current message to text and hightlights it.
 export function alertUser(text: string): void {
   message.set({

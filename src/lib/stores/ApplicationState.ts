@@ -6,11 +6,4 @@
 
 import { writable } from 'svelte/store';
 
-export enum ModelView {
-  TILE,
-  STACK,
-}
-
-export const modelView = writable<ModelView>(ModelView.STACK);
-
 export const isLoading = writable<boolean>(true);

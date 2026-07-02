@@ -21,7 +21,7 @@
   import { btPatternInput, btPatternOutput } from '../../../lib/stores/connectionStore';
   import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
   import { MBSpecs } from 'microbyte';
-    import { DeviceRequestState } from '../../../backend/application/devices/DeviceRequestState';
+  import { DeviceRequestState } from '../../../backend/application/devices/DeviceRequestState';
 
   let flashProgress = 0;
 

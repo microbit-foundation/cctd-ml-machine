@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { NotificationRepository } from "./NotificationRepository";
-import type { NotificationService } from "./NotificationService";
-
+import type { NotificationRepository } from './NotificationRepository';
+import type { NotificationService } from './NotificationService';
 
 export class NotificationServiceImpl implements NotificationService {
   public constructor(private notificationRepository: NotificationRepository) {}

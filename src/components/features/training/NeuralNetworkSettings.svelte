@@ -14,7 +14,9 @@
   const neuralNetworkSettings = neuralNetworkController.getNeuralNetworkSettings();
   const color = windi.theme.extend.colors.primary;
 
-  let learningRateSliderValue = $neuralNetworkSettings.getLearningSettings().getLearningRate();
+  let learningRateSliderValue = $neuralNetworkSettings
+    .getLearningSettings()
+    .getLearningRate();
   $: {
     neuralNetworkController.setLearningRate(learningRateSliderValue);
   }

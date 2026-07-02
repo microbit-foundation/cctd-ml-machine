@@ -15,7 +15,7 @@
   import Microbits from '../../lib/microbit-interfacing/Microbits';
   import { HexOrigin } from '../../lib/microbit-interfacing/HexOrigin';
   import StandardButton from '../ui/buttons/StandardButton.svelte';
-    import { DeviceRequestState } from '../../backend/application/devices/DeviceRequestState';
+  import { DeviceRequestState } from '../../backend/application/devices/DeviceRequestState';
   let hasBeenClosed = false;
   export let targetRole: 'INPUT' | 'OUTPUT';
   let showMakeCodeUpdateMessage =

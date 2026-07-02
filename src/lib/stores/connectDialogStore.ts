@@ -38,9 +38,7 @@ export const startConnectionProcess = (): void => {
     s.connectionState = inputConnected
       ? ConnectDialogStates.START_OUTPUT
       : ConnectDialogStates.START;
-    s.deviceState = inputConnected
-      ? DeviceRequestState.OUTPUT
-      : DeviceRequestState.INPUT;
+    s.deviceState = inputConnected ? DeviceRequestState.OUTPUT : DeviceRequestState.INPUT;
     return s;
   });
 };

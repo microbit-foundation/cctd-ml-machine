@@ -11,7 +11,7 @@ import {
   writable,
 } from 'svelte/store';
 import type LiveDataBuffer from '../../core/LiveDataBuffer';
-import type { LiveData } from '../domain/stores/LiveData';
+import type { LiveData } from '../stores/LiveData';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
 import { MicrobitAccelerometerDataVector } from './MicrobitAccelerometerData';
 

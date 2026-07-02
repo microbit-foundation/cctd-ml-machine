@@ -14,7 +14,6 @@ import LiveDataBuffer from '../../core/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
 import { type LiveDataVector } from '../../core/vector/LiveDataVector';
 import BaseLiveDataVector from '../../core/vector/BaseLiveDataVector';
-import type { LiveData } from '../domain/stores/LiveData';
 import BaseVector from '../../core/vector/BaseVector';
 import type { LiveDataStore } from '../../core/LiveDataStore';
 import type { AbstractState } from '../../backend/statemanagement/AbstractState';

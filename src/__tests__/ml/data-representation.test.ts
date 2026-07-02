@@ -16,7 +16,7 @@ import { get } from 'svelte/store';
 import { type LiveDataVector } from '../../core/vector/LiveDataVector';
 import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
 import { smoothNewValue } from '../../lib/utils/graphUtils';
-import type { LiveData } from '../../lib/domain/stores/LiveData';
+import type { LiveData } from '../../lib/stores/LiveData';
 import { writable } from 'svelte/store';
 import { SvelteStateAdapter } from '../../backend/statemanagement/SvelteStateAdapter';
 

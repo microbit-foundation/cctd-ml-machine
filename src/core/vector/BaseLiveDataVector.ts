@@ -10,9 +10,24 @@ import type { Vector } from './Vector';
 
 class BaseLiveDataVector implements LiveDataVector {
   public constructor(
-    private base: BaseVector,
+    private base: Vector,
     private labels: string[],
   ) {}
+
+  indexOfMax(): number {
+    return this.base.indexOfMax();
+  }
+
+  round(decimalPlaces: number): Vector {
+    return new BaseLiveDataVector(
+      this.base.round(decimalPlaces) as BaseVector,
+      this.labels,
+    );
+  }
+
+  scale(scalar: number): Vector {
+    return new BaseLiveDataVector(this.base.scale(scalar) as BaseVector, this.labels);
+  }
 
   public getLabels(): string[] {
     return this.labels;

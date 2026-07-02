@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 import { type Readable } from 'svelte/store';
-import LiveDataBuffer from '../../../core/LiveDataBuffer';
-import { type LiveDataVector } from '../../../core/vector/LiveDataVector';
+import LiveDataBuffer from '../../core/LiveDataBuffer';
+import { type LiveDataVector } from '../../core/vector/LiveDataVector';
 
 /**
  * A container for real-time data. Uses a LiveDataBuffer to store data points.

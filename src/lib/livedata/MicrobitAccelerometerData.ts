@@ -11,7 +11,7 @@ import {
 } from 'svelte/store';
 import LiveDataBuffer from '../../core/LiveDataBuffer';
 import type { LiveDataVector } from '../../core/vector/LiveDataVector';
-import type { LiveData } from '../domain/stores/LiveData';
+import type { LiveData } from '../stores/LiveData';
 import type { Vector } from '../../core/vector/Vector';
 import BaseVector from '../../core/vector/BaseVector';
 

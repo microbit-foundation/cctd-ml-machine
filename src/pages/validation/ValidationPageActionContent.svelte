@@ -21,9 +21,11 @@
   const classifierController = getControllers().getClassifierController();
   const modelTraining = classifierController.getModelTraining();
   $: accuracy = $validationResult?.getAccuracy();
-  const autoUpdate = validationController.shouldAutoUpdate();
 
   $: accuracyMatrix = $validationResult?.getMatrix();
+
+  let bindAutoUpdate = validationController.shouldAutoUpdate().get();
+  $: validationController.setAutoUpdate(bindAutoUpdate);
 
   const handleEvaluateValidationSets = () => {
     validationController.evaluateValidationSet();
@@ -38,7 +40,7 @@
       <p>
         {$tr('content.validation.testButton.autoUpdate')}:
       </p>
-      <Switch size="sm" bind:checked={$autoUpdate} />
+      <Switch size="sm" bind:checked={bindAutoUpdate} />
     </div>
     <Tooltip
       disabled={!$modelTraining.hasPendingSettings()}

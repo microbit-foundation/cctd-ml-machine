@@ -31,8 +31,10 @@ function createState<T>(initial: T): AbstractState<T> {
 describe('StatesValidationRepository', () => {
   test('saves and returns the validation result from state', () => {
     const validationState = createState<ValidationResult | undefined>(undefined);
+    const autoUpdateState = createState(false);
     const states = {
       getValidationResult: () => validationState,
+      getValidationAutoUpdate: () => autoUpdateState,
     } as AbstractStates;
     const repository = new StatesValidationRepository(states);
     const result = {
@@ -53,13 +55,41 @@ describe('StatesValidationRepository', () => {
       },
     } as unknown as ValidationResult;
     const validationState = createState<ValidationResult | undefined>(existing);
+    const autoUpdateState = createState(false);
     const states = {
       getValidationResult: () => validationState,
+      getValidationAutoUpdate: () => autoUpdateState,
     } as AbstractStates;
     const repository = new StatesValidationRepository(states);
 
     repository.clearValidationResult();
 
     expect(repository.getValidationResult()).toBeUndefined();
+  });
+
+  test('setAutoUpdate stores value in auto update state', () => {
+    const validationState = createState<ValidationResult | undefined>(undefined);
+    const autoUpdateState = createState(false);
+    const states = {
+      getValidationResult: () => validationState,
+      getValidationAutoUpdate: () => autoUpdateState,
+    } as AbstractStates;
+    const repository = new StatesValidationRepository(states);
+
+    repository.setAutoUpdate(true);
+
+    expect(autoUpdateState.get()).toBe(true);
+  });
+
+  test('getAutoUpdate returns value from auto update state', () => {
+    const validationState = createState<ValidationResult | undefined>(undefined);
+    const autoUpdateState = createState(true);
+    const states = {
+      getValidationResult: () => validationState,
+      getValidationAutoUpdate: () => autoUpdateState,
+    } as AbstractStates;
+    const repository = new StatesValidationRepository(states);
+
+    expect(repository.getAutoUpdate()).toBe(true);
   });
 });

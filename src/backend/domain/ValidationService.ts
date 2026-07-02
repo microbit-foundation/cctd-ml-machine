@@ -7,4 +7,5 @@
 export interface ValidationService {
   evaluateValidationSet(): Promise<void>;
   clearValidationResult(): void;
+  setAutoUpdate(value: boolean): void;
 }

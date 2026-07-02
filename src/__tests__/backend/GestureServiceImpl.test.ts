@@ -95,6 +95,8 @@ describe('GestureServiceImpl', () => {
       saveValidationResult: vi.fn(),
       clearValidationResult: vi.fn(),
       getValidationResult: vi.fn(),
+      getAutoUpdate: vi.fn(() => false),
+      setAutoUpdate: vi.fn(),
     };
     colors = {
       generateGestureColor: vi.fn(() => '#123456'),

@@ -10,6 +10,7 @@ import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class StatesValidationRepository implements ValidationRepository {
   constructor(private states: AbstractStates) {}
+
   clearValidationResult(): void {
     this.states.getValidationResult().set(undefined);
   }
@@ -20,5 +21,13 @@ export class StatesValidationRepository implements ValidationRepository {
 
   getValidationResult(): ValidationResult | undefined {
     return this.states.getValidationResult().get();
+  }
+
+  getAutoUpdate(): boolean {
+    return this.states.getValidationAutoUpdate().get();
+  }
+
+  setAutoUpdate(value: boolean): void {
+    this.states.getValidationAutoUpdate().set(value);
   }
 }

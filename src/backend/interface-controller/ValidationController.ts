@@ -25,6 +25,10 @@ export class ValidationController {
     return this.states.getValidationAutoUpdate();
   }
 
+  setAutoUpdate(value: boolean): void {
+    this.validationService.setAutoUpdate(value);
+  }
+
   public getValidationResult(): AbstractState<ValidationResult | undefined> {
     return this.states.getValidationResult();
   }

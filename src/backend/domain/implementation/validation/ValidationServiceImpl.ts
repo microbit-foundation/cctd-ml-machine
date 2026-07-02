@@ -43,4 +43,11 @@ export class ValidationServiceImpl implements ValidationService {
   clearValidationResult(): void {
     this.validationRepository.clearValidationResult();
   }
+
+  setAutoUpdate(value: boolean): void {
+    if (this.validationRepository.getAutoUpdate() === value) {
+      return;
+    }
+    this.validationRepository.setAutoUpdate(value);
+  }
 }

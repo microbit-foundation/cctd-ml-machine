@@ -9,4 +9,6 @@ export interface ValidationRepository {
   saveValidationResult(validationResult: ValidationResult): void;
   clearValidationResult(): void;
   getValidationResult(): ValidationResult | undefined;
+  getAutoUpdate(): boolean;
+  setAutoUpdate(value: boolean): void;
 }

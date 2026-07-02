@@ -25,7 +25,7 @@ import { MakeCodeController } from '../interface-controller/makecode/MakeCodeCon
 import type { MicrobitService } from '../domain/microbit/MicrobitService';
 import { MicrobitController } from '../interface-controller/MicrobitController';
 import { StatesMakeCodeProjectRepository } from '../infrastructure/StatesMakeCodeProjectRepository';
-import type { NotificationService } from '../domain/NotificationService';
+import type { NotificationService } from '../application/notification/NotificationService';
 import { ValidationController } from '../interface-controller/ValidationController';
 import type { ValidationService } from '../domain/ValidationService';
 import { NeuralNetworkController } from '../interface-controller/NeuralNetworkController';

@@ -19,14 +19,14 @@
   import StaticConfiguration from '../../../../StaticConfiguration';
   import { MBSpecs } from 'microbyte';
   import StandardButton from '../../../ui/buttons/StandardButton.svelte';
-  import { DeviceRequestStates } from '../../../../lib/domain/Devices';
+  import { DeviceRequestState } from '../../../../backend/application/devices/DeviceRequestState';
   import ConsoleLogger from '../../../../core/logging/ConsoleLogger';
   import { getControllers } from '../../../../backend/interface-adapter/MLMachine';
 
   const microbitController = getControllers().getMicrobitController();
   const microbitConnection = microbitController.getMicrobitConnectionState();
 
-  export let deviceState: DeviceRequestStates;
+  export let deviceState: DeviceRequestState;
   export let onBluetoothConnected: () => void;
 
   let isConnecting = false;
@@ -34,7 +34,7 @@
   let attemptedToPairWithInvalidPattern = false;
 
   let patternMatrixState: Writable<boolean[]> =
-    deviceState === DeviceRequestStates.INPUT ? btPatternInput : btPatternOutput;
+    deviceState === DeviceRequestState.INPUT ? btPatternInput : btPatternOutput;
 
   let timeoutProgress = writable<number>(0);
 
@@ -59,7 +59,7 @@
     isConnecting = true;
     const connectionResult = async () => {
       ConsoleLogger.log('BluetoothConnectDialog', 'Attempting to connect to micro:bit');
-      if (deviceState == DeviceRequestStates.INPUT) {
+      if (deviceState == DeviceRequestState.INPUT) {
         await Microbits.connectInput(name);
       } else {
         await Microbits.connectOutput(name);

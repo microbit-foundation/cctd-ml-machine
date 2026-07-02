@@ -21,7 +21,7 @@
   import { btPatternInput, btPatternOutput } from '../../../lib/stores/connectionStore';
   import BrokenFirmwareDetected from './usb/BrokenFirmwareDetected.svelte';
   import { MBSpecs } from 'microbyte';
-  import { DeviceRequestStates } from '../../../lib/domain/Devices';
+    import { DeviceRequestState } from '../../../backend/application/devices/DeviceRequestState';
 
   let flashProgress = 0;
 
@@ -29,7 +29,7 @@
     Microbits.getLinkedFriendlyName()
       .then(friendlyName => {
         // Find the name of the micro:bit
-        if ($connectionDialogState.deviceState === DeviceRequestStates.OUTPUT) {
+        if ($connectionDialogState.deviceState === DeviceRequestState.OUTPUT) {
           btPatternOutput.set(MBSpecs.Utility.nameToPattern(friendlyName));
         } else {
           btPatternInput.set(MBSpecs.Utility.nameToPattern(friendlyName));

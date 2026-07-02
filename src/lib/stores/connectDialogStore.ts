@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { get, writable } from 'svelte/store';
-import { DeviceRequestStates } from '../domain/Devices';
+import { writable } from 'svelte/store';
 import { getControllers } from '../../backend/interface-adapter/MLMachine';
+import { DeviceRequestState } from '../../backend/application/devices/DeviceRequestState';
 
 export enum ConnectDialogStates {
   NONE, // No connection in progress -> Dialog box closed
@@ -22,11 +22,11 @@ export enum ConnectDialogStates {
 
 export const connectionDialogState = writable<{
   connectionState: ConnectDialogStates;
-  deviceState: DeviceRequestStates;
+  deviceState: DeviceRequestState;
   retryUsb: boolean;
 }>({
   connectionState: ConnectDialogStates.NONE,
-  deviceState: DeviceRequestStates.NONE,
+  deviceState: DeviceRequestState.NONE,
   retryUsb: false,
 });
 
@@ -39,8 +39,8 @@ export const startConnectionProcess = (): void => {
       ? ConnectDialogStates.START_OUTPUT
       : ConnectDialogStates.START;
     s.deviceState = inputConnected
-      ? DeviceRequestStates.OUTPUT
-      : DeviceRequestStates.INPUT;
+      ? DeviceRequestState.OUTPUT
+      : DeviceRequestState.INPUT;
     return s;
   });
 };

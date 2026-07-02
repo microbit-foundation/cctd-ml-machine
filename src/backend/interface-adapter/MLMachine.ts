@@ -6,8 +6,8 @@
 
 import ConsoleLogger, { welcomeLog } from '../../core/logging/ConsoleLogger';
 import type { Logger } from '../../core/logging/Logger';
-import { StateNotificationService } from '../domain/implementation/notification/StateNotificationService';
-import type { NotificationService } from '../domain/NotificationService';
+import { NotificationServiceImpl } from '../application/notification/StateNotificationService';
+import type { NotificationService } from '../application/notification/NotificationService';
 import { MLMachineControllers } from './MLMachineControllers';
 import type { ClassifierService } from '../domain/ClassifierService';
 import { ClassifierServiceImpl } from '../domain/implementation/classifier/ClassifierServiceImpl';
@@ -207,7 +207,7 @@ export class MLMachine {
       this.userService,
     );
 
-    this.notificationService = new StateNotificationService(
+    this.notificationService = new NotificationServiceImpl(
       new StatesNotificationRepository(this.states),
     );
 

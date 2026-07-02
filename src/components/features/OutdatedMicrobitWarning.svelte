@@ -15,7 +15,7 @@
   import Microbits from '../../lib/microbit-interfacing/Microbits';
   import { HexOrigin } from '../../lib/microbit-interfacing/HexOrigin';
   import StandardButton from '../ui/buttons/StandardButton.svelte';
-  import { DeviceRequestStates } from '../../lib/domain/Devices';
+    import { DeviceRequestState } from '../../backend/application/devices/DeviceRequestState';
   let hasBeenClosed = false;
   export let targetRole: 'INPUT' | 'OUTPUT';
   let showMakeCodeUpdateMessage =
@@ -48,7 +48,7 @@
   const openConnectionPrompt = () => {
     $connectionDialogState.connectionState = ConnectDialogStates.USB_START;
     $connectionDialogState.deviceState =
-      targetRole === 'INPUT' ? DeviceRequestStates.INPUT : DeviceRequestStates.OUTPUT;
+      targetRole === 'INPUT' ? DeviceRequestState.INPUT : DeviceRequestState.OUTPUT;
   };
 </script>
 

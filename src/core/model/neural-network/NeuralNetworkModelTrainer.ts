@@ -12,10 +12,13 @@ import { NeuralNetworkModel } from './NeuralNetworkModel';
 import type { NeuralNetworkModelSettings } from './NeuralNetworkLearningSettings';
 import * as tf from '@tensorflow/tfjs';
 import type { ModelInfo } from '../ModelInfo';
+import ConsoleLogger from '../../logging/ConsoleLogger';
 
 export class NeuralNetworkModelTrainer
   implements ModelTrainer<NeuralNetworkModel, TrainingResult>
 {
+  private log = new ConsoleLogger(NeuralNetworkModelTrainer.name);
+
   constructor(private settings: NeuralNetworkModelSettings) {}
 
   public getModelInfo(): ModelInfo {
@@ -37,12 +40,12 @@ export class NeuralNetworkModelTrainer
       .getLabels()
       .getLabelVectors()
       .map(labelVector => labelVector.getValue());
-    console.log('Training features:', features);
-    console.log('Training labels:', labels);
+    this.log.info('Training features:', features);
+    this.log.info('Training labels:', labels);
     const tensorFeatures = tf.tensor(features);
     const tensorLabels = tf.tensor(labels);
     const modelFactory = new NeuralNetworkLayersModelFactory();
-    console.log(
+    this.log.info(
       'Building model with settings:',
       this.settings.getArchitecture(),
       this.settings.getLearningSettings(),

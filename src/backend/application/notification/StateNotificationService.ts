@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { NotificationService } from '../../NotificationService';
-import type { NotificationRepository } from '../../NotificationRepository';
+import type { NotificationRepository } from "./NotificationRepository";
+import type { NotificationService } from "./NotificationService";
 
-// TODO: Replace with notifier service calls. Uses observer pattern for state management!
-export class StateNotificationService implements NotificationService {
+
+export class NotificationServiceImpl implements NotificationService {
   public constructor(private notificationRepository: NotificationRepository) {}
+
   setPopupMessage(message: string): void {
     this.notificationRepository.setPopupMessage(message);
   }

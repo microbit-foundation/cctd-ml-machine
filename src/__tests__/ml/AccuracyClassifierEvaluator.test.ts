@@ -15,7 +15,7 @@ import type { FeatureData } from '../../core/dataset/FeatureData';
 import type { Vector } from '../../core/vector/Vector';
 import { VectorPredictionOutput } from '../../core/classifier/vector-classifier/VectorPredictionOutput';
 import { AccuracyClassifierEvaluator } from '../../core/classifier/evaluator/AccuracyClassifierEvaluator';
-import type { DataIndexLabel } from '../../core/dataset/DataIndexLabel';
+import { DataIndexLabel } from '../../core/dataset/DataIndexLabel';
 
 class SimpleDatasetLabels implements DatasetLabels {
   private labelVectors: BaseVector[];

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { KeyValueStore } from '../domain/KeyValueStore';
+import type { KeyValueStore } from './KeyValueStore';
 
 type StorageLike = Storage | Map<string, string>;
 

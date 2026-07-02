@@ -92,7 +92,6 @@
   };
 
   const handleTriggering = (action: TriggerAction) => {
-    console.log(action, pinIOEnabled);
     if (action === 'none') {
       return;
     }

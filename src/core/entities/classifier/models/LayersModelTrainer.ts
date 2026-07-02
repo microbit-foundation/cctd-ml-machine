@@ -75,16 +75,16 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
 
     model.compile({
       loss: 'categoricalCrossentropy',
-      optimizer: tf.train.sgd(this.settings.getLearningRate()),
+      optimizer: tf.train.sgd(this.settings.getLearningSettings().getLearningRate()),
       metrics: ['accuracy'],
     });
 
-    for (let i = 0; i < this.settings.getNumberOfEpochs(); i++) {
+    for (let i = 0; i < this.settings.getLearningSettings().getNumberOfEpochs(); i++) {
       const h = await model
         .fit(tensorFeatures, tensorLabels, {
           epochs: 1,
-          batchSize: this.settings.getBatchSize(),
-          validationSplit: this.settings.getValidationSplit(),
+          batchSize: this.settings.getLearningSettings().getBatchSize(),
+          validationSplit: this.settings.getLearningSettings().getValidationSplit(),
         })
         .catch(err => {
           console.error('tensorflow training process failed:', err);

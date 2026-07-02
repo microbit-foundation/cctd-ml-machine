@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Axis } from '../../core/entities/Axis';
+import type { Axis } from '../../../core/entities/Axis';
 
 export interface SelectedAxesListener {
   onSelectedAxesChanged(selectedAxes: Axis[]): void;

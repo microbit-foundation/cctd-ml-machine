@@ -26,7 +26,7 @@ import type { GestureRecordingState } from '../domain/recording/GestureRecording
 import type { RecordingSettings } from '../domain/recording/RecordingSettings';
 import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 import type { Vector } from '../../core/vector/Vector';
-import type { LabelledPoint } from '../../lib/legacy/KNNNonNormalizedMLModel';
+import type { LabelledPoint } from '../../core/model/KNN/LabelledPoint';
 
 /**
  * Both used as a reactive state interface and data source for the backend

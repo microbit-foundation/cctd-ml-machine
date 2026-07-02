@@ -14,7 +14,7 @@
   const neuralNetworkSettings = neuralNetworkController.getNeuralNetworkSettings();
   const color = windi.theme.extend.colors.primary;
 
-  let learningRateSliderValue = $neuralNetworkSettings.getLearningRate();
+  let learningRateSliderValue = $neuralNetworkSettings.getLearningSettings().getLearningRate();
   $: {
     neuralNetworkController.setLearningRate(learningRateSliderValue);
   }
@@ -40,7 +40,7 @@
       <NumberSelector
         min={1}
         max={1000}
-        defaultValue={$neuralNetworkSettings.getNumberOfEpochs()}
+        defaultValue={$neuralNetworkSettings.getLearningSettings().getNumberOfEpochs()}
         onChange={val => neuralNetworkController.setNumberOfEpochs(val)} />
     </div>
 
@@ -61,7 +61,7 @@
       <NumberSelector
         min={1}
         max={30}
-        defaultValue={$neuralNetworkSettings.getBatchSize()}
+        defaultValue={$neuralNetworkSettings.getLearningSettings().getBatchSize()}
         onChange={val => neuralNetworkController.setBatchSize(val)} />
     </div>
   </div>

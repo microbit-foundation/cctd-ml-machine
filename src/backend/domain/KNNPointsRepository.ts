@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Vector } from '../../core/vector/Vector';
-import type { LabelledPoint } from '../../lib/legacy/KNNNonNormalizedMLModel';
+import type { LabelledPoint } from '../../core/model/KNN/LabelledPoint';
 
 export interface KNNPointsRepository {
   saveInput(knnInput: Vector): void;

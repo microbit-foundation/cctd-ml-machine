@@ -11,7 +11,7 @@ import type { Logger } from '../../core/logging/Logger';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 import type { GestureRepository } from '../domain/GestureRepository';
-import type { SelectedAxesListener } from '../domain/SelectedAxesListener';
+import type { SelectedAxesListener } from '../domain/eventlistener/SelectedAxesListener';
 
 export class StatesAxisRepository implements AxisRepository {
   private log: Logger;

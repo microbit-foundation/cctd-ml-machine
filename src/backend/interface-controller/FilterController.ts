@@ -1,3 +1,8 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import type { Filter, FilterType } from '../../core/filter/Filter';
 import type { DataService } from '../domain/DataService';
 import type { AbstractState } from '../statemanagement/AbstractState';

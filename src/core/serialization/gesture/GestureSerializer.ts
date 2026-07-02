@@ -1,3 +1,8 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import type { NewGesture } from '../../entities/NewGesture';
 import type { Recording } from '../../entities/recording/Recording';
 import { RecordingImpl } from '../../entities/recording/RecordingImpl';

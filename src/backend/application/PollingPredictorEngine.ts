@@ -1,3 +1,8 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 import { VectorPredictionInput } from '../../core/classifier/vector-classifier/VectorPredictionInput';
 import { Confidences } from '../../core/entities/Confidences';
@@ -12,6 +17,7 @@ export class PollingPredictorEngine {
   private log = new ConsoleLogger(PollingPredictorEngine.name);
   private pollingInterval: ReturnType<typeof setInterval> | undefined;
   private isRunning: boolean = false;
+  private logWarnOnPredictionError: boolean = true;
 
   constructor(
     private classifierService: ClassifierService,
@@ -21,7 +27,7 @@ export class PollingPredictorEngine {
     private pollingPredictionInterval: number,
     private pollingPredictionSampleSize: number,
     private pollingPredictionSampleDuration: number,
-  ) {}
+  ) { }
 
   public stop() {
     this.log.info('Stopping PollingPredictorEngine');
@@ -53,7 +59,17 @@ export class PollingPredictorEngine {
   }
 
   private async poll(): Promise<void> {
-    const prediction = await this.predict();
+    let prediction = undefined;
+    try {
+      prediction = await this.predict();
+      this.logWarnOnPredictionError = true; // Reset the flag if prediction was successful
+    } catch (error) {
+      if (this.logWarnOnPredictionError) {
+        this.log.warn('Error during prediction polling:', error);
+        this.logWarnOnPredictionError = false; // Set the flag to avoid repeated warnings
+      }
+      return;
+    }
     if (prediction === undefined) {
       return;
     }

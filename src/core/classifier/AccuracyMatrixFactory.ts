@@ -1,3 +1,8 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import type { DatasetLabels } from '../dataset/DatasetLabels';
 import ConsoleLogger from '../logging/ConsoleLogger';
 import type { Vector } from '../vector/Vector';

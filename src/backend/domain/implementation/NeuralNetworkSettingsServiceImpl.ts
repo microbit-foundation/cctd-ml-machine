@@ -1,3 +1,8 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import { ModelOption } from '../../../core/model/ModelOption';
 import { BasicNeuralNetworkArchitecture } from '../../../core/model/neural-network/BasicNeuralNetworkArchitecture';
 import type { NeuralNetworkArchitecture } from '../../../core/model/neural-network/NeuralNetworkArchitecture';

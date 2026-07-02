@@ -49,7 +49,13 @@ export class MicrobitAccelerometerDataVector implements LiveDataVector {
       z: scaled.getValue()[2],
     });
   }
-  public constructor(private data: MicrobitAccelerometerData) {}
+
+  indexOfMax(): number {
+    const baseVec = new BaseVector(this.getValue());
+    return baseVec.indexOfMax();
+  }
+
+  public constructor(private data: MicrobitAccelerometerData) { }
 
   public getLabels(): string[] {
     return ['X', 'Y', 'Z'];

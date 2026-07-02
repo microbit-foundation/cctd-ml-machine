@@ -1,3 +1,8 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 import type { KNNModelSettings } from '../../core/model/KNN/KNNModelSettings';
 import type { LabelledPoint } from '../../core/model/KNN/LabelledPoint';
 import type { Vector } from '../../core/vector/Vector';

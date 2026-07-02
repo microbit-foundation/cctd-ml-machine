@@ -46,7 +46,8 @@
   $: pendingSettings = $modelTraining.getPendingSettings();
 </script>
 
-{#if inDev}
+<!-- Remove && false to enable the overlay for debugging -->
+{#if inDev && false}
   <div
     class="absolute bottom-2 left-2 justify-center self-center items-center z-4 opacity-75 bg-white p-2 text-xs text-violet-700 flex"
     style="pointer-events: none;"

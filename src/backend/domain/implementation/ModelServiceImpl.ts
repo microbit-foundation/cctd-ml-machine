@@ -9,6 +9,7 @@ import type { KNNModelSettings } from '../../../core/model/KNN/KNNModelSettings'
 import KNNModelTrainer from '../../../core/model/KNN/KNNModelTrainer';
 import type { ModelInfo } from '../../../core/model/ModelInfo';
 import { ModelOption } from '../../../core/model/ModelOption';
+import { ModelOptions } from '../../../core/model/ModelOptions';
 import type { ModelTraining } from '../../../core/model/ModelTraining';
 import { BasicNeuralNetworkArchitecture } from '../../../core/model/neural-network/BasicNeuralNetworkArchitecture';
 import type { NeuralNetworkModelSettings } from '../../../core/model/neural-network/NeuralNetworkLearningSettings';
@@ -45,7 +46,7 @@ export class ModelServiceImpl implements ModelService {
     const training = this.getModelTraining();
     training.addPendingSetting(
       new SettingsChange(
-        new ModelOption('Epochs'),
+        new ModelOption(ModelOptions.EPOCHS),
         settings.getLearningSettings().getNumberOfEpochs(),
         epochs,
       ),
@@ -59,7 +60,7 @@ export class ModelServiceImpl implements ModelService {
     const training = this.getModelTraining();
     training.addPendingSetting(
       new SettingsChange(
-        new ModelOption('Batch Size'),
+        new ModelOption(ModelOptions.BATCH_SIZE),
         settings.getLearningSettings().getBatchSize(),
         batchSize,
       ),
@@ -74,7 +75,7 @@ export class ModelServiceImpl implements ModelService {
     const training = this.getModelTraining();
     training.addPendingSetting(
       new SettingsChange(
-        new ModelOption('Learning Rate'),
+        new ModelOption(ModelOptions.LEARNING_RATE),
         settings.getLearningSettings().getLearningRate(),
         learningRate,
       ),
@@ -187,7 +188,7 @@ export class ModelServiceImpl implements ModelService {
     const training = this.getModelTraining();
     training.addPendingSetting(
       new SettingsChange(
-        new ModelOption('Selected Model'),
+        new ModelOption(ModelOptions.SELECTED_MODEL),
         this.modelRepository.getSelectedModel(),
         model,
       ),

@@ -14,6 +14,7 @@ import type { Filter, FilterType } from '../../../core/filter/Filter';
 import { createFilter } from '../../../core/filter/FilterUtils';
 import type { LiveDataStore } from '../../../core/LiveDataStore';
 import { ModelOption } from '../../../core/model/ModelOption';
+import { ModelOptions } from '../../../core/model/ModelOptions';
 import { SettingsChange } from '../../../core/model/SettingsChange';
 import FilterGraphLimits from '../../../core/utils/FilterGraphLimits';
 import BaseVector from '../../../core/vector/BaseVector';
@@ -94,7 +95,7 @@ export class DataServiceImpl implements DataService {
     const modelTraining = this.modelTrainingRepository.getModelTraining();
     modelTraining.addPendingSetting(
       new SettingsChange(
-        new ModelOption('Filters'),
+        new ModelOption(ModelOptions.FILTERS),
         filters.map(f => f.getType()),
         newFilters.map(f => f.getType()),
       ),
@@ -161,7 +162,7 @@ export class DataServiceImpl implements DataService {
     const modelTraining = this.modelTrainingRepository.getModelTraining();
     modelTraining.addPendingSetting(
       new SettingsChange(
-        new ModelOption('Selected Axes'),
+        new ModelOption(ModelOptions.SELECTED_AXES),
         oldAxes.map(ax => ax.index),
         axes.map(ax => ax.index),
       ),

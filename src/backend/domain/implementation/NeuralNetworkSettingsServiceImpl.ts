@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { ModelOption } from '../../../core/model/ModelOption';
+import { ModelOptions } from '../../../core/model/ModelOptions';
 import { BasicNeuralNetworkArchitecture } from '../../../core/model/neural-network/BasicNeuralNetworkArchitecture';
 import type { NeuralNetworkArchitecture } from '../../../core/model/neural-network/NeuralNetworkArchitecture';
 import type { NeuralNetworkModelSettings } from '../../../core/model/neural-network/NeuralNetworkLearningSettings';
@@ -43,7 +44,7 @@ export class NeuralNetworkSettingsServiceImpl implements NeuralNetworkSettingsSe
     settings.getLearningSettings().setNumberOfEpochs(epochs);
     this.setNeuralNetworkSettings(
       settings,
-      new SettingsChange(new ModelOption('Epochs'), prevEpochs, epochs),
+      new SettingsChange(new ModelOption(ModelOptions.EPOCHS), prevEpochs, epochs),
     );
   }
 
@@ -53,7 +54,7 @@ export class NeuralNetworkSettingsServiceImpl implements NeuralNetworkSettingsSe
     settings.getLearningSettings().setBatchSize(batchSize);
     this.setNeuralNetworkSettings(
       settings,
-      new SettingsChange(new ModelOption('Batch Size'), prevBatchSize, batchSize),
+      new SettingsChange(new ModelOption(ModelOptions.BATCH_SIZE), prevBatchSize, batchSize),
     );
   }
 
@@ -63,7 +64,7 @@ export class NeuralNetworkSettingsServiceImpl implements NeuralNetworkSettingsSe
     settings.getLearningSettings().setLearningRate(learningRate);
     this.setNeuralNetworkSettings(
       settings,
-      new SettingsChange(new ModelOption('Learning Rate'), prevLearnRate, learningRate),
+      new SettingsChange(new ModelOption(ModelOptions.LEARNING_RATE), prevLearnRate, learningRate),
     );
   }
 
@@ -91,7 +92,7 @@ export class NeuralNetworkSettingsServiceImpl implements NeuralNetworkSettingsSe
     );
     this.setNeuralNetworkSettings(
       newSettings,
-      new SettingsChange(new ModelOption('Architecture'), prevArchitecture, architecture),
+      new SettingsChange(new ModelOption(ModelOptions.ARCHITECTURE), prevArchitecture, architecture),
     );
   }
 }

@@ -5,6 +5,7 @@
  */
 import type { KNNModelSettings } from '../../../core/model/KNN/KNNModelSettings';
 import { ModelOption } from '../../../core/model/ModelOption';
+import { ModelOptions } from '../../../core/model/ModelOptions';
 import { SettingsChange } from '../../../core/model/SettingsChange';
 import type { GestureService } from '../GestureService';
 import type { KNNModelSettingsRepository } from '../KNNModelSettingsRepository';
@@ -24,7 +25,7 @@ export class KNNSettingsServiceImpl implements KNNSettingsService {
     this.setKNNModelSettings(
       settings,
       new SettingsChange(
-        new ModelOption('Normalize'),
+        new ModelOption(ModelOptions.NORMALIZE),
         settings.shouldNormalize(),
         checked,
       ),
@@ -44,7 +45,7 @@ export class KNNSettingsServiceImpl implements KNNSettingsService {
     this.setKNNModelSettings(
       settings,
       new SettingsChange(
-        new ModelOption('Number of Classes'),
+        new ModelOption(ModelOptions.NUMBER_OF_CLASSES),
         settings.getNumberOfClasses(),
         numberOfClasses,
       ),
@@ -62,7 +63,7 @@ export class KNNSettingsServiceImpl implements KNNSettingsService {
     settings.setK(safeK);
     this.setKNNModelSettings(
       settings,
-      new SettingsChange(new ModelOption('K'), oldK, safeK),
+      new SettingsChange(new ModelOption(ModelOptions.K), oldK, safeK),
     );
   }
 

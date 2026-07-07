@@ -97,7 +97,7 @@
       <div>
         {#each pendingSettings.slice(-10) as setting}
           <p>
-            {setting.getOption().getName()}
+            {setting.getOption().getOption()}
             {setting.getOldValue()}->{setting.getNewValue()}
           </p>
         {/each}

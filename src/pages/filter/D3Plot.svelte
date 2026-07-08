@@ -118,7 +118,7 @@
       drawLines([liveDataRep], p, path);
     } else {
       // Update live path
-      const newLivePathLine = () => path(liveDataRep as RecordingRepresentation);
+      const newLivePathLine = () => path(liveDataRep);
       // Animate
       livePath.transition().duration(50).attr('d', newLivePathLine);
     }
@@ -161,9 +161,9 @@
       )
       .map(d => d.value);
 
-    const xs = liveD.map(d => d!.getValue()[0]);
-    const ys = liveD.map(d => d!.getValue()[1]);
-    const zs = liveD.map(d => d!.getValue()[2]);
+    const xs = liveD.map(d => d.getValue()[0]);
+    const ys = liveD.map(d => d.getValue()[1]);
+    const zs = liveD.map(d => d.getValue()[2]);
 
     if (liveData === undefined) return undefined;
     const filteredData: RecordingRepresentation = {

@@ -41,7 +41,7 @@ class PredictedPointLiveData implements LiveData<LiveDataVector> {
   }
   public subscribe(
     run: Subscriber<LiveDataVector>,
-    invalidate?: Invalidator<LiveDataVector> | undefined,
+    invalidate?: Invalidator<LiveDataVector>  ,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

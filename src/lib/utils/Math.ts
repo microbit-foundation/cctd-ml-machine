@@ -18,7 +18,7 @@ export const getStandardDeviation = (vectors: Vector[]): Vector => {
 
   // Calculate the variance
   const variance = new Array(dimension).fill(0);
-  for (let vec of input) {
+  for (const vec of input) {
     for (let i = 0; i < dimension; i++) {
       const diff = vec[i] - mean[i];
       variance[i] += diff * diff;
@@ -42,7 +42,7 @@ export const getMean = (vectors: Vector[]): Vector => {
   const dimension = input[0].length;
   // Calculate the mean vector
   const mean = new Array(dimension).fill(0);
-  for (let vec of input) {
+  for (const vec of input) {
     for (let i = 0; i < dimension; i++) {
       mean[i] += vec[i];
     }

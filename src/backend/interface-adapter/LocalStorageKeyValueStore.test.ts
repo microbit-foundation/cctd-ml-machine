@@ -49,7 +49,7 @@ describe('LocalStorageKeyValueStore', () => {
     const raw = (globalThis as any).localStorage.getItem('kv:foo');
     expect(raw).not.toBeNull();
 
-    const parsed = JSON.parse(raw!);
+    const parsed = JSON.parse(raw);
     expect(parsed).toHaveProperty('version');
     expect(parsed).toHaveProperty('value');
     expect(parsed.version).toBe(1);

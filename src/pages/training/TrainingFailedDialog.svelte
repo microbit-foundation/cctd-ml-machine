@@ -16,7 +16,7 @@
   const modelTraining = classifierController.getModelTraining();
 
   $: {
-    if (!!$modelTraining.getError()) {
+    if ($modelTraining.getError()) {
       isFailedTrainingDialogOpen = true;
       classifierController.clearClassifier();
     }

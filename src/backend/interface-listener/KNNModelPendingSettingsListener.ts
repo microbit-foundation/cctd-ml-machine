@@ -7,8 +7,6 @@
 import { AccuracyClassifierEvaluator } from '../../core/classifier/evaluator/AccuracyClassifierEvaluator';
 import { VectorClassifier } from '../../core/classifier/vector-classifier/VectorClassifier';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';
-import { ModelInfo } from '../../core/model/ModelInfo';
-import { ModelOptions } from '../../core/model/ModelOptions';
 import type { ModelTraining } from '../../core/model/ModelTraining';
 import type { ModelTrainingListener } from '../../core/model/ModelTrainingObserver';
 import { ModelType } from '../../core/model/ModelType';

@@ -64,7 +64,7 @@ class SmoothedLiveData<T extends LiveDataVector>
 
   public subscribe(
     run: Subscriber<LiveDataVector>,
-    invalidate?: ((value?: LiveDataVector | undefined) => void) | undefined,
+    invalidate?: ((value?: LiveDataVector  ) => void)  ,
   ): Unsubscriber {
     return this.smoothedStore.subscribe(run, invalidate);
   }

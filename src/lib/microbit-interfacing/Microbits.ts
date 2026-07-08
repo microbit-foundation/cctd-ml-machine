@@ -297,7 +297,7 @@ class Microbits {
     const hexFile = await fetch(hexFileName);
     const fetched = await hexFile.arrayBuffer();
 
-    const hexContentBuffer = !!hexContent
+    const hexContentBuffer = hexContent
       ? this.createHexBuffer(hexContent, version)
       : fetched;
 

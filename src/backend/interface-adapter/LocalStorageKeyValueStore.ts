@@ -56,8 +56,8 @@ export default class LocalStorageKeyValueStore<T> implements KeyValueStore<T> {
         'value' in parsed
       ) {
         return {
-          version: (parsed as any).version as number,
-          value: (parsed as any).value,
+          version: (parsed).version as number,
+          value: (parsed).value,
         };
       }
       // Legacy/untagged value

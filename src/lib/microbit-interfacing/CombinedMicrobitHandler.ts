@@ -19,7 +19,7 @@ class CombinedMicrobitHandler extends InputMicrobitHandler {
     super(microbitController, dataController);
   }
 
-  public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
+  public onConnected(versionNumber?: MBSpecs.MBVersion  ): void {
     super.onConnected(versionNumber);
     if (Microbits.isInputOutputTheSame()) {
       this.outputHandler.onConnected();

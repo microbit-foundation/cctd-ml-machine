@@ -175,8 +175,8 @@ class MicrobitAccelerometerLiveData implements LiveData<MicrobitAccelerometerDat
   public subscribe(
     run: Subscriber<MicrobitAccelerometerDataVector>,
     invalidate?:
-      | ((value?: MicrobitAccelerometerDataVector | undefined) => void)
-      | undefined,
+      | ((value?: MicrobitAccelerometerDataVector  ) => void)
+       ,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

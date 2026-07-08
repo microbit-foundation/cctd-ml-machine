@@ -42,7 +42,7 @@ class PersistantWritable<T> implements Writable<T> {
 
   public subscribe(
     run: Subscriber<T>,
-    invalidate?: Invalidator<T> | undefined,
+    invalidate?: Invalidator<T>  ,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

@@ -30,7 +30,7 @@ class InputMicrobitHandler implements MicrobitHandler {
     private dataController: DataController,
   ) {}
 
-  public onConnected(versionNumber?: MBSpecs.MBVersion | undefined): void {
+  public onConnected(versionNumber?: MBSpecs.MBVersion  ): void {
     ConsoleLogger.log('InputMicrobitHandler', 'onConnected', versionNumber);
 
     clearTimeout(this.reconnectTimeout);

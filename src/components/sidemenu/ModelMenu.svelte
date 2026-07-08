@@ -14,7 +14,7 @@
     .getGestureController()
     .getMostConfident();
   const confidences = getControllers().getGestureController().getConfidences();
-  $: confidence = !!$bestPrediction
+  $: confidence = $bestPrediction
     ? ($confidences.getConfidence($bestPrediction) ?? 0)
     : 0;
 

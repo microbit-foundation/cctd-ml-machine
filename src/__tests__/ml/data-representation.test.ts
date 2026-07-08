@@ -10,13 +10,13 @@
 import LiveDataBuffer from '../../core/LiveDataBuffer';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
-} from '../../lib/livedata/MicrobitAccelerometerData';
+} from '../../frontend/lib/livedata/MicrobitAccelerometerData';
 import { repeat } from '../testUtils';
 import { get } from 'svelte/store';
 import { type LiveDataVector } from '../../core/vector/LiveDataVector';
-import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
-import { smoothNewValue } from '../../lib/utils/graphUtils';
-import type { LiveData } from '../../lib/stores/LiveData';
+import SmoothedLiveData from '../../frontend/lib/livedata/SmoothedLiveData';
+import { smoothNewValue } from '../../frontend/lib/utils/graphUtils';
+import type { LiveData } from '../../frontend/lib/stores/LiveData';
 import { writable } from 'svelte/store';
 import { SvelteStateAdapter } from '../../backend/statemanagement/SvelteStateAdapter';
 

@@ -7,7 +7,7 @@
 import type { GestureID } from '../../core/entities/Gesture';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { Logger } from '../../core/logging/Logger';
-import ControlledStorage from '../../lib/ControlledStorage';
+import ControlledStorage from '../../frontend/lib/ControlledStorage';
 import type { GestureRepository } from '../domain/GestureRepository';
 import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
 import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';

@@ -58,7 +58,7 @@ import type { AxisRepository } from '../domain/AxisRepository';
 import { GestureStateHandler } from '../interface-listener/GestureStateHandler';
 import { ClassifierNodeCountHandler } from '../interface-listener/ClassifierNodeCountHandler';
 import { FilterSelectionListener } from '../interface-listener/FilterSelectionListener';
-import { ValidationAutoUpdateGestureListener } from '../interface-listener/ValidationAutoUpdateGestureListener.ts';
+import { ValidationAutoUpdateListener } from '../interface-listener/ValidationAutoUpdateGestureListener.ts';
 import type { PredictionRepository } from '../domain/PredictionRepository';
 import { StatesPredictionRepository } from '../infrastructure/StatesPredictionRepository';
 import type { ModelService } from '../domain/ModelService';
@@ -123,14 +123,10 @@ export class MLMachine {
     const gestureStateHandler = new GestureStateHandler();
 
     const classifierNodeCountHandler = new ClassifierNodeCountHandler();
-    const validationAutoUpdateGestureListener = new ValidationAutoUpdateGestureListener();
+    const validationAutoUpdateListener = new ValidationAutoUpdateListener();
     const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
-      [
-        gestureStateHandler,
-        classifierNodeCountHandler,
-        validationAutoUpdateGestureListener,
-      ],
+      [gestureStateHandler, classifierNodeCountHandler, validationAutoUpdateListener],
       selectedGestureState,
     );
     this.states = new SvelteStates(
@@ -160,7 +156,7 @@ export class MLMachine {
     const knnSettingsListener = new KNNModelPendingSettingsListener();
     this.modelTrainingRepository = new StatesModelTrainingStateRepository(
       this.states.getModelTraining(),
-      [knnSettingsListener],
+      [knnSettingsListener, validationAutoUpdateListener],
     );
     const classifierRepository = new StatesClassifierRepository(this.states);
     const knnSettingsRepository = new StatesKNNModelSettingsRepository(this.states);
@@ -205,7 +201,7 @@ export class MLMachine {
       validationRepository,
       this.dataService,
     );
-    validationAutoUpdateGestureListener.setValidationDependencies(
+    validationAutoUpdateListener.setValidationDependencies(
       validationService,
       validationRepository,
     );

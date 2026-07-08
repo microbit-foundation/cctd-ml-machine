@@ -7,19 +7,19 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
   import type { AppController } from '../../backend/interface-controller/abstract/AppController';
-  import Router from '../../router/Router.svelte';
-  import SnackbarView from '../../components/features/snackbar/SnackbarView.svelte';
-  import { compatibility } from '../../lib/stores/uiStore';
-  import IncompatiblePlatformView from '../../components/layout/IncompatiblePlatformView.svelte';
-  import { isLoading } from '../../lib/stores/ApplicationState';
-  import LoadingSpinner from '../../components/ui/LoadingSpinner.svelte';
-  import CookieBanner from '../../components/features/cookie-bannner/CookieBanner.svelte';
-  import OverlayView from '../../components/layout/OverlayView.svelte';
-  import BluetoothIncompatibilityWarningDialog from '../../components/features/BluetoothIncompatibilityWarningDialog.svelte';
-  import MediaQuery from '../../components/layout/MediaQuery.svelte';
-  import SideBarMenuView from '../../components/layout/SideBarMenuView.svelte';
-  import PageContentView from '../../components/layout/PageContentView.svelte';
-  import BottomBarMenuView from '../../components/layout/BottomBarMenuView.svelte';
+  import Router from '../router/Router.svelte';
+  import SnackbarView from '../snackbar/SnackbarView.svelte';
+  import { compatibility } from '../lib/stores/uiStore';
+  import IncompatiblePlatformView from './layout/IncompatiblePlatformView.svelte';
+  import { isLoading } from '../lib/stores/ApplicationState';
+  import LoadingSpinner from '../components/LoadingSpinner.svelte';
+  import CookieBanner from '../cookie-bannner/CookieBanner.svelte';
+  import OverlayView from './layout/OverlayView.svelte';
+  import BluetoothIncompatibilityWarningDialog from '../incompatible-platform/BluetoothIncompatibilityWarningDialog.svelte';
+  import MediaQuery from './layout/MediaQuery.svelte';
+  import SideBarMenuView from './layout/SideBarMenuView.svelte';
+  import PageContentView from './layout/PageContentView.svelte';
+  import BottomBarMenuView from './layout/BottomBarMenuView.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import { MicrobitRole } from '../../backend/domain/microbit/MicrobitRole';
 

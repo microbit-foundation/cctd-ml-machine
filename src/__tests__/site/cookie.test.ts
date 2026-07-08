@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import CookieManager from '../../lib/CookieManager';
+import CookieManager from '../../frontend/lib/CookieManager';
 import Cookies from 'js-cookie';
 
 describe('Cookie tests', () => {

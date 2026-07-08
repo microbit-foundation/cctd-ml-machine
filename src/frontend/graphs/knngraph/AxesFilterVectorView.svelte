@@ -1,0 +1,147 @@
+<!--
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
+<script lang="ts">
+  import { type Unsubscriber, derived, get } from 'svelte/store';
+  import arrowCreate from 'arrows-svg';
+  import { onMount } from 'svelte';
+  import { vectorArrows } from './AxesFilterVector';
+  import StaticConfiguration from '../../../StaticConfiguration';
+  import StandardButton from '../../components/buttons/StandardButton.svelte';
+  import type { Axis } from '../../../core/entities/Axis';
+  import { getControllers } from '../../../backend/interface-adapter/MLMachine';
+
+  const classifier = getControllers().getClassifierController().getClassifier();
+  const filters = getControllers().getFilterController().getFilters();
+  const axisController = getControllers().getAxisController();
+  const highlightedAxes = axisController.getSelectedAxes();
+  const availableAxes = getControllers().getAxisController().getAvailableAxes();
+  const knnController = getControllers().getKnnController();
+
+  const drawArrows = (fromId: string) => {
+    get(vectorArrows).forEach(arr => arr.clear());
+    const from = document.getElementById(fromId)!;
+    if (!from) {
+      return;
+    }
+
+    vectorArrows.update(newVal => {
+      for (let i = 0; i < $filters.length; i++) {
+        const to = document.getElementById('arrowTo' + i.toString());
+        if (!to) {
+          throw new Error("Cant draw arrow, no destination 'arrowTo" + i + "'");
+        }
+        newVal.push(
+          arrowCreate({
+            from,
+            to,
+          }),
+        );
+      }
+      return newVal;
+    });
+    get(vectorArrows).forEach(arr => {
+      document.body.appendChild(arr.node);
+    });
+  };
+
+  const updateArrows = (axes: Axis[]) => {
+    if (axes.length !== 1) {
+      return;
+    }
+    const axis = axes[0];
+    drawArrows(`from${axis.label}`);
+  };
+
+  const knnInputPoint = knnController.getKNNInput();
+  $: inputPoint = $knnInputPoint?.getValue() || [];
+
+  let valueInterval: NodeJS.Timeout = setInterval(() => {}, 100);
+
+  const init = () => {
+    denit();
+    setTimeout(
+      () => {
+        // We set a timeout to fix a graphical issue, that relates to the resizing of DOM elements
+        updateArrows($highlightedAxes);
+      },
+      // We vary the timeout, because if no arrows exist, it must be the first render cycle which requres a bit more time (to avoid artifacts)
+      $vectorArrows.length === 0 ? 1000 : 200,
+    );
+  };
+
+  let unsubscribe: undefined | Unsubscriber = undefined;
+  const denit = () => {
+    $vectorArrows.forEach(arr => arr.clear());
+    clearInterval(valueInterval);
+  };
+
+  onMount(() => {
+    init();
+    return () => {
+      denit();
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  });
+
+  unsubscribe = derived([highlightedAxes, classifier], s => s).subscribe(s => {
+    init();
+  });
+</script>
+
+<div class:hidden={!$classifier}>
+  <div>
+    {#if $highlightedAxes !== undefined}
+      <div class="flex flex-row space-x-1 flex-grow">
+        <div class="flex flex-col justify-evenly">
+          {#each $availableAxes as axis}
+            <div class="flex flex-row space-x-2" id="from{axis.label}">
+              <StandardButton
+                color={StaticConfiguration.graphColors[axis.index]}
+                small
+                outlined={$highlightedAxes.find(e => e.index === axis.index) ===
+                  undefined}
+                onClick={() => {
+                  axisController.setSelectedAxes([axis]);
+                }}>
+                {axis.label}
+              </StandardButton>
+            </div>
+          {/each}
+        </div>
+
+        {#if $highlightedAxes.length === 1}
+          <!-- Name and blue arrow -->
+          <div class="pl-30 flex flex-col justify-around">
+            {#each $filters as filter, index}
+              <p class="pl-1" id={`arrowTo${index}`}>{filter.getName()}</p>
+            {/each}
+          </div>
+          <div class="flex flex-col justify-around">
+            {#each $filters as _}
+              <img
+                src={'imgs/right_arrow_blue.svg'}
+                alt="right arrow icon"
+                width="20px" />
+            {/each}
+          </div>
+
+          <!-- Numbers -->
+          <div
+            class="flex flex-col justify-around w-14 overflow-hidden whitespace-nowrap">
+            {#each inputPoint as val, index}
+              <p style={`color:${StaticConfiguration.graphColors[index]}`}>
+                {val.toFixed(2)}
+              </p>
+            {/each}
+          </div>
+        {/if}
+      </div>
+    {/if}
+  </div>
+</div>

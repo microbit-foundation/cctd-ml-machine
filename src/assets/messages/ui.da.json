@@ -102,7 +102,7 @@
   "content.model.output.prediction.iconTitle": "Forudsigelse",
   "content.model.output.prediction.descriptionTitle": "Forudsigelse",
   "content.model.output.prediction.descriptionBody": "Her kan du se, hvilken klasse din model forudsiger den nuværende bevægelse til at være. Du kan se i meteret hvor sikker modellen er i sin forudsigelse.",
-  "content.model.output.prediction.unknownGesture": "Kan ikke bestemme bevægelse",
+  "content.model.output.prediction.unknownGesture": "Kan ikke bestemme bevægelse. Prøv at tilføje flere eksempler på bevægelsen til datasættet.",
   "content.model.output.ledOutput.descriptionTitle": "LED output",
   "content.model.output.ledOutput.descriptionBody": "Her kan du vælge, hvordan LED-lysene på din output-micro:bit skal opføre sig, når din model forudsiger en klasse. Prøv at tegne nogle mønstre nedenfor og se, hvordan disse mønstre vises på din output-micro:bit, når du bevæger input-micro:bit'en.",
   "content.model.output.sound.iconTitle": "Lyd",

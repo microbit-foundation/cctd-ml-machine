@@ -9,8 +9,12 @@ import type { NewGesture } from '../../core/entities/NewGesture';
 import type { GestureListListener } from '../domain/eventlistener/GestureListListener';
 import type { ValidationRepository } from '../domain/ValidationRepository';
 import type { ValidationService } from '../domain/ValidationService';
+import type { ModelTrainingListener } from '../../core/model/ModelTrainingObserver';
+import type { ModelTraining } from '../../core/model/ModelTraining';
 
-export class ValidationAutoUpdateGestureListener implements GestureListListener {
+export class ValidationAutoUpdateListener
+  implements GestureListListener, ModelTrainingListener
+{
   private log = new ConsoleLogger('ValidationAutoUpdateGestureListener');
 
   private validationService?: ValidationService;
@@ -26,6 +30,17 @@ export class ValidationAutoUpdateGestureListener implements GestureListListener 
   }
 
   onGesturesChanged(_gestures: NewGesture[]): void {
+    this.updateValidation();
+  }
+
+  async onModelTrainingChanged(modelTraining: ModelTraining): Promise<void> {
+    if (modelTraining.isTraining() || modelTraining.hasPendingSettings()) {
+      return;
+    }
+    this.updateValidation();
+  }
+
+  private updateValidation(): void {
     if (!this.validationService || !this.validationRepository) {
       return;
     }

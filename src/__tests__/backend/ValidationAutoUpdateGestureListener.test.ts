@@ -7,11 +7,11 @@
 import { describe, expect, test, vi } from 'vitest';
 import type { ValidationRepository } from '../../backend/domain/ValidationRepository';
 import type { ValidationService } from '../../backend/domain/ValidationService';
-import { ValidationAutoUpdateGestureListener } from '../../backend/interface-listener/ValidationAutoUpdateGestureListener';
+import { ValidationAutoUpdateListener } from '../../backend/interface-listener/ValidationAutoUpdateGestureListener';
 
 describe('ValidationAutoUpdateGestureListener', () => {
   test('does nothing before dependencies are configured', () => {
-    const listener = new ValidationAutoUpdateGestureListener();
+    const listener = new ValidationAutoUpdateListener();
 
     expect(() => listener.onGesturesChanged([])).not.toThrow();
   });
@@ -29,7 +29,7 @@ describe('ValidationAutoUpdateGestureListener', () => {
       getAutoUpdate: vi.fn(() => false),
       setAutoUpdate: vi.fn(),
     };
-    const listener = new ValidationAutoUpdateGestureListener();
+    const listener = new ValidationAutoUpdateListener();
     listener.setValidationDependencies(validationService, validationRepository);
 
     listener.onGesturesChanged([]);
@@ -50,7 +50,7 @@ describe('ValidationAutoUpdateGestureListener', () => {
       getAutoUpdate: vi.fn(() => true),
       setAutoUpdate: vi.fn(),
     };
-    const listener = new ValidationAutoUpdateGestureListener();
+    const listener = new ValidationAutoUpdateListener();
     listener.setValidationDependencies(validationService, validationRepository);
 
     listener.onGesturesChanged([]);

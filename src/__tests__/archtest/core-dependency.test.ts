@@ -26,10 +26,7 @@ describe('Dependency direction test', () => {
         content: readFileSync(e),
       };
     });
-    const componentFiles = [
-      ...getFilesInDirectory('./src/components'),
-      ...getFilesInDirectory('./src/lib'),
-    ];
+    const componentFiles = [...getFilesInDirectory('./src/frontend')];
     const componentContent = componentFiles.map(e => {
       if (e.endsWith('.svelte')) {
         return {

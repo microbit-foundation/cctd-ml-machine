@@ -17,7 +17,7 @@ import { RecordingImpl } from '../../core/entities/recording/RecordingImpl';
 import { Sample } from '../../core/entities/recording/Sample';
 import { GestureImpl } from '../../backend/domain/implementation/gesture/GestureImpl';
 import { LocalStorageGestureRepository } from '../../backend/infrastructure/LocalStorageGestureRepository';
-import ControlledStorage from '../../lib/ControlledStorage';
+import ControlledStorage from '../../frontend/lib/ControlledStorage';
 
 function createState<T>(initial: T): AbstractState<T> {
   let value = initial;

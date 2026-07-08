@@ -6,6 +6,6 @@
 
 import type { ModelTraining } from './ModelTraining';
 
-export interface ModelTrainingObserver {
-  onModelTrainingChanged(modelTraining: ModelTraining): void;
+export interface ModelTrainingListener {
+  onModelTrainingChanged(modelTraining: ModelTraining): Promise<void>;
 }

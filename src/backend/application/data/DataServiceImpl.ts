@@ -13,6 +13,7 @@ import { Sample } from '../../../core/entities/recording/Sample';
 import type { Filter, FilterType } from '../../../core/filter/Filter';
 import { createFilter } from '../../../core/filter/FilterUtils';
 import type { LiveDataStore } from '../../../core/LiveDataStore';
+import ConsoleLogger from '../../../core/logging/ConsoleLogger';
 import { ModelOption } from '../../../core/model/ModelOption';
 import { ModelOptions } from '../../../core/model/ModelOptions';
 import { SettingsChange } from '../../../core/model/SettingsChange';
@@ -29,6 +30,8 @@ import type { ModelTrainingStateRepository } from '../../domain/ModelTrainingSta
 import { GestureDatasetFactory } from './GestureDatasetFactory';
 
 export class DataServiceImpl implements DataService {
+  
+  private log = new ConsoleLogger(DataServiceImpl.name);
   private readonly gestureDatasetFactory: GestureDatasetFactory;
 
   constructor(

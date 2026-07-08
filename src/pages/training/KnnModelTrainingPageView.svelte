@@ -10,29 +10,20 @@
   import AxesFilterVectorView from '../../components/features/graphs/knngraph/AxesFilterVectorView.svelte';
   import KnnModelGraph from '../../components/features/graphs/knngraph/KnnModelGraph.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
-  import { knnHasTrained } from '../../lib/stores/KNNStores';
   import KnnModelSettings from '../../components/features/training/KNNModelSettings.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
+  import { ModelType } from '../../core/model/ModelType';
 
   const classifierController = getControllers().getClassifierController();
-  const modelTraining = classifierController.getModelTraining();
   const classifier = classifierController.getClassifier();
   const filters = getControllers().getFilterController().getFilters();
   const highlightedAxis = getControllers().getAxisController().getSelectedAxes();
   const availableAxes = getControllers().getAxisController().getAvailableAxes();
-
-  $: {
-    if (!!$classifier && $modelTraining.hasPendingSettings()) {
-      if ($knnHasTrained) {
-        // Only train if the knn model has been trained before
-        getControllers().getClassifierController().trainKNNModel();
-      }
-    }
-  }
+  $: knnHasTrained = $classifier?.getModelType() === ModelType.KNN;
 </script>
 
 <div class="flex flex-col flex-grow gap-2 justify-center flex-grow">
-  {#if !$knnHasTrained}
+  {#if !knnHasTrained}
     <div class="flex gap-2 flex-col justify-center">
       <div class="flex justify-center mb-4">
         <KnnModelSettings />
@@ -42,7 +33,6 @@
           <StandardButton
             onClick={() => {
               getControllers().getClassifierController().trainKNNModel();
-              $knnHasTrained = true;
             }}>
             {$t('menu.trainer.trainModelButtonSimple')}
           </StandardButton>
@@ -52,20 +42,22 @@
   {/if}
   {#if $highlightedAxis.length === 1}
     <div class="flex flex-row flex-grow justify-evenly" class:hidden={!$classifier}>
-      <div class="flex flex-col mr-6 flex-grow justify-center gap-6">
-        <div class="flex">
-          <KnnModelSettings />
+      {#if knnHasTrained}
+        <div class="flex flex-col mr-6 flex-grow justify-center gap-6">
+          <div class="flex">
+            <KnnModelSettings />
+          </div>
+          <div>
+            <AxesFilterVectorView />
+          </div>
+          <div>
+            <PredictionLegend />
+          </div>
         </div>
-        <div>
-          <AxesFilterVectorView />
-        </div>
-        <div>
-          <PredictionLegend />
-        </div>
-      </div>
-      {#if $filters.length == 2 && !!$classifier && $highlightedAxis.length === 1}
+      {/if}
+      {#if $filters.length == 2 && !!$classifier && $highlightedAxis.length === 1 && knnHasTrained}
         <KnnModelGraph />
-      {:else}
+      {:else if knnHasTrained}
         <div class="max-w-[450px] flex-grow flex flex-col justify-center">
           <p class="max-w-80 text-md font-bold text-center">
             {$t('menu.trainer.knn.onlyTwoFilters')}

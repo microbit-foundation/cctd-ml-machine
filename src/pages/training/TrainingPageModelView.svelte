@@ -29,7 +29,7 @@
     <div class="flex flex-row p-2">
       {#if $selectedModel.getType() === ModelType.KNN}
         <KnnModelTrainingPageView />
-      {:else if $selectedModel.getType() === ModelType.NeuralNetwork}
+      {:else if $selectedModel.getType() === ModelType.NERUAL_NETWORK}
         <NeuralNetworkTrainingPageView />
       {/if}
     </div>

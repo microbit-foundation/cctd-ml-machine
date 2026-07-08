@@ -9,7 +9,7 @@ import { ModelOptions } from './ModelOptions';
 export class ModelOption {
   public constructor(private readonly option: ModelOptions) {}
 
-  getOption(): string {
+  getType(): ModelOptions {
     return this.option;
   }
   

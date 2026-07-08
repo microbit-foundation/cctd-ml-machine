@@ -47,7 +47,7 @@
 </script>
 
 <!-- Remove && false to enable the overlay for debugging -->
-{#if inDev && false}
+{#if inDev && true}
   <div
     class="absolute bottom-2 left-2 justify-center self-center items-center z-4 opacity-75 bg-white p-2 text-xs text-violet-700 flex"
     style="pointer-events: none;"
@@ -97,7 +97,7 @@
       <div>
         {#each pendingSettings.slice(-10) as setting}
           <p>
-            {setting.getOption().getOption()}
+            {setting.getOption().getType()}
             {setting.getOldValue()}->{setting.getNewValue()}
           </p>
         {/each}

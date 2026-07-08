@@ -9,12 +9,14 @@ import { distanceBetween } from '../../utils/Math';
 import BaseVector from '../../vector/BaseVector';
 import type { Vector } from '../../vector/Vector';
 import type { MLModel } from '../MLModel';
+import { ModelType } from '../ModelType';
 import type { KNNModelObserver } from './KNNModelObserver';
 import type { KNNModelSettings } from './KNNModelSettings';
 import type { LabelledPoint } from './LabelledPoint';
 
 class KNNMLModel implements MLModel {
   private normalize: boolean;
+
   constructor(
     private settings: KNNModelSettings,
     private points: LabelledPoint[],
@@ -35,6 +37,10 @@ class KNNMLModel implements MLModel {
     );
     ConsoleLogger.log('KNNMLModel', 'Mean:', mean.getValue());
     ConsoleLogger.log('KNNMLModel', 'Standd Deviation:', stdDeviation.getValue());
+  }
+
+  getType(): ModelType {
+    return ModelType.KNN;
   }
 
   public async predict(filteredData: Vector): Promise<Vector> {

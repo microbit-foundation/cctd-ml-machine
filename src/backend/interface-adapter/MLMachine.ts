@@ -73,6 +73,7 @@ import { NeuralNetworkSettingsServiceImpl } from '../domain/implementation/Neura
 import type { ModelTrainingStateRepository } from '../domain/ModelTrainingStateRepository';
 import type { KNNModelService } from '../domain/KNNModelService';
 import { KNNModelServiceImpl } from '../domain/implementation/KNNModelServiceImpl';
+import { KNNModelPendingSettingsListener } from '../interface-listener/KNNModelPendingSettingsListener.ts';
 
 /**
  * Acts as the main bootstrapping object. Is initialized once and shared across the UI
@@ -157,9 +158,10 @@ export class MLMachine {
     const neuralNetworkSettingsRepository = new StatesNeuralNetworkSettingsRepository(
       this.states.getNeuralNetworkSettings(),
     );
+    const knnSettingsListener = new KNNModelPendingSettingsListener();
     this.modelTrainingRepository = new StatesModelTrainingStateRepository(
       this.states.getModelTraining(),
-      [],
+      [knnSettingsListener],
     );
     const classifierRepository = new StatesClassifierRepository(this.states);
     const knnSettingsRepository = new StatesKNNModelSettingsRepository(this.states);
@@ -258,6 +260,9 @@ export class MLMachine {
       this.dataService,
       this.knnSettingsService,
     );
+
+    knnSettingsListener.setDependencies(this.modelService, this.classifierService);
+
     // This is the controller layer, probably should be last in the constructor
     this.controllers = new MLMachineControllers(
       this,

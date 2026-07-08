@@ -14,6 +14,7 @@ import type { PredictionInput } from '../Predictioninput';
 import type { PredictionOutput } from '../PredictionOutput';
 import { VectorPredictionInput } from './VectorPredictionInput';
 import { VectorPredictionOutput } from './VectorPredictionOutput';
+import type { ModelType } from '../../model/ModelType';
 
 export class VectorClassifier implements Classifier {
   private model: MLModel; // A trained ML model
@@ -22,6 +23,10 @@ export class VectorClassifier implements Classifier {
   public constructor(model: MLModel, evaluator: ClassifierEvaluator) {
     this.model = model;
     this.evaluator = evaluator;
+  }
+
+  getModelType(): ModelType {
+    return this.model.getType();
   }
 
   public async predict(input: PredictionInput): Promise<PredictionOutput> {

@@ -8,7 +8,7 @@ import { ModelType } from './ModelType';
  */
 class ModelRegistry {
   public static NeuralNetwork: ModelInfo = new ModelInfo(
-    ModelType.NeuralNetwork,
+    ModelType.NERUAL_NETWORK,
     'Neural Network',
     'Neural Network',
   );

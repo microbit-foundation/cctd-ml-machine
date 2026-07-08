@@ -4,6 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 export enum ModelType {
-  NeuralNetwork = 'NN',
+  NERUAL_NETWORK = 'NN',
   KNN = 'KNN',
 }

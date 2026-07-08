@@ -4,25 +4,26 @@
  * SPDX-License-Identifier: MIT
  */
 import type { ModelTraining } from '../../core/model/ModelTraining';
-import type { ModelTrainingObserver } from '../../core/model/ModelTrainingObserver';
+import type { ModelTrainingListener } from '../../core/model/ModelTrainingObserver';
 import type { ModelTrainingStateRepository } from '../domain/ModelTrainingStateRepository';
 import type { AbstractState } from '../statemanagement/AbstractState';
 
 export class StatesModelTrainingStateRepository implements ModelTrainingStateRepository {
-  private modelTraining: AbstractState<ModelTraining>;
+  private modelTrainingState: AbstractState<ModelTraining>;
 
   public constructor(
     initialModelTraining: AbstractState<ModelTraining>,
-    modelTrainingObserver: ModelTrainingObserver[],
+    private modelTrainingListeners: ModelTrainingListener[],
   ) {
-    this.modelTraining = initialModelTraining;
+    this.modelTrainingState = initialModelTraining;
   }
 
   public getModelTraining(): ModelTraining {
-    return this.modelTraining.get();
+    return this.modelTrainingState.get();
   }
 
   public saveModelTraining(modelTraining: ModelTraining): void {
-    this.modelTraining.set(modelTraining);
+    this.modelTrainingState.set(modelTraining);
+    this.modelTrainingListeners.map(async (listener) => await listener.onModelTrainingChanged(modelTraining))
   }
 }

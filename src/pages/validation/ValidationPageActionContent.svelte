@@ -27,8 +27,8 @@
   let bindAutoUpdate = validationController.shouldAutoUpdate().get();
   $: validationController.setAutoUpdate(bindAutoUpdate);
 
-  const handleEvaluateValidationSets = () => {
-    validationController.evaluateValidationSet();
+  const handleEvaluateValidationSets = async () => {
+    await validationController.evaluateValidationSet();
   };
 
   const showPercentages = writable(false);

@@ -41,7 +41,7 @@ export const getMean = (vectors: Vector[]): Vector => {
 
   const dimension = input[0].length;
   // Calculate the mean vector
-  const mean = new Array(dimension).fill(0);
+  const mean: number[] = new Array(dimension).fill(0);
   for (const vec of input) {
     for (let i = 0; i < dimension; i++) {
       mean[i] += vec[i];

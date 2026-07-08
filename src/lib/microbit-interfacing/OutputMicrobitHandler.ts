@@ -21,7 +21,7 @@ class OutputMicrobitHandler implements MicrobitHandler {
 
   public constructor() {}
 
-  public onConnected(versionNumber?: MBSpecs.MBVersion  ): void {
+  public onConnected(versionNumber?: MBSpecs.MBVersion): void {
     ConsoleLogger.log('OutputMicrobitHandler', 'onConnected', versionNumber);
 
     const pinResetArguments: { pin: MBSpecs.UsableIOPin; on: boolean }[] = [];

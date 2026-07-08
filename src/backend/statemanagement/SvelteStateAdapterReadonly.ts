@@ -36,10 +36,7 @@ export class SvelteStateAdapterReadonly<T> implements AbstractState<T>, Readable
     return get(this.svelteState);
   }
 
-  public subscribe(
-    run: Subscriber<T>,
-    invalidate?: Invalidator<T>  ,
-  ): Unsubscriber {
+  public subscribe(run: Subscriber<T>, invalidate?: Invalidator<T>): Unsubscriber {
     return this.svelteState.subscribe(
       () => run(this.get()),
       invalidate ? () => invalidate(this.get()) : undefined,

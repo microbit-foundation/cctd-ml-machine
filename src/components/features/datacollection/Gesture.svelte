@@ -23,7 +23,6 @@
   import { Feature, getFeature, hasFeature } from '../../../lib/FeatureToggles';
   import { printRecordings } from '../../../lib/utils/printRecordings';
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
-  import type { NewGesture } from '../../../core/entities/NewGesture';
   import type { Recording as RecordingType } from '../../../core/entities/recording/Recording';
   import Recording from '../../ui/recording/Recording.svelte';
   import type { GestureID } from '../../../core/entities/Gesture';

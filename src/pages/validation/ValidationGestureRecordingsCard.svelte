@@ -10,7 +10,6 @@
   import Recording from '../../components/ui/recording/Recording.svelte';
   import type { GestureID } from '../../core/entities/Gesture';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
-  import Matrix from '../../core/entities/Matrix';
 
   export let gestureId: GestureID;
 

@@ -45,9 +45,7 @@ export class LiveDataStateAdapter
   }
   subscribe(
     run: (value: LiveDataStore<LiveDataVector>) => void,
-    invalidate?:
-      | ((value?: LiveDataStore<LiveDataVector>  ) => void)
-       ,
+    invalidate?: (value?: LiveDataStore<LiveDataVector>) => void,
   ): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }

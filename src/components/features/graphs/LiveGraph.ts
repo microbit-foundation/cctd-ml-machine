@@ -5,7 +5,6 @@
  */
 import { SmoothieChart, TimeSeries } from 'smoothie';
 import StaticConfiguration from '../../../StaticConfiguration';
-import { getControllers } from '../../../backend/interface-adapter/MLMachine';
 import ConsoleLogger from '../../../core/logging/ConsoleLogger';
 import type { LiveDataStore } from '../../../core/LiveDataStore';
 import type { LiveDataVector } from '../../../core/vector/LiveDataVector';

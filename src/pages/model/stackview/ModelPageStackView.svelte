@@ -20,7 +20,6 @@
   // In case of manual classification, variables for evaluation
 
   $: hasPendingSettings = $modelTraining.hasPendingSettings();
-  $: isTraining = $modelTraining.isTraining();
 
   onMount(() => {
     Microbits.resetIOPins();

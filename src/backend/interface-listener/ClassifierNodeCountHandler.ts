@@ -5,7 +5,6 @@
  */
 import type { GestureListListener } from '../domain/eventlistener/GestureListListener';
 import type { NewGesture } from '../../core/entities/NewGesture';
-import type { ClassifierService } from '../domain/ClassifierService';
 import type { ModelService } from '../domain/ModelService';
 import type { KNNSettingsService } from '../domain/KNNSettingsService';
 

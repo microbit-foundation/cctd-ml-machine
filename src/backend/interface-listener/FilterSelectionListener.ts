@@ -6,7 +6,6 @@
 
 import type { Axis } from '../../core/entities/Axis';
 import type { Filter } from '../../core/filter/Filter';
-import type { ClassifierService } from '../domain/ClassifierService';
 import type { FilterListListener } from '../domain/eventlistener/FilterListListener';
 import type { SelectedAxesListener } from '../domain/eventlistener/SelectedAxesListener';
 import type { ModelService } from '../domain/ModelService';

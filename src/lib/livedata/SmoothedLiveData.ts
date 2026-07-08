@@ -3,13 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import {
-  type Readable,
-  type Subscriber,
-  type Unsubscriber,
-  derived,
-  writable,
-} from 'svelte/store';
+import { type Readable, type Subscriber, type Unsubscriber, derived } from 'svelte/store';
 import LiveDataBuffer from '../../core/LiveDataBuffer';
 import { smoothNewValue } from '../utils/graphUtils';
 import { type LiveDataVector } from '../../core/vector/LiveDataVector';
@@ -64,7 +58,7 @@ class SmoothedLiveData<T extends LiveDataVector>
 
   public subscribe(
     run: Subscriber<LiveDataVector>,
-    invalidate?: ((value?: LiveDataVector  ) => void)  ,
+    invalidate?: (value?: LiveDataVector) => void,
   ): Unsubscriber {
     return this.smoothedStore.subscribe(run, invalidate);
   }

@@ -36,10 +36,7 @@ export class SvelteStateAdapter<T> implements AbstractState<T>, Writable<T> {
     return this.svelteState.update(() => updater(this.get()));
   }
 
-  public subscribe(
-    run: Subscriber<T>,
-    invalidate?: Invalidator<T>  ,
-  ): Unsubscriber {
+  public subscribe(run: Subscriber<T>, invalidate?: Invalidator<T>): Unsubscriber {
     return this.svelteState.subscribe(
       () => run(this.get()),
       invalidate ? () => invalidate(this.get()) : undefined,

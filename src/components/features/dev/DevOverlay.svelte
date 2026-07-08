@@ -13,7 +13,6 @@
 
 <script lang="ts">
   import { getControllers } from '../../../backend/interface-adapter/MLMachine';
-  import { ClassifierController } from '../../../backend/interface-controller/ClassifierController';
   import Environment from '../../../core/Environment';
   import Microbits from '../../../lib/microbit-interfacing/Microbits';
   import NeuralNetworkArchitectureDebug from './NeuralNetworkArchitectureDebug.svelte';

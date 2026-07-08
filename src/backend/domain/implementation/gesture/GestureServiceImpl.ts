@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { get } from 'http';
 import type { Axis } from '../../../../core/entities/Axis';
 import type { GestureID } from '../../../../core/entities/Gesture';
 import type { NewGesture } from '../../../../core/entities/NewGesture';

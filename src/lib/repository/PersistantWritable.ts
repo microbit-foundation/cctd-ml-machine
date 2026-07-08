@@ -40,10 +40,7 @@ class PersistantWritable<T> implements Writable<T> {
     this.saveToLocalStorage();
   }
 
-  public subscribe(
-    run: Subscriber<T>,
-    invalidate?: Invalidator<T>  ,
-  ): Unsubscriber {
+  public subscribe(run: Subscriber<T>, invalidate?: Invalidator<T>): Unsubscriber {
     return this.store.subscribe(run, invalidate);
   }
 

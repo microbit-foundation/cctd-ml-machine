@@ -8,7 +8,6 @@
  */
 
 import fs from 'fs';
-import * as path from 'path';
 import { getFilesInDirectory } from './fileloader';
 
 // Place files you wish to ignore by name in here

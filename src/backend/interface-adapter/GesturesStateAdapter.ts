@@ -35,7 +35,7 @@ export class GesturesStateAdapter
 
   public subscribe(
     run: (value: NewGesture[]) => void,
-    invalidate?: ((value?: NewGesture[]  ) => void)  ,
+    invalidate?: (value?: NewGesture[]) => void,
   ): Unsubscriber {
     return this.gestures.subscribe(run, invalidate);
   }

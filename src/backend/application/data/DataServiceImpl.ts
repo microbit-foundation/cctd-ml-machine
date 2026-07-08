@@ -30,7 +30,6 @@ import type { ModelTrainingStateRepository } from '../../domain/ModelTrainingSta
 import { GestureDatasetFactory } from './GestureDatasetFactory';
 
 export class DataServiceImpl implements DataService {
-  
   private log = new ConsoleLogger(DataServiceImpl.name);
   private readonly gestureDatasetFactory: GestureDatasetFactory;
 

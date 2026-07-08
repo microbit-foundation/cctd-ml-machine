@@ -12,7 +12,7 @@ export class ModelOption {
   getType(): ModelOptions {
     return this.option;
   }
-  
+
   getDisplayName(): string {
     // Return the display name directly from the enum value
     switch (this.option) {

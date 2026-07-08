@@ -123,8 +123,7 @@ export class MLMachine {
     const gestureStateHandler = new GestureStateHandler();
 
     const classifierNodeCountHandler = new ClassifierNodeCountHandler();
-    const validationAutoUpdateGestureListener =
-      new ValidationAutoUpdateGestureListener();
+    const validationAutoUpdateGestureListener = new ValidationAutoUpdateGestureListener();
     const gestureRepository = new LocalStorageGestureRepository(
       new ConsoleLogger('LocalStorageGestureRepository'),
       [

@@ -22,7 +22,8 @@
   const availableAxes = axisController.getAvailableAxes();
 
   const trainKNNModel = () => classifierController.trainKNNModel();
-  const selectAxis = (axisIndex: number) => axisController.setSelectedAxes([$availableAxes[axisIndex]]);
+  const selectAxis = (axisIndex: number) =>
+    axisController.setSelectedAxes([$availableAxes[axisIndex]]);
 
   $: knnHasTrained = $classifier?.getModelType() === ModelType.KNN;
   $: hasSingleHighlightedAxis = $highlightedAxis.length === 1;

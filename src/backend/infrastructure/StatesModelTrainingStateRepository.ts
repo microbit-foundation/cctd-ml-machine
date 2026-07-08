@@ -24,6 +24,8 @@ export class StatesModelTrainingStateRepository implements ModelTrainingStateRep
 
   public saveModelTraining(modelTraining: ModelTraining): void {
     this.modelTrainingState.set(modelTraining);
-    this.modelTrainingListeners.map(async (listener) => await listener.onModelTrainingChanged(modelTraining))
+    this.modelTrainingListeners.map(
+      async listener => await listener.onModelTrainingChanged(modelTraining),
+    );
   }
 }

@@ -14,5 +14,5 @@ export enum ModelOptions {
   NUMBER_OF_CLASSES = 'Number of Classes',
   K = 'K',
   FILTERS = 'Filters',
-  SELECTED_AXES = 'Selected Axes'
+  SELECTED_AXES = 'Selected Axes',
 }

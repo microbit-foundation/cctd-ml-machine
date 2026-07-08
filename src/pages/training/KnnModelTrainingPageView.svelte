@@ -15,34 +15,41 @@
   import { ModelType } from '../../core/model/ModelType';
 
   const classifierController = getControllers().getClassifierController();
+  const axisController = getControllers().getAxisController();
   const classifier = classifierController.getClassifier();
   const filters = getControllers().getFilterController().getFilters();
-  const highlightedAxis = getControllers().getAxisController().getSelectedAxes();
-  const availableAxes = getControllers().getAxisController().getAvailableAxes();
+  const highlightedAxis = axisController.getSelectedAxes();
+  const availableAxes = axisController.getAvailableAxes();
+
+  const trainKNNModel = () => classifierController.trainKNNModel();
+  const selectAxis = (axisIndex: number) => axisController.setSelectedAxes([$availableAxes[axisIndex]]);
+
   $: knnHasTrained = $classifier?.getModelType() === ModelType.KNN;
+  $: hasSingleHighlightedAxis = $highlightedAxis.length === 1;
+  $: hasClassifier = !!$classifier;
+  $: showTrainingControls = !knnHasTrained;
+  $: showTrainingResults = hasSingleHighlightedAxis && knnHasTrained;
+  $: showGraph = showTrainingResults && hasClassifier && $filters.length === 2;
+  $: showGraphFallback = showTrainingResults && !showGraph;
 </script>
 
 <div class="flex flex-col flex-grow gap-2 justify-center flex-grow">
-  {#if !knnHasTrained}
-    <div class="flex gap-2 flex-col justify-center">
-      <div class="flex justify-center mb-4">
-        <KnnModelSettings />
-      </div>
-      {#if $highlightedAxis.length === 1}
+  {#if hasSingleHighlightedAxis}
+    {#if showTrainingControls}
+      <div class="flex gap-2 flex-col justify-center">
+        <div class="flex justify-center mb-4">
+          <KnnModelSettings />
+        </div>
         <div class="flex justify-center">
-          <StandardButton
-            onClick={() => {
-              getControllers().getClassifierController().trainKNNModel();
-            }}>
+          <StandardButton onClick={trainKNNModel}>
             {$t('menu.trainer.trainModelButtonSimple')}
           </StandardButton>
         </div>
-      {/if}
-    </div>
-  {/if}
-  {#if $highlightedAxis.length === 1}
-    <div class="flex flex-row flex-grow justify-evenly" class:hidden={!$classifier}>
-      {#if knnHasTrained}
+      </div>
+    {/if}
+
+    <div class="flex flex-row flex-grow justify-evenly" class:hidden={!hasClassifier}>
+      {#if showTrainingResults}
         <div class="flex flex-col mr-6 flex-grow justify-center gap-6">
           <div class="flex">
             <KnnModelSettings />
@@ -55,9 +62,10 @@
           </div>
         </div>
       {/if}
-      {#if $filters.length == 2 && !!$classifier && $highlightedAxis.length === 1 && knnHasTrained}
+
+      {#if showGraph}
         <KnnModelGraph />
-      {:else if knnHasTrained}
+      {:else if showGraphFallback}
         <div class="max-w-[450px] flex-grow flex flex-col justify-center">
           <p class="max-w-80 text-md font-bold text-center">
             {$t('menu.trainer.knn.onlyTwoFilters')}
@@ -71,21 +79,17 @@
       <div class="flex flex-row gap-2">
         <StandardButton
           colorOverride={StaticConfiguration.graphColors[0]}
-          onClick={() => {
-            getControllers().getAxisController().setSelectedAxes([$availableAxes[0]]);
-          }}>
+          onClick={() => selectAxis(0)}>
           X
         </StandardButton>
         <StandardButton
           colorOverride={StaticConfiguration.graphColors[1]}
-          onClick={() =>
-            getControllers().getAxisController().setSelectedAxes([$availableAxes[1]])}>
+          onClick={() => selectAxis(1)}>
           Y
         </StandardButton>
         <StandardButton
           colorOverride={StaticConfiguration.graphColors[2]}
-          onClick={() =>
-            getControllers().getAxisController().setSelectedAxes([$availableAxes[2]])}>
+          onClick={() => selectAxis(2)}>
           Z
         </StandardButton>
       </div>

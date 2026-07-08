@@ -33,5 +33,11 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true
   },
-  "hide-files.files": []
+  "hide-files.files": [],
+  "chat.tools.terminal.autoApprove": {
+    "/^npx tsc --noEmit --skipLibCheck$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
 }

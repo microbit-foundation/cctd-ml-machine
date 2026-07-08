@@ -1,0 +1,23 @@
+<!--
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
+<script lang="ts">
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
+
+  const validationResult = getControllers()
+    .getValidationController()
+    .getValidationResult();
+  $: accuracy = $validationResult?.getAccuracy();
+</script>
+
+<div class="w-full text-center justify-center pt-5 pb-7">
+  {#if !!accuracy}
+    <p class="text-4xl mb-4">{(accuracy * 100).toFixed(1)}%</p>
+  {:else}
+    <p class="text-4xl mb-4">-</p>
+  {/if}
+  <p class="text-xl">Accuracy</p>
+</div>

@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -19,14 +19,14 @@ const readSvelteFileScript = (fileLocation: string) => {
 describe('Dependency direction test', () => {
   // A crude way to enforce direction of dependencies, inspired by ArchUnit for java
   test('Files in lib should not depend on files in components', () => {
-    const libFiles = getFilesInDirectory('./src/lib');
+    const libFiles = getFilesInDirectory('./src/frontend/lib');
     const libContent = libFiles.map(e => {
       return {
         file: e,
         content: readFileSync(e),
       };
     });
-    const componentFiles = getFilesInDirectory('./src/components');
+    const componentFiles = getFilesInDirectory('./src/frontend');
     const componentContent = componentFiles.map(e => {
       if (e.endsWith('.svelte')) {
         return {

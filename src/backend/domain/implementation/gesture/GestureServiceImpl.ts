@@ -1,0 +1,149 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+import type { Axis } from '../../../../core/entities/Axis';
+import type { GestureID } from '../../../../core/entities/Gesture';
+import type { NewGesture } from '../../../../core/entities/NewGesture';
+import type { Recording } from '../../../../core/entities/recording/Recording';
+import type { AxisRepository } from '../../AxisRepository';
+import type { GestureRepository } from '../../GestureRepository';
+import type { GestureService } from '../../GestureService';
+import type { SystemColors } from '../SystemColors';
+import { GestureImpl } from './GestureImpl';
+import type { ValidationRepository } from '../../ValidationRepository';
+
+export class GestureServiceImpl implements GestureService {
+  public constructor(
+    private gestureRepository: GestureRepository,
+    private colors: SystemColors,
+    private axisRepository: AxisRepository,
+    private validationRepository: ValidationRepository,
+  ) {}
+
+  saveGestures(gestures: NewGesture[]): void {
+    this.gestureRepository.saveGestures(gestures);
+  }
+
+  selectGesture(gesture: NewGesture | undefined): void {
+    this.gestureRepository.setSelectedGesture(gesture);
+  }
+
+  deleteValidationRecording(gestureId: number, recordingId: number): void {
+    const gesture = this.getGestureOrThrow(gestureId);
+    gesture.setValidationRecordings(
+      [...gesture.getValidationRecordings()].filter(rec => rec.getId() !== recordingId),
+    );
+    this.validationRepository.clearValidationResult();
+    this.gestureRepository.saveGesture(gesture);
+  }
+
+  public getGestureFromRecording(recordingId: number): NewGesture | undefined {
+    const gestures = this.gestureRepository.getGestures();
+    for (const gesture of gestures) {
+      const recordings = gesture.getRecordings();
+      for (const recording of recordings) {
+        if (recording.getId() === recordingId) {
+          return gesture;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  getGestureFromValidationRecording(recordingId: number): NewGesture | undefined {
+    const gestures = this.gestureRepository.getGestures();
+    for (const gesture of gestures) {
+      const recordings = gesture.getValidationRecordings();
+      for (const recording of recordings) {
+        if (recording.getId() === recordingId) {
+          return gesture;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  public saveGesture(gesture: NewGesture): void {
+    this.gestureRepository.saveGesture(gesture);
+  }
+
+  public createGesture(name: string): NewGesture {
+    const id = this.gestureRepository.generateGestureId();
+    const gesture = new GestureImpl(
+      id,
+      name,
+      [],
+      [],
+      { requiredConfidence: 0.8 },
+      this.colors.generateGestureColor(),
+    );
+    this.gestureRepository.saveGesture(gesture);
+    return gesture;
+  }
+
+  public deleteRecording(gestureId: GestureID, recordingId: number): void {
+    const gesture = this.getGestureOrThrow(gestureId);
+    gesture.setRecordings(
+      [...gesture.getRecordings()].filter(rec => rec.getId() !== recordingId),
+    );
+    this.gestureRepository.saveGesture(gesture);
+  }
+
+  public addRecording(gestureId: number, recording: Recording): void {
+    const gesture = this.getGestureOrThrow(gestureId);
+    gesture.setRecordings([...gesture.getRecordings(), recording]);
+    this.gestureRepository.saveGesture(gesture);
+  }
+
+  public addValidationRecording(gestureId: GestureID, recording: Recording): void {
+    const gesture = this.getGestureOrThrow(gestureId);
+    gesture.setValidationRecordings([...gesture.getValidationRecordings(), recording]);
+    this.validationRepository.clearValidationResult();
+    this.gestureRepository.saveGesture(gesture);
+  }
+
+  public deleteGesture(gesture: GestureID): void {
+    this.gestureRepository.removeGesture(gesture);
+  }
+
+  public setGestureName(gestureId: GestureID, name: string): void {
+    const gesture = this.getGestureOrThrow(gestureId);
+    gesture.setName(name);
+    this.gestureRepository.saveGesture(gesture);
+  }
+
+  public getGesture(id: GestureID): NewGesture | undefined {
+    return this.gestureRepository.getGesture(id);
+  }
+
+  public setGestures(value: NewGesture[]): void {
+    this.gestureRepository.saveGestures(value);
+    const axes = this.getAvailableAxesFromGestures(value);
+    this.axisRepository.setAvailableAxes(axes);
+    this.axisRepository.setSelectedAxes(axes);
+  }
+
+  public getGestures(): NewGesture[] {
+    return this.gestureRepository.getGestures();
+  }
+
+  private getGestureOrThrow(gestureId: GestureID): NewGesture {
+    const gesture = this.getGesture(gestureId);
+    if (!gesture) {
+      throw new Error(`Couldn't find gesture with id ${gestureId}`);
+    }
+    return gesture;
+  }
+
+  private getAvailableAxesFromGestures(gestures: NewGesture[]): Axis[] {
+    for (const gesture of gestures) {
+      for (const recording of gesture.getRecordings()) {
+        return recording.getAxes(); // Dictate the axes from the first recording
+      }
+    }
+    return [];
+  }
+}

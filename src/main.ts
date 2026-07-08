@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -7,6 +7,7 @@
 import App from './App.svelte';
 import './appInsights';
 import 'virtual:windi.css';
+
 const app = new App({
   target: document.body,
 });

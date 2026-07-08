@@ -1,0 +1,28 @@
+<!--
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
+<script lang="ts">
+  import TrainingFailedDialog from './TrainingFailedDialog.svelte';
+  import TrainingPageModelView from './TrainingPageModelView.svelte';
+  import InsufficientData from './InsufficientData.svelte';
+  import TrainingPageTabs from './controlbar/TrainingPageTabs.svelte';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
+
+  const sufficientData = getControllers()
+    .getDataController()
+    .hasSufficientDataForTraining();
+</script>
+
+<TrainingFailedDialog />
+<div class="flex flex-col h-full">
+  <!--TODO: Rename the component to TrainingPageControlBar.svelte -->
+  <TrainingPageTabs />
+  {#if !sufficientData}
+    <InsufficientData />
+  {:else}
+    <TrainingPageModelView />
+  {/if}
+</div>

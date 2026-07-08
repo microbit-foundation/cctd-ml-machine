@@ -1,0 +1,12 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+import type { FeatureData } from './FeatureData';
+import type { DatasetLabels } from './DatasetLabels';
+
+export interface LabelledFeatureSet {
+  getFeatureSet(): FeatureData[];
+  getLabels(): DatasetLabels;
+}

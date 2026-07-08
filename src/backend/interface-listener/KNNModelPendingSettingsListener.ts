@@ -1,3 +1,9 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 import { AccuracyClassifierEvaluator } from '../../core/classifier/evaluator/AccuracyClassifierEvaluator';
 import { VectorClassifier } from '../../core/classifier/vector-classifier/VectorClassifier';
 import ConsoleLogger from '../../core/logging/ConsoleLogger';

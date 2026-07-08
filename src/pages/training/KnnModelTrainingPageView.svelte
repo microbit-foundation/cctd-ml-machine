@@ -6,11 +6,11 @@
 <script lang="ts">
   import { t } from '../../i18n';
   import PredictionLegend from './PredictionLegend.svelte';
-  import StaticConfiguration from '../../StaticConfiguration';
   import AxesFilterVectorView from '../../components/features/graphs/knngraph/AxesFilterVectorView.svelte';
   import KnnModelGraph from '../../components/features/graphs/knngraph/KnnModelGraph.svelte';
   import StandardButton from '../../components/ui/buttons/StandardButton.svelte';
   import KnnModelSettings from '../../components/features/training/KNNModelSettings.svelte';
+  import AxisPicker from './AxisPicker.svelte';
   import { getControllers } from '../../backend/interface-adapter/MLMachine';
   import { ModelType } from '../../core/model/ModelType';
 
@@ -74,25 +74,6 @@
       {/if}
     </div>
   {:else}
-    <div class="flex flex-col flex-grow justify-center items-center gap-4">
-      <p class="text-lg max-w-120">{$t('content.trainer.knn.selectOneAxis')}</p>
-      <div class="flex flex-row gap-2">
-        <StandardButton
-          colorOverride={StaticConfiguration.graphColors[0]}
-          onClick={() => selectAxis(0)}>
-          X
-        </StandardButton>
-        <StandardButton
-          colorOverride={StaticConfiguration.graphColors[1]}
-          onClick={() => selectAxis(1)}>
-          Y
-        </StandardButton>
-        <StandardButton
-          colorOverride={StaticConfiguration.graphColors[2]}
-          onClick={() => selectAxis(2)}>
-          Z
-        </StandardButton>
-      </div>
-    </div>
+    <AxisPicker onAxisSelect={selectAxis} />
   {/if}
 </div>

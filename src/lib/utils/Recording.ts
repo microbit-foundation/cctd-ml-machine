@@ -11,6 +11,7 @@ import StaticConfiguration from '../../StaticConfiguration';
 import Logger from './Logger';
 import { alertUser } from '../stores/uiStore';
 import { t } from '../../i18n';
+import { Feature, getFeature } from '../FeatureToggles';
 
 /**
  * @deprecated Will be removed in the future. Use store.getRecorder().startRecording(...) instead.
@@ -64,5 +65,5 @@ export const startRecording = (onFinished: (recording: RecordingData) => void) =
     onFinished(recording);
 
     Logger.log('Recording', `Created recording ${recordingId}`);
-  }, StaticConfiguration.recordingDuration);
+  }, getFeature<number>(Feature.RECORDING_DURATION));
 };

@@ -7,5 +7,8 @@
   "recordingScrubberValues": false,
   "modelValidation": false,
   "modelSettings": false,
-  "fingerprint": false
+  "fingerprint": false,
+  "recordingDuration": 1800,
+  "printableRecordings": false,
+  "dialogRecordings": false
 }

@@ -29,6 +29,10 @@ const fileMoveTargets = {
     "simple": [
         ['./src/__viteBuildVariants__/ml-machine-simple/windi.config.js', './windi.config.js'],
         ['./src/__viteBuildVariants__/ml-machine-simple/features.json', './features.json']
+    ],
+    "experimental": [
+        ['./src/__viteBuildVariants__/experimental/windi.config.js', './windi.config.js'],
+        ['./src/__viteBuildVariants__/experimental/features.json', './features.json']
     ]
 }
 

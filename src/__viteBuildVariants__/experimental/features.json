@@ -8,7 +8,7 @@
   "modelValidation": true,
   "modelSettings": true,
   "fingerprint": true,
-  "recordingDuration": 1800,
-  "printableRecordings": false,
-  "dialogRecordings": false
+  "recordingDuration": 2500,
+  "printableRecordings": true,
+  "dialogRecordings": true
 }

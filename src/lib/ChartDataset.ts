@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { RecordingData } from '../../../../lib/domain/RecordingData';
+import type { RecordingData } from './domain/RecordingData';
 
 export type ChartDataset = { x: number; y: number }[];
 export const getRecordingChartDatasets = (

@@ -12,6 +12,7 @@
   import ModelPageTileViewTiles from './ModelPageTileViewTiles.svelte';
   import StaticConfiguration from '../../../StaticConfiguration';
   import { stores } from '../../../lib/stores/Stores';
+  import { Feature, getFeature } from '../../../lib/FeatureToggles';
 
   const devices = stores.getDevices();
   const classifier = stores.getClassifier();
@@ -37,7 +38,7 @@
     // lastRecording = undefined;
 
     // Get duration
-    const duration = StaticConfiguration.recordingDuration;
+    const duration = getFeature<number>(Feature.RECORDING_DURATION);
 
     // Loading interval
     const loadingInterval = setInterval(() => {

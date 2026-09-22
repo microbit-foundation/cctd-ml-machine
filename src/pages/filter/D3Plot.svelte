@@ -14,6 +14,7 @@
   import StaticConfiguration from '../../StaticConfiguration';
   import type { RecordingData } from '../../lib/domain/RecordingData';
   import { stores } from '../../lib/stores/Stores';
+  import { Feature, getFeature } from '../../lib/FeatureToggles';
 
   const devices = stores.getDevices();
 
@@ -152,7 +153,7 @@
     const liveD = liveData
       .getBuffer()
       .getSeries(
-        StaticConfiguration.recordingDuration,
+        getFeature<number>(Feature.RECORDING_DURATION),
         StaticConfiguration.pollingPredictionSampleSize,
       )
       .map(d => d.value);

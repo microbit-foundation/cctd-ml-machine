@@ -14,6 +14,7 @@
   import StaticConfiguration from '../../../StaticConfiguration';
   import SmoothedLiveData from '../../../lib/livedata/SmoothedLiveData';
   import { stores } from '../../../lib/stores/Stores';
+  import { Feature, getFeature } from '../../../lib/FeatureToggles';
 
   /**
    * TimesSeries, but with the data array added.
@@ -133,7 +134,7 @@
       recordLines.append(new Date().getTime() - 1, maxValue, false);
       recordLines.append(new Date().getTime(), minValue, false);
       blockRecordingStart = false;
-    }, StaticConfiguration.recordingDuration);
+    }, getFeature<number>(Feature.RECORDING_DURATION));
   }
 
   // When devices changes, update the devices of the canvas

@@ -9,6 +9,7 @@
   import { stores } from '../../../lib/stores/Stores';
   import StaticConfiguration from '../../../StaticConfiguration';
   import Fingerprint from '../../ui/recording/Fingerprint.svelte';
+  import { Feature, getFeature } from '../../../lib/FeatureToggles';
 
   export let gestureName: string;
   const classifier = stores.getClassifier();
@@ -29,7 +30,7 @@
           const bufferedData = liveData
             .getBuffer()
             .getSeries(
-              StaticConfiguration.pollingPredictionSampleDuration,
+              getFeature<number>(Feature.RECORDING_DURATION),
               StaticConfiguration.pollingPredictionSampleSize,
             );
           filteredNormalizedInput = ClassifierInput.getInputForAxes(

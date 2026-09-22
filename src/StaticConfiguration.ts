@@ -20,9 +20,6 @@ class StaticConfiguration {
   // After how long should we consider the connection lost if ping was not able to conclude?
   public static readonly connectionLostTimeoutDuration: number = 3000;
 
-  // In milliseconds, how long should each recording be?
-  public static readonly recordingDuration = 1800;
-
   // Which pins are supported?
   public static supportedPins: MBSpecs.UsableIOPin[] = [0, 1, 2];
   public static readonly defaultOutputPin: MBSpecs.UsableIOPin = 0; // Which pin should be selected by default?
@@ -100,11 +97,6 @@ class StaticConfiguration {
    * If this value is too high, the buffer may not contain enough data for predicting.
    */
   public static readonly pollingPredictionSampleSize = 35;
-
-  /**
-   * How far back in time should the engine look for sample data for it's current prediction? (in milliseconds).
-   */
-  public static readonly pollingPredictionSampleDuration = 1800;
 
   /**
    * The size od the accelerometer livedata buffer. Larger means more memory is consumed.

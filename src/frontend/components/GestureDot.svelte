@@ -1,0 +1,38 @@
+<!--
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+<script lang="ts">
+  import type { NewGesture } from '../../core/entities/NewGesture';
+  import { t } from '../../i18n';
+  import Information from './information/Information.svelte';
+
+  let isDotHovered = false;
+  export let gesture: NewGesture | undefined;
+  export let disableTooltip: boolean = false;
+
+  $: name = gesture?.getName() ?? '';
+  $: color = gesture?.getColor() ?? '';
+  $: allowTooltip = !disableTooltip && !!gesture;
+</script>
+
+<div
+  class="absolute border-1 border-secondary rounded-md shadow-md bg-white top-[-28px]"
+  class:hidden={!isDotHovered || !allowTooltip}>
+  <p class="px-2">{name}</p>
+</div>
+<!--Information-->
+{#if !!gesture}
+  <div
+    on:mouseenter={() => (isDotHovered = true)}
+    on:mouseleave={() => (isDotHovered = false)}
+    class="w-3 h-3 z-2 rounded-full"
+    style="background-color: {color};" />
+{:else}
+  <div class="z-2 absolute right-1 top-[-4px]">
+    <Information
+      bodyText={$t('content.model.output.prediction.unknownGesture')}
+      isLightTheme={false} />
+  </div>
+{/if}

@@ -1,0 +1,71 @@
+<!--
+  (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ 
+  SPDX-License-Identifier: MIT
+ -->
+
+<script lang="ts">
+  import StandardDialog from '../components/dialogs/StandardDialog.svelte';
+  import { startConnectionProcess } from '../lib/stores/connectDialogStore';
+  import { t } from '../../i18n';
+  import Gesture from './Gesture.svelte';
+  import NewGestureButton from './NewGestureButton.svelte';
+  import Information from '../components/information/Information.svelte';
+  import StandardButton from '../components/buttons/StandardButton.svelte';
+  import RecordInformationContent from './RecordInformationContent.svelte';
+  import ConnectDialogContainer from '../connection-prompt/ConnectDialogContainer.svelte';
+  import { getControllers } from '../../backend/interface-adapter/MLMachine';
+
+  let isConnectionDialogOpen = false;
+  const gestureController = getControllers().getGestureController();
+  const gestures = gestureController.getGestures();
+</script>
+
+<StandardDialog
+  isOpen={isConnectionDialogOpen}
+  onClose={() => (isConnectionDialogOpen = false)}>
+  <div class="w-70 text-center">
+    <p class="mb-5">
+      {$t('content.data.addDataNoConnection')}
+    </p>
+    <StandardButton
+      onClick={() => {
+        isConnectionDialogOpen = false;
+        startConnectionProcess();
+      }}>
+      {$t('footer.connectButtonNotConnected')}
+    </StandardButton>
+  </div>
+</StandardDialog>
+<ConnectDialogContainer />
+
+<div class="relative flex h-7">
+  <div class="absolute left-3 flex">
+    <Information
+      isLightTheme={false}
+      iconText={$t('content.data.classification')}
+      titleText={$t('content.data.classHelpHeader')}
+      bodyText={$t('content.data.classHelpBody')} />
+  </div>
+  <div class="absolute left-55 flex">
+    <Information isLightTheme={false} iconText={$t('content.data.choice')}>
+      <RecordInformationContent isLightTheme={false} />
+    </Information>
+  </div>
+  <div class="absolute left-92 flex">
+    <Information
+      isLightTheme={false}
+      iconText={$t('content.data.data')}
+      titleText={$t('content.data.data')}
+      bodyText={$t('content.data.dataDescription')} />
+  </div>
+</div>
+<!-- Display all gestures -->
+<div class="flex flex-col gap-2 pt-8">
+  {#each $gestures as gesture}
+    <Gesture
+      gestureId={gesture.getID()}
+      onNoMicrobitSelect={() => (isConnectionDialogOpen = true)} />
+  {/each}
+  <NewGestureButton />
+</div>

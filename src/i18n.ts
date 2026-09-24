@@ -1,5 +1,5 @@
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
@@ -9,7 +9,7 @@ import { t as translate } from 'svelte-i18n';
 export { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
 import browserLang from 'browser-lang';
-import PersistantWritable from './lib/repository/PersistantWritable';
+import PersistantWritable from './frontend/lib/repository/PersistantWritable';
 
 export const tr = translate; // make intellisense a little better
 

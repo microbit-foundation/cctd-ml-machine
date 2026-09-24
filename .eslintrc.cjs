@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
+const path = require('path');
+
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
@@ -33,11 +35,23 @@ module.exports = {
       },
     },
   ],
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'unused-imports'],
   ignorePatterns: [
     'node_modules',
     'svelte.config.js',
     '.eslintrc.cjs',
     'babel.config.cjs',
   ],
+  rules: {
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
+  },
 };

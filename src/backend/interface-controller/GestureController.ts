@@ -1,0 +1,253 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+import { derived } from 'svelte/store';
+import type { GestureID } from '../../core/entities/Gesture';
+import type { AbstractState } from '../statemanagement/AbstractState';
+import type { GestureService } from '../domain/GestureService';
+import { SvelteStateAdapterReadonly } from '../statemanagement/SvelteStateAdapterReadonly';
+import type { AbstractReadonlyState } from '../statemanagement/AbstractReadonlyState';
+import type { Logger } from '../../core/logging/Logger';
+import ConsoleLogger from '../../core/logging/ConsoleLogger';
+import { GestureImpl } from '../domain/implementation/gesture/GestureImpl';
+import type { GestureOutput, SoundData } from '../../core/entities/GestureOutput';
+import type { NewGesture } from '../../core/entities/NewGesture';
+import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
+import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
+import type { Recording } from '../../core/entities/recording/Recording';
+import type { AbstractStates } from '../statemanagement/AbstractStates';
+import type { Confidences } from '../../core/entities/Confidences';
+import type { ConfidenceService } from '../domain/ConfidenceService';
+import type { MBSpecs } from 'microbyte';
+import { PinTurnOnState } from '../../core/entities/PinTurnOnState';
+
+export class GestureController {
+  private log: Logger;
+  public constructor(
+    private states: AbstractStates,
+    private gestureService: GestureService,
+    private confidenceService: ConfidenceService,
+  ) {
+    this.log = new ConsoleLogger('GestureController');
+  }
+
+  getMostConfident(): AbstractReadonlyState<NewGesture | undefined> {
+    const confidences = this.states.getConfidences();
+    return new SvelteStateAdapterReadonly(
+      derived(confidences, () => {
+        return this.confidenceService.getMostConfidentPrediction();
+      }),
+    );
+  }
+
+  getSelectedGesture(): AbstractReadonlyState<NewGesture | undefined> {
+    return this.states.getSelectedGesture();
+  }
+
+  selectGesture(gesture: NewGesture | undefined) {
+    this.gestureService.selectGesture(gesture);
+  }
+
+  clearValidationRecordings() {
+    const gestures = this.gestureService.getGestures();
+    gestures.forEach(gesture => {
+      gesture.setValidationRecordings([]);
+    });
+    this.gestureService.saveGestures(gestures);
+  }
+  public getValidationRecordings(): AbstractReadonlyState<Recording[]> {
+    const derivation = derived(this.states.getGestures(), gests => {
+      gests.map(gest => gest.getValidationRecordings()).flat();
+      const recordings = gests.map(gest => gest.getValidationRecordings()).flat();
+      return recordings;
+    });
+    return new SvelteStateAdapterReadonly(derivation);
+  }
+
+  public getGestureFromValidationRecording(recordingId: number): NewGesture | undefined {
+    return this.gestureService.getGestureFromValidationRecording(recordingId);
+  }
+
+  public getGestureFromRecording(recordingId: number): NewGesture | undefined {
+    return this.gestureService.getGestureFromRecording(recordingId);
+  }
+
+  public getClassIndex(gestureId: GestureID): number | undefined {
+    const gestures = this.gestureService.getGestures();
+    const index = gestures.findIndex(gesture => gesture.getID() === gestureId);
+    if (index === -1) {
+      this.log.warn(`Gesture with id ${gestureId} does not exist`);
+      return undefined;
+    }
+    return index;
+  }
+
+  public getGestureFromClassIndex(classIndex: number): NewGesture | undefined {
+    const gestures = this.gestureService.getGestures();
+    if (classIndex < 0 || classIndex >= gestures.length) {
+      this.log.warn(`Class index ${classIndex} can't be correlated with a gesture!`);
+      return undefined;
+    }
+    return gestures[classIndex];
+  }
+
+  getDownloadableGesturesAsJson(): string {
+    const gestures = this.gestureService.getGestures();
+    const serializer = new GestureSerializer();
+    const serializedData: SerializedGesture[] = gestures.map(gesture =>
+      serializer.serialize(gesture),
+    );
+    return JSON.stringify(serializedData, null, 2);
+  }
+
+  deleteValidationRecording(gestureId: GestureID, recordingId: number): void {
+    this.gestureService.deleteValidationRecording(gestureId, recordingId);
+  }
+
+  setRequiredConfidence(gestureId: GestureID, requiredConfidence: number) {
+    const gesture = this.gestureService.getGesture(gestureId);
+    if (!gesture) {
+      throw new Error('Invalid gesture id, not found, id: ' + gestureId);
+    }
+    if (requiredConfidence < 0 || requiredConfidence > 1) {
+      throw new Error(
+        'Invalid required confidence, must be between 0 and 1, got: ' +
+          requiredConfidence,
+      );
+    }
+    if (gesture.getOutput().requiredConfidence === requiredConfidence) {
+      this.log.info(
+        `Required confidence for gesture ${gestureId} is already ${requiredConfidence}, no change needed.`,
+      );
+      return;
+    }
+    gesture.getOutput().requiredConfidence = requiredConfidence;
+    this.gestureService.saveGesture(gesture);
+  }
+
+  setGestureOuput(gestureId: GestureID, ouput: GestureOutput) {
+    const gesture = this.gestureService.getGesture(gestureId);
+    if (!gesture) {
+      throw new Error('Invalid gesture id, not found, id: ' + gestureId);
+    }
+    gesture.setOutput(ouput);
+    this.gestureService.saveGesture(gesture);
+  }
+
+  public createGesture(name: string): NewGesture {
+    return this.gestureService.createGesture(name);
+  }
+
+  public setGestureName(gesture: GestureID, name: string) {
+    this.gestureService.setGestureName(gesture, name);
+  }
+
+  public getGestures(): AbstractReadonlyState<NewGesture[]> {
+    return this.states.getGestures();
+  }
+
+  public getGesture(id: GestureID): NewGesture | undefined {
+    return this.gestureService.getGesture(id);
+  }
+
+  public getGestureState(id: GestureID): AbstractState<NewGesture> {
+    const derivation = derived(this.states.getGestures(), gests => {
+      const idx = gests.findIndex(gest => gest.getID() === id);
+      if (idx === -1) {
+        this.log.warn(`Gesture with id ${id} does not exist`);
+        return new GestureImpl(
+          -1,
+          'deleted',
+          [],
+          [],
+          { requiredConfidence: 0.8 },
+          '#000000',
+        );
+      }
+      return gests[idx];
+    });
+
+    return new SvelteStateAdapterReadonly(derivation);
+  }
+
+  public clearGestures() {
+    this.gestureService.setGestures([]);
+  }
+
+  public deleteGesture(gesture: GestureID): void {
+    this.log.info(`Deleting gesture with id ${gesture}`);
+    this.gestureService.deleteGesture(gesture);
+  }
+
+  public addRecording(gesture: GestureID, recording: Recording): void {
+    this.gestureService.addRecording(gesture, recording);
+  }
+
+  public deleteRecording(gestureId: GestureID, recordingId: number) {
+    this.gestureService.deleteRecording(gestureId, recordingId);
+  }
+
+  public importFromJson(importable: string | object) {
+    const importString: string =
+      typeof importable === 'string' ? importable : JSON.stringify(importable);
+    const serializer = new GestureSerializer();
+    const parsed: SerializedGesture[] = JSON.parse(importString);
+    const deserialized = parsed.map(ser => serializer.deserialize(ser));
+    this.gestureService.setGestures(deserialized);
+  }
+
+  public getConfidences(): AbstractState<Confidences> {
+    return this.states.getConfidences();
+  }
+
+  public setLEDMatrixOutput(gestureId: GestureID, output: boolean[]) {
+    const gesture = this.gestureService.getGesture(gestureId);
+    if (!gesture) {
+      throw new Error('Invalid gesture id, not found, id: ' + gestureId);
+    }
+    const oldOutput = gesture.getOutput();
+    gesture.setOutput({
+      ...oldOutput,
+      matrix: output,
+    });
+    this.gestureService.saveGesture(gesture);
+  }
+
+  public setSoundOutput(gestureId: GestureID, output: SoundData | undefined) {
+    const gesture = this.gestureService.getGesture(gestureId);
+    if (!gesture) {
+      throw new Error('Invalid gesture id, not found, id: ' + gestureId);
+    }
+    const oldOutput = gesture.getOutput();
+    gesture.setOutput({
+      ...oldOutput,
+      sound: output,
+    });
+    this.gestureService.saveGesture(gesture);
+  }
+
+  public setIOPinOutput(
+    gestureId: GestureID,
+    pin: MBSpecs.UsableIOPin,
+    turnOnState: PinTurnOnState,
+    turnOnTime: number,
+  ) {
+    const gesture = this.gestureService.getGesture(gestureId);
+    if (!gesture) {
+      throw new Error('Invalid gesture id, not found, id: ' + gestureId);
+    }
+    const oldOutput = gesture.getOutput();
+    gesture.setOutput({
+      ...oldOutput,
+      outputPin: {
+        pin,
+        pinState: turnOnState,
+        turnOnTime,
+      },
+    });
+    this.gestureService.saveGesture(gesture);
+  }
+}

@@ -2,21 +2,23 @@
  * @vitest-environment jsdom
  */
 /**
- * (c) 2023-2025, Center for Computational Thinking and Design at Aarhus University and contributors
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
  *
  * SPDX-License-Identifier: MIT
  */
 
-import LiveDataBuffer from '../../lib/domain/LiveDataBuffer';
+import LiveDataBuffer from '../../core/LiveDataBuffer';
 import MicrobitAccelerometerLiveData, {
   MicrobitAccelerometerDataVector,
-} from '../../lib/livedata/MicrobitAccelerometerData';
+} from '../../frontend/lib/livedata/MicrobitAccelerometerData';
 import { repeat } from '../testUtils';
 import { get } from 'svelte/store';
-import { type LiveDataVector } from '../../lib/domain/stores/LiveDataVector';
-import SmoothedLiveData from '../../lib/livedata/SmoothedLiveData';
-import { smoothNewValue } from '../../lib/utils/graphUtils';
-import type { LiveData } from '../../lib/domain/stores/LiveData';
+import { type LiveDataVector } from '../../core/vector/LiveDataVector';
+import SmoothedLiveData from '../../frontend/lib/livedata/SmoothedLiveData';
+import { smoothNewValue } from '../../frontend/lib/utils/graphUtils';
+import type { LiveData } from '../../frontend/lib/stores/LiveData';
+import { writable } from 'svelte/store';
+import { SvelteStateAdapter } from '../../backend/statemanagement/SvelteStateAdapter';
 
 describe('Data representation tests', () => {
   test('Creating accelerometer live data does not throw', () => {
@@ -57,7 +59,10 @@ describe('Data representation tests', () => {
   test('Test smoothed values', () => {
     const liveData: LiveData<MicrobitAccelerometerDataVector> =
       new MicrobitAccelerometerLiveData(new LiveDataBuffer(20));
-    const smoothLiveData = new SmoothedLiveData(liveData, 2);
+    const smoothLiveData = new SmoothedLiveData(
+      new SvelteStateAdapter(writable(liveData)),
+      2,
+    );
 
     const point1 = new MicrobitAccelerometerDataVector({ x: 3, y: 2, z: 1 });
     const point2 = new MicrobitAccelerometerDataVector({ x: 1, y: 2, z: 3 });

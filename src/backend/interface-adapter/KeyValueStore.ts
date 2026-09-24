@@ -1,0 +1,10 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+export interface KeyValueStore<T> {
+  getValue<U>(key: T): U | undefined;
+  setValue<U>(key: T, value: U | undefined): void;
+}

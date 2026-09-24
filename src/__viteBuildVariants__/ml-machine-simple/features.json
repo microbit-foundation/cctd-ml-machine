@@ -10,5 +10,6 @@
   "fingerprint": false,
   "recordingDuration": 1800,
   "printableRecordings": false,
-  "dialogRecordings": false
+  "dialogRecordings": false,
+  "makecodeIntroductionVideo": false
 }

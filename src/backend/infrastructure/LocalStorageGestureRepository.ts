@@ -4,19 +4,38 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { Gesture, GestureID } from '../../core/entities/Gesture';
+import type { GestureID } from '../../core/entities/Gesture';
 import type { NewGesture } from '../../core/entities/NewGesture';
 import type { Logger } from '../../core/logging/Logger';
-import ControlledStorage from '../../lib/ControlledStorage';
-import type { PersistedGestureData } from '../../lib/domain/stores/gesture/Gestures';
+import ControlledStorage from '../../frontend/lib/ControlledStorage';
 import type { GestureRepository } from '../domain/GestureRepository';
-import { GestureImpl } from '../domain/implementation/gesture/GestureImpl';
+import { GestureSerializer } from '../../core/serialization/gesture/GestureSerializer';
+import type { SerializedGesture } from '../../core/serialization/gesture/SerializedGesture';
+import type { AbstractState } from '../statemanagement/AbstractState';
+import type { GestureListListener } from '../domain/eventlistener/GestureListListener';
+import type { Axis } from '../../core/entities/Axis';
 
 export class LocalStorageGestureRepository implements GestureRepository {
   private readonly LOCAL_STORAGE_KEY = 'gestureData';
+  private serializer;
+  private listeners: GestureListListener[] = [];
 
-  public constructor(private log: Logger) {}
+  public constructor(
+    private log: Logger,
+    initialListeners: GestureListListener[],
+    private selectedGesture: AbstractState<NewGesture | undefined>,
+  ) {
+    this.serializer = new GestureSerializer();
+    for (const l of initialListeners) {
+      this.listeners.push(l);
+    }
+  }
 
+  setSelectedGesture(gesture: NewGesture | undefined): void {
+    this.selectedGesture.set(gesture);
+  }
+
+  // TODO: This could be swapped for UUID. The reason for this is to allow the core application to create gestures
   public generateGestureId(): GestureID {
     let proposed = new Date().getTime();
     while (this.getGestures().find(gest => gest.getID() === proposed)) {
@@ -40,16 +59,7 @@ export class LocalStorageGestureRepository implements GestureRepository {
 
   public getGestures(): NewGesture[] {
     const persisted = this.getPersistedData();
-    return persisted.map(
-      persist =>
-        new GestureImpl(
-          persist.ID,
-          persist.name,
-          persist.recordings,
-          persist.output,
-          persist.color,
-        ),
-    );
+    return persisted.map(gest => this.serializer.deserialize(gest));
   }
 
   public getGesture(gestureId: GestureID): NewGesture | undefined {
@@ -66,32 +76,45 @@ export class LocalStorageGestureRepository implements GestureRepository {
   }
 
   public saveGestures(value: NewGesture[]): NewGesture[] {
-    const persistedData: PersistedGestureData[] = value.map(gest => ({
-      ID: gest.getID(),
-      color: gest.getColor(),
-      name: gest.getName(),
-      output: gest.getOutput(),
-      recordings: gest.getRecordings(),
-    }));
-    ControlledStorage.set(this.LOCAL_STORAGE_KEY, persistedData);
+    const serialized = value.map(gest => this.serializer.serialize(gest));
+    ControlledStorage.set(this.LOCAL_STORAGE_KEY, serialized);
+    this.publish(value);
     return value;
   }
 
   public clearGestures(): void {
     ControlledStorage.set(this.LOCAL_STORAGE_KEY, []);
+    this.publish([]);
   }
 
   public removeGesture(gestureId: number): void {
     this.saveGestures([...this.getGestures().filter(gest => gest.getID() !== gestureId)]);
   }
 
-  private getPersistedData(): PersistedGestureData[] {
+  private getPersistedData(): SerializedGesture[] {
     if (!ControlledStorage.hasValid(this.LOCAL_STORAGE_KEY)) {
       return [];
     }
-    const storedData = ControlledStorage.get<PersistedGestureData[]>(
-      this.LOCAL_STORAGE_KEY,
-    );
+    const storedData = ControlledStorage.get<SerializedGesture[]>(this.LOCAL_STORAGE_KEY);
     return storedData;
+  }
+
+  public getAxesFromGestures(): Axis[] {
+    const gestures = this.getGestures();
+    if (!gestures.length) {
+      return [];
+    }
+    const recording = gestures[0].getRecordings()[0];
+
+    if (!recording) {
+      return [];
+    }
+    return recording.getAxes();
+  }
+
+  private publish(gestures: NewGesture[]): void {
+    for (const listener of this.listeners) {
+      listener.onGesturesChanged(gestures);
+    }
   }
 }

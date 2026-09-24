@@ -8,9 +8,21 @@ export interface Vector {
 
   getValue(): number[];
 
+  getValueByIndex(index: number): number;
+
   divide(vector: Vector): Vector;
+
+  divideByScalar(scalar: number): Vector;
 
   subtract(vector: Vector): Vector;
 
   add(vector: Vector): Vector;
+
+  extract(indices: number[]): Vector;
+
+  scale(scalar: number): Vector;
+
+  round(decimalPlaces: number): Vector;
+
+  indexOfMax(): number;
 }

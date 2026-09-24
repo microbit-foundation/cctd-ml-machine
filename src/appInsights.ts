@@ -5,7 +5,7 @@
  */
 
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
-import CookieManager from './lib/CookieManager';
+import CookieManager from './frontend/lib/CookieManager';
 
 const load = () => {
   if (location.hostname !== "ml-machine.org") {

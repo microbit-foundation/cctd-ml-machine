@@ -14,6 +14,6 @@ export class LoggingNeuralNetworkTrainingObserver
   public constructor(private logger: Logger) {}
 
   handleTrainingIteration(iteration: NeuralNetworkTrainingIteration): void {
-    this.logger.log(`Epoch ${iteration.epoch} - Loss: ${iteration.loss}`);
+    this.logger.info(`Epoch ${iteration.epoch} - Loss: ${iteration.loss}`);
   }
 }

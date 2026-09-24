@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { NotificationRepository } from '../domain/NotificationRepository';
+import type { NotificationRepository } from '../application/notification/NotificationRepository';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 
 export class StatesNotificationRepository implements NotificationRepository {

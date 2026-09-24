@@ -14,12 +14,12 @@ import { NeuralNetworkLayerSettingsImpl } from './NeuralNetworkLayerSettingsImpl
 export class BasicNeuralNetworkArchitecture implements NeuralNetworkArchitecture {
   public constructor(
     private noOfClasses: number,
-    private noOfFilters: number,
+    private noOfFeatures: number,
     private noOfNodesInHiddenLayer: number,
   ) {}
 
   public getInputLayer(): NeuralNetworkLayerSettings {
-    return new NeuralNetworkLayerSettingsImpl(this.noOfFilters, ActivationFunction.RELU);
+    return new NeuralNetworkLayerSettingsImpl(this.noOfFeatures, ActivationFunction.RELU);
   }
   public getHiddenLayers(): NeuralNetworkLayerSettings[] {
     return [

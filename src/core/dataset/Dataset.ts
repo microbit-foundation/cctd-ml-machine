@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { FeatureData } from '../classifier/FeatureData';
+import type { FeatureData } from './FeatureData';
 import type { Vector } from '../vector/Vector';
 import type { DatasetLabels } from './DatasetLabels';
 import type { LabelledFeatureSet } from './LabelledFeatureSet';
@@ -14,6 +14,7 @@ export interface Dataset extends LabelledFeatureSet {
   getNormalizedFeatureSet(): FeatureData[];
   getLabels(): DatasetLabels;
   isValid(): boolean;
+  isEmpty(): boolean;
   getNumberOfClasses(): number;
   getFeatureSize(): number;
   getFeatureMean(): Vector;

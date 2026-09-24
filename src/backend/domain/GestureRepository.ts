@@ -8,6 +8,8 @@ import type { GestureID } from '../../core/entities/Gesture';
 import type { NewGesture } from '../../core/entities/NewGesture';
 
 export interface GestureRepository {
+  setSelectedGesture(gesture: NewGesture | undefined): unknown;
+
   generateGestureId(): GestureID;
 
   saveGesture(gesture: NewGesture): NewGesture;

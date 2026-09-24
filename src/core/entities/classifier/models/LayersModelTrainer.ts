@@ -9,6 +9,7 @@ import type { ModelTrainer } from './ModelTrainer';
 import type { ModelInfo } from './ModelRegistry';
 import ModelRegistry from './ModelRegistry';
 import type { TrainingDataRepository } from '../../../repository/TrainingDataRepository';
+import type { NeuralNetworkModelSettings } from '../../../model/neural-network/NeuralNetworkLearningSettings';
 export type LayersModelTrainingSettings = {
   noOfEpochs: number;
   noOfUnits: number;
@@ -24,7 +25,7 @@ export type LossTrainingIteration = {
 
 class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
   constructor(
-    private settings: LayersModelTrainingSettings,
+    private settings: NeuralNetworkModelSettings,
     private onFitIteration: (h: LossTrainingIteration) => void,
   ) {}
 
@@ -61,7 +62,10 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
     const input = tf.input({ shape: inputShape });
     const normalizer = tf.layers.batchNormalization().apply(input);
     const dense = tf.layers
-      .dense({ units: this.settings.noOfUnits, activation: 'relu' })
+      .dense({
+        units: this.settings.getArchitecture().getHiddenLayers()[0].getNumberOfNodes(),
+        activation: 'relu',
+      })
       .apply(normalizer);
     const softmax = tf.layers
       .dense({ units: numberOfClasses, activation: 'softmax' })
@@ -71,16 +75,16 @@ class LayersModelTrainer implements ModelTrainer<LayersMLModel> {
 
     model.compile({
       loss: 'categoricalCrossentropy',
-      optimizer: tf.train.sgd(this.settings.learningRate),
+      optimizer: tf.train.sgd(this.settings.getLearningSettings().getLearningRate()),
       metrics: ['accuracy'],
     });
 
-    for (let i = 0; i < this.settings.noOfEpochs; i++) {
+    for (let i = 0; i < this.settings.getLearningSettings().getNumberOfEpochs(); i++) {
       const h = await model
         .fit(tensorFeatures, tensorLabels, {
           epochs: 1,
-          batchSize: this.settings.batchSize,
-          validationSplit: this.settings.validationSplit,
+          batchSize: this.settings.getLearningSettings().getBatchSize(),
+          validationSplit: this.settings.getLearningSettings().getValidationSplit(),
         })
         .catch(err => {
           console.error('tensorflow training process failed:', err);

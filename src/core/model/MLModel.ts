@@ -5,7 +5,9 @@
  */
 
 import type { Vector } from '../vector/Vector';
+import type { ModelType } from './ModelType';
 
 export interface MLModel {
+  getType(): ModelType;
   predict(filteredData: Vector): Promise<Vector>;
 }

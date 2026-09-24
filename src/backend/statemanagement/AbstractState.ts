@@ -12,4 +12,5 @@ import type { AbstractReadonlyState } from './AbstractReadonlyState';
 export interface AbstractState<T> extends AbstractReadonlyState<T> {
   set(value: T): void;
   update(updater: (currentValue: T) => T): void;
+  readOnly(): AbstractReadonlyState<T>;
 }

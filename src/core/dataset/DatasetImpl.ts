@@ -4,29 +4,32 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { FeatureData } from '../classifier/FeatureData';
+import type { FeatureData } from './FeatureData';
 import type { Vector } from '../vector/Vector';
 import type { Dataset } from './Dataset';
 import type { DatasetLabels } from './DatasetLabels';
+import type { LabelledFeatureSet } from './LabelledFeatureSet';
 
 export default class DatasetImpl implements Dataset {
   constructor(
-    private readonly featureSet: FeatureData[],
-    private readonly labels: DatasetLabels,
-    private readonly valid: boolean,
-    private readonly numberOfClasses: number,
+    private readonly labelledFeatureSet: LabelledFeatureSet,
     private readonly featureSize: number,
     private readonly featureMean: Vector,
     private readonly featureStdDev: Vector,
+    private readonly numberOfClasses: number,
   ) {}
 
+  public isEmpty(): boolean {
+    return this.labelledFeatureSet.getFeatureSet().length === 0;
+  }
+
   public getFeatureSet(): FeatureData[] {
-    return this.featureSet;
+    return this.labelledFeatureSet.getFeatureSet();
   }
 
   public getNormalizedFeatureSet(): FeatureData[] {
     const self = this;
-    return this.featureSet.map(fd => {
+    return this.labelledFeatureSet.getFeatureSet().map(fd => {
       const raw = fd.getFeatures();
       return {
         getFeatures(): Vector {
@@ -37,17 +40,20 @@ export default class DatasetImpl implements Dataset {
   }
 
   public getLabels(): DatasetLabels {
-    return this.labels;
+    return this.labelledFeatureSet.getLabels();
   }
 
   public isValid(): boolean {
-    return this.valid;
+    return true;
   }
 
   public getNumberOfClasses(): number {
     return this.numberOfClasses;
   }
 
+  /**
+   * The size of input features. I.e the number of filters times the number of axes
+   */
   public getFeatureSize(): number {
     return this.featureSize;
   }

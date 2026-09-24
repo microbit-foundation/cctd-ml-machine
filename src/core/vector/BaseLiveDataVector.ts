@@ -6,12 +6,28 @@
 
 import BaseVector from './BaseVector';
 import { type LiveDataVector } from './LiveDataVector';
+import type { Vector } from './Vector';
 
 class BaseLiveDataVector implements LiveDataVector {
   public constructor(
-    private base: BaseVector,
+    private base: Vector,
     private labels: string[],
   ) {}
+
+  indexOfMax(): number {
+    return this.base.indexOfMax();
+  }
+
+  round(decimalPlaces: number): Vector {
+    return new BaseLiveDataVector(
+      this.base.round(decimalPlaces) as BaseVector,
+      this.labels,
+    );
+  }
+
+  scale(scalar: number): Vector {
+    return new BaseLiveDataVector(this.base.scale(scalar) as BaseVector, this.labels);
+  }
 
   public getLabels(): string[] {
     return this.labels;
@@ -23,6 +39,23 @@ class BaseLiveDataVector implements LiveDataVector {
 
   public getValue(): number[] {
     return this.base.getValue();
+  }
+
+  extract(indices: number[]): Vector {
+    const extractedValues = indices.map(index => this.base.getValue()[index]);
+    const extractedLabels = indices.map(index => this.labels[index]);
+    return new BaseLiveDataVector(new BaseVector(extractedValues), extractedLabels);
+  }
+
+  getValueByIndex(index: number): number {
+    return this.base.getValue()[index];
+  }
+
+  public divideByScalar(scalar: number): Vector {
+    return new BaseLiveDataVector(
+      new BaseVector(this.base.divideByScalar(scalar).getValue()),
+      this.labels,
+    );
   }
 
   public add(vector: BaseLiveDataVector): BaseLiveDataVector {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import ControlledStorage from '../../lib/ControlledStorage';
+import ControlledStorage from '../../frontend/lib/ControlledStorage';
 import type { UserSessionRepository } from '../domain/UserSessionRepository';
 
 export class LocalStorageUserSessionRepository implements UserSessionRepository {

@@ -5,17 +5,20 @@
  */
 import type { TrainingResult } from '../../classifier/TrainingResult';
 import type { Dataset } from '../../dataset/Dataset';
-import type { ModelInfo } from '../ModelRegistry';
 import ModelRegistry from '../ModelRegistry';
 import type { ModelTrainer, ModelTrainerResult } from '../ModelTrainer';
 import { NeuralNetworkLayersModelFactory } from './NeuralNetworkLayersFactory';
 import { NeuralNetworkModel } from './NeuralNetworkModel';
-import type { NeuralNetworkModelSettings } from './NeuralNetworkModelSettings';
+import type { NeuralNetworkModelSettings } from './NeuralNetworkLearningSettings';
 import * as tf from '@tensorflow/tfjs';
+import type { ModelInfo } from '../ModelInfo';
+import ConsoleLogger from '../../logging/ConsoleLogger';
 
 export class NeuralNetworkModelTrainer
   implements ModelTrainer<NeuralNetworkModel, TrainingResult>
 {
+  private log = new ConsoleLogger(NeuralNetworkModelTrainer.name);
+
   constructor(private settings: NeuralNetworkModelSettings) {}
 
   public getModelInfo(): ModelInfo {
@@ -37,23 +40,30 @@ export class NeuralNetworkModelTrainer
       .getLabels()
       .getLabelVectors()
       .map(labelVector => labelVector.getValue());
+    this.log.info('Training features:', features);
+    this.log.info('Training labels:', labels);
     const tensorFeatures = tf.tensor(features);
     const tensorLabels = tf.tensor(labels);
     const modelFactory = new NeuralNetworkLayersModelFactory();
+    this.log.info(
+      'Building model with settings:',
+      this.settings.getArchitecture(),
+      this.settings.getLearningSettings(),
+    );
     const model = modelFactory.buildLayers(this.settings.getArchitecture());
 
     model.compile({
       loss: 'categoricalCrossentropy',
-      optimizer: tf.train.sgd(this.settings.getLearningRate()),
+      optimizer: tf.train.sgd(this.settings.getLearningSettings().getLearningRate()),
       metrics: ['accuracy'],
     });
 
-    for (let i = 0; i < this.settings.getNumberOfEpochs(); i++) {
+    for (let i = 0; i < this.settings.getLearningSettings().getNumberOfEpochs(); i++) {
       try {
         const iteration = await model.fit(tensorFeatures, tensorLabels, {
           epochs: 1,
-          batchSize: this.settings.getBatchSize(),
-          validationSplit: this.settings.getValidationSplit(),
+          batchSize: this.settings.getLearningSettings().getBatchSize(),
+          validationSplit: this.settings.getLearningSettings().getValidationSplit(),
         });
         this.settings.getTrainingObserver().handleTrainingIteration({
           epoch: i,

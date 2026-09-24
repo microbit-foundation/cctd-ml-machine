@@ -2,6 +2,7 @@
   {
     "ID": 1733944249288,
     "name": "Shake",
+    "validationRecordings": [],
     "recordings": [
       {
         "ID": 1733944301249,
@@ -286,7 +287,20 @@
             "vector": [-0.92, 0.26, 0.512]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944298130,
@@ -568,7 +582,20 @@
             "vector": [-1.024, -0.428, 0.944]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944295066,
@@ -853,7 +880,20 @@
             "vector": [-1.44, -0.78, 1.328]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944292631,
@@ -1135,7 +1175,20 @@
             "vector": [-1.284, -1.264, -0.004]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944290416,
@@ -1417,7 +1470,20 @@
             "vector": [-1.156, -0.532, -0.432]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944287743,
@@ -1702,7 +1768,20 @@
             "vector": [0.676, -0.252, -0.72]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944285344,
@@ -1984,7 +2063,20 @@
             "vector": [1.116, -0.476, -0.356]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944283055,
@@ -2269,10 +2361,25 @@
             "vector": [0.516, -0.432, -0.784]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       }
     ],
-    "output": {},
+    "output": {
+      "requiredConfidence": 0.8
+    },
     "color": "#a6cee3",
     "confidence": {
       "currentConfidence": 0,
@@ -2283,6 +2390,7 @@
   {
     "ID": 1733944264563,
     "name": "Idle",
+    "validationRecordings": [],
     "recordings": [
       {
         "ID": 1733944332818,
@@ -2567,7 +2675,20 @@
             "vector": [0.548, -0.792, -0.256]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944329369,
@@ -2852,7 +2973,20 @@
             "vector": [0.224, 1.004, -0.336]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944324266,
@@ -3137,7 +3271,20 @@
             "vector": [-0.272, -0.424, -0.928]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944320426,
@@ -3422,7 +3569,20 @@
             "vector": [0.928, 0.008, 0.26]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944317846,
@@ -3704,7 +3864,20 @@
             "vector": [-0.056, -0.084, 1.016]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944314856,
@@ -3989,7 +4162,20 @@
             "vector": [-0.728, -0.052, 0.748]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944312276,
@@ -4271,7 +4457,20 @@
             "vector": [-0.88, -0.276, 0.496]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944309720,
@@ -4553,7 +4752,20 @@
             "vector": [-0.968, -0.212, -0.42]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944305351,
@@ -4838,10 +5050,25 @@
             "vector": [-0.036, 0.052, -1.048]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       }
     ],
-    "output": {},
+    "output": {
+      "requiredConfidence": 0.8
+    },
     "color": "#b15928",
     "confidence": {
       "currentConfidence": 0,
@@ -4852,6 +5079,7 @@
   {
     "ID": 1733944266820,
     "name": "Circle",
+    "validationRecordings": [],
     "recordings": [
       {
         "ID": 1733944385302,
@@ -5133,7 +5361,20 @@
             "vector": [-0.648, 0.476, 0.34]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944379275,
@@ -5418,7 +5659,20 @@
             "vector": [-0.272, 0.044, 0.976]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944373005,
@@ -5703,7 +5957,20 @@
             "vector": [-0.22, 0.872, 0.376]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944368904,
@@ -5988,7 +6255,20 @@
             "vector": [-0.168, 0.964, -0.296]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944360032,
@@ -6270,7 +6550,20 @@
             "vector": [0.796, 0.06, -0.184]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944357521,
@@ -6552,7 +6845,20 @@
             "vector": [0.924, -0.276, -0.708]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944352216,
@@ -6834,7 +7140,20 @@
             "vector": [-0.16, -0.324, -0.944]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944349416,
@@ -7122,7 +7441,20 @@
             "vector": [-0.132, -0.14, -1.064]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944343272,
@@ -7407,7 +7739,20 @@
             "vector": [-0.056, -0.444, -0.924]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944340070,
@@ -7689,7 +8034,20 @@
             "vector": [-0.24, -0.42, -1.292]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       },
       {
         "ID": 1733944336822,
@@ -7971,10 +8329,25 @@
             "vector": [-0.156, -0.06, -0.996]
           }
         ],
-        "labels": ["X", "Y", "Z"]
+        "axes": [
+          {
+            "index": 0,
+            "label": "X"
+          },
+          {
+            "index": 1,
+            "label": "Y"
+          },
+          {
+            "index": 2,
+            "label": "Z"
+          }
+        ]
       }
     ],
-    "output": {},
+    "output": {
+      "requiredConfidence": 0.8
+    },
     "color": "#b2df8a",
     "confidence": {
       "currentConfidence": 0,

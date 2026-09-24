@@ -14,6 +14,7 @@ export type SoundData = {
 };
 
 export type GestureOutput = {
+  requiredConfidence: number;
   matrix?: boolean[];
   sound?: SoundData;
   outputPin?: { pin: MBSpecs.UsableIOPin; pinState: PinTurnOnState; turnOnTime: number };

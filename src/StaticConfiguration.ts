@@ -9,7 +9,7 @@
  */
 import { MBSpecs } from 'microbyte';
 import { PinTurnOnState } from './core/entities/PinTurnOnState';
-import { HexOrigin } from './lib/microbit-interfacing/HexOrigin';
+import { HexOrigin } from './frontend/lib/microbit-interfacing/HexOrigin';
 import type { LayersModelTrainingSettings } from './core/entities/classifier/models/LayersModelTrainer';
 
 class StaticConfiguration {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { KeyValueStore } from '../domain/KeyValueStore';
+import type { KeyValueStore } from './KeyValueStore';
 
 type StorageLike = Storage | Map<string, string>;
 
@@ -56,8 +56,8 @@ export default class LocalStorageKeyValueStore<T> implements KeyValueStore<T> {
         'value' in parsed
       ) {
         return {
-          version: (parsed as any).version as number,
-          value: (parsed as any).value,
+          version: parsed.version as number,
+          value: parsed.value,
         };
       }
       // Legacy/untagged value

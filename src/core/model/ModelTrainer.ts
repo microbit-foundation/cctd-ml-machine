@@ -6,9 +6,9 @@
 
 import type { Vector } from '../vector/Vector';
 import type { MLModel } from './MLModel';
-import type { ModelInfo } from './ModelRegistry';
 import type { Dataset } from '../dataset/Dataset';
 import type { TrainingResult } from '../classifier/TrainingResult';
+import type { ModelInfo } from './ModelInfo';
 
 export type TrainingData = {
   classes: {

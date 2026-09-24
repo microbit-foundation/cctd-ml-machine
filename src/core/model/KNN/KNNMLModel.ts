@@ -9,20 +9,38 @@ import { distanceBetween } from '../../utils/Math';
 import BaseVector from '../../vector/BaseVector';
 import type { Vector } from '../../vector/Vector';
 import type { MLModel } from '../MLModel';
+import { ModelType } from '../ModelType';
 import type { KNNModelObserver } from './KNNModelObserver';
 import type { KNNModelSettings } from './KNNModelSettings';
 import type { LabelledPoint } from './LabelledPoint';
 
 class KNNMLModel implements MLModel {
-  private observer: KNNModelObserver | undefined;
+  private normalize: boolean;
 
   constructor(
     private settings: KNNModelSettings,
     private points: LabelledPoint[],
     private mean: Vector,
     private stdDeviation: Vector,
+    private observer: KNNModelObserver,
   ) {
-    ConsoleLogger.log('KNNMLModel', 'New (normalized) KNN model was initialized');
+    this.normalize = settings.shouldNormalize();
+    ConsoleLogger.log('KNNMLModel', 'New KNN model was initialized');
+    ConsoleLogger.log(
+      'KNNMLModel',
+      'Settings:',
+      JSON.stringify({
+        k: settings.getK(),
+        numberOfClasses: settings.getNumberOfClasses(),
+        shouldNormalize: settings.shouldNormalize(),
+      }),
+    );
+    ConsoleLogger.log('KNNMLModel', 'Mean:', mean.getValue());
+    ConsoleLogger.log('KNNMLModel', 'Standd Deviation:', stdDeviation.getValue());
+  }
+
+  getType(): ModelType {
+    return ModelType.KNN;
   }
 
   public async predict(filteredData: Vector): Promise<Vector> {
@@ -41,32 +59,29 @@ class KNNMLModel implements MLModel {
 
     // Find the nearest gesture class indices
     const neighbours = [];
-    for (let i = 0; i < this.settings.k; i++) {
+    for (let i = 0; i < this.settings.getK(); i++) {
       const neighbour = orderedPoints[i];
       neighbours.push(neighbour);
     }
 
     if (this.observer) {
-      this.observer.onNeighboursFound(neighbours);
+      this.observer.onNearestNeighboursFound(neighbours);
     }
 
     // Compute the confidences and create the confidences array.
     const confidences = [];
-    for (let i = 0; i < this.settings.numberOfClasses; i++) {
+    for (let i = 0; i < this.settings.getNumberOfClasses(); i++) {
+      const neighbourIndices = neighbours.map(e => e.classIndex);
       confidences.push(
-        neighbours.map(e => e.classIndex).filter(e => e === i).length / this.settings.k,
+        neighbourIndices.filter(e => e === i).length / this.settings.getK(),
       );
     }
 
     return Promise.resolve(new BaseVector(confidences));
   }
 
-  public setObserver(observer: KNNModelObserver) {
-    this.observer = observer;
-  }
-
   private getInputPoint(filteredData: Vector): Vector {
-    if (this.settings.normalize) {
+    if (this.normalize) {
       return this.normalizePoint(filteredData);
     }
     return filteredData;

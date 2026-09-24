@@ -5,11 +5,16 @@
  */
 
 import type { MLModel } from '../../../core/model/MLModel';
+import { ModelType } from '../../../core/model/ModelType';
 import BaseVector from '../../../core/vector/BaseVector';
 import type { Vector } from '../../../core/vector/Vector';
 
 class TestMLModel implements MLModel {
   constructor(private numberOfGestures: number) {}
+
+  getType(): ModelType {
+    return ModelType.KNN;
+  }
 
   // Predicts a random gesture as 100% confident
   predict(filteredData: Vector): Promise<Vector> {

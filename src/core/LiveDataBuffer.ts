@@ -56,6 +56,11 @@ class LiveDataBuffer<T extends LiveDataVector> {
     return values;
   }
 
+  public getNewestValue(): T | null {
+    const newest = this.buffer[this.getBufferIndexFrom(this.bufferPtr - 1)];
+    return newest ? newest.value : null;
+  }
+
   /**
    * Returns the series of data points that are within the specified time frame.
    * The time is specified in milliseconds, and the number of elements to return is also specified.
@@ -87,7 +92,11 @@ class LiveDataBuffer<T extends LiveDataVector> {
 
     if (foundElements < noOfElements) {
       throw new Error(
-        'Insufficient buffer data! Try increasing the polling rate or decrease the number of elements requested',
+        'Insufficient buffer data! Try increasing the polling rate or decrease the number of elements requested (found ' +
+          foundElements +
+          ' elements, but ' +
+          noOfElements +
+          ' were requested).',
       );
     }
 

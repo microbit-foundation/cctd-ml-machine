@@ -8,9 +8,14 @@ import * as tf from '@tensorflow/tfjs';
 import type { MLModel } from '../MLModel';
 import type { Vector } from '../../vector/Vector';
 import BaseVector from '../../vector/BaseVector';
+import { ModelType } from '../ModelType';
 
 export class NeuralNetworkModel implements MLModel {
   constructor(private neuralNet: LayersModel) {}
+
+  getType(): ModelType {
+    return ModelType.NERUAL_NETWORK;
+  }
 
   public async predict(filteredData: Vector): Promise<Vector> {
     const inputTensor = tf.tensor([filteredData.getValue()]);

@@ -6,7 +6,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "build": "node prepEnv.js branded && vite build",
+    "build": "node prepEnv.js simple && vite build",
     "dev": "node prepEnv.js unbranded && vite",
     "devML": "node prepEnv.js branded && vite",
     "devSimple": "node prepEnv.js simple && vite",
@@ -32,6 +32,7 @@
     "@typescript-eslint/parser": "^8.24.0",
     "eslint": "^8.43.0",
     "eslint-plugin-svelte": "^2.46.1",
+    "eslint-plugin-unused-imports": "^4.4.1",
     "jsdom": "^26.0.0",
     "prettier": "^3.5.0",
     "prettier-plugin-svelte": "^3.3.3",

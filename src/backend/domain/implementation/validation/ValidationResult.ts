@@ -4,19 +4,26 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type Matrix from '../../../../core/entities/Matrix';
+import type AccuracyMatrix from '../../../../core/classifier/AccuracyMatrix';
+import type { EvaluationResult } from '../../../../core/classifier/EvaluationResult';
 
+// TODO: Maybe it should just be evaluation result that's used, since this just mirrors all of the methods
 export class ValidationResult {
-  public constructor(
-    private accuracy: number,
-    private matrix: Matrix<number>,
-  ) {}
+  public constructor(private evaluationResult: EvaluationResult) {}
 
   public getAccuracy(): number {
-    return this.accuracy;
+    return this.evaluationResult.getAccuracy();
   }
 
-  public getMatrix(): Matrix<number> {
-    return this.matrix;
+  public getMatrix(): AccuracyMatrix {
+    return this.evaluationResult.getAccuracyMatrix();
+  }
+
+  public getPredictions(): number[] {
+    return this.evaluationResult.getPredictionIndices();
+  }
+
+  public getConfusionBuckets(): number[][] {
+    return this.evaluationResult.getConfusionBuckets();
   }
 }

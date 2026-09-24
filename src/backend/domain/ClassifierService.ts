@@ -5,13 +5,12 @@
  */
 
 import type { Classifier } from '../../core/classifier/Classifier';
-import type { NeuralNetworkModelSettings } from '../../core/model/neural-network/NeuralNetworkModelSettings';
-import type { AbstractState } from '../statemanagement/AbstractState';
-import type { ModelTraining } from '../../core/model/ModelTraining';
+import type { PredictionInput } from '../../core/classifier/Predictioninput';
+import type { PredictionOutput } from '../../core/classifier/PredictionOutput';
 
 export interface ClassifierService {
-  getNeuralNetworkSettings(): AbstractState<NeuralNetworkModelSettings>;
-  getClassifier(): AbstractState<Classifier | undefined>;
-  getModelTraining(): AbstractState<ModelTraining>;
+  predict(predictionInput: PredictionInput): Promise<PredictionOutput>;
+  setClassifier(classifier: Classifier): void;
+  getClassifier(): Classifier | undefined;
   unsetClassifier(): void;
 }

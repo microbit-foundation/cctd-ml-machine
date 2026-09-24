@@ -14,6 +14,7 @@ import type { PredictionInput } from '../Predictioninput';
 import type { PredictionOutput } from '../PredictionOutput';
 import { VectorPredictionInput } from './VectorPredictionInput';
 import { VectorPredictionOutput } from './VectorPredictionOutput';
+import type { ModelType } from '../../model/ModelType';
 
 export class VectorClassifier implements Classifier {
   private model: MLModel; // A trained ML model
@@ -24,11 +25,19 @@ export class VectorClassifier implements Classifier {
     this.evaluator = evaluator;
   }
 
-  public async predict(input: PredictionInput): Promise<PredictionOutput> {
-    const prediction: Vector = await this.model.predict(input.getInput());
-    return new VectorPredictionOutput(prediction);
+  getModelType(): ModelType {
+    return this.model.getType();
   }
 
+  public async predict(input: PredictionInput): Promise<PredictionOutput> {
+    const prediction: Vector = await this.model.predict(input.getInput());
+    const predictionOutput = new VectorPredictionOutput(input, prediction);
+    return predictionOutput;
+  }
+
+  /**
+   * Evaluates the classifier on the provided test dataset and returns an EvaluationResult containing the accuracy and other relevant metrics.
+   */
   public async evaluate(testData: Dataset): Promise<EvaluationResult> {
     const predictionInputs = this.getPredictionInputForDataset(testData);
     const predictions = predictionInputs.map(predInput => this.predict(predInput));

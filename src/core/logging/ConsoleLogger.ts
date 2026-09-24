@@ -7,16 +7,35 @@
 import Environment from '../Environment';
 import type { Logger } from './Logger';
 
+type DevWindow = typeof window & {
+  hasLogged?: boolean;
+  ns?: boolean;
+  ds?: () => void;
+  es?: () => void;
+};
+
+const getDevWindow = (): DevWindow | undefined =>
+  typeof window !== 'undefined' ? (window as DevWindow) : undefined;
+
+const getStorage = (): Storage | undefined => {
+  const globalObject = globalThis as { localStorage?: Storage };
+  return globalObject.localStorage;
+};
+
 const isStackTraceEnabled = () => {
-  return localStorage.getItem('dev_print_stacktrace') === 'true';
+  const storage = getStorage();
+  if (storage?.getItem) {
+    return storage.getItem('dev_print_stacktrace') === 'true';
+  }
+  return false;
 };
 const setStackTraceEnabled = (val: boolean) =>
-  localStorage.setItem('dev_print_stacktrace', val.toString());
+  getStorage()?.setItem('dev_print_stacktrace', val.toString());
 
 class ConsoleLogger implements Logger {
   constructor(private origin: any) {}
 
-  public log(message: any, ...params: any[]) {
+  public info(message: any, ...params: any[]) {
     ConsoleLogger.log(this.origin, message, params);
   }
 
@@ -32,9 +51,10 @@ class ConsoleLogger implements Logger {
       return;
     }
     welcomeLog();
-    const outputMessage = `[${origin}] ${message} ${params}`;
-    isStackTraceEnabled() && console.trace(outputMessage);
-    !isStackTraceEnabled() && console.warn(outputMessage);
+    const warnOutputMessage = `[${origin}] ${message} ${params}`;
+    const traceOutputMessage = `[${origin}] %c${message} ${params}`;
+    isStackTraceEnabled() && console.trace(traceOutputMessage, 'color: orange;');
+    !isStackTraceEnabled() && console.warn(warnOutputMessage);
   }
 
   /**
@@ -52,10 +72,8 @@ class ConsoleLogger implements Logger {
 }
 
 export const welcomeLog = () => {
-  if (
-    !Environment.isInDevelopment ||
-    (window as typeof window & { hasLogged: boolean }).hasLogged
-  ) {
+  const devWindow = getDevWindow();
+  if (!Environment.isInDevelopment || devWindow?.hasLogged) {
     return;
   }
   console.log(`⚙️ Development Mode:
@@ -69,11 +87,13 @@ If you encounter any issues, unexpected behavior, or bugs, please report them to
 https://github.com/microbit-foundation/cctd-ml-machine/issues.
 
 Thank you for contributing to the improvement of ML-Machine!`);
-  Object.assign(window, { hasLogged: true });
+  devWindow && Object.assign(devWindow, { hasLogged: true });
 };
 
-if (!(window as typeof window & { ns: boolean }).ns) {
-  Object.assign(window, {
+const devWindow = getDevWindow();
+
+if (devWindow && devWindow.ns === undefined) {
+  Object.assign(devWindow, {
     ns: isStackTraceEnabled(),
     ds: () => {
       console.log('Disabled stacktraces, enable again using es()');

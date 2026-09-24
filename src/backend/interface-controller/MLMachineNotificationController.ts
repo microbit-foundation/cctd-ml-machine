@@ -5,7 +5,7 @@
  */
 
 import type { AbstractState } from '../statemanagement/AbstractState';
-import type { NotificationService } from '../domain/NotificationService';
+import type { NotificationService } from '../application/notification/NotificationService';
 import type { NotificationController } from './abstract/NotificationsController';
 import type { AbstractStates } from '../statemanagement/AbstractStates';
 

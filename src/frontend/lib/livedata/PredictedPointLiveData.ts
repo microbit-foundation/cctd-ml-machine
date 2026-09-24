@@ -1,0 +1,50 @@
+/**
+ * (c) 2023-2026, Center for Computational Thinking and Design at Aarhus University and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+import {
+  type Subscriber,
+  type Invalidator,
+  type Unsubscriber,
+  type Writable,
+  writable,
+} from 'svelte/store';
+import type LiveDataBuffer from '../../../core/LiveDataBuffer';
+import type { LiveData } from '../stores/LiveData';
+import type { LiveDataVector } from '../../../core/vector/LiveDataVector';
+import { MicrobitAccelerometerDataVector } from './MicrobitAccelerometerData';
+
+class PredictedPointLiveData implements LiveData<LiveDataVector> {
+  private store: Writable<LiveDataVector>;
+  constructor(private dataBuffer: LiveDataBuffer<LiveDataVector>) {
+    this.store = writable(
+      new MicrobitAccelerometerDataVector({
+        x: 0,
+        y: 0,
+        z: 0,
+      }),
+    );
+  }
+  public put(data: LiveDataVector): void {
+    this.store.set(data);
+    this.dataBuffer.addValue(data);
+  }
+  public getBuffer(): LiveDataBuffer<LiveDataVector> {
+    return this.dataBuffer;
+  }
+  public getSeriesSize(): number {
+    return 3;
+  }
+  public getLabels(): string[] {
+    return [];
+  }
+  public subscribe(
+    run: Subscriber<LiveDataVector>,
+    invalidate?: Invalidator<LiveDataVector>,
+  ): Unsubscriber {
+    return this.store.subscribe(run, invalidate);
+  }
+}
+
+export default PredictedPointLiveData;

@@ -20,13 +20,26 @@ import { GestureController } from '../interface-controller/GestureController';
 import { MLMachineAppController } from '../interface-controller/MLMachineAppController';
 import { MLMachineNotificationController } from '../interface-controller/MLMachineNotificationController';
 import { OutputController } from '../interface-controller/OutputController';
-import { GesturesStateAdapter } from './GesturesStateAdapter';
 import { MLMachine } from './MLMachine';
 import { MakeCodeController } from '../interface-controller/makecode/MakeCodeController';
 import type { MicrobitService } from '../domain/microbit/MicrobitService';
 import { MicrobitController } from '../interface-controller/MicrobitController';
 import { StatesMakeCodeProjectRepository } from '../infrastructure/StatesMakeCodeProjectRepository';
-import type { NotificationService } from '../domain/NotificationService';
+import type { NotificationService } from '../application/notification/NotificationService';
+import { ValidationController } from '../interface-controller/ValidationController';
+import type { ValidationService } from '../domain/ValidationService';
+import { NeuralNetworkController } from '../interface-controller/NeuralNetworkController';
+import { KNNController } from '../interface-controller/KNNController';
+import type { KNNSettingsService } from '../domain/KNNSettingsService';
+import { RecordingController } from '../interface-controller/RecordingController';
+import { FilterController } from '../interface-controller/FilterController';
+import type { RecordingService } from '../domain/RecordingService';
+import type { ClassifierService } from '../domain/ClassifierService';
+import type { ModelService } from '../domain/ModelService';
+import { EngineController } from '../interface-controller/EngineController';
+import type { PollingPredictorEngine } from '../application/PollingPredictorEngine';
+import type { NeuralNetworkSettingsService } from '../domain/NeuralNetworkSettingsService';
+import type { KNNModelService } from '../domain/KNNModelService';
 
 export class MLMachineControllers {
   private gestureController: GestureController;
@@ -35,16 +48,25 @@ export class MLMachineControllers {
 
   public constructor(
     private mlMachine: MLMachine,
-    dataService: DataService,
+    private dataService: DataService,
     private notificationService: NotificationService,
     private featureService: FeatureService,
     private outputService: OutputService,
     private states: AbstractStates,
     private microbitService: MicrobitService,
+    private validationService: ValidationService,
+    private knnSettingsService: KNNSettingsService,
+    private recordingService: RecordingService,
+    private classifierService: ClassifierService,
+    private modelService: ModelService,
+    private pollingPredictorEngine: PollingPredictorEngine,
+    private neuralNetworkSettingsService: NeuralNetworkSettingsService,
+    private knnModelService: KNNModelService,
   ) {
     this.gestureController = new GestureController(
-      new GesturesStateAdapter(this.mlMachine.getGestureService()),
+      states,
       this.mlMachine.getGestureService(),
+      mlMachine.getConfidenceService(),
     );
     this.dataController = new DataController(dataService, states);
     this.notificationController = new MLMachineNotificationController(
@@ -55,23 +77,38 @@ export class MLMachineControllers {
 
   public getAppController(): AppController {
     return new MLMachineAppController(
-      this.mlMachine.getDevices(),
       new UserServiceImpl(new LocalStorageUserSessionRepository()),
       this.featureService,
     );
   }
 
+  public getFilterController() {
+    return new FilterController(this.states, this.dataService);
+  }
+
+  public getKnnController(): KNNController {
+    return new KNNController(this.states, this.knnSettingsService, this.knnModelService);
+  }
+
   public getNotificationController(): NotificationController {
-    console.log(this.notificationController);
     return this.notificationController;
   }
 
+  public getNeuralNetworkController(): NeuralNetworkController {
+    return new NeuralNetworkController(this.states, this.neuralNetworkSettingsService);
+  }
+
   public getClassifierController(): ClassifierController {
-    return new ClassifierController(this.mlMachine);
+    return new ClassifierController(
+      this.states,
+      this.mlMachine,
+      this.classifierService,
+      this.modelService,
+    );
   }
 
   public getAxisController(): AxisController {
-    return new AxisController(this.mlMachine);
+    return new AxisController(this.mlMachine, this.states);
   }
 
   public getGestureController(): GestureController {
@@ -96,5 +133,21 @@ export class MLMachineControllers {
 
   public getMicrobitController() {
     return new MicrobitController(this.microbitService, this.states);
+  }
+
+  public getValidationController() {
+    return new ValidationController(
+      this.validationService,
+      this.dataService,
+      this.states,
+    );
+  }
+
+  public getRecordingController() {
+    return new RecordingController(this.recordingService, this.states);
+  }
+
+  getEngineController() {
+    return new EngineController(this.pollingPredictorEngine);
   }
 }

@@ -16,12 +16,19 @@ export const distanceBetween = (p1: Vector, p2: Vector): number => {
   }
 
   // Calculate the distance using the Euclidean formula
-  const squaredDifferences = p1.getValue().map((coord, index) => {
-    const difference = coord - p2.getValue()[index];
-    return difference ** 2;
-  });
+  const point1 = p1.getValue();
+  const point2 = p2.getValue();
 
-  const sumOfSquares = squaredDifferences.reduce((sum, value) => sum + value, 0);
+  // Step 1: For each feature, find the difference between the two points,
+  // square it (multiply it by itself), and add it to a running total.
+  let sumOfSquares = 0;
+  for (let i = 0; i < point1.length; i++) {
+    const difference = point1[i] - point2[i];
+    const squaredDifference = difference * difference;
+    sumOfSquares = sumOfSquares + squaredDifference;
+  }
 
-  return Math.sqrt(sumOfSquares);
+  // Step 2: The distance is the square root of that total.
+  const distance = Math.sqrt(sumOfSquares);
+  return distance;
 };

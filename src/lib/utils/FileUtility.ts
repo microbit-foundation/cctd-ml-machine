@@ -6,6 +6,10 @@
 import { type GestureData } from '../domain/stores/gesture/GestureState';
 import { type PersistedGestureData } from '../domain/stores/gesture/Gestures';
 import { stores } from '../stores/Stores';
+import type {
+  PersistedValidationSet,
+  ValidationSetImportResult,
+} from '../domain/stores/ValidationSets';
 
 class FileUtility {
   public static loadDatasetFromFile(file: File) {
@@ -22,14 +26,45 @@ class FileUtility {
     reader.readAsText(file as Blob);
   }
 
+  public static loadValidationSetsFromFile(
+    file: File,
+    onLoaded?: (result: ValidationSetImportResult) => void,
+    onError?: (error: unknown) => void,
+  ) {
+    const reader = new FileReader();
+    reader.onload = function (e: ProgressEvent<FileReader>) {
+      const contents = e.target?.result;
+      if (typeof contents !== 'string') {
+        return;
+      }
+      try {
+        const result = stores
+          .getValidationSets()
+          .importFrom(JSON.parse(contents) as PersistedValidationSet[]);
+        onLoaded?.(result);
+      } catch (error) {
+        onError?.(error);
+      }
+    };
+    reader.readAsText(file as Blob);
+  }
+
+  public static downloadValidationSets(validationSets: PersistedValidationSet[]) {
+    FileUtility.downloadJson(validationSets, 'validation-sets');
+  }
+
   public static downloadDataset(gestureData: GestureData[]) {
+    FileUtility.downloadJson(gestureData, 'dataset');
+  }
+
+  private static downloadJson(data: unknown, filename: string) {
     const element = document.createElement('a');
     element.setAttribute(
       'href',
       'data:application/json;charset=utf-8,' +
-        encodeURIComponent(JSON.stringify(gestureData, null, 2)),
+        encodeURIComponent(JSON.stringify(data, null, 2)),
     );
-    element.setAttribute('download', 'dataset');
+    element.setAttribute('download', filename);
 
     element.style.display = 'none';
     document.body.appendChild(element);
